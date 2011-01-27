@@ -3,15 +3,14 @@ package com.socialcomputing.wps.server.plandictionary.loader;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
-import com.socialcomputing.utils.HibernateUtil;
 import com.socialcomputing.utils.database.DatabaseHelper;
+import com.socialcomputing.utils.database.HibernateUtil;
 
 
 public class DictionaryManager {

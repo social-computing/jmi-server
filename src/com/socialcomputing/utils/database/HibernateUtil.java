@@ -1,4 +1,4 @@
-package com.socialcomputing.utils;
+package com.socialcomputing.utils.database;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
