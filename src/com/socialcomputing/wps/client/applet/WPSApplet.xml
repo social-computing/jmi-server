@@ -1,0 +1,274 @@
+<?xml version='1.0' encoding='ISO-8859-1' standalone="yes"?>
+
+<!--doctype doc system "doc.dtd"-->
+
+<!--				CLIENT
+					JavaDoc : 100%
+					UML	: 100%
+					GLOSSAIRE-->
+
+<doc>
+	<header>
+		<title>WPS Applet</title>
+		<css href="../../../../doc2html.css"/>
+	</header>
+
+	<definition label="Projet WPS Applet" type="project">
+
+		<element label="En-tête">
+			Entête du projet.
+
+			<parameters label="Informations">
+				<param name="company" desc="MapStan (Voyez Vous)"/>
+				<param name="copyright" desc="Copyright (c) 2001-2003"/>
+				<param name="author" desc="Franck Lugué"/>
+			</parameters>
+		</element>
+
+		<element label="Implementation">
+			Implémentation de la génération graphique du Plan.
+
+			<parameters label="Environnement Java">
+				<param name="jvm" desc="Java 1.1"/>
+				<param name="package" desc="com.voyezvous.wps.client"/>
+				<param name="archive" desc="WPSApplet.jar"/>
+				<param name="main" desc="WPSApplet.class"/>
+				<param name="project" desc="WPSApplet.jpx"/>
+			</parameters>
+		</element>
+	</definition>
+
+	<definition label="Définition XML de l'environnement de l'Applet" type="XML" decl="WPS-dictionary.dtd">
+
+		<element label="display-profile" type="XML element">
+			Les paramètres d'environnement 'Env' sont définis dans les dictionnaires XML (ex : societecom-dic.xml).
+
+			<rem label='Définition des couleurs'>
+				Les couleurs sont définies en Hexa sur 3 octets : RRVVBB (ex : jaune = FFFF00).
+			</rem>
+
+			<parameters label='Attributs' type="XML attribute">
+				<param name="in-color" type="color" default="#IMPLIED" desc="couleur de fond de l'Applet"/>
+				<param name="filter-color" type="color" default="#IMPLIED" desc="couleur de transparence des zones survolées">
+					En cas d'abscence de cet attribut la transparence est totale.
+				</param>
+				<param name="out-color" type="color" default="#IMPLIED" desc="couleur du bord de l'Applet (rectangle de 1 pixel d'épaisseur)">
+					Disparu pour cause de non utilisation.
+				</param>
+			</parameters>
+		</element>
+	</definition>
+
+	<definition label="Paramètrage de l'Applet" type="HTML">
+
+		<element label="Paramètres HTML" type="HTML element">
+			L'Applet WPS utilise des paramètres définis dans sa balise HTML affin de comuniquer avec le monde extrerieur.
+
+			<parameters label="Attributs" type="Html Applet param">
+				<param name="WakeUpURL" type="URL">
+					URL de la connection à ouvrir afin de maintenir la session
+				</param>
+				<param name="WakeUpDelay" type="int">
+					Délais en ms entre 2 connections de maintient de session
+				</param>
+				<param name="VoidPlanUrl" type="URL">
+					URL à afficher à la place de l'applet dans le cas ou le plan est vide
+				</param>
+				<param name="NoScriptUrl" type="URL">
+					URL de la page à contacter pour émuler Liveconnect lorsqu'il ne fonctionne pas
+				</param>
+				<param name="ErrorPlanUrl" type="URL">
+					URL à afficher à la place de l'applet dans le cas ou une erreur est survenue lors du calcul du plan
+				</param>
+				<param name="ComputeMsg" type="String">
+					Message à afficher dans l'Applet pendant que le serveur crée le plan
+				</param>
+				<param name="DownloadMsg" type="String">
+					Message à afficher dans l'Applet lors du transfert du Plan.
+					Ce message est suivit du pourcentage éffectué.
+				</param>
+				<param name="PlanFile" type="File">
+					Nom d'un fichier contenant un plan sérialisé produit par PlanGenerator et qui sera chargé.
+				</param>
+				<param name="InitColor" type="Color">
+					Couleur de fond de l'Applet avant que la couleur du plan soit lue. En général c'est la même!
+				</param>
+				<param name="MsgColor" type="Color">
+					Couleur des message affichés pendant l'initialisation de l'Applet. Blanc par défaut.
+				</param>
+				<param name="OnAppletReadyFunc" type="script">
+					Fonction javascript à appeler lorsque l'Applet est prète (plan chargé et initialisé).
+					La syntaxe est celle des swatchs (cf item) javascript:_target:function(args).
+				</param>
+				<param name="IsNotIE" type="boolean">
+					'true' si ce navigateur n'est pas IE Windows. Permet de corriger un bug d'IE Windows.
+				</param>
+				<param name="NeedPrint" type="boolean">
+					'true' si ce plan doit être imprimé. Dans ce cas l'Applet change le fond en blanc.
+				</param>
+				<param name="ServletURL" type="URL">
+					URL de la servlet à contacter pour demander le plan.
+				</param>
+				<param name="SessionId" type="int">
+					Identifiant de la session. Certains browsers perdent la session, cet id permet de la retrouver.
+				</param>
+				<param name="WPSParameters" type="cgi">
+					Parametres CGI à passer à la servlet. L'Applet les URL-encodera.
+				</param>
+			</parameters>
+		</element>
+
+		<element label="API Javascript de l'Applet" type="Java source">
+			L'Applet est 'scriptable' en Javascript au travers d'une simple API.
+
+			<parameters type="Java method">
+				<param name="isReady" type="boolean">
+					Retourne 'true' si l'Applet est chargée et que le plan a été initialisé.
+					C'est un prérequis pour utiliser l'API à partir de Javascript.
+				</param>
+				<param name="getAttCount" type="int">
+					Rends le nombre d'attributs du plan, clusterizés compris.
+				</param>
+				<param name="getEnvProp" type="Object">
+					Rends une propriété de l'Env.
+					<parameters type="Java argument">
+						<param name="propName" type="String">
+							Le nom de la propriété à renvoyer telle que définie dans le Dictionnaire.
+						</param>
+					</parameters>
+				</param>
+				<param name="getAttProp" type="Object">
+					Rends une propriété d'un attribut dont on connait l'indice.
+					Grace à getAttCount() on peut parcourir tous les attributs en incrémentant un indice.
+					<parameters type="Java argument">
+						<param name="index" type="int">
+							L'indice de l'attribut dans la table des attributs.
+						</param>
+						<param name="propName" type="String">
+							Le nom de la propriété à renvoyer telle que définie dans le Dictionnaire.
+						</param>
+					</parameters>
+				</param>
+				<param name="getLinkProp" type="Object">
+					Rends une propriété d'un lien dont on connait l'indice.
+					Grace à getLinkCount() on peut parcourir tous les liens en incrémentant un indice.
+					<parameters type="Java argument">
+						<param name="index" type="int">
+							L'indice du lien dans la table des liens.
+						</param>
+						<param name="propName" type="String">
+							Le nom de la propriété à renvoyer telle que définie dans le Dictionnaire.
+						</param>
+					</parameters>
+				</param>
+				<param name="setAttSelection">
+					Sélectionne une liste d'attributs dans le type de sélection spécifié.
+					<parameters type="Java argument">
+						<param name="attIds" type="String">
+							Une liste d'indice d'attributs séparés par ','.
+						</param>
+						<param name="selNam" type="String">
+							Le nom de la sélection telle que définie dans le Dictionnaire.
+						</param>
+					</parameters>
+				</param>
+				<param name="setLinkSelection">
+					Sélectionne une liste de liens dans le type de sélection spécifié.
+					<parameters type="Java argument">
+						<param name="linkIds" type="String">
+							Une liste d'indice de liens séparés par ','.
+						</param>
+						<param name="selNam" type="String">
+							Le nom de la sélection telle que définie dans le Dictionnaire.
+						</param>
+					</parameters>
+				</param>
+				<param name="clearAttSelection">
+					Déselectionne les attributs d'une sélection donnée.
+					<parameters type="Java argument">
+						<param name="selNam" type="String">
+							Le nom de la sélection telle que définie dans le Dictionnaire.
+						</param>
+					</parameters>
+				</param>
+				<param name="clearLinkSelection">
+					Déselectionne les liens d'une sélection donnée.
+					<parameters type="Java argument">
+						<param name="selNam" type="String">
+							Le nom de la sélection telle que définie dans le Dictionnaire.
+						</param>
+					</parameters>
+				</param>
+				<param name="setSelection">
+					Change la sélection courament affichée.
+					<parameters type="Java argument">
+						<param name="selNam" type="String">
+							Le nom de la sélection telle que définie dans le Dictionnaire.
+						</param>
+					</parameters>
+				</param>
+			</parameters>
+		</element>
+	</definition>
+
+
+	<definition type="FAQ">
+		<element name="Fonctionnement" type="TechDoc">
+			<description>
+				Explique le fonctionnement de certains processus.
+			</description>
+			<parameters type="technical description">
+				<param name="Resize de l'Applet">
+				</param>
+				<param name="Maintient de la connection au server">
+				</param>
+				<param name="chargement des icones">
+				</param>
+				<param name="Affichage du Plan">
+					2 buffers de la taille de la fenêtre initialisés à chaque changement de taille.
+					backImg	image du plan tel qu'il apparaitrait sans places
+					restImg	image du plan avec les places au repos.
+					Lorsqu'une place est survolée, la portion de backImg qu'elle occupe est copiée à sa place puis la place active est déssinée par dessus.
+					Lorsqu'une place est"quittée", la portion de restImg qu'elle occupe est copiée à sa place.-->
+				</param>
+			</parameters>
+		</element>
+		<element name="Glossaire" type="UserDoc">
+			<description>
+				Définition des termes employés dans la documentation et le code de l'Applet.
+			</description>
+			<parameters type="technical definition">
+				<param name="Zone">
+					Une Zone est une unité élémentaire de d'information générée par l'Analyse.
+					Il en existe actuellement deux types, les noeuds (BagZone) et les liens (LinkZone)
+					ainsi qu'un sous-type, les sous-noeuds (ActiveZone).
+					Les noeuds sont des clusters d'Attributs, les sous-noeuds des Attrbuts clusterisés.
+					Les liens sont des Objets reliant deux clusters d'Attributs.
+				</param>
+				<param name="SubZone">
+					Une SubZone (sous zone) est une Zone clusterisée dans une autre Zone. Il n'y a qu'un niveau de hierarchie.
+					Graphiquement c'est un 'pustule' d'une place.
+				</param>
+				<param name="SupZone">
+					Une SupZone (super zone) est une Zone qui clusterize d'autres zones.
+					Graphiquement, c'est le 'pustule' principal d'une place, celui qui apparait au repos.
+				</param>
+				<param name="Swatch">
+					Pour s'afficher chaque place ou rue utilise un 'template' graphique qui peut varier en fonction de ses propriétés.
+					Lorsqu'un objet est suvolé, un autre 'template' est utilisé pour l'affichage. Ces 'templates' sont appelés 'swatchs'.
+				</param>
+				<param name="Place">
+					Une Place est la représentation graphique d'un cluster d'Attributs (il peut n'y avoir qu'un attribut).
+				</param>
+				<param name="Rue">
+					Une Rue est la représentation graphique d'un lien entre deux clusters d'Attributs.
+				</param>
+				<param name="Pustule">
+					Un Pustule est la représentation graphique d'un attribut sur une Place.
+					Le Pustule principal (visible au repos) est l'attribut de la Place qui clusterize les autres (BagZone).
+					Les Pustules qui l'entourent sont les attributs clusterizés de la Place (ActiveZone).
+				</param>
+			</parameters>
+		</element>
+	</definition>
+</doc>
