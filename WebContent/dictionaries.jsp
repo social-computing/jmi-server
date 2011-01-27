@@ -1,4 +1,7 @@
-<%@ page import="java.util.*, com.socialcomputing.wps.server.plandictionary.loader.*" %>
+<%@page import="java.util.Iterator"%>
+<%@page import="com.socialcomputing.wps.server.plandictionary.loader.Dictionary"%>
+<%@page import="java.util.Collection"%>
+<%@page import="com.socialcomputing.wps.server.plandictionary.loader.DictionnaryManager"%>
 
 <%!
 // return current time to proxy server request
@@ -41,7 +44,7 @@ public long getLastModified(HttpServletRequest request) {
 <body bgcolor=7f9fdf>
 <!--iframe height="0" width="0" src="../exportrequest.jsp"></iframe-->
 <%
-DictionnaryLoaderDao dld = new DictionnaryLoaderDao();
+DictionnaryManager manager = new DictionnaryManager();
 
 if( request.getParameter( "confirmdelete") != null && request.getParameter( "confirmdelete").equalsIgnoreCase( "y"))
 {
@@ -55,11 +58,11 @@ if( request.getParameter( "confirmdelete") != null && request.getParameter( "con
 		
 			//dic = dicHome.findByPrimaryKey( request.getParameter( "delete" + i));
 			//dic.remove();
-			dld.delete( request.getParameter( "delete" + i) );
+			manager.delete( request.getParameter( "delete" + i) );
 		}
 	}
 }
-Collection dics = dld.findAll();
+Collection<Dictionary> dics = manager.findAll();
 %>
 <form name="test" method="GET" action="dictionaries.jsp">
 <input type="hidden" name="confirmdelete" value="n" />
@@ -85,7 +88,7 @@ Collection dics = dld.findAll();
 	Iterator it = dics.iterator();
 	for( int i = 0; it.hasNext(); ++i)
 	{
-		BeanDictionaryLoader dic = (BeanDictionaryLoader) it.next();
+		Dictionary dic = (Dictionary) it.next();
 		%><tr>
 		<td align="center" nowrap><span class="texblanc"><%=i+1%></span></td>
 		<td align="center" valign="top"><input type="checkbox" name="delete<%=i%>" value="<%=dic.getName()%>" /></td>

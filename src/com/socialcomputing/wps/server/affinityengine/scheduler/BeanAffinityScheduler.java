@@ -16,6 +16,7 @@ import com.socialcomputing.wps.server.affinityengine.AffinityProcess;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.wps.server.plandictionary.loader.DictionaryLoader;
 import com.socialcomputing.wps.server.plandictionary.loader.DictionnaryLoaderDao;
+import com.socialcomputing.wps.server.plandictionary.loader.DictionnaryManager;
 
 public class BeanAffinityScheduler implements AffinityScheduler {
 
@@ -89,8 +90,8 @@ public class BeanAffinityScheduler implements AffinityScheduler {
 		Connection connection = null;
 		try
 		{
-			DictionnaryLoaderDao dao =  new DictionnaryLoaderDao();
-			DictionaryLoader dictionaryLoader = dao.findByName(plan);
+			DictionnaryManager manager =  new DictionnaryManager();
+			DictionaryLoader dictionaryLoader = manager.findByName(plan);
 			
 			connection = this.getConnection();
 			dico = 	dictionaryLoader.getDictionary();
@@ -116,12 +117,12 @@ public class BeanAffinityScheduler implements AffinityScheduler {
 
 	public void updateNow( String plan, HashSet entities) throws RemoteException
 	{
-		WPSDictionary  dico = null;
+		WPSDictionary dico = null;
 		Connection connection = null;
 		try
 		{
-			DictionnaryLoaderDao dao =  new DictionnaryLoaderDao();
-			DictionaryLoader dictionaryLoader = dao.findByName(plan);
+			DictionnaryManager manager =  new DictionnaryManager();
+			DictionaryLoader dictionaryLoader = manager.findByName(plan);
 			
 			connection = this.getConnection();
 			dico = 	dictionaryLoader.getDictionary();

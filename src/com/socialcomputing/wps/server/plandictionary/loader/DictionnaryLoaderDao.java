@@ -9,11 +9,16 @@ import java.sql.Statement;
 //import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.utils.database.DatabaseHelper;
@@ -27,12 +32,12 @@ import com.socialcomputing.utils.database.DatabaseHelper;
  * @version 1.0
  */
 
+@Deprecated
 public class DictionnaryLoaderDao 
 {
 	
 	//private static SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-	private Connection getConnection() throws SQLException, RemoteException
-	{
+	private Connection getConnection() throws SQLException, RemoteException	{
 		DataSource m_DataSource = null;
 		try {
 			Context context = new InitialContext();
@@ -46,11 +51,10 @@ public class DictionnaryLoaderDao
 		return m_DataSource.getConnection();
 	}
 	
-	public Collection findAll() throws RemoteException
-	{
-		ArrayList cdl = new ArrayList ();;
+	public Collection findAll() throws RemoteException {
+		ArrayList<BeanDictionaryLoader> cdl = new ArrayList<BeanDictionaryLoader>();
+		BeanDictionaryLoader dl = null;
 		
-		BeanDictionaryLoader dl = null;		
 		String query ="select * from dictionaries";
 		Connection conn = null;
 		PreparedStatement ps =null;
@@ -87,16 +91,16 @@ public class DictionnaryLoaderDao
 				e.printStackTrace();
 			}
 		}		
-		
 		return cdl;
 	}
 	
-	public BeanDictionaryLoader findByName(String name) throws RemoteException{
+	public BeanDictionaryLoader findByName(String name) throws RemoteException {
 		BeanDictionaryLoader dl = null;
 		String query ="select * from dictionaries where name=?";
 		Connection conn = null;
 		PreparedStatement ps =null;
 		ResultSet  rs = null;
+		
 		try {
 			conn =  getConnection();
 			ps = conn.prepareStatement(query);
@@ -128,12 +132,13 @@ public class DictionnaryLoaderDao
 				e.printStackTrace();
 			}
 		}
+		
 		return dl;
 	}
 	
-	public DictionaryLoader create(String name) throws RemoteException{
+	public DictionaryLoader create(String name) throws RemoteException {
 		
-		String query ="insert into  dictionaries (name) values (?)";
+		String query ="insert into dictionaries (name) values (?)";
 		Connection conn = null;
 		PreparedStatement ps =null;
 		Statement st  =null;
@@ -145,9 +150,9 @@ public class DictionnaryLoaderDao
 			ps.setString(1, name);
 			
 			ps.executeUpdate();
-			String coefTable = WPSDictionary.getCoefficientTableName( name);
-			String queueTable = WPSDictionary.getCoefficientQueuingTableName( name);
-			String histoTable = WPSDictionary.getHistoryTableName( name);
+			String coefTable = WPSDictionary.getCoefficientTableName(name);
+			String queueTable = WPSDictionary.getCoefficientQueuingTableName(name);
+			String histoTable = WPSDictionary.getHistoryTableName(name);
 			
 			st = conn.createStatement();
 			st.execute( "create table " +  coefTable + " (id1 varchar(255) not null, id2 varchar(255) not null, ponderation float)" );
@@ -171,17 +176,15 @@ public class DictionnaryLoaderDao
 			st.execute( "create index iduser on " + histoTable + " (iduser)" );
 			st.execute( "create index type on " + histoTable + " (type)" );
 			//conn.commit();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			/*try { 
+		} catch (Exception e) {
+			/*e.printStackTrace();
+			try { 
 				conn.rollback();
 			} catch (SQLException se) {
 				se.printStackTrace();
 			}*/
 			throw new RemoteException("Unable to create dictionary", e);
-		}
-		finally{
+		} finally {
 			try { 
 				ps.close();
 				
@@ -200,10 +203,11 @@ public class DictionnaryLoaderDao
 				e.printStackTrace();
 			}
 		}
+		
 		return new BeanDictionaryLoader(name, null, null);
 	}
 	
-	public void update(DictionaryLoader dl) throws RemoteException{
+	public void update(DictionaryLoader dl) throws RemoteException {
 		String query ="update  dictionaries set dictionary=? ,filteringdate=? where name=?";
 		Connection conn = null;
 		PreparedStatement ps =null;	
@@ -257,20 +261,18 @@ public class DictionnaryLoaderDao
 			ps.setString(1, name);
 			ps.executeUpdate();
 			st = conn.createStatement();
-			st.execute( "drop table " + WPSDictionary.getCoefficientTableName( name));
-			st.execute( "drop table " + WPSDictionary.getCoefficientQueuingTableName( name));
-			st.execute( "drop table " + WPSDictionary.getHistoryTableName( name));
+			st.execute( "drop table " + WPSDictionary.getCoefficientTableName(name));
+			st.execute( "drop table " + WPSDictionary.getCoefficientQueuingTableName(name));
+			st.execute( "drop table " + WPSDictionary.getHistoryTableName(name));
 			conn.commit();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			try {
 				conn.rollback();
 			} catch (SQLException e1) {
 				
 				e1.printStackTrace();
 			}
-		}
-		finally{
+		} finally{
 			try { 
 				ps.close();
 				
@@ -289,6 +291,5 @@ public class DictionnaryLoaderDao
 				e.printStackTrace();
 			}
 		}
-		
 	}
 }

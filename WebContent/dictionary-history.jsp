@@ -1,3 +1,4 @@
+<%@page import="com.socialcomputing.wps.server.plandictionary.loader.Dictionary"%>
 <%@ page import="java.util.*, java.sql.*, javax.sql.*, javax.naming.*, java.rmi.*, java.io.*" %>
 <%@ page import="com.socialcomputing.wps.server.plandictionary.loader.*" %>
 
@@ -103,8 +104,8 @@ if( sortquery == null) sortquery = "date desc";
 -->
 <%
 	if( request.getParameter( "dictionary") == null) return;
-	DictionnaryLoaderDao dld = new DictionnaryLoaderDao();
-	BeanDictionaryLoader dic = dld.findByName(request.getParameter( "dictionary"));
+	DictionnaryManager manager = new DictionnaryManager();
+	Dictionary dic = manager.findByName(request.getParameter( "dictionary"));
 
 	
 String tableName = com.socialcomputing.wps.server.plandictionary.WPSDictionary.getHistoryTableName( dic.getName());
@@ -197,19 +198,19 @@ rs.close();
 <td nowrap width="20%" align="left">
 	<%if( start > 1)
 	{%>
-	<a href="" title="Voir les abonnés précédents" onclick="javascript:return GotoPred()" >&lt;&lt;&lt; les <%=viewstep%> précédents</a>
+	<a href="" title="Voir les abonnï¿½s prï¿½cï¿½dents" onclick="javascript:return GotoPred()" >&lt;&lt;&lt; les <%=viewstep%> prï¿½cï¿½dents</a>
 	<%}%>
 </td>
 
 <td nowrap width="0%" align="center">
-  <!--span class="subTitleBlue">commencer à</span-->
+  <!--span class="subTitleBlue">commencer ï¿½</span-->
   <input type="hidden" name="start" value="<%=start%>" size="10" />
   <input type="hidden" name="sortcol" value="<%=sortcol%>" />
   <input type="hidden" name="sortorder" value="<%=sortorder%>" />
   <input type="hidden" name="sortquery" value="<%=sortquery%>" />
 </td>
 <td nowrap width="60%" align="center">
-  <span class="subTitleBlue"># abonnés / page</span>
+  <span class="subTitleBlue"># abonnï¿½s / page</span>
   <select name="viewstep" onchange="javascript:ResetStart(); return SubmitForm(false)" >
 	<option value="25"/>25</option>
 	<option value="50" <%=viewstep==50 ? "SELECTED" : ""%> />50</option>
@@ -221,7 +222,7 @@ rs.close();
 <td nowrap width="20%" align="right">
 	<%if( viewstep != -1 && count > start + viewstep -1)
 	{%>
-	<a href="" title="Voir les abonnés suivants" onclick="javascript:return GotoNext()" >&gt;&gt;&gt; les <%=viewstep%> suivants</a>
+	<a href="" title="Voir les abonnï¿½s suivants" onclick="javascript:return GotoNext()" >&gt;&gt;&gt; les <%=viewstep%> suivants</a>
 	<%}%>
 </td>
 </tr></table>

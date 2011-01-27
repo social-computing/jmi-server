@@ -1,5 +1,9 @@
-<%@ page import="java.util.*, com.socialcomputing.wps.server.swatchs.loader.*" %>
 
+
+<%@page import="java.util.Iterator"%>
+<%@page import="com.socialcomputing.wps.server.swatchs.loader.Swatch"%>
+<%@page import="java.util.Collection"%>
+<%@page import="com.socialcomputing.wps.server.swatchs.loader.SwatchManager"%>
 <%!
 // return current time to proxy server request
 public long getLastModified(HttpServletRequest request) {
@@ -41,7 +45,7 @@ public long getLastModified(HttpServletRequest request) {
 <body bgcolor=7f9fdf>
 <!--iframe height="0" width="0" src="../exportrequest.jsp"></iframe-->
 <%
-SwatchLoaderDao sld = new SwatchLoaderDao();
+SwatchManager manager = new SwatchManager();
 
 if( request.getParameter( "confirmdelete") != null && request.getParameter( "confirmdelete").equalsIgnoreCase( "y"))
 {
@@ -50,11 +54,11 @@ if( request.getParameter( "confirmdelete") != null && request.getParameter( "con
 	{
 		if( request.getParameter( "delete" + i) != null)
 		{	// Delete
-			sld.delete( request.getParameter( "delete" + i) );
+			manager.delete( request.getParameter( "delete" + i) );
 		}
 	}
 }
-Collection sws = sld.findAll();
+Collection<Swatch> sws = manager.findAll();
 %>
 <form name="test" method="GET" action="swatches.jsp">
 <input type="hidden" name="confirmdelete" value="n" />
@@ -78,7 +82,7 @@ Collection sws = sld.findAll();
 	Iterator it = sws.iterator();
 	for( int i = 0; it.hasNext(); ++i)
 	{
-		BeanSwatchLoader sw = (BeanSwatchLoader) it.next();
+		Swatch sw = (Swatch) it.next();
 		%><tr>
 		<td align="center" nowrap><span class="texblanc"><%=i+1%></span></td>
 		<td align="center" valign="top"><input type="checkbox" name="delete<%=i%>" value="<%=sw.getName()%>" /></td>

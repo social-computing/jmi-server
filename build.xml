@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project name="CentreRessourcesMenuPortlet-portlet" basedir="." default="all">
+<project name="wps" basedir="." default="all">
 	<property name="applet.version" value="2.0" />
 	<property name="src" location="src"/>
 	<property name="build" location="build"/>

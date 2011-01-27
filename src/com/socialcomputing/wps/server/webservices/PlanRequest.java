@@ -25,6 +25,7 @@ import com.socialcomputing.wps.server.swatchs.ValueContainer;
 import com.socialcomputing.wps.server.swatchs.XSwatch;
 import com.socialcomputing.wps.server.swatchs.loader.SwatchLoader;
 import com.socialcomputing.wps.server.swatchs.loader.SwatchLoaderDao;
+import com.socialcomputing.wps.server.swatchs.loader.SwatchManager;
 
 
 public class PlanRequest
@@ -582,8 +583,8 @@ public class PlanRequest
 				{
 					//SwatchLoader loader = m_SwatchLoaderHome.findByPrimaryKey( swatchName);
 					//swatch = loader.getSwatch();
-					SwatchLoaderDao dao =  new SwatchLoaderDao();
-					SwatchLoader swatchLoader = dao.findByName(swatchName);					
+					SwatchManager manager =  new SwatchManager();
+					SwatchLoader swatchLoader = manager.findByName(swatchName);					
 					swatch = swatchLoader.getSwatch();
 					
 					m_LoadedSwatch.put( swatchName, swatch );

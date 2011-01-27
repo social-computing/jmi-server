@@ -14,6 +14,7 @@ import javax.servlet.*;
 
 import com.socialcomputing.wps.server.plandictionary.loader.DictionaryLoader;
 import com.socialcomputing.wps.server.plandictionary.loader.DictionnaryLoaderDao;
+import com.socialcomputing.wps.server.plandictionary.loader.DictionnaryManager;
 import com.socialcomputing.utils.servlet.ExtendedRequest;
 import com.socialcomputing.utils.servlet.UploadedFile;
 //import com.socialcomputing.wps.server.plandictionary.loader.DictionaryLoaderHome;
@@ -72,7 +73,7 @@ public class WPSPlanUploaderServlet extends HttpServlet
 	private void doUploadDictionary( ExtendedRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		DictionaryLoader loader = null;
-		DictionnaryLoaderDao dao = null;
+		DictionnaryManager manager = null;
 		try
 		{
 			UploadedFile uf = request.getFileParameter( "dictionary");
@@ -86,12 +87,12 @@ public class WPSPlanUploaderServlet extends HttpServlet
 				String name = dicoNode.getAttributeValue( "name");
 				try {
 					//loader = m_DicLoaderHome.findByPrimaryKey( name);
-					dao =  new DictionnaryLoaderDao();
-					loader = dao.findByName(name);
+					manager =  new DictionnaryManager();
+					loader = manager.findByName(name);
 				}
 				catch( RemoteException e)
 				{
-					loader = dao.create(name);
+					loader = manager.create(name);
 					//loader = m_DicLoaderHome.create( name);
 				}
 
@@ -126,8 +127,8 @@ public class WPSPlanUploaderServlet extends HttpServlet
 			if( name != null)
 			{
 				//try {
-					DictionnaryLoaderDao dao =  new DictionnaryLoaderDao();
-					dao.delete(name);
+					DictionnaryManager manager =  new DictionnaryManager();
+					manager.delete(name);
 					//loader = m_DicLoaderHome.findByPrimaryKey( name);
 					//loader.remove();
 //				}

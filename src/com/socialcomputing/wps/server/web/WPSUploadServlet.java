@@ -20,8 +20,10 @@ import org.xml.sax.InputSource;
 
 import com.socialcomputing.wps.server.plandictionary.loader.DictionaryLoader;
 import com.socialcomputing.wps.server.plandictionary.loader.DictionnaryLoaderDao;
+import com.socialcomputing.wps.server.plandictionary.loader.DictionnaryManager;
 import com.socialcomputing.wps.server.swatchs.loader.SwatchLoader;
 import com.socialcomputing.wps.server.swatchs.loader.SwatchLoaderDao;
+import com.socialcomputing.wps.server.swatchs.loader.SwatchManager;
 import com.socialcomputing.utils.servlet.ExtendedRequest;
 import com.socialcomputing.utils.servlet.UploadedFile;
 //import com.socialcomputing.wps.server.plandictionary.loader.DictionaryLoaderHome;
@@ -261,12 +263,12 @@ public class WPSUploadServlet extends HttpServlet
 		try {
 			boolean created = false;
 			DictionaryLoader loader = null;
-			DictionnaryLoaderDao dldao = new DictionnaryLoaderDao();
+			DictionnaryManager manager = new DictionnaryManager();
 			try
 			{
-				loader = dldao.findByName(name);
+				loader = manager.findByName(name);
 				if (loader==null) {
-					loader =dldao.create(name);
+					loader =manager.create(name);
 					created = true;					
 				}
 			}
@@ -277,7 +279,7 @@ public class WPSUploadServlet extends HttpServlet
 			if( loader != null)
 			{
 				loader.setDictionaryDefinition( content);
-				dldao.update(loader);
+				manager.update(loader);
 				output.setLastActionResult( created ? "created." : "updated.");
 			}
 		}
@@ -293,12 +295,12 @@ public class WPSUploadServlet extends HttpServlet
 		try {
 			boolean created = false;
 			SwatchLoader loader = null;
-			SwatchLoaderDao sldao = new SwatchLoaderDao();			
+			SwatchManager slm = new SwatchManager();			
 			try
 			{
-				loader = sldao.findByName(name); //m_SwLoaderHome.findByPrimaryKey( name);
+				loader = slm.findByName(name); //m_SwLoaderHome.findByPrimaryKey( name);
 				if (loader==null) {
-					loader =sldao.create(name);
+					loader =slm.create(name);
 					created = true;					
 				}
 			}
@@ -309,7 +311,7 @@ public class WPSUploadServlet extends HttpServlet
 			if( loader != null)
 			{
 				loader.setSwatch( content);
-				sldao.update(loader);
+				slm.update(loader);
 				output.setLastActionResult( created ? "created." : "updated.");
 			}
 		}

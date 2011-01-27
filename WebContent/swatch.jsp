@@ -41,8 +41,8 @@ public long getLastModified(HttpServletRequest request) {
 <!--iframe height="0" width="0" src="../exportrequest.jsp"></iframe-->
 <%
 if(request.getParameter("swatch") == null) return;
-SwatchLoaderDao sld = new SwatchLoaderDao();
-BeanSwatchLoader sw = sld.findByName(request.getParameter("swatch"));
+SwatchManager manager = new SwatchManager();
+Swatch sw = manager.findByName(request.getParameter("swatch"));
 
 //sw = swHome.findByPrimaryKey( request.getParameter( "swatch"));
 %>

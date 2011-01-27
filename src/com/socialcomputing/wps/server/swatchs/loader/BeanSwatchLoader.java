@@ -6,6 +6,7 @@ import java.rmi.RemoteException;
 
 import com.socialcomputing.wps.server.swatchs.XSwatch;
 
+@Deprecated
 public class BeanSwatchLoader implements SwatchLoader {
 
 	public String      m_SwatchDefinition = null;

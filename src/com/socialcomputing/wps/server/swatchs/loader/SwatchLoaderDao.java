@@ -19,6 +19,7 @@ import javax.sql.DataSource;
 //import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 //import com.socialcomputing.wps.server.plandictionary.loader.BeanDictionaryLoader;
 
+@Deprecated
 public class SwatchLoaderDao {
 
 	private Connection getConnection() throws SQLException, RemoteException
