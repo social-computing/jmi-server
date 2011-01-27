@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+
+	<!--  Configuration générale de l'application -->
+	<display-name>WPS</display-name>
+	<description>WPS Server</description>
+	<welcome-file-list>
+		<welcome-file>
+			/welcome.jsp
+		</welcome-file>
+	</welcome-file-list>
+	
+	<!-- Liste des servlets  -->
+	<servlet>
+		<servlet-name>WPSPlanMakerServlet</servlet-name>
+		<servlet-class>com.socialcomputing.wps.server.web.WPSPlanMakerServlet</servlet-class>
+		<load-on-startup></load-on-startup>
+	</servlet>
+	<servlet>
+		<servlet-name>WPSPlanUploaderServlet</servlet-name>
+		<servlet-class>com.socialcomputing.wps.server.web.WPSPlanUploaderServlet</servlet-class>
+		<load-on-startup></load-on-startup>
+	</servlet>
+	<servlet>
+		<servlet-name>WPSSchedulerServlet</servlet-name>
+		<servlet-class>com.socialcomputing.wps.server.web.WPSSchedulerServlet</servlet-class>
+		<load-on-startup></load-on-startup>
+	</servlet>
+	<servlet>
+		<servlet-name>WPSUploadServlet</servlet-name>
+		<servlet-class>com.socialcomputing.wps.server.web.WPSUploadServlet</servlet-class>
+		<load-on-startup></load-on-startup>
+	</servlet>
+	
+	<!-- Servlet mapping configuration -->
+	<servlet-mapping> 
+		<servlet-name>WPSPlanMakerServlet</servlet-name> 
+  		<url-pattern>/maker</url-pattern> 
+	</servlet-mapping> 
+	<servlet-mapping> 
+		<servlet-name>WPSPlanUploaderServlet</servlet-name> 
+  		<url-pattern>/loader</url-pattern> 
+	</servlet-mapping> 
+	<servlet-mapping> 
+		<servlet-name>WPSSchedulerServlet</servlet-name> 
+  		<url-pattern>/scheduler</url-pattern> 
+	</servlet-mapping> 
+	<servlet-mapping> 
+		<servlet-name>WPSUploadServlet</servlet-name> 
+  		<url-pattern>/upload</url-pattern> 
+	</servlet-mapping> 
+	
+	<login-config>
+		<auth-method>BASIC</auth-method>
+		<realm-name>WPS administration</realm-name>
+	</login-config>
+	<security-role>
+		<role-name>administrator</role-name>
+	</security-role>
+	<!--security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Administration WPS</web-resource-name>
+			<url-pattern>*</url-pattern>
+			<http-method>*</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>administrator</role-name>
+		</auth-constraint>
+	</security-constraint-->
+	<session-config> 
+		<session-timeout>10</session-timeout> 
+	</session-config> 
+  
+</web-app>
