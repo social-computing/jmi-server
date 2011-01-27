@@ -1,0 +1,339 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+
+<!ENTITY relaxPerso "
+		<relax
+			linkBaseLen 	= '8 12'
+			linkMixedLen	= '7 10'
+			linkExtLen	 	= '7 10'
+			nodeSize		= '2.5 4.25'
+			linkWidth       = '.4 1.5'
+			baseLinkMin		= '2'
+			baseLinkMax		= '5'
+			baseLinkKeep	= '2'
+			mixedLinkMin	= '1'
+			mixedLinkMax	= '3'
+			mixedLinkKeep	= '1'
+			extLinkMin		= '2'
+			extLinkMax		= '4'
+			extLinkKeep		= '.5'
+			linkBaseStiff 	= '.5 1'
+			linkMixedStiff	= '.1 .8'
+			linkExtStiff 	= '.1 .8'>
+			&relaxPersoStages;
+		</relax>
+">
+
+<!ENTITY relaxPersoNet "
+		<relax
+			linkBaseLen 	= '6 10'
+			linkMixedLen	= '6 9'
+			linkExtLen	 	= '6 8'
+			nodeSize		= '2.5 4'
+			linkWidth       = '.5 1.75'
+			baseLinkMin		= '2'
+			baseLinkMax		= '5'
+			baseLinkKeep	= '2'
+			mixedLinkMin	= '1'
+			mixedLinkMax	= '3'
+			mixedLinkKeep	= '1'
+			extLinkMin		= '2'
+			extLinkMax		= '4'
+			extLinkKeep		= '.5'			
+			linkBaseStiff 	= '.25 1'
+			linkMixedStiff	= '.1 .8'
+			linkExtStiff 	= '.25 1'>
+			&relaxPersoNetStages;
+		</relax>
+">
+
+<!ENTITY relaxPersoSoc "&relaxPerso;">
+
+
+<!ENTITY relaxDisco "
+		<relax
+			linkMixedLen	= '6 9'
+			linkExtLen		= '6 9'
+			nodeSize		= '2.5 4.5'
+			linkWidth       = '.5 1.5'
+			baseLinkMin		= '2'
+			baseLinkMax		= '5'
+			baseLinkKeep	= '2'
+			mixedLinkMin	= '0.33'
+			mixedLinkMax	= '3'
+			mixedLinkKeep	= '2'
+			extLinkMin		= '2'
+			extLinkMax		= '4'
+			extLinkKeep		= '2'
+			linkExtStiff	= '.5 .8'
+			linkMixedStiff	= '.75 1'>
+			&relaxDiscoStages;
+		</relax>
+">
+
+<!ENTITY relaxDiscoSoc "
+		<relax
+			linkMixedLen	= '6 9'
+			linkExtLen		= '6 9'
+			nodeSize		= '2.75 2.75'
+			linkWidth       = '.5 1.25'
+			baseLinkMin		= '2'
+			baseLinkMax		= '5'
+			baseLinkKeep	= '2'
+			mixedLinkMin	= '.65'
+			mixedLinkMax	= '3'
+			mixedLinkKeep	= '.5'
+			extLinkMin		= '3'
+			extLinkMax		= '5'
+			extLinkKeep		= '2'
+			linkExtStiff	= '.5 .8'
+			linkMixedStiff	= '.75 1'>
+			&relaxDiscoStages;
+		</relax>
+">
+
+<!ENTITY relaxGlobal "&relaxDisco;">
+
+
+<!ENTITY relaxPersoStages "
+			<stage	name			= 'baseRelax'
+					scale 			= '.4'
+					nodeRep    		= '.25'
+					nodeRepMix		= '.75'
+					linkTens		= '.5'
+					linkTensMix		= '.25'
+					linkRep			= '.75'
+					linkRepMix		= '1'
+					linkRot			= '.1'
+					crossRep		= '0'
+					iterCnt			= '30'
+					errorTrsh		= '.002'
+					lastIterCnt		= '50'
+					lastErrorTrsh	= '.002'/>
+			<stage	name			= 'baseFilter'
+					scale 			= '.25'
+					nodeRep    		= '.5'
+					nodeRepMix		= '1'
+					linkTens		= '.25'
+					linkTensMix		= '1.'
+					linkRep			= '4'
+					linkRepMix		= '1.2'
+					linkRot			= '0'
+					crossRep		= '1'
+					iterCnt			= '100'
+					errorTrsh		= '.001'/>
+			<stage	name			= 'extRelax'
+					scale 			= '.5'
+					nodeRep    		= '.33'
+					nodeRepMix		= '.5'
+					linkTens		= '.1'
+					linkTensMix		= '.1'
+					linkRep			= '0'
+					linkRepMix		= '.5'
+					linkRot			= '0'
+					crossRep		= '0'
+					iterCnt			= '25'
+					errorTrsh		= '.01'
+					lastIterCnt		= '50'
+					lastErrorTrsh	= '.002'/>
+			<stage	name			= 'extFilter'
+					scale 			= '.33'
+					nodeRep    		= '.5'
+					nodeRepMix		= '.75'
+					linkTens		= '.5'
+					linkTensMix		= '.75'
+					linkRep			= '1'
+					linkRepMix		= '.75'
+					linkRot			= '.1'
+					crossRep		= '0'
+					iterCnt			= '200'
+					errorTrsh		= '.002'/>
+			<stage	name			= 'extLast'
+					scale 			= '.15'
+					nodeRep    		= '1'
+					nodeRepMix		= '1'
+					linkTens		= '.5'
+					linkTensMix		= '1'
+					linkRep			= '4'
+					linkRepMix		= '1.2'
+					linkRot			= '0'
+					crossRep		= '1'
+					iterCnt			= '100'
+					errorTrsh		= '.001'/>
+">
+
+<!ENTITY relaxPersoNetStages "
+			<stage	name			= 'baseRelax'
+					scale 			= '.33'
+					nodeRep    		= '.4'
+					nodeRepMix		= '.5'
+					linkTens		= '.25'
+					linkTensMix		= '.25'
+					linkRep			= '1'
+					linkRepMix		= '1'
+					linkRot			= '.1'
+					crossRep		= '0'
+					iterCnt			= '30'
+					errorTrsh		= '.002'
+					lastIterCnt		= '50'
+					lastErrorTrsh	= '.002'/>
+			<stage	name			= 'baseFilter'
+					scale 			= '.2'
+					nodeRep    		= '1'
+					nodeRepMix		= '1'
+					linkTens		= '.33'
+					linkTensMix		= '.2'
+					linkRep			= '4'
+					linkRepMix		= '1'
+					linkRot			= '0'
+					crossRep		= '1'
+					iterCnt			= '100'
+					errorTrsh		= '.001'/>
+			<stage	name			= 'extRelax'
+					scale 			= '.5'
+					nodeRep    		= '.33'
+					nodeRepMix		= '.5'
+					linkTens		= '.1'
+					linkTensMix		= '.1'
+					linkRep			= '0'
+					linkRepMix		= '.5'
+					linkRot			= '0'
+					crossRep		= '0'
+					iterCnt			= '25'
+					errorTrsh		= '.01'
+					lastIterCnt		= '50'
+					lastErrorTrsh	= '.002'/>
+			<stage	name			= 'extFilter'
+					scale 			= '.33'
+					nodeRep    		= '.5'
+					nodeRepMix		= '.75'
+					linkTens		= '.5'
+					linkTensMix		= '.75'
+					linkRep			= '1'
+					linkRepMix		= '.75'
+					linkRot			= '.1'
+					crossRep		= '0'
+					iterCnt			= '200'
+					errorTrsh		= '.002'/>
+			<stage	name			= 'extLast'
+					scale 			= '.15'
+					nodeRep    		= '1'
+					nodeRepMix		= '1'
+					linkTens		= '.5'
+					linkTensMix		= '1'
+					linkRep			= '4'
+					linkRepMix		= '1.2'
+					linkRot			= '0'
+					crossRep		= '1'
+					iterCnt			= '100'
+					errorTrsh		= '.001'/>
+">
+
+<!ENTITY relaxPersoSocStages "
+			<stage	name			= 'baseRelax'
+					scale 			= '.3'
+					nodeRep    		= '.25'
+					nodeRepMix		= '.75'
+					linkTens		= '.5'
+					linkTensMix		= '.25'
+					linkRep			= '.75'
+					linkRepMix		= '1'
+					linkRot			= '.1'
+					crossRep		= '0'
+					iterCnt			= '30'
+					errorTrsh		= '.002'
+					lastIterCnt		= '50'
+					lastErrorTrsh	= '.002'/>
+			<stage	name			= 'baseFilter'
+					scale 			= '.2'
+					nodeRep    		= '.5'
+					nodeRepMix		= '1'
+					linkTens		= '.25'
+					linkTensMix		= '1.'
+					linkRep			= '3'
+					linkRepMix		= '1'
+					linkRot			= '0'
+					crossRep		= '1'
+					iterCnt			= '100'
+					errorTrsh		= '.001'/>
+			<stage	name			= 'extRelax'
+					scale 			= '.5'
+					nodeRep    		= '.33'
+					nodeRepMix		= '.5'
+					linkTens		= '.1'
+					linkTensMix		= '.1'
+					linkRep			= '0'
+					linkRepMix		= '.5'
+					linkRot			= '0'
+					crossRep		= '0'
+					iterCnt			= '25'
+					errorTrsh		= '.01'
+					lastIterCnt		= '50'
+					lastErrorTrsh	= '.002'/>
+			<stage	name			= 'extFilter'
+					scale 			= '.33'
+					nodeRep    		= '.5'
+					nodeRepMix		= '.75'
+					linkTens		= '.5'
+					linkTensMix		= '.75'
+					linkRep			= '1'
+					linkRepMix		= '.75'
+					linkRot			= '.1'
+					crossRep		= '0'
+					iterCnt			= '200'
+					errorTrsh		= '.002'/>
+			<stage	name			= 'extLast'
+					scale 			= '.15'
+					nodeRep    		= '1'
+					nodeRepMix		= '1'
+					linkTens		= '.5'
+					linkTensMix		= '1'
+					linkRep			= '4'
+					linkRepMix		= '1.2'
+					linkRot			= '0'
+					crossRep		= '1'
+					iterCnt			= '100'
+					errorTrsh		= '.001'/>
+">
+
+<!ENTITY relaxDiscoStages "
+			<stage	name			= 'extRelax'
+					scale 			= '.25'
+					nodeRep    		= '.5'
+					nodeRepMix		= '.75'
+					linkTens		= '.2'
+					linkTensMix		= '0.5'
+					linkRep			= '.5'
+					linkRepMix		= '.75'
+					linkRot			= '.1'
+					crossRep		= '0'
+					iterCnt			= '50'
+					errorTrsh		= '.002'
+					lastIterCnt		= '200'
+					lastErrorTrsh	= '.0005'/>
+			<stage	name			= 'extFilter'
+					scale 			= '.25'
+					nodeRep    		= '.5'
+					nodeRepMix		= '1.0'
+					linkTens		= '.75'
+					linkTensMix		= '1.0'
+					linkRep			= '1'
+					linkRepMix		= '1.0'
+					linkRot			= '.1'
+					crossRep		= '0'
+					iterCnt			= '200'
+					errorTrsh		= '.0001'/>
+			<stage	name			= 'extLast'
+					scale 			= '.15'
+					nodeRep    		= '1'
+					nodeRepMix		= '.75'
+					linkTens		= '.4'
+					linkTensMix		= '1'
+					linkRep			= '3.5'
+					linkRepMix		= '1.2'
+					linkRot			= '0'
+					crossRep		= '1'
+					iterCnt			= '100'
+					errorTrsh		= '.001'/>
+">
+
+<!ENTITY relaxGlobalStages "&relaxDiscoStages;">

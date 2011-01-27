@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+
+<!DOCTYPE swatch SYSTEM "swatch.dtd">
+
+<swatch             name="SAMPLE_LINK_CUR_REF">
+
+<!-- Base Satellite definition -->
+	<sat	        shape="edgeShp"
+					hover="hoverEvt"
+					click="clickEvt"
+					isBack="true">
+		<slice		inCol="255 255 195"
+					outCol="143 143 143"/>
+	</sat>
+
+	<sat	        shape="edgeShp"
+					selection="search">
+		<slice		inCol="255 255 255"
+					outCol="255 0 0"/>
+	</sat>
+	
+<!-- References -->
+	<font		    id="tipFnt"
+					name="SansSerif"
+					size="12"/>
+
+	<font		    id="fixedFnt"
+					name="Monospaced"
+					size="12"/>
+
+	<shape		    id="edgeShp"
+					scale="1"
+					anchor="intersect">
+	</shape>
+
+	<tooltip    id="tooltip"
+				delay="0"
+				length="3000">
+		<tip 	font="tipFnt"
+				label="[/20sREC_NAME]"
+				inCol="255 255 223"
+				outCol="&blackCol;"
+				textCol="&blackCol;"
+				align="center"
+				isFloating="true"/>
+	</tooltip>
+
+	<!-- Hover event -->
+	<event 	        id="hoverEvt">
+		<show       status="Click to show this link menu"/>
+		<pop        tooltip="tooltip"/>
+	</event>
+
+	<!-- Click event -->
+	<event 	        id="clickEvt">
+		<popup      menu="menu"/>
+	</event>
+
+	<menu		    id="menu"
+					font="menuFnt" >
+		<item 		label="[sREC_NAME]"
+					url="javascript:NewWin([sREC_ID],[sREC_NAME])"/>
+	</menu>
+
+
+		<font		    id="menuFnt"
+						name="Monospaced"
+						size="11"/>
+
+</swatch>
+

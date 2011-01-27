@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+
+<!-- WPS JDBC connector -->
+<!-- @title JDBC connector
+	 @root JDBC-entities -->
+
+<!-- JDBC-entities describes the entities (links in the map) -->
+<!ELEMENT JDBC-entities (comment?, JDBC-connection, JDBC-default-classifier, JDBC-classifier*, JDBC-property*, JDBC-affinity-reader*, JDBC-attributes+)>
+<!ATTLIST JDBC-entities	name    CDATA    #REQUIRED>
+<!ATTLIST JDBC-entities	class   CDATA    "com.socialcomputing.wps.server.plandictionary.connectors.jdbc.JDBCEntityConnector" >
+
+<!-- a comment -->
+<!ELEMENT comment 			(#PCDATA)>
+
+<!-- a JDBC connection -->
+<!ELEMENT JDBC-connection 	(JNDI-data-source | JDBC-driver)>
+<!-- @attr catalog catalog to set after connection is ready -->
+<!ATTLIST JDBC-connection	catalog		CDATA    #IMPLIED>
+
+<!-- a JNDI data-source -->
+<!ELEMENT JNDI-data-source 	(url)>
+
+<!-- a JDBC url -->
+<!ELEMENT url 			(#PCDATA)>
+
+<!-- a JDBC driver -->
+<!ELEMENT JDBC-driver 	(class, url)>
+
+<!-- a JDBC driver class name -->
+<!ELEMENT class 		(#PCDATA)>
+
+<!-- read properties for entities, attributes or sub-attributes 
+	 @example 	%<JDBC-property name="Countries properties">%
+					%<JDBC-query>%SELECT id, name FROM countries where id = ?%</JDBC-query>%
+				%</JDBC-property>%
+				%<JDBC-property name="Belong to properties" multiple-rows="yes" >%
+					%<JDBC-query>%SELECT ido as poss_id, name as poss_name FROM countries_organizations INNER JOIN organizations ON id=ido WHERE idc=? ORDER BY name ASC%</JDBC-query>%
+				%</JDBC-property>%%
+-->
+<!ELEMENT JDBC-property (comment?, (JDBC-query|JDBC-query2) )>
+<!-- @attr name name of the properties
+	 @attr apply for attributes properties only : retrieve these properties to :<li> all attributes, <li> reference attributes or <li> normal attributes
+	 @attr columns-used if -1, all columns are converted into properties, else the n first columns are converted
+	 @attr multiple-rows if true array of properties (all row are examined), if false single properties
+	 @attr use-id1 <i>deprecated</i>
+	 @attr use-id2 <i>deprecated</i>
+-->
+<!ATTLIST JDBC-property 	name     		CDATA    			#REQUIRED
+							apply    		(all|base|notbase) 	"all"
+							column-name		(name|label)		"name"
+							multiple-rows   (yes|no)   			"no"
+							columns-used    CDATA    			"-1"
+							use-id1    		(yes|no)   "no"
+							use-id2    		(yes|no)   "no">
+
+<!-- <i>deprecated</i> SQL query may contain global variables. ex: {s$MY_GLOBAL} -->
+<!ELEMENT JDBC-query (#PCDATA)>
+<!-- SQL query may contain global and/or contextuals variables. <br>
+<li>global: {s$entityId} for a personal plan, {s$attributeId} for a discovery plan<br>
+<li>global: {s$MY_GLOBAL} where $MY_GLOBAL (or MY_GLOBAL) is an IN parameter<br>
+<li>contextual: {scurEntity}, {scurAttribute} or {scurSubAttribute}
+-->
+<!ELEMENT JDBC-query2 (#PCDATA)>
+
+<!-- Default Classifier : retrieve all JDBC-entities -->
+<!ELEMENT JDBC-default-classifier (JDBC-connection?, (JDBC-query|JDBC-query2))>
+
+<!-- Classifier -->
+<!ELEMENT JDBC-classifier (comment?, JDBC-connection?, (JDBC-query|JDBC-query2), JDBC-classifier-rule*)>
+<!ATTLIST JDBC-classifier name     CDATA    #REQUIRED>
+
+<!-- Classifier Rule -->
+<!ELEMENT JDBC-classifier-rule (comment?, (JDBC-query|JDBC-query2))>
+<!ATTLIST JDBC-classifier-rule name     CDATA    #REQUIRED>
+
+<!-- Affinity Reader -->
+<!ELEMENT JDBC-affinity-reader (comment?, JDBC-connection?, (JDBC-query|JDBC-query2))>
+<!ATTLIST JDBC-affinity-reader name     CDATA    #REQUIRED>
+
+<!-- Attributes -->
+<!ELEMENT JDBC-attributes (comment?, JDBC-connection?, (JDBC-query|JDBC-query2), JDBC-exclusion?, JDBC-analysis-properties?, JDBC-property*, JDBC-subattributes?, JDBC-selection*)>
+<!ATTLIST JDBC-attributes name     CDATA    #REQUIRED>
+
+<!-- Attributes Exclusion -->
+<!ELEMENT JDBC-exclusion (comment?, (JDBC-query|JDBC-query2))>
+
+<!-- Analysis Properties -->
+<!ELEMENT JDBC-analysis-properties (JDBC-property*)>
+
+<!-- Subattributes -->
+<!ELEMENT JDBC-subattributes (comment?, JDBC-connection?, (JDBC-query|JDBC-query2), JDBC-property*)>
+<!ATTLIST JDBC-subattributes name     CDATA    #REQUIRED>
+
+<!-- Selection -->
+<!ELEMENT JDBC-selection (comment?, JDBC-connection?, (JDBC-query|JDBC-query2))>
+<!ATTLIST JDBC-selection name   CDATA    #REQUIRED>
+<!ATTLIST JDBC-selection use   	(noid | curid | refid | currefid)	"refid">
+<!ATTLIST JDBC-selection apply   (all|base|notbase) 				"all">
+

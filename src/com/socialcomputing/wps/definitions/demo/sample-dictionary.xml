@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+
+<!DOCTYPE dictionary SYSTEM "WPS-dictionary.dtd" >
+
+<dictionary name="sample" >
+	<comment>Sample Plan Dictionary</comment>
+
+	<entities>
+		<JDBC-entities name="WPS Sample">
+			<JDBC-connection catalog="WPS_SAMPLE" >
+				<JNDI-data-source>
+					<url>java:comp/env/jdbc/WPS_SAMPLE_DS</url>
+				</JNDI-data-source>
+			</JDBC-connection>
+	
+			<JDBC-default-classifier>
+				<JDBC-query2>SELECT id FROM organizations</JDBC-query2>
+			</JDBC-default-classifier>
+	
+			<JDBC-property name="Organizations properties" column-name="label">
+				<JDBC-query2>SELECT id, name FROM organizations WHERE id={icurEntity}</JDBC-query2>
+			</JDBC-property>
+
+			<JDBC-affinity-reader name="JDBC_AffReader">
+				<comment>Affinity Group for an organization</comment>
+				<JDBC-query2>SELECT b.ido, count( a.ido) FROM countries_organizations a LEFT JOIN countries_organizations b ON a.idc=b.idc WHERE a.ido={i$entityId} GROUP BY b.ido</JDBC-query2>
+			</JDBC-affinity-reader>
+
+			<JDBC-affinity-reader name="JDBC_DiscoveryAffReader">
+				<comment>Affinity Group for a country</comment>
+				<JDBC-query2>SELECT b.ido, count( a.ido) FROM countries_organizations a LEFT JOIN countries_organizations b ON a.idc=b.idc WHERE a.idc={i$attributeId} GROUP BY b.ido</JDBC-query2>
+			</JDBC-affinity-reader>
+
+			<JDBC-affinity-reader name="JDBC_GlobalAffReader">
+				<comment>Global Affinity Group</comment>
+				<JDBC-query2>SELECT id, 1 FROM organizations</JDBC-query2>
+			</JDBC-affinity-reader>
+	
+			<JDBC-attributes name="JDBC_Profile">
+				<comment>Organizations attributes</comment>
+				<JDBC-query2>SELECT idc, 1 FROM countries_organizations WHERE ido={icurEntity}</JDBC-query2>
+	
+				<JDBC-property name="Countries properties" column-name="label" >
+					<JDBC-query2>SELECT id, name FROM countries where id={icurAttribute}</JDBC-query2>
+				</JDBC-property>
+				<JDBC-property name="Belong to properties" column-name="label" multiple-rows="yes" >
+					<JDBC-query2>SELECT ido as poss_id, name as poss_name FROM countries_organizations LEFT JOIN organizations ON id=ido WHERE idc={icurAttribute} ORDER BY name ASC</JDBC-query2>
+				</JDBC-property>
+			</JDBC-attributes>
+			
+		</JDBC-entities>
+	</entities>
+	
+	<env-property name="$web_context" value ="/wps" />
+	
+	<affinity-reader-profile name="AffReader" affinity-reader-ref="JDBC_AffReader" threshold="100" />
+	<affinity-reader-profile name="DiscoveryAffReader" affinity-reader-ref="JDBC_DiscoveryAffReader" threshold="100" />
+	<affinity-reader-profile name="GlobalAffReader" affinity-reader-ref="JDBC_GlobalAffReader" threshold="100" />
+
+	<analysis-profile name="Profile" attributes-ref="JDBC_Profile" type="personal" attribute-size="frequency">
+		<props-mapping>
+			<entity-props-mapping>
+				<mapping key="ID" 	value="id" />
+				<mapping key="NAME" value="name" />
+			</entity-props-mapping>
+			<attribute-props-mapping>
+				<mapping key="ID" 	value="id" />
+				<mapping key="NAME" value="name" />
+				<mapping key="POSS_ID" 	value="poss_id" />
+				<mapping key="POSS_NAME" value="poss_name" />
+			</attribute-props-mapping>
+		</props-mapping>
+		<entities-recommendation>
+			<mapping key="REC_ID"  		value="id" />
+			<mapping key="REC_NAME"  	value="name" />
+		</entities-recommendation>
+	</analysis-profile>
+
+	<analysis-profile name="DiscoveryProfile" attributes-ref="JDBC_Profile" type="discovery" attribute-size="frequency" attributes-max="300" >
+		<props-mapping>
+			<entity-props-mapping>
+				<mapping key="ID" 	value="id" />
+				<mapping key="NAME" value="name" />
+			</entity-props-mapping>
+			<attribute-props-mapping>
+				<mapping key="ID" 	value="id" />
+				<mapping key="NAME" value="name" />
+				<mapping key="POSS_ID" 	value="poss_id" />
+				<mapping key="POSS_NAME" value="poss_name" />
+			</attribute-props-mapping>
+		</props-mapping>
+		<entities-recommendation>
+			<mapping key="REC_ID"  		value="id" />
+			<mapping key="REC_NAME"  	value="name" />
+		</entities-recommendation>
+	</analysis-profile>
+
+	<analysis-profile name="GlobalProfile" attributes-ref="JDBC_Profile" type="global" attribute-size="same" attributes-max="300" >
+		<props-mapping>
+			<entity-props-mapping>
+				<mapping key="ID" 	value="id" />
+				<mapping key="NAME" value="name" />
+			</entity-props-mapping>
+			<attribute-props-mapping>
+				<mapping key="ID" 	value="id" />
+				<mapping key="NAME" value="name" />
+				<mapping key="POSS_ID" 	value="poss_id" />
+				<mapping key="POSS_NAME" value="poss_name" />
+			</attribute-props-mapping>
+		</props-mapping>
+		<entities-recommendation>
+			<mapping key="REC_ID"  		value="id" />
+			<mapping key="REC_NAME"  	value="name" />
+		</entities-recommendation>
+	</analysis-profile>
+
+	<display-profile name="Display" display-empty-links="no" in-color="7F9FDF" out-color="0" filter-color="9fbfff" >
+		<swatch-segmentation>
+			<attribute-swatch>
+				<norm-swatch default-ref="SAMPLE_NODE_NORM" />
+				<ref-swatch default-ref="SAMPLE_NODE_REF" />
+				<active-norm-swatch default-ref="SAMPLE_NODE_CUR_NORM" />
+				<active-ref-swatch default-ref="SAMPLE_NODE_CUR_REF" />
+			</attribute-swatch>
+			<link-swatch>
+				<norm-swatch default-ref="SAMPLE_LINK_NORM" />
+				<ref-swatch default-ref="SAMPLE_LINK_REF" />
+				<active-norm-swatch default-ref="SAMPLE_LINK_CUR_NORM" />
+				<active-ref-swatch default-ref="SAMPLE_LINK_CUR_REF" />
+			</link-swatch>
+		</swatch-segmentation>
+		<selection-swatch name="search" />
+	</display-profile>
+
+	<display-profile name="GlobalDisplay" display-empty-links="no" display-fake-links="no" in-color="7F9FDF" out-color="0" filter-color="9fbfff" >
+		<swatch-segmentation>
+			<attribute-swatch>
+				<norm-swatch default-ref="SAMPLE_NODE_NORM" />
+				<ref-swatch default-ref="SAMPLE_NODE_REF" />
+				<active-norm-swatch default-ref="SAMPLE_NODE_CUR_NORM" />
+				<active-ref-swatch default-ref="SAMPLE_NODE_CUR_REF" />
+			</attribute-swatch>
+			<link-swatch>
+				<norm-swatch default-ref="SAMPLE_LINK_NORM" />
+				<ref-swatch default-ref="SAMPLE_LINK_REF" />
+				<active-norm-swatch default-ref="SAMPLE_LINK_CUR_NORM" />
+				<active-ref-swatch default-ref="SAMPLE_LINK_CUR_REF" />
+			</link-swatch>
+		</swatch-segmentation>
+		<selection-swatch name="search" />
+	</display-profile>
+
+	<segmentation>
+		<analysis-segmentation  default-ref="Profile" />
+		<affinity-reader-segmentation default-ref="AffReader" >
+			<affreader-analysis-mapping analysis-ref="DiscoveryProfile" default-ref="DiscoveryAffReader" />
+			<affreader-analysis-mapping analysis-ref="GlobalProfile" default-ref="GlobalAffReader" />
+		</affinity-reader-segmentation>
+		<display-segmentation default-ref="Display" >
+			<display-analysis-mapping analysis-ref="GlobalProfile" default-ref="GlobalDisplay" />
+		</display-segmentation>
+	</segmentation>
+	
+</dictionary>

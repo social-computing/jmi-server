@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<project name="CentreRessourcesMenuPortlet-portlet" basedir="." default="all">
+	<property name="applet.version" value="2.0" />
+	<property name="src" location="src"/>
+	<property name="build" location="build"/>
+	<property name="dist"  location="dist"/>
+
+	<path id="project.class.path">
+		<pathelement location="WebContent/WEB-INF/lib"/>
+	</path>
+
+	
+	<target name="all" depends="compile,applet,server" />
+
+	<target name="compile">
+		<echo file="${src}/com/socialcomputing/wps/client/applet/AppletVersion.java">package com.socialcomputing.wps.client.applet; 
+			public final class AppletVersion { public static final String APPLET_VERSION="${applet.version}";}
+		</echo>
+		<echo file="${src}/com/socialcomputing/wps/client/applet/AppletVersion.jsp">&#x3C;%! final String APPLET_VERSION="${applet.version}"; %&#x3E;</echo>
+		<echo file="${src}/com/socialcomputing/wps/client/applet/AppletVersion.txt">${applet.version}</echo>
+		<javac srcdir="${src}" destdir="${build}/classes" >
+		      <classpath refid="project.class.path"/>
+		</javac>
+	</target>
+	
+	<target name="applet">
+		<mkdir dir="${dist}"/>
+		<jar 	destfile="${dist}/WPSApplet${applet.version}.jar" 
+				basedir="${build}/classes" 
+				includes="com/socialcomputing/wps/client/applet/**" 
+		/>
+		<mkdir dir="WebContent/applet"/>
+	</target>
+
+	<target name="server">
+		<copy file="${dist}/WPSApplet${applet.version}.jar" tofile="WebContent/applet/WPSApplet${applet.version}.jar" />
+		<copy file="${src}/com/socialcomputing/wps/client/applet/AppletVersion.jsp" tofile="WebContent/applet/AppletVersion.jsp" />
+		<jar 	destfile="${dist}/WPS.jar" 
+				basedir="${build}/classes" 
+				includes="com/socialcomputing/wps/**,com/socialcomputing/utils/**" 
+		/>
+		<copy file="${dist}/WPS.jar" tofile="WebContent/WEB-INF/lib/WPS.jar" />
+		<war destfile="${dist}/wps.war" 
+			basedir="WebContent" 
+			includes="**" 
+		/>
+	</target>
+</project>

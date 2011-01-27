@@ -1,0 +1,300 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+
+<!-- A Swatch describes how a specifique WPS object is displayed and respond to events.<br>
+	Nearly every elements includes an optional unique 'id' attribute. Its purpose is to identify an element so it can be referenced somewhere else.  -->
+<!-- @title swatch
+	 @root swatch -->
+
+
+<!-- A swatch. It has just a few attributes. All its information is in its 'sat' elements -->
+<!ELEMENT swatch ( comment?, ( sat | ref )+, ( string | color | transfo | shape | inter | key | font | tip |
+					open | play | popup | show | dump | event | menu  | item | slice | tooltip | ref )* )>
+<!--
+	@attr name    The unique identifier of this Swatch.
+	@attr title   <i>deprecated</i>.
+-->
+	<!ATTLIST swatch    name    CDATA   #REQUIRED
+						title   CDATA   #IMPLIED>
+
+<!ELEMENT comment (#PCDATA)>
+
+<!-- A reference to an element. 
+	Complex elements can be referenced at different places using a unique identifier.
+	It is the element equivalent of attribute="ref".-->
+<!ELEMENT ref EMPTY>
+<!-- @attr name   name of the element -->
+	<!ATTLIST ref       name    IDREF   #REQUIRED>
+
+<!-- A string of text. The text can be formated to include properties that will be replaced at run-time.<br>
+Formats: ... -->
+<!ELEMENT string EMPTY>
+<!-- @attr label  this string. -->
+	<!ATTLIST string    label   CDATA   #REQUIRED
+						id      ID      #IMPLIED>
+
+<!-- An RGB color.
+@example %<color rgb="#FF00FF"/>% or %<color rgb="255 0 255"/>% -->
+<!ELEMENT color EMPTY>
+<!-- @attr rgb   An hexadecimal HTML color code or a triplet r g b. -->
+	<!ATTLIST color     rgb     CDATA   #REQUIRED
+						id      ID      #IMPLIED>
+
+<!-- A simple geometrical transformation. It is used to sets the position and scale of a graphical object. Usally, this transform a shape from a WPS Object to another shape in a satellite. -->
+<!ELEMENT transfo ( cart | polar )? >
+<!-- @attr scale  The scale of this object relative to its parent [0,1].  
+	@attr map   Type of coordinate mapping:<br>
+				<li>interpol : coordinates are evaluated using using bilinear interpolation of the parent shape.<br>
+				<li>relative : coordinates are relative to the parent shape center.<br>
+				<li>absolute : coordinates are absolute (relative to the window origin). 
+-->
+	<!ATTLIST transfo   scale   CDATA   "0"
+						map     ( interpol | relative | absolute )  "absolute"
+						id      ID      #IMPLIED>
+
+<!-- A point location using cartesian coordinates.-->
+<!ELEMENT cart EMPTY>
+	<!ATTLIST cart      x       CDATA   "0"
+						y       CDATA   "0">
+
+<!-- A point location using polar coordinates. -->
+<!ELEMENT polar EMPTY>
+<!-- @attr dir Clockwise angular direction in degrees. 0 degree means 3 o'clock.
+	 @attr rad Radius in interpol/relative/absolute units.-->
+	<!ATTLIST polar     dir     CDATA   "0"
+						rad     CDATA   "1">
+
+<!-- A basic scalable shape. Its form depends on the number of points:<br>
+<li>0 point     : It's a 'ghosted' shape, without visible surface.<br>
+<li>1 point     : It's a disk whose radius is given by the scale attribute.<br>
+<li>2 points    : It's a segment whose width is given by the scale attribute.<br>
+<li>more points : It's a polygon whose size is given by the scale attribute.
+-->
+<!ELEMENT shape ( point* )>
+<!-- @attr scale depending on his type.
+	@attr anchor anchor.
+-->
+	<!ATTLIST shape     scale   CDATA   "0"
+						anchor  ( center | intersect | tangent ) "center"
+						id      ID      #IMPLIED>
+						
+<!-- A cartesian 2D location.-->
+<!ELEMENT point EMPTY>
+	<!ATTLIST point     x       CDATA   #REQUIRED
+						y       CDATA   #REQUIRED
+						id      ID      #IMPLIED>
+
+<!-- A localized value to interpolate. This is a couple (pos, value) used by the 'inter' element. -->
+<!ELEMENT key EMPTY>
+<!-- @attr pos Normalized position of the key on [0,1].
+	@attr value A reference to an object. All the keys of an inter must be of the same class.
+	-->
+	<!ATTLIST key       pos     CDATA   #REQUIRED
+						value   CDATA   #REQUIRED
+						id      ID      #IMPLIED>
+
+<!-- An interpolation between keys.<br>
+At least 2 keys are needed to interpolate using a property or a randon factor. Min must be strictly less than max.
+-->
+<!ELEMENT inter ( key, key+ )>
+<!-- @attr class All keys must share the same type, one of : { color, integer, float, boolean, string }.
+	 @attr isAdaptive If isAdaptive is 'true', the interpolation property bounds are evaluated automaticaly for this map.<br> Else the bounds are given by the 'min' and 'max' attributes.
+	 @attr isHSB If is HSB is 'true', the keys are hexadecimal values (RGB like).
+	 @attr min The minimal value of the bound property. If the property if less than min, it is set to min.
+	 @attr max The maximal value of the bound property. If the property if greater than max, it is set to max.
+	 @attr type The way keys are interpolated:<br>
+				<li>stair 	: The output is a discrete graph representing exact value of the keys (like stairs).<br>
+				<li>linear	: The output is a linear interpolation of the keys.<br>
+				<li>spline	: The output is a cubic spline interpolation of the keys.
+	 @attr binding Name of the property that interpolate the keys. If no binding is specified, the output is a random interpolation of the keys.
+-->
+	<!ATTLIST inter     class   ( color | integer | float | boolean | string | transfo ) "integer"
+						min     CDATA   "0"
+						max     CDATA   "100"
+						isAdaptive ( true | false ) "false"
+						isHSB 	( true | false ) "false"
+						type    ( stair | linear | spline ) "linear"
+						binding CDATA   #IMPLIED
+						id      ID      #IMPLIED>
+
+<!-- A typeface. To preserve platform independance, choose between { Serif, SansSerif, Monospaced, Symbol }.-->
+<!ELEMENT font EMPTY>
+<!-- @attr name Name of the system font.
+	 @attr size Size in point of the TypeFace.
+	 @attr style One of { plain, bold, italic, bold-italic }.
+-->
+	<!ATTLIST font      name    CDATA   "SansSerif"
+						size    CDATA   "9"
+						style   ( plain | bold | italic | bold-italic )   "plain"
+						id      ID      #IMPLIED>
+
+<!-- A graphical tip of text. This can be used to describe a tooltip or a titletip. -->
+<!ELEMENT tip EMPTY>
+<!-- @attr label Text of the tip or a string reference (then url must be empty).
+	 @attr url URL of the text of the tip (then label must be empty).
+	 @attr font A font reference.
+	 @attr textCol This text color as a color or a color reference.
+	 @attr inCol This text background color as a color or a color reference.
+	 @attr outCol This text border color as a color or a color reference.
+	 @attr dir Direction.
+	 @attr align How this text is horizontally aligned, must be one of { left, center, right }.
+	 @attr isCorner True if this tip is handle by its corner. Else it is centered.	 
+	 @attr isFloating True if this tip must try to stay in the window (to avoid clipping). 
+-->
+	<!ATTLIST tip       label   CDATA   #IMPLIED
+						url     CDATA   #IMPLIED
+						textCol CDATA   "&amp;blackcol;"
+						font    IDREF   #IMPLIED
+						inCol   CDATA   #IMPLIED
+						outCol  CDATA   #IMPLIED
+						dir   	( N | NE | E | SE | S | SW | W | NW )   "SW"
+						align   ( left | center | right )   "left"
+						isCorner ( true | false )   "false"
+						isFloating ( true | false )   "false"
+						id      ID      #IMPLIED>
+
+<!-- A menu item. Oone of the next 3 actions are possible:<br>
+<li>popup a new browser window at the specified URL,<br>
+<li>popup a new browser window at the specified tracking URL if 'track' attribute exists,<br>
+<li>call a JavaScript function if it's supported by the browser and 'call' attribute exists,
+-->
+<!ELEMENT item EMPTY >
+<!-- @attr label Text apearing in the menu for this item.
+	 @attr url Adress to go when this item is choosen. **********
+	 @attr track Information to send to the tracking engine when this item is choosen. **********
+	 @attr font A reference to a font used for rendering this. If no font is specified, the menu's one is used.
+-->
+	<!ATTLIST item      label   CDATA   #REQUIRED
+						url     CDATA   #IMPLIED
+						track   CDATA   #IMPLIED
+						font    IDREF   #IMPLIED
+						id      ID      #IMPLIED>
+					
+<!-- A list of actions to execute. This is triggered when a satellite changes its state.<br>
+This can execute any of the next actions in any order:<br>
+open URL, play sound, popup menu, show status, dump text, pop tooltip. -->
+<!ELEMENT event ( open | play | popup | show | dump | pop )+ >
+	<!ATTLIST event     id      ID      #IMPLIED>
+
+<!-- Opens a new browser window. The location of the page to open is specified by an URL.-->
+<!ELEMENT open EMPTY>
+<!-- @attr url Adress to go when this item is choosen. **********
+	 @attr track Information to send to the tracking engine when this item is choosen. ********** -->
+	<!ATTLIST open      url     CDATA   #REQUIRED
+						track   CDATA   #IMPLIED
+						id      ID      #IMPLIED>
+
+<!-- Plays a sound. The sound file must be in Sun's .au audio format.-->						
+<!ELEMENT play EMPTY>
+<!-- @attr sound URL of the sound.-->
+	<!ATTLIST play      sound   CDATA   #REQUIRED
+						id      ID      #IMPLIED>
+						
+<!-- Popup a contextual menu.-->						
+<!ELEMENT popup EMPTY>
+<!-- @attr menu A menu reference.-->
+	<!ATTLIST popup     menu    IDREF   #REQUIRED
+						id      ID      #IMPLIED>
+						
+<!-- Update the browser status bar.-->						
+<!ELEMENT show EMPTY>
+<!-- @attr status The text to show in the status bar. -->
+	<!ATTLIST show      status  CDATA   #REQUIRED
+						id      ID      #IMPLIED>
+						
+<!-- Print a line of text. The output is visible in the browser Java Console.-->						
+<!ELEMENT dump EMPTY>
+<!-- @attr text The text to dump in the Java Console. -->
+	<!ATTLIST dump      text    CDATA   #REQUIRED
+						id      ID      #IMPLIED>
+						
+<!-- Popup a tooltip. -->						
+<!ELEMENT pop EMPTY>
+<!-- @attr tooltip A tooltip reference.-->
+	<!ATTLIST pop       tooltip IDREF   #REQUIRED
+						id      ID      #IMPLIED>
+
+<!-- A contextual menu. This can be pop when a satellite receive an event. -->
+<!ELEMENT menu ( menu | item | ref | separator )+ >
+<!-- @attr label Text displayed if this is a sub-menu.
+	 @attr font Font to use to render label and/or menu items.-->
+	<!ATTLIST menu      label   CDATA   #IMPLIED
+						font    IDREF   #IMPLIED
+						id      ID      #IMPLIED>
+
+<!-- A menu separator. -->
+<!ELEMENT separator EMPTY>
+
+<!-- A layer of graphical data.<br>
+	This shape is the same as its parent satellite's one. The size and position of this is given by the 'transfo' attribute. -->
+<!ELEMENT slice ( transfo?, tip? )>
+<!-- @attr transfo A transfo reference used to localise and scale this in a satellite.
+	 @attr inCol This background color or color reference.
+	 @attr outCol This border color or color reference.
+	 @attr image URL of an image of type {gif, jpg, png} to display in this.
+	 @attr tip A tip reference. For the titletip to display, the transfo's scale must be 0. -->
+	<!ATTLIST slice     transfo IDREF   #IMPLIED
+						inCol   CDATA   #IMPLIED
+						outCol  CDATA   #IMPLIED
+						image   CDATA   #IMPLIED
+						tip     IDREF   #IMPLIED
+						id      ID      #IMPLIED
+						alpha   CDATA   "1"
+						linewidth CDATA "1">
+
+<!-- A text tip. This can be pop when a satellite receive an event. -->
+<!ELEMENT tooltip ( transfo?, tip? )>
+<!-- @attr image  URL of an image of type {gif, jpg, png} to display in this.
+ 	 @attr delay  Time in ms before this appears.
+ 	 @attr length Time in ms before this disappears.
+-->
+	<!ATTLIST tooltip   image   CDATA   #IMPLIED
+						delay   CDATA   "0"
+						length  CDATA   "4000"
+						id      ID      #IMPLIED>
+
+<!-- A satellite. -->
+<!ELEMENT sat ( transfo?, ( slice | ref )+ )>
+<!-- @attr shape 	  	A shape reference.
+ 	 @attr transfo 	  	A transfo reference.
+ 	 @attr hover 		An event reference that is executed when this is hovered by the user.
+ 	 @attr click 		An event reference that is executed when this is clicked by the user.
+ 	 @attr dblClk 		An event reference that is executed when this is dblclicked by the user.
+ 	 @attr selection 	A selection id.
+ 	 @attr linkDarkCol 	Dark color of the link or a color reference.
+ 	 @attr linkNormCol 	Plain color of the link or a color reference.
+ 	 @attr linkLitCol 	Lite color of the link or a color reference.
+ 	 @attr isVisible 	True if this sat is visible.
+ 	 @attr isSuper 		True if this sat is visible on WPS Object superzone.
+ 	 @attr isSub 		True if this sat is visible on WPS Object subzones.
+ 	 @attr isCur 		True if this sat is visible on WPS Object current zone.
+ 	 @attr isRest 		True if this sat is visible on WPS Object rest zones.
+ 	 @attr isBack 		True if this sat is visible in the background (transparent).
+ 	 @attr isTip 		True if this sat is a title tip.
+ 	 @attr isNoSided 	True if .-->
+	<!ATTLIST sat       shape   IDREF   #REQUIRED
+						transfo IDREF   #IMPLIED
+						hover   IDREF   #IMPLIED
+						click   IDREF   #IMPLIED
+						dblClk  IDREF   #IMPLIED
+						selection   CDATA   #IMPLIED
+						linkDarkCol CDATA   #IMPLIED
+						linkNormCol CDATA   #IMPLIED
+						linkLitCol  CDATA   #IMPLIED
+						isVisible   ( true | false )    "true"
+						isSuper     ( true | false )    "true"
+						isSub       ( true | false )    "false"
+						isCur       ( true | false )    "false"
+						isRest      ( true | false )    "true"
+						isBack      ( true | false )    "false"
+						isTip       ( true | false )    "false"
+						isNoSided   ( true | false )    "false"
+						id      ID      #IMPLIED>
+
+<!ENTITY blackCol       "0">
+<!ENTITY whiteCol       "ffffff">
+<!ENTITY redCol         "ff0000">
+<!ENTITY redDrkCol      "7f0000">
+<!ENTITY redLitCol      "ff8f8f">
+<!ENTITY tipCol         "ffffdf">
+<!ENTITY inSpotCol    	"255 175 79">
+<!ENTITY outSpotCol   	"255 135 55">

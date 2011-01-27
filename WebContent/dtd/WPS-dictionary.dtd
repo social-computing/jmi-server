@@ -1,0 +1,219 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+
+<!ENTITY % JDBC-entities SYSTEM "JDBC-connector.dtd" >
+%JDBC-entities;
+
+<!ENTITY % XML-entities SYSTEM "XML-connector.dtd" >
+%XML-entities;
+
+<!ENTITY % JAVA-entities SYSTEM "JAVA-connector.dtd" >
+%JAVA-entities;
+
+<!ENTITY % Relax-params SYSTEM "Relax-params.dtd" >
+%Relax-params;
+
+<!-- =====================================================================  -->
+<!-- Dictionaries -->
+<!-- =====================================================================  -->
+<!ELEMENT dictionaries (dictionary+)>
+
+<!-- =====================================================================  -->
+<!-- Dictionary -->
+<!-- =====================================================================  -->
+<!ELEMENT dictionary (comment?, entities, env-property*, filtering-scheduling?, filtering-profile*, affinity-reader-profile+, analysis-profile+, display-profile+, segmentation)>
+<!ATTLIST dictionary name   NMTOKEN 	#REQUIRED>
+
+<!ELEMENT entities (JDBC-entities|XML-entities|JAVA-entities)>
+
+<!-- =====================================================================  -->
+<!-- Env Properties : fixing env properties -->
+<!-- =====================================================================  -->
+<!ELEMENT env-property EMPTY>
+<!ATTLIST env-property name  CDATA    #REQUIRED>
+<!ATTLIST env-property value CDATA    #REQUIRED>
+
+<!-- =====================================================================  -->
+<!-- Filtering scheduling  -->
+<!-- =====================================================================  -->
+<!ELEMENT filtering-scheduling (filtering-scheduling-timer|filtering-scheduling-time) >
+
+<!ELEMENT filtering-scheduling-timer EMPTY>
+<!ATTLIST filtering-scheduling-timer timer 	CDATA    "60">
+
+<!ELEMENT filtering-scheduling-time  EMPTY>
+<!ATTLIST filtering-scheduling-time time 	CDATA    "00:00">
+
+<!-- =====================================================================  -->
+<!-- Filtering Profile : fixing parameters and connector -->
+<!-- =====================================================================  -->
+<!ELEMENT filtering-profile (comment?)>
+<!ATTLIST filtering-profile name     		CDATA    #REQUIRED>
+<!ATTLIST filtering-profile attributes-ref	CDATA    #REQUIRED>
+<!ATTLIST filtering-profile threshold 		CDATA    "60">
+<!ATTLIST filtering-profile max-attribute 	CDATA    "1000">
+<!ATTLIST filtering-profile tmp-dir			CDATA    #IMPLIED>
+
+<!-- =====================================================================  -->
+<!-- Affinity Reader Profile : fixing parameters and connector -->
+<!-- =====================================================================  -->
+<!ELEMENT affinity-reader-profile (comment?)>
+<!ATTLIST affinity-reader-profile name     				CDATA    #REQUIRED>
+<!ATTLIST affinity-reader-profile affinity-reader-ref	CDATA    #IMPLIED>
+<!ATTLIST affinity-reader-profile threshold 			CDATA    "60">
+<!ATTLIST affinity-reader-profile max-entities 			CDATA    "2000">
+
+<!-- =====================================================================  -->
+<!-- Analysis Profile : fixing parameters and connector -->
+<!-- =====================================================================  -->
+<!ELEMENT analysis-profile (comment?, props-mapping, entities-recommendation?, attributes-recommendation?, subattributes-recommendation?, relax?)>
+<!ATTLIST analysis-profile name     					CDATA    #REQUIRED>
+<!ATTLIST analysis-profile attributes-ref				CDATA    #REQUIRED>
+<!ATTLIST analysis-profile type							(personal|global|discovery) "personal">
+<!ATTLIST analysis-profile attribute-size				(frequency|ponderation|max-ponderation|same) "frequency">
+<!ATTLIST analysis-profile cluster						(yes|no) "yes">
+<!ATTLIST analysis-profile self-clustering-property		CDATA	 #IMPLIED>
+<!ATTLIST analysis-profile force-clustering-property	CDATA	 #IMPLIED>
+<!ATTLIST analysis-profile cluster-level				CDATA    "50"> <!-- % between 0 and 100 -->
+<!ATTLIST analysis-profile cluster-threshold			CDATA    "20">	<!-- % between 0 and 100 -->
+<!ATTLIST analysis-profile cluster-type					(size|ponderation) "size">
+<!ATTLIST analysis-profile attributes-cluster-max		CDATA    "7">
+<!ATTLIST analysis-profile balanced-effect				CDATA    "0">
+<!ATTLIST analysis-profile entities-max					CDATA    "100">
+<!ATTLIST analysis-profile attributes-max				CDATA    "60">
+<!ATTLIST analysis-profile attributes-base-max			CDATA    "30">
+<!ATTLIST analysis-profile attr-link-threshold			CDATA    "10"> <!-- % between 0 and 100 -->
+<!ATTLIST analysis-profile links-attribute-threshold	CDATA    "3"> <!-- >=1 -->
+
+<!ELEMENT entities-recommendation (mapping*)>
+<!ATTLIST entities-recommendation apply			(all|base|notbase) "all">
+<!ATTLIST entities-recommendation max			CDATA    "10">
+<!ATTLIST entities-recommendation threshold		CDATA    "20">  <!-- % between 0 and 100 -->
+
+<!ELEMENT attributes-recommendation (mapping*)>
+<!ATTLIST attributes-recommendation apply			(all|base|notbase) "all">
+<!ATTLIST attributes-recommendation max				CDATA    "10">
+<!ATTLIST attributes-recommendation threshold		CDATA    "20">  <!-- % between 0 and 100 -->
+
+<!ELEMENT subattributes-recommendation (mapping*)>
+<!ATTLIST subattributes-recommendation apply		(all|base|notbase) "all">
+<!ATTLIST subattributes-recommendation max			CDATA    "10">
+<!ATTLIST subattributes-recommendation threshold	CDATA    "20">  <!-- % between 0 and 100 -->
+
+<!-- Swatchs => DB Properties Names Mapping -->
+<!ELEMENT props-mapping (entity-props-mapping?, attribute-props-mapping?, subattribute-props-mapping?)>
+<!ELEMENT entity-props-mapping (comment?, mapping*)>
+<!ELEMENT attribute-props-mapping (comment?, mapping*)>
+<!ELEMENT subattribute-props-mapping (comment?, mapping*)>
+
+<!-- Mapping -->
+<!ELEMENT mapping EMPTY>
+<!ATTLIST mapping key   CDATA    #REQUIRED>
+<!ATTLIST mapping value CDATA    #REQUIRED>
+
+<!-- Relax -->
+<!ELEMENT relax ( stage* )>
+	<!ATTLIST relax	linkBaseLen 	CDATA   "8 10"
+					linkMixedLen	CDATA   "8 10"
+					linkExtLen	 	CDATA   "8 10"
+					nodeSize		CDATA   "2.5 3.5"
+					linkWidth       CDATA   ".5 1.5"
+					linkBaseStiff 	CDATA   ".5 1"
+					linkMixedStiff	CDATA   ".5 1"
+					linkExtStiff 	CDATA   ".5 1"
+					margin			CDATA	"5"
+					baseLinkMin		CDATA	"1"
+					baseLinkMax		CDATA	"5"
+					baseLinkKeep	CDATA	".25"
+					mixedLinkMin	CDATA	"1"
+					mixedLinkMax	CDATA	"3"
+					mixedLinkKeep	CDATA	".25"
+					extLinkMin		CDATA	"1"
+					extLinkMax		CDATA	"4"
+					extLinkKeep		CDATA	".25">
+
+<!-- Stage -->
+<!ELEMENT stage EMPTY>
+	<!ATTLIST stage	name			(baseRelax|baseFilter|extRelax|extFilter|extLast)	#REQUIRED
+					scale 			CDATA   ".2"
+					nodeRep    		CDATA   ".2"
+					nodeRepMix		CDATA   ".75"
+					linkTens		CDATA   ".2"
+					linkTensMix		CDATA   ".5"
+					linkRep			CDATA   ".5"
+					linkRepMix		CDATA   ".75"
+					linkRot			CDATA   "0"
+					crossRep		CDATA   "0"
+					iterCnt			CDATA   "50"
+					errorTrsh		CDATA   ".002"
+					lastIterCnt		CDATA   #IMPLIED
+					lastErrorTrsh	CDATA   #IMPLIED>
+
+<!-- =====================================================================  -->
+<!-- Display Profile : fixing plan parameters and swatchs -->
+<!-- =====================================================================  -->
+<!ELEMENT display-profile (comment?, swatch-segmentation, selection-swatch*)>
+<!ATTLIST display-profile name     				CDATA    #REQUIRED>
+<!ATTLIST display-profile display-entities   	(yes|no)   "no">
+<!ATTLIST display-profile display-empty-links   (yes|no)   "yes">
+<!ATTLIST display-profile display-fake-links   	(yes|no)   "yes">
+<!ATTLIST display-profile in-color				CDATA    #IMPLIED>
+<!ATTLIST display-profile out-color				CDATA    #IMPLIED>
+<!ATTLIST display-profile filter-color			CDATA    #IMPLIED>
+
+<!-- Swatch Segmentation -->
+<!ELEMENT swatch-segmentation (attribute-swatch, link-swatch)>
+
+<!ELEMENT attribute-swatch (norm-swatch, ref-swatch, active-norm-swatch, active-ref-swatch)>
+<!ELEMENT link-swatch (norm-swatch, ref-swatch, ( active-norm-swatch, active-ref-swatch )?)>
+
+<!ELEMENT norm-swatch (classifier-ref?)>
+<!ATTLIST norm-swatch default-ref   CDATA    #REQUIRED>
+<!ELEMENT ref-swatch (classifier-ref?)>
+<!ATTLIST ref-swatch default-ref   CDATA    #REQUIRED>
+<!ELEMENT active-norm-swatch (classifier-ref?)>
+<!ATTLIST active-norm-swatch default-ref   CDATA    #REQUIRED>
+<!ELEMENT active-ref-swatch (classifier-ref?)>
+<!ATTLIST active-ref-swatch default-ref   CDATA    #REQUIRED>
+
+<!ELEMENT selection-swatch EMPTY>
+<!ATTLIST selection-swatch name  		  CDATA    #REQUIRED>
+<!ATTLIST selection-swatch selection-ref  CDATA    #IMPLIED>
+
+<!-- Classifier Ref -->
+<!ELEMENT classifier-ref (mapping*)>
+<!ATTLIST classifier-ref classifier   CDATA    #REQUIRED>
+
+<!-- =====================================================================  -->
+<!-- Segmentation : requesting entity fixes profiles -->
+<!-- =====================================================================  -->
+<!ELEMENT segmentation (filtering-segmentation?, analysis-segmentation, affinity-reader-segmentation, display-segmentation)>
+
+<!-- Fixes Filtering Profile -->
+<!ELEMENT filtering-segmentation (classifier-ref?)>
+<!ATTLIST filtering-segmentation default-ref   CDATA    #REQUIRED>
+
+<!-- Fixes Analysis Profile -->
+<!ELEMENT analysis-segmentation (classifier-ref?)>
+<!ATTLIST analysis-segmentation default-ref   CDATA    #REQUIRED>
+
+<!-- Fixes Affinity Reader according Analysis Profile -->
+<!ELEMENT affinity-reader-segmentation (classifier-ref?, affreader-analysis-mapping*)>
+<!ATTLIST affinity-reader-segmentation default-ref   CDATA    #REQUIRED>
+
+<!ELEMENT affreader-analysis-mapping (classifier-ref?)>
+<!ATTLIST affreader-analysis-mapping analysis-ref CDATA    #REQUIRED>
+<!ATTLIST affreader-analysis-mapping default-ref   CDATA    #REQUIRED>
+
+<!-- Fixes display-profile according Analysis Profile and Language -->
+<!ELEMENT display-segmentation (classifier-ref?, display-language-mapping*, display-analysis-mapping*)>
+<!ATTLIST display-segmentation default-ref   CDATA    #REQUIRED>
+
+<!ELEMENT display-analysis-mapping (display-language-mapping*)>
+<!ATTLIST display-analysis-mapping analysis-ref CDATA    #REQUIRED>
+<!ATTLIST display-analysis-mapping default-ref  CDATA    #REQUIRED>
+
+<!ELEMENT display-language-mapping (classifier-ref?)>
+<!ATTLIST display-language-mapping language   	CDATA    #REQUIRED>
+<!ATTLIST display-language-mapping default-ref  CDATA    #REQUIRED>
+
+
