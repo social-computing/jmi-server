@@ -12,7 +12,7 @@ import javax.rmi.PortableRemoteObject;
 import com.socialcomputing.wps.server.plandictionary.loader.DictionaryLoader;
 import com.socialcomputing.wps.server.plandictionary.loader.DictionnaryLoaderDao;
 //import com.socialcomputing.wps.server.plandictionary.loader.DictionaryLoaderHome;
-import com.socialcomputing.wps.server.plandictionary.loader.DictionnaryManager;
+import com.socialcomputing.wps.server.plandictionary.loader.DictionaryManager;
 
 /**
  * Title:        Affinity Scheduler
@@ -34,7 +34,7 @@ public class PlanAffinityMain extends TimerTask
 	public void run()
 	{
 		try {
-			DictionnaryManager manager =  new DictionnaryManager();
+			DictionaryManager manager =  new DictionaryManager();
 
 			Collection col = manager.findAll(); //m_DictionaryLoaderHome.findAll();
 			Iterator it = col.iterator();

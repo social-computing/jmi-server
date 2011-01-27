@@ -20,7 +20,7 @@ import org.xml.sax.InputSource;
 
 import com.socialcomputing.wps.server.plandictionary.loader.DictionaryLoader;
 import com.socialcomputing.wps.server.plandictionary.loader.DictionnaryLoaderDao;
-import com.socialcomputing.wps.server.plandictionary.loader.DictionnaryManager;
+import com.socialcomputing.wps.server.plandictionary.loader.DictionaryManager;
 import com.socialcomputing.wps.server.swatchs.loader.SwatchLoader;
 import com.socialcomputing.wps.server.swatchs.loader.SwatchLoaderDao;
 import com.socialcomputing.wps.server.swatchs.loader.SwatchManager;
@@ -263,7 +263,7 @@ public class WPSUploadServlet extends HttpServlet
 		try {
 			boolean created = false;
 			DictionaryLoader loader = null;
-			DictionnaryManager manager = new DictionnaryManager();
+			DictionaryManager manager = new DictionaryManager();
 			try
 			{
 				loader = manager.findByName(name);

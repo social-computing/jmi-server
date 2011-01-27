@@ -14,7 +14,7 @@ import javax.servlet.*;
 
 import com.socialcomputing.wps.server.plandictionary.loader.DictionaryLoader;
 import com.socialcomputing.wps.server.plandictionary.loader.DictionnaryLoaderDao;
-import com.socialcomputing.wps.server.plandictionary.loader.DictionnaryManager;
+import com.socialcomputing.wps.server.plandictionary.loader.DictionaryManager;
 import com.socialcomputing.utils.servlet.ExtendedRequest;
 import com.socialcomputing.utils.servlet.UploadedFile;
 //import com.socialcomputing.wps.server.plandictionary.loader.DictionaryLoaderHome;
@@ -73,7 +73,7 @@ public class WPSPlanUploaderServlet extends HttpServlet
 	private void doUploadDictionary( ExtendedRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		DictionaryLoader loader = null;
-		DictionnaryManager manager = null;
+		DictionaryManager manager = null;
 		try
 		{
 			UploadedFile uf = request.getFileParameter( "dictionary");
@@ -87,7 +87,7 @@ public class WPSPlanUploaderServlet extends HttpServlet
 				String name = dicoNode.getAttributeValue( "name");
 				try {
 					//loader = m_DicLoaderHome.findByPrimaryKey( name);
-					manager =  new DictionnaryManager();
+					manager =  new DictionaryManager();
 					loader = manager.findByName(name);
 				}
 				catch( RemoteException e)
@@ -127,7 +127,7 @@ public class WPSPlanUploaderServlet extends HttpServlet
 			if( name != null)
 			{
 				//try {
-					DictionnaryManager manager =  new DictionnaryManager();
+					DictionaryManager manager =  new DictionaryManager();
 					manager.delete(name);
 					//loader = m_DicLoaderHome.findByPrimaryKey( name);
 					//loader.remove();

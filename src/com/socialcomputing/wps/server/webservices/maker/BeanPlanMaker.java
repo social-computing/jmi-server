@@ -27,7 +27,7 @@ import com.socialcomputing.wps.server.plandictionary.AnalysisProfile;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.wps.server.plandictionary.loader.DictionaryLoader;
 import com.socialcomputing.wps.server.plandictionary.loader.DictionnaryLoaderDao;
-import com.socialcomputing.wps.server.plandictionary.loader.DictionnaryManager;
+import com.socialcomputing.wps.server.plandictionary.loader.DictionaryManager;
 import com.socialcomputing.wps.server.webservices.PlanRequest;
 import com.socialcomputing.utils.EZDebug;
 import com.socialcomputing.utils.EZTimer;
@@ -166,7 +166,7 @@ public class BeanPlanMaker implements PlanMaker {
 			
 			
 			
-			DictionnaryManager manager=  new DictionnaryManager();
+			DictionaryManager manager=  new DictionaryManager();
 			DictionaryLoader dictionaryLoader = manager.findByName(name);
 			if (result!=null)
 				result.put( "PLAN_NAME", name);
@@ -282,7 +282,7 @@ public class BeanPlanMaker implements PlanMaker {
 			connection = getConnection();
 
 			// EJB DICTIONARY RETRIEVAL
-			DictionnaryManager manager=  new DictionnaryManager();
+			DictionaryManager manager=  new DictionaryManager();
 			DictionaryLoader dictionaryLoader =manager.findByName(name);
 			if (result!=null)
 				result.put( "PLAN_NAME", name);

@@ -9,10 +9,10 @@ public long getLastModified(HttpServletRequest request) {
 
 
 <%
-DictionnaryLoaderDao dld = new DictionnaryLoaderDao();
-SwatchLoaderDao sld = new SwatchLoaderDao();
-Collection sws = sld.findAll(); //swHome.findAll();
-Collection dics = dld.findAll(); //dicHome.findAll();
+DictionaryManager dManager = new DictionaryManager();
+SwatchManager sManager = new SwatchManager();
+Collection sws = sManager.findAll(); //swHome.findAll();
+Collection dics = dManager.findAll(); //dicHome.findAll();
 
 Context context = new InitialContext();
 DataSource ds = (DataSource) context.lookup("java:comp/env/jdbc/WPSPooledDS");

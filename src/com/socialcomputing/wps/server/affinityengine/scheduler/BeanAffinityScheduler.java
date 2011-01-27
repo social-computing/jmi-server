@@ -16,7 +16,7 @@ import com.socialcomputing.wps.server.affinityengine.AffinityProcess;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.wps.server.plandictionary.loader.DictionaryLoader;
 import com.socialcomputing.wps.server.plandictionary.loader.DictionnaryLoaderDao;
-import com.socialcomputing.wps.server.plandictionary.loader.DictionnaryManager;
+import com.socialcomputing.wps.server.plandictionary.loader.DictionaryManager;
 
 public class BeanAffinityScheduler implements AffinityScheduler {
 
@@ -90,7 +90,7 @@ public class BeanAffinityScheduler implements AffinityScheduler {
 		Connection connection = null;
 		try
 		{
-			DictionnaryManager manager =  new DictionnaryManager();
+			DictionaryManager manager =  new DictionaryManager();
 			DictionaryLoader dictionaryLoader = manager.findByName(plan);
 			
 			connection = this.getConnection();
@@ -121,7 +121,7 @@ public class BeanAffinityScheduler implements AffinityScheduler {
 		Connection connection = null;
 		try
 		{
-			DictionnaryManager manager =  new DictionnaryManager();
+			DictionaryManager manager =  new DictionaryManager();
 			DictionaryLoader dictionaryLoader = manager.findByName(plan);
 			
 			connection = this.getConnection();

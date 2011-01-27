@@ -12,7 +12,7 @@ import com.socialcomputing.utils.HibernateUtil;
 import com.socialcomputing.utils.database.DatabaseHelper;
 
 
-public class DictionnaryManager {
+public class DictionaryManager {
 	
 	public Collection findAll() throws RemoteException {
 		ArrayList<Dictionary> cdl = new ArrayList<Dictionary>();
