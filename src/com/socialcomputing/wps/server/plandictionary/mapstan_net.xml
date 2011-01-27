@@ -1,0 +1,460 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+
+<!--  MapStan.net Dictionnary  -->
+
+<!DOCTYPE dictionary SYSTEM "WPS-dictionary.dtd" >
+
+<dictionary name="BooSol" >
+	<comment>MapStan.net dictionary</comment>
+
+	<entities>
+	<JDBC-entities name="MapStan.net Entities">
+		<JDBC-connection>
+			<JNDI-data-source>
+				<url>jdbc/MapStanDataROPooledDS</url>
+			</JNDI-data-source>
+		</JDBC-connection>
+
+		<JDBC-default-classifier>
+			<JDBC-query>select id from users</JDBC-query>
+		</JDBC-default-classifier>
+
+		<JDBC-classifier name="UserGroup">
+			<comment>Group segmentation</comment>
+			<JDBC-query>select ugroup from users where id=?</JDBC-query>
+			<JDBC-classifier-rule name="WEB">
+				<JDBC-query>select id from users where ugroup='WEB'</JDBC-query>
+			</JDBC-classifier-rule>
+			<JDBC-classifier-rule name="MAPSTAN">
+				<JDBC-query>select id from users where ugroup='MAPSTAN'</JDBC-query>
+			</JDBC-classifier-rule>
+			<JDBC-classifier-rule name="MAYETIC">
+				<JDBC-query>select id from users where ugroup='MAYETIC'</JDBC-query>
+			</JDBC-classifier-rule>
+		</JDBC-classifier>
+
+		<JDBC-property name="misc">
+			<comment>Tentative de propriété sur les entités</comment>
+			<JDBC-query>select email, alias from users where id = ?</JDBC-query>
+		</JDBC-property>
+
+
+		<JDBC-affinity-reader name="JDBCDiscoReaderWEB">
+			<comment>Dynamic Affinity Group for Discovery Plan</comment>
+			<JDBC-query>select user_id, POW(LEAST(SUM(count),200),2) as somme, max(user_history.date) from user_history left join users on id=user_id where server_id=? and (user_history.date > DATE_SUB(NOW(), INTERVAL 30 DAY)) and ugroup='WEB' group by user_id having somme>1 order by 2 desc, 3 desc LIMIT 0,250</JDBC-query>
+		</JDBC-affinity-reader>
+
+		<JDBC-affinity-reader name="JDBCDiscoReaderMAPSTAN">
+			<comment>Dynamic Affinity Group for Discovery Plan</comment>
+			<JDBC-query>select user_id, POW(LEAST(SUM(count),200),2) as somme, max(user_history.date) from user_history left join users on id=user_id where server_id=? and (user_history.date > DATE_SUB(NOW(), INTERVAL 30 DAY)) and ugroup='MAPSTAN' group by user_id having somme>1 order by 2 desc, 3 desc LIMIT 0,250</JDBC-query>
+		</JDBC-affinity-reader>
+
+		<JDBC-affinity-reader name="JDBCDiscoReaderMAYETIC">
+			<comment>Dynamic Affinity Group for Discovery Plan</comment>
+			<JDBC-query>select user_id, POW(LEAST(SUM(count),200),2) as somme, max(user_history.date) from user_history left join users on id=user_id where server_id=? and (user_history.date > DATE_SUB(NOW(), INTERVAL 30 DAY)) and ugroup='MAYETIC' group by user_id having somme>1 order by 2 desc, 3 desc LIMIT 0,250</JDBC-query>
+		</JDBC-affinity-reader>
+
+		<JDBC-attributes name="JDBCAffinity">
+			<comment>For affinity coefficient computing</comment>
+			<JDBC-query>select server_id, count(distinct date)+(LEAST(SUM(count),200)/200) as somme from user_history where user_id = ? group by server_id order by 2 DESC, 1  LIMIT 0,100</JDBC-query>
+		</JDBC-attributes>
+
+		<JDBC-attributes name="JDBCPersonalPlan">
+			<comment>Personal Plan Analysis</comment>
+			<JDBC-query>select server_id, count(distinct date)+(LEAST(SUM(count),200)/200) as somme, GREATEST(TO_DAYS(MAX(date)), TO_DAYS(NOW())-2) from user_history where user_id=? group by server_id order by 3 DESC, 2 DESC, 1 LIMIT 0,30</JDBC-query>
+
+			<JDBC-exclusion>
+				<comment>Remove servers removed by reference user</comment>
+				<JDBC-query>select server_id from excluded_servers where user_id=?</JDBC-query>
+			</JDBC-exclusion>
+
+			<JDBC-analysis-properties>
+				<JDBC-property name="clustering" use-id1="yes" >
+					<JDBC-query>select MAX(date) as clustering from user_history where server_id=? and user_id=?</JDBC-query>
+				</JDBC-property>
+			</JDBC-analysis-properties>
+
+			<JDBC-property name="misc">
+				<JDBC-query>select id, name, url, logo_path from servers where id = ?</JDBC-query>
+			</JDBC-property>
+			<JDBC-property name="history" apply="base" multiple-rows="yes" columns-used="2" use-id1="yes">
+				<JDBC-query>select pages.title as history, pages.url as history_url, MAX(date) from user_history LEFT JOIN pages ON (user_history.page_id = pages.id) WHERE (user_history.server_id = ?) and (user_history.user_id = ?) group by user_history.page_id order by 3 DESC LIMIT 0,20</JDBC-query>
+			</JDBC-property>
+			<JDBC-property name="toprating" multiple-rows="yes" columns-used="2" >
+				<JDBC-query>select title as toprating, url as toprating_url, count from pages where (server_id = ?) and (count>10) order by 3 DESC LIMIT 0,10</JDBC-query>
+			</JDBC-property>
+
+			<JDBC-subattributes name="PagesHistory">
+				<comment>User pages history</comment>
+				<JDBC-query>select page_id, SUM(count) from user_history where (( user_id = ? ) and ( server_id = ? )) group by page_id</JDBC-query>
+				<JDBC-property name="misc">
+					<JDBC-query>select title, url from pages where id = ?</JDBC-query>
+				</JDBC-property>
+			</JDBC-subattributes>
+
+			<JDBC-selection name="HistoryToday" use="refid" apply="base">
+				<comment>Today history selection</comment>
+				<JDBC-query>select distinct server_id from user_history where ((user_id = ?) and (date >= DATE_SUB(NOW(), INTERVAL 1 DAY)) ) </JDBC-query>
+			</JDBC-selection>
+			<JDBC-selection name="HistoryLastWeek" use="refid" apply="base">
+				<comment>Last week history selection</comment>
+				<JDBC-query>select distinct server_id from user_history where ((user_id = ?) and (date &lt; DATE_SUB(NOW(), INTERVAL 1 DAY))  and (date >= DATE_SUB(NOW(), INTERVAL 7 DAY)))</JDBC-query>
+			</JDBC-selection>
+			<JDBC-selection name="HistoryTwoLastWeek" use="refid" apply="base">
+				<comment>Two last week history selection</comment>
+				<JDBC-query>select distinct server_id from user_history where ((user_id = ?) and (date &lt; DATE_SUB(NOW(), INTERVAL 7 DAY))  and (date >= DATE_SUB(NOW(), INTERVAL 15 DAY)))</JDBC-query>
+			</JDBC-selection>
+			<JDBC-selection name="HistoryLastMonth" use="refid" apply="base">
+				<comment>Last month history selection</comment>
+				<JDBC-query>select distinct server_id from user_history where ((user_id = ?) and (date &lt; DATE_SUB(NOW(), INTERVAL 15 DAY))  and (date >= DATE_SUB(NOW(), INTERVAL 31 DAY)))</JDBC-query>
+			</JDBC-selection>
+		</JDBC-attributes>
+
+		<JDBC-attributes name="JDBCDailyPlan">
+			<comment>Daily Plan Analysis</comment>
+			<JDBC-query>select server_id, SUM(count) as somme, max(date) as maxdate from user_history where (user_id = ?) and (date >= DATE_SUB(NOW(), INTERVAL 3 DAY)) group by server_id order by 2 DESC, 3 DESC LIMIT 0,40</JDBC-query>
+
+			<JDBC-property name="misc">
+				<JDBC-query>select id, name, url, logo_path from servers where id = ?</JDBC-query>
+			</JDBC-property>
+			<JDBC-property name="toprating" multiple-rows="yes" columns-used="2" >
+				<JDBC-query>select title as toprating, url as toprating_url, count from pages where (server_id = ?) and (count>10) order by 3 DESC LIMIT 0,10</JDBC-query>
+			</JDBC-property>
+
+			<JDBC-subattributes name="PagesHistory">
+				<comment>User pages history</comment>
+				<JDBC-query>select page_id, SUM(count) from user_history where (( user_id = ? ) and ( server_id = ? )) group by page_id</JDBC-query>
+				<JDBC-property name="misc">
+					<JDBC-query>select title, url from pages where id = ?</JDBC-query>
+				</JDBC-property>
+			</JDBC-subattributes>
+		</JDBC-attributes>
+
+		<JDBC-attributes name="JDBCGroupsDailyPlan">
+			<comment>Daily Plan Analysis</comment>
+			<JDBC-query>select server_id, count(distinct date)+(LEAST(SUM(count),200)/200) as somme, GREATEST(TO_DAYS(MAX(date)), TO_DAYS(NOW())-2) from user_history where user_id=? group by server_id order by 3 DESC, 2 DESC, 1 LIMIT 0,30</JDBC-query>
+
+			<JDBC-exclusion>
+				<JDBC-query>select server_id from users X, users_groups Y, excluded_servers Z where Y.belong=CONCAT("admin",X.ugroup) and X.id=?  and Y.id=Z.user_id</JDBC-query>
+			</JDBC-exclusion>
+
+			<JDBC-property name="misc">
+				<JDBC-query>select id, name, url, logo_path from servers where id = ?</JDBC-query>
+			</JDBC-property>
+
+			<JDBC-property name="toprating" multiple-rows="yes" columns-used="2" >
+				<JDBC-query>select title as toprating, url as toprating_url, count from pages where (server_id = ?) and (count>10) order by 3 DESC LIMIT 0,10</JDBC-query>
+			</JDBC-property>
+
+			<JDBC-subattributes name="PagesHistory">
+				<comment>User pages history</comment>
+				<JDBC-query>select page_id, SUM(count) from user_history where (( user_id = ? ) and ( server_id = ? )) group by page_id</JDBC-query>
+				<JDBC-property name="misc">
+					<JDBC-query>select title, url from pages where id = ?</JDBC-query>
+				</JDBC-property>
+			</JDBC-subattributes>
+		</JDBC-attributes>
+
+		<JDBC-attributes name="JDBCDiscoveryPlan">
+			<comment>Discovery Plan Analysis</comment>
+			<JDBC-query>select server_id, count(distinct date)+(LEAST(SUM(count),200)/200) as somme from user_history where user_id=? and (date > DATE_SUB(NOW(), INTERVAL 30 DAY)) group by server_id order by 2 DESC, 1 LIMIT 0,30</JDBC-query>
+
+			<JDBC-exclusion>
+				<JDBC-query>select server_id from users X, users_groups Y, excluded_servers Z where Y.belong=CONCAT("admin",X.ugroup) and X.id=?  and Y.id=Z.user_id</JDBC-query>
+			</JDBC-exclusion>
+
+			<JDBC-property name="misc">
+				<JDBC-query>select id, name, url, logo_path from servers where id = ?</JDBC-query>
+			</JDBC-property>
+			<JDBC-property name="toprating" multiple-rows="yes" columns-used="2" >
+				<JDBC-query>select title as toprating, url as toprating_url, count from pages where (server_id = ?) and (count>10) order by 3 DESC LIMIT 0,10</JDBC-query>
+			</JDBC-property>
+
+			<JDBC-subattributes name="PagesHistory">
+				<comment>User pages history</comment>
+				<JDBC-query>select page_id, SUM(count) from user_history where (( user_id = ? ) and ( server_id = ? )) group by page_id</JDBC-query>
+				<JDBC-property name="misc">
+					<JDBC-query>select title, url from pages where id = ?</JDBC-query>
+				</JDBC-property>
+			</JDBC-subattributes>
+		</JDBC-attributes>
+	</JDBC-entities>
+	</entities>
+
+	<env-property name="$IMG_PATH" value="/icons/" />
+
+	<filtering-scheduling>
+		<filtering-scheduling-time time="3:00" />
+	</filtering-scheduling>
+
+	<filtering-profile name="Filtering" attributes-ref="JDBCAffinity" max-attribute="100" threshold="25" />
+	<filtering-profile name="GroupsFiltering" attributes-ref="JDBCAffinity" max-attribute="100" threshold="1000" />
+
+	<affinity-reader-profile name="PersonalReader" threshold="25" max-entities="150" />
+	<affinity-reader-profile name="DailyReader" threshold="25" max-entities="150" />
+	<affinity-reader-profile name="GroupsDailyReader" threshold="100" max-entities="150" />
+
+	<affinity-reader-profile name="DiscoveryReaderWEB" affinity-reader-ref="JDBCDiscoReaderWEB" threshold="100" />
+
+	<affinity-reader-profile name="DiscoveryReaderMAPSTAN" affinity-reader-ref="JDBCDiscoReaderMAPSTAN" threshold="100" />
+	<affinity-reader-profile name="DiscoveryReaderMAYETIC" affinity-reader-ref="JDBCDiscoReaderMAYETIC" threshold="100" />
+
+
+	<analysis-profile name="PersonnalProfile" attributes-ref="JDBCPersonalPlan" self-clustering-property="clustering" attributes-max="60" >
+		<props-mapping>
+			<entity-props-mapping>
+				<mapping key="NAME" value="alias" />
+			</entity-props-mapping>
+			<attribute-props-mapping>
+				<mapping key="URL_ID" 	value="id" />
+				<mapping key="NAME" 	value="name" />
+				<mapping key="URL" 		value="url" />
+				<mapping key="icon" 	value="logo_path" />
+				<mapping key="HISTORY" 			value="history" />
+				<mapping key="HISTORY_URL" 		value="history_url" />
+				<mapping key="TOP_RATING" 		value="toprating" />
+				<mapping key="TOP_RATING_URL"	value="toprating_url" />
+			</attribute-props-mapping>
+		</props-mapping>
+		<entities-recommendation>
+			<mapping key="USERS_ALIAS"  value="alias" />
+			<mapping key="USERS_EMAIL" 	value="email" />
+		</entities-recommendation>
+		<subattributes-recommendation>
+			<mapping key="OFFERS_NAME"  value="title" />
+			<mapping key="OFFERS_URL" 	value="url" />
+		</subattributes-recommendation>
+		&relaxPersoNet;
+	</analysis-profile>
+
+	<analysis-profile name="dailyPlan" attributes-ref="JDBCDailyPlan" type="global" attributes-max="60" >
+		<props-mapping>
+			<entity-props-mapping>
+				<mapping key="NAME" value="alias" />
+			</entity-props-mapping>
+			<attribute-props-mapping>
+				<mapping key="URL_ID" 	value="id" />
+				<mapping key="NAME" 	value="name" />
+				<mapping key="URL" 		value="url" />
+				<mapping key="icon" 	value="logo_path" />
+				<mapping key="TOP_RATING" 		value="toprating" />
+				<mapping key="TOP_RATING_URL"	value="toprating_url" />
+			</attribute-props-mapping>
+		</props-mapping>
+		<entities-recommendation>
+			<mapping key="USERS_ALIAS"  value="alias" />
+			<mapping key="USERS_EMAIL" 	value="email" />
+		</entities-recommendation>
+		<subattributes-recommendation  threshold="0">
+			<mapping key="OFFERS_NAME"  value="title" />
+			<mapping key="OFFERS_URL" 	value="url" />
+		</subattributes-recommendation>
+		&relaxGlobal;
+	</analysis-profile>
+
+	<analysis-profile name="groupsDailyPlan" attributes-ref="JDBCGroupsDailyPlan" type="global" attributes-max="60" >
+		<props-mapping>
+			<entity-props-mapping>
+				<mapping key="NAME" value="alias" />
+			</entity-props-mapping>
+			<attribute-props-mapping>
+				<mapping key="URL_ID" 	value="id" />
+				<mapping key="NAME" 	value="name" />
+				<mapping key="URL" 		value="url" />
+				<mapping key="icon" 	value="logo_path" />
+				<mapping key="TOP_RATING" 		value="toprating" />
+				<mapping key="TOP_RATING_URL"	value="toprating_url" />
+			</attribute-props-mapping>
+		</props-mapping>
+		<entities-recommendation>
+			<mapping key="USERS_ALIAS"  value="alias" />
+			<mapping key="USERS_EMAIL" 	value="email" />
+		</entities-recommendation>
+		<subattributes-recommendation  threshold="0">
+			<mapping key="OFFERS_NAME"  value="title" />
+			<mapping key="OFFERS_URL" 	value="url" />
+		</subattributes-recommendation>
+		&relaxGlobal;
+	</analysis-profile>
+
+	<analysis-profile name="discoveryPlan" attributes-ref="JDBCDiscoveryPlan" type="discovery" attributes-max="60" >
+		<props-mapping>
+			<entity-props-mapping>
+				<mapping key="NAME" value="alias" />
+			</entity-props-mapping>
+			<attribute-props-mapping>
+				<mapping key="URL_ID" 	value="id" />
+				<mapping key="NAME" 	value="name" />
+				<mapping key="URL" 		value="url" />
+				<mapping key="icon" 	value="logo_path" />
+				<mapping key="TOP_RATING" 		value="toprating" />
+				<mapping key="TOP_RATING_URL"	value="toprating_url" />
+			</attribute-props-mapping>
+		</props-mapping>
+		<entities-recommendation>
+			<mapping key="USERS_ALIAS"  value="alias" />
+			<mapping key="USERS_EMAIL" 	value="email" />
+		</entities-recommendation>
+		<subattributes-recommendation  threshold="0">
+			<mapping key="OFFERS_NAME"  value="title" />
+			<mapping key="OFFERS_URL" 	value="url" />
+		</subattributes-recommendation>
+		&relaxDisco;
+	</analysis-profile>
+
+	<display-profile name="PersonalEn" display-entities="no" in-color="5F8F3F" out-color="0" filter-color="3FAF6F" >
+		<swatch-segmentation>
+			<attribute-swatch>
+				<norm-swatch default-ref="MPST_DEF_NODE_REST_NORM_MY" />
+				<ref-swatch default-ref="MPST_DEF_NODE_REST_REF_MY" />
+				<active-norm-swatch default-ref="MPST_DEF_NODE_CUR_NORM_MY" />
+				<active-ref-swatch default-ref="MPST_DEF_NODE_CUR_REF_MY" />
+			</attribute-swatch>
+			<link-swatch>
+				<norm-swatch default-ref="MPST_LINK_NORM_MY" />
+				<ref-swatch default-ref="MPST_LINK_REF_MY" />
+				<!--active-norm-swatch default-ref="MPST_DEF_LINK_CUR_NORM_MY" />
+				<active-ref-swatch default-ref="MPST_DEF_LINK_CUR_REF_MY" /-->
+			</link-swatch>
+		</swatch-segmentation>
+		<selection-swatch name="search"  />
+		<selection-swatch name="history1" 	selection-ref="HistoryToday" />
+		<selection-swatch name="history7" 	selection-ref="HistoryLastWeek" />
+		<selection-swatch name="history14" 	selection-ref="HistoryTwoLastWeek" />
+		<selection-swatch name="history30" selection-ref="HistoryLastMonth" />
+	</display-profile>
+
+	<display-profile name="PersonalFr" display-entities="no" in-color="5F8F3F" out-color="0" filter-color="3FAF6F" >
+		<swatch-segmentation>
+			<attribute-swatch>
+				<norm-swatch default-ref="MPST_FR_NODE_REST_NORM_MY" />
+				<ref-swatch default-ref="MPST_FR_NODE_REST_REF_MY" />
+				<active-norm-swatch default-ref="MPST_FR_NODE_CUR_NORM_MY" />
+				<active-ref-swatch default-ref="MPST_FR_NODE_CUR_REF_MY" />
+			</attribute-swatch>
+			<link-swatch>
+				<norm-swatch default-ref="MPST_LINK_NORM_MY" />
+				<ref-swatch default-ref="MPST_LINK_REF_MY" />
+				<!--active-norm-swatch default-ref="MPST_DEF_LINK_CUR_NORM_MY" />
+				<active-ref-swatch default-ref="MPST_DEF_LINK_CUR_REF_MY" /-->
+			</link-swatch>
+		</swatch-segmentation>
+		<selection-swatch name="search"  />
+		<selection-swatch name="history1" 	selection-ref="HistoryToday" />
+		<selection-swatch name="history7" 	selection-ref="HistoryLastWeek" />
+		<selection-swatch name="history14" 	selection-ref="HistoryTwoLastWeek" />
+		<selection-swatch name="history30" selection-ref="HistoryLastMonth" />
+	</display-profile>
+
+	<display-profile name="DailyEn" display-entities="no" in-color="5F8F3F" out-color="0" filter-color="669933" >
+		<swatch-segmentation>
+			<attribute-swatch>
+				<norm-swatch default-ref="MPST_DEF_NODE_REST_NORM_MY" />
+				<ref-swatch default-ref="MPST_DEF_NODE_REST_REF_MY" />
+				<active-norm-swatch default-ref="MPST_DEF_NODE_CUR_NORM_DAILY" />
+				<active-ref-swatch default-ref="MPST_DEF_NODE_CUR_REF_MY" />
+			</attribute-swatch>
+			<link-swatch>
+				<norm-swatch default-ref="MPST_LINK_NORM_MY" />
+				<ref-swatch default-ref="MPST_LINK_REF_MY" />
+				<!--active-norm-swatch default-ref="MPST_DEF_LINK_CUR_NORM_MY" />
+				<active-ref-swatch default-ref="MPST_DEF_LINK_CUR_REF_MY" /-->
+			</link-swatch>
+		</swatch-segmentation>
+		<selection-swatch name="search"  />
+	</display-profile>
+
+	<display-profile name="DailyFr" display-entities="no" in-color="5F8F3F" out-color="0" filter-color="669933" >
+		<swatch-segmentation>
+			<attribute-swatch>
+				<norm-swatch default-ref="MPST_DEF_NODE_REST_NORM_MY" />
+				<ref-swatch default-ref="MPST_DEF_NODE_REST_REF_MY" />
+				<active-norm-swatch default-ref="MPST_FR_NODE_CUR_NORM_DAILY" />
+				<active-ref-swatch default-ref="MPST_FR_NODE_CUR_REF_MY" />
+			</attribute-swatch>
+			<link-swatch>
+				<norm-swatch default-ref="MPST_LINK_NORM_MY" />
+				<ref-swatch default-ref="MPST_LINK_REF_MY" />
+				<!--active-norm-swatch default-ref="MPST_DEF_LINK_CUR_NORM_MY" />
+				<active-ref-swatch default-ref="MPST_DEF_LINK_CUR_REF_MY" /-->
+			</link-swatch>
+		</swatch-segmentation>
+		<selection-swatch name="search"  />
+	</display-profile>
+
+	<display-profile name="DiscoveryEn" display-entities="no" in-color="5F8F3F" out-color="0" filter-color="3FAF6F" >
+		<swatch-segmentation>
+			<attribute-swatch>
+				<norm-swatch default-ref="MPST_DEF_NODE_REST_NORM_DISCO" />
+				<ref-swatch default-ref="MPST_DEF_NODE_REST_REF_DISCO" />
+				<active-norm-swatch default-ref="MPST_DEF_NODE_CUR_NORM_DISCO" />
+				<active-ref-swatch default-ref="MPST_DEF_NODE_CUR_REF_DISCO" />
+			</attribute-swatch>
+			<link-swatch>
+				<norm-swatch default-ref="MPST_LINK_NORM_DISCO" />
+				<ref-swatch default-ref="MPST_LINK_REF_MY" />
+				<!--active-norm-swatch default-ref="MPST_DEF_LINK_CUR_NORM_MY" />
+				<active-ref-swatch default-ref="MPST_DEF_LINK_CUR_REF_MY" /-->
+			</link-swatch>
+		</swatch-segmentation>
+		<selection-swatch name="search"  />
+	</display-profile>
+
+	<display-profile name="DiscoveryFr" display-entities="no" in-color="5F8F3F" out-color="0" filter-color="3FAF6F" >
+		<swatch-segmentation>
+			<attribute-swatch>
+				<norm-swatch default-ref="MPST_DEF_NODE_REST_NORM_DISCO" />
+				<ref-swatch default-ref="MPST_DEF_NODE_REST_REF_DISCO" />
+				<active-norm-swatch default-ref="MPST_FR_NODE_CUR_NORM_DISCO" />
+				<active-ref-swatch default-ref="MPST_FR_NODE_CUR_REF_DISCO" />
+			</attribute-swatch>
+			<link-swatch>
+				<norm-swatch default-ref="MPST_LINK_NORM_DISCO" />
+				<ref-swatch default-ref="MPST_LINK_REF_MY" />
+				<!--active-norm-swatch default-ref="MPST_DEF_LINK_CUR_NORM_MY" />
+				<active-ref-swatch default-ref="MPST_DEF_LINK_CUR_REF_MY" /-->
+			</link-swatch>
+		</swatch-segmentation>
+		<selection-swatch name="search"  />
+	</display-profile>
+
+	<segmentation>
+		<filtering-segmentation default-ref="Filtering" >
+			<classifier-ref classifier="UserGroup" >
+					<mapping key="MAPSTAN" value="GroupsFiltering" />
+					<mapping key="MAYETIC" value="GroupsFiltering" />
+			</classifier-ref>
+		</filtering-segmentation>
+
+		<analysis-segmentation  default-ref="PersonnalProfile" />
+
+		<affinity-reader-segmentation default-ref="PersonalReader">
+			<affreader-analysis-mapping analysis-ref="dailyPlan" default-ref="DailyReader" />
+			<affreader-analysis-mapping analysis-ref="groupsDailyPlan" default-ref="GroupsDailyReader">
+				<classifier-ref classifier="UserGroup" />
+			</affreader-analysis-mapping>
+
+			<affreader-analysis-mapping analysis-ref="discoveryPlan" default-ref="DiscoveryReaderWEB" >
+				<classifier-ref classifier="UserGroup" >
+					<mapping key="MAPSTAN" value="DiscoveryReaderMAPSTAN" />
+					<mapping key="MAYETIC" value="DiscoveryReaderMAYETIC" />
+				</classifier-ref>
+			</affreader-analysis-mapping>
+		</affinity-reader-segmentation>
+
+		<display-segmentation default-ref="PersonalEn">
+			<display-language-mapping language="fr" default-ref="PersonalFr" />
+			<display-analysis-mapping analysis-ref="dailyPlan" default-ref="DailyEn">
+				<display-language-mapping language="fr" default-ref="DailyFr" />
+			</display-analysis-mapping>
+			<display-analysis-mapping analysis-ref="groupsDailyPlan" default-ref="DailyEn">
+				<display-language-mapping language="fr" default-ref="DailyFr" />
+			</display-analysis-mapping>
+			<display-analysis-mapping analysis-ref="discoveryPlan" default-ref="DiscoveryEn">
+				<display-language-mapping language="fr" default-ref="DiscoveryFr" />
+			</display-analysis-mapping>
+		</display-segmentation>
+
+	</segmentation>
+
+</dictionary>

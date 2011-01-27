@@ -1,0 +1,598 @@
+<?xml version='1.0' encoding='ISO-8859-1' standalone="yes"?>
+
+<!-- Ca serait pas mal de faire une DTD pour la doc :) doctype doc system "doc.dtd"-->
+<!-- Et de trouver comment encoder les accents! -->
+
+<doc>
+	<header>
+		<title>Generator</title>
+		<css href="../../../../../doc2html.css"/>
+	</header>
+
+	<definition label="Projet Plan Generator" type="project">
+
+		<element label="En-tête">
+			Entête du projet.
+
+			<parameters label="Informations">
+				<param name="company" desc="MapStan (Voyez Vous)"/>
+				<param name="copyright" desc="Copyright (c) 2001-2003"/>
+				<param name="author" desc="Franck Lugué"/>
+			</parameters>
+		</element>
+
+		<element label="Implementation">
+			Implémentation de la génération graphique du Plan.
+
+			<parameters label="Environnement Java">
+				<param name="jvm" desc="Java 1.3"/>
+				<param name="package" desc="com.voyezvous.wps.server.generator"/>
+				<param name="archive" desc="WPS.jar"/>
+				<param name="main" desc="PlanGenerator.class"/>
+				<param name="project" desc="Generator.jpx"/>
+			</parameters>
+		</element>
+	</definition>
+
+	<definition label="Définition XML de la Relaxation" type="XML" decl="WPS-dictionary.dtd">
+		Les paramètres de la relaxation sont définis dans les dictionnaires XML (ex : mapstan_net.xml)
+		dans 2 éléments : &lt;relax&gt; et &lt;stage&gt;<br/>
+		Afin de simplifier les déclaration de relaxation, une autre dtd, 'Relax-params.dtd'
+		regroupe des entités qui définissent certains jeux de paramètres (ex : relaxPersoSoc)
+
+		<element label="analysis-profile.relax" type="XML element" content="(stage*)">
+			Relax décrit les paramètres généraux de la relaxation.
+
+			<rem label="Type 'intervalle'">
+				Les intervalles définissent les valeurs minimales et maximales qui sont utilisées graphiquement par la relaxation.
+				Le premier nombre est la valeur minimale de l'intervalle et doit rester &lt;= au deuxième.
+			</rem>
+			<rem label="Flotant statistique">
+				Les paramètres xxxLinkMin et xxxLinkMax	accèptent des valeurs flotantes. Ces valeurs sont "statistiquement" vraies.
+				En effet avoir 1.25 liens par noeuds est vrai si on a 3 noeuds avec 1 lien et 1 noeud avec 2 liens!<br/>
+				Ce mécanisme fonctionne sur la base d'un tirage aléatoire ce qui signifie que les liens "en plus" ne sont pas forcément les meilleurs.
+				Un mécanisme "idéal" pourrais être implémenté mais nécessiterais une réflexion plus pousée...
+			</rem>
+			<rem label="règlage de linkWidth">
+				linkWidth aurrait pu être déduit automatiquement de nodeSize.
+				Mais pour des raisons esthétiques il est parfois souhaitable d'avoir des liens plus fins pour "aérer".<br/>
+				Voir la différence entre les plans Search et SeeK.
+			</rem>
+			<rem label="Exactitude des bornes">
+				La relaxation étant un processus itératif qui évalue des forces par aproximation, les chiffres fournis ne sont qu'une indication "théorique".
+				En effet le principe de la relaxation est de contraindre des forces suivant leurs pondérations
+				ce qui signifie que certaines bornes peuvent êtres dépassées localement dans le temps et l'espace.<br/>
+				En principe en cas de conflit le plus faible laisse la place au plus fort (taille des liens, poids des noeuds...).
+			</rem>
+
+			<parameters label="Attributs">
+				<param name="nodeSize" type="float float" default="2.5 3.5" desc="intervalle du rayon des noeuds">
+					Pour augmenter la taille des noeuds visuellement, on peut aussi réduire la longueur des liens.<br/>
+					rapports d'intervalle conseillés : 1.25 &lt; max/min &lt; 2<br/>
+					En dessous de 1.25 la différence entre les petits et gros noeuds est difficilement perceptible.<br/>
+					Au dessus de 2 les petits noeuds ne sont plus très visibles
+				</param>
+
+				<param name="linkWidth" type="float float" default=".5 1.5" desc="intervalle d'épaisseur des liens">
+					rapports d'intervalle conseillés : 2 &lt; max/min &lt; 4 et max &lt; nodeSize/2<br/>
+					Si max &gt; nodeSize/2 les liens risques d'être plus gros que les noeuds!<br/>
+					En dessous de 2 la différence entre les petits et gros liens est difficilement perceptible.<br/>
+					Au dessus de 4 les petits liens ne sont plus très visibles
+				</param>
+
+				<param name="linkBaseLen" type="float float" default="8 10" desc="intervalle de longeur des liens de la base">
+				</param>
+				<param name="linkMixedLen" type="float float" default="8 10" desc="intervalle de longeur des liens entre la base et l'exterieur">
+				</param>
+				<param name="linkExtLen" type="float float" default="8 10" desc="intervalle de longeur des liens externes">
+					Les longeurs des liens permettent de rapprocher ou d'éloigner les noeuds.
+					Il faut noter que lors de la relaxation l'élasticité des liens leur permet de dépasser ces bornes qui sont "théoriques".<br/>
+					rapports d'intervalle conseillés : 1.2 &lt; max/min &lt; 1.75<br/>
+					En dessous de 1.2 la différence entre les liens courts et long n'est pas pertinente.<br/>
+					L'information peut néanmoins être préservé par l'intermédiaire d'un gradient de couleur dans les swatchs (cf Search).<br/>
+					Au dessus de 1.75 les différences trop fortes nuisent à la relaxation en augmentant les risques de chevauchement liens/noeuds.
+				</param>
+
+				<param name="linkBaseStiff" type="float float" default=".5 1" desc="intervalle de dureté des liens de la base">
+				</param>
+				<param name="linkMixedStiff" type="float float" default=".5 1" desc="intervalle de dureté des liens entre la base et l'exterieur">
+				</param>
+				<param name="linkExtStiff" type="float float" default=".5 1" desc="intervalle de dureté des liens externes">
+					La dureté (comme un ressort) est l'inverse de l'élasticité. Plus un lien est dure et moins il peut se dilater.<br/>
+					bornes d'intervalle conseillées : .2 &lt; min et max &lt;= 1<br/>
+					En dessous de .2 l'élasticité trop grande perd l'information sur la longueur des liens.<br/>
+					Attention! Si la dureté est nulle le plan explose puisque plus rien ne retient les noeuds!<br/>
+					La borne supérieur est 1, dans ce cas les liens ne se dilatent "théoriquement" pas.
+				</param>
+
+				<param name="baseLinkMin" type="float" default="1" desc="nombre minimal de liens par noeuds de la base">
+				</param>
+				<param name="mixedLinkMin" type="float" default="1" desc="nombre minimal de liens entre la base et l'exterieur par noeuds externes">
+				</param>
+				<param name="extLinkMin" type="float" default="1" desc="nombre minimal de liens externes par noeuds externes">
+					Ce nombre permet d'éviter que des noeuds soient isolés. Il agit en plus d'un autre processus qui garanti la connexité de la base.<br/>
+					valeurs conseillées : 1 &lt; val &lt; 1.5<br/>
+					En dessous de 1 certains noeuds risques de n'avoir pas de liens.<br/>
+					Au dessus de 1.5 trop de noeuds pas nécessairement interressants seront ajouttés.<br/>
+					Biens que les les liens choisis soient les meilleurs pour chaque noeuds, ce ne sont pas nécessairement les meilleurs de l'ensemble du plan.
+					Il arrive souvent que les meilleurs liens soient concentrés autour d'un petit nombre de noeuds.
+					C'est pourquoi il à la fois interessant de les faire apparaitre grace au paramètre xxxLinkKeep.
+					Mais aussi de les brider grace au paramètre xxxLinkMin afin d'éviter que tous les liens se retrouvent autour d'un noeud.
+				</param>
+
+				<param name="baseLinkMax" type="float" default="5" desc="nombre maximal de liens par noeuds de la base">
+				</param>
+				<param name="mixedLinkMax" type="float" default="3" desc="nombre maximal de liens entre la base et l'exterieur par noeuds externes">
+				</param>
+				<param name="extLinkMax" type="float" default="4" desc="nombre maximal de liens externes par noeuds externes">
+					Ce nombre permet d'éviter que des noeuds s'accaparent trop de liens lors de la passe qui ajoutte les meilleurs liens (xxxLinkKeep).<br/>
+					valeurs conseillées : 3 &lt;= val &lt;= 5<br/>
+					En dessous de 3 le plan risque d'être "filiforme".<br/>
+					Au dessus de 5 trop de liens empêchent la relaxation de bien se passer puisqu'elle suppose le non chevauchement qui n'est valable que pour une moyenne de 3 liens par noeuds.
+					Heureusement le maximum n'est pas atteint partout c'est pourquoi il peut-être souhaitable d'avoir plus de 3 liens par noeuds localement.
+				</param>
+
+				<param name="baseLinkKeep" type="float" default=".25" desc="Meilleurs liens de la base à garder en fonction du nombre d'attributs de la base">
+				</param>
+				<param name="mixedLinkKeep" type="float" default=".25" desc="Meilleurs liens entre la base et l'extérieur à garder en fonction du nombre d'attributs externes">
+				</param>
+				<param name="extLinkKeep" type="float" default=".25" desc="Meilleurs liens externes à garder en fonction du nombre d'attributs externes">
+					Ce facteur indique le nombre de liens parmis les meilleurs à ajoutter en fonction du nombre de noeuds.
+					Cela permet d'éviter de "passer à côté" des meilleurs liens qui ne sont pas forcément retenus
+					lors de la phase d'affectation par noeud (xxxLinkMin).<br/>
+					valeurs conseillées : 0 &lt;= val &lt;= 1<br/>
+					Cette valeur est à choisir en fonction de l'information que l'on veut privilégier.
+					Dans certains plan il est intéressant de garder les liens forts autour d'un noeud central (plan de découverte).
+				</param>
+
+				<param name="margin" type="int" default="5" desc="marge en pixels réservé à l'affichage lors du debug, sans impact sur l'Applet" deprecated="Figé en interne">
+					Cet attribut pourrait être figé dans PlanGenerator car il n'a pas d'intérèt pour l'utilisateur.
+				</param>
+			</parameters>
+
+			<element label="analysis-profile.relax.stage" type="XML element">
+				Stage décrit les paramètres de chaque étape de la relaxation.
+				En principe relax contient 5 stages.
+
+				<rem label="Stage par défaut">
+					Il est préférable de définir toutes les étapes de la relaxation car les valeurs par défaut correspondent à un "stage" générique.
+					Donc quelque soit l'étape les valeurs par défaut sont les mêmes!<br/>
+					Dans le cas de plans dont on sait par avance que la base ne sera pas relaxée (1 seul noeud)
+					="Amélioration">
+					linkRot et crossRep sont 2 forces qui sont sous-utilisées à cause des effets de bord qu'elles induisent.
+					En effet ces forces ont démontrées leur éfficacité sur des cas simples mais pas sur de "vrais" plans.<br/>
+					Néanmoins il est possible de les modifier pour supprimer ces inconvénient moyenant réflexion :)
+					Une telle évolution pourrait donc encore améliorer sensiblement la relaxation.
+				</rem>
+
+				<parameters label="Attributs">
+					<param name="name" type="String" desc="Nom de l'étape de relaxation dont on veut modifier les paramètres parmis les 5 possibles">
+						<parameters label="Les différentes étapes">
+							<param name="baseRelax" desc="première étape de relaxation de la base"/>
+							<param name="baseFilter" desc="deuxième étape de relaxation de la base">
+								Cette étape filtre les intersections.
+							</param>
+							<param name="extRelax" desc="première étape de relaxation des noeuds externes"/>
+							<param name="extFilter" desc="deuxième étape de relaxation des noeuds externes">
+								Cette étape filtre les intersections externes.
+							</param>
+							<param name="extLast" desc="troisième étape de relaxation des noeuds externes">
+								Cette étape filtre toutes les intersections.
+							</param>
+						</parameters>
+					</param>
+					<param name="scale" type="float" default=".25" desc="Coéfficient multiplicatif du bilan des forces. Ce nombre agit à postériori sur toutes les forces">
+						Il permet de ralentir ou d'accélérer la relaxation à condition de rester raisonable!
+						Comme ce coéfficient est appliqué à posteriori, sa valeur dépend de celle des autres forces.
+						Donc la valeur par défaut n'a pas de sens que si les autres forces prennent elles aussi leur valeur par défaut!
+					</param>
+					<param name="nodeRep" type="float" default=".2" desc="Coéfficient multiplicatif de la force répulsive des noeuds">
+						Tous les noeuds se repoussent en fonction d'une valeur calculée prenant en compte leur taille, nombre de liens, longueur des liens...
+					</param>
+					<param name="nodeRepMix" type="float" default=".75" desc="Coéfficient de 'mélange' des distances de répulsion des noeuds">
+						Tous les noeuds ne se repoussent pas de la même manière et leur répulsion est bornée par 3 frontières:
+						L'enveloppe externe E du noeud qu'un autre noeud ne peut "théoriquement" pénétrer.
+						La limite médiane Lm que les noeuds non reliés entre eux ne peuvent franchir.
+						La limite supérieur Ls.
+						Description des limites de répulsion entre 2 noeuds en fonction de leur type et du coéfficient de mélange:
+						nodeRepMix	:		0		0.5		1
+						Noeuds liés	:		E	(E+Lm)/2	Lm
+						Noeuds disjoints :	Lm	(Lm+Ls)/2	Ls
+						Le détail du calcul de Lm et Ls est donné dans "fonctionement"
+					</param>
+					<param name="linkRep" type="float" default=".5" desc="Coéfficient multiplicatif de la force répulsive des liens">
+						Tous les liens repoussent les noeuds affin d'éviter les chevauchements.
+					</param>
+					<param name="linkRepMix" type="float" default=".75" desc="Coéfficient de 'mélange' des distances de répulsion des liens">
+						Tous les noeuds ne sont pas repoussés par les liens de la même manière et leur répulsion est bornée par 3 frontières:
+						L'enveloppe externe E du noeud qu'un lien ne peut "théoriquement" pénétrer.
+						La limite médiane Lm d'un noeud qu'un lien non reliés à lui ne peuvent franchir.
+						La limite supérieur Ls d'un noeud.
+						Description des limites de répulsion entre un lien et un noeud en fonction de leur type et du coéfficient de mélange:
+						linkRepMix	:		0		0.5		1
+						Noeud lié	:		E	(E+Lm)/2	Lm
+						Noeud disjoint :	Lm	(Lm+Ls)/2	Ls
+						Le détail du calcul de Lm et Ls est donné dans "fonctionement"
+					</param>
+					<param name="linkTens" type="float" default=".2" desc="Coéfficient multiplicatif de la force tendant à ramener les liens à leur longueur théorique">
+						Cette force n'est pas uniquement attractive, elle peut être aussi répulsive si la distance entre deux noeuds est trop petite.
+						Cette force dépends par ailleurs de la raideur du lien (cf linkxxxStiff).
+						Attention! Si "linkTens" est nul plus rien ne retient les noeuds qui risquent de se repousser très loin!
+					</param>
+					<param name="linkTensMix" type="float" default=".5" desc="Coéfficient de 'mélange' des distances limites d'élasticité des liens">
+						Tous les liens ne se "relachent" pas de la même manière et leur "relachement" est bornée par 3 frontières:
+						La longueur au repos du liens R qui est la longeur théorique du lien.
+						La longueur nulle qui ne peut être franchie, il n'y a pas de longueurs négatives.
+						L'infini ou presque :)
+						Si ce coéfficient vaut 1 les liens ne se dilatent pas.
+						Si ce coéfficient vaut 0 les liens se dilatent autant que leur raideur le permet.
+					</param>
+					<param name="linkRot" type="float" default="0" desc="Coéfficient multiplicatif de la force tendant à distribuer les liens autour d'un noeud de manière homogène">
+						Ce coéfficient est à utiliser avec précaution et plutôt pour des raisons esthétiques, c'est pourquoi il est à 0 par défaut.
+						En effet lorsque la rotation est contrainte (cycle) elle induit des contractions qui nuisent à la relaxation.
+						Une variante de l'algo ne présentant pas cet inconvénient permeterait de redonner à cette force tout son intérêt!
+					</param>
+					<param name="crossRep" type="float" default="0" desc="Coéfficient multiplicatif de la force tendant à décroiser les liens">
+						Ce coéfficient est à utiliser avec précaution c'est pourquoi il est à 0 par défaut.
+						En effet les croisement sont détectés à posterioris ce qui induit un phénomène d'hystérésis (tremblement).
+						Une variante de l'algo ne présentant pas cet inconvénient permeterait tout comme pour "linkRot" de redonner à cette force tout son intérêt!
+					</param>
+					<param name="iterCnt" type="int" default="50" desc="Nombre d'itérations maximales par noeud lors de cette étape de relaxation">
+						valeurs conseillées : 10 &lt;= iter &lt;= 100
+						Pour chaque noeud le processus de relaxation est itéré jusqu'à ce que le graph se stabilise en fonction du seuil 'errorTrsh'.
+						'iterCnt' est un 'garde fou' pour éviter les attentes infinies en cas de seuil trop bas.
+					</param>
+					<param name="errorTrsh" type="float" default=".002" desc="Seuil d'erreur en dessous duquel la relaxation s'arrète et passe au noeud suivant">
+						Le temps de calcul de la relaxation est directement lié à ce paramètre.
+						En mettant un seuil d'erreur élevé la relaxation sera plus breve mais moins précise et inversement.
+					</param>
+					<param name="lastIterCnt" type="int" default="50" desc="Comme pour 'errorTrsh' dans le cas ou on veut que le dernier noeud de l'étape soit relaxé plus longuement (en général)">
+						Ainsi on peut relaxer les N noeuds de la base avec un seuil élevé et "peaufiner" le dernier noeud avec un seuil bas.
+						Cette valeur est facultative et n'a de sens que si elle est supérieur à iterCnt.
+						Une valeur pertinente pourait être iterCnt*4.
+					</param>
+					<param name="lastErrorTrsh" type="float" default=".002" desc="Comme pour 'iterCnt' dans le cas ou on veut que le dernier noeud de l'étape soit relaxé plus longuement (en général)">
+						Ainsi on peut relaxer les N noeuds de la base avec un seuil élevé et 'peaufiner' le dernier noeud avec un seuil bas.
+						Cette valeur est facultative et n'a de sens que si elle est inférieur à errorTrsh.
+						Une valeur pertinente pourait être errorTrsh/10.
+					</param>
+				</parameters>
+			</element>
+		</element>
+	</definition>
+
+	<definition label="Interface de test" type="GUI">
+
+		<element label="Panel d'affichage" type="Button Panel">
+			Le Panel d'Affichage, situé sur la gauche, gère l'affichage des différents types d'éléments graphiques .
+
+			<parameters label="Boutons">
+				<param name="nodes" desc="Noeuds"/>
+				<param name="nids" desc="Numéros des noeuds dans leur ordre d'affichage"/>
+				<param name="nExt" desc="Message propre à chaque noeuds défini dans NodeMapData.getLabel()"/>
+				<param name="shield" desc="Zones d'influence médiane et supérieur.(cf 'nodeRepMix' dans 'stage')"/>
+
+				<param name="links" desc="Liens"/>
+				<param name="lids" desc="Numéros des liens dans leur ordre d'affichage"/>
+				<param name="lExt" desc="Message propre à chaque liens défini dans NodeMapData.getLabel()"/>
+				<param name="inters" desc="Liens (visibles ou non) qui se croisent"/>
+
+				<param name="tens" desc="Force qui tends à donner aux liens leur longueur théorique"/>
+				<param name="nrep" desc="Force de répulsion des noeuds"/>
+				<param name="rot" desc="Force de rotation des liens"/>
+				<param name="lrep" desc="Force de répulsion des liens par rapport aux noeuds"/>
+				<param name="cross" desc="Force de 'décroisement' des liens"/>
+
+				<param name="swap" desc="'démèle' certaines configuration particulière de noeuds/liens" deprecated="Ne fonctionne qu'en test, pas dans generator"/>
+				<param name="filter" desc="élimine 'virtuellement' les liens qui se croisent en gardant les 'meilleurs'" deprecated="Ne fonctionne qu'en test, pas dans generator"/>
+				<param name="tess" desc="triangulation de Delaunay en plus du maillage courant" deprecated="Ne sert plus"/>
+			</parameters>
+		</element>
+
+		<element label="Panel de Navigation">
+			Le Panel de navigation, situé en haut au centre, gère la progression des stages.
+
+			<parameters label="Boutons">
+				<param name="|&lt;" desc="Réinitialize les donées du Plan pour recommencer la relaxation à zéro"/>
+				<param name="||" desc="Stope temporairement (pause) l'étape courante"/>
+				<param name="> " desc="Relance la relaxation préalablement stopée"/>
+				<param name="=>" desc="Relaxe le 'stage' courant en relaxant succéssivement les noeuds de ce 'stage'"/>
+				<param name="->" desc="Relaxe le noeud courant en itérant jusqu'à la précision spécifiée"/>
+				<param name="|>" desc="Execute une itération de relaxation sur le noeud courant"/>
+				<param name="~>" desc="Mode interactif. Permet de tester les paramètres de relaxation en 'jouant' avec les noeuds et liens"/>
+			</parameters>
+		</element>
+
+		<element label="Panel de Rendu">
+			Le Panel de rendu, situé au centre, gère les options de rendu.
+
+			<parameters label="Boutons">
+				<param name="center" desc="Centre la fenêtre sur les objets du plan de telle sorte qu'il ne puissent en sortir"/>
+				<param name="dblbuf" desc="Déssine dans un buffer puis affiche celui-ci évitant le scintillement mais ralentissant l'affichage"/>
+			</parameters>
+		</element>
+
+		<element label="Panel d'état" type="StaticText Panel">
+			Le Panel d'état, situé au centre indique l'état de la relaxation.
+
+			<parameters label="Textes">
+				<param name="gauche" desc="nom du 'stage' courant"/>
+				<param name="centre" desc="indice du noeud courant"/>
+				<param name="droite" desc="itération courante"/>
+			</parameters>
+		</element>
+
+		<element label="Panel de Parametrage" type="Button Panel">
+			Le Panel de Parametrage, situé en bas, gère la modification des paramètres de relaxation.
+
+			<parameters label="Boutons">
+				<param name="&lt;&lt;" desc="décrémente de 1.0 pour les réels et de 10 pour les entiers"/>
+				<param name="&lt; " desc="décrémente de 0.1 pour les réels et de 1 pour les entiers"/>
+				<param name="val" desc="affiche et édite le paramètre courant.(cf liste)"/>
+				<param name="&gt; " desc="incrémente de 0.1 pour les réels et de 1 pour les entiers"/>
+				<param name="&gt;&gt;" desc="incrémente de 1.0 pour les réels et de 10 pour les entiers"/>
+				<param name="params" desc="liste des paramètres de relaxation modifiables">
+					<parameters label="Champs des Classes">
+						<param name="global force scale" desc="attribut scale de 'stage'"/>
+						<param name="node repulsion" desc="attribut nodeRep de 'stage'"/>
+						<param name="node rep S/E ratio" desc="attribut nodeRepMix de 'stage'"/>
+						<param name="link repulsion" desc="attribut linkRep de 'stage'"/>
+						<param name="link rep S/E ratio" desc="attribut linkRepMix de 'stage'"/>
+						<param name="link tension" desc="attribut linkTens de 'stage'"/>
+						<param name="link tens S/H ratio" desc="attribut linkTensMix de 'stage'"/>
+						<param name="link rotation" desc="attribut linkRot de 'stage'"/>
+						<param name="link uncrossing" desc="attribut crossRep de 'stage'"/>
+						<param name="max iter count" desc="attribut iterCnt de 'stage'"/>
+						<param name="relax treshold" desc="attribut errorTrsh de 'stage'"/>
+						<param name="refresh delay" desc="delais en ms entre deux affichages. Permet de ralentir l'affichage">
+							Une valeur de 0 signifie que l'affichage se fait aussi vite que possible.
+						</param>
+						<param name="nodes count" desc="Nombre de noeuds" deprecated="Prévu pour le projet relax. Ne fonctionne pas dans PlanGenerator."/>
+						<param name="links count" desc="Nombre de liens" deprecated="Prévu pour le projet relax. Ne fonctionne que dans PlanGenerator."/>
+					</parameters>
+				</param>
+			</parameters>
+		</element>
+
+		<element label="Boutons de la souris" type="Mouse Event">
+			Les 3 boutons de la souris permettent d'agir sur les noeuds et liens
+			après avoir activé le mode interactif à l'aide du boutton [~>]
+
+			<parameters label="Boutons">
+				<param name="gauche" desc="déplace les objets graphiques"/>
+				<param name="centre" desc="'fige' et 'libère' les objets graphiques"/>
+				<param name="droite" desc="édite les valeurs internes des champs des objets graphiques"/>
+			</parameters>
+		</element>
+
+		<element label="Touches du clavier" type="Key Event">
+			PlanGenerator définit certaines touches à l'aide de la méthode 'keyPressed' de la classe 'VisualMapper'.
+
+			<parameters label="Touches">
+				<param name="D" desc="imprime les infos de tous les noeuds et liens relaxés sur la sortie standard"/>
+				<param name="L" desc="charge un fichier de paramètres au format XML dans le 'stage' courant.(cf DTD)"/>
+				<param name="S" desc="enregistre les paramètres du 'stage' courant au format XML.(cf DTD)"/>
+			</parameters>
+		</element>
+	</definition>
+
+	<definition label="FAQ" type="FAQ">
+
+		<element label="Fonctionnement" type="Technical">
+			Explique le fonctionnement de certains processus.
+
+			<parameters label="Comment fonctionne">
+				<param name="La relaxation">
+					Une triangulation idéale (Delaunay) donne un graphe avec, en moyenne, 3 liens par noeuds.
+					La relaxation sélectionne donc les 3n liens 'les plus intéressants à représenter' et ne travail que sur eux
+					en faisant de son mieux pour ne pas les croiser afin de les préserver jusqu'à la fin du processus.<br/>
+					Pour cela des forces non linéaires font d'une part se repousser les noeuds et les liens d'autre part tendent à donner aux liens leur longueur idéale.
+					En sélectionnant les liens les plus intéressants, on garantit qu'une bonne part d'entre eux seront présents dans le Plan final
+					et on favorise un placement localement pertinent des noeuds.<br/>
+					A la fin du processus, les liens se croisants sont supprimés en privilégiant l'élimination des moins intéressants.
+					Puis une triangulation de Delaunay est appliquée aux noeuds ainsi qu'à des faux noeuds à l'exterieurs du Plan.
+					Les liens avec ces faux noeuds sont gardés pour former les rues qui sortent de la fenêtre.
+					Les autres liens résultants de la triangulation et qui ont une existence dans l'Analyse
+					et qui de plus ne coupent pas de liens existants sont ajoutés à ceux préalablement relaxés.
+
+					<parameters label="Les étapes">
+						En simplifiant, la relaxation place un noeud, le relaxe avec ceux déjà placés et ajoute le noeud suivant.
+						Les noeuds de la base sont placés en premier puis leur position est verrouillée avant de relaxer les noeuds externes
+						selon le même procédé que pour la base.<br/>
+						Ces deux processus correspondent à la première étape de relaxation de la base ainsi qu'à celle des noeuds externes.
+						Les positions des noeuds à l'issue de ces premières étapes sert de point de départ à d'autres étapes de filtrage et de 'peaufinages'.
+						<param name="Placement initial de la Base">
+							L'ordre de relaxation des noeuds de la base est évalué en fonction de leur "importance structurelle".
+							Cette importance est un poids sommé récursivement en suivant les liens autour du noeud jusqu'à une certaine profondeur.
+							Les noeuds les plus lourds sont relaxés en premier.<br/>
+							Les noeuds sont placés avec une attention particulière, en prenant soin de bien attendre que chaque noeud soit stable avant de relaxer le suivant.<br/>
+							Leur position initiale est le barycentre des noeuds visibles auquel ils sont ratachés.
+							L'influence de chaque noeud est pondéré par la longueur du lien qui le relie.<br/>
+							Les liens peuvent se couper et les noeuds se chevaucher. Cette liberté leur permet de se positionner plus facilement
+							afin qu'ils trouvent leur vrai place sans contraintes.
+						</param>
+						<param name="Filtrage des liens de la Base">
+							Les liens deviennent plus 'durs' pour mieux respecter leur longueur théorique.
+							Ceux qui provoquent des intersections sont filtrés suivant leur 'importance'.
+							Les noeuds et les liens se repoussent plus pour éviter tout chevauchements.
+						</param>
+						<param name="Placement initial des Noeuds externes">
+							D'abbord les noeuds de la base sont vérouillés car leur position finale est déjà déterminée.
+							Les liens qui les unissent aux noeuds externes vont permettre d'influencer le placement de ces derniers.
+							L'ensemble des noeuds de la base est alors englobé par un pseudo noeud répulsif.<br/>
+							Les noeuds sont placés à la périphérie de la base, à la verticale du noeud de la base qui a le lien le plus important avec lui.<br/>
+							L'ordre de relaxation des noeuds externes est celui donné par l'Analyse.<br/>
+							Comme pour le placement initial de la base, les noeuds ont toute liberté de se chevaucher et les liens de se croiser.
+						</param>
+						<param name="Filtrage des liens de la Base">
+							Comme pour le filtrage de la Base les contraintes sont renforcées mais pas totalement car il reste une dernière étape.
+							Les liens mixtes et externes qui se croisent sont filtrés, mais aucun élément de la base n'a d'influence.
+						</param>
+						<param name="Filtrage final des liens de la Base">
+							Les contraintes sont encore renforcées et la pseudo base est remplacé par les vrais liens de la base.
+							Bien que figés, ces derniers sont actifs vis à vis des noeuds et des liens externes.<br/>
+							Les liens mixtes et externes qui croisent des liens de la base sont filtrés sauf dans le cas ou ce lien est un terminator.
+							Ainsi quelques liens mixtes peuvent croiser des liens de la base.
+						</param>
+					</parameters>
+				</param>
+				<param name="La triangulation">
+				</param>
+				<param name="Le filtrage des liens pendant la relaxation" see="CrossMgr.s_crossCmp">
+					Lorsque des liens se croisent et que leur filtrage est activé, un tri est effectué pour savoir quels liens supprimer pour éliminer les croisements.
+					Ces liens sont supprimés à la volé pour cette itération. A l'itération suivante il réapparaîtrons et seront à nouveau éliminés si nécessaire.
+					La fonction de comparaison des liens s'intersectant est la suivante:<br/>
+					Si un seul des deux liens est un Terminator, il est rangé derrière.<br/>
+					Sinon<br/>
+					->  Si le nombre d'intersection des liens est différents, celui qui en a le moins est rangé derrière.<br/>
+					->  Sinon Le lien le plus épais se retrouve derrière.<br/>
+					A l'issue du tri:<br/>
+					Si le premier lien n'est pas un Terminator, il est filtré et le tri est relancé après avoir évalué le nouveau nombre d'intersections.<br/>
+					Sinon le filtrage s'arrête puisque les Terminators ne sont pas filtrable.
+				</param>
+				<param name="Le tri et le filtrage des liens de l'Analyse">
+					Comme les liens de l'analyse sont trop nombreux pour être tous relaxés, il faut en sélectionner un certain nombre, de préférence les plus interessants.
+					Pour cela on commence par les trier puis on élimine ceux qui sont jugé trop faible à la fois globalement et pour chaque noeuds.
+
+					<parameters label="Les étapes">
+						<param name="Calcul du nombre de liens par noeuds">
+							Le nombre minimal et maximal de liens par noeuds est déterminés en fonction des paramètres de relaxation, de manière statistique.
+							Par exemple on peut avoir 2.5 liens par noeud en moyenne si on a 5 noeuds avec 2 liens et 5 noeuds avec trois liens.
+							Ces valeurs sont initialisées une seule fois.
+						</param>
+						<param name="Pour chaque noeud on garde ses meilleurs liens en fonction de XXXLinkMin">
+							Dans chaque noeuds, Les liens sont triés selon leur rapport épaisseur sur longueur, les larges-courts étant les premiers et les fins-longs les derniers.
+							Pour chaque noeud les min meilleurs liens de chaque type sont choisis.
+						</param>
+						<param name="On s'assure du non dépassement du nombre de liens choisis ainsi que de la connexité de la base">
+							Comme un lien appartient à deux noeuds, le nombre de liens choisis dépasse - pour certains noeuds - min à la fin de cette étape.
+							Donc il faut -lorsque c'est possible- éliminer les liens surnuméraires.<br/>
+							A l'inverse, il se peut que certains liens faibles aient été filtré alors qu'ils assuraient la connexité de la base.
+							Une passe rétablit donc ces liens car la base doit rester connexe sous peine de dérive des continents.
+						</param>
+						<param name="Sur l'ensemble des liens, on garde les meilleurs en fonction de XXXLinkKeep et XXXLinkMax">
+							L'ensemble des liens est trié selon le même principe que pour chaque noeud.
+							Puis les meilleurs liens du Plan sont choisis en vérifiant que les noeuds auxquels ils sont ajoutés
+							n'ont pas atteint leur quotas maximal de liens.
+						</param>
+					</parameters>
+				</param>
+				<param name="Le tri des noeuds" see="MapData.GetLinkMass,MapData.GetNodeMass">
+					Dans la base, les noeuds les plus importants doivent êtres placés en premier afin d'avoir plus de liberté et de se trouver proche du centre.
+					L'importance d'un noeud correspond à sa capacité à influencer les autres, à les générer.
+					Pour cela une métrique appelé poids (m_weight) est calculée récursivement à une profondeur donnée selon la formule:<br/>
+					Pour chaque lien de la base relié à ce noeud, ajouter la masse du lien au poids de l'autre noeud.<br/>
+					La masse d'un lien est donnée par une fonction linéaire de sa taille.<br/>
+					La masse d'un noeud est donnée par une fonction linéaire de son poids (de l'Analyse).
+				</param>
+				<param name="La dynamique de la relaxation">
+					La relaxation utilise des forces appliquées aux noeuds puisqu'ils sont les seuls éléments possédant une position.
+					Mais seule une partie des forces dépendent des propriétés intrinsèques des noeuds, l'autre partie dépendant de celles des liens.<br/>
+					A chaque itération de la relaxation les forces appliquées aux noeuds sont évaluées et leur bilan pondéré est calculé.
+					Enfin le vecteur résultant est ajusté par un paramètre d'échelle global afin de définir la translation
+					à faire subir au noeud pour cette itération.<br/>
+					Le paramètre d'échelle globale 'scale' permet de régler la vitesse de relaxation. En effet en l'augmentant, les noeuds se dirigent plus vite vers leur but.<br/>
+					Attention : Une valeur trop importante risquent de faire dépasser aux noeuds leur position d'équilibre et donc d'osciller à l'infini autour de cette position.
+					Ce phénomène est facile à observer en utilisant l'interface de relaxation, ce qui permet de le régler.
+					Un tuning idéal permet une relaxation rapide sans oscillations. Il faut bien sur se laisser une marge car tous les plans sont différents.
+
+					<parameters label="Les 5 forces" see="shémas Relax">
+						<param name="Répulsion des noeuds (nodeRep)">
+							Tous les noeuds se repoussent suivant une force radiale dont l'intensité décroît avec le carré de la distance.
+							Cette force est maximale au niveau d'une frontière d'influence et minimale au niveau de la suivante.<br/>
+							<parameters label="Les 3 rayons d'influence">
+								<param name="La taille du noeud">
+									Le rayon du noeud est la limite physique théoriquement infranchissable.
+									2 noeuds ne peuvent pas, en principe, se chevaucher.
+								</param>
+								<param name="La taille maximale">
+									Autour du noeud on définit un rayon théorique qui correspond à la demi-longueur moyenne des liens de ce noeud
+									afin de favoriser la relaxation des liens.
+								</param>
+								<param name="La taille maximale de séparation">
+									Un rayon encore plus grand permet de repousser les noeuds qui ne sont pas reliés entre eux afin de faire de la place pour les autres.
+								</param>
+							</parameters>
+							Un coefficient permet d'étalonner ces frontières (NodeRepMix) afin de laisser plus ou moins de liberté de circulation aux noeuds
+							lors des différentes étapes de la relaxation.<br/>
+							Si ce coefficient est minimal(0), les noeuds liés sont séparés par leur taille propre et les autres par leur taille maximale.<br/>
+							Si ce coefficient est maximal(1), les noeuds liés sont séparés par leur taille maximale et les autres par leur taille maximale de séparation.<br/>
+							Les valeurs intermédiaires sont calculées par interpolation linéaire.
+						</param>
+						<param name="Répulsion entre les noeuds et les liens (linkRep)">
+							Tous les liens repoussent les noeuds suivant une force dont l'intensité décroît avec le carré de la distance.
+							Cette force s'annule lorsqu'on sort d'un  losange d'influence donné par :<br/>
+							La force est maximale au milieu du lien, décroissant linéairement jusqu'à s'annuler aux extrémités du lien afin de garantir sa continuité.
+							Un coefficient permet d'étalonner cette zone (LinkRepMix) afin de laisser plus ou moins de liberté de circulation aux noeuds lors des différentes étapes de la relaxation.<br/>
+							Au niveau des noeuds, la force suit le même principe de frontière variable en fonction du type de liaison avec les noeuds du lien.
+							Ainsi les noeuds liés au lien sont moins repoussés que ceux qui en sont disjoints.
+						</param>
+						<param name="Tension des liens (linkTens)">
+							Les liens possèdent une longueur théorique que la relaxation essaye de conserver.
+							Pour cela une force tend à rapprocher les extrémités d'un lien lorsque sa longueur réelle est supérieur à sa longueur théorique et inversement.
+							Cette force varie avec le carré de la différence entre les longueurs réelles et théoriques.<br/>
+							Si le coefficient qui pondère cette force est nul, plus rien ne retient les noeuds qui risquent alors de s'étaler fort loin
+							car les autres forces sont essentiellement répulsives.<br/>
+							Par ailleurs les liens possèdent une raideur spécifique qui dépends de leur taille.
+							Les liens larges sont raides alors que les fins sont élastiques.
+							Comme les noeuds doivent se déplacer, ils font subire des contraintes d'élongation aux liens.
+							La raideur permet de dilater en priorité les liens les plus 'faibles'.
+							Les bornes de cette raideur sont données par linkxxxStiff. Un autre coefficient, LinkTensMix, pondère globalement la raideur.<br/>
+							S'il vaut 0, la raideur des liens est inchangée, s'il vaut 1, la raideur des liens est maximale.
+							Donc si ce coefficient est nul et que certain liens ont une raideur propre nulle, le lien sera totalement élastique; déplacer un de ses noeuds n'aura aucun effet sur l'autre.
+						</param>
+						<param name="Rotation des liens (linkRot)">
+							Afin d'utiliser au mieux l'espace, il serait souhaitable que les liens se répartissent autour des noeuds en occupant le plus d'espace possible.
+							Une technique simple consiste à les répartir de manière homogène. Pour cela une force tend à centrer chaque lien entre les deux liens qui l'entourent.
+							Dans le cas où on n'a que 2 liens autour du noeud la force essaye de les opposer.<br/>
+							Cette force a malheureusement l'inconvénient de faire se contracter les configurations fermées (triangles, carrés...)
+							c'est pourquoi il faut en user avec contrôle et modération.
+						</param>
+						<param name="Décroisement des liens (crossRep)">
+							Lorsque deux liens se croisent il se peut qu'un des noeuds impliqué puisse démèler l'ensemble en le passant de l'autre côté du lien qu'il coupe.
+							Dans ce cas, en le faisant se rapprocher de l'autre noeud qui lui est relié, le croisement disparaît.<br/>
+							Cette astuce n'est intéressante qu'en théorie (comme linkRot) car en général un noeud qui franchit un lien le fait parce qu'il y ait contraint.
+							Donc en le repoussant de l'autre coté du lien on s'expose à ce que contraint, il franchisse à nouveau le lien.
+							Ce qui a pour effet un tremblement et surtout une localisation moyenne du noeud tremblant près du lien, ce qui n'est pas souhaitable.<br/>
+							Une solution à ce problème consisterait à détecter les intersections avant qu'elles se produisent (et à ne pas traiter les intersections déjà produites),
+							mais serait beaucoup plus coûteux en calculs ou en réflexion.
+						</param>
+					</parameters>
+				</param>
+			</parameters>
+		</element>
+
+		<element label="Glossaire" type="Glossary">
+			Définition des termes employés dans la JavaDoc et le code de l'Applet.
+
+			<parameters label="C'est quoi">
+				<param name="Node ou noeud">
+					C'est un cluster d'attribut servant à la relaxation.
+					Il est inutile de relaxer les attributs clusterisés car leur position est celle du cluster qui les contient.
+				</param>
+				<param name="Link ou lien">
+					C'est l'objet, servant à la relaxation, qui relie deux clusters d'attribut.
+				</param>
+				<param name="Noeud externe">
+					Un noeud en dehors de la base.
+				</param>
+				<param name="Lien externe">
+					Un lien entre deux noeuds externes.
+				</param>
+				<param name="Lien mixte">
+					Un lien entre un noeud de la base et un noeud externe.
+				</param>
+				<param name="Terminator">
+					Un noeud ne possédant qu'un lien visible. Dans ce cas le lien est aussi un Terminator.
+					Un lien 'Terminator' ne peut être filtré car il laisserait un noeud sans lien, tout seul dans l'espace!
+				</param>
+				<param name="Triangulation de Delaunay">
+					Cette tesselation relie un ensemble de points de telle sorte qu'ils forment un maillage de triangles sans aucune intersection.
+					Cette triangulation est le dual du diagramme de Voronoï que l'on obtient en reliant le centre des triangles autour d'un point.
+					Elle est intéressante pour des raisons esthétiques et de performance. En effet, les triangles générés sont optimaux en nombre, surface et homogénéité.
+					D'autre part, comme pour le diagramme de Voronoï, l'algorithme peut-être implémenté en nlog2(n).
+				</param>
+			</parameters>
+		</element>
+	</definition>
+</doc>

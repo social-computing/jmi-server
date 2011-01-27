@@ -1,0 +1,571 @@
+<?xml version='1.0' encoding='ISO-8859-1' standalone="yes"?>
+
+<!--doctype doc system "doc.dtd"-->
+
+<doc>
+	<header>
+		<title>Swatchs</title>
+		<css href="../../../../../doc2html.css"/>
+	</header>
+
+	<definition label="Projet Swatchs Server" type="project">
+
+		<element label="En-tête">
+			Entête du projet.
+
+			<parameters label="Informations">
+				<param name="company" desc="MapStan (Voyez Vous)"/>
+				<param name="copyright" desc="Copyright (c) 2001-2003"/>
+				<param name="author" desc="Franck Lugué"/>
+			</parameters>
+		</element>
+
+		<element label="Implementation">
+			Implémentation des Swatchs côté serveur avec chargement à partir d'un fichier XML et sérialisation en Swatch client.
+
+			<parameters label="Environnement Java">
+				<param name="jvm" desc="Java 1.3"/>
+				<param name="package" desc="com.voyezvous.wps.server.swatchs"/>
+				<param name="archive" desc="WPS.jar"/>
+				<param name="main" desc="loader.SwatchLoader.class"/>
+				<param name="project" desc="swatchs.jpx"/>
+			</parameters>
+		</element>
+	</definition>
+
+	<definition type="XML" decl="XMLSwatchs\swatch.dtd">
+		<element label="swatch" type="XML element" content="(comment? , (sat | ref)+ , user? , (string | color | transfo | shape | inter | key | font | tip | open | play | popup | show | dump | event | menu | item | call | slice | tooltip | ref)* )">
+			Swatch décrit les paramètres généraux de la relaxation. Ces paramètres sont définis dans les dictionnaires XML (ex : mapstan_net.xml).<br/>
+			Afin de simplifier les déclaration de relaxation, une autre dtd, 'Relax-params.dtd' regroupe des entités qui définissent certains jeux de paramètres.<br/>
+			Cet élément est la racine qui englobe tous les autres. Il n'a que peut d'attributs car toute la définition est faite par les satellites.
+			Cet élément contient aussi toutes les références utilisées dans d'autres éléments des satellites.
+
+			<rem subject="id ID #IMPLIED">
+				L'utilisation de références permet de déclarer un élément n'importe où dans le 'swatch' et de le référencer ailleurs une ou plusieurs fois au moyen de son identifiant.
+				C'est pourquoi tous les éléments ayant un 'id' ont pour parent 'swatch'. Inversement lorsque ces éléments sont déclaré 'inline' l'identifiant est inutile.<br/>
+				ex :<br/>
+				<slice><br/>
+					<tip label="hello"/><br/>
+					<transfo scale="0.2"/><br/>
+				</slice><br/><br/>
+				équivaut à :<br/>
+				<tip		id="myTip"		label="hello"/><br/>
+				<transfo	id="myTrf"		scale="0.2"/><br/>
+				<slice      tip="myTip"		transfo="myTrf"/><br/>
+			</rem>
+			<rem subject="Référence dans un attribut">
+				La définition des attributs de type 'string' et 'color' peut être remplacé par une référence sur un élément de même type.
+				Dans ce cas il faut faire précéder l'ID du charactère '@'<br/>
+				ex :<br/>
+				<color		id="myCol" 		rgb="0 0 255"/><br/>
+				<string		id="myStr" 		label="Label"/><br/>
+				<tip 		label="@myStr"	inCol="@myCol"/><br/>
+			</rem>
+
+			<parameters label="Attributs">
+				<param name="name" type="String" default="#REQUIRED" desc="L'identifiant unique de ce swatch tel qu'il est référencé dans le dictionnaire"/>
+				<param name="title" type="String" default="#IMPLIED" desc="Un texte associé avec l'objet WPS (place ou lien)" deprecated="Remplacé par getAttProp('NAME')">
+					Ce texte est accéssible depuis Javascript ce qui permet de renseigner la GUI.
+					L'API de l'Applet a changé. On accède directement aux propriétés brutes donc title est inutile.(cf Applet)
+				</param>
+				<param name="id" type="ID" default="#IMPLIED" desc="Identifiant d'occurence"/>
+			</parameters>
+
+			<element label="color">
+				Un triplet RVB définissant une couleur.
+
+				<parameters label="Attributs">
+					<param name="rgb" type="Color" default="#REQUIRED" desc="Triplet R,V,B">
+						Il y'a deux notations possibles pour coder la couleur:<br/>
+						Le code HTML long en hexa (ex:'#ff00ff' pour du rose)
+						Un triplet r v b (ex:'255 255 0' pour du jaune).
+					</param>
+					<param name="id" type="ID" default="#IMPLIED" desc="Identifiant d'occurence"/>
+				</parameters>
+			</element>
+			<element label="font">
+				Une police de caractères.
+				Pour rester indépendant de la plateforme, il est souhaitable d'utiliser un nom générique { Serif, SansSerif, Monospaced, Symbol }.
+
+				<parameters label="Attributs">
+					<param name="name" type="String" default="SansSerif" desc="Nom de la police">
+						Ce nom peut être celui d'une police système bien que ce soit deconseillé pour des raisons de portabilité.
+					</param>
+					<param name="size" type="int" default="9" desc="taille en point de la police"/>
+					<param name="style" type="choice" default="plain" desc="à choisir parmi les entités prédéfinies { plain, bold, italic, bold-italic }"/>
+				</parameters>
+			</element>
+			<element label="inter" content="(key , key+)">
+				Une interpolation entre des clés. Deux clés au minimum sont nécessaires pour interpoler en utilisant une propriété ou une valeur aléatoire.
+				Attention! La borne minimal doit être strictement inférieur à la borne maximale.
+
+				<parameters label="Attributs">
+					<param name="binding" type="String" default="#IMPLIED" desc="Nom de la propriété interpolant les clés">
+						Si aucune propriété n'est donnée, le générateur aléatoir sert d'interpolant.
+					</param>
+					<param name="class" type="choice" default="integer" desc="Toutes les clés doivent être du même type choisi parmis : { color, integer, float, boolean, string, transfo }"/>
+					<param name="isAdaptive" type="boolean" default="false" desc="Vrai si les bornes d'interpolation sont évaluées automatiquement pour ce plan">
+						Faux si les bornes sont données par les attributs 'min' et 'max'.
+					</param>
+					<param name="isHSB" type="boolean" default="false" desc="Vrai si les couleurs sont interpolées en HSB.">
+						En interpolant la teinte(Hue), saturation(Saturation) et luminosité(Brightness) on peut réduire le nombre de clés nécessaires.
+						Par défaut les composantes rouge(Red), vert(Green), bleuBlue) sont interpolées.<br/>
+						ex : l'interpolation linéaire du rouge au bleu donne:<br/>
+						en RGB (255 0 0) -> (191 0 63) -> (127 0 127) -> (63 0 192) -> (0 0 255)<br/>
+								rouge         pourpre       magenta         violet         bleu<br/>
+						en HSB (0 255 255) -> (60 255 255) -> (120 255 255) -> (180 255 255) -> (240 255 255)<br/>
+								 rouge          jaune           vert             cyan             bleu<br/>
+					</param>
+					<param name="max" type="float" default="100" desc="La valeur maximale théorique que peut atteindre la propriété interpolante">
+						La propriété ne peux dépasser cette valeur car dans ce cas elle est tronquée à max.
+					</param>
+					<param name="min" type="float" default="0" desc="La valeur minimale théorique que peut atteindre la propriété interpolante">
+						La propriété ne peux être inférieur à cette valeur car dans ce cas elle est tronquée à min.
+					</param>
+					<param name="type" type="choice" default="linear" desc="Méthode d'interpolation des clés parmis : { stair, linear, spline }">
+						stair :  La sortie est discrétisée pour prendre la valeur exacte des clés, come des marches d'escalier.<br/>
+						linear : La sortie est une interpolation linéaire des clés.<br/>
+						spline : La sortie est une interpolation par spline cubique des clés.
+					</param>
+					<param name="id" type="ID" default="#IMPLIED" desc="Identifiant d'occurence"/>
+				</parameters>
+				<element label="key" parent="inter">
+					Une valeur à interpoler positionée dans le temps. C'est un couple (pos, value) utilisé par 'inter'.
+
+					<parameters label="Attributs">
+						<param name="pos" type="float" default="#REQUIRED" desc="Position normalisée de la clé (valeur) sur [0,1]"/>
+						<param name="value" type="String" default="#REQUIRED" desc="Une référence sur un objet">
+							Toutes les clés d'une 'inter' doivent être du même type ('class').
+						</param>
+						<param name="id" type="ID" default="#IMPLIED" desc="Identifiant d'occurence"/>
+					</parameters>
+				</element>
+			</element>
+			<element label="menu" content="(menu | item | ref | separator)+">
+				Un menu contextuel. Ce menu apparait lors d'un 'event' de type 'popup'.
+				Les items de ce menu peuvent être des 'menu's, des 'item's, des 'separator's une des 'ref' sur ces mêmes éléments.
+
+				<parameters label="Attributs">
+					<param name="font" type="IDREF" default="#IMPLIED" desc="Police utilisée pour le titre du menu et par défaut sur les items du menu"/>
+					<param name="label" type="String" default="#IMPLIED" desc="Label affiché si ce menu est un sous-menu"/>
+					<param name="style" type="choice" default="plain" desc="à choisir parmi les entités prédéfinies { plain, bold, italic, bold-italic }"/>
+					<param name="id" type="ID" default="#IMPLIED" desc="Identifiant d'occurence"/>
+				</parameters>
+				<element label="separator">
+					<description>
+						Un séparateur d'items dans un menu.
+					</description>
+				</element>
+				<element label="item" content="(call?)" parent="menu">
+					Un item de menu. Cet item permet d'ouvrir une nouvelle page web ou d'executer une fonction Javascript.
+					On peut également spécifier le nom de la fenêtre ou frame dans laquelle doit s'afficher la page ou s'executer le script.
+
+					<parameters label="Attributs">
+						<param name="label" type="String" default="#REQUIRED" desc="Titre de l'item tel qu'il apparait dans le menu"/>
+						<param name="font" type="IDREF" default="#IMPLIED" desc="Une référence sur une 'font' qui sera utilisée pour écrire le titre de cet item">
+							Si cet attribut n'est pas spécifié, c'est la 'font' du 'menu' qui est utilisée.
+						</param>
+						<param name="url" type="URL" default="#IMPLIED" desc="L'URL à utiliser si l'utilisateur choisit cet item">
+							Pour utiliser un item passif dans un menu il suffit de ne pas spécifier 'url'.<br/>
+							La syntax varie en fonction de l'action à réaliser:<br/>
+							url='myHTTPPage'						ouvre une nouvelle fenêtre pour afficher la page myHTTPPage<br/>
+							url='_myWin:myHTTPPage'					si myWin existe, affiche la page myHTTPPage dedans sinon ouvre une nouvelle fenêtre de référence myWin<br/>
+							url='javascript:function(args)'			si le navigateur supporte LiveConnect, L'Applet appelera 'function(args)' en Javascript.
+																	sinon l'Applet redirigera l'appel sur une page prévue à cet effet en passant 'function(args)' sous forme de paramètres CGI.
+																	(cf paramètres de l'Applet).<br/>
+							url='javascript:_myWin:function(args)'	Même chose que dans le cas précédent sauf que la fenêtre(frame) dans laquelle la méthode doit être appelée est précisé.
+																	Si _myWin='null' l'Applet ne redirige pas l'appel sur la page de secours.
+						</param>
+						<param name="track" type="URL" default="#IMPLIED" desc="L'URL de tracking" deprecated="Inclus dans 'url'">
+							Comme le tracking ouvre la page contenant l'URL, on peut directement utiliser 'url' à la place de 'track'.
+						</param>
+						<param name="call" type="IDREF" default="#IMPLIED" desc="Une référence sur une fonction javascript" deprecated="Remplacé par javascript:">
+							Il est plus simple de faire une URL du type "javascript:[_target:]function(args)".
+							Car sans LiveConnect l'Applet peut rediriger l'appel sur une page prévue à cet effet en passant "function(args)" sous forme de paramètres CGI.
+						</param>
+						<param name="id" type="ID" default="#IMPLIED" desc="Identifiant d'occurence"/>
+					</parameters>
+					<element label="call" deprecated="Remplacé par javascript:call()" parent="item" content="(arg*)">
+						Un appel Javascript.
+						Remplacé par la déclaration en ligne de type javascript:function(args).
+
+						<parameters label="Attributs">
+							<param name="method" type="String" default="#REQUIRED" desc="Nom de la fonction à appeler"/>
+							<param name="id" type="ID" default="#IMPLIED" desc="Identifiant d'occurence"/>
+						</parameters>
+						<element label="arg" deprecated="Remplacé par javascript:call(arg)" parent="call">
+							<description>
+								Un argument d'une fonction Javascript.
+								Remplacé par la déclaration en ligne de type javascript:function(args).
+							</description>
+							<parameters label="Attributs">
+								<param name="value" type="String" default="#REQUIRED" desc="Valeur de l'argument"/>
+							</parameters>
+						</element>
+					</element>
+				</element>
+			</element>
+			<element label="event" content="(open | play | popup | show | dump | pop)+">
+				Une liste d'actions à executer. Cet évenement est déclenché lors du changement d'état d'un satellite (survol, clic, double-clic).
+				La liste peut comporter autant d'actions que souhaité parmis:<br/>
+				open URL, play sound, popup menu, show status, dump text, pop tooltip.
+
+				<parameters label="Attributs">
+					<param name="id" type="ID" default="#IMPLIED" desc="Identifiant d'occurence"/>
+				</parameters>
+				<element label="dump" parent="event">
+					Ecris une ligne de texte sur la sortie Java standard (console).
+					Cet élément n'est en principe utilisé que pour débugger.
+
+					<parameters label="Attributs">
+						<param name="text" type="String" default="#REQUIRED" desc="Le text à écrire"/>
+						<param name="id" type="ID" default="#IMPLIED" desc="Identifiant d'occurence"/>
+					</parameters>
+				</element>
+				<element label="open" parent="event">
+					Ouvre une page dans une nouvelle fenêtre ou une frame.
+
+					<parameters label="Attributs">
+						<param name="url" type="URL" default="#IMPLIED" desc="L'adresse de la page à afficher" see="item"/>
+						<param name="track" type="URL" default="#IMPLIED" desc="Le traking pouvant tout aussi bien être géré par 'url', cet attribut n'est plus nécessaire" deprecated="Inclus dans 'url'"/>
+						<param name="id" type="ID" default="#IMPLIED" desc="Identifiant d'occurence"/>
+					</parameters>
+				</element>
+				<element label="play" parent="event">
+					Joue un son. Le fichier sonore doit être au format .au de Sun.
+					Attention! Cette fonctionalité bien qu'implémenté dans l'Applet n'a jamais été testé.
+
+					<parameters label="Attributs">
+						<param name="sound" type="URL" default="#REQUIRED" desc="URL du fichier sonore"/>
+						<param name="id" type="ID" default="#IMPLIED" desc="Identifiant d'occurence"/>
+					</parameters>
+				</element>
+				<element label="pop" parent="event">
+					Affiche un tooltip préalablement déclaré.
+
+					<parameters label="Attributs">
+						<param name="tooltip" type="IDREF" default="#REQUIRED" desc="référence sur un tooltip"/>
+						<param name="id" type="ID" default="#IMPLIED" desc="Identifiant d'occurence"/>
+					</parameters>
+				</element>
+				<element label="popup" parent="event">
+					Affiche un menu contextuel préalablement déclaré.
+
+					<parameters label="Attributs">
+						<param name="menu" type="IDREF" default="#REQUIRED" desc="référence sur un menu"/>
+						<param name="id" type="ID" default="#IMPLIED" desc="Identifiant d'occurence"/>
+					</parameters>
+				</element>
+				<element label="show" parent="event">
+					Affiche un message dans la barre de status du navigateur.
+
+					<parameters label="Attributs">
+						<param name="status" type="IDREF" default="#REQUIRED" desc="Le texte à afficher"/>
+						<param name="id" type="ID" default="#IMPLIED" desc="Identifiant d'occurence"/>
+					</parameters>
+				</element>
+			</element>
+			<element label="ref" deprecated="Non utilisé">
+				Une référence sur un élément. Des éléments complexes peuvent êtres référencés au moyen de cet élément (menus...).
+				C'est l'équivalent de l'attribut "@ref" pour les éléments.
+				En fait cet élément n'a jamais été utilisé, c'est pourquoi il est déprécié.
+
+				<parameters label="Attributs">
+					<param name="name" type="IDREF" default="#REQUIRED" desc="Identifiant de l'élément à référencer"/>
+				</parameters>
+			</element>
+			<element label="sat" content="(transfo? , (slice | ref)+ )">
+				Un satellite. Cet élément est la brique de base de tous les swatchs.
+
+				<parameters label="Attributs">
+					<param name="shape" type="IDREF" default="#REQUIRED" desc="Une référence sur la 'shape' (forme) de ce satellite"/>
+					<param name="transfo" type="IDREF" default="#IMPLIED" desc="Une référence sur une transformation afin de positionner et dimensionner la 'shape'"/>
+					<param name="selection" type="String" default="#IMPLIED" desc="Un identifiant de sélection"/>
+					<param name="click" type="IDREF" default="#IMPLIED" desc="Une référence sur un évenement qui est executé quand ce satellite est cliqué"/>
+					<param name="dblClk" type="IDREF" default="#IMPLIED" desc="Une référence sur un évenement qui est executé quand ce satellite est double-cliqué"/>
+					<param name="hover" type="IDREF" default="#IMPLIED" desc="Une référence sur un évenement qui est executé quand ce satellite est survolé"/>
+					<param name="linkDarkCol" type="Color" default="#IMPLIED" desc="Couleur de l'ombre du lien reliant ce satellite à son père. Si aucune couleur de lien n'est spécifiée le lien n'apparait pas"/>
+					<param name="linkLitCol" type="Color" default="#IMPLIED" desc="Couleur claire du lien reliant ce satellite à son père"/>
+					<param name="linkNormCol" type="Color" default="#IMPLIED" desc="Couleur du lien reliant ce satellite à son père"/>
+					<param name="isBack" type="boolean" default="false" desc="'true' si ce 'sat' est visible en arrière plan (sous la zone transparente)">
+						Ce flag permet de cacher certains satellites derrière un film transparent.
+						Ainsi les satellites devant le filtre resortent mieux du fond.
+					</param>
+					<param name="isCur" type="boolean" default="false" desc="'true' si ce 'sat' est visible lorsque la zone est courante (survolée)"/>
+					<param name="isRest" type="boolean" default="true" desc="'true' si ce 'sat' est visible lorsque la zone est au repos (non-survolée)"/>
+					<param name="isSub" type="boolean" default="false" desc="'true' si ce 'sat' est visible sur les zones clusterisées (sous-zones)"/>
+					<param name="isSuper" type="boolean" default="true" desc="'true' si ce 'sat' est visible sur le père des zones clusterisées (super-zone)"/>
+					<param name="isTip" type="boolean" default="false" desc="'true' si ce 'sat' est un titre de place"/>
+					<param name="isVisible" type="boolean" default="true" desc="'true' si ce 'sat' est visible" deprecated="Non utilisé">
+						On peut utiliser certains satellites uniquement dans le but d'en positionner d'autres donc ils ne doivent pas apparaitre.
+						Mais cela n'a jamais été utilisé :(
+					</param>
+					<param name="id" type="ID" default="#IMPLIED" desc="Identifiant d'occurence"/>
+				</parameters>
+				<element label="slice" content="(transfo? , tip?)" parent="sat">
+					Une couche graphique à afficher dans un satellite. Sa forme est celle du satellite père.
+					La taille et la position de cette couche est définie par une 'transfo'.
+
+					<parameters label="Attributs">
+						<param name="image" type="URL" default="#IMPLIED" desc="L'URL d'une image de type {gif, jpg, png} à afficher dans cette 'slice'"/>
+						<param name="inCol" type="Color" default="#IMPLIED" desc="Couleur de fond de cette 'slice'"/>
+						<param name="outCol" type="Color" default="#IMPLIED" desc="Couleur du bord de cette 'slice'"/>
+						<param name="tip" type="IDREF" default="#IMPLIED" desc="Une référence sur un 'tip'"/>
+							Attention! Dans ce cas L'échelle de la transformation doit être 0.
+						<param name="transfo" type="IDREF" default="#IMPLIED" desc="Une référence sur une 'tranfo' utilisée pour positionner et dimensionner ce 'slice' par rapport à son satellite"/>
+						<param name="id" type="ID" default="#IMPLIED" desc="Identifiant d'occurence"/>
+					</parameters>
+				</element>
+				<element label="transfo" content="(cart | polar)?" parent="sat slice tooltip">
+					Une transformation géométrique simple permettant de positionner et de changer l'échelle des 'slice's.
+					En général une 'transfo' transforme une 'shape' en une autre par translation et/ou homothétie.
+
+					<parameters label="Attributs">
+						<param name="map" type="choice" default="absolute" desc="type de mapping des coordonées parmis { interpol, relative, absolute }">
+							<parameters label="Type de mapping">
+								<param name="interpol" desc="Les coordonnées sont évaluées par interpolation bilinéaire dans le repère de la 'shape' parente"/>
+								<param name="relative" desc="Les coordonnées sont relatives au centre de la 'shape' parente"/>
+								<param name="absolute" desc="Les coordonnées sont absolues (relative à l'origine de la fenêtre)"/>
+							</parameters>
+						</param>
+						<param name="scale" type="float" default="0" desc="L'échelle de cet objet relativement à sa 'shape' parente"/>
+					</parameters>
+					<element label="cart" parent="transfo">
+						Une translation en pixels utilisant des coordonées cartésiennes.
+						Utilisé par ex. pour positionner au pixel près plusieurs couches de texte et produire ainsi des effets (contours, ombrages...).
+
+						<parameters label="Attributs">
+							<param name="x" type="int" default="0" desc="abscisse"/>
+							<param name="y" type="int" default="0" desc="ordonnée"/>
+						</parameters>
+					</element>
+					<element label="polar" parent="transfo">
+						Une position 2D en coordonnées polaires.
+
+						<parameters label="Attributs">
+							<param name="dir" type="float" default="0" desc="Angle en degrés dans le sens des aiguilles d'une montre">
+								O degré signifie 3 heures.
+							</param>
+							<param name="rad" type="float" default="1" desc="Rayon en unitées dependant du type de transformation">
+								interpolation :       la fraction du rayon de la forme sur laquelle porte la transformation.
+								relative / absolute : le rayon en pixels.
+							</param>
+						</parameters>
+					</element>
+				</element>
+			</element>
+			<element label="shape" content="(point*)">
+				Une forme de base dont on peut donner la taille. Son apparence dépend du nombre de points spécifiés.
+
+				<parameters label="Formes possibles">
+					<param name="0 point" desc="c'est une forme invisible, utile pour placer un bitmap"/>
+					<param name="1 point" desc="c'est un disque dont le rayon est 'scale'"/>
+					<param name="2 points" desc="c'est un segment dont l'épaisseur est 'scale'"/>
+					<param name="plus" desc="c'est un polygone dont l'échelle est 'scale'"/>
+				</parameters>
+
+				<parameters label="Attributs">
+					<param name="scale" type="float" default="0" desc="Taille ou échelle de la forme suivant son type"/>
+					<param name="id" type="ID" default="#IMPLIED" desc="Identifiant d'occurence"/>
+				</parameters>
+				<element label="point" parent="shape">
+					Une position 2D en coordonnées cartésiennes.
+
+					<parameters label="Attributs">
+						<param name="x" type="int" default="#REQUIRED" desc="abscisse"/>
+						<param name="y" type="int" default="#REQUIRED" desc="ordonnée"/>
+					</parameters>
+				</element>
+			</element>
+			<element label="string">
+				Une ligne de texte. Ce texte peut inclure des propriétés qui seront évaluées à la volée par l'Applet.
+				Les propriétés utilisateur sont définies dans le Dictionnaire et ne peuvent ni commencer par '~' ni par '_'.
+				Il existe 1 propriété interne public définie par Plan Generator : _LENGTH qui est la longeur normalisé d'un lien.
+
+				<parameters label="Définition d'une propriété">
+					<param name="{prop}" desc="déclaration d'une propriété simple"/>
+					<param name="[prop]" desc="déclaration d'une propriété multiple (tableau)">
+						Une telle propriété sert aux sous-menus et tooltips.
+					</param>
+					<param name="_prop" desc="cette propriété vient de PlanGenerator"/>
+					<param name="$prop" desc="cette propriété vient de l'Env, elle est globale et définie dans le dictionaire">
+						Une telle propriété est accéssible depuis toutes les zones.
+						On peut s'en servir par exemple pour définir un path auquel on concatenera un nom de fichier au moyen d'une propriété 'normale'.
+					</param>
+					<param name="![prop]" desc="Cette propriété multiple ne peut avoir de membre non renseigné">
+						Dans ce cas elle ne sera pas affichée.
+					</param>
+					<param name="?(prop)" desc="URLEncode la propriété">
+						Très utile pour passer des propriétés en paramètre CGI.
+					</param>
+					<param name="-(prop)" desc="justifie le texte à droite.">
+						Par défaut il est justifié à gauche.
+					</param>
+					<param name="+n(prop)" desc="restreint le nb de chars affichables">
+						ex : 'MapStan Search' sera affiché 'MapStan Se' avec le format '+10'.
+					</param>
+					<param name="[n]d(prop)" desc="nombre entier">
+						Eventuellement précédé du nombre de chiffre à afficher.
+						ex : '56' sera affiché '  56' avec le format '4d'.
+					</param>
+					<param name="[n.m]f(prop)" desc="nombre réel">
+						Eventuellement précédé du nombre de chiffre à afficher pour la partie entière et flottante.
+						ex : '23,89' sera affiché ' 23.8' avec le format '3.1f'.
+					</param>
+					<param name="/c" desc="pour neutraliser un caractère">
+						ex : '/?' pour afficher '?'.
+					</param>
+				</parameters>
+				ex : si obj="pomme" $soc="ED" prix="001,5" $curr="F"<br/>
+				"Cette {obj} de chez {$soc} coute {.2fprix} {$curr}"<br/>
+				s'affichera :<br/>
+				"Cette pomme de chez ED coute 1.50 F"<br/>
+				<br/>
+				si $page="Page de" pre="John,Pénélope,null,Alex,Clark" nom="Duff,Solette,Bidochon,Terrieur,Guenfü" rank="1,2,5,7,11"<br/>
+				"{$page} [-8pre] [8nom] : [2drank]"<br/>
+				<br/>
+				s'affichera:<br/>
+				"Page de     John Duff     :  1"<br/>
+				"Page de Pénélope Solette  :  2"<br/>
+				"Page de     Alex Terrieur :  7"<br/>
+				"Page de    Clark Guenfü   : 11"<br/>
+
+				<parameters label="Attributs">
+					<param name="label" type="String" default="#REQUIRED" desc="La chaine de caractères"/>
+					<param name="id" type="ID" default="#IMPLIED" desc="Identifiant d'occurence"/>
+				</parameters>
+			</element>
+			<element label="tip" parent="slice tooltip">
+				Un texte avec un fond et un bord. Il peut être utilisé pour définir un tooltip, un fanion ou une "fenêtre" de texte fixe.
+
+				<rem>
+					Une légère modification permettrait d'écrire du HTML en ligne (hors url).
+				</rem>
+
+				<parameters label="Attributs">
+					<param name="align" type="choice" default="left" desc="Alignement horizontal du texte parmis { left, center, right }"/>
+					<param name="font" type="IDREF" default="#REQUIRED" desc="Une référence sur une 'font'"/>
+					<param name="textCol" type="Color" default="blackCol" desc="Couleur des caractères"/>
+					<param name="inCol" type="Color" default="#IMPLIED" desc="Couleur de fond derrière le texte">
+						Si cet attribut n'est pas précisé, le fond est invisible.
+					</param>
+					<param name="outCol" type="Color" default="#IMPLIED" desc="Couleur du bord autour du texte">
+						Si cet attribut n'est pas précisé le bord est invisible.
+					</param>
+					<param name="isCorner" type="boolean" default="false" desc="'true' si ce tip est positionné relativement à ses coins (titre des attributs clusterizés)">
+						'false' pour centrer ce tip.
+					</param>
+					<param name="isFloating" type="boolean" default="false" desc="'true' si ce tip doit essayer de rester à l'interieur de la fenêtre du browser">
+						Il n'est pas toujours possible à un tip de rester dans la fenêtre car il peut être plus grand que cette dernière.
+					</param>
+					<param name="label" type="String" default="#REQUIRED" desc="Texte du tip"/>
+					<param name="url" type="URL" default="#IMPLIED" desc="URL d'un fichier contenant du texte avec éventuellement du pseudo HTML">
+						<parameters label="Les balises suportées">
+							<param name="&lt;p&gt;" desc="Paragraphe dont les attributs optionels permettent de formater le texte">
+								a=	allignement du texte parmis { 'r', 'c', 'l' } lorsque plusieurs lignes sont définies. 'l' par défaut.<br/>
+								t=	marge du haut en pixels.<br/>
+								l=	marge de gauche en pixels.<br/>
+								b=	marge du bas en pixels.<br/>
+								r=	marge de droite en pixels.
+							</param>
+							<param name="&lt;c=&gt;" desc="Couleur du texte au format HTML : '#RRGGBB'"/>
+							<param name="&lt;k=&gt;" desc="Couleur du fond au format HTML"/>
+							<param name="&lt;b&gt;" desc="Gras"/>
+							<param name="&lt;i&gt;" desc="Italique"/>
+							<param name="&lt;s=&gt;" desc="Taille de la police en points"/>
+							<param name="&lt;f=&gt;" desc="Nom de la police.(cf font)"/>
+							<param name="&lt;br&gt;" desc="Retour à la ligne"/>
+						</parameters>
+						ex :<br/>
+						&lt;p a='r' t='10' r='5'&gt;<br/>
+							Ce texte aligné à droite devient &lt;c='#ff0000'&gt;rouge, &lt;b&gt;gras, &lt;i&gt;italique&lt;/i&gt;&lt;/b&gt;&lt;/c&gt;&lt;br&gt;<br/>
+							Il est maintenant écrit en &lt;f='Monospaced'&gt;&lt;s=15&gt;Courrier sur fond&lt;k='#ffff00'&gt;jaune&lt;/k&gt;&lt;/s&gt;&lt;/f><br/>
+						&lt;/p&gt;
+					</param>
+					<param name="dir" type="choice" default="SW" desc="Le 'tip' est fixé à un point cardinal de la fenêtre parmis { N, NE, E, SE, S, SW, W, NW }">
+						Attention! Ce paramètre bien que passé à l'Applet est aujourd'hui hardcodé à 'SW'.
+						De plus il n'est utilisé qu'en conjonction avec 'url'.
+					</param>
+					<param name="id" type="ID" default="#IMPLIED" desc="Identifiant d'occurence"/>
+				</parameters>
+			</element>
+			<element label="tooltip" content="(transfo? , tip?)">
+				Un tooltip qui s'active lors d'un 'event' sur un 'sat'.
+				Il disparait lorsque l'utilisateur change de satellite ou que le delais de disparition est atteint.
+
+				<parameters label="Attributs">
+					<param name="delay" type="int" default="0" desc="Delais en ms avant son apparition"/>
+					<param name="image" type="URL" default="#IMPLIED" desc="Une référence sur un 'tip'"/>
+					<param name="length" type="int" default="4000" desc="Delais en ms avant sa disparition">
+						Une valeur de -1 perment de garder le tooltip visible tant que le curseur ne change pas de satellite.
+					</param>
+					<param name="id" type="ID" default="#IMPLIED" desc="Identifiant d'occurence"/>
+				</parameters>
+			</element>
+		</element>
+	</definition>
+
+	<definition label="FAQ" type="FAQ">
+
+		<element label="Fonctionnement" type="Technical">
+			Explique le fonctionnement de certains processus.
+
+			<parameters label="Comment fonctionne">
+				<param name="Les contraintes graphiques">
+					Les bitmaps des places doivent doivent être carrés pour éviter les distorsions et d'une taille suffisante
+					pour qu'on ne voit pas trop les pixels lors des agrandissements mais pas trop pour que le fichier ne soit pas trop lourd.
+					32x32 semble être un bon compromis.<br/>
+					Il n'y a pas de contraintes de palettes car Java travail en True-Color.
+					Les formats supportés sont le gif et le jpeg, le png n'est pas supporté dans IE.
+					Les gifs animés sont déconseillés car la gestion de leur affichage échappe à tout contrôle!<br/>
+					Bien que la transparence du gif soit gérée, le resize d'une image transparente entraîne des artefacts visuels.
+					Il faut donc si possible minimiser la transparence.
+				</param>
+			</parameters>
+		</element>
+
+		<element label="Glossaire" type="Glossary">
+			Définition des termes employés dans la JavaDoc et le code des Swatchs.
+
+			<parameters label="C'est quoi">
+				<param name="Taxonomie des Swatchs">
+					Pour chaque 'zone' graphique que l'Applet affiche, elle utilise un swatch pour la zone au repos et éventuellement un autre swatch pour la zone survolée.
+					Bien que ces couples puissent être différents pour chaque zone (noeuds et liens) seuls 2 pour les liens et 2 pour les noeuds sont utilisés.
+					En effet, ces couples (zone au repos ou courrante) peuvent être de référence ou non.
+					<parameters label="Les 4 types de base">
+						<param name="NODE/LINK_REST_NORM" desc="swatch d'une zone normale au repos (non survolée)"/>
+						<param name="NODE/LINK_CUR_NORM" desc="swatch d'une zone normale courante (suvolée)"/>
+						<param name="NODE/LINK_REST_REF" desc="swatch d'une zone de réference au repos"/>
+						<param name="NODE/LINK_CUR_REF" desc="swatch d'une zone de réference courante"/>
+					</parameters>
+					Puisque les évenements gérés par l'Applet sont le click, le double-clic et le survol, seuls les swatchs courants incluent des évenements.
+					C'est pourquoi généralement seuls les swatchs courants sont localisés.<br/>
+					Si on veut localiser les swatchs, la convention est de faire précéder le nom de LANG_.
+					<parameters label="Localisation">
+						<param name="DEF_" desc="FR_"/>
+						<param name="FR_" desc="français"/>
+					</parameters>
+					Enfin on peut choisir de faire des swatchs différents en fonction du type de plan. Dans ce cas, on fait suivre le nom de _PLAN.
+					<parameters label="Sur www.mapstan.net">
+						<param name="_MY" desc="plan personel"/>
+						<param name="_DAILY" desc="plan du jour"/>
+						<param name="_DISCO" desc="plan de découverte"/>
+					</parameters>
+					<parameters label="Sur search.mapstan.net">
+						<param name="_SEARCH" desc="plan de recherche"/>
+						<param name="_DISEARCH" desc="plan de d'exploration"/>
+					</parameters>
+					<parameters label="Sur seek.mapstan.com">
+						<param name="_SEEK"/>
+					</parameters>
+					<parameters label="Sur societe.mapstan.com">
+						<param name="_SOCIETECOM" desc="plan de société"/>
+						<param name="_BOSS_SOCIETECOM" desc="plan de dirigeant"/>
+					</parameters>
+					ex : FR_NODE_CUR_REF_DISCO est le swatch des noeuds de référence courant en français dans les plans de découverte de www.mapstan.net.<br/>
+					En utilisant cets conventions on peut nommer les swatchs en ajoutant le préfixe MPST_ (cf l'attribut 'name' de 'swatch').
+				</param>
+			</parameters>
+		</element>
+	</definition>
+</doc>
