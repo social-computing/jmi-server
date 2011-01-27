@@ -1,7 +1,7 @@
 <%@page import="java.util.Iterator"%>
 <%@page import="com.socialcomputing.wps.server.plandictionary.loader.Dictionary"%>
 <%@page import="java.util.Collection"%>
-<%@page import="com.socialcomputing.wps.server.plandictionary.loader.DictionnaryManager"%>
+<%@page import="com.socialcomputing.wps.server.plandictionary.loader.DictionaryManager"%>
 
 <%!
 // return current time to proxy server request
@@ -44,7 +44,7 @@ public long getLastModified(HttpServletRequest request) {
 <body bgcolor=7f9fdf>
 <!--iframe height="0" width="0" src="../exportrequest.jsp"></iframe-->
 <%
-DictionnaryManager manager = new DictionnaryManager();
+DictionaryManager manager = new DictionaryManager();
 
 if( request.getParameter( "confirmdelete") != null && request.getParameter( "confirmdelete").equalsIgnoreCase( "y"))
 {

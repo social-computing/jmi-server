@@ -4,6 +4,8 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -20,9 +22,8 @@ public class SwatchManager {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			Iterator<Swatch> results = session.createQuery("from Swatch").iterate();
-			while (results.hasNext()) {
-				Swatch s = (Swatch) results.next();
+			List<Swatch> results = session.createQuery("from Swatch").list();
+			for (Swatch s : results) {
 				sl = new Swatch(s.getName(), s.getSwatchDefinition());
 				csl.add(sl);
 			}

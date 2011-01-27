@@ -4,6 +4,8 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -22,9 +24,8 @@ public class DictionaryManager {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			Iterator<Dictionary> results = session.createQuery("from Dictionary").iterate();
-			while (results.hasNext()) {
-				Dictionary d = (Dictionary) results.next();
+			List<Dictionary> results = session.createQuery("from Dictionary").list();
+			for (Dictionary d : results) {
 				dl = new Dictionary(d.getName(), d.getDictionaryDefinition(), d.getFilteringdate());
 				cdl.add(dl);
 			}

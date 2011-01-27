@@ -104,7 +104,7 @@ if( sortquery == null) sortquery = "date desc";
 -->
 <%
 	if( request.getParameter( "dictionary") == null) return;
-	DictionnaryManager manager = new DictionnaryManager();
+	DictionaryManager manager = new DictionaryManager();
 	Dictionary dic = manager.findByName(request.getParameter( "dictionary"));
 
 	

@@ -41,7 +41,7 @@ public long getLastModified(HttpServletRequest request) {
 <!--iframe height="0" width="0" src="../exportrequest.jsp"></iframe-->
 <%
 if( request.getParameter( "dictionary") == null) return;
-DictionnaryManager manager = new DictionnaryManager();
+DictionaryManager manager = new DictionaryManager();
 Dictionary dic = manager.findByName(request.getParameter( "dictionary")); //dicHome.findByPrimaryKey( request.getParameter( "dictionary"));
 %>
 <table width="100%">
