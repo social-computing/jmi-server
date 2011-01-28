@@ -41,6 +41,8 @@
 				includes="com/socialcomputing/wps/**,com/socialcomputing/utils/**" 
 		/>
 		<copy file="${dist}/WPS.jar" tofile="WebContent/WEB-INF/lib/WPS.jar" />
+                <mkdir dir="WebContent/WEB-INF/classes"/>
+                <copy file="${build}/classes/hibernate.cfg.xml" tofile="WebContent/WEB-INF/classes/hibernate.cfg.xml" />
 		<war destfile="${dist}/wps.war" 
 			basedir="WebContent" 
 			includes="**" 

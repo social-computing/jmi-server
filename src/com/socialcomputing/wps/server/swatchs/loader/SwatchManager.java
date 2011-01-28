@@ -1,7 +1,6 @@
 package com.socialcomputing.wps.server.swatchs.loader;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -13,19 +12,14 @@ import com.socialcomputing.utils.database.HibernateUtil;
 
 public class SwatchManager {
 	
-	public Collection findAll() throws RemoteException {
-		ArrayList<Swatch> csl = new ArrayList<Swatch>();
-		Swatch sl = null;
+	public Collection<Swatch> findAll() throws RemoteException {
+		List<Swatch> results = null;
 		Session session = null;
 		Transaction tx = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			List<Swatch> results = session.createQuery("from Swatch").list();
-			for (Swatch s : results) {
-				sl = new Swatch(s.getName(), s.getSwatchDefinition());
-				csl.add(sl);
-			}
+			results = session.createQuery("from Swatch").list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -33,28 +27,24 @@ public class SwatchManager {
 			session.close();
 		}
 		
-		return csl;
+		return results;
 	}
 	
 	public Swatch findByName(String name) throws RemoteException {
-		Swatch sl = null;
+		Swatch result = null;
 		Session session = null;
 		Transaction tx = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			Swatch result = (Swatch) session.createQuery("from Swatch as s where s.name = ?").setString(0, name).uniqueResult();
-			if (result != null) {
-				sl = new Swatch(result.getName(), result.getSwatchDefinition());
-			}
+			result = (Swatch) session.createQuery("from Swatch as s where s.name = ?").setString(0, name).uniqueResult();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			tx.commit();
 			session.close();
 		}
-		
-		return sl;
+		return result;
 	}
 	
 	public Swatch create(String name) throws RemoteException {

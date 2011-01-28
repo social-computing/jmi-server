@@ -1,54 +1,45 @@
 package com.socialcomputing.wps.server.plandictionary.loader;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.utils.database.DatabaseHelper;
 import com.socialcomputing.utils.database.HibernateUtil;
+import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 
 
 public class DictionaryManager {
 	
-	public Collection findAll() throws RemoteException {
-		ArrayList<Dictionary> cdl = new ArrayList<Dictionary>();
-		Dictionary dl = null;
+	public Collection<Dictionary> findAll() throws RemoteException {
+		List<Dictionary> results = null;
 		Session session = null;
 		Transaction tx = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			List<Dictionary> results = session.createQuery("from Dictionary").list();
-			for (Dictionary d : results) {
-				dl = new Dictionary(d.getName(), d.getDictionaryDefinition(), d.getFilteringdate());
-				cdl.add(dl);
-			}
+			results = session.createQuery("from Dictionary").list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			tx.commit();
 			session.close();
+			
 		}
-		
-		return cdl;
+		return results;
 	}
 	
 	public Dictionary findByName(String name) throws RemoteException {
-		Dictionary dl = null;
+		Dictionary result = null;
 		Session session = null;
 		Transaction tx = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			Dictionary result = (Dictionary) session.createQuery("from Dictionary as d where d.name = ?").setString(0, name).uniqueResult();
-			if (result != null) {
-				dl = new Dictionary(result.getName(), result.getDictionaryDefinition(), result.getFilteringdate());
-			}
+			result = (Dictionary) session.createQuery("from Dictionary as d where d.name = ?").setString(0, name).uniqueResult();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -56,7 +47,7 @@ public class DictionaryManager {
 			session.close();
 		}
 		
-		return dl;
+		return result;
 	}
 	
 	public DictionaryLoader create(String name) throws RemoteException {
