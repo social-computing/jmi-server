@@ -33,7 +33,7 @@ public class Swatch implements Serializable, SwatchLoader {
 	}
 	
 	@Id
-	@Column(name = "name")
+	@Column(name = "name", columnDefinition="varchar(100) default ''")
 	String name;
 	
 	@Column(name = "swatch", columnDefinition="TEXT")

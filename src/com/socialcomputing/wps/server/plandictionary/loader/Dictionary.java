@@ -41,13 +41,14 @@ public class Dictionary implements Serializable, DictionaryLoader {
 	private static String s_DateFormat = "yyyy/MM/dd HH:mm:ss";
 	
 	@Id
-	@Column(name = "name")
+	@Column(name = "name", columnDefinition="varchar(100) default ''")
 	String name;
 	
 	@Column(name = "dictionary", columnDefinition="TEXT")
 	String dictionary;
 	
-	@Column(name = "filteringdate")
+	@Column(name = "filteringdate", nullable=false, columnDefinition="varchar(50) default ''")
+	
 	String filteringdate;
 	
 	@Transient
