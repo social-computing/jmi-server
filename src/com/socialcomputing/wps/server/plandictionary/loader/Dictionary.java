@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Index;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -25,6 +27,7 @@ import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 @Entity
 @Table(name = "dictionaries")
 @org.hibernate.annotations.Table(appliesTo="dictionaries", indexes = {@Index(name="PRIMARY", columnNames={"name"})})
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Dictionary implements Serializable, DictionaryLoader {
 
 	public Dictionary() {
