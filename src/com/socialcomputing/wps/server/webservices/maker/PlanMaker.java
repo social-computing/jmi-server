@@ -1,9 +1,7 @@
 package com.socialcomputing.wps.server.webservices.maker;
 
 import java.rmi.RemoteException;
-//import java.util.Hashtable;
 
-//import javax.ejb.*;
 /**
  * Title:        PlanMaker
  * Description:
@@ -15,7 +13,5 @@ import java.rmi.RemoteException;
 
 public interface PlanMaker //extends EJBObject
 {
-	public java.util.Hashtable createBinaryPlan( java.util.Hashtable params) throws RemoteException;
-
-	public String createXmlPlan( java.util.Hashtable params) throws RemoteException;
+	public java.util.Hashtable<String, Object> createPlan( java.util.Hashtable<String, String> params) throws RemoteException;
 }

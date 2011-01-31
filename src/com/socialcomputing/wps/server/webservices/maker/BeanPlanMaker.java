@@ -46,28 +46,45 @@ public class BeanPlanMaker implements PlanMaker {
 		static final int EnvInitialized         = 0x00002000;
 	}
 
-	public Hashtable createBinaryPlan( Hashtable params) throws RemoteException
+	@Override
+	public Hashtable<String, Object> createPlan( Hashtable<String, String> params) throws RemoteException
 	{
-		Hashtable result = new Hashtable();
+		Hashtable<String, Object> result = new Hashtable<String, Object>();
 		try {
 			EZDebug.setVerbosity( EZDebug.NONE );
 			EZDebug.push();
 			EZTimer timer = new EZTimer();
 
-			ByteArrayOutputStream bout = new ByteArrayOutputStream( 32768);
-			PlanContainer planContainer = createPlan( params, result);
+			String mime = params.get( "PLAN_MIME");
+			if( mime == null)
+				mime = "application/octet-stream";
+			PlanContainer planContainer = _createPlan( params, result);
 			if( planContainer.m_env != null)
 			{
-				ObjectOutputStream objectOutStream = new ObjectOutputStream( new GZIPOutputStream( bout));
-				objectOutStream.writeObject( planContainer.m_env);
-				objectOutStream.writeObject( planContainer.m_plan);
-				objectOutStream.close();
+				if( mime.equals( "application/octet-stream"))
+				{
+					ByteArrayOutputStream bout = new ByteArrayOutputStream( 32768);
+					ObjectOutputStream objectOutStream = new ObjectOutputStream( new GZIPOutputStream( bout));
+					objectOutStream.writeObject( planContainer.m_env);
+					objectOutStream.writeObject( planContainer.m_plan);
+					objectOutStream.close();
+					result.put( "PLAN", bout.toByteArray());
+					result.put( "PLAN_MIME", mime);
+				}
+				else if( mime.equals( "text/xml"))
+				{
+					result.put( "PLAN", planContainer.m_protoPlan.getXML());
+					result.put( "PLAN_MIME", mime);
+				}
+				else if( mime.equals( "text/java"))
+				{
+					result.put( "PLAN", planContainer);
+					result.put( "PLAN_MIME", mime);
+				}
 			}
 
 			timer.showElapsedTime( "ALL STEPS" );
 			EZDebug.pop();
-			result.put( "PLAN", bout.toByteArray());
-			result.put( "PLAN_MIME", "application/octet-stream");
 			return result;
 		}
 		catch( Exception e)
@@ -76,159 +93,7 @@ public class BeanPlanMaker implements PlanMaker {
 		}
 	}
 	
-	public PlanContainer createPlanContainer( Hashtable params) throws RemoteException
-	{
-		String result = new String();
-		try {
-			EZDebug.setVerbosity( EZDebug.NONE );
-			EZDebug.push();
-			EZTimer timer = new EZTimer();
-
-			ByteArrayOutputStream bout = new ByteArrayOutputStream( 32768);
-			PlanContainer planContainer = createPlan( params, null);
-
-			timer.showElapsedTime( "ALL STEPS" );
-			EZDebug.pop();
-
-			return planContainer;
-		}
-		catch( Exception e)
-		{
-			throw new RemoteException( "WPS can't create plan " + (String)params.get( "planName") + " : " + e.getMessage());
-		}		
-	}
-	
-	public String createXmlPlan( Hashtable params) throws RemoteException
-	{
-		String result = new String();
-		try {
-			ProtoPlan proto = createProtoPlan( params, null);
-
-			result += proto.getXML();
-
-			return result;
-		}
-		catch( Exception e)
-		{
-			throw new RemoteException( "WPS can't create plan " + (String)params.get( "planName") + " : " + e.getMessage());
-		}
-	}
-
-	private ProtoPlan createProtoPlan( Hashtable params, Hashtable result) throws RemoteException
-	{
-		EZDebug.setVerbosity( EZDebug.NONE );
-		int 	status 		= Steps.PlanMakerStarted;
-		Connection connection = null;
-		WPSDictionary  dico = null;
-		//PlanContainer container = null;
-		PlanRequest planRequest = null;
-		ProtoPlan proto;
-		
-		long startTime = System.currentTimeMillis();
-
-		String name = ( String) params.get( "planName");
-		if( name == null)
-			throw new RemoteException( "WPS parameter 'planName' missing.");
-		String x = ( String)params.get( "width");
-		if( x != null && Integer.parseInt( x) == 0)
-			throw new RemoteException( "WPS parameter 'width' can't be 0.");
-		x = ( String) params.get( "height");
-		if( x != null && Integer.parseInt( x) == 0)
-		  throw new RemoteException( "WPS parameter 'height' can't be 0.");
-
-		String useragent = ( String) params.get( "User-Agent");
-		if( useragent == null) useragent = "<unknown>";
-
-		x = ( String) params.get( "wpsDebugLevel");
-		if( x != null)
-		{
-			switch( Integer.parseInt( x))
-			{
-				case 1:
-					EZDebug.setVerbosity( EZDebug.LOW);
-					break;
-				case 2:
-					EZDebug.setVerbosity( EZDebug.MED);
-					break;
-				case 3:
-					EZDebug.setVerbosity( EZDebug.HIGH);
-					break;
-			}
-		}
-
-		try
-		{
-			connection = getConnection();
-
-			
-			
-			
-			DictionaryManagerImpl manager=  new DictionaryManagerImpl();
-			Dictionary dictionaryLoader = manager.findByName(name);
-			if (result!=null)
-				result.put( "PLAN_NAME", name);
-
-			// DICTIONARY RETRIEVAL
-			dico = dictionaryLoader.getDictionary();
-			status = Steps.DictionaryLoaded;
-
-			// PLANREQUEST CREATION
-			planRequest = new PlanRequest( connection, dico, params);
-			if (result!=null)
-			switch( planRequest.getAnalysisProfile().m_planType)
-			{
-				case AnalysisProfile.PERSONAL_PLAN:
-					 result.put( "PLAN_TYPE", "PERSONAL");
-					 break;
-				case AnalysisProfile.GLOBAL_PLAN:
-					 result.put( "PLAN_TYPE", "GLOBAL");
-					 break;
-				case AnalysisProfile.DISCOVERY_PLAN:
-					 result.put( "PLAN_TYPE", "DISCOVERY");
-					 break;
-			}
-
-			// PLANREQUEST CREATION
-			dico.openConnections( params);
-			status = Steps.DictionaryOpened;
-
-			// AFFINITY GROUP RETRIEVAL
-			RecommendationInterface  affinity = new RecommendationInterface ( planRequest);
-			Collection affinityGroup = affinity.retrieveAffinityGroup();
-			status = Steps.AffinityGroupComputed;
-
-			// ANALYSIS MOTOR
-			AnalysisProcess analysisEngine = new AnalysisProcess( planRequest, affinityGroup, affinity);
-			proto = analysisEngine.getProtoPlan();
-			status = Steps.AnalysisPassed;
-
-			// PLAN GENERATOR
-			PlanGenerator   planGenerator	= new PlanGenerator();
-			planGenerator.generatePlan( proto, false );
-			
-			}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			recordPlanCreationInHistory( connection, name, null, null, params, useragent, System.currentTimeMillis() - startTime, status, e.getMessage());
-			throw new RemoteException( e.getMessage());
-		}
-		finally
-		{
-			try {
-				if( connection != null) connection.close();
-				if( dico != null) dico.closeConnections();
-			}
-			catch(Exception e)
-			{
-			}
-		}
-
-		return proto;
-	}	
-
-	
-	private PlanContainer createPlan( Hashtable params, Hashtable result) throws RemoteException
+	private PlanContainer _createPlan( Hashtable<String, String> params, Hashtable<String, Object> results) throws RemoteException
 	{
 		EZDebug.setVerbosity( EZDebug.NONE );
 		int 	status 		= Steps.PlanMakerStarted;
@@ -281,8 +146,7 @@ public class BeanPlanMaker implements PlanMaker {
 			// EJB DICTIONARY RETRIEVAL
 			DictionaryManagerImpl manager=  new DictionaryManagerImpl();
 			Dictionary dictionaryLoader =manager.findByName(name);
-			if (result!=null)
-				result.put( "PLAN_NAME", name);
+			results.put( "PLAN_NAME", name);
 
 			// DICTIONARY RETRIEVAL
 			dico = dictionaryLoader.getDictionary();
@@ -290,17 +154,16 @@ public class BeanPlanMaker implements PlanMaker {
 
 			// PLANREQUEST CREATION
 			planRequest = new PlanRequest( connection, dico, params);
-			if (result!=null)
 			switch( planRequest.getAnalysisProfile().m_planType)
 			{
 				case AnalysisProfile.PERSONAL_PLAN:
-					 result.put( "PLAN_TYPE", "PERSONAL");
+					 results.put( "PLAN_TYPE", "PERSONAL");
 					 break;
 				case AnalysisProfile.GLOBAL_PLAN:
-					 result.put( "PLAN_TYPE", "GLOBAL");
+					 results.put( "PLAN_TYPE", "GLOBAL");
 					 break;
 				case AnalysisProfile.DISCOVERY_PLAN:
-					 result.put( "PLAN_TYPE", "DISCOVERY");
+					 results.put( "PLAN_TYPE", "DISCOVERY");
 					 break;
 			}
 
@@ -310,7 +173,7 @@ public class BeanPlanMaker implements PlanMaker {
 
 			// AFFINITY GROUP RETRIEVAL
 			RecommendationInterface  affinity = new RecommendationInterface ( planRequest);
-			Collection affinityGroup = affinity.retrieveAffinityGroup();
+			Collection<String> affinityGroup = affinity.retrieveAffinityGroup();
 			status = Steps.AffinityGroupComputed;
 
 			// ANALYSIS MOTOR
@@ -320,12 +183,11 @@ public class BeanPlanMaker implements PlanMaker {
 
 			// PLAN GENERATOR
 			PlanGenerator   planGenerator	= new PlanGenerator();
-
 			planGenerator.generatePlan( proto, isVisual );
-
 			status = Steps.PlanGenerated;
 
 			container = new PlanContainer( planGenerator.getEnv(), planGenerator.getPlan());
+			container.m_protoPlan = proto;
 
 			recordPlanCreationInHistory( connection, name, planRequest.getAnalysisProfile().m_planType, planRequest.m_entityId, params, useragent, System.currentTimeMillis() - startTime);
 		}
@@ -350,7 +212,7 @@ public class BeanPlanMaker implements PlanMaker {
 	}
 
 
-	private void recordPlanCreationInHistory( Connection connection, String plan, int type, String user, Hashtable params, String useragent, long duration)
+	private void recordPlanCreationInHistory( Connection connection, String plan, int type, String user, Hashtable<String, String> params, String useragent, long duration)
 	{
 		String stype = null;
 		switch ( type)
@@ -361,7 +223,8 @@ public class BeanPlanMaker implements PlanMaker {
 		}
 		recordPlanCreationInHistory( connection, plan, stype, user, params, useragent, duration, 0, "");
 	}
-	private void recordPlanCreationInHistory( Connection connection, String plan, String type, String user, Hashtable params, String useragent, long duration, int status, String info)
+	
+	private void recordPlanCreationInHistory( Connection connection, String plan, String type, String user, Hashtable<String, String> params, String useragent, long duration, int status, String info)
 	{
 		try {
 			InetAddress local = InetAddress.getLocalHost();

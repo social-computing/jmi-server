@@ -13,7 +13,7 @@ import com.socialcomputing.wps.server.plandictionary.connectors.iAttributeEnumer
   * Key is attribute identifier (Numerical)
   * Value is attribute ponderation (>0) */
 
-public class AttributesPonderationMap extends TreeMap
+public class AttributesPonderationMap extends TreeMap<Integer, Float>
 {
 	/**
 	 * 
@@ -33,27 +33,29 @@ public class AttributesPonderationMap extends TreeMap
 			enumerator.next(item);
 			put( new Integer( m_Converter.add(item.m_Id)), new Float(item.m_Ponderation));
 			if (m_PondMax<item.m_Ponderation)
-			   {
+			{
 				m_PondMax=item.m_Ponderation;
-			   }
+			}
 		}
 	}
 
-	public   AttributesPonderationMap( iAttributeEnumerator enumerator, ObjectToNumConverter converter, String objectId ) throws WPSConnectorException
+	public   AttributesPonderationMap( iAttributeEnumerator enumerator, ObjectToNumConverter<ArrayList<String>> converter, String objectId ) throws WPSConnectorException
 	{
-		ArrayList array; int numAttr;
 		m_Converter = converter;
 		AttributeEnumeratorItem item = new AttributeEnumeratorItem();
 
 			while( enumerator.hasNext() )
 			{
 				enumerator.next(item);
-				put( new Integer( numAttr=converter.add(item.m_Id, null)), new Float(item.m_Ponderation));
+				int numAttr = converter.add( item.m_Id, null);
+				
+				put( numAttr, new Float( item.m_Ponderation));
 
-				// On met à jour la table des attributs
-				if ((array=(ArrayList)converter.getObject(numAttr))==null)
-					   converter.setObject(numAttr, array=new ArrayList());
-				array.add(objectId);
+				// On met ï¿½ jour la table des attributs
+				ArrayList<String> array = converter.getObject(numAttr);
+				if (array == null)
+					converter.setObject( numAttr, array = new ArrayList<String>());
+				array.add( objectId);
 
 				if (m_PondMax<item.m_Ponderation)
 				   {

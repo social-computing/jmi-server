@@ -20,6 +20,8 @@ public class PlanContainer implements Serializable
 
 	public Plan m_plan  = null;
 	public Env  m_env   = null;
+	// Temporary
+	public ProtoPlan m_protoPlan = null;
 
 	public PlanContainer( Env env, Plan plan )
 	{

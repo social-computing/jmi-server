@@ -14,6 +14,7 @@ import java.util.Hashtable;
 //import javax.naming.NamingException;
 
 import com.socialcomputing.wps.server.webservices.maker.BeanPlanMaker;
+import com.socialcomputing.wps.server.webservices.maker.PlanMaker;
 //import com.socialcomputing.wps.server.webservices.maker.PlanMaker;
 //import com.socialcomputing.wps.server.webservices.maker.PlanMakerHome;
 
@@ -27,28 +28,7 @@ public class WPSPlanMakerServlet extends HttpServlet
 	 * 
 	 */
 	private static final long serialVersionUID = -1343674940328653700L;
-	//PlanMakerHome m_PlanMakerHome = null;
-	static Hashtable m_bufferedPlans=new Hashtable();
-
-	public void init()
-	{
-		/*try
-		{
-			javax.naming.Context  context = new javax.naming.InitialContext();
-			Object ref = context.lookup( "java:comp/env/ejb/WPSPlanMaker");
-			m_PlanMakerHome = ( PlanMakerHome) javax.rmi.PortableRemoteObject.narrow(ref, PlanMakerHome.class);
-		}
-		catch( NamingException e)
-		{
-			  log( "WPS Servlet unable to find WPSPlanMaker EJB");
-		}*/
-	}
-
-	public void destroy()
-	{
-		//m_PlanMakerHome = null;
-	}
-
+	static Hashtable m_bufferedPlans = new Hashtable();
 
 	/*
 	   Method:  doGet
@@ -79,13 +59,11 @@ public class WPSPlanMakerServlet extends HttpServlet
 	{
 		DataOutputStream out = new DataOutputStream( response.getOutputStream());
 
-		BeanPlanMaker planmaker = null;
 		try
 		{
-			//planmaker = m_PlanMakerHome.create();
-			planmaker = new BeanPlanMaker();
+			PlanMaker planmaker = new BeanPlanMaker();
 			
-			Hashtable params = new Hashtable();
+			Hashtable<String, String> params = new Hashtable<String, String>();
 			Enumeration enumvar = request.getParameterNames();
 			while( enumvar.hasMoreElements())
 			{
@@ -95,7 +73,7 @@ public class WPSPlanMakerServlet extends HttpServlet
 			params.put( "User-Agent", request.getHeader( "User-Agent"));
 			params.put( "User-Agent", request.getHeader( "User-Agent") == null ? "unknown" : request.getHeader( "User-Agent"));
 
-			Hashtable result = null;
+			Hashtable<String, Object> result = null;
 			String  bufferName = request.getParameter( "bufferedPlan");
 			if( bufferName!=null) // Si demande de bufferisation globale
 			{
@@ -109,7 +87,7 @@ public class WPSPlanMakerServlet extends HttpServlet
 
 				if (( bufferedPlan == null) || (System.currentTimeMillis() - bufferedPlanDate> 1000*timeout))
 				{
-					result = planmaker.createBinaryPlan( params);
+					result = planmaker.createPlan( params);
 					m_bufferedPlans.put(bufferName, result);
 					m_bufferedPlans.put(bufferName+"Date", new Long(System.currentTimeMillis()));
 				}
@@ -118,7 +96,7 @@ public class WPSPlanMakerServlet extends HttpServlet
 					result=bufferedPlan;
 				}
 			}
-			else  result = planmaker.createBinaryPlan( params);
+			else  result = planmaker.createPlan( params);
 
 
 			response.setContentType( (String)result.get( "PLAN_MIME"));
@@ -150,26 +128,24 @@ public class WPSPlanMakerServlet extends HttpServlet
 		
 		out.println("<wpsplan>");
 
-		BeanPlanMaker planmaker = null;
 		try
 		{
-			// TODO Bufferisation du plan
-			//planmaker = m_PlanMakerHome.create();
-			planmaker = new BeanPlanMaker();
+			PlanMaker planmaker = new BeanPlanMaker();
 			
-			Hashtable params = new Hashtable();
-			Enumeration enumvar = request.getParameterNames();
+			Hashtable<String, String> params = new Hashtable<String, String>();
+			Enumeration<String> enumvar = request.getParameterNames();
 			while( enumvar.hasMoreElements())
 			{
-				String name = ( String)enumvar.nextElement();
+				String name = enumvar.nextElement();
 				String value = request.getParameter( name);
 				params.put( name, value);
 			}
 			params.put( "User-Agent", request.getHeader( "User-Agent"));
 			params.put( "User-Agent", request.getHeader( "User-Agent") == null ? "unknown" : request.getHeader( "User-Agent"));
+			params.put("PLAN_MIME", "text/xml");
 			
-			String planxml = planmaker.createXmlPlan( params);
-			out.println(planxml);
+			Hashtable<String, Object> result = planmaker.createPlan( params);
+			out.println( ( String) result.get("PLAN"));
 		}
 		catch(Exception e)
 		{
@@ -191,11 +167,9 @@ public class WPSPlanMakerServlet extends HttpServlet
 		out.println("<body>");
 		out.println("<br><br><br>");
 
-		BeanPlanMaker planmaker = null;
 		try
 		{
-			//planmaker = m_PlanMakerHome.create();
-			planmaker= new BeanPlanMaker();
+			PlanMaker planmaker = new BeanPlanMaker();
 			
 			String searchName = (String) request.getParameter( "planName");
 			if ( (searchName == null) || (searchName.length() == 0))
@@ -205,7 +179,7 @@ public class WPSPlanMakerServlet extends HttpServlet
 			else
 			{
 				out.println("<H3><CENTER> Recherche : " + searchName + "</CENTER></H3>");
-				Hashtable params = new Hashtable();
+				Hashtable<String, String> params = new Hashtable<String, String>();
 				Enumeration enumvar = request.getParameterNames();
 				while( enumvar.hasMoreElements())
 				{
@@ -216,7 +190,7 @@ public class WPSPlanMakerServlet extends HttpServlet
 						params.put( name, value);
 				}
 				params.put( "User-Agent", request.getHeader( "User-Agent"));
-				planmaker.createBinaryPlan( params);
+				planmaker.createPlan( params);
 				out.println("<H3><CENTER>"+ "Plan created" + "</CENTER></H3>");
 			}
 			//planmaker.remove();

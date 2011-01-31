@@ -68,9 +68,9 @@ public class RecommendationInterface
 
 	/**
 	*/
-	public  Collection retrieveAffinityGroup() throws WPSConnectorException
+	public Collection<String> retrieveAffinityGroup() throws WPSConnectorException
 	{
-		Collection retVal = new ArrayList();
+		Collection<String> retVal = new ArrayList<String>();
 		AffinityReaderProfile affinityProfile = m_PlanRequest.getAffinityReaderProfile();
 		AnalysisProfile profile = m_PlanRequest.getAnalysisProfile();
 		if( affinityProfile != null)

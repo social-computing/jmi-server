@@ -1,4 +1,6 @@
-<%@ page import="com.socialcomputing.wps.server.plandictionary.loader.*" %>
+<%@page import="com.socialcomputing.wps.server.persistence.Dictionary"%>
+<%@page import="com.socialcomputing.wps.server.persistence.DictionaryManager"%>
+<%@page import="com.socialcomputing.wps.server.persistence.hibernate.DictionaryManagerImpl"%>
 
 <%!
 // return current time to proxy server request
@@ -41,8 +43,8 @@ public long getLastModified(HttpServletRequest request) {
 <!--iframe height="0" width="0" src="../exportrequest.jsp"></iframe-->
 <%
 if( request.getParameter( "dictionary") == null) return;
-DictionaryManager manager = new DictionaryManager();
-Dictionary dic = manager.findByName(request.getParameter( "dictionary")); //dicHome.findByPrimaryKey( request.getParameter( "dictionary"));
+DictionaryManager manager = new DictionaryManagerImpl();
+Dictionary dic = manager.findByName(request.getParameter( "dictionary")); 
 %>
 <table width="100%">
 <tr>

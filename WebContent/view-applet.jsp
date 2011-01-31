@@ -75,7 +75,7 @@ else if( request.getParameter( "internal")!= null && request.getParameter( "inte
 	%></table><br><br><%
 	Hashtable results = null;
 	try {
-		results = planmaker.createBinaryPlan( params);
+		results = planmaker.createPlan( params);
 	}
 	catch( Exception e)
 	{%>
@@ -109,7 +109,7 @@ else
 	appletParams.append( "&");
 	appletParams.append( request.getParameter( "appletparams"));
 	%>	
-	<APPLET name="WPSApplet" archive="WPSApplet<%=APPLET_VERSION%>.jar" code="com.socialcomputing.wps.client.applet.WPSApplet.class" codebase="../applet/" MAYSCRIPT="" align="absmiddle" hspace="0" vspace="0" width="100%" height="100%">
+	<APPLET name="WPSApplet" archive="WPSApplet<%=APPLET_VERSION%>.jar" code="com.socialcomputing.wps.client.applet.WPSApplet.class" codebase="./applet/" MAYSCRIPT="" align="absmiddle" hspace="0" vspace="0" width="100%" height="100%">
 		<PARAM NAME="WPSParameters"		VALUE="<%=appletParams.toString()%>" />
 		<PARAM NAME="ServletUrl"		VALUE="../maker" />
 		<PARAM NAME="VoidPlanUrl"    	VALUE="../view-applet.jsp?error=nodata&<%=appletParams.toString()%>" />

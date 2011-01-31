@@ -8,12 +8,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import com.socialcomputing.utils.database.DatabaseHelper;
+import com.socialcomputing.utils.database.FileFastInserter;
+import com.socialcomputing.utils.database.MultipleFastInserter;
+import com.socialcomputing.utils.database.iFastInsert;
 import com.socialcomputing.wps.server.plandictionary.FilteringProfile;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.wps.server.plandictionary.connectors.IdEnumeratorItem;
@@ -24,10 +28,6 @@ import com.socialcomputing.wps.server.utils.AttributesPonderationMap;
 import com.socialcomputing.wps.server.utils.MathLogBuffer;
 import com.socialcomputing.wps.server.utils.ObjectToNumConverter;
 import com.socialcomputing.wps.server.utils.StringAndFloat;
-import com.socialcomputing.utils.database.DatabaseHelper;
-import com.socialcomputing.utils.database.FileFastInserter;
-import com.socialcomputing.utils.database.MultipleFastInserter;
-import com.socialcomputing.utils.database.iFastInsert;
 
 
 /**
@@ -41,7 +41,7 @@ public class AffinitySegment
 	private iIdEnumerator m_Entities=null;
 	private boolean m_InitializeProcess = true;
 	private List m_EntitiesToUpdate=null;
-	private ObjectToNumConverter m_AttrConverter= new ObjectToNumConverter();
+	private ObjectToNumConverter<ArrayList<String>> m_AttrConverter= new ObjectToNumConverter<ArrayList<String>>();
 	private HashMap m_Profiles=new HashMap();
 	private FilteringProfile m_FilteringProfile=null;
 
@@ -303,23 +303,18 @@ public class AffinitySegment
 		return map;
 	}
 
-	private ArrayList getRelatedEntities (String id) throws WPSConnectorException
+	private ArrayList<String> getRelatedEntities (String id) throws WPSConnectorException
 	{
-		AttributesPonderationMap map=getAttributesMap( id );
+		AttributesPonderationMap map = getAttributesMap( id );
 
 		// On met � jour la table des attributs
-		Map.Entry entry=null;
-		ArrayList array; int numAttr;
-		TreeSet set = new TreeSet();
-		Iterator it = map.entrySet().iterator();
-		while (it.hasNext())
+		Set<String> set = new TreeSet<String>();
+		for( Map.Entry<Integer, Float> entry : map.entrySet())
 		{
-			entry=(Map.Entry)it.next();
-			numAttr=((Integer)entry.getKey()).intValue();
-			array=(ArrayList)m_AttrConverter.getObject(numAttr);
-			if(array.size()!=1)
-				set.addAll((Collection)array);
+			ArrayList<String> array = m_AttrConverter.getObject( entry.getKey());
+			if(array.size() != 1)
+				set.addAll( array);
 		}
-		return (new ArrayList((Collection)set));
+		return (new ArrayList<String>( set));
 	}
 }

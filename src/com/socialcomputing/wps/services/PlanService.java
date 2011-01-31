@@ -9,7 +9,7 @@ import com.socialcomputing.wps.server.webservices.maker.BeanPlanMaker;
 
 /**
  * PlanService
- * Classe d'interface pour Flex. Crée le plan et l'envoie
+ * Classe d'interface pour Flex. Crï¿½e le plan et l'envoie
  * @author anteika
  *
  */
@@ -34,7 +34,7 @@ public class PlanService {
 	public PlanContainerFlex getPlan(String planName, Integer width, Integer height,String entityId,String attributeId, String classifyId, String analysisProfile,String affinityReaderProfile,String displayProfile)
 	{
 		// build params from Flex parameters
-		Hashtable<String, Object> params = new Hashtable<String, Object>() ;
+		Hashtable<String, String> params = new Hashtable<String, String>() ;
 		params.put("planName", planName);
 		params.put("width", String.valueOf(width));
 		params.put("height", String.valueOf(height));
@@ -45,6 +45,7 @@ public class PlanService {
 		if (analysisProfile!=null) params.put("analysisProfile", analysisProfile);
 		if (affinityReaderProfile!=null) params.put("affinityReaderProfile", affinityReaderProfile);
 		if (displayProfile!=null) params.put("displayProfile", displayProfile);
+		params.put("PLAN_MIME", "text/java");
 		
 		BeanPlanMaker bpm = new BeanPlanMaker();
 
@@ -55,8 +56,8 @@ public class PlanService {
 		try {
 			_planFlex.planName = planName;
 			
-			_plan = bpm.createPlanContainer(params);
-			
+			Hashtable<String, Object> results = bpm.createPlan( params);
+			_plan = ( PlanContainer) results.get( "PLAN");
 			
 		} catch (RemoteException e) {
 			_planFlex.errorMessage=e.getMessage();			
