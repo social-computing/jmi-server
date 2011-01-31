@@ -13,6 +13,8 @@ import com.socialcomputing.wps.server.generator.AttributeLink;
 import com.socialcomputing.wps.server.generator.ProtoAttribute;
 import com.socialcomputing.wps.server.generator.Recommendable;
 import com.socialcomputing.wps.server.generator.RecommendationGroup;
+import com.socialcomputing.wps.server.persistence.Swatch;
+import com.socialcomputing.wps.server.persistence.hibernate.SwatchManagerImpl;
 import com.socialcomputing.wps.server.plandictionary.AffinityReaderProfile;
 import com.socialcomputing.wps.server.plandictionary.AnalysisProfile;
 import com.socialcomputing.wps.server.plandictionary.Model;
@@ -23,9 +25,6 @@ import com.socialcomputing.wps.server.plandictionary.connectors.iSelectionConnec
 import com.socialcomputing.wps.server.swatchs.InterValue;
 import com.socialcomputing.wps.server.swatchs.ValueContainer;
 import com.socialcomputing.wps.server.swatchs.XSwatch;
-import com.socialcomputing.wps.server.swatchs.loader.SwatchLoader;
-import com.socialcomputing.wps.server.swatchs.loader.SwatchLoaderDao;
-import com.socialcomputing.wps.server.swatchs.loader.SwatchManager;
 
 
 public class PlanRequest
@@ -583,8 +582,8 @@ public class PlanRequest
 				{
 					//SwatchLoader loader = m_SwatchLoaderHome.findByPrimaryKey( swatchName);
 					//swatch = loader.getSwatch();
-					SwatchManager manager =  new SwatchManager();
-					SwatchLoader swatchLoader = manager.findByName(swatchName);					
+					SwatchManagerImpl manager =  new SwatchManagerImpl();
+					Swatch swatchLoader = manager.findByName(swatchName);					
 					swatch = swatchLoader.getSwatch();
 					
 					m_LoadedSwatch.put( swatchName, swatch );

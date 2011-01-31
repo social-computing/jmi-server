@@ -1,7 +1,8 @@
 <%@page import="java.util.Iterator"%>
-<%@page import="com.socialcomputing.wps.server.plandictionary.loader.Dictionary"%>
 <%@page import="java.util.Collection"%>
-<%@page import="com.socialcomputing.wps.server.plandictionary.loader.DictionaryManager"%>
+<%@page import="com.socialcomputing.wps.server.persistence.Dictionary"%>
+<%@page import="com.socialcomputing.wps.server.persistence.DictionaryManager"%>
+<%@page import="com.socialcomputing.wps.server.persistence.hibernate.DictionaryManagerImpl"%>
 
 <%!
 // return current time to proxy server request
@@ -44,7 +45,7 @@ public long getLastModified(HttpServletRequest request) {
 <body bgcolor=7f9fdf>
 <!--iframe height="0" width="0" src="../exportrequest.jsp"></iframe-->
 <%
-DictionaryManager manager = new DictionaryManager();
+DictionaryManager manager = new DictionaryManagerImpl();
 
 if( request.getParameter( "confirmdelete") != null && request.getParameter( "confirmdelete").equalsIgnoreCase( "y"))
 {
@@ -53,12 +54,8 @@ if( request.getParameter( "confirmdelete") != null && request.getParameter( "con
 	for( int i = 0; i < maxDelete; i++)
 	{
 		if( request.getParameter( "delete" + i) != null)
-		{	// Delete
-			//BeanDictionaryLoader dic = (BeanDictionaryLoader) dld.findByName(request.getParameter( "delete"+i)); 
-		
-			//dic = dicHome.findByPrimaryKey( request.getParameter( "delete" + i));
-			//dic.remove();
-			manager.delete( request.getParameter( "delete" + i) );
+		{	
+			manager.remove( request.getParameter( "delete" + i) );
 		}
 	}
 }
@@ -85,7 +82,7 @@ Collection<Dictionary> dics = manager.findAll();
   <th width="24%" ><span class="subTitleBlue">next filtering date</span></th>
  </tr>
 <%	
-	Iterator it = dics.iterator();
+	Iterator<Dictionary> it = dics.iterator();
 	for( int i = 0; it.hasNext(); ++i)
 	{
 		Dictionary dic = (Dictionary) it.next();

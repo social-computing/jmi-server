@@ -1,25 +1,26 @@
-package com.socialcomputing.wps.server.swatchs.loader;
+package com.socialcomputing.wps.server.persistence.hibernate;
 
-import java.rmi.RemoteException;
 import java.util.Collection;
-import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.socialcomputing.utils.database.HibernateUtil;
+import com.socialcomputing.wps.server.persistence.Swatch;
+import com.socialcomputing.wps.server.persistence.SwatchManager;
 
 
-public class SwatchManager {
+public class SwatchManagerImpl implements SwatchManager {
 	
-	public Collection<Swatch> findAll() throws RemoteException {
-		List<Swatch> results = null;
+	@Override
+	public Collection<Swatch> findAll() {
+		Collection<Swatch> results = null;
 		Session session = null;
 		Transaction tx = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			results = session.createQuery("from Swatch").list();
+			results = session.createQuery("from SwatchImpl").list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -30,14 +31,15 @@ public class SwatchManager {
 		return results;
 	}
 	
-	public Swatch findByName(String name) throws RemoteException {
+	@Override
+	public Swatch findByName(String name) {
 		Swatch result = null;
 		Session session = null;
 		Transaction tx = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			result = (Swatch) session.createQuery("from Swatch as s where s.name = ?").setString(0, name).uniqueResult();
+			result = (Swatch) session.createQuery("from SwatchImpl as s where s.name = ?").setString(0, name).uniqueResult();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -47,32 +49,34 @@ public class SwatchManager {
 		return result;
 	}
 	
-	public Swatch create(String name) throws RemoteException {
+	@Override
+	public Swatch create(String name, String definition) {
+		Swatch result = null;
 		Session session = null;
 		Transaction tx = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			Swatch s = new Swatch();
-			s.setName(name);
-			session.save(s);
+			result = new SwatchImpl( name, definition);
+			session.save( result);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			tx.commit();
 			session.close();
 		}
-		return new Swatch(name, null);
+		return result;
 	}
 	
-	public void update(SwatchLoader sl) throws RemoteException {
+	@Override
+	public void update( Swatch swatch) {
 		Session session = null;
 		Transaction tx = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			Swatch s = (Swatch) session.get(Swatch.class, sl.getName());
-			s.setSwatch(sl.getSwatchDefinition());
+			Swatch s = (Swatch) session.get(Swatch.class, swatch.getName());
+			s.setDefinition( swatch.getDefinition());
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -81,7 +85,8 @@ public class SwatchManager {
 		}
 	}
 	
-	public void delete(String name) {
+	@Override
+	public void remove(String name) {
 		Session session = null;
 		Transaction tx = null;
 		try {

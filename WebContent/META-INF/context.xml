@@ -1,7 +1,6 @@
 <Context>
 	<WatchedResource>WEB-INF/web.xml</WatchedResource>
         
-	<ResourceLink global="jdbc/WPSCoreDS" name="jdbc/WPSPooledDS" />	
-	<ResourceLink global="jdbc/BMSCoreDS" name="jdbc/BMSPooledDS" />
-
+	<!--ResourceLink global="jdbc/WPSCoreDS" name="jdbc/WPSPooledDS" /-->	
+	
 </Context>

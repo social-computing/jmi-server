@@ -1,9 +1,8 @@
-
-
+<%@page import="com.socialcomputing.wps.server.persistence.Swatch"%>
+<%@page import="com.socialcomputing.wps.server.persistence.SwatchManager"%>
+<%@page import="com.socialcomputing.wps.server.persistence.hibernate.SwatchManagerImpl"%>
 <%@page import="java.util.Iterator"%>
-<%@page import="com.socialcomputing.wps.server.swatchs.loader.Swatch"%>
 <%@page import="java.util.Collection"%>
-<%@page import="com.socialcomputing.wps.server.swatchs.loader.SwatchManager"%>
 <%!
 // return current time to proxy server request
 public long getLastModified(HttpServletRequest request) {
@@ -45,7 +44,7 @@ public long getLastModified(HttpServletRequest request) {
 <body bgcolor=7f9fdf>
 <!--iframe height="0" width="0" src="../exportrequest.jsp"></iframe-->
 <%
-SwatchManager manager = new SwatchManager();
+SwatchManager manager = new SwatchManagerImpl();
 
 if( request.getParameter( "confirmdelete") != null && request.getParameter( "confirmdelete").equalsIgnoreCase( "y"))
 {
@@ -54,7 +53,7 @@ if( request.getParameter( "confirmdelete") != null && request.getParameter( "con
 	{
 		if( request.getParameter( "delete" + i) != null)
 		{	// Delete
-			manager.delete( request.getParameter( "delete" + i) );
+			manager.remove( request.getParameter( "delete" + i) );
 		}
 	}
 }

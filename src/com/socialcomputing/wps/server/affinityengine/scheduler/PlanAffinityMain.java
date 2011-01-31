@@ -9,10 +9,8 @@ import java.util.TimerTask;
 //import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
 
-import com.socialcomputing.wps.server.plandictionary.loader.DictionaryLoader;
-import com.socialcomputing.wps.server.plandictionary.loader.DictionnaryLoaderDao;
-//import com.socialcomputing.wps.server.plandictionary.loader.DictionaryLoaderHome;
-import com.socialcomputing.wps.server.plandictionary.loader.DictionaryManager;
+import com.socialcomputing.wps.server.persistence.Dictionary;
+import com.socialcomputing.wps.server.persistence.hibernate.DictionaryManagerImpl;
 
 /**
  * Title:        Affinity Scheduler
@@ -34,13 +32,13 @@ public class PlanAffinityMain extends TimerTask
 	public void run()
 	{
 		try {
-			DictionaryManager manager =  new DictionaryManager();
+			DictionaryManagerImpl manager =  new DictionaryManagerImpl();
 
 			Collection col = manager.findAll(); //m_DictionaryLoaderHome.findAll();
 			Iterator it = col.iterator();
 			while( it.hasNext())
 			{
-				DictionaryLoader dicLoader = (DictionaryLoader) PortableRemoteObject.narrow( it.next(), DictionaryLoader.class);
+				Dictionary dicLoader = (Dictionary) PortableRemoteObject.narrow( it.next(), Dictionary.class);
 				java.util.Date plannifiedDate = dicLoader.getNextFilteringDate();
 				String name = dicLoader.getName();
 				if( plannifiedDate != null)

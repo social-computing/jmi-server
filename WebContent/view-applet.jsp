@@ -1,3 +1,5 @@
+<%@ page import="com.socialcomputing.wps.server.webservices.maker.PlanMaker" %>
+<%@ page import="com.socialcomputing.wps.server.webservices.maker.BeanPlanMaker" %>
 <%@ page import="java.util.*, java.sql.*, javax.sql.*, javax.naming.*, java.rmi.*, java.io.*" %>
 
 <%!
@@ -7,8 +9,9 @@ public long getLastModified(HttpServletRequest request) {
 }%>
 <%@ include file="./applet/AppletVersion.jsp" %>
 
-<ejb:useHome id="planmakerHome" type="com.socialcomputing.wps.server.webservices.maker.PlanMakerHome" location="java:comp/env/ejb/WPSPlanMaker" />
-<ejb:useBean id="planmaker" type="com.socialcomputing.wps.server.webservices.maker.PlanMaker" scope="page"/>
+<%
+PlanMaker planmaker = new BeanPlanMaker();
+%>
 
 <HTML>
 <HEAD>
@@ -47,8 +50,7 @@ if( error)
  	</td></tr></table>
 <%}
 else if( request.getParameter( "internal")!= null && request.getParameter( "internal").equals( "y"))
-{	// EJB
-	planmaker = planmakerHome.create();
+{	
 	Hashtable params = new Hashtable();
 	params.put( "planName", request.getParameter( "dictionary"));
 	java.util.StringTokenizer st = new java.util.StringTokenizer( request.getParameter( "appletparams"), "&");
@@ -107,7 +109,7 @@ else
 	appletParams.append( "&");
 	appletParams.append( request.getParameter( "appletparams"));
 	%>	
-	<APPLET name="WPSApplet" archive="WPSApplet<%=APPLET_VERSION%>.jar" code="com.socialcomputing.wps.client.WPSApplet.class" codebase="../applet/" MAYSCRIPT="" align="absmiddle" hspace="0" vspace="0" width="100%" height="100%">
+	<APPLET name="WPSApplet" archive="WPSApplet<%=APPLET_VERSION%>.jar" code="com.socialcomputing.wps.client.applet.WPSApplet.class" codebase="../applet/" MAYSCRIPT="" align="absmiddle" hspace="0" vspace="0" width="100%" height="100%">
 		<PARAM NAME="WPSParameters"		VALUE="<%=appletParams.toString()%>" />
 		<PARAM NAME="ServletUrl"		VALUE="../maker" />
 		<PARAM NAME="VoidPlanUrl"    	VALUE="../view-applet.jsp?error=nodata&<%=appletParams.toString()%>" />

@@ -6,18 +6,17 @@ package com.socialcomputing.wps.server.web;
 // Import Statements
 import java.io.CharArrayWriter;
 import java.io.IOException;
-import java.rmi.RemoteException;
 
-//import javax.naming.NamingException;
-import javax.servlet.http.*;
-import javax.servlet.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import com.socialcomputing.wps.server.plandictionary.loader.DictionaryLoader;
-import com.socialcomputing.wps.server.plandictionary.loader.DictionnaryLoaderDao;
-import com.socialcomputing.wps.server.plandictionary.loader.DictionaryManager;
 import com.socialcomputing.utils.servlet.ExtendedRequest;
 import com.socialcomputing.utils.servlet.UploadedFile;
-//import com.socialcomputing.wps.server.plandictionary.loader.DictionaryLoaderHome;
+import com.socialcomputing.wps.server.persistence.Dictionary;
+import com.socialcomputing.wps.server.persistence.DictionaryManager;
+import com.socialcomputing.wps.server.persistence.hibernate.DictionaryManagerImpl;
 
 public class WPSPlanUploaderServlet extends HttpServlet
 {
@@ -25,26 +24,6 @@ public class WPSPlanUploaderServlet extends HttpServlet
 	 * 
 	 */
 	private static final long serialVersionUID = 2684650116528241125L;
-	//DictionaryLoaderHome m_DicLoaderHome = null;
-
-	public void init()
-	{
-		/*try
-		{
-			javax.naming.Context  context = new javax.naming.InitialContext();
-			Object ref = context.lookup( "java:comp/env/ejb/WPSDictionaryLoader");
-			m_DicLoaderHome = ( DictionaryLoaderHome) javax.rmi.PortableRemoteObject.narrow(ref, DictionaryLoaderHome.class);
-		}
-		catch( NamingException e)
-		{
-			  log( "WPSPlanUploaderServlet unable to find WPSDictionaryLoader EJB");
-		}*/
-	}
-
-	public void destroy()
-	{
-		//m_DicLoaderHome = null;
-	}
 
 	/*
 	   Method:  doPost
@@ -72,8 +51,6 @@ public class WPSPlanUploaderServlet extends HttpServlet
 
 	private void doUploadDictionary( ExtendedRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		DictionaryLoader loader = null;
-		DictionaryManager manager = null;
 		try
 		{
 			UploadedFile uf = request.getFileParameter( "dictionary");
@@ -85,15 +62,10 @@ public class WPSPlanUploaderServlet extends HttpServlet
 				org.jdom.Element dicoNode = doc.getRootElement();
 
 				String name = dicoNode.getAttributeValue( "name");
-				try {
-					//loader = m_DicLoaderHome.findByPrimaryKey( name);
-					manager =  new DictionaryManager();
-					loader = manager.findByName(name);
-				}
-				catch( RemoteException e)
-				{
-					loader = manager.create(name);
-					//loader = m_DicLoaderHome.create( name);
+				DictionaryManager manager =  new DictionaryManagerImpl();
+				Dictionary dictionary = manager.findByName(name);
+				if( dictionary == null) {
+					dictionary = manager.create( name, null);
 				}
 
 				//ByteArrayOutputStream bout = new ByteArrayOutputStream();
@@ -101,8 +73,8 @@ public class WPSPlanUploaderServlet extends HttpServlet
 				org.jdom.output.XMLOutputter op = new org.jdom.output.XMLOutputter();
 				op.output( dicoNode, bout);
 
-				loader.setDictionaryDefinition( bout.toString());
-				
+				dictionary.setDefinition( bout.toString());
+				manager.update( dictionary);
 			}
 			else
 				throw new ServletException( "WPSPlanUploaderServlet : No dictionary");
@@ -111,30 +83,18 @@ public class WPSPlanUploaderServlet extends HttpServlet
 		{
 			e.printStackTrace();
 			throw new ServletException( "WPSPlanUploaderServlet : upload plan error : " + e.getMessage());
-		}
-		finally
-		{
-			loader = null;
 		}
 	}
 
 	private void doDeleteDictionary( ExtendedRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		//DictionaryLoader loader = null;
 		try
 		{
 			String name = request.getParameter( "dictionary");
 			if( name != null)
 			{
-				//try {
-					DictionaryManager manager =  new DictionaryManager();
-					manager.delete(name);
-					//loader = m_DicLoaderHome.findByPrimaryKey( name);
-					//loader.remove();
-//				}
-//				catch( javax.ejb.ObjectNotFoundException e)
-//				{
-//				}
+				DictionaryManager manager =  new DictionaryManagerImpl();
+				manager.remove( name);
 			}
 			else
 				throw new ServletException( "WPSPlanUploaderServlet : No dictionary");
@@ -143,10 +103,6 @@ public class WPSPlanUploaderServlet extends HttpServlet
 		{
 			e.printStackTrace();
 			throw new ServletException( "WPSPlanUploaderServlet : upload plan error : " + e.getMessage());
-		}
-		finally
-		{
-			//loader = null;
 		}
 	}
 

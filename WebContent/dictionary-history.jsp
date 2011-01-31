@@ -1,6 +1,7 @@
-<%@page import="com.socialcomputing.wps.server.plandictionary.loader.Dictionary"%>
+<%@page import="com.socialcomputing.wps.server.persistence.Dictionary"%>
+<%@page import="com.socialcomputing.wps.server.persistence.DictionaryManager"%>
+<%@page import="com.socialcomputing.wps.server.persistence.hibernate.DictionaryManagerImpl"%>
 <%@ page import="java.util.*, java.sql.*, javax.sql.*, javax.naming.*, java.rmi.*, java.io.*" %>
-<%@ page import="com.socialcomputing.wps.server.plandictionary.loader.*" %>
 
 <%!
 // return current time to proxy server request
@@ -104,7 +105,7 @@ if( sortquery == null) sortquery = "date desc";
 -->
 <%
 	if( request.getParameter( "dictionary") == null) return;
-	DictionaryManager manager = new DictionaryManager();
+	DictionaryManager manager = new DictionaryManagerImpl();
 	Dictionary dic = manager.findByName(request.getParameter( "dictionary"));
 
 	

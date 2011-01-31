@@ -1,4 +1,6 @@
-<%@ page import="com.socialcomputing.wps.server.swatchs.loader.*" %>
+<%@page import="com.socialcomputing.wps.server.persistence.Swatch"%>
+<%@page import="com.socialcomputing.wps.server.persistence.SwatchManager"%>
+<%@page import="com.socialcomputing.wps.server.persistence.hibernate.SwatchManagerImpl"%>
 
 <%!
 // return current time to proxy server request
@@ -41,10 +43,8 @@ public long getLastModified(HttpServletRequest request) {
 <!--iframe height="0" width="0" src="../exportrequest.jsp"></iframe-->
 <%
 if(request.getParameter("swatch") == null) return;
-SwatchManager manager = new SwatchManager();
+SwatchManager manager = new SwatchManagerImpl();
 Swatch sw = manager.findByName(request.getParameter("swatch"));
-
-//sw = swHome.findByPrimaryKey( request.getParameter( "swatch"));
 %>
 <table width="100%">
 <tr>

@@ -1,27 +1,28 @@
-package com.socialcomputing.wps.server.plandictionary.loader;
+package com.socialcomputing.wps.server.persistence.hibernate;
 
-import java.rmi.RemoteException;
 import java.util.Collection;
-import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.socialcomputing.utils.database.DatabaseHelper;
 import com.socialcomputing.utils.database.HibernateUtil;
+import com.socialcomputing.wps.server.persistence.Dictionary;
+import com.socialcomputing.wps.server.persistence.DictionaryManager;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 
 
-public class DictionaryManager {
+public class DictionaryManagerImpl implements DictionaryManager {
 	
-	public Collection<Dictionary> findAll() throws RemoteException {
-		List<Dictionary> results = null;
+	@Override
+	public Collection<Dictionary> findAll() {
+		Collection<Dictionary> results = null;
 		Session session = null;
 		Transaction tx = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			results = session.createQuery("from Dictionary").list();
+			results = session.createQuery("from DictionaryImpl").list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -32,14 +33,15 @@ public class DictionaryManager {
 		return results;
 	}
 	
-	public Dictionary findByName(String name) throws RemoteException {
+	@Override
+	public Dictionary findByName(String name) {
 		Dictionary result = null;
 		Session session = null;
 		Transaction tx = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			result = (Dictionary) session.createQuery("from Dictionary as d where d.name = ?").setString(0, name).uniqueResult();
+			result = (Dictionary) session.createQuery("from DictionaryImpl as d where d.name = ?").setString(0, name).uniqueResult();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -50,15 +52,16 @@ public class DictionaryManager {
 		return result;
 	}
 	
-	public DictionaryLoader create(String name) throws RemoteException {
-		
+	@Override
+	public Dictionary create(String name, String definition) {
+		Dictionary result = null;
 		Session session = null;
 		Transaction tx = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			Dictionary d = new Dictionary(name, null, "");
-			session.save(d);
+			result = new DictionaryImpl(name, definition, "");
+			session.save( result);
 			String coefTable = WPSDictionary.getCoefficientTableName(name);
 			String queueTable = WPSDictionary.getCoefficientQueuingTableName(name);
 			String histoTable = WPSDictionary.getHistoryTableName(name);
@@ -87,17 +90,18 @@ public class DictionaryManager {
 			tx.commit();
 			session.close();
 		}
-		return new Dictionary(name, null, null);
+		return result;
 	}
 	
-	public void update(DictionaryLoader dl) throws RemoteException {
+	@Override
+	public void update( Dictionary dl) {
 		Session session = null;
 		Transaction tx = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
 			Dictionary d = (Dictionary) session.get(Dictionary.class, dl.getName());
-			d.setDictionaryDefinition(dl.getDictionaryDefinition());
+			d.setDefinition(dl.getDefinition());
 			String date =  "";
 			try {
 				date = dl.getNextFilteringDate().toString();
@@ -113,7 +117,8 @@ public class DictionaryManager {
 		}
 	}
 	
-	public void delete(String name) {
+	@Override
+	public void remove(String name) {
 		Session session = null;
 		Transaction tx = null;
 		try {
@@ -131,4 +136,5 @@ public class DictionaryManager {
 			session.close();
 		}
 	}
+	
 }

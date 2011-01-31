@@ -7,7 +7,7 @@
 		diskPersistent="false" diskExpiryThreadIntervalSeconds="120"
 		memoryStoreEvictionPolicy="LRU" statistics="false" />
 	<cache
-		name="com.socialcomputing.wps.server.plandictionary.loader.Dictionary"
+		name="com.socialcomputing.wps.server.persistence.hibernate.DictionaryImpl"
 		   maxElementsInMemory="10000"
            maxElementsOnDisk="1000"
            eternal="false"
@@ -17,7 +17,7 @@
            timeToLiveSeconds="600"
            memoryStoreEvictionPolicy="LFU"
            transactionalMode="off" />
-	<cache name="com.socialcomputing.wps.server.swatchs.loader.Swatch"
+	<cache name="com.socialcomputing.wps.server.persistence.hibernate.SwatchImpl"
            maxElementsInMemory="10000"
            maxElementsOnDisk="1000"
            eternal="false"

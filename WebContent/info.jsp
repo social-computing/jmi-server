@@ -1,4 +1,10 @@
-<%@ page import="java.util.*, java.sql.*, javax.sql.*, javax.naming.*, com.socialcomputing.wps.server.plandictionary.loader.*,com.socialcomputing.wps.server.swatchs.loader.*" %>
+<%@page import="com.socialcomputing.wps.server.persistence.Dictionary"%>
+<%@page import="com.socialcomputing.wps.server.persistence.DictionaryManager"%>
+<%@page import="com.socialcomputing.wps.server.persistence.hibernate.DictionaryManagerImpl"%>
+<%@page import="com.socialcomputing.wps.server.persistence.Swatch"%>
+<%@page import="com.socialcomputing.wps.server.persistence.SwatchManager"%>
+<%@page import="com.socialcomputing.wps.server.persistence.hibernate.SwatchManagerImpl"%>
+<%@ page import="java.util.*, java.sql.*, javax.sql.*, javax.naming.*" %>
 
 <%!
 // return current time to proxy server request
@@ -9,10 +15,10 @@ public long getLastModified(HttpServletRequest request) {
 
 
 <%
-DictionaryManager dManager = new DictionaryManager();
-SwatchManager sManager = new SwatchManager();
-Collection sws = sManager.findAll(); //swHome.findAll();
-Collection dics = dManager.findAll(); //dicHome.findAll();
+DictionaryManager dManager = new DictionaryManagerImpl();
+SwatchManager sManager = new SwatchManagerImpl();
+Collection<Swatch> sws = sManager.findAll(); 
+Collection<Dictionary> dics = dManager.findAll();
 
 Context context = new InitialContext();
 DataSource ds = (DataSource) context.lookup("java:comp/env/jdbc/WPSPooledDS");

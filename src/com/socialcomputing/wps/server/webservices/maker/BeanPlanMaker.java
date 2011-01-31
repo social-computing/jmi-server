@@ -11,27 +11,24 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.zip.GZIPOutputStream;
 
-//import javax.ejb.EJBException;
-//import javax.ejb.SessionContext;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import com.socialcomputing.utils.EZDebug;
+import com.socialcomputing.utils.EZTimer;
+import com.socialcomputing.utils.database.DatabaseHelper;
 import com.socialcomputing.wps.server.affinityengine.RecommendationInterface;
 import com.socialcomputing.wps.server.analysisengine.AnalysisProcess;
 import com.socialcomputing.wps.server.generator.PlanContainer;
 import com.socialcomputing.wps.server.generator.PlanGenerator;
 import com.socialcomputing.wps.server.generator.ProtoPlan;
+import com.socialcomputing.wps.server.persistence.Dictionary;
+import com.socialcomputing.wps.server.persistence.hibernate.DictionaryManagerImpl;
 import com.socialcomputing.wps.server.plandictionary.AnalysisProfile;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
-import com.socialcomputing.wps.server.plandictionary.loader.DictionaryLoader;
-import com.socialcomputing.wps.server.plandictionary.loader.DictionnaryLoaderDao;
-import com.socialcomputing.wps.server.plandictionary.loader.DictionaryManager;
 import com.socialcomputing.wps.server.webservices.PlanRequest;
-import com.socialcomputing.utils.EZDebug;
-import com.socialcomputing.utils.EZTimer;
-import com.socialcomputing.utils.database.DatabaseHelper;
 
 public class BeanPlanMaker implements PlanMaker {
 
@@ -166,8 +163,8 @@ public class BeanPlanMaker implements PlanMaker {
 			
 			
 			
-			DictionaryManager manager=  new DictionaryManager();
-			DictionaryLoader dictionaryLoader = manager.findByName(name);
+			DictionaryManagerImpl manager=  new DictionaryManagerImpl();
+			Dictionary dictionaryLoader = manager.findByName(name);
 			if (result!=null)
 				result.put( "PLAN_NAME", name);
 
@@ -282,8 +279,8 @@ public class BeanPlanMaker implements PlanMaker {
 			connection = getConnection();
 
 			// EJB DICTIONARY RETRIEVAL
-			DictionaryManager manager=  new DictionaryManager();
-			DictionaryLoader dictionaryLoader =manager.findByName(name);
+			DictionaryManagerImpl manager=  new DictionaryManagerImpl();
+			Dictionary dictionaryLoader =manager.findByName(name);
 			if (result!=null)
 				result.put( "PLAN_NAME", name);
 

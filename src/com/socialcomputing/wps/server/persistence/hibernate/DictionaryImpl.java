@@ -1,8 +1,7 @@
-package com.socialcomputing.wps.server.plandictionary.loader;
+package com.socialcomputing.wps.server.persistence.hibernate;
 
 import java.io.Serializable;
 import java.io.StringReader;
-import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -19,32 +18,21 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Index;
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+import com.socialcomputing.wps.server.persistence.Dictionary;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 
 @Entity
 @Table(name = "dictionaries")
 @org.hibernate.annotations.Table(appliesTo="dictionaries", indexes = {@Index(name="PRIMARY", columnNames={"name"})})
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-public class Dictionary implements Serializable, DictionaryLoader {
+public class DictionaryImpl implements Serializable, Dictionary {
 
-	public Dictionary() {
-		
-	}
-	
-	public Dictionary(String name, String dictionary, String filteringdate) {
-		super();
-		this.dictionary = dictionary;
-		this.name = name;
-		this.filteringdate = filteringdate;
-	}
-	
 	private static String s_DateFormat = "yyyy/MM/dd HH:mm:ss";
 	
 	@Id
-	@Column(name = "name", columnDefinition="varchar(100) default ''")
+	@Column(name = "name", columnDefinition="varchar(255) default ''")
 	String name;
 	
 	@Column(name = "dictionary", columnDefinition="TEXT")
@@ -57,6 +45,19 @@ public class Dictionary implements Serializable, DictionaryLoader {
 	@Transient
 	private WPSDictionary m_Dico = null; // Speeder
 	
+	public DictionaryImpl() {
+		this.dictionary = null;
+		this.name = null;
+		this.filteringdate = null;
+		
+	}
+	
+	public DictionaryImpl(String name, String dictionary, String filteringdate) {
+		this.dictionary = dictionary;
+		this.name = name;
+		this.filteringdate = filteringdate;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -65,11 +66,13 @@ public class Dictionary implements Serializable, DictionaryLoader {
 		this.name = name;
 	}
 
-	public String getDictionaryDefinition() throws RemoteException {
+	@Override
+	public String getDefinition() {
 		return dictionary;
 	}
 
-	public void setDictionaryDefinition(String dictionary) throws RemoteException, JDOMException {
+	@Override
+	public void setDefinition(String dictionary) {
 		this.dictionary = dictionary;
 	}
 
@@ -81,7 +84,7 @@ public class Dictionary implements Serializable, DictionaryLoader {
 		this.filteringdate = filteringdate;
 	}
 	
-	public WPSDictionary getDictionary() throws RemoteException {
+	public WPSDictionary getDictionary() {
 		try {
 			if (m_Dico == null)	{
 				SAXBuilder builder = new SAXBuilder(false);
@@ -90,13 +93,9 @@ public class Dictionary implements Serializable, DictionaryLoader {
 				m_Dico = WPSDictionary.readObject( root);
 			}
 		} catch (Exception e) {
-			throw new RemoteException ( "getDictionary failed : " + e.getMessage());
+			e.printStackTrace();
 		}
 		return m_Dico;
-	}
-	
-	public void setDictionaryDefinitionApplyDTD(String definition) throws RemoteException, JDOMException {
-		// TODO Auto-generated method stub
 	}
 	
 	public Date getNextFilteringDate(){

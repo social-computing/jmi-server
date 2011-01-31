@@ -13,10 +13,9 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import com.socialcomputing.wps.server.affinityengine.AffinityProcess;
+import com.socialcomputing.wps.server.persistence.Dictionary;
+import com.socialcomputing.wps.server.persistence.hibernate.DictionaryManagerImpl;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
-import com.socialcomputing.wps.server.plandictionary.loader.DictionaryLoader;
-import com.socialcomputing.wps.server.plandictionary.loader.DictionnaryLoaderDao;
-import com.socialcomputing.wps.server.plandictionary.loader.DictionaryManager;
 
 public class BeanAffinityScheduler implements AffinityScheduler {
 
@@ -90,8 +89,8 @@ public class BeanAffinityScheduler implements AffinityScheduler {
 		Connection connection = null;
 		try
 		{
-			DictionaryManager manager =  new DictionaryManager();
-			DictionaryLoader dictionaryLoader = manager.findByName(plan);
+			DictionaryManagerImpl manager =  new DictionaryManagerImpl();
+			Dictionary dictionaryLoader = manager.findByName(plan);
 			
 			connection = this.getConnection();
 			dico = 	dictionaryLoader.getDictionary();
@@ -121,8 +120,8 @@ public class BeanAffinityScheduler implements AffinityScheduler {
 		Connection connection = null;
 		try
 		{
-			DictionaryManager manager =  new DictionaryManager();
-			DictionaryLoader dictionaryLoader = manager.findByName(plan);
+			DictionaryManagerImpl manager =  new DictionaryManagerImpl();
+			Dictionary dictionaryLoader = manager.findByName(plan);
 			
 			connection = this.getConnection();
 			dico = 	dictionaryLoader.getDictionary();

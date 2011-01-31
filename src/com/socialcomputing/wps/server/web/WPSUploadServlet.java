@@ -6,30 +6,28 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
-import java.rmi.RemoteException;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 
-//import javax.sql.DataSource;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
-import com.socialcomputing.wps.server.plandictionary.loader.DictionaryLoader;
-import com.socialcomputing.wps.server.plandictionary.loader.DictionnaryLoaderDao;
-import com.socialcomputing.wps.server.plandictionary.loader.DictionaryManager;
-import com.socialcomputing.wps.server.swatchs.loader.SwatchLoader;
-import com.socialcomputing.wps.server.swatchs.loader.SwatchLoaderDao;
-import com.socialcomputing.wps.server.swatchs.loader.SwatchManager;
 import com.socialcomputing.utils.servlet.ExtendedRequest;
 import com.socialcomputing.utils.servlet.UploadedFile;
-//import com.socialcomputing.wps.server.plandictionary.loader.DictionaryLoaderHome;
-//import com.socialcomputing.wps.server.swatchs.loader.SwatchLoaderHome;
-import javax.servlet.http.*;
-import javax.servlet.*;
+import com.socialcomputing.wps.server.persistence.Dictionary;
+import com.socialcomputing.wps.server.persistence.DictionaryManager;
+import com.socialcomputing.wps.server.persistence.Swatch;
+import com.socialcomputing.wps.server.persistence.SwatchManager;
+import com.socialcomputing.wps.server.persistence.hibernate.DictionaryManagerImpl;
+import com.socialcomputing.wps.server.persistence.hibernate.SwatchManagerImpl;
 /**
  * Title:        Users
  * Description:
@@ -45,38 +43,6 @@ public class WPSUploadServlet extends HttpServlet
 	 * 
 	 */
 	private static final long serialVersionUID = 1362617337569904439L;
-	//private DataSource m_DataSource = null; // Do not use
-	//static private Hashtable m_bufferedPlans=new Hashtable();
-
-	// WPS
-	//private DictionaryLoaderHome m_DicLoaderHome = null;
-	//private SwatchLoaderHome m_SwLoaderHome = null;
-
-	public void init(ServletConfig config) throws ServletException
-	{
-		super.init(config);
-		/*try
-		{
-			javax.naming.Context  context = new javax.naming.InitialContext();
-
-			//Object ref = context.lookup( "java:comp/env/ejb/WPSDictionaryLoader");
-			//m_DicLoaderHome = ( DictionaryLoaderHome) javax.rmi.PortableRemoteObject.narrow(ref, DictionaryLoaderHome.class);
-
-			//Object ref = context.lookup( "java:comp/env/ejb/WPSSwatchLoader");
-			//m_SwLoaderHome = ( SwatchLoaderHome) javax.rmi.PortableRemoteObject.narrow(ref, SwatchLoaderHome.class);
-
-		}
-		catch( Exception e)
-		{
-			  throw new ServletException( "WPSUploadServlet naming exception occured during initialization : " + e.getMessage());
-		}*/
-	}
-
-	public void destroy()
-	{
-		//m_DicLoaderHome = null;
-		//m_SwLoaderHome = null;
-	}
 
 	public long getLastModified(HttpServletRequest request)
 	{
@@ -141,19 +107,19 @@ public class WPSUploadServlet extends HttpServlet
 	}
 	private class WPSResolver implements EntityResolver
 	{
-		Hashtable m_dtds = null;
+		Hashtable<String, String> m_dtds = null;
 		public WPSResolver()
 		{
-			m_dtds = new Hashtable();
+			m_dtds = new Hashtable<String, String>();
 		}
-		public WPSResolver( Hashtable dtds)
+		public WPSResolver( Hashtable<String, String> dtds)
 		{
 			m_dtds = dtds;
 		}
 		public InputSource resolveEntity (String publicId, String systemId) throws java.io.FileNotFoundException
 		{
 			InputSource iSource = null;
-			String file = (String) m_dtds.get( extractPath( systemId));
+			String file = m_dtds.get( extractPath( systemId));
 			if( file != null)
 			{
 				iSource = new InputSource( new StringReader( file));
@@ -189,8 +155,8 @@ public class WPSUploadServlet extends HttpServlet
 	}
 	private void uploadZipFile( InternalReport output, byte[] definitionFile)  throws Exception
 	{
-		Hashtable dtds = new Hashtable();
-		Hashtable files = new Hashtable();
+		Hashtable<String, String> dtds = new Hashtable<String, String>();
+		Hashtable<String, String> files = new Hashtable<String, String>();
 		String name = null;
 		output.addAction( 0, "Reading definition file");
 		JarInputStream input = new JarInputStream( new ByteArrayInputStream( definitionFile));
@@ -216,13 +182,11 @@ public class WPSUploadServlet extends HttpServlet
 		output.setLastActionResult( "done.");
 		output.skipLine();
 
-		Enumeration enumvar = files.keys();
-		while( enumvar.hasMoreElements())
+		for( String name1 : files.keySet())
 		{
-			name = ( String )enumvar.nextElement();
-			if( name.endsWith( ".xml"))
+			if( name1.endsWith( ".xml"))
 			{
-				uploadFile( saxBuilder, output, name, (String) files.get( name));
+				uploadFile( saxBuilder, output, name1, files.get( name1));
 			}
 		}
 	}
@@ -257,30 +221,20 @@ public class WPSUploadServlet extends HttpServlet
 			uploadSwatch( root.getAttributeValue( "name"), bout.toString(), output);
 		}
 	}
-	private void uploadDictionary( String name, String content, InternalReport output)
+	private void uploadDictionary( String name, String definition, InternalReport output)
 	{
 		output.addAction( 1,  "Dictionary '" + name + "'");
 		try {
-			boolean created = false;
-			DictionaryLoader loader = null;
-			DictionaryManager manager = new DictionaryManager();
-			try
-			{
-				loader = manager.findByName(name);
-				if (loader==null) {
-					loader =manager.create(name);
-					created = true;					
-				}
+			DictionaryManager manager = new DictionaryManagerImpl();
+			Dictionary dictionary = manager.findByName(name);
+			if (dictionary == null) {
+				dictionary = manager.create( name, definition);
+				output.setLastActionResult( "created.");
 			}
-			catch( RemoteException e)
-			{
-				output.setLastActionResult( "Unable to create dictionary '" + name + "'");
-			}
-			if( loader != null)
-			{
-				loader.setDictionaryDefinition( content);
-				manager.update(loader);
-				output.setLastActionResult( created ? "created." : "updated.");
+			else {
+				dictionary.setDefinition( definition);
+				manager.update( dictionary);
+				output.setLastActionResult( "updated.");
 			}
 		}
 		catch( Exception e)
@@ -289,30 +243,20 @@ public class WPSUploadServlet extends HttpServlet
 			e.printStackTrace();
 		}
 	}
-	private void uploadSwatch( String name, String content, InternalReport output)
+	private void uploadSwatch( String name, String definition, InternalReport output)
 	{
 		output.addAction( 1,  "Swatch '" + name + "'");
 		try {
-			boolean created = false;
-			SwatchLoader loader = null;
-			SwatchManager slm = new SwatchManager();			
-			try
-			{
-				loader = slm.findByName(name); //m_SwLoaderHome.findByPrimaryKey( name);
-				if (loader==null) {
-					loader =slm.create(name);
-					created = true;					
-				}
+			SwatchManager swatchManager = new SwatchManagerImpl();			
+			Swatch swatch = swatchManager.findByName( name);
+			if (swatch == null) {
+				swatch = swatchManager.create( name, definition);
+				output.setLastActionResult( "created.");
 			}
-			catch( RemoteException e)
-			{
-					output.setLastActionResult( "Unable to create swatch '" + name + "'");
-			}
-			if( loader != null)
-			{
-				loader.setSwatch( content);
-				slm.update(loader);
-				output.setLastActionResult( created ? "created." : "updated.");
+			else  {
+				swatch.setDefinition( definition);
+				swatchManager.update( swatch);
+				output.setLastActionResult( "updated.");
 			}
 		}
 		catch( Exception e)

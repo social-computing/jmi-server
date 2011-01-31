@@ -1,7 +1,10 @@
-<%@page import="com.socialcomputing.wps.server.swatchs.loader.Swatch"%>
-<%@page import="com.socialcomputing.wps.server.swatchs.loader.SwatchManager"%>
-<%@page import="com.socialcomputing.wps.server.plandictionary.loader.Dictionary"%>
-<%@page import="com.socialcomputing.wps.server.plandictionary.loader.DictionaryManager"%>
+<%@page import="com.socialcomputing.wps.server.persistence.Dictionary"%>
+<%@page import="com.socialcomputing.wps.server.persistence.DictionaryManager"%>
+<%@page import="com.socialcomputing.wps.server.persistence.hibernate.DictionaryManagerImpl"%>
+<%@page import="com.socialcomputing.wps.server.persistence.Swatch"%>
+<%@page import="com.socialcomputing.wps.server.persistence.SwatchManager"%>
+<%@page import="com.socialcomputing.wps.server.persistence.hibernate.SwatchManagerImpl"%>
+
 <%!
 // return current time to proxy server request
 public long getLastModified(HttpServletRequest request) {
@@ -12,17 +15,14 @@ response.setContentType( "text/xml");
 //out.print( "<?xml version='1.0' encoding='ISO-8859-1'?>");
 if( request.getParameter( "dictionary") != null)
 {
-	DictionaryManager managerD = new DictionaryManager();
+	DictionaryManager managerD = new DictionaryManagerImpl();
 	Dictionary dic = managerD.findByName( request.getParameter("dictionary"));
-	//dic = dicHome.findByPrimaryKey( request.getParameter( "dictionary"));
-	out.print( dic.getDictionaryDefinition());
+	out.print( dic.getDefinition());
 }
 else if( request.getParameter( "swatch") != null)
 {
-	SwatchManager managerS = new SwatchManager();
+	SwatchManager managerS = new SwatchManagerImpl();
 	Swatch swatch = managerS.findByName(request.getParameter("swatch"));
-
-	//sw = swHome.findByPrimaryKey( request.getParameter( "swatch"));
-	out.print(swatch.getSwatchDefinition());
+	out.print(swatch.getDefinition());
 }
 %>

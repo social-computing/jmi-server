@@ -1,8 +1,7 @@
-package com.socialcomputing.wps.server.swatchs.loader;
+package com.socialcomputing.wps.server.persistence.hibernate;
 
 import java.io.Serializable;
 import java.io.StringReader;
-import java.rmi.RemoteException;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,28 +14,20 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Index;
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+import com.socialcomputing.wps.server.persistence.Swatch;
 import com.socialcomputing.wps.server.swatchs.XSwatch;
 
 @Entity
 @Table(name = "swatchs")
 @org.hibernate.annotations.Table(appliesTo="swatchs", indexes = {@Index(name="PRIMARY", columnNames={"name"})})
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-public class Swatch implements Serializable, SwatchLoader {
+class SwatchImpl implements Serializable, Swatch {
 
-	public Swatch() {
-		
-	}
-	
-	public Swatch(String name, String swatch) {
-		super();
-		this.name = name;
-		this.swatch = swatch;
-	}
-	
 	@Id
-	@Column(name = "name", columnDefinition="varchar(100) default ''")
+	@Column(name = "name", columnDefinition="varchar(255) default ''")
 	String name;
 	
 	@Column(name = "swatch", columnDefinition="TEXT")
@@ -44,6 +35,17 @@ public class Swatch implements Serializable, SwatchLoader {
 	
 	@Transient
 	private XSwatch m_Swatch = null;
+	
+
+	public SwatchImpl() {
+		this.name = null;
+		this.swatch = null;
+	}
+	
+	public SwatchImpl(String name, String swatch) {
+		this.name = name;
+		this.swatch = swatch;
+	}
 	
 	public String getName() {
 		return name;
@@ -53,16 +55,19 @@ public class Swatch implements Serializable, SwatchLoader {
 		this.name = name;
 	}
 
-	public String getSwatchDefinition() throws RemoteException {
+	@Override
+	public String getDefinition() {
 		return swatch;
 	}
 
-	public void setSwatch(String swatch) {
-		this.swatch = swatch;
+	@Override
+	public void setDefinition(String definition) throws JDOMException {
+		this.swatch = definition;
 		this.m_Swatch = null;
 	}
 	
-	public XSwatch getSwatch() throws RemoteException {
+	@Override
+	public XSwatch getSwatch() {
 		try {
 			if( m_Swatch == null) {
 				SAXBuilder builder = new SAXBuilder( false);
@@ -71,8 +76,9 @@ public class Swatch implements Serializable, SwatchLoader {
 				m_Swatch = XSwatch.readObject( root);
 			}
 		} catch( Exception e) {
-			throw new RemoteException ( "getSwatch failed : " + e.getMessage());
+			e.printStackTrace();
 		}
 		return m_Swatch;
 	}
+
 }
