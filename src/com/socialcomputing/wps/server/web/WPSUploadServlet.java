@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
+import com.socialcomputing.utils.database.HibernateUtil;
 import com.socialcomputing.utils.servlet.ExtendedRequest;
 import com.socialcomputing.utils.servlet.UploadedFile;
 import com.socialcomputing.wps.server.persistence.Dictionary;
@@ -60,6 +61,7 @@ public class WPSUploadServlet extends HttpServlet
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		HibernateUtil.currentSession();
 		ExtendedRequest exrequest = new ExtendedRequest( request);
 		String action = exrequest.getParameter( "action");
 		if( action != null)
@@ -76,10 +78,12 @@ public class WPSUploadServlet extends HttpServlet
 				out.print( exrequest.getParameter( "redirect"));
 				out.print( "\"></head></html>");
 				out.close();
+				HibernateUtil.closeSession();
 				response.setStatus( HttpServletResponse.SC_OK);
 				return;
 			}
 		}
+		HibernateUtil.closeSession();
 		response.sendError( HttpServletResponse.SC_BAD_REQUEST);
 	}
 

@@ -74,6 +74,7 @@ public class DictionaryImpl implements Serializable, Dictionary {
 	@Override
 	public void setDefinition(String dictionary) {
 		this.dictionary = dictionary;
+		this.m_Dico = null;
 	}
 
 	public String getFilteringdate() {
