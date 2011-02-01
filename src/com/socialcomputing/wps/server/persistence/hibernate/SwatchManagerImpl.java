@@ -20,7 +20,7 @@ public class SwatchManagerImpl implements SwatchManager {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			results = session.createQuery("from SwatchImpl").list();
+			results = session.createQuery("from SwatchImpl").setCacheable(true).list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -39,7 +39,7 @@ public class SwatchManagerImpl implements SwatchManager {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			result = (Swatch) session.createQuery("from SwatchImpl as s where s.name = ?").setString(0, name).uniqueResult();
+			result = (Swatch) session.createQuery("from SwatchImpl as s where s.name = ?").setString(0, name).setCacheable(true).uniqueResult();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

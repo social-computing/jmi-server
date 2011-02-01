@@ -22,7 +22,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			results = session.createQuery("from DictionaryImpl").list();
+			results = session.createQuery("from DictionaryImpl").setCacheable(true).list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -41,7 +41,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			result = (Dictionary) session.createQuery("from DictionaryImpl as d where d.name = ?").setString(0, name).uniqueResult();
+			result = (Dictionary) session.createQuery("from DictionaryImpl as d where d.name = ?").setString(0, name).setCacheable(true).uniqueResult();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
