@@ -20,7 +20,7 @@
 		<property name="show_sql">true</property>
 		<property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
 		<property name="current_session_context_class">thread</property>
-		<mapping class="com.socialcomputing.wps.server.plandictionary.loader.Dictionary"/>
-		<mapping class="com.socialcomputing.wps.server.swatchs.loader.Swatch" />
+		<mapping class="com.socialcomputing.wps.server.persistence.hibernate.DictionaryImpl"/>
+		<mapping class="com.socialcomputing.wps.server.persistence.hibernate.SwatchImpl" />
 	</session-factory>
 </hibernate-configuration>
