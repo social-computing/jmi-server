@@ -20,15 +20,14 @@ public class DictionaryManagerImpl implements DictionaryManager {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.currentSession();
 			tx = session.beginTransaction();
 			results = session.createQuery("from DictionaryImpl").list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			tx.commit();
-			session.close();
-			
+			// HibernateUtil.closeSession();
 		}
 		return results;
 	}
@@ -39,14 +38,14 @@ public class DictionaryManagerImpl implements DictionaryManager {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.currentSession();
 			tx = session.beginTransaction();
-			result = (Dictionary) session.createQuery("from DictionaryImpl as d where d.name = ?").setString(0, name).uniqueResult();
+			result = (Dictionary) session.get(DictionaryImpl.class, name);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			tx.commit();
-			session.close();
+			// HibernateUtil.closeSession();
 		}
 		
 		return result;
@@ -58,7 +57,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.currentSession();
 			tx = session.beginTransaction();
 			result = new DictionaryImpl(name, definition, "");
 			session.save( result);
@@ -88,7 +87,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
 			e.printStackTrace();
 		} finally {
 			tx.commit();
-			session.close();
+			// HibernateUtil.closeSession();
 		}
 		return result;
 	}
@@ -98,9 +97,9 @@ public class DictionaryManagerImpl implements DictionaryManager {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.currentSession();
 			tx = session.beginTransaction();
-			Dictionary d = (Dictionary) session.get(Dictionary.class, dl.getName());
+			Dictionary d = (Dictionary) session.get(DictionaryImpl.class, dl.getName());
 			d.setDefinition(dl.getDefinition());
 			String date =  "";
 			try {
@@ -113,7 +112,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
 			e.printStackTrace();
 		} finally {
 			tx.commit();
-			session.close();
+			// HibernateUtil.closeSession();
 		}
 	}
 	
@@ -122,7 +121,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.currentSession();
 			tx = session.beginTransaction();
 			Dictionary d = (Dictionary) session.get(Dictionary.class, name);
 			session.delete(d);
@@ -133,7 +132,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
 			e.printStackTrace();
 		} finally {
 			tx.commit();
-			session.close();
+			// HibernateUtil.closeSession();
 		}
 	}
 	

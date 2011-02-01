@@ -13,6 +13,7 @@ import java.util.Hashtable;
 
 //import javax.naming.NamingException;
 
+import com.socialcomputing.utils.database.HibernateUtil;
 import com.socialcomputing.wps.server.webservices.maker.BeanPlanMaker;
 import com.socialcomputing.wps.server.webservices.maker.PlanMaker;
 //import com.socialcomputing.wps.server.webservices.maker.PlanMaker;
@@ -43,6 +44,7 @@ public class WPSPlanMakerServlet extends HttpServlet
 	*/
 	public void doPost( HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		HibernateUtil.currentSession();
 		String outputType = (String) request.getParameter( "WPSOutputType");
 		if( outputType == null)
 			doPostBinary( request, response);
@@ -52,6 +54,7 @@ public class WPSPlanMakerServlet extends HttpServlet
 			doPostXML( request, response);
 		else
 			doPostBinary( request, response);
+		HibernateUtil.closeSession();
 		response.setStatus( HttpServletResponse.SC_OK);
 	}
 

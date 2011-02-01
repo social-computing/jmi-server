@@ -18,14 +18,14 @@ public class SwatchManagerImpl implements SwatchManager {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.currentSession();
 			tx = session.beginTransaction();
 			results = session.createQuery("from SwatchImpl").list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			tx.commit();
-			session.close();
+			// HibernateUtil.closeSession();
 		}
 		
 		return results;
@@ -37,14 +37,14 @@ public class SwatchManagerImpl implements SwatchManager {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.currentSession();
 			tx = session.beginTransaction();
-			result = (Swatch) session.createQuery("from SwatchImpl as s where s.name = ?").setString(0, name).uniqueResult();
+			result = (Swatch) session.get(SwatchImpl.class, name);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			tx.commit();
-			session.close();
+			// HibernateUtil.closeSession();
 		}
 		return result;
 	}
@@ -55,7 +55,7 @@ public class SwatchManagerImpl implements SwatchManager {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.currentSession();
 			tx = session.beginTransaction();
 			result = new SwatchImpl( name, definition);
 			session.save( result);
@@ -63,7 +63,7 @@ public class SwatchManagerImpl implements SwatchManager {
 			e.printStackTrace();
 		} finally {
 			tx.commit();
-			session.close();
+			// HibernateUtil.closeSession();
 		}
 		return result;
 	}
@@ -73,7 +73,7 @@ public class SwatchManagerImpl implements SwatchManager {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.currentSession();
 			tx = session.beginTransaction();
 			Swatch s = (Swatch) session.get(Swatch.class, swatch.getName());
 			s.setDefinition( swatch.getDefinition());
@@ -81,7 +81,7 @@ public class SwatchManagerImpl implements SwatchManager {
 			e.printStackTrace();
 		} finally {
 			tx.commit();
-			session.close();
+			// HibernateUtil.closeSession();
 		}
 	}
 	
@@ -90,7 +90,7 @@ public class SwatchManagerImpl implements SwatchManager {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.currentSession();
 			tx = session.beginTransaction();
 			Swatch s = (Swatch) session.get(Swatch.class, name);
 			session.delete(s);
@@ -98,7 +98,7 @@ public class SwatchManagerImpl implements SwatchManager {
 			e.printStackTrace();
 		} finally {
 			tx.commit();
-			session.close();
+			// HibernateUtil.closeSession();
 		}
 	}
 }
