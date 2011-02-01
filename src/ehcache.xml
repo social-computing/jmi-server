@@ -1,30 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <ehcache>
-	<defaultCache maxElementsInMemory="10000" eternal="false"
-		timeToIdleSeconds="120" timeToLiveSeconds="120" overflowToDisk="true"
-		diskSpoolBufferSizeMB="30" maxElementsOnDisk="10000000"
-		diskPersistent="false" diskExpiryThreadIntervalSeconds="120"
-		memoryStoreEvictionPolicy="LRU" statistics="false" />
+	<diskStore path="java.io.tmp"/>
+	<defaultCache
+		maxElementsInMemory="10000"
+        eternal="false"
+        timeToIdleSeconds="120"
+        timeToLiveSeconds="120"
+        overflowToDisk="true"
+        diskPersistent="false"
+        diskExpiryThreadIntervalSeconds="120"/>
 	<cache
 		name="com.socialcomputing.wps.server.persistence.hibernate.DictionaryImpl"
-		   maxElementsInMemory="10000"
-           maxElementsOnDisk="1000"
-           eternal="false"
-           overflowToDisk="true"
-           diskSpoolBufferSizeMB="20"
-           timeToIdleSeconds="300"
-           timeToLiveSeconds="600"
-           memoryStoreEvictionPolicy="LFU"
-           transactionalMode="off" />
-	<cache name="com.socialcomputing.wps.server.persistence.hibernate.SwatchImpl"
-           maxElementsInMemory="10000"
-           maxElementsOnDisk="1000"
-           eternal="false"
-           overflowToDisk="true"
-           diskSpoolBufferSizeMB="20"
-           timeToIdleSeconds="300"
-           timeToLiveSeconds="600"
-           memoryStoreEvictionPolicy="LFU"
-           transactionalMode="off" />
+		maxElementsInMemory="10000"
+    	eternal="false"
+    	overflowToDisk="false" />
+	<cache
+		name="com.socialcomputing.wps.server.persistence.hibernate.SwatchImpl"
+        maxElementsInMemory="10000"
+    	eternal="false"
+    	overflowToDisk="false" />
+    <cache name="com.aaa.Country"
+        maxElementsInMemory="300"
+        eternal="true"
+        overflowToDisk="false"
+        />
 </ehcache>

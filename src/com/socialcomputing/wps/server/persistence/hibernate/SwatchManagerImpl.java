@@ -20,7 +20,7 @@ public class SwatchManagerImpl implements SwatchManager {
 		try {
 			session = HibernateUtil.currentSession();
 			tx = session.beginTransaction();
-			results = session.createQuery("from SwatchImpl").list();
+			results = session.createQuery("from SwatchImpl").setCacheable(true).list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

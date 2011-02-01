@@ -22,7 +22,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
 		try {
 			session = HibernateUtil.currentSession();
 			tx = session.beginTransaction();
-			results = session.createQuery("from DictionaryImpl").list();
+			results = session.createQuery("from DictionaryImpl").setCacheable(true).list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
