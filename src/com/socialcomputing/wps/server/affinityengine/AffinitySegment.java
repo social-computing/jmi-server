@@ -39,7 +39,7 @@ public class AffinitySegment
 	private iProfileConnector m_Connector=null;
 	private iIdEnumerator m_Entities=null;
 	private boolean m_InitializeProcess = true;
-	private List m_EntitiesToUpdate=null;
+	private List<String> m_EntitiesToUpdate=null;
 	private ObjectToNumConverter<ArrayList<String>> m_AttrConverter= new ObjectToNumConverter<ArrayList<String>>();
 	private HashMap m_Profiles=new HashMap();
 	private FilteringProfile m_FilteringProfile=null;
@@ -81,7 +81,7 @@ public class AffinitySegment
 	/**
 	*
 	*  */
-	public  AffinitySegment( Connection connection, WPSDictionary dictionary, FilteringProfile filteringProfile, iIdEnumerator enumerator, List entitiesToUpdate) throws WPSConnectorException
+	public  AffinitySegment( Connection connection, WPSDictionary dictionary, FilteringProfile filteringProfile, iIdEnumerator enumerator, List<String> entitiesToUpdate) throws WPSConnectorException
 	{
 		this( connection,  dictionary,  filteringProfile,  enumerator);
 		m_InitializeProcess = false;

@@ -81,7 +81,7 @@ public class AnalysisProcess {
 	private ProtoPlan m_Plan = null;
 
 	// All entities to compute
-	private Collection m_Entities = null;
+	private Collection<String> m_Entities = null;
 	private RadiationData m_RadData = null;
 	// All statistics about radiation of base attributes
 	private BaseRadiationStat m_BaseRadiationStat = new BaseRadiationStat();
@@ -96,7 +96,7 @@ public class AnalysisProcess {
 	/**
 	 * entities is the affinity group
 	 **/
-	public AnalysisProcess (PlanRequest planRequest, Collection entities)  throws WPSConnectorException
+	public AnalysisProcess (PlanRequest planRequest, Collection<String> entities)  throws WPSConnectorException
 	{
 		m_PlanRequest = planRequest;
 		m_Entities = entities;
@@ -107,15 +107,15 @@ public class AnalysisProcess {
 	/**
 	 * entities is the affinity group
 	 **/
-	public AnalysisProcess (PlanRequest planRequest, Collection entities, RecommendationInterface recomInterface)  throws WPSConnectorException
+	public AnalysisProcess (PlanRequest planRequest, Collection<String> entities, RecommendationInterface recomInterface)  throws WPSConnectorException
 	{
 		this(planRequest, entities);
 		m_RecomInterface = recomInterface;
 	}
 
 	// Compute initial statistics about radiation of base attributes
-	private void computeBaseRadiationStat (Collection base) {
-		Integer[] baseArray = (Integer[])base.toArray(new Integer[0]);
+	private void computeBaseRadiationStat (Collection<Integer> base) {
+		Integer[] baseArray = base.toArray( new Integer[0]);
 		m_BaseRadiationStat.m_BaseRadiation = m_RadData.getRadiationArray(baseArray);
 		m_BaseRadiationStat.m_AttributesCntInRadiation = RadiationData.positiveValuesCnt(m_BaseRadiationStat.m_BaseRadiation);
 		m_BaseRadiationStat.m_MaxFrequency = -1;
@@ -390,60 +390,53 @@ public class AnalysisProcess {
 	/** Compute the entities to display on map
 	 *  called if AnalysisProcess.m_DisplayEntities = false (ie <displau-profile display-entities='no' )
 	 */
-		 private Collection computePlanRefEntity (Collection base, Collection attributes)
-			  {
-			  Collection ret= new ArrayList();
-			  if ((m_PlanRequest.m_entityId!=null) && (m_Profile.m_planType!=AnalysisProfile.DISCOVERY_PLAN))
-				ret.add(new ObjectStringStat(m_PlanRequest.m_entityId, new float[0]));
-			  return ret;
-			  }
-
+	private Collection<ObjectStringStat> computePlanRefEntity(Collection<Integer> base, Collection<ObjectNumStat> attributes) {
+		Collection<ObjectStringStat> ret = new ArrayList<ObjectStringStat>();
+		if ((m_PlanRequest.m_entityId != null) && (m_Profile.m_planType != AnalysisProfile.DISCOVERY_PLAN))
+			ret.add(new ObjectStringStat(m_PlanRequest.m_entityId, new float[0]));
+		return ret;
+	}
 
 
 	/** Compute the entities to display on map
 	 *  Called if m_DisplayEntities=true (ie <displayprofile display-entities='yes' > )
 	 */
-		private Collection computePlanEntities (Collection base, Collection attributes)  throws WPSConnectorException
-		{
-		TreeSet tree = new TreeSet();
-		Iterator it = m_Entities.iterator();
+	private Collection<ObjectStringStat> computePlanEntities (Collection<Integer> base, Collection<ObjectNumStat> attributes)  throws WPSConnectorException
+	{
+		TreeSet<ObjectStringStat> tree = new TreeSet<ObjectStringStat>();
 		// convert attibutes collection in array
 		int aArray[] = new int[attributes.size()+base.size()];
 
-		Iterator aIt = base.iterator();
-		for (int i = 0; aIt.hasNext(); ++i)
-			aArray[i] = ((Integer)aIt.next()).intValue();
+		int i = 0; 
+		for( Integer val : base)
+			aArray[i++] = val;
 
-		aIt = attributes.iterator();
-		for (int i = base.size(); aIt.hasNext(); ++i)
-			aArray[i] = ((ObjectNumStat)aIt.next()).m_Num;
+		for( ObjectNumStat val2 : attributes)
+			aArray[i++] = val2.m_Num;
 
 		// Duplicate matrix
-		SymmetricalMatrix radMat = new SymmetricalMatrix(m_RadData.m_RadiationMatrix,
-				aArray);
-		FSymmetricalMatrix balRadMat = new FSymmetricalMatrix(m_RadData.m_BalRadiationMatrix,
-				aArray);
-
+		SymmetricalMatrix radMat = new SymmetricalMatrix(m_RadData.m_RadiationMatrix, aArray);
+		FSymmetricalMatrix balRadMat = new FSymmetricalMatrix(m_RadData.m_BalRadiationMatrix, aArray);
 
 		// create StringAndFloat Collection to sort entities
-		while (it.hasNext()) {
+		for( String name : m_Entities)
+		{
 			float temp[] = new float[2];
-			String name = (String)(it.next());
-			temp[0] = m_RadData.getAverageRadiation(name, radMat, aArray);
+			temp[0] = m_RadData.getAverageRadiation( name, radMat, aArray);
 			if (temp[0] != 0) {
-				temp[1] = m_RadData.getAverageBalancedRadiation(name, balRadMat,
-						aArray);
+				temp[1] = m_RadData.getAverageBalancedRadiation( name, balRadMat, aArray);
 				tree.add(new ObjectStringStat(name, temp));
 			}
 		}
 		if (tree.size() == 0)
-			return  new ArrayList();
-		Object[] array = tree.toArray();
+			return new ArrayList<ObjectStringStat>();
+		ObjectStringStat[] array = ( ObjectStringStat[])tree.toArray();
 
-		Collection entRet = null;
+		Collection<ObjectStringStat> entRet = null;
 		if (m_Profile.m_EntitiesMaxNb<array.length)
-		   entRet=tree.headSet(array[m_Profile.m_EntitiesMaxNb]);
-		else entRet=tree;
+		   entRet = tree.headSet( array[m_Profile.m_EntitiesMaxNb]);
+		else 
+			entRet = tree;
 		//  voir subset par rapport au TreeSet ?
 		return  entRet;
 	}
@@ -454,28 +447,26 @@ public class AnalysisProcess {
 	 * @param attributes
 	 * @throws WPSConnectorException
 	 */
-	private void computeRecommendations (Collection base, Collection attributes) throws WPSConnectorException
+	private void computeRecommendations (Collection<Integer> base, Collection<ObjectNumStat> attributes) throws WPSConnectorException
 	{
 		if( m_Profile.m_RecomProfiles[ RecommendationGroup.SATTRIBUTES_RECOM] == null)
 			return; // No recommendation
 
 		//Iterator it = m_Entities.iterator();
-		int i=0; Iterator aIt=null;
+		int i=0; 
 		// convert attibutes collection in array
 		int aArray[] = new int[attributes.size()+base.size()];
 
 		if (m_Profile.m_RecomProfiles[ RecommendationGroup.SATTRIBUTES_RECOM].m_RecommendationScale!=WPSDictionary.APPLY_TO_NOT_BASE)
-		   {
-		   aIt = base.iterator();
-			for (; aIt.hasNext(); ++i)
-				aArray[i] = ((Integer)aIt.next()).intValue();
-		   }
+	    {
+			for( Integer val : base)
+				aArray[i] = val;
+	    }
 
 		if (m_Profile.m_RecomProfiles[ RecommendationGroup.SATTRIBUTES_RECOM].m_RecommendationScale!=WPSDictionary.APPLY_TO_BASE)
 		   {
-			aIt = attributes.iterator();
-			for (; aIt.hasNext(); ++i)
-				aArray[i] = ((ObjectNumStat)aIt.next()).m_Num;
+			for( ObjectNumStat val2 : attributes)
+				aArray[i++] = val2.m_Num;
 		   }
 
 		Arrays.sort(aArray);

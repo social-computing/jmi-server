@@ -7,10 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 
 import com.socialcomputing.wps.server.plandictionary.FilteringProfile;
@@ -34,7 +32,7 @@ import com.socialcomputing.wps.server.plandictionary.connectors.iIdEnumerator;
 public class AffinityProcess
 {
 	private WPSDictionary m_Dictionary = null;
-	private Collection m_EntitiesToUpdate = null;
+	private Collection<String> m_EntitiesToUpdate = null;
 	//private boolean m_IsAffinityInit = true;
 	private Connection m_DbConnection = null;
 
@@ -43,7 +41,7 @@ public class AffinityProcess
 		m_Dictionary = dictionary;
 		m_DbConnection = connection;
 	}
-	public AffinityProcess( WPSDictionary dictionary, Collection entitiesToUpdate, Connection connection )
+	public AffinityProcess( WPSDictionary dictionary, Collection<String> entitiesToUpdate, Connection connection )
 	{
 		this(dictionary, connection);
 		m_EntitiesToUpdate = entitiesToUpdate;
@@ -63,56 +61,51 @@ public class AffinityProcess
 	* Compute All the affinity coef for all the entities (Rule by Rul, i.e. SegmentBySegment)
 	*
 	*/
-	public Collection compute() throws WPSConnectorException
+	public Collection<String> compute() throws WPSConnectorException
 	{
-		Collection col = null;
+		Collection<String> col = null;
 		iClassifierConnector classifier = m_Dictionary.getFilteringClassifier();
 
 		if( m_EntitiesToUpdate == null)
 		{
 			deleteAll();
-			Iterator ruleIt = classifier.getRules().iterator();
-			while ( ruleIt.hasNext())
+			for( iClassifierRuleConnector rule : classifier.getRules())
 			{
 				if ( col == null)
-					col = compute( (iClassifierRuleConnector)ruleIt.next(), null);
+					col = compute( rule, null);
 				else
-					col.addAll(  compute( (iClassifierRuleConnector)ruleIt.next(), null));
+					col.addAll(  compute( rule, null));
 			}
 		}
 		else
 		{	// if faut segmenter les entites pour ne les traiter que dans leur groupe
-			Hashtable repartition = new Hashtable();
-			Iterator it = m_EntitiesToUpdate.iterator();
-			while( it.hasNext())
+			Hashtable<String, ArrayList<String>> repartition = new Hashtable<String, ArrayList<String>>();
+			for( String id : m_EntitiesToUpdate)
 			{
-				String id = (String )it.next();
 				String classification = classifier.getClassification( id);
-				ArrayList lst = ( ArrayList)repartition.get( classification);
+				ArrayList<String> lst = repartition.get( classification);
 				if( lst == null)
 				{
-					lst = new ArrayList();
+					lst = new ArrayList<String>();
 					repartition.put( classification, lst);
 				}
 				lst.add( id);
 			}
 			// Calcul des groupes
-			Enumeration keys = repartition.keys();
-			while( keys.hasMoreElements())
+			for( String k : repartition.keySet())
 			{
-				String k = ( String) keys.nextElement();
 				if ( col == null)
-					col = compute( classifier.getRule( k), ( List)repartition.get( k));
+					col = compute( classifier.getRule( k), repartition.get( k));
 				else
-					col.addAll( compute( classifier.getRule( k), ( List)repartition.get( k)));
+					col.addAll( compute( classifier.getRule( k), repartition.get( k)));
 			}
 		}
 		return col;
 	}
 
-	private Collection compute( iClassifierRuleConnector ruleConnector, List update) throws WPSConnectorException
+	private Collection<String> compute( iClassifierRuleConnector ruleConnector, List<String> update) throws WPSConnectorException
 	{
-		if( ruleConnector == null) return new ArrayList(); // id(s) has been destroyed or data error
+		if( ruleConnector == null) return new ArrayList<String>(); // id(s) has been destroyed or data error
 
 		FilteringProfile    filterProf = m_Dictionary.getFilteringProfile( ruleConnector.getName());
 		iIdEnumerator	 	entityEnum = ruleConnector.iterator();
