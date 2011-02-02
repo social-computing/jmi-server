@@ -1,60 +1,67 @@
 <?xml version="1.0"?>
 
 <project xmlns:ivy="antlib:org.apache.ivy.ant" name="wps" basedir="." default="all">
-	<property name="applet.version" value="2.0" />
-	<property name="src" location="src"/>
-	<property name="build" location="WebContent/WEB-INF"/>
-	<property name="dist"  location="dist"/>
-	<property name="ivy.lib.dir" location="WebContent/WEB-INF/lib"/>
-	
-	<path id="project.class.path">
-		<pathelement location="${ivy.lib.dir}"/>
-	</path>
+    <property name="applet.version" value="2.0" />
+    <property name="src" location="src"/>
+    <property name="build" location="WebContent/WEB-INF"/>
+    <property name="dist"  location="dist"/>
+    <property name="ivy.lib.dir" location="WebContent/WEB-INF/lib"/>
 
-	<target name="all" depends="genreport,resolve,compile,applet,server" />
+    <path id="project.class.path">
+        <pathelement location="${ivy.lib.dir}"/>
+    </path>
 
-	<target name="resolve" description="Retrieve dependencies with ivy">
-		<ivy:retrieve pattern="${ivy.lib.dir}/[module]-[type]-[revision].[ext]"/>
-	</target>
-		
-	<target name="genreport" description="Generate dependencies report with ivy">
-		<ivy:resolve />
-		<ivy:report />
-	</target>
-	
-	<target name="compile" depends="resolve">
-		<echo file="${src}/com/socialcomputing/wps/client/applet/AppletVersion.java">package com.socialcomputing.wps.client.applet; 
-			public final class AppletVersion { public static final String APPLET_VERSION="${applet.version}";}
-		</echo>
-		<echo file="${src}/com/socialcomputing/wps/client/applet/AppletVersion.jsp">&#x3C;%! final String APPLET_VERSION="${applet.version}"; %&#x3E;</echo>
-		<echo file="${src}/com/socialcomputing/wps/client/applet/AppletVersion.txt">${applet.version}</echo>
-		<javac srcdir="${src}" destdir="${build}/classes" >
-		      <classpath refid="project.class.path"/>
-		</javac>
-	</target>
-	
-	<target name="applet" depends="compile">
-		<mkdir dir="${dist}"/>
-		<jar 	destfile="${dist}/WPSApplet${applet.version}.jar" 
-				basedir="${build}/classes" 
-				includes="com/socialcomputing/wps/client/applet/**" 
-		/>
-		<mkdir dir="WebContent/applet"/>
-	</target>
+    <target name="all" depends="genreport,resolve,compile,applet,server" />
 
-	<target name="server" depends="compile">
-		<copy file="${dist}/WPSApplet${applet.version}.jar" tofile="WebContent/applet/WPSApplet${applet.version}.jar" />
-		<copy file="${src}/com/socialcomputing/wps/client/applet/AppletVersion.jsp" tofile="WebContent/applet/AppletVersion.jsp" />
-		<jar 	destfile="${dist}/WPS.jar" 
-				basedir="${build}/classes" 
-				includes="com/socialcomputing/wps/**,com/socialcomputing/utils/**" 
-		/>
-		<copy file="${dist}/WPS.jar" tofile="WebContent/WEB-INF/lib/WPS.jar" />
-                <mkdir dir="WebContent/WEB-INF/classes"/>
-                <copy file="${build}/classes/hibernate.cfg.xml" tofile="WebContent/WEB-INF/classes/hibernate.cfg.xml" />
-		<war destfile="${dist}/wps.war" 
-			basedir="WebContent" 
-			includes="**" 
-		/>
-	</target>
+    <target name="cleanlibdir" description="Clean lib directory">
+        <delete>
+            <fileset dir="${ivy.lib.dir}" includes="*.jar"/>
+        </delete>
+    </target>
+
+    <target name="resolve" description="Retrieve dependencies with ivy">
+        <ivy:retrieve pattern="${ivy.lib.dir}/[module]-[type]-[revision].[ext]"/>
+    </target>
+
+    <target name="genreport" description="Generate dependencies report with ivy">
+        <ivy:resolve />
+        <ivy:report />
+    </target>
+
+    <target name="compile" depends="resolve">
+        <echo file="${src}/com/socialcomputing/wps/client/applet/AppletVersion.java">package com.socialcomputing.wps.client.applet; 
+            public final class AppletVersion { public static final String APPLET_VERSION="${applet.version}";}
+        </echo>
+        <echo file="${src}/com/socialcomputing/wps/client/applet/AppletVersion.jsp">&#x3C;%! final String APPLET_VERSION="${applet.version}"; %&#x3E;</echo>
+        <echo file="${src}/com/socialcomputing/wps/client/applet/AppletVersion.txt">${applet.version}</echo>
+        <javac srcdir="${src}" destdir="${build}/classes" >
+              <classpath refid="project.class.path"/>
+        </javac>
+    </target>
+
+    <target name="applet" depends="compile">
+        <mkdir dir="${dist}"/>
+        <jar destfile="${dist}/WPSApplet${applet.version}.jar" 
+             basedir="${build}/classes" 
+             includes="com/socialcomputing/wps/client/applet/**" 
+        />
+        <mkdir dir="WebContent/applet"/>
+    </target>
+
+    <target name="server" depends="compile">
+        <copy file="${dist}/WPSApplet${applet.version}.jar" tofile="WebContent/applet/WPSApplet${applet.version}.jar" />
+        <copy file="${src}/com/socialcomputing/wps/client/applet/AppletVersion.jsp" tofile="WebContent/applet/AppletVersion.jsp" />
+        <jar destfile="${dist}/WPS.jar" 
+             basedir="${build}/classes" 
+             includes="com/socialcomputing/wps/**,com/socialcomputing/utils/**" 
+        />
+        <copy file="${dist}/WPS.jar" tofile="WebContent/WEB-INF/lib/WPS.jar" />
+        <mkdir dir="WebContent/WEB-INF/classes"/>
+        <copy file="${build}/classes/hibernate.cfg.xml" tofile="WebContent/WEB-INF/classes/hibernate.cfg.xml" />
+        <copy file="${build}/classes/logback.xml" tofile="WebContent/WEB-INF/classes/logback.xml" />
+        <war destfile="${dist}/wps.war" 
+            basedir="WebContent" 
+            includes="**" 
+        />
+    </target>
 </project>
