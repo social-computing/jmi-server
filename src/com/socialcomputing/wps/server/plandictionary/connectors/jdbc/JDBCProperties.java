@@ -189,45 +189,21 @@ public class JDBCProperties implements java.io.Serializable
                         int added = 0;
                         try
                         {
-                                if( m_PropertyGroupQuery instanceof JDBCQuery1)
-                                {
-                                        switch( m_Type)
-                                        {
-                                                case JDBCProperties.ENTITY_PROPS:
-                                                        m_PropertyGroupQuery.setCurEntity( id);
-                                                        break;
-                                                case JDBCProperties.ATTRIBUTE_PROPS:
-                                                        m_PropertyGroupQuery.setCurAttribute( id);
-                                                        break;
-                                                case JDBCProperties.SUBATTRIBUTE_PROPS:
-                                                        m_PropertyGroupQuery.setCurSubAttribute( id);
-                                                        break;
-                                        }
-                                        if( m_bUseRefId1 && (idRef1 != null))
-                                                m_PropertyGroupQuery.setCurEntity( idRef1);
-                                        if( m_bUseRefId2 && (idRef2 != null))
-                                                m_PropertyGroupQuery.setCurEntity( idRef2);
-                                        if( m_bUseRefId1 && m_bUseRefId2)
-                                                System.out.println( "JDBCProperty: JDBCQuery with use-idx deprecated, use JDBCQuery2, " + m_PropertyGroupQuery.m_Query);
-                                }
-                                else // if( m_PropertyGroupQuery.i instanceof JDBCQuery2)
-                                {
-                                        switch( m_Type)
-                                        {
-                                                case JDBCProperties.ENTITY_PROPS:
-                                                        m_PropertyGroupQuery.setCurEntity( id);
-                                                        break;
-                                                case JDBCProperties.ATTRIBUTE_PROPS:
-                                                        m_PropertyGroupQuery.setCurAttribute( id);
-                                                        m_PropertyGroupQuery.setCurEntity( idRef1);
-                                                        break;
-                                                case JDBCProperties.SUBATTRIBUTE_PROPS:
-                                                        m_PropertyGroupQuery.setCurSubAttribute( id);
-                                                        m_PropertyGroupQuery.setCurAttribute( idRef1);
-                                                        m_PropertyGroupQuery.setCurEntity( idRef2);
-                                                        break;
-                                        }
-                                }
+	                            switch( m_Type)
+	                            {
+	                                    case JDBCProperties.ENTITY_PROPS:
+	                                            m_PropertyGroupQuery.setCurEntity( id);
+	                                            break;
+	                                    case JDBCProperties.ATTRIBUTE_PROPS:
+	                                            m_PropertyGroupQuery.setCurAttribute( id);
+	                                            m_PropertyGroupQuery.setCurEntity( idRef1);
+	                                            break;
+	                                    case JDBCProperties.SUBATTRIBUTE_PROPS:
+	                                            m_PropertyGroupQuery.setCurSubAttribute( id);
+	                                            m_PropertyGroupQuery.setCurAttribute( idRef1);
+	                                            m_PropertyGroupQuery.setCurEntity( idRef2);
+	                                            break;
+	                            }
 
                                 ResultSet rs = m_PropertyGroupQuery.executeQuery();
                                 if( getColumnInfo( rs, id) && m_ColumnInfo != null)

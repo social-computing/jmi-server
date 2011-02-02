@@ -20,7 +20,6 @@ import com.socialcomputing.utils.database.MultipleFastInserter;
 import com.socialcomputing.utils.database.iFastInsert;
 import com.socialcomputing.wps.server.plandictionary.FilteringProfile;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
-import com.socialcomputing.wps.server.plandictionary.connectors.IdEnumeratorItem;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iIdEnumerator;
 import com.socialcomputing.wps.server.plandictionary.connectors.iProfileConnector;
@@ -93,10 +92,10 @@ public class AffinitySegment
 	*  Compute the affinity coef for all the entities and for a given list of attributes
 	*
 	*/
-	public  Collection compute(  ) throws WPSConnectorException
+	public Collection<String> compute(  ) throws WPSConnectorException
 	{
-		ArrayList entities = new ArrayList();
-		ArrayList computedEntities = new ArrayList();
+		ArrayList<String> entities = new ArrayList<String>();
+		ArrayList<String> computedEntities = new ArrayList<String>();
 		int maxMapSize = m_FilteringProfile.m_AffProfileMaxAttrNb;
 		AttributesPonderationMap map1, map2;
 		float coef=0; int size; int strComp;
@@ -104,16 +103,12 @@ public class AffinitySegment
 		boolean relatedEntitesCompute=true;
 
 		//int ii=0;
-		IdEnumeratorItem item = new IdEnumeratorItem();
-		while ( m_Entities.hasNext())
-		{
-			m_Entities.next( item);
-			if ((map1 = getAttributesMap(item.m_Id))!=null)
-			{
-			   size=map1.size();
-			   entities.add( item.m_Id);
-			   if (maxMapSize < size)
-				  maxMapSize = size;
+		for (String item : m_Entities) {
+			if ((map1 = getAttributesMap(item)) != null) {
+				size = map1.size();
+				entities.add( item);
+				if (maxMapSize < size)
+					maxMapSize = size;
 			}
 		}
 
@@ -123,7 +118,7 @@ public class AffinitySegment
 
 		// Load Attributes and compute max
 		int n = entities.size(), relatedEntSize;
-		ArrayList relatedEntities=null;
+		ArrayList<String> relatedEntities = null;
 		float ponderAll=(float)MathLogBuffer.getLog(2) / (float)(maxMapSize+1);
 		float threshold = (float)(m_FilteringProfile.m_AffinityThreshold / 100.0);
 

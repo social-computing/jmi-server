@@ -336,7 +336,6 @@ public class PlanGenerator
 			else
 			{
 				iIdEnumerator		enumerator	= testNet ? getNetEnumerator() : null;
-				IdEnumeratorItem	item		= new IdEnumeratorItem();
 
 				do
 				{
@@ -344,8 +343,8 @@ public class PlanGenerator
 
 					if ( testNet )
 					{
-						enumerator.next( item );
-						planPrm	= new PlanParams( "charon", "SEngine", AnalysisProfile.PERSONAL_PLAN, Integer.parseInt( item.m_Id ));
+						String item = enumerator.next();
+						planPrm	= new PlanParams( "charon", "SEngine", AnalysisProfile.PERSONAL_PLAN, Integer.parseInt( item ));
 					}
 
 					protoPlan	= preGenerate( planPrm );

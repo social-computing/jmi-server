@@ -14,6 +14,7 @@ import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorExce
  * @version 1.0
  */
 
+@Deprecated
 public class JDBCQuery1 extends JDBCQuery
 {
 	/**
@@ -62,7 +63,7 @@ public class JDBCQuery1 extends JDBCQuery
 		cpt = 1;
 	}
 
-	// Remplacement paramètres globaux uniquement ex : {s$PROP} et création du PreparedStatement
+	// Remplacement paramï¿½tres globaux uniquement ex : {s$PROP} et crï¿½ation du PreparedStatement
 	private void check() throws SQLException, WPSConnectorException
 	{
 		if( m_QueryPS != null) return;

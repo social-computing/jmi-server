@@ -125,39 +125,10 @@ public class JDBCSelectionConnector implements iSelectionConnector, java.io.Seri
 		  return false;
 
 		try {
-			if( m_SelectionQuery instanceof JDBCQuery1)
-			{
-				switch( m_Flag)
-				{
-					case USE_NO_ID:
-						 break;
-					case USE_REFID:
-						 m_SelectionQuery.setCurEntity( refEntityId);
-						 break;
-					case USE_CURRENTID:
-						 if( m_Type == ENTITY_SELECTION)
-							 m_SelectionQuery.setCurEntity( id);
-						 else //if( m_Type == ATTRIBUTE_SELECTION)
-							  m_SelectionQuery.setCurAttribute( id);
-						 System.out.println( "JDBCSelectionConnector: JDBCQuery with use deprecated, use JDBCQuery2, " + m_SelectionQuery.m_Query);
-						 break;
-					case USE_CURRENTID_REFID:
-						if( m_Type == ENTITY_SELECTION)
-							m_SelectionQuery.setCurEntity( id);
-						else //if( m_Type == ATTRIBUTE_SELECTION)
-							 m_SelectionQuery.setCurAttribute( id);
-						 m_SelectionQuery.setCurEntity( refEntityId);
-						 System.out.println( "JDBCSelectionConnector: JDBCQuery with use deprecated, use JDBCQuery2, " + m_SelectionQuery.m_Query);
-						 break;
-				}
-			}
-			else // if( m_SelectionQuery.i instanceof JDBCQuery2)
-			{
-				if( m_Type == ENTITY_SELECTION)
-					m_SelectionQuery.setCurEntity( id);
-				else //if( m_Type == ATTRIBUTE_SELECTION)
-					 m_SelectionQuery.setCurAttribute( id);
-			}
+			if( m_Type == ENTITY_SELECTION)
+				m_SelectionQuery.setCurEntity( id);
+			else //if( m_Type == ATTRIBUTE_SELECTION)
+				m_SelectionQuery.setCurAttribute( id);
 		}
 		catch( SQLException e)
 		{
@@ -168,7 +139,7 @@ public class JDBCSelectionConnector implements iSelectionConnector, java.io.Seri
 		{
 			case USE_NO_ID:
 			case USE_REFID:
-				// Mémorisation des résultats
+				// Mï¿½morisation des rï¿½sultats
 				if( m_Result == null)
 				{
 					try {
@@ -189,7 +160,7 @@ public class JDBCSelectionConnector implements iSelectionConnector, java.io.Seri
 				break;
 			case USE_CURRENTID:
 			case USE_CURRENTID_REFID:
-					// Requête à chaque demande
+					// Requï¿½te ï¿½ chaque demande
 					try {
 						ResultSet rs = m_SelectionQuery.executeQuery();
 						if( rs.next())

@@ -115,7 +115,7 @@ public class AffinityProcess
 		if( ruleConnector == null) return new ArrayList(); // id(s) has been destroyed or data error
 
 		FilteringProfile    filterProf = m_Dictionary.getFilteringProfile( ruleConnector.getName());
-		iIdEnumerator entityEnum = ruleConnector.getEnumerator();
+		iIdEnumerator	 	entityEnum = ruleConnector.iterator();
 
 		AffinitySegment seg = null;
 		if ( update == null)

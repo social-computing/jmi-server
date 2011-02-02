@@ -2,6 +2,7 @@ package com.socialcomputing.wps.server.plandictionary.connectors.jdbc;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Iterator;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.AttributeEnumeratorItem;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
@@ -17,29 +18,37 @@ public class JDBCAttributeEnumerator implements iAttributeEnumerator
 		m_ResultSet = rs;
 	}
 
-	public void next( AttributeEnumeratorItem item) throws WPSConnectorException
+	@Override
+	public Iterator<AttributeEnumeratorItem> iterator() {
+		return this;
+	}
+
+	@Override
+	public AttributeEnumeratorItem next() 
 	{
 		try {
 			if( m_needNext)
 				if( !m_ResultSet.next())
-					return;
+					return null;
 
-			item.m_Id = m_ResultSet.getString( 1);
+			AttributeEnumeratorItem item = new AttributeEnumeratorItem( m_ResultSet.getString( 1), m_ResultSet.getFloat( 2));
 			if( item.m_Id == null)
 			{
 				System.out.println( "WARNING: JDBCAttributeEnumerator next, id is null");
 				item.m_Id = "";
 			}
-			item.m_Ponderation = m_ResultSet.getFloat( 2);
-
 			m_needNext = true;
+			return item;
 		}
 		catch( SQLException e)
 		{
-			throw new WPSConnectorException( "JDBCAttributeEnumerator failed to read next item", e);
+			e.printStackTrace();
+			//throw new WPSConnectorException( "JDBCAttributeEnumerator failed to read next item", e);
 		}
+		return null;
 	}
 
+	@Override
 	public boolean hasNext()
 	{
 		try {
@@ -58,5 +67,9 @@ public class JDBCAttributeEnumerator implements iAttributeEnumerator
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public void remove() {
 	}
 }

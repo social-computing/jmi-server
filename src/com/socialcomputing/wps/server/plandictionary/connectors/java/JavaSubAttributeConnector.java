@@ -3,6 +3,7 @@ package com.socialcomputing.wps.server.plandictionary.connectors.java;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.SubAttributeEnumeratorItem;
 import com.socialcomputing.wps.server.plandictionary.connectors.iSubAttributeConnector;
@@ -53,28 +54,38 @@ public class JavaSubAttributeConnector implements iSubAttributeConnector, Serial
 	// INNER CLASS	JavaSubAttributeEnumerator
 	public class JavaSubAttributeEnumerator implements iSubAttributeEnumerator
 	{
-		private ArrayList m_links = null;
+		private ArrayList<SubAttributeEnumeratorItem> m_links = null;
 		private int i = 0, max = 0;
-		public JavaSubAttributeEnumerator( ArrayList links)
+		public JavaSubAttributeEnumerator( ArrayList<SubAttributeEnumeratorItem> links)
 		{
 			m_links = links;
 			max = m_links.size();
+		}
+
+		@Override
+		public Iterator<SubAttributeEnumeratorItem> iterator() {
+			return this;
 		}
 
 		public void reset()
 		{
 		}
 
-		public void next( SubAttributeEnumeratorItem item)
-		{
-			SubAttributeEnumeratorItem sitem = ( SubAttributeEnumeratorItem)m_links.get( i++);
-			item.m_Id = sitem.m_Id;
-			item.m_Ponderation = sitem.m_Ponderation;
+		@Override
+		public SubAttributeEnumeratorItem next() {
+			return m_links.get( i++);
 		}
 
+		@Override
 		public boolean hasNext()
 		{
 			return i < max;
+		}
+
+		@Override
+		public void remove() {
+			// TODO Auto-generated method stub
+			
 		}
 	}
 }

@@ -41,9 +41,9 @@ public class JDBCProfileConnector implements iProfileConnector, Serializable
 	public JDBCSubAttributeConnector m_SubAttributes = null;
 
 	// JDBCSelectionConnector TreeMap
-	public Hashtable  m_Selections = null;
+	public Hashtable<String, JDBCSelectionConnector>  m_Selections = null;
 
-	// Propriétés
+	// Propriï¿½tï¿½s
 	public JDBCProperties m_AnalysisProperties = null;
 	public JDBCProperties m_Properties = null;
 
@@ -66,7 +66,7 @@ public class JDBCProfileConnector implements iProfileConnector, Serializable
 		// Properties
 		profile.m_Properties = JDBCProperties.readObject( JDBCProperties.ATTRIBUTE_PROPS, element);
 
-		{   // Sélections
+		{   // Sï¿½lections
 			List lst = element.getChildren( "JDBC-selection");
 			int size = lst.size();
 			for( int i = 0; i < size; ++i)
@@ -82,7 +82,7 @@ public class JDBCProfileConnector implements iProfileConnector, Serializable
 	public JDBCProfileConnector( String name)
 	{
 		m_Name = name;
-		m_Selections = new Hashtable();
+		m_Selections = new Hashtable<String,JDBCSelectionConnector>();
 	}
 
 	public void openConnections( Hashtable wpsparams, Connection connection) throws WPSConnectorException
@@ -92,10 +92,8 @@ public class JDBCProfileConnector implements iProfileConnector, Serializable
 		else
 			m_Connection = m_ConnectionProfile.getConnection();
 
-		Iterator it = m_Selections.values().iterator();
-		while( it.hasNext())
+		for( JDBCSelectionConnector j : m_Selections.values())
 		{
-			JDBCSelectionConnector j = ( JDBCSelectionConnector) it.next();
 			j.openConnections( wpsparams, m_Connection);
 		}
 		if( m_SubAttributes != null)
@@ -118,10 +116,8 @@ public class JDBCProfileConnector implements iProfileConnector, Serializable
 			if( !m_UseEntityConnection)
 				m_Connection.close();
 
-			Iterator it = m_Selections.values().iterator();
-			while( it.hasNext())
+			for( JDBCSelectionConnector j : m_Selections.values())
 			{
-				JDBCSelectionConnector j = ( JDBCSelectionConnector) it.next();
 				j.closeConnections();
 			}
 

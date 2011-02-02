@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
@@ -30,7 +30,7 @@ public class JDBCEntityClassifier implements iClassifierConnector, Serializable
 	private transient Connection m_Connection = null;
 
 	// JDBCRuleConnector
-	private Hashtable m_Rules = null;
+	private Hashtable<String, JDBCRuleConnector> m_Rules = null;
 
 	static JDBCEntityClassifier readObject( org.jdom.Element element)
 	{
@@ -67,7 +67,7 @@ public class JDBCEntityClassifier implements iClassifierConnector, Serializable
 	public JDBCEntityClassifier( String name)
 	{
 		m_Name = name;
-		m_Rules = new Hashtable();
+		m_Rules = new Hashtable<String, JDBCRuleConnector>();
 	}
 
 	public void openConnections(  Hashtable wpsparams, Connection connection) throws WPSConnectorException
@@ -78,10 +78,8 @@ public class JDBCEntityClassifier implements iClassifierConnector, Serializable
 		{
 			m_Connection = m_ConnectionProfile.getConnection();
 		}
-		Iterator it = m_Rules.values().iterator();
-		while( it.hasNext())
+		for( JDBCRuleConnector j : m_Rules.values())
 		{
-			JDBCRuleConnector j = ( JDBCRuleConnector) it.next();
 			j.openConnections( wpsparams, m_Connection);
 		}
 		if( m_GetClassifierQuery != null)
@@ -94,10 +92,8 @@ public class JDBCEntityClassifier implements iClassifierConnector, Serializable
 			if( m_GetClassifierQuery != null)
 				m_GetClassifierQuery.close();
 			m_GetClassifierQuery = null;
-			Iterator it = m_Rules.values().iterator();
-			while( it.hasNext())
+			for( JDBCRuleConnector j : m_Rules.values())
 			{
-				JDBCRuleConnector j = ( JDBCRuleConnector) it.next();
 				j.closeConnections();
 			}
 			if( !m_UseEntityConnection)
@@ -109,25 +105,29 @@ public class JDBCEntityClassifier implements iClassifierConnector, Serializable
 		}
 	}
 
-	// iClassifierConnector interface
+	@Override
 	public  String getName()
 	{
 		return m_Name;
 	}
+	@Override
 	public  String getDescription()
 	{
 		return m_Description;
 	}
-	public Collection getRules()
+	@Override
+	public Collection<iClassifierRuleConnector> getRules() 
 	{
-		return m_Rules.values();
+		return new ArrayList<iClassifierRuleConnector>( m_Rules.values());
 	}
 
+	@Override
 	public iClassifierRuleConnector getRule( String id)
 	{
-		return ( iClassifierRuleConnector) m_Rules.get( id);
+		return ( iClassifierRuleConnector)m_Rules.get( id);
 	}
 
+	@Override
 	public String getClassification( String id) throws WPSConnectorException
 	{
 		if( id == null)

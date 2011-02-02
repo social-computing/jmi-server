@@ -30,7 +30,7 @@ public abstract class JDBCQuery implements Serializable
 	{
 		JDBCQuery query = null;
 		if( element.getChild( "JDBC-query") != null)
-			query = new JDBCQuery1( element.getChildText( "JDBC-query"));
+			query = new JDBCQuery2( element.getChildText( "JDBC-query"));
 		else
 			query = new JDBCQuery2( element.getChildText( "JDBC-query2"));
 		return query;

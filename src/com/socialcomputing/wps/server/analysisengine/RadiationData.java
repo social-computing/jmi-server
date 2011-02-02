@@ -137,7 +137,7 @@ public class RadiationData
 		filteringAttributes( lastNumOfRequestingEntity+1);
 		m_Frequency = null;
 
-		// On récupère le profil de réference après filtrage
+		// On rï¿½cupï¿½re le profil de rï¿½ference aprï¿½s filtrage
 		if (m_refEntityProfile!=null)
 		{
 			m_refEntityProfile=(NumAndFloat[])getNumericalProfile(m_PlanRequest.m_entityId).clone();
@@ -249,7 +249,7 @@ public class RadiationData
 				}
 			}
 
-			// Création des nouveaux profils renumérotés
+			// Crï¿½ation des nouveaux profils renumï¿½rotï¿½s
 			Iterator it=m_Entities.entrySet().iterator();
 			Collection numAttributes; Map.Entry entry;
 			HashMap newEntities=new HashMap();
@@ -300,9 +300,9 @@ public class RadiationData
 			int minFreq=Math.min(  freqJ,  freqI);
 			int maxFreq=Math.max(  freqJ,  freqI);
 
-			// Fréquence maximale ?? sur tous les éléments
+			// Frï¿½quence maximale ?? sur tous les ï¿½lï¿½ments
 			float value =  (float)getRadiation( i, j) / (float)minFreq   *(float)MathLogBuffer.getLog(minFreq+m_maxFrequency)/(float)MathLogBuffer.getLog(maxFreq+m_maxFrequency);
-			// On donne un avantage à ceux qui ont des fréquences respectives proches
+			// On donne un avantage ï¿½ ceux qui ont des frï¿½quences respectives proches
 			return  value;
 			//		return  (float)getRadiation( i, j) / (float)minFreq;
 		}
@@ -485,8 +485,8 @@ public class RadiationData
 		value=/*inter**/(minDiff+1)/(float)m_attributesCnt*(float)2.0*(float)(diff1+diff2+1)/(float)(inter+diff1+diff2+1.0);
 
 		m_ExRadiationMatrix.setAt(i, j, value);
-		return (value); // normalisée entre 0 et 1
-		// on donne un petit avantage à une différence symétrique qd la somme différence symétrique plus forte l'avantage
+		return (value); // normalisï¿½e entre 0 et 1
+		// on donne un petit avantage ï¿½ une diffï¿½rence symï¿½trique qd la somme diffï¿½rence symï¿½trique plus forte l'avantage
 	}
 	/**
 	 */
@@ -538,13 +538,10 @@ public class RadiationData
 		{
 			Collection numAttributes = new ArrayList();
 			AnalysisProfile profile = m_PlanRequest.getAnalysisProfile();
-			AttributeEnumeratorItem item = new AttributeEnumeratorItem();
 
-			iAttributeEnumerator p = profile.getConnector( m_PlanRequest.m_Dictionary).getEnumerator(entity);
-			ArrayList stockAttributes = new ArrayList();
-			while( p.hasNext())
+			ArrayList<StringAndFloat> stockAttributes = new ArrayList<StringAndFloat>();
+			for( AttributeEnumeratorItem item : profile.getConnector( m_PlanRequest.m_Dictionary).getEnumerator(entity))
 			{
-				p.next( item);
 				if( discoverRestrictFlag && !isDiscoverList && m_PlanRequest.m_discoveryAttributeId.compareTo( item.m_Id)==0)
 					isDiscoverList = true; // La liste contient-elle le discoveryAttr
 				stockAttributes.add( new StringAndFloat( item.m_Id, item.m_Ponderation));
@@ -571,7 +568,7 @@ public class RadiationData
 				}
 			}
 
-			// Si l'attribut de découverte n'est pas là on l'ajoute avec une pondération minimale
+			// Si l'attribut de dï¿½couverte n'est pas lï¿½ on l'ajoute avec une pondï¿½ration minimale
 			if (discoverAddFlag)
 			{
 				num = addAttribute( m_PlanRequest.m_discoveryAttributeId);
@@ -797,7 +794,7 @@ public class RadiationData
 		for (int num=0; num<m_attributesCnt; ++num) {
 			temp= new float[3]; i=0;
 
-// On favorise le critère de pondération totale
+// On favorise le critï¿½re de pondï¿½ration totale
 			temp[i++] = getAttributeMaxPond(num);
 			temp[i++] = getFrequency(num);
 			temp[i++] = getBalancedRadiationPower(num);

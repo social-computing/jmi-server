@@ -33,14 +33,25 @@ public class XmlIdEnumerator implements iIdEnumerator
 		m_index = 0;
 	}
 
-	public void next( IdEnumeratorItem item)
+	@Override
+	public iIdEnumerator iterator() {
+		return this;
+	}
+	
+	@Override
+	public String next()
 	{
 		Element e = ( Element) m_lst.get( m_index++);
-		item.m_Id = e.getAttributeValue( m_IdAttribute);
+		return e.getAttributeValue( m_IdAttribute);
 	}
 
+	@Override
 	public boolean hasNext()
 	{
 		return m_index < m_size;
+	}
+
+	@Override
+	public void remove() {
 	}
 }

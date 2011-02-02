@@ -3,7 +3,6 @@ package com.socialcomputing.wps.server.plandictionary.connectors.java;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.IdEnumeratorItem;
 import com.socialcomputing.wps.server.plandictionary.connectors.iIdEnumerator;
 
 /**
@@ -17,7 +16,7 @@ import com.socialcomputing.wps.server.plandictionary.connectors.iIdEnumerator;
 
 public class JavaIdEnumerator implements iIdEnumerator
 {
-	private Enumeration m_enum = null;
+	private Enumeration<String> m_enum = null;
 
 	public JavaIdEnumerator( Hashtable table)
 	{
@@ -28,13 +27,26 @@ public class JavaIdEnumerator implements iIdEnumerator
 	{
 	}
 
-	public void next( IdEnumeratorItem item)
+	@Override
+	public iIdEnumerator iterator() {
+		return this;
+	}
+	
+	@Override
+	public String next()
 	{
-		item.m_Id = (String) m_enum.nextElement();
+		return m_enum.nextElement();
 	}
 
+	@Override
 	public boolean hasNext()
 	{
 		return m_enum.hasMoreElements();
+	}
+
+	@Override
+	public void remove() {
+		// TODO Auto-generated method stub
+		
 	}
 }

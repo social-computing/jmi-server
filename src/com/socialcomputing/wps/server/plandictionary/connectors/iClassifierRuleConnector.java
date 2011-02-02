@@ -1,8 +1,9 @@
 package com.socialcomputing.wps.server.plandictionary.connectors;
 
-public interface iClassifierRuleConnector
+public interface iClassifierRuleConnector extends Iterable<String>
 {
    public abstract  String getName(  );
    public abstract  String getDescription(  );
-   public abstract  com.socialcomputing.wps.server.plandictionary.connectors.iIdEnumerator getEnumerator() throws WPSConnectorException;
+   @Override
+   public abstract iIdEnumerator iterator();
 }

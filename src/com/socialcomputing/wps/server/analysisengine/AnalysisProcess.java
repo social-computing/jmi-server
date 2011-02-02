@@ -29,7 +29,6 @@ import com.socialcomputing.wps.server.generator.ProtoPlan;
 import com.socialcomputing.wps.server.generator.RecommendationGroup;
 import com.socialcomputing.wps.server.plandictionary.AnalysisProfile;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
-import com.socialcomputing.wps.server.plandictionary.connectors.IdEnumeratorItem;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iIdEnumerator;
 import com.socialcomputing.wps.server.plandictionary.connectors.iProfileConnector;
@@ -318,18 +317,16 @@ public class AnalysisProcess {
 		if (m_Profile.m_AttributesMaxNb<=base.size())
 			return attributes;
 
-			IdEnumeratorItem item = new IdEnumeratorItem();
 			iIdEnumerator enumvar = m_PlanRequest.getAnalysisProfile().getConnector(m_PlanRequest.m_Dictionary).getExclusionEnumerator(m_PlanRequest.m_entityId);
 
 			// Construction de la la liste des attributs exclus
 			if (enumvar.hasNext())
 			   {
 				exclusionAttributes= new TreeSet();
-				while( enumvar.hasNext())
+				for( String item : enumvar)
 					{
-					enumvar.next( item);
-						if (m_RadData.m_AttrConverter.contains(item.m_Id)==true)
-						   exclusionAttributes.add(new Integer(m_RadData.getNum(item.m_Id)));
+						if (m_RadData.m_AttrConverter.contains(item)==true)
+						   exclusionAttributes.add( new Integer(m_RadData.getNum(item)));
 					}
 			   }
 

@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Hashtable;
+import java.util.Iterator;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierRuleConnector;
@@ -56,7 +57,8 @@ public class JDBCRuleConnector implements iClassifierRuleConnector, Serializable
 		return m_Description;
 	}
 
-	public iIdEnumerator getEnumerator() throws WPSConnectorException
+	@Override
+	public iIdEnumerator iterator()
 	{
 		try {
 			Statement st = m_Connection.createStatement();
@@ -64,8 +66,10 @@ public class JDBCRuleConnector implements iClassifierRuleConnector, Serializable
 		}
 		catch( SQLException e)
 		{
-			throw new WPSConnectorException( "JDBCRuleConnector failed to set enumerator", e);
+			e.printStackTrace();
+			//throw new WPSConnectorException( "JDBCRuleConnector failed to set enumerator", e);
 		}
+		return null;
 	}
 
 }

@@ -72,7 +72,7 @@ public class JavaProfileConnector implements iProfileConnector, Serializable
 	{
 		PlanData.Attribute attribute = m_planData.getAttribute( attributeId);
 		Hashtable properties = attribute.getProperties();
-		// Ajout des propriétés des sous attributs sous forme de tableaux
+		// Ajout des propriï¿½tï¿½s des sous attributs sous forme de tableaux
 		iSubAttributeConnector subConnector = this.getSubAttribute();
 		int subAttCount = attribute.getSubAttributes().size();
 		int max = attribute.getSubAttributes().size();
@@ -116,28 +116,36 @@ public class JavaProfileConnector implements iProfileConnector, Serializable
 	// INNER CLASS	JavaAttributeEnumerator
 	public class JavaAttributeEnumerator implements iAttributeEnumerator
 	{
-		private ArrayList m_links = null;
+		private ArrayList<AttributeEnumeratorItem> m_links = null;
 		private int i = 0, max = 0;
-		public JavaAttributeEnumerator( ArrayList links)
+		public JavaAttributeEnumerator( ArrayList<AttributeEnumeratorItem> links)
 		{
 			m_links = links;
 			max = (m_links == null ? 0 : m_links.size());
+		}
+
+		@Override
+		public Iterator<AttributeEnumeratorItem> iterator() {
+			return this;
 		}
 
 		public void reset()
 		{
 		}
 
-		public void next( AttributeEnumeratorItem item)
+		@Override
+		public AttributeEnumeratorItem next() 
 		{
-			AttributeEnumeratorItem sitem = ( AttributeEnumeratorItem)m_links.get( i++);
-			item.m_Id = sitem.m_Id;
-			item.m_Ponderation = sitem.m_Ponderation;
+			return m_links.get( i++);
 		}
 
 		public boolean hasNext()
 		{
 			return i < max;
+		}
+
+		@Override
+		public void remove() {
 		}
 	}
 }

@@ -2,6 +2,7 @@ package com.socialcomputing.wps.server.plandictionary.connectors.jdbc;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Iterator;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.SubAttributeEnumeratorItem;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
@@ -17,6 +18,12 @@ public class JDBCSubAttributeEnumerator implements iSubAttributeEnumerator
 		m_ResultSet = rs;
 	}
 
+	@Override
+	public Iterator<SubAttributeEnumeratorItem> iterator() {
+		return this;
+	}
+
+	@Override
 	public boolean hasNext(  )
 	{
 		try {
@@ -37,22 +44,30 @@ public class JDBCSubAttributeEnumerator implements iSubAttributeEnumerator
 		return true;
 	}
 
-	public  void next( SubAttributeEnumeratorItem item) throws WPSConnectorException
+	@Override
+	public SubAttributeEnumeratorItem next() 
 	{
+		SubAttributeEnumeratorItem item = null;
 		try {
 			if( m_needNext)
 				if( !m_ResultSet.next())
-					return;
+					return item;
 
-			item.m_Id = m_ResultSet.getString( 1);
-			item.m_Ponderation = m_ResultSet.getFloat( 2);
-
+			item = new SubAttributeEnumeratorItem( m_ResultSet.getString( 1), m_ResultSet.getFloat( 2));
 			m_needNext = true;
 		}
 		catch( SQLException e)
 		{
-			throw new WPSConnectorException( "JDBCSubAttributeEnumerator failed to read next item", e);
+			e.printStackTrace();
+			//throw new WPSConnectorException( "JDBCSubAttributeEnumerator failed to read next item", e);
 		}
+		return item;
+	}
+
+	@Override
+	public void remove() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

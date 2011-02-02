@@ -27,10 +27,8 @@ public class AttributesPonderationMap extends TreeMap<Integer, Float>
 	public   AttributesPonderationMap( iAttributeEnumerator enumerator, StringToNumConverter converter ) throws WPSConnectorException
 	{
 		m_Converter = converter;
-		AttributeEnumeratorItem item = new AttributeEnumeratorItem();
-		while( enumerator.hasNext() )
+		for( AttributeEnumeratorItem item : enumerator)
 		{
-			enumerator.next(item);
 			put( new Integer( m_Converter.add(item.m_Id)), new Float(item.m_Ponderation));
 			if (m_PondMax<item.m_Ponderation)
 			{
@@ -42,26 +40,23 @@ public class AttributesPonderationMap extends TreeMap<Integer, Float>
 	public   AttributesPonderationMap( iAttributeEnumerator enumerator, ObjectToNumConverter<ArrayList<String>> converter, String objectId ) throws WPSConnectorException
 	{
 		m_Converter = converter;
-		AttributeEnumeratorItem item = new AttributeEnumeratorItem();
+		for( AttributeEnumeratorItem item : enumerator)
+		{
+			int numAttr = converter.add( item.m_Id, null);
+			
+			put( numAttr, new Float( item.m_Ponderation));
 
-			while( enumerator.hasNext() )
-			{
-				enumerator.next(item);
-				int numAttr = converter.add( item.m_Id, null);
-				
-				put( numAttr, new Float( item.m_Ponderation));
+			// On met � jour la table des attributs
+			ArrayList<String> array = converter.getObject(numAttr);
+			if (array == null)
+				converter.setObject( numAttr, array = new ArrayList<String>());
+			array.add( objectId);
 
-				// On met � jour la table des attributs
-				ArrayList<String> array = converter.getObject(numAttr);
-				if (array == null)
-					converter.setObject( numAttr, array = new ArrayList<String>());
-				array.add( objectId);
-
-				if (m_PondMax<item.m_Ponderation)
-				   {
-					m_PondMax=item.m_Ponderation;
-				   }
-			}
+			if (m_PondMax<item.m_Ponderation)
+			   {
+				m_PondMax=item.m_Ponderation;
+			   }
+		}
 	}
 
 

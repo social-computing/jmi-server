@@ -3,7 +3,6 @@ package com.socialcomputing.wps.server.plandictionary.connectors.jdbc;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.IdEnumeratorItem;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iIdEnumerator;
 
@@ -21,24 +20,32 @@ public class JDBCIdEnumerator implements iIdEnumerator
 		m_ResultSet = rs;
 	}
 
-	public void next( IdEnumeratorItem item) throws WPSConnectorException
+	@Override
+	public iIdEnumerator iterator() {
+		return this;
+	}
+	
+	@Override
+	public String next()
 	{
-		if( m_ResultSet == null) return;
+		if( m_ResultSet == null) return null;
 		try {
 			if( m_needNext)
 				if( !m_ResultSet.next())
-					return;
-
-			item.m_Id = m_ResultSet.getString( 1);
+					return null;
 
 			m_needNext = true;
+			return m_ResultSet.getString( 1);
 		}
 		catch( SQLException e)
 		{
-			throw new WPSConnectorException( "JDBCIdEnumerator failed to read next item", e);
+			e.printStackTrace();
+			//throw new WPSConnectorException( "JDBCIdEnumerator failed to read next item", e);
 		}
+		return null;
 	}
 
+	@Override
 	public boolean hasNext()
 	{
 		if( m_ResultSet == null) return false;
@@ -58,6 +65,12 @@ public class JDBCIdEnumerator implements iIdEnumerator
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public void remove() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -3,6 +3,7 @@ package com.socialcomputing.wps.server.plandictionary.connectors;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 
 /**
@@ -133,12 +134,12 @@ public class MultiProfileConnector implements iProfileConnector, Serializable
 				 m_Enumerators[i] = profiles[i].getEnumerator( entityId);
 			index = 0;
 		}
-		public void next( AttributeEnumeratorItem item) throws WPSConnectorException
-		{
-			m_Enumerators[ index].next( item);
-			item.m_Id = m_Prefixes[ index] + item.m_Id;
+		@Override
+		public Iterator<AttributeEnumeratorItem> iterator() {
+			return this;
 		}
-		public boolean hasNext() throws WPSConnectorException
+		@Override
+		public boolean hasNext()
 		{
 			for( ; index < m_Enumerators.length; ++index)
 			{
@@ -146,6 +147,15 @@ public class MultiProfileConnector implements iProfileConnector, Serializable
 				   return true;
 			}
 			return false;
+		}
+		@Override
+		public AttributeEnumeratorItem next() {
+			AttributeEnumeratorItem item = m_Enumerators[ index].next();
+			item.m_Id = m_Prefixes[ index] + item.m_Id;
+			return item;
+		}
+		@Override
+		public void remove() {
 		}
 	}
 
@@ -163,12 +173,18 @@ public class MultiProfileConnector implements iProfileConnector, Serializable
 				 m_Enumerators[i] = profiles[i].getExclusionEnumerator( entityId);
 			index = 0;
 		}
-		public void next( IdEnumeratorItem item) throws WPSConnectorException
-		{
-			m_Enumerators[ index].next( item);
-			item.m_Id = m_Prefixes[ index] + item.m_Id;
+		@Override
+		public iIdEnumerator iterator() {
+			return this;
 		}
-		public boolean hasNext() throws WPSConnectorException
+		@Override
+		public String next() 
+		{
+			String id = m_Enumerators[ index].next();
+			return m_Prefixes[ index] + id;
+		}
+		@Override
+		public boolean hasNext() 
 		{
 			for( ; index < m_Enumerators.length; ++index)
 			{
@@ -176,6 +192,9 @@ public class MultiProfileConnector implements iProfileConnector, Serializable
 				   return true;
 			}
 			return false;
+		}
+		@Override
+		public void remove() {
 		}
 	}
 

@@ -1,9 +1,7 @@
 package com.socialcomputing.wps.server.plandictionary.connectors;
 
-public interface iIdEnumerator
+import java.util.Iterator;
+
+public interface iIdEnumerator extends Iterable<String>, Iterator<String>
 {
-   public abstract  void next( IdEnumeratorItem item ) throws WPSConnectorException;
-
-   public abstract  boolean hasNext(  ) throws WPSConnectorException;
-
 }
