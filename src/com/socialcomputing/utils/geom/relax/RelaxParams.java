@@ -3,11 +3,15 @@ package com.socialcomputing.utils.geom.relax;
 import java.io.*;
 
 import org.jdom.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.socialcomputing.utils.*;
 
 public class RelaxParams implements Serializable
 {
+	private static final Logger log = LoggerFactory.getLogger(RelaxParams.class); 
+	
 	static final long serialVersionUID  	= 5845865399115455453L;
 
 	public	float           m_scale     	= 0.5f;
@@ -150,7 +154,7 @@ public class RelaxParams implements Serializable
 			}
 			catch ( NumberFormatException e )
 			{
-				EZDebug.println( "error parsing Number in RelaxParams.readObject(): " + elem, EZDebug.HIGH );
+				log.debug("error parsing Number in RelaxParams.readObject(): {}", elem);
 			}
 		}
 

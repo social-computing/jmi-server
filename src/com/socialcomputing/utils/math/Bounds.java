@@ -3,6 +3,9 @@ package com.socialcomputing.utils.math;
 import java.io.Serializable;
 import java.util.Arrays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.socialcomputing.utils.EZDebug;
 import com.socialcomputing.utils.ValueGetter;
 
@@ -17,6 +20,8 @@ import com.socialcomputing.utils.ValueGetter;
 
 public class Bounds implements Serializable
 {
+	private static final Logger log = LoggerFactory.getLogger(Bounds.class); 
+	
 	static final long serialVersionUID  = 2403692454644032415L;
 
 	public  float   m_min;
@@ -228,10 +233,10 @@ public class Bounds implements Serializable
 		}
 		float   step    = 1.f /( sCnt - 1 );
 
-		EZDebug.print( this.toString() + " -> " );
+		log.info(this.toString() + " -> ");
 		m_min = map( step * hBeg );
 		m_max = map( step * hEnd );
-		EZDebug.println( this.toString());
+		log.info(this.toString());
 	}
 
 	public void clipValues( Object[] vals, ValueGetter getter )
@@ -343,8 +348,8 @@ public class Bounds implements Serializable
 		float   t = Math.abs(( avg - med )/ avg );
 		if ( t > 1.f )
 		{
-			EZDebug.println( "avg = " + avg + ", med = " + med + ", var = " + t );
-
+			log.info("avg = {}, med = {}, var = {}", new Object[] {avg, med, t});
+			
 			// Finds the average histogram bar
 			max     = (int)( normalize( avg ) * sCnt );
 			//hMax    = histo[max];

@@ -3,6 +3,9 @@ package com.socialcomputing.wps.server.generator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 //import java.util.Hashtable;
 
 import com.socialcomputing.utils.geom.relax.CrossMgr;
@@ -52,6 +55,9 @@ import com.socialcomputing.utils.math.EZMath;
  */
 public class Mapper
 {
+	
+	private static final Logger log = LoggerFactory.getLogger(Mapper.class); 
+	
 	/**
 	 * Name of each stages as they will appears in the GUI.
 	 */
@@ -537,7 +543,7 @@ public class Mapper
 		m_nodes = new NodeMapData[j];
 		System.arraycopy( nodes, 0, m_nodes, 0, j );
 
-		EZDebug.println( String.valueOf( m_nodes.length )+ " NodeMapData were created, " + m_baseNodeCnt + " in base" );
+		log.info("{} NodeMapData were created, {} in base", String.valueOf(m_nodes.length), m_baseNodeCnt);
 
 		EZDebug.pop();
 	}
@@ -564,7 +570,7 @@ public class Mapper
 			m_links[i]  = linkDat;
 		}
 
-		EZDebug.println( "links created" );
+		log.info("links created");
 		EZDebug.pop();
 	}
 

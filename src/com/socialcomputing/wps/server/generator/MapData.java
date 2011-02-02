@@ -5,6 +5,8 @@ import java.awt.*;
 import java.util.*;
 
 import org.jdom.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.socialcomputing.utils.geom.relax.*;
 import com.socialcomputing.utils.*;
@@ -28,6 +30,8 @@ public class MapData implements Serializable
 {
 	static final long serialVersionUID  = 7086160279928299040L;
 
+	public static final Logger log = LoggerFactory.getLogger(MapData.class);
+	
 	/**
 	 * Index of Nodes size [min,max] in the bounds array.
 	 */
@@ -387,7 +391,7 @@ public class MapData implements Serializable
 			}
 			catch ( NumberFormatException e )
 			{
-				EZDebug.println( "error parsing Number in MapData.readObject(): " + elem );
+				log.info("error parsing Number in MapData.readObject(): {}", elem );
 			}
 
 			java.util.List  stageLst    = elem.getChildren( "stage" );

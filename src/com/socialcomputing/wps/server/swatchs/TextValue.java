@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.socialcomputing.wps.client.applet.Base;
 import com.socialcomputing.wps.client.applet.Token;
 import com.socialcomputing.wps.client.applet.VContainer;
@@ -26,6 +29,8 @@ public class TextValue extends ValueContainer implements Serializable, Propable
 	 */
 	private static final long serialVersionUID = -3104134468985535077L;
 
+	private static final Logger log = LoggerFactory.getLogger(TextValue.class);
+	
 	/**
 	 * Raw text value.
 	 */
@@ -85,7 +90,7 @@ public class TextValue extends ValueContainer implements Serializable, Propable
 				}
 				else
 				{
-					EZDebug.println( "TextValue.getValue : This prop is not a list!", EZDebug.HIGH );
+					log.debug("TextValue.getValue : This prop is not a list!");
 					return null;
 				}
 			}
@@ -216,12 +221,12 @@ public class TextValue extends ValueContainer implements Serializable, Propable
 					return ( token.m_flags & Token.LIST_BIT )!= 0;
 				}
 			}
-			EZDebug.println( "TextValue.getValue : unknown prop'" + propName + "', use TextValue.getProps", EZDebug.HIGH );
+			log.debug("TextValue.getValue : unknown prop'{}', use TextValue.getProps", propName);
 			return false;
 		}
 		else
 		{
-			EZDebug.println( "Call TextValue.getProps before TextValue.getValue", EZDebug.HIGH );
+			log.debug( "Call TextValue.getProps before TextValue.getValue");
 			return false;
 		}
 	}
