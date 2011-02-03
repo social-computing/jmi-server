@@ -1,3 +1,4 @@
+<%@page import="sun.misc.BASE64Encoder"%>
 <html>
 <head>
 <title>Basic authentication</title>
@@ -12,9 +13,10 @@ if( login == null) login = "";
 String password = request.getParameter( "password");
 if( password == null) password = "";
 String encoded = null;
-if( login.length()>0 || password.length()>0)
-{
-	encoded = com.socialcomputing.utils.coder.Base64.encodeString( login + ":" + password);
+if( login.length()>0 || password.length()>0) {
+	String lp = login + ":" + password;
+	BASE64Encoder encoder = new BASE64Encoder();
+	encoded = encoder.encode(lp.getBytes());
 }
 %>
 
