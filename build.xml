@@ -19,7 +19,7 @@
         </delete>
     </target>
 
-    <target name="resolve" description="Retrieve dependencies with ivy">
+    <target name="resolve" depends="cleanlibdir" description="Retrieve dependencies with ivy">
         <ivy:retrieve pattern="${ivy.lib.dir}/[module]-[type]-[revision].[ext]"/>
     </target>
 
