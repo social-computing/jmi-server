@@ -109,33 +109,33 @@ public class DefaultAffinityGroupReader implements iAffinityGroupReader, java.io
 		return ( StringAndFloat[]) eList.toArray( new StringAndFloat[0]);
 	}
 
-	public static void main(String args[])
-	{
-		try
-		{
-			Connection connection = null;
-			Class.forName( "org.gjt.mm.mysql.Driver");
-			connection = DriverManager.getConnection( "jdbc:mysql://saturne:3306/WPS?user=boosol&password=boosol");
-
-			int test[] = { 7,49,88,125,149,168,205,568,345,412,589,1024,1587,1789,2001,2005,2312,2587,2688,3000,3001};
-
-			DefaultAffinityGroupReader ar = new DefaultAffinityGroupReader();
-			WPSDictionary dico = WPSDictionary.CreateTestInstance( "BooSol");
-			ar.instanciate( connection, new PlanRequest( null, dico, new Hashtable()));
-
-			Statement st  = connection.createStatement();
-			long t1 = System.currentTimeMillis();
-			for( int i = 0; i < 1000; ++i)
-				st.executeUpdate( "insert into " + WPSDictionary.getCoefficientTableName( dico.m_Name) + "(id1, id2, ponderation) values( '"+i+"', '333', 0)");
-			//for( int i = 0; i < test.length; ++i)
-			//	ar.retrieveAffinityGroup( "777" , 100, 1000);
-			long t2 = System.currentTimeMillis();
-			//System.out.println( "Temps moyen " + test.length + " requ�tes : " + (t2 - t1)/test.length + "ms");
-			System.out.println( "Temps moyen " + test.length + " requ�tes : " + (t2 - t1) + "ms");
-			connection.close();
-		}
-		 catch (Exception e) { e.printStackTrace();}
-		 System.exit(1);
-	}
+//	public static void main(String args[])
+//	{
+//		try
+//		{
+//			Connection connection = null;
+//			Class.forName( "org.gjt.mm.mysql.Driver");
+//			connection = DriverManager.getConnection( "jdbc:mysql://saturne:3306/WPS?user=boosol&password=boosol");
+//
+//			int test[] = { 7,49,88,125,149,168,205,568,345,412,589,1024,1587,1789,2001,2005,2312,2587,2688,3000,3001};
+//
+//			DefaultAffinityGroupReader ar = new DefaultAffinityGroupReader();
+//			WPSDictionary dico = WPSDictionary.CreateTestInstance( "BooSol");
+//			ar.instanciate( connection, new PlanRequest( null, dico, new Hashtable()));
+//
+//			Statement st  = connection.createStatement();
+//			long t1 = System.currentTimeMillis();
+//			for( int i = 0; i < 1000; ++i)
+//				st.executeUpdate( "insert into " + WPSDictionary.getCoefficientTableName( dico.m_Name) + "(id1, id2, ponderation) values( '"+i+"', '333', 0)");
+//			//for( int i = 0; i < test.length; ++i)
+//			//	ar.retrieveAffinityGroup( "777" , 100, 1000);
+//			long t2 = System.currentTimeMillis();
+//			//System.out.println( "Temps moyen " + test.length + " requ�tes : " + (t2 - t1)/test.length + "ms");
+//			System.out.println( "Temps moyen " + test.length + " requ�tes : " + (t2 - t1) + "ms");
+//			connection.close();
+//		}
+//		 catch (Exception e) { e.printStackTrace();}
+//		 System.exit(1);
+//	}
 
 }

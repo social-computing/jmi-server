@@ -70,7 +70,7 @@ public class JDBCEntityClassifier implements iClassifierConnector, Serializable
 		m_Rules = new Hashtable<String, JDBCRuleConnector>();
 	}
 
-	public void openConnections(  Hashtable wpsparams, Connection connection) throws WPSConnectorException
+	public void openConnections(   Hashtable<String, Object> wpsparams, Connection connection) throws WPSConnectorException
 	{
 		if( m_UseEntityConnection)
 			m_Connection = connection;

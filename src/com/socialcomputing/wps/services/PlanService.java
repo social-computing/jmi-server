@@ -34,7 +34,7 @@ public class PlanService {
 	public PlanContainerFlex getPlan(String planName, Integer width, Integer height,String entityId,String attributeId, String classifyId, String analysisProfile,String affinityReaderProfile,String displayProfile)
 	{
 		// build params from Flex parameters
-		Hashtable<String, String> params = new Hashtable<String, String>() ;
+		Hashtable<String, Object> params = new Hashtable<String, Object>() ;
 		params.put("planName", planName);
 		params.put("width", String.valueOf(width));
 		params.put("height", String.valueOf(height));

@@ -81,7 +81,7 @@ public class JDBCSelectionConnector implements iSelectionConnector, java.io.Seri
 		m_Name = name;
 	}
 
-	public void openConnections( Hashtable wpsparams, Connection connection) throws WPSConnectorException
+	public void openConnections( Hashtable<String, Object> wpsparams, Connection connection) throws WPSConnectorException
 	{
 		if( m_UseEntityConnection)
 			m_Connection = connection;

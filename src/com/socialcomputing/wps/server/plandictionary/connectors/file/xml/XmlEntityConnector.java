@@ -1,6 +1,8 @@
-package com.socialcomputing.wps.server.plandictionary.connectors.xml;
+package com.socialcomputing.wps.server.plandictionary.connectors.file.xml;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.*;
+import com.socialcomputing.wps.server.plandictionary.connectors.file.FileEntityConnector;
+import com.socialcomputing.wps.server.plandictionary.connectors.jdbc.JDBCEntityConnector;
 
 import java.io.*;
 import java.util.*;
@@ -15,21 +17,15 @@ import org.jdom.*;
  * @version 1.0
  */
 
-public class XmlEntityConnector implements iEntityConnector, Serializable
+public class XmlEntityConnector extends FileEntityConnector
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2427315660133745314L;
-	public String m_Name = null;
-	public String m_Description = null;
 	public Element m_Root = null;
 
 	static XmlEntityConnector readObject( org.jdom.Element element)
 	{
-		XmlEntityConnector connector = new XmlEntityConnector( "");
-		connector.m_Description = "";
-
+		XmlEntityConnector connector = new XmlEntityConnector( element.getAttributeValue( "name"));
+		connector._readObject( element);
+		
 		try {
 			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder( false);
 			org.jdom.Document doc = builder.build( "test.xml");
@@ -41,23 +37,13 @@ public class XmlEntityConnector implements iEntityConnector, Serializable
 		}
 		return connector;
 	}
+	
 	public XmlEntityConnector( String name)
 	{
-		m_Name = name;
+		super( name);
 	}
 
-	// iEntityConnector interface
-	public  String getName()
-	{
-		return m_Name;
-	}
-
-	public  String getDescription()
-	{
-		return m_Description;
-	}
-
-	public void openConnections( Hashtable wpsparams)
+	public void openConnections( Hashtable<String, Object> wpsparams)
 	{
 		//return false;
 	}
@@ -80,43 +66,49 @@ public class XmlEntityConnector implements iEntityConnector, Serializable
 		return enumvar;
    }
 
-   public Collection getAffinityGroupReaders()
+   @Override
+   public Collection<iAffinityGroupReader> getAffinityGroupReaders()
    {
 		return null;
    }
 
+	@Override
 	public iAffinityGroupReader getAffinityGroupReader( String affGrpReader)
 	{
 		return null;
 	}
 
-/**
-  * Retrieve a collection of interface iProfileConnector    */
-	public  Collection getProfiles()
+	@Override
+	public Collection<iProfileConnector> getProfiles()
 	{
 	  return null;
 	}
 
-	public  iProfileConnector getProfile( String profile )
+	@Override
+	public iProfileConnector getProfile( String profile )
 	{
 		return null;
 	}
 
+	@Override
 	public Collection getClassifiers()
 	{
 		return null;
 	}
 
+	@Override
 	public iClassifierConnector getClassifier( String classifier)
 	{
 		return null;
 	}
 
-	public Collection getSelections()
+	@Override
+	public Collection<iSelectionConnector> getSelections()
 	{
 		return null;
 	}
 
+	@Override
 	public iSelectionConnector getSelection( String selectionId)
 	{
 		return null;

@@ -120,60 +120,60 @@ public class AffinityProcess
 	}
 
 	// Test
-	public static void main(String [] args)
-	{
-		WPSDictionary dico = WPSDictionary.CreateTestInstance( "BooSol");
-
-		try {
-			dico.openConnections( null);
-
-			Connection connection = null;
-			Class.forName( "org.gjt.mm.mysql.Driver");
-			Class.forName( "com.microsoft.jdbc.sqlserver.SQLServerDriver");
-			connection = DriverManager.getConnection( "jdbc:mysql://io:3306/WPS?user=boosolreader&password=boosolreader");
-			//connection = DriverManager.getConnection( "jdbc:microsoft:sqlserver://SATURNE:1433;DatabaseName=WPS;user=sa;password=youarehere");
-
-			//st.executeUpdate( "delete from " + WPSDictionary.getCoefficientTableName( dico.m_Name));
-
-			HashSet set = new HashSet();
-
-			connection.setCatalog( "BOOSOL");
-			Statement st  = connection.createStatement();
-			ResultSet rs = st.executeQuery( "select id from users");
-			while( rs.next())
-			{
-			   String id = rs.getString( 1);
-			   set.add( id);
-			}
-			rs.close();
-
-			/*ResultSet rs = st.executeQuery( "select id from " + WPSDictionary.getCoefficientQueuingTableName( "BooSol"));
-			while( rs.next())
-			{
-				String id = rs.getString( 1);
-				set.add( id);
-			}
-			rs.close();*/
-
-			/*set.add( "7");
-			set.add( "41");
-			set.add( "2");
-			set.add( "27");*/
-
-			st.close();
-			System.out.println("N:"+set.size());
-
-			long t1= System.currentTimeMillis();
-			connection.setCatalog( "WPS");
-			AffinityProcess proc = new AffinityProcess( dico, set, connection);
-			proc.compute();
-			long t2= System.currentTimeMillis();
-			System.out.println("Time:"+(t2-t1));
-			dico.closeConnections();
-		}
-		catch( Exception e) {
-			e.printStackTrace();
-		}
-	}
+//	public static void main(String [] args)
+//	{
+//		WPSDictionary dico = WPSDictionary.CreateTestInstance( "BooSol");
+//
+//		try {
+//			dico.openConnections( null);
+//
+//			Connection connection = null;
+//			Class.forName( "org.gjt.mm.mysql.Driver");
+//			Class.forName( "com.microsoft.jdbc.sqlserver.SQLServerDriver");
+//			connection = DriverManager.getConnection( "jdbc:mysql://io:3306/WPS?user=boosolreader&password=boosolreader");
+//			//connection = DriverManager.getConnection( "jdbc:microsoft:sqlserver://SATURNE:1433;DatabaseName=WPS;user=sa;password=youarehere");
+//
+//			//st.executeUpdate( "delete from " + WPSDictionary.getCoefficientTableName( dico.m_Name));
+//
+//			HashSet set = new HashSet();
+//
+//			connection.setCatalog( "BOOSOL");
+//			Statement st  = connection.createStatement();
+//			ResultSet rs = st.executeQuery( "select id from users");
+//			while( rs.next())
+//			{
+//			   String id = rs.getString( 1);
+//			   set.add( id);
+//			}
+//			rs.close();
+//
+//			/*ResultSet rs = st.executeQuery( "select id from " + WPSDictionary.getCoefficientQueuingTableName( "BooSol"));
+//			while( rs.next())
+//			{
+//				String id = rs.getString( 1);
+//				set.add( id);
+//			}
+//			rs.close();*/
+//
+//			/*set.add( "7");
+//			set.add( "41");
+//			set.add( "2");
+//			set.add( "27");*/
+//
+//			st.close();
+//			System.out.println("N:"+set.size());
+//
+//			long t1= System.currentTimeMillis();
+//			connection.setCatalog( "WPS");
+//			AffinityProcess proc = new AffinityProcess( dico, set, connection);
+//			proc.compute();
+//			long t2= System.currentTimeMillis();
+//			System.out.println("Time:"+(t2-t1));
+//			dico.closeConnections();
+//		}
+//		catch( Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 }
 

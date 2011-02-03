@@ -36,7 +36,7 @@ public class JDBCRuleConnector implements iClassifierRuleConnector, Serializable
 		m_Name = name;
 	}
 
-	public void openConnections(  Hashtable wpsparams, Connection connection)
+	public void openConnections(  Hashtable<String, Object> wpsparams, Connection connection)
 	{
 		m_Connection = connection;
 	}

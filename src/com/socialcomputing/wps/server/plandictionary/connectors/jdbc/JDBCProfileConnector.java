@@ -85,7 +85,7 @@ public class JDBCProfileConnector implements iProfileConnector, Serializable
 		m_Selections = new Hashtable<String,JDBCSelectionConnector>();
 	}
 
-	public void openConnections( Hashtable wpsparams, Connection connection) throws WPSConnectorException
+	public void openConnections( Hashtable<String, Object> wpsparams, Connection connection) throws WPSConnectorException
 	{
 		if( m_UseEntityConnection)
 			m_Connection = connection;

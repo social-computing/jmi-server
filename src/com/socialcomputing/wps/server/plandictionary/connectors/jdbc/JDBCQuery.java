@@ -41,7 +41,7 @@ public abstract class JDBCQuery implements Serializable
 		m_Query = query;
 	}
 
-	public void open( Hashtable wpsparams, Connection connection)
+	public void open( Hashtable<String, Object> wpsparams, Connection connection)
 	{
 		m_Connection = connection;
 		m_WPSParams = wpsparams;

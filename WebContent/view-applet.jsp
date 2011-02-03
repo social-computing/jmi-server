@@ -7,7 +7,7 @@
 public long getLastModified(HttpServletRequest request) {
 	return System.currentTimeMillis();
 }%>
-<%@ include file="./applet/AppletVersion.jsp" %>
+<%@ include file="applet/AppletVersion.jsp" %>
 
 <%
 PlanMaker planmaker = new BeanPlanMaker();

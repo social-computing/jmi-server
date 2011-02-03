@@ -1,9 +1,7 @@
 package com.socialcomputing.wps.server.plandictionary;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.TreeMap;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
@@ -46,23 +44,23 @@ public class WPSDictionary implements java.io.Serializable
 
 	// Filtering
 	public Schedule m_FilteringSchedule = new Schedule();
-	public TreeMap m_FilteringProfiles = new TreeMap(); // FilteringProfile
+	public TreeMap<String,FilteringProfile> m_FilteringProfiles = new TreeMap<String,FilteringProfile>(); // FilteringProfile
 	public ClassifierMapper m_FilteringMapper = new ClassifierMapper(); // Segmentation
 
 	// Analysis
-	public TreeMap m_AnalysisProfiles = new TreeMap();  // AnalysisProfile
+	public TreeMap<String,AnalysisProfile> m_AnalysisProfiles = new TreeMap<String,AnalysisProfile>();  // AnalysisProfile
 	public ClassifierMapper m_AnalysisMapper = new ClassifierMapper(); // Segmentation
 
 	// Affinity Reader
-	public TreeMap m_AffinityReaderProfiles = new TreeMap();  // AffinityReaderProfile
+	public TreeMap<String,AffinityReaderProfile> m_AffinityReaderProfiles = new TreeMap<String,AffinityReaderProfile>();  // AffinityReaderProfile
 	public AffinityReaderMapper m_AffinityReaderMapper = new AffinityReaderMapper(); // Segmentation
 
 	// Models
-	public TreeMap m_Models = new TreeMap();    // Model
+	public TreeMap<String,Model> m_Models = new TreeMap<String,Model>();    // Model
 	public ModelMapper m_AnalysisLanguageModelMapper = new ModelMapper(); // Segmentation : Analysis / Language / Classifier / Model
 
 	// Global Env Properties
-	public Hashtable m_EnvProperties = new Hashtable();
+	public Hashtable<String, String> m_EnvProperties = new Hashtable<String, String>();
 
 	static public String getCoefficientTableName( String name)
 	{
@@ -208,17 +206,15 @@ public class WPSDictionary implements java.io.Serializable
 		m_Name = name;
 	}
 
-	public void openConnections( Hashtable wpsparams) throws WPSConnectorException
+	public void openConnections( Hashtable<String, Object> wpsparams) throws WPSConnectorException
 	{
 		// V\uFFFDrifications de base
 		if( m_EntitiesConnector == null)
 			throw new WPSConnectorException( "No entities connector in WPSDictionary");
 
 		// Information des models sur les entit\uFFFDs utilis\uFFFDes
-		Iterator it = m_Models.values().iterator();
-		while( it.hasNext())
+		for( Model model : m_Models.values())
 		{
-			Model model = ( Model) it.next();
 			model.setEntitiesConnector( m_EntitiesConnector);
 		}
 		// Ouverture des bases
@@ -227,10 +223,8 @@ public class WPSDictionary implements java.io.Serializable
 
 	public void closeConnections()  throws WPSConnectorException
 	{
-		Iterator it = m_Models.values().iterator();
-		while( it.hasNext())
+		for( Model model : m_Models.values())
 		{
-			Model model = ( Model) it.next();
 			model.setEntitiesConnector( null);
 		}
 		m_EntitiesConnector.closeConnections();
@@ -244,7 +238,7 @@ public class WPSDictionary implements java.io.Serializable
 	public FilteringProfile getFilteringProfile( String classifierName)
 	{
 		String name = m_FilteringMapper.getAssociatedName( classifierName);
-		return (FilteringProfile) m_FilteringProfiles.get( name);
+		return m_FilteringProfiles.get( name);
 	}
 
 	public  iClassifierConnector getFilteringClassifier()  throws WPSConnectorException
@@ -260,7 +254,7 @@ public class WPSDictionary implements java.io.Serializable
 
 	public AnalysisProfile getAnalysisProfile( String name )  throws WPSConnectorException
 	{
-		return ( AnalysisProfile)m_AnalysisProfiles.get( name);
+		return m_AnalysisProfiles.get( name);
 	}
 
 	public AnalysisProfile getAnalysisProfile( RequestingClassifyId classifyId )  throws WPSConnectorException
@@ -270,7 +264,7 @@ public class WPSDictionary implements java.io.Serializable
 
 	public AffinityReaderProfile getAffinityReaderProfile( String name )
 	{
-		return ( AffinityReaderProfile)m_AffinityReaderProfiles.get( name);
+		return m_AffinityReaderProfiles.get( name);
 	}
 
 	public AffinityReaderProfile getAffinityReaderProfile( String analysisProfile, RequestingClassifyId classifyId )  throws WPSConnectorException
@@ -282,7 +276,7 @@ public class WPSDictionary implements java.io.Serializable
 
 	public  Model getModel( String name)
 	{
-		return (Model) m_Models.get( name);
+		return m_Models.get( name);
 	}
 
 	public  Model getModel( String analysisProfile, String language, RequestingClassifyId classifyId )  throws WPSConnectorException
@@ -293,51 +287,4 @@ public class WPSDictionary implements java.io.Serializable
 		return this.getModel( name);
 	}
 
-	// Starter helper
-	public static WPSDictionary CreateTestInstance( String name)
-	{
-		WPSDictionary dico = null;
-
-		try
-		{
-			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder( true);
-			org.jdom.Document doc = null;
-
-			if( name.equalsIgnoreCase( "BooSol"))
-				doc = builder.build( new File( "..\\plandictionary\\mapstan_net.xml"));
-			if( name.equalsIgnoreCase( "SEngine"))
-				doc = builder.build( new File( "..\\plandictionary\\mapstan_search.xml"));
-			if( name.equalsIgnoreCase( "Test"))
-				doc = builder.build( new File( "..\\plandictionary\\test.xml"));
-
-			if( doc != null)
-			{
-				org.jdom.Element root = doc.getRootElement();
-				dico = WPSDictionary.readObject( root);
-				if( dico != null)
-					System.out.println( dico.m_Name + " created");
-				else
-					System.out.println( "Dico failed");
-
-			}
-			else
-				System.out.println( "Unknown dico failed");
-		}
-		catch (org.jdom.JDOMException se)
-		{
-			System.err.println(se.getMessage());
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		return dico;
-	}
-
-	public static void main(String[] args)
-	{
-		//WPSDictionary dico = null;
-		WPSDictionary.CreateTestInstance( "BooSol");
-		WPSDictionary.CreateTestInstance( "SEngine");
-	}
 }

@@ -128,7 +128,7 @@ public class JDBCEntityConnector implements iEntityConnector, Serializable
 		return m_Description;
 	}
 
-	public void openConnections( Hashtable wpsparams) throws WPSConnectorException
+	public void openConnections( Hashtable<String, Object> wpsparams) throws WPSConnectorException
 	{
 		m_Connection = m_ConnectionProfile.getConnection();
 		if( m_AffinityGroupReaders.size() > 0)

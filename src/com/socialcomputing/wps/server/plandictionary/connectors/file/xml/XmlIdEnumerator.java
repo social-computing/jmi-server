@@ -1,4 +1,4 @@
-package com.socialcomputing.wps.server.plandictionary.connectors.xml;
+package com.socialcomputing.wps.server.plandictionary.connectors.file.xml;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.*;
 //import java.io.*;

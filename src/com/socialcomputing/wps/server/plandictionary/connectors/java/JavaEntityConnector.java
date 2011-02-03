@@ -74,7 +74,7 @@ public class JavaEntityConnector implements iEntityConnector, Serializable
 		return s_Description;
 	}
 
-	public void openConnections( Hashtable wpsparams) throws WPSConnectorException
+	public void openConnections( Hashtable<String, Object> wpsparams) throws WPSConnectorException
 	{
 		if( m_javaPlanParameter != null)
 		{

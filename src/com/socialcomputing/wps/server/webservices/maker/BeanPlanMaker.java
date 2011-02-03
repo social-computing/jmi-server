@@ -47,7 +47,7 @@ public class BeanPlanMaker implements PlanMaker {
 	}
 
 	@Override
-	public Hashtable<String, Object> createPlan( Hashtable<String, String> params) throws RemoteException
+	public Hashtable<String, Object> createPlan( Hashtable<String, Object> params) throws RemoteException
 	{
 		Hashtable<String, Object> result = new Hashtable<String, Object>();
 		try {
@@ -55,7 +55,7 @@ public class BeanPlanMaker implements PlanMaker {
 			EZDebug.push();
 			EZTimer timer = new EZTimer();
 
-			String mime = params.get( "PLAN_MIME");
+			String mime = (String)params.get( "PLAN_MIME");
 			if( mime == null)
 				mime = "application/octet-stream";
 			PlanContainer planContainer = _createPlan( params, result);
@@ -93,7 +93,7 @@ public class BeanPlanMaker implements PlanMaker {
 		}
 	}
 	
-	private PlanContainer _createPlan( Hashtable<String, String> params, Hashtable<String, Object> results) throws RemoteException
+	private PlanContainer _createPlan( Hashtable<String, Object> params, Hashtable<String, Object> results) throws RemoteException
 	{
 		EZDebug.setVerbosity( EZDebug.NONE );
 		int 	status 		= Steps.PlanMakerStarted;
@@ -212,7 +212,7 @@ public class BeanPlanMaker implements PlanMaker {
 	}
 
 
-	private void recordPlanCreationInHistory( Connection connection, String plan, int type, String user, Hashtable<String, String> params, String useragent, long duration)
+	private void recordPlanCreationInHistory( Connection connection, String plan, int type, String user, Hashtable<String, Object> params, String useragent, long duration)
 	{
 		String stype = null;
 		switch ( type)
@@ -224,7 +224,7 @@ public class BeanPlanMaker implements PlanMaker {
 		recordPlanCreationInHistory( connection, plan, stype, user, params, useragent, duration, 0, "");
 	}
 	
-	private void recordPlanCreationInHistory( Connection connection, String plan, String type, String user, Hashtable<String, String> params, String useragent, long duration, int status, String info)
+	private void recordPlanCreationInHistory( Connection connection, String plan, String type, String user, Hashtable<String, Object> params, String useragent, long duration, int status, String info)
 	{
 		try {
 			InetAddress local = InetAddress.getLocalHost();

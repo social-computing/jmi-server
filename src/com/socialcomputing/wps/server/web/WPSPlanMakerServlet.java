@@ -66,7 +66,7 @@ public class WPSPlanMakerServlet extends HttpServlet
 		{
 			PlanMaker planmaker = new BeanPlanMaker();
 			
-			Hashtable<String, String> params = new Hashtable<String, String>();
+			Hashtable<String, Object> params = new Hashtable<String, Object>();
 			Enumeration enumvar = request.getParameterNames();
 			while( enumvar.hasMoreElements())
 			{
@@ -135,7 +135,7 @@ public class WPSPlanMakerServlet extends HttpServlet
 		{
 			PlanMaker planmaker = new BeanPlanMaker();
 			
-			Hashtable<String, String> params = new Hashtable<String, String>();
+			Hashtable<String, Object> params = new Hashtable<String, Object>();
 			Enumeration<String> enumvar = request.getParameterNames();
 			while( enumvar.hasMoreElements())
 			{
@@ -182,7 +182,7 @@ public class WPSPlanMakerServlet extends HttpServlet
 			else
 			{
 				out.println("<H3><CENTER> Recherche : " + searchName + "</CENTER></H3>");
-				Hashtable<String, String> params = new Hashtable<String, String>();
+				Hashtable<String, Object> params = new Hashtable<String, Object>();
 				Enumeration enumvar = request.getParameterNames();
 				while( enumvar.hasMoreElements())
 				{

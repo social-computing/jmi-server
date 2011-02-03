@@ -373,7 +373,7 @@ public class PlanGenerator
 
 	private static iIdEnumerator getNetEnumerator() throws com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException
 	{
-		WPSDictionary	dico	= WPSDictionary.CreateTestInstance( "Boosol" );
+		WPSDictionary	dico	= WPSDictionaryTest.CreateTestInstance( "Boosol" );
 		dico.openConnections( null);
 		return dico.getEntityConnector().getEnumerator();
 	}
@@ -518,7 +518,7 @@ class PlanParams
 	 */
 	protected WPSDictionary getDictionnary()
 	{
-		return WPSDictionary.CreateTestInstance( m_name );
+		return WPSDictionaryTest.CreateTestInstance( m_name );
 	}
 
 	/**

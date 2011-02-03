@@ -13,5 +13,5 @@ import java.rmi.RemoteException;
 
 public interface PlanMaker //extends EJBObject
 {
-	public java.util.Hashtable<String, Object> createPlan( java.util.Hashtable<String, String> params) throws RemoteException;
+	public java.util.Hashtable<String, Object> createPlan( java.util.Hashtable<String, Object> params) throws RemoteException;
 }
