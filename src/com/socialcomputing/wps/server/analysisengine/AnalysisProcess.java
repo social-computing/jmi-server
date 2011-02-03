@@ -42,7 +42,6 @@ import com.socialcomputing.wps.server.utils.ObjectNumStat;
 import com.socialcomputing.wps.server.utils.ObjectStringStat;
 import com.socialcomputing.wps.server.utils.SymmetricalMatrix;
 import com.socialcomputing.wps.server.webservices.PlanRequest;
-import com.socialcomputing.utils.EZDebug;
 import com.socialcomputing.utils.EZTimer;
 import com.socialcomputing.utils.math.Bounds;
 
@@ -202,7 +201,6 @@ public class AnalysisProcess {
 
 		Collection base, attributes, entities;
 
-		EZDebug.push();
 		EZTimer timer = new EZTimer();
 
 		if ((m_RadData.getAttributesCnt()!=0) & (m_Entities.size()!=0))
@@ -233,7 +231,6 @@ public class AnalysisProcess {
 		log.info("ClusterCnt:{}",m_clusterCnt);
 
 		timer.showElapsedTime( "ANALYSIS" );
-		EZDebug.pop();
 
 //		if (EZDebug.s_level!=EZDebug.DEBUG_NONE)
 //			dumpPlan(m_Plan);

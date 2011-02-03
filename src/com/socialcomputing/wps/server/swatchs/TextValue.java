@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import com.socialcomputing.wps.client.applet.Base;
 import com.socialcomputing.wps.client.applet.Token;
 import com.socialcomputing.wps.client.applet.VContainer;
-import com.socialcomputing.utils.EZDebug;
 
 /**
  * <p>Title: TextValue</p>
