@@ -1,12 +1,13 @@
 <ivy-module version="2.0">
-    <info organisation="com.socialcomputing" module="wps"/>
+    <info organisation="com.socialcomputing" module="wps" />
     <dependencies>
-        <dependency org="org.hibernate" name="hibernate-annotations" rev="3.4.0.GA"/>
-        <dependency org="org.jdom" name="jdom" rev="1.1"/>
+        <dependency org="org.hibernate" name="hibernate-annotations" rev="3.4.0.GA" />
+        <dependency org="org.jdom" name="jdom" rev="1.1" />
         <!-- dependency org="org.slf4j" name="slf4j-jdk14" rev="1.4.2"/> -->
         <dependency org="net.sf.ehcache" name="ehcache-core" rev="2.3.1">
-        	<exclude module="hibernate-core"/>
+            <exclude module="hibernate-core" />
         </dependency>
-        <dependency org="javassist" name="javassist" rev="3.4.GA"/>
+        <dependency org="javassist" name="javassist" rev="3.4.GA" />
+        <dependency org="ch.qos.logback" name="logback-classic"	rev="0.9.27" />
     </dependencies>
 </ivy-module>

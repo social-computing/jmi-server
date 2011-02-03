@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.TreeSet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.socialcomputing.wps.server.affinityengine.RecommendationInterface;
 import com.socialcomputing.wps.server.affinityengine.RecommendationProcess;
 import com.socialcomputing.wps.server.generator.AttributeLink;
@@ -63,6 +66,8 @@ import com.socialcomputing.utils.math.Bounds;
  * ********************************************************** */
 public class AnalysisProcess {
 
+	private static final Logger log = LoggerFactory.getLogger(AnalysisProcess.class);
+	
 	// All statistics about radiation of base attributes
 	// which are necessary to compute attributes to display on map
 	class BaseRadiationStat {
@@ -223,9 +228,9 @@ public class AnalysisProcess {
 
 		createProtoPlan(base, attributes, entities);
 
-		EZDebug.println("Attributes:"+m_Plan.m_attributes.length);
-		EZDebug.println("Attribute Links:"+m_Plan.m_attLinks.length);
-		EZDebug.println("ClusterCnt:"+m_clusterCnt);
+		log.info("Attributes:{}",m_Plan.m_attributes.length);
+		log.info("Attribute Links:{}",m_Plan.m_attLinks.length);
+		log.info("ClusterCnt:{}",m_clusterCnt);
 
 		timer.showElapsedTime( "ANALYSIS" );
 		EZDebug.pop();
