@@ -49,7 +49,7 @@
 		<copy file="${dist}/WPSApplet${applet.version}.jar" tofile="WebContent/applet/WPSApplet${applet.version}.jar" />
 		<copy file="${src}/com/socialcomputing/wps/client/applet/AppletVersion.jsp" tofile="WebContent/applet/AppletVersion.jsp" />
 		<jar destfile="${dist}/WPS.jar" basedir="${build}/classes" includes="com/socialcomputing/wps/**,com/socialcomputing/utils/**" />
-		<copy file="${dist}/WPS.jar" tofile="WebContent/WEB-INF/lib/WPS.jar" />
+        <!--copy file="${dist}/WPS.jar" tofile="WebContent/WEB-INF/lib/WPS.jar" /-->
 		<mkdir dir="WebContent/WEB-INF/classes" />
 		<copy file="${build}/classes/hibernate.cfg.xml" tofile="WebContent/WEB-INF/classes/hibernate.cfg.xml" />
 		<copy file="${build}/classes/logback.xml" tofile="WebContent/WEB-INF/classes/logback.xml" />

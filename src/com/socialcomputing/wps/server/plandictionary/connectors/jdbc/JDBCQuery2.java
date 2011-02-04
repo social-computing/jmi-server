@@ -87,7 +87,7 @@ public class JDBCQuery2 extends JDBCQuery
 		curSubAttribute = null;
 	}
 
-	// Remplacement paramètres globaux ex : {s$PROP} et création du PreparedStatement
+	// Remplacement parametres globaux ex : {s$PROP} et crÃ©ation du PreparedStatement
 	private void prepareQuery() throws SQLException
 	{
 		if( m_QueryPS != null) return;

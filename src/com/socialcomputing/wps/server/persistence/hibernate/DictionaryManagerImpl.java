@@ -123,7 +123,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
 		try {
 			session = HibernateUtil.currentSession();
 			tx = session.beginTransaction();
-			Dictionary d = (Dictionary) session.get(Dictionary.class, name);
+			Dictionary d = (Dictionary) session.get(DictionaryImpl.class, name);
 			session.delete(d);
 			session.createSQLQuery("drop table " + WPSDictionary.getCoefficientTableName(name)).executeUpdate();
 			session.createSQLQuery("drop table " + WPSDictionary.getCoefficientQueuingTableName(name)).executeUpdate();

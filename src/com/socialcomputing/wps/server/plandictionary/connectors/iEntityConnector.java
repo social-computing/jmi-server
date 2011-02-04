@@ -15,7 +15,7 @@ public interface iEntityConnector
 
 /**
   * Load the entity properties (image, age, income, ...). */
-   public abstract  Hashtable getProperties( String entityId ) throws WPSConnectorException;
+   public abstract  Hashtable<String, Object> getProperties( String entityId ) throws WPSConnectorException;
 
    public abstract  iIdEnumerator getEnumerator() throws WPSConnectorException;
 

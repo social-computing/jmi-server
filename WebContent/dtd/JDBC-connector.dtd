@@ -9,9 +9,6 @@
 <!ATTLIST JDBC-entities	name    CDATA    #REQUIRED>
 <!ATTLIST JDBC-entities	class   CDATA    "com.socialcomputing.wps.server.plandictionary.connectors.jdbc.JDBCEntityConnector" >
 
-<!-- a comment -->
-<!ELEMENT comment 			(#PCDATA)>
-
 <!-- a JDBC connection -->
 <!ELEMENT JDBC-connection 	(JNDI-data-source | JDBC-driver)>
 <!-- @attr catalog catalog to set after connection is ready -->
@@ -19,9 +16,6 @@
 
 <!-- a JNDI data-source -->
 <!ELEMENT JNDI-data-source 	(url)>
-
-<!-- a JDBC url -->
-<!ELEMENT url 			(#PCDATA)>
 
 <!-- a JDBC driver -->
 <!ELEMENT JDBC-driver 	(class, url)>

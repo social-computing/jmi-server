@@ -41,7 +41,7 @@ public class AnalysisProfile implements java.io.Serializable
 	public static final int ATTR_SAME_SIZE=2;
 	public static final int ATTR_MAX_PONDERATION_SIZE=3;
 
-	// Flag spécifique pour ne pas ajouter l'attribut de decouverte
+	// Flag spÃ©cifique pour ne pas ajouter l'attribut de decouverte
 	public static final int NO_DISCOVERY_ADD_IN_PROFILE=1000;
 
 	public String m_AttributesRef = null;
