@@ -34,6 +34,8 @@ public class WPSDictionary implements java.io.Serializable
 	public static final int APPLY_TO_BASE                   = 0x00000001;
 	public static final int APPLY_TO_NOT_BASE               = 0x00000002;
 
+	public static final String DEFAULT_NAME					= "<default>";
+	
 	static final long serialVersionUID = 165666346154822634L;
 
 	public String m_Name = null;

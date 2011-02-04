@@ -9,7 +9,7 @@ import java.util.Iterator;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierRuleConnector;
-import com.socialcomputing.wps.server.plandictionary.connectors.iIdEnumerator;
+import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 
 public class JDBCRuleConnector implements iClassifierRuleConnector, Serializable
 {
@@ -58,7 +58,7 @@ public class JDBCRuleConnector implements iClassifierRuleConnector, Serializable
 	}
 
 	@Override
-	public iIdEnumerator iterator()
+	public iEnumerator<String> iterator()
 	{
 		try {
 			Statement st = m_Connection.createStatement();

@@ -71,21 +71,8 @@ public class JDBCConnectionProfile implements java.io.Serializable
 			{
 				if( m_DataSource == null)
 				{
-					Context context = null;
-					try {
-						context = new InitialContext();
-						m_DataSource = (DataSource) context.lookup( m_JNDIDataSource);
-					}
-					catch( javax.naming.NoInitialContextException e)
-					{
-						//Pour le debug uniquement
-						String driver = "org.gjt.mm.mysql.Driver";
-						String connectStr = "jdbc:mysql://io:3306/BOOSOL?user=boosolreader&password=boosolreader";
-						if( m_JNDIDataSource.compareTo( "jdbc/SEngineDataROPooledDS") == 0)
-							connectStr = "jdbc:mysql://io:3306/SENGINE?user=boosolreader&password=boosolreader";
-						Class.forName( driver);
-						return DriverManager.getConnection( connectStr);
-					}
+					Context context =  new InitialContext();
+					m_DataSource = (DataSource) context.lookup( m_JNDIDataSource);
 				}
 				connection = (m_DataSource != null) ? m_DataSource.getConnection() : null;
 			}
@@ -108,18 +95,5 @@ public class JDBCConnectionProfile implements java.io.Serializable
 			throw new WPSConnectorException( "JDBC connector can not open connection: '" + (m_JNDIDataSource == null ? m_URL : m_JNDIDataSource) + "'", e);
 		}
 		return connection;
-	}
-
-	public static void main(String [] args)
-	{
-		JDBCConnectionProfile toto = new JDBCConnectionProfile( "jdbc/MapStanDataDS");
-		try {
-			toto.getConnection();
-		}
-		catch( Exception e)
-		{
-			System.out.print( e.getMessage());
-			e.printStackTrace();
-		}
 	}
 }

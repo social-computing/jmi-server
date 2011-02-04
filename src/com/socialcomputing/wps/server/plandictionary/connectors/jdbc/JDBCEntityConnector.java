@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
 
+import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.wps.server.plandictionary.connectors.MultiAffinityGroupReader;
 import com.socialcomputing.wps.server.plandictionary.connectors.MultiProfileConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
@@ -16,12 +17,11 @@ import com.socialcomputing.wps.server.plandictionary.connectors.iAffinityGroupRe
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierRuleConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEntityConnector;
-import com.socialcomputing.wps.server.plandictionary.connectors.iIdEnumerator;
+import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 import com.socialcomputing.wps.server.plandictionary.connectors.iProfileConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iSelectionConnector;
 
-public class JDBCEntityConnector implements iEntityConnector, Serializable
-{
+public class JDBCEntityConnector implements iEntityConnector, Serializable {
 	static final long serialVersionUID = 7560468521228097945L;
 
 	public String m_Name = null;
@@ -36,79 +36,76 @@ public class JDBCEntityConnector implements iEntityConnector, Serializable
 	// JDBCProfileConnector TreeMap, <default> classifier is mandatory !!!!
 	public TreeMap<String, JDBCProfileConnector> m_Profiles = null;
 
-	// JDBCEntityClassifier TreeMap, <default> classifier with one rule is mandatory !!!!
+	// JDBCEntityClassifier TreeMap, <default> classifier with one rule is
+	// mandatory !!!!
 	public TreeMap<String, JDBCEntityClassifier> m_Classifiers = null;
 
 	// JDBCSelectionConnector TreeMap
-	public Hashtable<String, JDBCSelectionConnector>  m_Selections = null;
+	public Hashtable<String, JDBCSelectionConnector> m_Selections = null;
 
-	// Propri�t�s
+	// Proprietes
 	public JDBCProperties m_Properties = null;
 
-	// Stockage propri�t�s (pour acc�l�ration)
+	// Stockage proprietes (pour acceleration)
 	public transient Hashtable m_StockedProperties = null;
 
-	static JDBCEntityConnector readObject( org.jdom.Element element)
-	{
-		JDBCEntityConnector connector = new JDBCEntityConnector( element.getAttributeValue( "name"));
-		connector.m_Description = element.getChildText( "comment");
+	static JDBCEntityConnector readObject(org.jdom.Element element) {
+		JDBCEntityConnector connector = new JDBCEntityConnector(element.getAttributeValue("name"));
+		connector.m_Description = element.getChildText("comment");
 		// Connection
-		connector.m_ConnectionProfile = JDBCConnectionProfile.readObject( element.getChild( "JDBC-connection"));
-		//if( connector.m_ConnectionProfile == null) Exception;
+		connector.m_ConnectionProfile = JDBCConnectionProfile.readObject(element.getChild("JDBC-connection"));
+		// if( connector.m_ConnectionProfile == null) Exception;
 
-		{     // Default Classifier
-			  // Il est identifi� car la propri�t� name == null (transform� en "<default>")
-			  JDBCEntityClassifier cl = JDBCEntityClassifier.readObject( element.getChild( "JDBC-default-classifier"));
-			  connector.m_Classifiers.put( cl.m_Name, cl);
+		{ // Default Classifier
+			// Il est identifie car la propriete name == null (transforme en
+			// "<default>")
+			JDBCEntityClassifier cl = JDBCEntityClassifier.readObject(element.getChild("JDBC-default-classifier"));
+			connector.m_Classifiers.put(cl.m_Name, cl);
 		}
-		{     // Others Classifiers
-			List lst = element.getChildren( "JDBC-classifier");
+		{ // Others Classifiers
+			List lst = element.getChildren("JDBC-classifier");
 			int size = lst.size();
-			for( int i = 0; i < size; ++i)
-			{
-				  JDBCEntityClassifier cl = JDBCEntityClassifier.readObject( ( org.jdom.Element) lst.get( i));
-				  //if( cl.m_Name.equalsIgnoreCase( "<default>") Exception
-				  connector.m_Classifiers.put( cl.m_Name, cl);
+			for (int i = 0; i < size; ++i) {
+				JDBCEntityClassifier cl = JDBCEntityClassifier.readObject((org.jdom.Element) lst.get(i));
+				// if( cl.m_Name.equalsIgnoreCase( "<default>") Exception
+				connector.m_Classifiers.put(cl.m_Name, cl);
 			}
 		}
 
 		// Properties
-		connector.m_Properties = JDBCProperties.readObject( JDBCProperties.ENTITY_PROPS, element);
+		connector.m_Properties = JDBCProperties.readObject(JDBCProperties.ENTITY_PROPS, element);
 
-		{   // Affinity Groups
-			List lst = element.getChildren( "JDBC-affinity-reader");
+		{ // Affinity Groups
+			List lst = element.getChildren("JDBC-affinity-reader");
 			int size = lst.size();
-			for( int i = 0; i < size; ++i)
-			{
-				JDBCAffinityGroupReader grp = JDBCAffinityGroupReader.readObject(  ( org.jdom.Element) lst.get( i));
-				connector.m_AffinityGroupReaders.put( grp.m_Name, grp);
+			for (int i = 0; i < size; ++i) {
+				JDBCAffinityGroupReader grp = JDBCAffinityGroupReader.readObject((org.jdom.Element) lst.get(i));
+				connector.m_AffinityGroupReaders.put(grp.m_Name, grp);
 			}
 		}
 
-		{   // Profiles
-			List lst = element.getChildren( "JDBC-attributes");
+		{ // Profiles
+			List lst = element.getChildren("JDBC-attributes");
 			int size = lst.size();
-			for( int i = 0; i < size; ++i)
-			{
-				JDBCProfileConnector prof = JDBCProfileConnector.readObject(  ( org.jdom.Element) lst.get( i));
-				connector.m_Profiles.put( prof.m_Name, prof);
+			for (int i = 0; i < size; ++i) {
+				JDBCProfileConnector prof = JDBCProfileConnector.readObject((org.jdom.Element) lst.get(i));
+				connector.m_Profiles.put(prof.m_Name, prof);
 			}
 		}
 
-		{   // S�lections
-			List lst = element.getChildren( "JDBC-selection");
+		{ // S�lections
+			List lst = element.getChildren("JDBC-selection");
 			int size = lst.size();
-			for( int i = 0; i < size; ++i)
-			{
-				JDBCSelectionConnector sel = JDBCSelectionConnector.readObject(  JDBCSelectionConnector.ENTITY_SELECTION, ( org.jdom.Element) lst.get( i));
-				connector.m_Selections.put( sel.m_Name, sel);
+			for (int i = 0; i < size; ++i) {
+				JDBCSelectionConnector sel = JDBCSelectionConnector.readObject(JDBCSelectionConnector.ENTITY_SELECTION,
+						(org.jdom.Element) lst.get(i));
+				connector.m_Selections.put(sel.m_Name, sel);
 			}
 		}
 		return connector;
 	}
 
-	public JDBCEntityConnector(String name)
-	{
+	public JDBCEntityConnector(String name) {
 		m_Name = name;
 		m_Classifiers = new TreeMap<String, JDBCEntityClassifier>();
 		m_Profiles = new TreeMap<String, JDBCProfileConnector>();
@@ -118,147 +115,133 @@ public class JDBCEntityConnector implements iEntityConnector, Serializable
 	}
 
 	// iEntityConnector interface
-	public  String getName()
-	{
+	public String getName() {
 		return m_Name;
 	}
 
-	public  String getDescription()
-	{
+	public String getDescription() {
 		return m_Description;
 	}
 
-	public void openConnections( Hashtable<String, Object> wpsparams) throws WPSConnectorException
-	{
+	public void openConnections(Hashtable<String, Object> wpsparams) throws WPSConnectorException {
 		m_Connection = m_ConnectionProfile.getConnection();
-		if( m_AffinityGroupReaders.size() > 0)
-		{
-			for( JDBCAffinityGroupReader j : m_AffinityGroupReaders.values())	
-			{
-				j.openConnections( wpsparams, m_Connection);
+		if (m_AffinityGroupReaders.size() > 0) {
+			for (JDBCAffinityGroupReader j : m_AffinityGroupReaders.values()) {
+				j.openConnections(wpsparams, m_Connection);
 			}
 		}
-		for( JDBCProfileConnector j : m_Profiles.values())
-		{
-			j.openConnections( wpsparams, m_Connection);
+		for (JDBCProfileConnector j : m_Profiles.values()) {
+			j.openConnections(wpsparams, m_Connection);
 		}
-		for( JDBCEntityClassifier j : m_Classifiers.values())
-		{
-			j.openConnections( wpsparams, m_Connection);
+		for (JDBCEntityClassifier j : m_Classifiers.values()) {
+			j.openConnections(wpsparams, m_Connection);
 		}
-		for( JDBCSelectionConnector j : m_Selections.values())
-		{
-			j.openConnections( wpsparams, m_Connection);
+		for (JDBCSelectionConnector j : m_Selections.values()) {
+			j.openConnections(wpsparams, m_Connection);
 		}
-		m_Properties.openConnections( wpsparams, m_Connection);
+		m_Properties.openConnections(wpsparams, m_Connection);
 		m_StockedProperties = new Hashtable();
 	}
 
-	public void closeConnections() throws WPSConnectorException
-	{
+	public void closeConnections() throws WPSConnectorException {
 		try {
 			Iterator it = null;
-			if( m_AffinityGroupReaders.size() > 0)
-			{
-				for( JDBCAffinityGroupReader j : m_AffinityGroupReaders.values())	
-				{
+			if (m_AffinityGroupReaders.size() > 0) {
+				for (JDBCAffinityGroupReader j : m_AffinityGroupReaders.values()) {
 					j.closeConnections();
 				}
 			}
-			for( JDBCProfileConnector j : m_Profiles.values())
-			{
+			for (JDBCProfileConnector j : m_Profiles.values()) {
 				j.closeConnections();
 			}
-			for( JDBCEntityClassifier j : m_Classifiers.values())
-			{
+			for (JDBCEntityClassifier j : m_Classifiers.values()) {
 				j.closeConnections();
 			}
-			for( JDBCSelectionConnector j : m_Selections.values())
-			{
+			for (JDBCSelectionConnector j : m_Selections.values()) {
 				j.closeConnections();
 			}
 			m_Properties.closeConnections();
 			m_StockedProperties = null;
 			m_Connection.close();
-		}
-		catch( SQLException e)
-		{
-			throw new WPSConnectorException( "JDBC connector can't close JDBCEntityConnector connection", e);
+		} catch (SQLException e) {
+			throw new WPSConnectorException("JDBC connector can't close JDBCEntityConnector connection", e);
 		}
 	}
 
-/**
-  * Load the entity properties (image, age, income, ...). */
-	public  Hashtable getProperties( String entityId ) throws WPSConnectorException
-	{
-		Hashtable table = ( Hashtable) m_StockedProperties.get( entityId);
-		if(table == null)
-		{
-			table = new Hashtable();
-			m_Properties.getProperties( table, entityId, true, null, null);
-			m_StockedProperties.put( entityId, table);
+	/**
+	 * Load the entity properties (image, age, income, ...).
+	 */
+	@Override
+	public Hashtable<String, Object> getProperties(String entityId) throws WPSConnectorException {
+		Hashtable<String, Object> table = (Hashtable<String, Object>) m_StockedProperties.get(entityId);
+		if (table == null) {
+			table = new Hashtable<String, Object>();
+			m_Properties.getProperties(table, entityId, true, null, null);
+			m_StockedProperties.put(entityId, table);
 		}
 		return table;
 	}
 
-   public iIdEnumerator getEnumerator() throws WPSConnectorException
-   {
-		JDBCEntityClassifier classifier = m_Classifiers.get( "<default>");
-		iClassifierRuleConnector rule = classifier.getRules().iterator().next(); // first and unique rule
+	@Override
+	public iEnumerator<String> getEnumerator() throws WPSConnectorException {
+		JDBCEntityClassifier classifier = m_Classifiers.get(WPSDictionary.DEFAULT_NAME);
+		iClassifierRuleConnector rule = classifier.getRules().iterator().next(); 
+		// first and unique rule
 		return rule.iterator();
-   }
+	}
 
-   public Collection getAffinityGroupReaders()
-   {
+	@Override
+	public Collection getAffinityGroupReaders() {
 		return m_AffinityGroupReaders.values();
-   }
-
-	public iAffinityGroupReader getAffinityGroupReader( String full_reader) throws WPSConnectorException
-	{
-		if( full_reader.indexOf( '=') == -1 && full_reader.indexOf( '&') == -1)
-			// Cas fr�quent : attributs homog�nes
-			return ( JDBCAffinityGroupReader) m_AffinityGroupReaders.get( full_reader);
-		// Attributes h�t�rog�nes
-		return MultiAffinityGroupReader.GetMultiAffinityGroupReader( this, full_reader);
 	}
 
-/**
-  * Retrieve a collection of interface iProfileConnector    */
-	public  Collection getProfiles()
-	{
-	  return m_Profiles.values();
+	@Override
+	public iAffinityGroupReader getAffinityGroupReader(String full_reader) throws WPSConnectorException {
+		if (full_reader.indexOf('=') == -1 && full_reader.indexOf('&') == -1) {
+			// Cas frequent : attributs homogenes
+			return (JDBCAffinityGroupReader) m_AffinityGroupReaders.get(full_reader);
+		}
+		// Attributes heterogenes
+		return MultiAffinityGroupReader.GetMultiAffinityGroupReader(this, full_reader);
 	}
 
-/*
-	full_profile = profile [&profile]*
-	profile = jdbcname[=prefix]
-	*/
-	public  iProfileConnector getProfile( String full_profile ) throws WPSConnectorException
-	{
-		if( full_profile.indexOf( '=') == -1 && full_profile.indexOf( '&') == -1)
-			// Cas fr�quent : attributs homog�nes
-			return ( JDBCProfileConnector) m_Profiles.get( full_profile);
-		// Attributes h�t�rog�nes
-		return MultiProfileConnector.getProfile( this, full_profile );
+	/**
+	 * Retrieve a collection of interface iProfileConnector
+	 */
+	@Override
+	public Collection getProfiles() {
+		return m_Profiles.values();
 	}
 
-	public Collection getClassifiers()
-	{
-	  return m_Classifiers.values();
+	/*
+	 * full_profile = profile [&profile]* profile = jdbcname[=prefix]
+	 */
+	@Override
+	public iProfileConnector getProfile(String full_profile) throws WPSConnectorException {
+		if (full_profile.indexOf('=') == -1 && full_profile.indexOf('&') == -1)
+			// Cas fréquent : attributs homogenes
+			return (JDBCProfileConnector) m_Profiles.get(full_profile);
+		// Attributes h�t�rogenes
+		return MultiProfileConnector.getProfile(this, full_profile);
 	}
 
-	public iClassifierConnector getClassifier( String classifier)
-	{
-	  return ( JDBCEntityClassifier) m_Classifiers.get( classifier);
+	@Override
+	public Collection getClassifiers() {
+		return m_Classifiers.values();
 	}
 
-	public Collection getSelections()
-	{
+	@Override
+	public iClassifierConnector getClassifier(String classifier) {
+		return (JDBCEntityClassifier) m_Classifiers.get(classifier);
+	}
+
+	@Override
+	public Collection getSelections() {
 		return m_Selections.values();
 	}
 
-	public iSelectionConnector getSelection( String selectionId)
-	{
-		return ( JDBCSelectionConnector) m_Selections.get( selectionId);
+	@Override
+	public iSelectionConnector getSelection(String selectionId) {
+		return (JDBCSelectionConnector) m_Selections.get(selectionId);
 	}
 }

@@ -7,6 +7,7 @@ import java.util.Iterator;
 import com.socialcomputing.wps.server.generator.RecommendationGroup;
 import com.socialcomputing.wps.server.plandictionary.AffinityReaderProfile;
 import com.socialcomputing.wps.server.plandictionary.AnalysisProfile;
+import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.utils.StringAndFloat;
 import com.socialcomputing.wps.server.webservices.PlanRequest;
@@ -82,13 +83,13 @@ public class RecommendationInterface
 				//   m_RecommendationProcess.precompute();
 			}
 
-			if (affinityProfile.m_ReaderRef.compareTo("<default>")==0)
+			if (affinityProfile.m_ReaderRef.equalsIgnoreCase( WPSDictionary.DEFAULT_NAME))
 				retVal.add( m_PlanRequest.m_entityId);
 
 			for (int i=0; i<m_entities.length; ++i)
-					{
-					retVal.add( m_entities[i].m_Id);
-					}
+			{
+				retVal.add( m_entities[i].m_Id);
+			}
 		}
 		return retVal;
 	}

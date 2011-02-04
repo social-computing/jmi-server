@@ -21,7 +21,7 @@ import com.socialcomputing.utils.database.iFastInsert;
 import com.socialcomputing.wps.server.plandictionary.FilteringProfile;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
-import com.socialcomputing.wps.server.plandictionary.connectors.iIdEnumerator;
+import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 import com.socialcomputing.wps.server.plandictionary.connectors.iProfileConnector;
 import com.socialcomputing.wps.server.utils.AttributesPonderationMap;
 import com.socialcomputing.wps.server.utils.MathLogBuffer;
@@ -37,7 +37,7 @@ public class AffinitySegment
 {
 	private WPSDictionary m_Dictionary=null;
 	private iProfileConnector m_Connector=null;
-	private iIdEnumerator m_Entities=null;
+	private iEnumerator<String> m_Entities=null;
 	private boolean m_InitializeProcess = true;
 	private List<String> m_EntitiesToUpdate=null;
 	private ObjectToNumConverter<ArrayList<String>> m_AttrConverter= new ObjectToNumConverter<ArrayList<String>>();
@@ -52,7 +52,7 @@ public class AffinitySegment
 
 	/**
 	* */
-	public  AffinitySegment( Connection connection, WPSDictionary dictionary, FilteringProfile filteringProfile, iIdEnumerator enumerator ) throws WPSConnectorException
+	public  AffinitySegment( Connection connection, WPSDictionary dictionary, FilteringProfile filteringProfile, iEnumerator<String> enumerator ) throws WPSConnectorException
 	{
 		m_DatabaseHelper = new DatabaseHelper( connection, false);
 		m_Dictionary=dictionary;
@@ -81,7 +81,7 @@ public class AffinitySegment
 	/**
 	*
 	*  */
-	public  AffinitySegment( Connection connection, WPSDictionary dictionary, FilteringProfile filteringProfile, iIdEnumerator enumerator, List<String> entitiesToUpdate) throws WPSConnectorException
+	public  AffinitySegment( Connection connection, WPSDictionary dictionary, FilteringProfile filteringProfile, iEnumerator<String> enumerator, List<String> entitiesToUpdate) throws WPSConnectorException
 	{
 		this( connection,  dictionary,  filteringProfile,  enumerator);
 		m_InitializeProcess = false;

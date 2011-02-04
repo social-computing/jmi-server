@@ -13,7 +13,7 @@ import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorExce
 import com.socialcomputing.wps.server.plandictionary.connectors.iAffinityGroupReader;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEntityConnector;
-import com.socialcomputing.wps.server.plandictionary.connectors.iIdEnumerator;
+import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 import com.socialcomputing.wps.server.plandictionary.connectors.iProfileConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iSelectionConnector;
 
@@ -32,7 +32,7 @@ public abstract class FileEntityConnector implements iEntityConnector
 	public void _readObject( org.jdom.Element element) {
 		m_Description = element.getChildText( "comment");
 		Element connection = element.getChild( "URL-connection");
-		m_fileUrl = connection.getAttributeValue( "url");
+		m_fileUrl = connection.getChildText( "url");
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public abstract class FileEntityConnector implements iEntityConnector
 	@Override
 	public void openConnections(Hashtable<String, Object> wpsparams) throws WPSConnectorException {
 		m_WPSParams = wpsparams;
-		// Traitement des variables de l'url, POST ou GET des paramètres....
+		// TODO Traitement des variables de l'url, POST ou GET des paramètres....
 		try {
 			URL url = new URL( m_fileUrl);
 			URLConnection connection = url.openConnection(); 
@@ -80,7 +80,7 @@ public abstract class FileEntityConnector implements iEntityConnector
 	}
 
 	@Override
-	public iIdEnumerator getEnumerator() throws WPSConnectorException {
+	public iEnumerator<String> getEnumerator() throws WPSConnectorException {
 		// TODO Auto-generated method stub
 		return null;
 	}

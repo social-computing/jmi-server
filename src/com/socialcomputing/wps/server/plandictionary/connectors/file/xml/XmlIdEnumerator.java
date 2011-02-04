@@ -1,9 +1,8 @@
 package com.socialcomputing.wps.server.plandictionary.connectors.file.xml;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.*;
-//import java.io.*;
-import java.util.*;
-import org.jdom.*;
+import java.util.List;
+
+import org.jdom.Element;
 
 /**
  * <p>Title: WPS Connectors</p>
@@ -14,44 +13,19 @@ import org.jdom.*;
  * @version 1.0
  */
 
-public class XmlIdEnumerator implements iIdEnumerator
+public class XmlIdEnumerator extends XmlEnumerator<String>
 {
 	private String m_IdAttribute = null;
-	private List m_lst = null;
-	private int m_size = 0;
-	private int m_index = 0;
 
-	public XmlIdEnumerator( List lst, String idAttribute)
+	public XmlIdEnumerator( List<Element> lst, String idAttribute)
 	{
-		m_lst = lst;
-		m_size = lst.size();
+		super( lst);
 		m_IdAttribute = idAttribute;
 	}
 
-	public void reset()
-	{
-		m_index = 0;
-	}
-
 	@Override
-	public iIdEnumerator iterator() {
-		return this;
-	}
-	
-	@Override
-	public String next()
-	{
-		Element e = ( Element) m_lst.get( m_index++);
+	public String getItem() {
+		Element e = m_lst.get( m_index++);
 		return e.getAttributeValue( m_IdAttribute);
-	}
-
-	@Override
-	public boolean hasNext()
-	{
-		return m_index < m_size;
-	}
-
-	@Override
-	public void remove() {
 	}
 }

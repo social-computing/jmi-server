@@ -13,10 +13,10 @@ import com.socialcomputing.wps.server.plandictionary.AnalysisProfile;
 import com.socialcomputing.wps.server.plandictionary.connectors.AttributeEnumeratorItem;
 import com.socialcomputing.wps.server.plandictionary.connectors.SubAttributeEnumeratorItem;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
-import com.socialcomputing.wps.server.plandictionary.connectors.iAttributeEnumerator;
+import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 import com.socialcomputing.wps.server.plandictionary.connectors.iProfileConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iSubAttributeConnector;
-import com.socialcomputing.wps.server.plandictionary.connectors.iSubAttributeEnumerator;
+import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 import com.socialcomputing.wps.server.utils.AttributesPonderationMap;
 import com.socialcomputing.wps.server.utils.MathLogBuffer;
 import com.socialcomputing.wps.server.utils.NumAndFloat;
@@ -81,23 +81,14 @@ public class RecommendationProcess {
 
 		Collection<String> saColl = new ArrayList<String>();
 		Collection<String> aColl = new ArrayList<String>();
-		if (m_PlanRequest.getAnalysisProfile().m_planType != AnalysisProfile.DISCOVERY_PLAN) { // Read
-																								// attributes
-																								// of
-																								// m_RefEntity
-																								// and
-																								// store
-																								// in
-																								// m_RefSAttributes
-																								// and
-																								// sort
-			iAttributeEnumerator aEnum = m_ProfileCon
-					.getEnumerator(m_RefEntity);
+		if (m_PlanRequest.getAnalysisProfile().m_planType != AnalysisProfile.DISCOVERY_PLAN) { 
+			// Read attributes of m_RefEntity and store in m_RefSAttributes and sort
+			iEnumerator<AttributeEnumeratorItem> aEnum = m_ProfileCon.getEnumerator( m_RefEntity);
 			for (AttributeEnumeratorItem aItem : aEnum) {
 				aColl.add(aItem.m_Id);
 				iSubAttributeConnector saCon = m_ProfileCon.getSubAttribute();
 				if (saCon != null) {
-					iSubAttributeEnumerator saEnum = saCon.getEnumerator(
+					iEnumerator<SubAttributeEnumeratorItem> saEnum = saCon.getEnumerator(
 							m_RefEntity, aItem.m_Id);
 					if (saEnum != null) {
 						for( SubAttributeEnumeratorItem saItem : saEnum) {
@@ -140,8 +131,7 @@ public class RecommendationProcess {
 		while (it.hasNext()) {
 			eId = (String) ((Map.Entry) it.next()).getKey();
 
-			for (AttributeEnumeratorItem aItem : m_ProfileCon
-					.getEnumerator(eId)) {
+			for (AttributeEnumeratorItem aItem : m_ProfileCon.getEnumerator(eId)) {
 				aNum = 0;
 				// For all specified attributes
 				if ((aNum = Arrays.binarySearch(attributes, aItem.m_Id)) >= 0) {

@@ -38,32 +38,30 @@ public class PlanRequest
 	 * "displayProfile" : force the display profile
 	 * "appletSize" : dimension of the Applet ( ex: "appletSize=300,400")
 	 */
-	private Hashtable           m_RequestParameters = null;
-	//private SwatchLoaderHome    m_SwatchLoaderHome = null;
-	private Hashtable           m_LoadedSwatch = null;
-	private AnalysisProfile        m_AnalysisProfile = null;
-	private AffinityReaderProfile  m_AffinityReaderProfile = null;
-	private Model                  m_Model = null; // display profile
+	private Hashtable           		m_RequestParameters = null;
+	private Hashtable<String, XSwatch>	m_LoadedSwatch = null;
+	private AnalysisProfile        		m_AnalysisProfile = null;
+	private AffinityReaderProfile  		m_AffinityReaderProfile = null;
+	private Model                  		m_Model = null; // display profile
 
 	public WPSDictionary m_Dictionary = null;
 
 	// Identifiant de l'entit� du plan personnel
 	public String m_entityId = null;
-	// Identifiant de l'attribut du plan de d�couverte
+	// Identifiant de l'attribut du plan de découverte
 	public String m_discoveryAttributeId = null;
-	// Identit� de segmentation
+	// Identitede segmentation
 	public RequestingClassifyId m_classifyId = null;
 
 	public PlanRequest( Connection WPSConnection, WPSDictionary dico, Hashtable parameters ) throws WPSConnectorException
 	{
-		//m_SwatchLoaderHome = swatchLoaderHome;
-		m_LoadedSwatch = new Hashtable();
+		m_LoadedSwatch = new Hashtable<String, XSwatch>();
 		m_Dictionary = dico;
 		m_RequestParameters = parameters;
 		m_entityId = this.getParameter( "entityId");
 		m_classifyId = new RequestingClassifyId( this.getParameter( "classifyId") != null ? this.getParameter( "classifyId") : m_entityId);
 
-		{   // Initialisation des AffinityReader par d�fauts (built-in)
+		{   // Initialisation des AffinityReader par defauts (built-in)
 			Iterator it = m_Dictionary.m_AffinityReaderProfiles.values().iterator();
 			while( it.hasNext())
 			{
@@ -543,7 +541,7 @@ public class PlanRequest
 
 			case XSwatch.LINK_TYP:
 				 swatchName = model.getLinkSwatch( m_classifyId, style );
-				 if ( style > 1 && swatchName.equals( "<default>" ))    return null;
+				 if ( style > 1 && swatchName.equals(  WPSDictionary.DEFAULT_NAME ))    return null;
 				 break;
 
 			case XSwatch.CLUS_TYP:
@@ -574,7 +572,7 @@ public class PlanRequest
 
 		if ( swatchName != null )
 		{
-			swatch = (XSwatch)m_LoadedSwatch.get( swatchName );
+			swatch = m_LoadedSwatch.get( swatchName );
 
 			if( swatch == null )
 			{

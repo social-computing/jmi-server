@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 
+import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierRuleConnector;
@@ -39,12 +40,12 @@ public class JDBCEntityClassifier implements iClassifierConnector, Serializable
 		cl.m_UseEntityConnection = (cl.m_ConnectionProfile == null) ? true : false;
 
 		if( cl.m_Name == null)
-		{   // Classifier par d�faut : tous les �l�ments : Une seule r�gle avec une requ�te pour tout s�lectionner
-			cl.m_Name = "<default>";
+		{   // Classifier par défaut : tous les éléments : Une seule regle avec une requete pour tout sélectionner
+			cl.m_Name =  WPSDictionary.DEFAULT_NAME;
 			cl.m_Description = "Default classifier";
 
 			JDBCRuleConnector rule = JDBCRuleConnector.readObject( element);
-			rule.m_Name = "<default>";
+			rule.m_Name =  WPSDictionary.DEFAULT_NAME;
 			rule.m_Description = "Default classifier";
 			cl.m_Rules.put( rule.m_Name, rule);
 		}
@@ -134,7 +135,7 @@ public class JDBCEntityClassifier implements iClassifierConnector, Serializable
 			throw new WPSConnectorException( "JDBCEntityClassifier failed to set getClassification, id is null");
 
 		// Default
-		if( m_Name.equalsIgnoreCase( "<default>"))
+		if( m_Name.equalsIgnoreCase(  WPSDictionary.DEFAULT_NAME))
 			return m_Name;
 
 		ResultSet rs = null;
@@ -151,6 +152,6 @@ public class JDBCEntityClassifier implements iClassifierConnector, Serializable
 			}
 			catch( SQLException e) { }
 		}
-		return "<default>";
+		return  WPSDictionary.DEFAULT_NAME;
 	}
 }

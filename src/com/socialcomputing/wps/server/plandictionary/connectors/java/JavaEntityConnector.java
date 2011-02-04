@@ -9,7 +9,7 @@ import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorExce
 import com.socialcomputing.wps.server.plandictionary.connectors.iAffinityGroupReader;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEntityConnector;
-import com.socialcomputing.wps.server.plandictionary.connectors.iIdEnumerator;
+import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 import com.socialcomputing.wps.server.plandictionary.connectors.iProfileConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iSelectionConnector;
 
@@ -124,7 +124,7 @@ public class JavaEntityConnector implements iEntityConnector, Serializable
 		return m_PlanData.getEntity( entityId).getProperties();
 	}
 
-   public iIdEnumerator getEnumerator()
+   public iEnumerator<String> getEnumerator()
    {
 		JavaIdEnumerator enumvar = new JavaIdEnumerator( m_PlanData.getEntities());
 		return enumvar;

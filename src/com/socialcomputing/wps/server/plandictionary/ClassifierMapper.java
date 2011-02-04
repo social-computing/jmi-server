@@ -20,13 +20,13 @@ public class ClassifierMapper implements java.io.Serializable
 {
 	static final long serialVersionUID = 161215646546417774L;
 
-	public String m_ClassifierName = "<default>";
+	public String m_ClassifierName =  WPSDictionary.DEFAULT_NAME;
 	public String m_Description = null;
 
 	/**
 	* The classifier association map (for ech rule of iClassifierConnector) */
 	private Hashtable m_ClassifierData = null;
-	private String m_DefaultClassifierData = "<default>";
+	private String m_DefaultClassifierData =  WPSDictionary.DEFAULT_NAME;
 
 	static public ClassifierMapper readObject( org.jdom.Element element)
 	{
@@ -91,7 +91,7 @@ public class ClassifierMapper implements java.io.Serializable
 
 	public String getAssociatedName( iEntityConnector entityConnector, RequestingClassifyId classifyId)  throws WPSConnectorException
 	{
-		if( m_ClassifierName.equals( "<default>")) // No segmentation
+		if( m_ClassifierName.equals(  WPSDictionary.DEFAULT_NAME)) // No segmentation
 			return m_DefaultClassifierData;
 
 		String result = ( String) classifyId.m_ClassifiersResults.get( m_ClassifierName);
@@ -109,7 +109,7 @@ public class ClassifierMapper implements java.io.Serializable
 
 	public String getAssociatedName( String classifyName )
 	{
-		if( classifyName.equals( "<default>")) // No segmentation
+		if( classifyName.equals(  WPSDictionary.DEFAULT_NAME)) // No segmentation
 			return m_DefaultClassifierData;
 
 		String result;
@@ -176,7 +176,7 @@ public class ClassifierMapper implements java.io.Serializable
 	// Check classifiers integrity
 	private void checkIntegrity( String m, iEntityConnector entities) throws org.jdom.JDOMException, WPSConnectorException
 	{
-		if( m_ClassifierName.equals( "<default>")) // No segmentation
+		if( m_ClassifierName.equals(  WPSDictionary.DEFAULT_NAME)) // No segmentation
 			return;
 		if(  entities.getClassifier( m_ClassifierName) == null)
 			throw new org.jdom.JDOMException( m + "Unknown Classifier '" + m_ClassifierName + "'");

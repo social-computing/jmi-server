@@ -7,7 +7,7 @@ import java.util.TreeMap;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.AttributeEnumeratorItem;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
-import com.socialcomputing.wps.server.plandictionary.connectors.iAttributeEnumerator;
+import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 /**
   *  describes a Map which permits to store (attributeId/ponderation) and to compute set fonctions
   * Key is attribute identifier (Numerical)
@@ -24,7 +24,7 @@ public class AttributesPonderationMap extends TreeMap<Integer, Float>
 
 	private static float m_PondMax=-1;
 
-	public   AttributesPonderationMap( iAttributeEnumerator enumerator, StringToNumConverter converter ) throws WPSConnectorException
+	public   AttributesPonderationMap( iEnumerator<AttributeEnumeratorItem> enumerator, StringToNumConverter converter ) throws WPSConnectorException
 	{
 		m_Converter = converter;
 		for( AttributeEnumeratorItem item : enumerator)
@@ -37,7 +37,7 @@ public class AttributesPonderationMap extends TreeMap<Integer, Float>
 		}
 	}
 
-	public   AttributesPonderationMap( iAttributeEnumerator enumerator, ObjectToNumConverter<ArrayList<String>> converter, String objectId ) throws WPSConnectorException
+	public   AttributesPonderationMap( iEnumerator<AttributeEnumeratorItem> enumerator, ObjectToNumConverter<ArrayList<String>> converter, String objectId ) throws WPSConnectorException
 	{
 		m_Converter = converter;
 		for( AttributeEnumeratorItem item : enumerator)

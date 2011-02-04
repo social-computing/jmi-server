@@ -11,8 +11,8 @@ import java.util.Set;
 import com.socialcomputing.wps.server.plandictionary.connectors.AttributeEnumeratorItem;
 import com.socialcomputing.wps.server.plandictionary.connectors.SubAttributeEnumeratorItem;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
-import com.socialcomputing.wps.server.plandictionary.connectors.iAttributeEnumerator;
-import com.socialcomputing.wps.server.plandictionary.connectors.iIdEnumerator;
+import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
+import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 import com.socialcomputing.wps.server.plandictionary.connectors.iProfileConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iSelectionConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iSubAttributeConnector;
@@ -53,7 +53,7 @@ public class JavaProfileConnector implements iProfileConnector, Serializable
 		return m_SubAttributeConnector.openConnections( planData);
 	}
 
-	public iAttributeEnumerator getEnumerator( String entityId ) throws WPSConnectorException
+	public iEnumerator getEnumerator( String entityId ) throws WPSConnectorException
 	{
 		return new JavaAttributeEnumerator( m_planData.getEntityLinks( entityId));
 	}
@@ -63,7 +63,7 @@ public class JavaProfileConnector implements iProfileConnector, Serializable
 		return m_planData.getAttribute( attributeId).getAnalysisProperties();
 	}
 
-	public iIdEnumerator getExclusionEnumerator( String entityId)
+	public iEnumerator<String> getExclusionEnumerator( String entityId)
 	{
 		return new JavaIdEnumerator( new Hashtable()); // Pas d'exclusions
 	}
@@ -114,7 +114,7 @@ public class JavaProfileConnector implements iProfileConnector, Serializable
 	}
 
 	// INNER CLASS	JavaAttributeEnumerator
-	public class JavaAttributeEnumerator implements iAttributeEnumerator
+	public class JavaAttributeEnumerator implements iEnumerator
 	{
 		private ArrayList<AttributeEnumeratorItem> m_links = null;
 		private int i = 0, max = 0;

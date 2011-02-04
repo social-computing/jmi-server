@@ -5,9 +5,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Hashtable;
 
+import com.socialcomputing.wps.server.plandictionary.connectors.SubAttributeEnumeratorItem;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iSubAttributeConnector;
-import com.socialcomputing.wps.server.plandictionary.connectors.iSubAttributeEnumerator;
+import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 
 public class JDBCSubAttributeConnector implements iSubAttributeConnector, Serializable
 {
@@ -25,7 +26,7 @@ public class JDBCSubAttributeConnector implements iSubAttributeConnector, Serial
 	/**
 	* The SQL query retrieving sub attributes for an entity attribute (multiple rows).
 	*
-	* Used for implementing iSubAttributeEnumerator.
+	* Used for implementing iEnumerator<SubAttributeEnumeratorItem>.
 	*
 	* Sample:
 	* select PRODUCT_ID, PRODUCT_NAME from PRODUCTS, SELLS group by PRODUCT_ID where user = ?;
@@ -97,7 +98,7 @@ public class JDBCSubAttributeConnector implements iSubAttributeConnector, Serial
 		return m_Description;
 	}
 
-	public iSubAttributeEnumerator getEnumerator( String entity, String attribute)  throws WPSConnectorException
+	public iEnumerator<SubAttributeEnumeratorItem> getEnumerator( String entity, String attribute)  throws WPSConnectorException
 	{
 		if( entity == null)
 			throw new WPSConnectorException( "JDBCSubAttributeConnector failed to set getEnumerator, entity is null");
@@ -114,9 +115,9 @@ public class JDBCSubAttributeConnector implements iSubAttributeConnector, Serial
 		}
 	}
 
-	public Hashtable getProperties( String subAttributeId, String attributeId, String entityId ) throws WPSConnectorException
+	public Hashtable<String, Object> getProperties( String subAttributeId, String attributeId, String entityId ) throws WPSConnectorException
 	{
-		Hashtable table = new Hashtable();
+		Hashtable<String, Object> table = new Hashtable<String, Object>();
 		if( m_Properties != null)
 			m_Properties.getProperties( table, subAttributeId, true, attributeId, entityId);
 		return table;

@@ -17,17 +17,17 @@ public interface iEntityConnector
   * Load the entity properties (image, age, income, ...). */
    public abstract  Hashtable<String, Object> getProperties( String entityId ) throws WPSConnectorException;
 
-   public abstract  iIdEnumerator getEnumerator() throws WPSConnectorException;
+   public abstract  iEnumerator<String> getEnumerator() throws WPSConnectorException;
 
 /**
   * Retrieve a collection of interface iAffinityGroupReader    */
-   public abstract  Collection<iAffinityGroupReader> getAffinityGroupReaders(  ) throws WPSConnectorException;
+   public abstract  Collection getAffinityGroupReaders() throws WPSConnectorException;
 
    public abstract  iAffinityGroupReader getAffinityGroupReader( String affGrpReader ) throws WPSConnectorException;
 
 /**
   * Retrieve a collection of interface iProfileConnector    */
-   public abstract  Collection<iProfileConnector> getProfiles(  ) throws WPSConnectorException;
+   public abstract  Collection getProfiles() throws WPSConnectorException;
 
    public abstract  iProfileConnector getProfile( String profile ) throws WPSConnectorException;
 

@@ -93,21 +93,13 @@ public class DictionaryManagerImpl implements DictionaryManager {
 	}
 	
 	@Override
-	public void update( Dictionary dl) {
+	public void update( Dictionary dictionary) {
 		Session session = null;
 		Transaction tx = null;
 		try {
 			session = HibernateUtil.currentSession();
 			tx = session.beginTransaction();
-			Dictionary d = (Dictionary) session.get(DictionaryImpl.class, dl.getName());
-			d.setDefinition(dl.getDefinition());
-			String date =  "";
-			try {
-				date = dl.getNextFilteringDate().toString();
-			} catch (RuntimeException e) {
-				
-			}
-			d.setFilteringdate(date);
+			session.update( dictionary);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
