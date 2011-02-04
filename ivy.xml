@@ -9,5 +9,6 @@
         </dependency>
         <dependency org="javassist" name="javassist" rev="3.4.GA" />
         <dependency org="ch.qos.logback" name="logback-classic"	rev="0.9.27" />
+        <dependency org="junit" name="junit" rev="4.8"/>
     </dependencies>
 </ivy-module>
