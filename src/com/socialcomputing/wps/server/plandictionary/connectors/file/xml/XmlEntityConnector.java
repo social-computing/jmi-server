@@ -1,8 +1,10 @@
 package com.socialcomputing.wps.server.plandictionary.connectors.file.xml;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Set;
 
 import org.jdom.Element;
@@ -10,7 +12,7 @@ import org.jdom.Element;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iAffinityGroupReader;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierConnector;
-import com.socialcomputing.wps.server.plandictionary.connectors.iIdEnumerator;
+import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 import com.socialcomputing.wps.server.plandictionary.connectors.iProfileConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iSelectionConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.file.FileEntityConnector;
@@ -35,15 +37,26 @@ import com.socialcomputing.wps.server.plandictionary.connectors.file.FileEntityC
 
 public class XmlEntityConnector extends FileEntityConnector {
 	protected	Element m_Root = null;
-	protected	String entityId = null, attributeId = null;
+	protected	String m_EntityId = null, m_EntityMarkup = null, m_AttributeId = null, m_AttributeMarkup = null;
 	protected 	Set<String> entityProperties = new HashSet<String>();
 	protected 	Set<String> attributeProperties = new HashSet<String>();
+	protected 	List<XmlAffinityGroupReader> 	affinityGroupReaders = new ArrayList<XmlAffinityGroupReader>();
+	protected 	List<XmlProfileConnector> 		profileConnectors = new ArrayList<XmlProfileConnector>();
 	
 	static XmlEntityConnector readObject(org.jdom.Element element) {
-		XmlEntityConnector connector = new XmlEntityConnector(element.getAttributeValue("name"));
-		connector._readObject(element);
+		XmlEntityConnector connector = new XmlEntityConnector( element.getAttributeValue("name"));
+		connector._readObject( element);
 		
-		
+		Element entity = element.getChild( "XML-entity");
+		connector.m_EntityMarkup = entity.getAttributeValue( "markup");
+		connector.m_EntityId = entity.getAttributeValue( "id");
+
+		Element attribute = element.getChild( "XML-attribute");
+		connector.m_AttributeMarkup = attribute.getAttributeValue( "markup");
+		connector.m_AttributeId = attribute.getAttributeValue( "id");
+	
+		connector.affinityGroupReaders.add( XmlAffinityGroupReader.readObject( element));
+		connector.profileConnectors.add( XmlProfileConnector.readObject( element));
 		return connector;
 	}
 
@@ -60,11 +73,18 @@ public class XmlEntityConnector extends FileEntityConnector {
 			m_Root = doc.getRootElement();
 		} catch (Exception e) {
 		}
+		List<Element> entities = m_Root.getChildren( m_EntityMarkup);
+		for( XmlAffinityGroupReader affinityGroupReader : affinityGroupReaders) {
+			affinityGroupReader.openConnections( wpsparams, m_EntityId, entities); 
+		}
 	}
 
 	@Override
 	public void closeConnections() throws WPSConnectorException {
 		super.closeConnections();
+		for( XmlAffinityGroupReader affinityGroupReader : affinityGroupReaders) {
+			affinityGroupReader.closeConnections();
+		}
 	}
 
 	/**
@@ -77,29 +97,29 @@ public class XmlEntityConnector extends FileEntityConnector {
 	}
 
 	@Override
-	public iIdEnumerator getEnumerator() {
+	public iEnumerator<String> getEnumerator() {
 		XmlIdEnumerator enumvar = new XmlIdEnumerator( m_Root.getChildren("o1"), "id");
 		return enumvar;
 	}
 
 	@Override
-	public Collection<iAffinityGroupReader> getAffinityGroupReaders() {
-		return null;
+	public Collection getAffinityGroupReaders() {
+		return affinityGroupReaders;
 	}
 
 	@Override
 	public iAffinityGroupReader getAffinityGroupReader(String affGrpReader) {
-		return null;
+		return affinityGroupReaders.get( 0);
 	}
 
 	@Override
-	public Collection<iProfileConnector> getProfiles() {
-		return null;
+	public Collection getProfiles() {
+		return profileConnectors;
 	}
 
 	@Override
 	public iProfileConnector getProfile(String profile) {
-		return null;
+		return profileConnectors.get( 0);
 	}
 
 	@Override

@@ -375,7 +375,7 @@ public class PlanGenerator {
 				protoPlan = preGenerate(planPrm);
 				protoPlan.degenerate();
 			} else {
-				iIdEnumerator enumerator = testNet ? getNetEnumerator() : null;
+				iEnumerator<String> enumerator = testNet ? getNetEnumerator() : null;
 
 				do {
 					timer.reset();
@@ -412,7 +412,7 @@ public class PlanGenerator {
 		}
 	}
 
-	private static iIdEnumerator getNetEnumerator()
+	private static iEnumerator<String> getNetEnumerator()
 			throws com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException {
 		WPSDictionary dico = WPSDictionaryTest.CreateTestInstance("Boosol");
 		dico.openConnections(null);

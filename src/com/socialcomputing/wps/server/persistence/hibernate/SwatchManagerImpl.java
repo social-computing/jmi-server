@@ -2,6 +2,7 @@ package com.socialcomputing.wps.server.persistence.hibernate;
 
 import java.util.Collection;
 
+import org.apache.commons.collections.functors.SwitchTransformer;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -75,8 +76,7 @@ public class SwatchManagerImpl implements SwatchManager {
 		try {
 			session = HibernateUtil.currentSession();
 			tx = session.beginTransaction();
-			Swatch s = (Swatch) session.get(Swatch.class, swatch.getName());
-			s.setDefinition( swatch.getDefinition());
+			session.update( swatch);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

@@ -16,7 +16,7 @@ import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierRuleConnector;
-import com.socialcomputing.wps.server.plandictionary.connectors.iIdEnumerator;
+import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 
 /**
   * describes object which computes affinity coef in background
@@ -108,7 +108,7 @@ public class AffinityProcess
 		if( ruleConnector == null) return new ArrayList<String>(); // id(s) has been destroyed or data error
 
 		FilteringProfile    filterProf = m_Dictionary.getFilteringProfile( ruleConnector.getName());
-		iIdEnumerator	 	entityEnum = ruleConnector.iterator();
+		iEnumerator<String>	 	entityEnum = ruleConnector.iterator();
 
 		AffinitySegment seg = null;
 		if ( update == null)

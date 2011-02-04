@@ -46,8 +46,7 @@ public class BeanPlanMaker implements PlanMaker {
 	}
 
 	@Override
-	public Hashtable<String, Object> createPlan(Hashtable<String, Object> params)
-			throws RemoteException {
+	public Hashtable<String, Object> createPlan(Hashtable<String, Object> params) throws RemoteException {
 		Hashtable<String, Object> result = new Hashtable<String, Object>();
 		try {
 			EZTimer timer = new EZTimer();
@@ -58,10 +57,8 @@ public class BeanPlanMaker implements PlanMaker {
 			PlanContainer planContainer = _createPlan(params, result);
 			if (planContainer.m_env != null) {
 				if (mime.equals("application/octet-stream")) {
-					ByteArrayOutputStream bout = new ByteArrayOutputStream(
-							32768);
-					ObjectOutputStream objectOutStream = new ObjectOutputStream(
-							new GZIPOutputStream(bout));
+					ByteArrayOutputStream bout = new ByteArrayOutputStream(32768);
+					ObjectOutputStream objectOutStream = new ObjectOutputStream(new GZIPOutputStream(bout));
 					objectOutStream.writeObject(planContainer.m_env);
 					objectOutStream.writeObject(planContainer.m_plan);
 					objectOutStream.close();
@@ -79,13 +76,13 @@ public class BeanPlanMaker implements PlanMaker {
 			timer.showElapsedTime("ALL STEPS");
 			return result;
 		} catch (Exception e) {
-			throw new RemoteException("WPS can't create plan "
-					+ (String) params.get("planName") + " : " + e.getMessage());
+			throw new RemoteException("WPS can't create plan " + (String) params.get("planName") + " : "
+					+ e.getMessage());
 		}
 	}
 
-	private PlanContainer _createPlan(Hashtable<String, Object> params,
-			Hashtable<String, Object> results) throws RemoteException {
+	private PlanContainer _createPlan(Hashtable<String, Object> params, Hashtable<String, Object> results)
+			throws RemoteException {
 		int status = Steps.PlanMakerStarted;
 		boolean isVisual = false;
 		Connection connection = null;
@@ -144,14 +141,12 @@ public class BeanPlanMaker implements PlanMaker {
 			status = Steps.DictionaryOpened;
 
 			// AFFINITY GROUP RETRIEVAL
-			RecommendationInterface affinity = new RecommendationInterface(
-					planRequest);
+			RecommendationInterface affinity = new RecommendationInterface(planRequest);
 			Collection<String> affinityGroup = affinity.retrieveAffinityGroup();
 			status = Steps.AffinityGroupComputed;
 
 			// ANALYSIS MOTOR
-			AnalysisProcess analysisEngine = new AnalysisProcess(planRequest,
-					affinityGroup, affinity);
+			AnalysisProcess analysisEngine = new AnalysisProcess(planRequest, affinityGroup, affinity);
 			ProtoPlan proto = analysisEngine.getProtoPlan();
 			status = Steps.AnalysisPassed;
 
@@ -160,19 +155,15 @@ public class BeanPlanMaker implements PlanMaker {
 			planGenerator.generatePlan(proto, isVisual);
 			status = Steps.PlanGenerated;
 
-			container = new PlanContainer(planGenerator.getEnv(),
-					planGenerator.getPlan());
+			container = new PlanContainer(planGenerator.getEnv(), planGenerator.getPlan());
 			container.m_protoPlan = proto;
 
-			recordPlanCreationInHistory(connection, name,
-					planRequest.getAnalysisProfile().m_planType,
-					planRequest.m_entityId, params, useragent,
-					System.currentTimeMillis() - startTime);
+			recordPlanCreationInHistory(connection, name, planRequest.getAnalysisProfile().m_planType,
+					planRequest.m_entityId, params, useragent, System.currentTimeMillis() - startTime);
 		} catch (Exception e) {
 			e.printStackTrace();
-			recordPlanCreationInHistory(connection, name, null, null, params,
-					useragent, System.currentTimeMillis() - startTime, status,
-					e.getMessage());
+			recordPlanCreationInHistory(connection, name, null, null, params, useragent, System.currentTimeMillis()
+					- startTime, status, e.getMessage());
 			throw new RemoteException(e.getMessage());
 		} finally {
 			try {
@@ -187,8 +178,7 @@ public class BeanPlanMaker implements PlanMaker {
 		return container;
 	}
 
-	private void recordPlanCreationInHistory(Connection connection,
-			String plan, int type, String user,
+	private void recordPlanCreationInHistory(Connection connection, String plan, int type, String user,
 			Hashtable<String, Object> params, String useragent, long duration) {
 		String stype = null;
 		switch (type) {
@@ -202,14 +192,11 @@ public class BeanPlanMaker implements PlanMaker {
 			stype = "PERSONAL";
 			break;
 		}
-		recordPlanCreationInHistory(connection, plan, stype, user, params,
-				useragent, duration, 0, "");
+		recordPlanCreationInHistory(connection, plan, stype, user, params, useragent, duration, 0, "");
 	}
 
-	private void recordPlanCreationInHistory(Connection connection,
-			String plan, String type, String user,
-			Hashtable<String, Object> params, String useragent, long duration,
-			int status, String info) {
+	private void recordPlanCreationInHistory(Connection connection, String plan, String type, String user,
+			Hashtable<String, Object> params, String useragent, long duration, int status, String info) {
 		try {
 			InetAddress local = InetAddress.getLocalHost();
 			PreparedStatement st = null;
@@ -240,8 +227,7 @@ public class BeanPlanMaker implements PlanMaker {
 				st.setLong(4, duration);
 				st.setString(5, local.getHostAddress());
 				st.setString(6, params.toString());
-				st.setString(7, ((info == null) ? "No information available"
-						: info));
+				st.setString(7, ((info == null) ? "No information available" : info));
 				st.setString(8, ((useragent == null) ? "" : useragent));
 				st.executeUpdate();
 				st.close();
@@ -256,11 +242,9 @@ public class BeanPlanMaker implements PlanMaker {
 		if (m_DataSource == null) {
 			try {
 				Context context = new InitialContext();
-				m_DataSource = (DataSource) context
-						.lookup("java:comp/env/jdbc/WPSPooledDS");
+				m_DataSource = (DataSource) context.lookup("java:comp/env/jdbc/WPSPooledDS");
 			} catch (NamingException e) {
-				throw new RemoteException("Could not obtain WPS DataSource: "
-						+ e.getMessage());
+				throw new RemoteException("Could not obtain WPS DataSource: " + e.getMessage());
 			}
 		}
 		Connection connection = m_DataSource.getConnection();

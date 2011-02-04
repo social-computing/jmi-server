@@ -3,7 +3,7 @@ package com.socialcomputing.wps.server.plandictionary.connectors.java;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.iIdEnumerator;
+import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 
 /**
  * <p>Title: WPS Connectors</p>
@@ -14,7 +14,7 @@ import com.socialcomputing.wps.server.plandictionary.connectors.iIdEnumerator;
  * @version 1.0
  */
 
-public class JavaIdEnumerator implements iIdEnumerator
+public class JavaIdEnumerator implements iEnumerator<String>
 {
 	private Enumeration<String> m_enum = null;
 
@@ -28,7 +28,7 @@ public class JavaIdEnumerator implements iIdEnumerator
 	}
 
 	@Override
-	public iIdEnumerator iterator() {
+	public iEnumerator<String> iterator() {
 		return this;
 	}
 	

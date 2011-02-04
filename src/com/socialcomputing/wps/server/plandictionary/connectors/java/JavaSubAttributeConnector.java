@@ -7,7 +7,7 @@ import java.util.Iterator;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.SubAttributeEnumeratorItem;
 import com.socialcomputing.wps.server.plandictionary.connectors.iSubAttributeConnector;
-import com.socialcomputing.wps.server.plandictionary.connectors.iSubAttributeEnumerator;
+import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 
 public class JavaSubAttributeConnector implements iSubAttributeConnector, Serializable
 {
@@ -41,7 +41,7 @@ public class JavaSubAttributeConnector implements iSubAttributeConnector, Serial
 		return s_Description;
 	}
 
-	public iSubAttributeEnumerator getEnumerator( String entity, String attribute)
+	public iEnumerator<SubAttributeEnumeratorItem> getEnumerator( String entity, String attribute)
 	{
 		return new JavaSubAttributeEnumerator( m_planData.getAttribute( attribute).getSubAttributes());
 	}
@@ -52,7 +52,7 @@ public class JavaSubAttributeConnector implements iSubAttributeConnector, Serial
 	}
 
 	// INNER CLASS	JavaSubAttributeEnumerator
-	public class JavaSubAttributeEnumerator implements iSubAttributeEnumerator
+	public class JavaSubAttributeEnumerator implements iEnumerator<SubAttributeEnumeratorItem>
 	{
 		private ArrayList<SubAttributeEnumeratorItem> m_links = null;
 		private int i = 0, max = 0;

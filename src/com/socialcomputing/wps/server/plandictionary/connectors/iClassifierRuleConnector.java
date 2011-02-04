@@ -5,5 +5,5 @@ public interface iClassifierRuleConnector extends Iterable<String>
    public abstract  String getName(  );
    public abstract  String getDescription(  );
    @Override
-   public abstract iIdEnumerator iterator();
+   public abstract iEnumerator<String> iterator();
 }

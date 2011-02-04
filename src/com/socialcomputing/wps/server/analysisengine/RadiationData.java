@@ -13,7 +13,7 @@ import com.socialcomputing.wps.server.plandictionary.AnalysisProfile;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.wps.server.plandictionary.connectors.AttributeEnumeratorItem;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
-import com.socialcomputing.wps.server.plandictionary.connectors.iAttributeEnumerator;
+import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 import com.socialcomputing.wps.server.utils.FSymmetricalMatrix;
 import com.socialcomputing.wps.server.utils.MathLogBuffer;
 import com.socialcomputing.wps.server.utils.NumAndFloat;

@@ -1,9 +1,11 @@
 package com.socialcomputing.wps.server.plandictionary.connectors;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**
@@ -70,7 +72,7 @@ public class MultiProfileConnector implements iProfileConnector, Serializable
 		return m_Profiles[0].getDescription();
 	}
 
-	public iAttributeEnumerator getEnumerator( String entityId ) throws WPSConnectorException
+	public iEnumerator getEnumerator( String entityId ) throws WPSConnectorException
 	{
 		return new MultiAttributeEnumerator( m_Prefixes, m_Profiles, entityId);
 	}
@@ -85,9 +87,9 @@ public class MultiProfileConnector implements iProfileConnector, Serializable
 		throw new WPSConnectorException( "MultiProfileConnector getAnalysisProperties unknown attributeId origin '" + attributeId + "'");
 	}
 
-	public iIdEnumerator getExclusionEnumerator( String entityId) throws WPSConnectorException
+	public iEnumerator<String> getExclusionEnumerator( String entityId) throws WPSConnectorException
 	{
-		return new MultiIdEnumerator( m_Prefixes, m_Profiles, entityId);
+		return new MultiEnumerator( m_Prefixes, m_Profiles, entityId);
 	}
 
 	public Hashtable getProperties( String attributeId, boolean bInBase, String entityId) throws WPSConnectorException
@@ -120,16 +122,16 @@ public class MultiProfileConnector implements iProfileConnector, Serializable
 	}
 
 
-	public class MultiAttributeEnumerator implements iAttributeEnumerator
+	public class MultiAttributeEnumerator implements iEnumerator
 	{
 		private String m_Prefixes[] = null;
-		private iAttributeEnumerator m_Enumerators[] = null;
+		private iEnumerator<AttributeEnumeratorItem> m_Enumerators[] = null;
 		private int index;
 
 		public MultiAttributeEnumerator( String prefixes[], iProfileConnector [] profiles, String entityId) throws WPSConnectorException
 		{
 			m_Prefixes = prefixes;
-			m_Enumerators = new iAttributeEnumerator[ profiles.length];
+			m_Enumerators = new iEnumerator[ profiles.length];
 			for( int i = 0; i < profiles.length; ++i)
 				 m_Enumerators[i] = profiles[i].getEnumerator( entityId);
 			index = 0;
@@ -159,36 +161,35 @@ public class MultiProfileConnector implements iProfileConnector, Serializable
 		}
 	}
 
-	public class MultiIdEnumerator implements iIdEnumerator
+	public class MultiEnumerator implements iEnumerator<String>
 	{
 		private String m_Prefixes[] = null;
-		private iIdEnumerator m_Enumerators[] = null;
+		private List<iEnumerator<String>> m_Enumerators = new ArrayList<iEnumerator<String>>();
 		private int index;
 
-		public MultiIdEnumerator( String prefixes[], iProfileConnector [] profiles, String entityId) throws WPSConnectorException
+		public MultiEnumerator( String prefixes[], iProfileConnector [] profiles, String entityId) throws WPSConnectorException
 		{
 			m_Prefixes = prefixes;
-			m_Enumerators = new iIdEnumerator[ profiles.length];
 			for( int i = 0; i < profiles.length; ++i)
-				 m_Enumerators[i] = profiles[i].getExclusionEnumerator( entityId);
+				 m_Enumerators.add( profiles[i].getExclusionEnumerator( entityId));
 			index = 0;
 		}
 		@Override
-		public iIdEnumerator iterator() {
+		public iEnumerator<String> iterator() {
 			return this;
 		}
 		@Override
 		public String next() 
 		{
-			String id = m_Enumerators[ index].next();
+			String id = m_Enumerators.get( index).next();
 			return m_Prefixes[ index] + id;
 		}
 		@Override
 		public boolean hasNext() 
 		{
-			for( ; index < m_Enumerators.length; ++index)
+			for( ; index < m_Enumerators.size(); ++index)
 			{
-			   if( m_Enumerators[ index].hasNext())
+			   if( m_Enumerators.get( index).hasNext())
 				   return true;
 			}
 			return false;
@@ -267,7 +268,7 @@ public class MultiProfileConnector implements iProfileConnector, Serializable
 			return "";
 		}
 
-		public iSubAttributeEnumerator getEnumerator( String entity, String attributeId)  throws WPSConnectorException
+		public iEnumerator<SubAttributeEnumeratorItem> getEnumerator( String entity, String attributeId)  throws WPSConnectorException
 		{
 			for( int i = 0; i < m_Profiles.length; ++i)
 			{
@@ -282,7 +283,7 @@ public class MultiProfileConnector implements iProfileConnector, Serializable
 			throw new WPSConnectorException( "getEnumerator unknown attributeId origin '" + attributeId + "'");
 		}
 
-		public Hashtable getProperties( String subAttributeId, String attributeId, String entityId ) throws WPSConnectorException
+		public Hashtable<String, Object> getProperties( String subAttributeId, String attributeId, String entityId ) throws WPSConnectorException
 		{
 			for( int i = 0; i < m_Profiles.length; ++i)
 			{

@@ -26,7 +26,7 @@ import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 @Entity
 @Table(name = "dictionaries")
 @org.hibernate.annotations.Table(appliesTo="dictionaries", indexes = {@Index(name="PRIMARY", columnNames={"name"})})
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class DictionaryImpl implements Serializable, Dictionary {
 
 	private static String s_DateFormat = "yyyy/MM/dd HH:mm:ss";

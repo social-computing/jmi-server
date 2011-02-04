@@ -8,9 +8,10 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
+import com.socialcomputing.wps.server.plandictionary.connectors.AttributeEnumeratorItem;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
-import com.socialcomputing.wps.server.plandictionary.connectors.iAttributeEnumerator;
-import com.socialcomputing.wps.server.plandictionary.connectors.iIdEnumerator;
+import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
+import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 import com.socialcomputing.wps.server.plandictionary.connectors.iProfileConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iSelectionConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iSubAttributeConnector;
@@ -143,7 +144,7 @@ public class JDBCProfileConnector implements iProfileConnector, Serializable
 		return m_Description;
 	}
 
-	public iAttributeEnumerator getEnumerator( String entityId ) throws WPSConnectorException
+	public iEnumerator<AttributeEnumeratorItem> getEnumerator( String entityId ) throws WPSConnectorException
 	{
 		if( entityId == null)
 			throw new WPSConnectorException( "JDBCProfileConnector failed to set getEnumerator, entityId is null");
@@ -164,7 +165,8 @@ public class JDBCProfileConnector implements iProfileConnector, Serializable
 		return table;
 	}
 
-	public iIdEnumerator getExclusionEnumerator( String entityId) throws WPSConnectorException
+	@Override
+	public iEnumerator<String> getExclusionEnumerator( String entityId) throws WPSConnectorException
 	{
 		if( m_ExclusionQuery != null)
 		{
@@ -178,12 +180,12 @@ public class JDBCProfileConnector implements iProfileConnector, Serializable
 				throw new WPSConnectorException( "JDBCProfileConnector failed to set exclusion enumerator", e);
 			}
 		}
-		return new JDBCIdEnumerator();
+		return new JDBCIdEnumerator( null);
 	}
 
-	public Hashtable getProperties( String attributeId, boolean bInBase, String entityId) throws WPSConnectorException
+	public Hashtable<String, Object> getProperties( String attributeId, boolean bInBase, String entityId) throws WPSConnectorException
 	{
-		Hashtable table = new Hashtable();
+		Hashtable<String, Object> table = new Hashtable<String, Object>();
 		m_Properties.getProperties( table, attributeId, bInBase, entityId, null);
 		return table;
 	}

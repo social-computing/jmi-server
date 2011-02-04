@@ -35,7 +35,7 @@ public class AffinityReaderProfile implements java.io.Serializable
 		profile.m_ReaderRef = element.getAttributeValue( "affinity-reader-ref");
 		if( profile.m_ReaderRef == null)
 		{
-			profile.m_ReaderRef = "<default>"; // On utilise le built-in
+			profile.m_ReaderRef =  WPSDictionary.DEFAULT_NAME; // On utilise le built-in
 			profile.m_defaultConnector = new DefaultAffinityGroupReader();
 		}
 		profile.m_AffinityThreshold = Integer.parseInt( element.getAttributeValue( "threshold"));
@@ -50,14 +50,14 @@ public class AffinityReaderProfile implements java.io.Serializable
 
 	public iAffinityGroupReader getConnector( WPSDictionary dico)  throws WPSConnectorException
 	{
-		if( m_ReaderRef.equalsIgnoreCase( "<default>"))
+		if( m_ReaderRef.equalsIgnoreCase(  WPSDictionary.DEFAULT_NAME))
 			return m_defaultConnector;
 		return dico.m_EntitiesConnector.getAffinityGroupReader( m_ReaderRef);
 	}
 
 	public void checkIntegrity( String m, iEntityConnector entities) throws org.jdom.JDOMException, WPSConnectorException
 	{
-		if( m_ReaderRef.equalsIgnoreCase( "<default>"))
+		if( m_ReaderRef.equalsIgnoreCase(  WPSDictionary.DEFAULT_NAME))
 			return;
 		if( entities.getAffinityGroupReader( m_ReaderRef) == null)
 			throw new org.jdom.JDOMException( m + ", Affinity Reader Profile '" + m_Name + "', Unknown Affinity Reader '" + m_ReaderRef + "'");

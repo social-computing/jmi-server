@@ -12,10 +12,12 @@
 <!ELEMENT URL-connection 	(url)>
 
 <!ELEMENT XML-entity 	(XML-property*)>
-<!ATTLIST XML-entity	id    CDATA    #REQUIRED>
+<!ATTLIST XML-entity	markup	    CDATA    #REQUIRED>
+<!ATTLIST XML-entity	id    		CDATA    #REQUIRED>
 
 <!ELEMENT XML-property 	EMPTY>
-<!ATTLIST XML-property	id    CDATA    #REQUIRED>
+<!ATTLIST XML-property	id    		CDATA    #REQUIRED>
 
 <!ELEMENT XML-attribute (XML-property*)>
-<!ATTLIST XML-attribute	id    CDATA    #REQUIRED>
+<!ATTLIST XML-attribute	markup		   	CDATA    #REQUIRED>
+<!ATTLIST XML-attribute	id    			CDATA    #REQUIRED>

@@ -33,7 +33,7 @@ import com.socialcomputing.wps.server.generator.RecommendationGroup;
 import com.socialcomputing.wps.server.plandictionary.AnalysisProfile;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
-import com.socialcomputing.wps.server.plandictionary.connectors.iIdEnumerator;
+import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 import com.socialcomputing.wps.server.plandictionary.connectors.iProfileConnector;
 import com.socialcomputing.wps.server.utils.FSymmetricalMatrix;
 import com.socialcomputing.wps.server.utils.MathLogBuffer;
@@ -319,7 +319,7 @@ public class AnalysisProcess {
 		if (m_Profile.m_AttributesMaxNb<=base.size())
 			return attributes;
 
-			iIdEnumerator enumvar = m_PlanRequest.getAnalysisProfile().getConnector(m_PlanRequest.m_Dictionary).getExclusionEnumerator(m_PlanRequest.m_entityId);
+			iEnumerator<String> enumvar = m_PlanRequest.getAnalysisProfile().getConnector(m_PlanRequest.m_Dictionary).getExclusionEnumerator(m_PlanRequest.m_entityId);
 
 			// Construction de la la liste des attributs exclus
 			if (enumvar.hasNext())
