@@ -51,8 +51,9 @@
 		<jar destfile="${dist}/WPS.jar" basedir="${build}/classes" includes="com/socialcomputing/wps/**,com/socialcomputing/utils/**" />
         <!--copy file="${dist}/WPS.jar" tofile="WebContent/WEB-INF/lib/WPS.jar" /-->
 		<mkdir dir="WebContent/WEB-INF/classes" />
-		<copy file="${build}/classes/hibernate.cfg.xml" tofile="WebContent/WEB-INF/classes/hibernate.cfg.xml" />
-		<copy file="${build}/classes/logback.xml" tofile="WebContent/WEB-INF/classes/logback.xml" />
+		<copy file="${src}/hibernate.cfg.xml" tofile="WebContent/WEB-INF/classes/hibernate.cfg.xml" />
+		<copy file="${src}/ehcache.xml" tofile="WebContent/WEB-INF/classes/ehcache.xml" />
+		<copy file="${src}/logback.xml" tofile="WebContent/WEB-INF/classes/logback.xml" />
 		<war destfile="${dist}/wps.war" basedir="WebContent" includes="**" />
 	</target>
 </project>
