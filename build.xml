@@ -8,7 +8,7 @@
 	<property name="ivy.lib.dir" location="WebContent/WEB-INF/lib" />
 
 	<path id="project.class.path">
-		<pathelement location="${ivy.lib.dir}" />
+		<fileset dir="${ivy.lib.dir}" includes="**/*.jar"/>
 	</path>
 
 	<target name="all" depends="genreport,resolve,compile,applet,server" />
@@ -34,9 +34,7 @@
         </echo>
 		<echo file="${src}/com/socialcomputing/wps/client/applet/AppletVersion.jsp">&#x3C;%! final String APPLET_VERSION="${applet.version}"; %&#x3E;</echo>
 		<echo file="${src}/com/socialcomputing/wps/client/applet/AppletVersion.txt">${applet.version}</echo>
-		<javac srcdir="${src}" destdir="${build}/classes">
-			<classpath refid="project.class.path" />
-		</javac>
+		<javac srcdir="${src}" destdir="${build}/classes" classpathref="project.class.path" />
 	</target>
 
 	<target name="applet" depends="compile">
