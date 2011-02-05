@@ -35,7 +35,7 @@ public class JDBCSubAttributeConnector implements iSubAttributeConnector, Serial
 	*             */
 	public JDBCQuery m_SubAttributeQuery = null;
 
-	// Propri�t�s
+	// Propriete
 	public JDBCProperties m_Properties = null;
 
 	static JDBCSubAttributeConnector readObject( org.jdom.Element element)
@@ -87,17 +87,19 @@ public class JDBCSubAttributeConnector implements iSubAttributeConnector, Serial
 		}
 	}
 
-	// iSubAttributeConnector interface
+	@Override
 	public  String getName(  )
 	{
 		return m_Name;
 	}
 
+	@Override
 	public  String getDescription(  )
 	{
 		return m_Description;
 	}
 
+	@Override
 	public iEnumerator<SubAttributeEnumeratorItem> getEnumerator( String entity, String attribute)  throws WPSConnectorException
 	{
 		if( entity == null)
@@ -115,6 +117,7 @@ public class JDBCSubAttributeConnector implements iSubAttributeConnector, Serial
 		}
 	}
 
+	@Override
 	public Hashtable<String, Object> getProperties( String subAttributeId, String attributeId, String entityId ) throws WPSConnectorException
 	{
 		Hashtable<String, Object> table = new Hashtable<String, Object>();

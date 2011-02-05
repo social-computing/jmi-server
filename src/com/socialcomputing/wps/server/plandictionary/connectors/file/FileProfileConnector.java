@@ -1,4 +1,4 @@
-package com.socialcomputing.wps.server.plandictionary.connectors.file.xml;
+package com.socialcomputing.wps.server.plandictionary.connectors.file;
 
 import java.util.Collection;
 import java.util.Hashtable;
@@ -13,16 +13,21 @@ import com.socialcomputing.wps.server.plandictionary.connectors.iProfileConnecto
 import com.socialcomputing.wps.server.plandictionary.connectors.iSelectionConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iSubAttributeConnector;
 
-public class XmlProfileConnector implements iProfileConnector {
+public class FileProfileConnector implements iProfileConnector {
 	protected String m_Name = WPSDictionary.DEFAULT_NAME;
+	protected FileEntityConnector m_FileEntityConnector = null;
 	
-	static XmlProfileConnector readObject( Element element)
+	static FileProfileConnector readObject( Element element)
 	{
-		XmlProfileConnector profile = new XmlProfileConnector();
+		FileProfileConnector profile = new FileProfileConnector();
 		return profile;
 	}
 	
-	public XmlProfileConnector() {
+	public void openConnections(Hashtable<String, Object> wpsparams, FileEntityConnector fileEntityConnector)  {
+		m_FileEntityConnector = fileEntityConnector;
+	}
+
+	public void closeConnections() {
 	}
 	
 	@Override
@@ -38,25 +43,23 @@ public class XmlProfileConnector implements iProfileConnector {
 
 	@Override
 	public iEnumerator<AttributeEnumeratorItem> getEnumerator(String entityId) throws WPSConnectorException {
-		return new XmlAttributeEnumerator( null, "");
+		return new DataEnumerator<AttributeEnumeratorItem>( m_FileEntityConnector.getEntity(entityId).m_Attributes);
 	}
 
 	@Override
 	public iEnumerator<String> getExclusionEnumerator(String entityId) throws WPSConnectorException {
+		return new DataEnumerator<String>();
+	}
+
+	@Override
+	public Hashtable<String, Object> getAnalysisProperties(String attributeId, String entityId) throws WPSConnectorException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Hashtable getAnalysisProperties(String attributeId, String entityId) throws WPSConnectorException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Hashtable getProperties(String attributeId, boolean bInBase, String entityId) throws WPSConnectorException {
-		// TODO Auto-generated method stub
-		return null;
+	public Hashtable<String, Object> getProperties(String attributeId, boolean bInBase, String entityId) throws WPSConnectorException {
+		return m_FileEntityConnector.getAttribute( attributeId).getProperties();
 	}
 
 	@Override

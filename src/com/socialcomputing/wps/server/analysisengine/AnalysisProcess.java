@@ -1,14 +1,5 @@
-/*
- * put your module comment here
- * formatted with JxBeauty (c) johann.langhofer@nextra.at
- */
-
-
 package  com.socialcomputing.wps.server.analysisengine;
 
-//import java.io.FileNotFoundException;
-//import java.io.FileOutputStream;
-//import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;

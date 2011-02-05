@@ -45,7 +45,7 @@ public class JDBCSelectionConnector implements iSelectionConnector, java.io.Seri
 	public int m_Flag = USE_NO_ID;
 	public int m_AttributeRestriction = WPSDictionary.APPLY_TO_ALL;
 
-	private transient HashSet m_Result = null; // optimisation pour USE_NO_ID et USE_REFID
+	private transient HashSet<String> m_Result = null; // optimisation pour USE_NO_ID et USE_REFID
 
 	static JDBCSelectionConnector readObject( int type, org.jdom.Element element)
 	{
@@ -106,17 +106,19 @@ public class JDBCSelectionConnector implements iSelectionConnector, java.io.Seri
 		}
 	}
 
-	// iSelectionConnector interface
+	@Override
 	public String getName()
 	{
 		return m_Name;
 	}
 
+	@Override
 	public  String getDescription()
 	{
 		return m_Description;
 	}
 
+	@Override
 	public boolean isRuleVerified(String id, boolean bInBase, String refEntityId) throws WPSConnectorException
 	{
 		boolean ret  = false;
@@ -139,12 +141,12 @@ public class JDBCSelectionConnector implements iSelectionConnector, java.io.Seri
 		{
 			case USE_NO_ID:
 			case USE_REFID:
-				// M�morisation des r�sultats
+				// Memorisation des resultats
 				if( m_Result == null)
 				{
 					try {
 						ResultSet rs = m_SelectionQuery.executeQuery();
-						m_Result = new HashSet();
+						m_Result = new HashSet<String>();
 						while( rs.next())
 							m_Result.add( rs.getString( 1));
 						rs.close();
@@ -160,7 +162,7 @@ public class JDBCSelectionConnector implements iSelectionConnector, java.io.Seri
 				break;
 			case USE_CURRENTID:
 			case USE_CURRENTID_REFID:
-					// Requ�te � chaque demande
+					// Requete a chaque demande
 					try {
 						ResultSet rs = m_SelectionQuery.executeQuery();
 						if( rs.next())

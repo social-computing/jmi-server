@@ -24,7 +24,7 @@ public class JDBCQuery2 extends JDBCQuery
 	private static final long serialVersionUID = 3133883409410549876L;
 	//private int cpt = 1;
 	private String curEntity = null, curAttribute = null, curSubAttribute = null;
-	private ArrayList listParameters = new ArrayList();
+	private ArrayList<QueryParameter> listParameters = new ArrayList<QueryParameter>();
 
 	private class QueryParameter
 	{
@@ -57,21 +57,25 @@ public class JDBCQuery2 extends JDBCQuery
 		super( query);
 	}
 
+	@Override
 	public void setCurEntity( String id)
 	{
 		curEntity = id;
 	}
 
+	@Override
 	public void setCurAttribute( String id)
 	{
 		curAttribute = id;
 	}
 
+	@Override
 	public void setCurSubAttribute( String id)
 	{
 		curSubAttribute = id;
 	}
 
+	@Override
 	public ResultSet executeQuery() throws SQLException, WPSConnectorException
 	{
 		prepareQuery();
@@ -80,6 +84,7 @@ public class JDBCQuery2 extends JDBCQuery
 		return m_QueryPS.executeQuery();
 	}
 
+	@Override
 	public void reset()
 	{
 		curEntity = null;
@@ -148,11 +153,12 @@ public class JDBCQuery2 extends JDBCQuery
 		}
 		m_QueryPS = m_Connection.prepareStatement( nquery.toString());
 	}
+	
 	private void fillParameters() throws SQLException, WPSConnectorException
 	{
 		for( int i = 1; i <= listParameters.size(); ++i)
 		{
-			 QueryParameter qp = ( QueryParameter) listParameters.get( i-1);
+			 QueryParameter qp = listParameters.get( i-1);
 			 switch( qp.type & 0xFF00)
 			 {
 				 case QueryParameter.CUR_ENTITY:
@@ -192,15 +198,4 @@ public class JDBCQuery2 extends JDBCQuery
 		}
 	}
 
-	public static void main(String [] args)
-	{
-		try {
-			JDBCQuery2 q = new JDBCQuery2( "select * from and {scurEntity} or {scurAttribute} {s$TOTO} ");
-			q.executeQuery();
-		}
-		catch( Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
 }

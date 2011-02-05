@@ -645,7 +645,7 @@ public class PlanRequest
 		return env;
 	}
 
-	static public Object ExtractProperty( String definition, Hashtable properties) throws WPSConnectorException
+	static public Object ExtractProperty( String definition, Hashtable<String, Object> properties) throws WPSConnectorException
 	{
 		if( definition.indexOf( '&') == -1)
 			return properties.get( definition);

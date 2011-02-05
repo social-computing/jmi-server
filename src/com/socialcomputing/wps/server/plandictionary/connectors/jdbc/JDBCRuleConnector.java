@@ -5,9 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Hashtable;
-import java.util.Iterator;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierRuleConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 
@@ -46,12 +44,13 @@ public class JDBCRuleConnector implements iClassifierRuleConnector, Serializable
 		m_Connection = null;
 	}
 
-	// iClassifierRuleConnector interface
+	@Override
 	public  String getName()
 	{
 		return m_Name;
 	}
 
+	@Override
 	public  String getDescription()
 	{
 		return m_Description;

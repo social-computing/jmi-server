@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -47,7 +46,7 @@ public class JDBCEntityConnector implements iEntityConnector, Serializable {
 	public JDBCProperties m_Properties = null;
 
 	// Stockage proprietes (pour acceleration)
-	public transient Hashtable m_StockedProperties = null;
+	public transient Hashtable<String, Hashtable<String, Object>> m_StockedProperties = null;
 
 	static JDBCEntityConnector readObject(org.jdom.Element element) {
 		JDBCEntityConnector connector = new JDBCEntityConnector(element.getAttributeValue("name"));
@@ -114,11 +113,12 @@ public class JDBCEntityConnector implements iEntityConnector, Serializable {
 		m_AffinityGroupReaders = new TreeMap<String, JDBCAffinityGroupReader>();
 	}
 
-	// iEntityConnector interface
+	@Override
 	public String getName() {
 		return m_Name;
 	}
 
+	@Override
 	public String getDescription() {
 		return m_Description;
 	}
@@ -140,12 +140,11 @@ public class JDBCEntityConnector implements iEntityConnector, Serializable {
 			j.openConnections(wpsparams, m_Connection);
 		}
 		m_Properties.openConnections(wpsparams, m_Connection);
-		m_StockedProperties = new Hashtable();
+		m_StockedProperties = new Hashtable<String, Hashtable<String, Object>>();
 	}
 
 	public void closeConnections() throws WPSConnectorException {
 		try {
-			Iterator it = null;
 			if (m_AffinityGroupReaders.size() > 0) {
 				for (JDBCAffinityGroupReader j : m_AffinityGroupReaders.values()) {
 					j.closeConnections();
@@ -173,7 +172,7 @@ public class JDBCEntityConnector implements iEntityConnector, Serializable {
 	 */
 	@Override
 	public Hashtable<String, Object> getProperties(String entityId) throws WPSConnectorException {
-		Hashtable<String, Object> table = (Hashtable<String, Object>) m_StockedProperties.get(entityId);
+		Hashtable<String, Object> table = m_StockedProperties.get( entityId);
 		if (table == null) {
 			table = new Hashtable<String, Object>();
 			m_Properties.getProperties(table, entityId, true, null, null);

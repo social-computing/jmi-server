@@ -24,7 +24,7 @@ public abstract class JDBCQuery implements Serializable
 	protected transient PreparedStatement m_QueryPS = null;
 
 	protected transient Connection m_Connection = null;
-	private transient Hashtable m_WPSParams = null;
+	private transient Hashtable<String, Object> m_WPSParams = null;
 
 	static JDBCQuery readObject( org.jdom.Element element)
 	{
@@ -55,25 +55,16 @@ public abstract class JDBCQuery implements Serializable
 		return o;
 	}
 
-	public void setCurEntity( String id) throws SQLException, WPSConnectorException
-	{
-	}
+	public abstract void setCurEntity( String id) throws SQLException, WPSConnectorException;
 
-	public void setCurAttribute( String id) throws SQLException, WPSConnectorException
-	{
-	}
+	public abstract void setCurAttribute( String id) throws SQLException, WPSConnectorException;
 
-	public void setCurSubAttribute( String id) throws SQLException, WPSConnectorException
-	{
-	}
+	public abstract void setCurSubAttribute( String id) throws SQLException, WPSConnectorException;
 
-	public ResultSet executeQuery() throws SQLException, WPSConnectorException
-	{
-		return null;
-	}
-	public void reset()
-	{
-	}
+	public abstract ResultSet executeQuery() throws SQLException, WPSConnectorException;
+
+	public abstract void reset();
+	
 	public void close() throws WPSConnectorException
 	{
 		try {

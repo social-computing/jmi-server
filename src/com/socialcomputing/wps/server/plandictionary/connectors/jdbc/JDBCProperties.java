@@ -53,9 +53,8 @@ public class JDBCProperties implements java.io.Serializable {
 			m_Type = type;
 		}
 
-		public void openConnections(Hashtable wpsparams, Connection connection)
+		public void openConnections(Hashtable<String, Object> wpsparams, Connection connection)
 				throws WPSConnectorException {
-			// m_Connection = connection;
 			m_PropertyGroupQuery.open(wpsparams, connection);
 		}
 
@@ -76,8 +75,7 @@ public class JDBCProperties implements java.io.Serializable {
 			}
 		}
 
-		private boolean getColumnInfo(ResultSet rs, String id)
-				throws WPSConnectorException {
+		private boolean getColumnInfo(ResultSet rs, String id) throws WPSConnectorException {
 			boolean ret = false;
 			try {
 				ret = rs.next();
@@ -105,8 +103,7 @@ public class JDBCProperties implements java.io.Serializable {
 			return ret;
 		}
 
-		private Object getProperty(ResultSet rs, int index)
-				throws WPSConnectorException {
+		private Object getProperty(ResultSet rs, int index) throws WPSConnectorException {
 			InternalColumnInfo info = null;
 			try {
 				// Recherche des valeurs
@@ -270,11 +267,11 @@ public class JDBCProperties implements java.io.Serializable {
 		}
 	}
 
-	// Type de la colonne de nommage des propri�t�s (pour la gestion de
+	// Type de la colonne de nommage des proprietes (pour la gestion de
 	// l'unicode dans un LONGVARBINARY)
 	// private int m_ColumnNameType = java.sql.Types.OTHER;
 
-	// Liste desrequ�tes des propri�t�s
+	// Liste desrequetes des proprietes
 	public ArrayList<JDBCPropertyGroup> m_PropertyGroups = new ArrayList<JDBCPropertyGroup>();
 
 	static JDBCProperties readObject(int type, org.jdom.Element element) {
@@ -317,7 +314,7 @@ public class JDBCProperties implements java.io.Serializable {
 	public JDBCProperties() {
 	}
 
-	public void openConnections(Hashtable wpsparams, Connection connection) throws WPSConnectorException {
+	public void openConnections(Hashtable<String, Object> wpsparams, Connection connection) throws WPSConnectorException {
 		for( JDBCPropertyGroup grp : m_PropertyGroups)
 		{
 			grp.openConnections(wpsparams, connection);
@@ -331,8 +328,7 @@ public class JDBCProperties implements java.io.Serializable {
 		}
 	}
 
-	public int getProperties(Hashtable<String, Object> table, String id, boolean bInBase,
-			String idRef1, String idRef2) throws WPSConnectorException {
+	public int getProperties(Hashtable<String, Object> table, String id, boolean bInBase, String idRef1, String idRef2) throws WPSConnectorException {
 		int count = 0;
 		for( JDBCPropertyGroup grp : m_PropertyGroups)
 		{

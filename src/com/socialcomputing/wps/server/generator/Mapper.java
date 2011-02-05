@@ -75,9 +75,8 @@ public class Mapper {
 	/**
 	 * Name of each stages as they will appears in the GUI.
 	 */
-	private static final String[] s_stages = new String[] { "Base relax",
-			"Base filter", "Ext relax", "Ext filter", "Ext last",
-			"Tesselation", };
+	private static final String[] s_stages = new String[] { "Base relax", "Base filter", "Ext relax", "Ext filter",
+			"Ext last", "Tesselation", };
 
 	/**
 	 * Index of the Base relax stage in the Stage table.
@@ -255,8 +254,7 @@ public class Mapper {
 	/**
 	 * Generate a new Plan by executing all the stages.
 	 */
-	public void generatePlan()
-			throws com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException {
+	public void generatePlan() throws com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException {
 		EZTimer timer = new EZTimer();
 
 		if (!m_protoPlan.m_isDegenerated) {
@@ -365,8 +363,7 @@ public class Mapper {
 			m_base = new NodeRelaxData(null, 1, 1, 1, 1, true, true, "base");
 			setStageParams(m_nodes.length - m_baseNodeCnt, m_base, false);
 			m_relaxer.updateBoundingBase(0, m_baseNodeCnt);
-			m_relaxer.setLinksFlags(0, m_protoPlan.m_baseLinkCnt,
-					LinkRelaxData.LOCKED_BIT);
+			m_relaxer.setLinksFlags(0, m_protoPlan.m_baseLinkCnt, LinkRelaxData.LOCKED_BIT);
 			m_relaxer.setNodesLock(0, m_baseNodeCnt, true, false);
 			break;
 
@@ -382,8 +379,7 @@ public class Mapper {
 		case TESSELATION_STG:
 			m_stepCnt = 2;
 			m_relaxer.alignData(m_protoPlan.m_mapDat.m_winBnds, m_base);
-			m_delaunay = new Delaunay(m_relaxer.getDataNodes(),
-					m_relaxer.getBounds(), 5);
+			m_delaunay = new Delaunay(m_relaxer.getDataNodes(), m_relaxer.getBounds(), 5);
 			m_oldLinksDat = m_relaxer.getDataLinks();
 			break;
 
@@ -526,8 +522,7 @@ public class Mapper {
 		m_nodes = new NodeMapData[j];
 		System.arraycopy(nodes, 0, m_nodes, 0, j);
 
-		log.info("{} NodeMapData were created, {} in base",
-				String.valueOf(m_nodes.length), m_baseNodeCnt);
+		log.info("{} NodeMapData were created, {} in base", String.valueOf(m_nodes.length), m_baseNodeCnt);
 	}
 
 	/**
@@ -560,8 +555,7 @@ public class Mapper {
 	 * are added only if they exists in the ProtoPlan and the angle between them
 	 * and previous links is > PI/8.
 	 */
-	protected void tesselate()
-			throws com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException {
+	protected void tesselate() throws com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException {
 		ArrayList edges = m_delaunay.process().edges(), fakeEdges = new ArrayList();
 		QuadEdge edge;
 		NodeRelaxData fromDat, toDat;
@@ -582,8 +576,7 @@ public class Mapper {
 		boolean displayFakeLinks = this.m_protoPlan.m_planReq.getModel().m_DisplayFakeLinks;
 
 		m_crossMgr.clearInters();
-		m_crossMgr.evalInters(m_relaxer.getDataNodes(),
-				m_relaxer.getDataLinks(), true);
+		m_crossMgr.evalInters(m_relaxer.getDataNodes(), m_relaxer.getDataLinks(), true);
 		m_crossMgr.filter(true);
 
 		for (i = m = 0; i < n; i++) {
@@ -602,8 +595,7 @@ public class Mapper {
 				if ((linkDat == null)// || linkDat.isDead()) // this link
 										// doesn't already exists or has been
 										// removed
-						&& m_crossMgr.hasOneInterMax(fromDat, toDat, links,
-								inters)) {
+						&& m_crossMgr.hasOneInterMax(fromDat, toDat, links, inters)) {
 					from = (NodeMapData) fromDat.getNode();
 					to = (NodeMapData) toDat.getNode();
 					attLink = from.getLinkTo(to);
@@ -612,8 +604,7 @@ public class Mapper {
 											// be relaxable, let's add it.
 					{
 						j = inters[0];
-						size = j == -1 ? 0 : ((LinkMapData) (links[j]
-								.getSource())).m_link.m_size;
+						size = j == -1 ? 0 : ((LinkMapData) (links[j].getSource())).m_link.m_size;
 
 						if (j == -1 || size < attLink.m_size) {
 							link = new LinkMapData(attLink, mapDat);
@@ -638,8 +629,7 @@ public class Mapper {
 			}
 		}
 
-		m_fakeLinks = (LinkFakeData[]) fakeEdges
-				.toArray(new LinkFakeData[fakeEdges.size()]);
+		m_fakeLinks = (LinkFakeData[]) fakeEdges.toArray(new LinkFakeData[fakeEdges.size()]);
 		n = linkCnt + m;
 		links = new LinkRelaxData[n];
 
@@ -683,8 +673,7 @@ public class Mapper {
 	 * the Plan).
 	 */
 	protected void toDegeneratedZone() {
-		NodeMapData node = new NodeMapData(m_protoPlan.m_attributes[0],
-				m_protoPlan.m_mapDat.m_winBnds);
+		NodeMapData node = new NodeMapData(m_protoPlan.m_attributes[0], m_protoPlan.m_mapDat.m_winBnds);
 
 		m_nodes = new NodeMapData[] { node };
 		m_subNodeCnt = m_protoPlan.m_attributes.length - 1;
@@ -699,8 +688,7 @@ public class Mapper {
 	 * Creates the WPSApplet Plan using the Mapper nodes and links. Links are
 	 * sorted using the LinkMapData.s_comp comparator.
 	 */
-	protected void toZones()
-			throws com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException {
+	protected void toZones() throws com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException {
 		int i, j, n = m_nodes.length, m = m_fakeLinks.length;
 		// ActiveZone zone;
 		// NodeMapData node;
@@ -752,24 +740,20 @@ public class Mapper {
 			linkZone.put("_INDEX", new Integer(i));
 			if (linkZone.m_from != null) {
 				BagZone bagZone = (BagZone) linkZone.m_from;
-				int nbindexes = 1 + (bagZone.m_subZones != null ? bagZone.m_subZones.length
-						: 0);
+				int nbindexes = 1 + (bagZone.m_subZones != null ? bagZone.m_subZones.length : 0);
 				Integer indexes[] = new Integer[nbindexes];
 				indexes[0] = (Integer) bagZone.get("_INDEX");
 				for (int j = 1; j < nbindexes; ++j)
-					indexes[j] = (Integer) bagZone.m_subZones[j - 1]
-							.get("_INDEX");
+					indexes[j] = (Integer) bagZone.m_subZones[j - 1].get("_INDEX");
 				linkZone.put("_NODE1", indexes);
 			}
 			if (linkZone.m_to != null) {
 				BagZone bagZone = (BagZone) linkZone.m_to;
-				int nbindexes = 1 + (bagZone.m_subZones != null ? bagZone.m_subZones.length
-						: 0);
+				int nbindexes = 1 + (bagZone.m_subZones != null ? bagZone.m_subZones.length : 0);
 				Integer indexes[] = new Integer[nbindexes];
 				indexes[0] = (Integer) bagZone.get("_INDEX");
 				for (int j = 1; j < nbindexes; ++j)
-					indexes[j] = (Integer) bagZone.m_subZones[j - 1]
-							.get("_INDEX");
+					indexes[j] = (Integer) bagZone.m_subZones[j - 1].get("_INDEX");
 				linkZone.put("_NODE2", indexes);
 			}
 		}
@@ -790,44 +774,37 @@ public class Mapper {
 		XSwatch[] nodeSSwh;
 		XSwatch[][] serverSwatchs = new XSwatch[][] { { // Normal Node
 														// ServerSwatchs
-				m_protoPlan.getNodeSwatch(0), m_protoPlan.getNodeSwatch(2) }, { // Reference
-																				// Node
-																				// ServerSwatchs
-				m_protoPlan.getNodeSwatch(1), m_protoPlan.getNodeSwatch(3) } };
+						m_protoPlan.getNodeSwatch(0), m_protoPlan.getNodeSwatch(2) }, { // Reference
+																						// Node
+																						// ServerSwatchs
+						m_protoPlan.getNodeSwatch(1), m_protoPlan.getNodeSwatch(3) } };
 
 		for (i = 0; i < n; i++) {
-			att = i < m ? (ProtoAttribute) m_nodes[i].m_att
-					: (ProtoAttribute) m_plan.m_nodes[i].get("ATT");
+			att = i < m ? (ProtoAttribute) m_nodes[i].m_att : (ProtoAttribute) m_plan.m_nodes[i].get("ATT");
 			nodeSSwh = getSSwatchs(serverSwatchs, att.isRef());
 
-			m_protoPlan.m_planReq.putAttributeProps(att, nodeSSwh[0],
-					nodeSSwh[1], m_plan.m_nodes[i]);
+			m_protoPlan.m_planReq.putAttributeProps(att, nodeSSwh[0], nodeSSwh[1], m_plan.m_nodes[i]);
 
 			m_protoPlan.m_props.put(att.m_strId, m_plan.m_nodes[i]);
 		}
 
 		for (i = 0; i < n; i++) {
-			att = i < m ? (ProtoAttribute) m_nodes[i].m_att
-					: (ProtoAttribute) m_plan.m_nodes[i].get("ATT");
+			att = i < m ? (ProtoAttribute) m_nodes[i].m_att : (ProtoAttribute) m_plan.m_nodes[i].get("ATT");
 			nodeSSwh = getSSwatchs(serverSwatchs, att.isRef());
 
-			m_protoPlan.m_planReq.updateInterProps(att, nodeSSwh[0],
-					nodeSSwh[1], m_plan.m_nodes[i]);
+			m_protoPlan.m_planReq.updateInterProps(att, nodeSSwh[0], nodeSSwh[1], m_plan.m_nodes[i]);
 		}
 
 		Swatch[] nodeSwh;
 		Swatch[][] clientSwatchs = new Swatch[][] { { // Normal Node
 														// ClientSwatchs
-				(Swatch) serverSwatchs[0][0].toClient(),
-						(Swatch) serverSwatchs[0][1].toClient() }, { // Reference
-																		// Node
-																		// ClientSwatchs
-				(Swatch) serverSwatchs[1][0].toClient(),
-						(Swatch) serverSwatchs[1][1].toClient() } };
+						(Swatch) serverSwatchs[0][0].toClient(), (Swatch) serverSwatchs[0][1].toClient() }, { // Reference
+																												// Node
+																												// ClientSwatchs
+						(Swatch) serverSwatchs[1][0].toClient(), (Swatch) serverSwatchs[1][1].toClient() } };
 
 		for (i = 0; i < n; i++) {
-			att = i < m ? (ProtoAttribute) m_nodes[i].m_att
-					: (ProtoAttribute) m_plan.m_nodes[i].get("ATT");
+			att = i < m ? (ProtoAttribute) m_nodes[i].m_att : (ProtoAttribute) m_plan.m_nodes[i].get("ATT");
 			nodeSwh = getSwatchs(clientSwatchs, att.isRef());
 
 			m_plan.m_nodes[i].setSwatchs(nodeSwh[0], nodeSwh[1]);
@@ -851,10 +828,11 @@ public class Mapper {
 		AttributeLink link;
 		int i, n = m_links.length;
 		XSwatch[] linkSSwh;
-		XSwatch[][] serverSwatchs = new XSwatch[][] {
-				{ // Normal Link ServerSwatchs
-				m_protoPlan.getLinkSwatch(0), m_protoPlan.getLinkSwatch(2), },
-				{ // Reference Link ServerSwatchs
+		XSwatch[][] serverSwatchs = new XSwatch[][] { { // Normal Link
+														// ServerSwatchs
+				m_protoPlan.getLinkSwatch(0), m_protoPlan.getLinkSwatch(2), }, { // Reference
+																					// Link
+																					// ServerSwatchs
 				m_protoPlan.getLinkSwatch(1), m_protoPlan.getLinkSwatch(3), } };
 
 		for (i = 0; i < n; i++) {
@@ -862,28 +840,24 @@ public class Mapper {
 			link = (AttributeLink) sLink.m_link;
 			linkSSwh = getSSwatchs(serverSwatchs, link.isRef());
 
-			m_protoPlan.m_planReq.putAttLinkProps(link, linkSSwh[0],
-					linkSSwh[1], m_plan.m_links[i]);
+			m_protoPlan.m_planReq.putAttLinkProps(link, linkSSwh[0], linkSSwh[1], m_plan.m_links[i]);
 		}
 
 		linkSSwh = getSSwatchs(serverSwatchs, false);
 
 		for (n = i + m_fakeLinks.length; i < n; i++) {
-			m_protoPlan.m_planReq.putAttLinkProps(null, linkSSwh[0],
-					linkSSwh[1], m_plan.m_links[i]);
+			m_protoPlan.m_planReq.putAttLinkProps(null, linkSSwh[0], linkSSwh[1], m_plan.m_links[i]);
 		}
 
 		Swatch[] linkSwh;
 		Swatch[][] clientSwatchs = new Swatch[][] { { // Normal Node
-														// ClientSwatchs
+						// ClientSwatchs
 						(Swatch) serverSwatchs[0][0].toClient(),
-						serverSwatchs[0][1] == null ? null
-								: (Swatch) serverSwatchs[0][1].toClient() }, { // Reference
-																				// Node
-																				// ClientSwatchs
+						serverSwatchs[0][1] == null ? null : (Swatch) serverSwatchs[0][1].toClient() }, { // Reference
+						// Node
+						// ClientSwatchs
 						(Swatch) serverSwatchs[1][0].toClient(),
-						serverSwatchs[1][1] == null ? null
-								: (Swatch) serverSwatchs[1][1].toClient() } };
+						serverSwatchs[1][1] == null ? null : (Swatch) serverSwatchs[1][1].toClient() } };
 
 		n = m_links.length;
 
@@ -909,8 +883,7 @@ public class Mapper {
 	// ============================================================
 	// =====================================================================================================
 
-	private void setStageParams(int stepCnt, NodeRelaxData base,
-			boolean needData) {
+	private void setStageParams(int stepCnt, NodeRelaxData base, boolean needData) {
 		MapData mapDat = m_protoPlan.m_mapDat;
 
 		m_stepCnt = stepCnt;
@@ -918,8 +891,7 @@ public class Mapper {
 		m_trsh = mapDat.m_relaxParams[m_stage].m_trsh;
 
 		if (needData) {
-			m_relaxer.setParams(mapDat.m_relaxParams[m_stage], base, m_nodes,
-					m_links);
+			m_relaxer.setParams(mapDat.m_relaxParams[m_stage], base, m_nodes, m_links);
 		} else {
 			m_relaxer.setParams(mapDat.m_relaxParams[m_stage], base);
 		}

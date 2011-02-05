@@ -44,7 +44,7 @@ public class JDBCProfileConnector implements iProfileConnector, Serializable
 	// JDBCSelectionConnector TreeMap
 	public Hashtable<String, JDBCSelectionConnector>  m_Selections = null;
 
-	// Propri�t�s
+	// Proprietes
 	public JDBCProperties m_AnalysisProperties = null;
 	public JDBCProperties m_Properties = null;
 
@@ -67,7 +67,7 @@ public class JDBCProfileConnector implements iProfileConnector, Serializable
 		// Properties
 		profile.m_Properties = JDBCProperties.readObject( JDBCProperties.ATTRIBUTE_PROPS, element);
 
-		{   // S�lections
+		{   // Sélections
 			List lst = element.getChildren( "JDBC-selection");
 			int size = lst.size();
 			for( int i = 0; i < size; ++i)
@@ -133,17 +133,19 @@ public class JDBCProfileConnector implements iProfileConnector, Serializable
 		}
 	}
 
-	// iProfileConnector interface
+	@Override
 	public  String getName()
 	{
 		return m_Name;
 	}
 
+	@Override
 	public  String getDescription()
 	{
 		return m_Description;
 	}
 
+	@Override
 	public iEnumerator<AttributeEnumeratorItem> getEnumerator( String entityId ) throws WPSConnectorException
 	{
 		if( entityId == null)
@@ -158,9 +160,10 @@ public class JDBCProfileConnector implements iProfileConnector, Serializable
 		}
 	}
 
-	public Hashtable getAnalysisProperties( String attributeId, String entityId) throws WPSConnectorException
+	@Override
+	public Hashtable<String, Object> getAnalysisProperties( String attributeId, String entityId) throws WPSConnectorException
 	{
-		Hashtable table = new Hashtable();
+		Hashtable<String, Object> table = new Hashtable<String, Object>();
 		m_AnalysisProperties.getProperties( table, attributeId, false, entityId, null);
 		return table;
 	}
@@ -183,6 +186,7 @@ public class JDBCProfileConnector implements iProfileConnector, Serializable
 		return new JDBCIdEnumerator( null);
 	}
 
+	@Override
 	public Hashtable<String, Object> getProperties( String attributeId, boolean bInBase, String entityId) throws WPSConnectorException
 	{
 		Hashtable<String, Object> table = new Hashtable<String, Object>();
@@ -190,16 +194,19 @@ public class JDBCProfileConnector implements iProfileConnector, Serializable
 		return table;
 	}
 
+	@Override
 	public iSubAttributeConnector getSubAttribute()
 	{
 		return m_SubAttributes;
 	}
 
+	@Override
 	public Collection getSelections()
 	{
 		return m_Selections.values();
 	}
 
+	@Override
 	public iSelectionConnector getSelection( String selectionId)
 	{
 		return ( JDBCSelectionConnector) m_Selections.get( selectionId);
