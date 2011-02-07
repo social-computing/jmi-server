@@ -124,7 +124,7 @@ public class PlanGenerator {
 	 *            Parameters of the Plan to generate.
 	 * @return A new ProtoPlan defined by planPrm.
 	 */
-	private static ProtoPlan preGenerate(PlanParams planPrm)
+	public ProtoPlan preGenerate(PlanParams planPrm)
 			throws com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException {
 		EZTimer timer = new EZTimer();
 
@@ -161,7 +161,7 @@ public class PlanGenerator {
 	 * @param planPrm
 	 *            Parameters of the generated Plan.
 	 */
-	private void postGenerate(PlanParams planPrm) {
+	public void postGenerate(PlanParams planPrm) {
 		Env env = getEnv();
 		Plan plan = getPlan();
 
@@ -189,7 +189,7 @@ public class PlanGenerator {
 	 * 
 	 * @return A new 'properties' element describing a connection to scharon.
 	 */
-	private Element getProperties() {
+	public Element getProperties() {
 		Element properties = new Element("properties"), parameters = new Element(
 				"parameters"), parameter = new Element("parameter"), redirect = new Element(
 				"redirect");
@@ -217,7 +217,7 @@ public class PlanGenerator {
 	/**
 	 * Magic header to identify a MapStan Plan.
 	 */
-	private static final byte[] s_header = { 'M', 'a', 'p', 'S', 't', 'a', 'n' };
+	public static final byte[] s_header = { 'M', 'a', 'p', 'S', 't', 'a', 'n' };
 
 	/**
 	 * Gets a buffer containing a raw serialized Env+Plan.
@@ -229,7 +229,7 @@ public class PlanGenerator {
 	 * @return A byte array containing raw serialized Objects.
 	 * @throws IOException
 	 */
-	private byte[] getSerialPlan(Env env, Plan plan) throws IOException {
+	public byte[] getSerialPlan(Env env, Plan plan) throws IOException {
 		ByteArrayOutputStream baOut = new ByteArrayOutputStream();
 		ObjectOutputStream objOut = new ObjectOutputStream(
 				new GZIPOutputStream(baOut));
@@ -259,7 +259,7 @@ public class PlanGenerator {
 	 *            True if the serialized WPSApplet Plan should be compressed
 	 *            using GZIP.
 	 */
-	private void writeObject(Env env, Plan plan, PlanParams planPrm,
+	public void writeObject(Env env, Plan plan, PlanParams planPrm,
 			boolean needComp) {
 		try {
 			String outPath = "C:/Documents and Settings/flugue/Desktop/temp/";
@@ -309,115 +309,9 @@ public class PlanGenerator {
 		}
 	}
 
-	private void writeXML(Env env, Plan plan, PlanParams planPrm) {
+	public void writeXML(Env env, Plan plan, PlanParams planPrm) {
 	}
 
-	/**
-	 * Creates a Plan and/or display it for debug/tuning purposes.
-	 * 
-	 * @param args
-	 *            <ul>
-	 *            <li>debug=[-1,0,1,2]. -1 for no messages, 2 for maximum
-	 *            verbosity.</li>
-	 *            <li>degenerate=true. Simulates a degenerated Plan (only 1
-	 *            cluster).</li>
-	 *            <li>testNet=true. Creates the personal plans of all the
-	 *            mapstan.net users.</li>
-	 *            <li>visual=true. Open a GUI to display/edit the relaxation
-	 *            process.</li>
-	 *            <li>output=[0,1]. 0 for raw output, 1 for GZIP compressed
-	 *            output.</li>
-	 */
-	public static void main(String[] args) {
-		try {
-			s_params = new EZParams(args);
-
-			EZTimer timer = new EZTimer();
-			boolean testDeg = s_params.isEnabled("degenerate"), testNet = s_params
-					.isEnabled("testNet"), isVisual = s_params
-					.isEnabled("visual");
-			PlanParams[] params = new PlanParams[] {
-					new PlanParams("charon", "Boosol",
-							AnalysisProfile.PERSONAL_PLAN, 1), // 0 flugue Plan
-					new PlanParams("charon", "SEngine",
-							AnalysisProfile.PERSONAL_PLAN, 1), // 1 mapstan
-					new PlanParams("charon", "SEngine",
-							AnalysisProfile.PERSONAL_PLAN, 12), // 2 amiga ppc
-					new PlanParams("charon", "SEngine",
-							AnalysisProfile.DISCOVERY_PLAN, 25), // 3
-																	// mapstan.net
-					new PlanParams("charon", "SEngine",
-							AnalysisProfile.DISCOVERY_PLAN, 1), // 4 mapstan.com
-					new PlanParams("charon", "SEngine",
-							AnalysisProfile.DISCOVERY_PLAN, 4), // 5 mapstan.net
-					new PlanParams("charon", "SEngine",
-							AnalysisProfile.DISCOVERY_PLAN, 250), // 6
-																	// linternaute
-					new PlanParams("charon", "SEngine",
-							AnalysisProfile.PERSONAL_PLAN, 31206),// 7 Amiga PPC
-					new PlanParams("charon", "SEngine",
-							AnalysisProfile.PERSONAL_PLAN, 59863),// 8 mapstan
-																	// search
-					new PlanParams("charon", "Boosol",
-							AnalysisProfile.PERSONAL_PLAN, 2), // 9 espinat Plan
-					new PlanParams("charon", "Boosol",
-							AnalysisProfile.GLOBAL_PLAN, 6227), // 10
-					new PlanParams("charon", "SEngine",
-							AnalysisProfile.PERSONAL_PLAN, 27), // 11 bug
-			};
-
-			PlanParams planPrm = params[11];
-			ProtoPlan protoPlan;
-			PlanGenerator planGenerator;
-
-			// Test degenerated cases
-			if (testDeg) {
-				protoPlan = preGenerate(planPrm);
-				protoPlan.degenerate();
-			} else {
-				iEnumerator<String> enumerator = testNet ? getNetEnumerator() : null;
-
-				do {
-					timer.reset();
-
-					if (testNet) {
-						String item = enumerator.next();
-						planPrm = new PlanParams("charon", "SEngine",
-								AnalysisProfile.PERSONAL_PLAN,
-								Integer.parseInt(item));
-					}
-
-					protoPlan = preGenerate(planPrm);
-					timer.showElapsedTime("init " + planPrm.getPlanName());
-
-					System.out
-							.println("\n--==< PLAN GENERATION STARTED >==--\n");
-					timer.reset();
-
-					planGenerator = new PlanGenerator();
-
-					planGenerator.generatePlan(protoPlan, isVisual);
-					timer.showElapsedTime("Plan generated");
-
-					planGenerator.postGenerate(planPrm);// getIntValue(
-														// "output", SERIALZ_OUT
-														// ));
-
-					System.out
-							.println("\n--==< PLAN GENERATION FINISHED >==--\n");
-				} while (testNet && enumerator.hasNext());
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	private static iEnumerator<String> getNetEnumerator()
-			throws com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException {
-		WPSDictionary dico = WPSDictionaryTest.CreateTestInstance("Boosol");
-		dico.openConnections(null);
-		return dico.getEntityConnector().getEnumerator();
-	}
 }
 
 /**
@@ -565,7 +459,7 @@ class PlanParams {
 	 * @return a new WPSDictionary.
 	 */
 	protected WPSDictionary getDictionnary() {
-		return WPSDictionaryTest.CreateTestInstance(m_name);
+		return WPSDictionary.CreateTestInstance(m_name);
 	}
 
 	/**
