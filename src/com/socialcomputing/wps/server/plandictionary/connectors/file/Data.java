@@ -18,4 +18,8 @@ public abstract class Data {
 	public Hashtable<String, Object> getProperties() {
 		return m_Properties;
 	}
+	
+	public void addProperty( String name, Object value) {
+		m_Properties.put( name, value);
+	}
 }

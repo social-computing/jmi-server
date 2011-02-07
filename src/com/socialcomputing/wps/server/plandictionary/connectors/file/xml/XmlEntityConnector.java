@@ -43,10 +43,16 @@ public class XmlEntityConnector extends FileEntityConnector {
 		Element entity = element.getChild( "XML-entity");
 		connector.m_EntityMarkup = entity.getAttributeValue( "markup");
 		connector.m_EntityId = entity.getAttributeValue( "id");
+		for( Element property: (List<Element>)entity.getChildren( "XML-property")) {
+			connector.entityProperties.add( property.getAttributeValue( "id"));
+		}
 
 		Element attribute = element.getChild( "XML-attribute");
 		connector.m_AttributeMarkup = attribute.getAttributeValue( "markup");
 		connector.m_AttributeId = attribute.getAttributeValue( "id");
+		for( Element property: (List<Element>)attribute.getChildren( "XML-property")) {
+			connector.attributeProperties.add( property.getAttributeValue( "id"));
+		}
 	
 		return connector;
 	}
@@ -66,6 +72,9 @@ public class XmlEntityConnector extends FileEntityConnector {
 		}
 		for( Element el: (List<Element>)m_Root.getChildren( m_EntityMarkup)) {
 			Entity entity = addEntity( el.getAttributeValue( m_EntityId));
+			for( String property : entityProperties) {
+				entity.addProperty( property, el.getAttributeValue( property));
+			}
 			
 			for( Element el2: (List<Element>)el.getChildren( m_AttributeMarkup)) {
 				Attribute attribute = addAttribute( el2.getAttributeValue( m_AttributeId));
@@ -74,6 +83,9 @@ public class XmlEntityConnector extends FileEntityConnector {
 		}
 		for( Element el: (List<Element>)m_Root.getChildren( m_AttributeMarkup)) {
 			Attribute attribute = addAttribute( el.getAttributeValue( m_AttributeId));
+			for( String property : attributeProperties) {
+				attribute.addProperty( property, el.getAttributeValue( property));
+			}
 		}
 	}
 
