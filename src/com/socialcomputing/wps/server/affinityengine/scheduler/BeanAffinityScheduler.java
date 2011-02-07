@@ -12,6 +12,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import org.hibernate.Session;
+
+import com.socialcomputing.utils.database.HibernateUtil;
 import com.socialcomputing.wps.server.affinityengine.AffinityProcess;
 import com.socialcomputing.wps.server.persistence.Dictionary;
 import com.socialcomputing.wps.server.persistence.hibernate.DictionaryManagerImpl;
@@ -150,7 +153,7 @@ public class BeanAffinityScheduler implements AffinityScheduler {
 
 	private Connection getConnection() throws SQLException, RemoteException
 	{
-		if( m_DataSource == null)
+		/*if( m_DataSource == null)
 		{
 			try {
 				Context context = new InitialContext();
@@ -161,6 +164,9 @@ public class BeanAffinityScheduler implements AffinityScheduler {
 				throw new RemoteException("Could not obtain DataSource: " + e.getMessage());
 			}
 		}
-		return m_DataSource.getConnection();
+		return m_DataSource.getConnection();*/
+		Session session = HibernateUtil.currentSession();
+		
+		return session.connection();
 	}
 }

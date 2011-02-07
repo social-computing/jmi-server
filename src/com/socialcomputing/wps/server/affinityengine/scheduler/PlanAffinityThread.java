@@ -10,6 +10,9 @@ import javax.naming.InitialContext;
 //import javax.rmi.PortableRemoteObject;
 import javax.sql.DataSource;
 
+import org.hibernate.Session;
+
+import com.socialcomputing.utils.database.HibernateUtil;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 
 /**
@@ -39,10 +42,13 @@ public class PlanAffinityThread extends Thread
 		Connection             connection = null;
 		Statement              stmt = null;
 		try {
-			Context context = new InitialContext();
+			//Context context = new InitialContext();
 
-			DataSource dataSource = (DataSource) context.lookup("java:comp/env/jdbc/WPSPooledDS");
-			connection = dataSource.getConnection();
+			//DataSource dataSource = (DataSource) context.lookup("java:comp/env/jdbc/WPSPooledDS");
+			//connection = dataSource.getConnection();
+			Session session = HibernateUtil.currentSession();
+			
+			connection = session.connection();
 
 			StringBuffer sbDelete = new StringBuffer( "delete from " + WPSDictionary.getCoefficientQueuingTableName( m_Name) + " where id in(");
 			stmt = connection.createStatement();

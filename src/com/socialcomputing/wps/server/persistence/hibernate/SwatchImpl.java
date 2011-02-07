@@ -27,10 +27,12 @@ import com.socialcomputing.wps.server.swatchs.XSwatch;
 class SwatchImpl implements Serializable, Swatch {
 
 	@Id
-	@Column(name = "name", columnDefinition="varchar(255) default ''")
+	//@Column(name = "name", columnDefinition="varchar(255) default ''")
+	@Column(name = "name")
 	String name;
 	
-	@Column(name = "swatch", columnDefinition="TEXT")
+	//@Column(name = "swatch", columnDefinition="text")
+	@Column(name = "swatch")
 	String swatch;
 	
 	@Transient
