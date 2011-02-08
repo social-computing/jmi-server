@@ -6,7 +6,7 @@
 <!ENTITY % XML-entities SYSTEM "XML-connector.dtd" >
 %XML-entities;
 
-<!ENTITY % JAVA-entities SYSTEM "JAVA-connector.dtd" >
+<!ENTITY % JAVA-entities SYSTEM "SOLR-connector.dtd" >
 %JAVA-entities;
 
 <!ENTITY % Relax-params SYSTEM "Relax-params.dtd" >
@@ -32,7 +32,7 @@
 <!ELEMENT dictionary (comment?, entities, env-property*, filtering-scheduling?, filtering-profile*, affinity-reader-profile+, analysis-profile+, display-profile+, segmentation)>
 <!ATTLIST dictionary name   NMTOKEN 	#REQUIRED>
 
-<!ELEMENT entities (JDBC-entities|XML-entities|JAVA-entities)>
+<!ELEMENT entities (JDBC-entities|XML-entities|SOLR-entities)>
 
 <!-- =====================================================================  -->
 <!-- Env Properties : fixing env properties -->

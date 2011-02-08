@@ -1,0 +1,338 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+
+<wps>	
+	<entity id="1" name="ONU">
+	</entity>
+	<entity id="2" name="OCDE">
+		<attribute id="5" />
+		<attribute id="12" />
+		<attribute id="13" />
+		<attribute id="19" />
+		<attribute id="35" />
+		<attribute id="45" />
+		<attribute id="50" />
+		<attribute id="57" />
+		<attribute id="59" />
+		<attribute id="62" />
+		<attribute id="63" />
+		<attribute id="68" />
+		<attribute id="77" />
+		<attribute id="82" />
+		<attribute id="83" />
+		<attribute id="85" />
+		<attribute id="87" />
+		<attribute id="102" />
+		<attribute id="114" />
+		<attribute id="127" />
+		<attribute id="128" />
+		<attribute id="137" />
+		<attribute id="140" />
+		<attribute id="142" />
+		<attribute id="147" />
+		<attribute id="163" />
+		<attribute id="168" />
+		<attribute id="169" />
+		<attribute id="177" />
+		<attribute id="185" />
+	</entity>
+	<entity id="3" name="Union Européenne">
+		<attribute id="5" />
+		<attribute id="13" />
+		<attribute id="19" />
+		<attribute id="50" />
+		<attribute id="57" />
+		<attribute id="62" />
+		<attribute id="63" />
+		<attribute id="68" />
+		<attribute id="82" />
+		<attribute id="85" />
+		<attribute id="100" />
+		<attribute id="132" />
+		<attribute id="147" />
+		<attribute id="142" />
+		<attribute id="168" />
+		<attribute id="30" />
+		<attribute id="39" />
+		<attribute id="177" />
+		<attribute id="58" />
+		<attribute id="77" />
+		<attribute id="96" />
+		<attribute id="101" />
+		<attribute id="109" />
+		<attribute id="140" />
+		<attribute id="163" />
+		<attribute id="164" />
+		<attribute id="185" />
+		<attribute id="146" />
+	</entity>
+	<entity id="4" name="EURO">
+		<attribute id="5" />
+		<attribute id="13" />
+		<attribute id="19" />
+		<attribute id="57" />
+		<attribute id="62" />
+		<attribute id="63" />
+		<attribute id="68" />
+		<attribute id="82" />
+		<attribute id="85" />
+		<attribute id="102" />
+		<attribute id="137" />
+		<attribute id="142" />
+	</entity>
+	<entity id="5" name="SCHENGEN">
+		<attribute id="5" />
+		<attribute id="13" />
+		<attribute id="19" />
+		<attribute id="57" />
+		<attribute id="63" />
+		<attribute id="68" />
+		<attribute id="85" />
+		<attribute id="102" />
+		<attribute id="137" />
+		<attribute id="142" />
+	</entity>
+	<entity id="6" name="OTAN">
+		<attribute id="5" />
+		<attribute id="19" />
+		<attribute id="35" />
+		<attribute id="50" />
+		<attribute id="57" />
+		<attribute id="59" />
+		<attribute id="63" />
+		<attribute id="68" />
+		<attribute id="77" />
+		<attribute id="83" />
+		<attribute id="85" />
+		<attribute id="102" />
+		<attribute id="127" />
+		<attribute id="137" />
+		<attribute id="140" />
+		<attribute id="142" />
+		<attribute id="147" />
+		<attribute id="177" />
+		<attribute id="185" />
+	</entity>
+	<entity id="7" name="OPEP">
+		<attribute id="4" />
+		<attribute id="9" />
+		<attribute id="54" />
+		<attribute id="55" />
+		<attribute id="64" />
+		<attribute id="79" />
+		<attribute id="80" />
+		<attribute id="93" />
+		<attribute id="99" />
+		<attribute id="126" />
+		<attribute id="143" />
+		<attribute id="191" />
+	</entity>
+	<entity id="8" name="OMC">
+	</entity>
+	<entity id="9" name="ALENA">
+		<attribute id="35" />
+		<attribute id="59" />
+		<attribute id="114" />
+	</entity>
+	<entity id="10" name="MERCOSUR">
+		<attribute id="10" />
+		<attribute id="28" />
+		<attribute id="136" />
+		<attribute id="188" />
+	</entity>
+
+	<attribute id="1" name="Afghanistan" />
+	<attribute id="2" name="Afrique" />
+	<attribute id="3" name="Albanie" />
+	<attribute id="4" name="Algérie" />
+	<attribute id="5" name="Allemagne" />
+	<attribute id="6" name="Andorre" />
+	<attribute id="7" name="Angola" />
+	<attribute id="8" name="Antigua-et-Barbuda" />
+	<attribute id="9" name="Arabie Saoudite" />
+	<attribute id="10" name="Argentine" />
+	<attribute id="11" name="Arménie" />
+	<attribute id="12" name="Australie" />
+	<attribute id="13" name="Autriche" />
+	<attribute id="14" name="Azerbaïdjan" />
+	<attribute id="15" name="Bahamas" />
+	<attribute id="16" name="Bahreïn" />
+	<attribute id="17" name="Bangladesh" />
+	<attribute id="18" name="Barbade" />
+	<attribute id="19" name="Belgique" />
+	<attribute id="20" name="Belize" />
+	<attribute id="21" name="Bénin" />
+	<attribute id="22" name="Bhoutan" />
+	<attribute id="23" name="Biélorussie" />
+	<attribute id="24" name="Birmanie" />
+	<attribute id="25" name="Bolivie" />
+	<attribute id="26" name="Bosnie-Herzégovine" />
+	<attribute id="27" name="Botswana" />
+	<attribute id="28" name="Brésil" />
+	<attribute id="29" name="Brunéi Darussalam" />
+	<attribute id="30" name="Bulgarie" />
+	<attribute id="31" name="Burkina Faso" />
+	<attribute id="32" name="Burundi" />
+	<attribute id="33" name="Cambodge" />
+	<attribute id="34" name="Cameroun" />
+	<attribute id="35" name="Canada" />
+	<attribute id="36" name="Cap-Vert" />
+	<attribute id="37" name="Chili" />
+	<attribute id="38" name="Chine" />
+	<attribute id="39" name="Chypre" />
+	<attribute id="40" name="Colombie" />
+	<attribute id="41" name="Comores" />
+	<attribute id="42" name="Congo-Brazzaville" />
+	<attribute id="43" name="Congo-Kinshasa" />
+	<attribute id="44" name="Corée du Nord" />
+	<attribute id="45" name="Corée du Sud" />
+	<attribute id="46" name="Costa Rica" />
+	<attribute id="47" name="Côte d'Ivoire" />
+	<attribute id="48" name="Croatie" />
+	<attribute id="49" name="Cuba" />
+	<attribute id="50" name="Danemark" />
+	<attribute id="51" name="Djibouti" />
+	<attribute id="52" name="Dominique" />
+	<attribute id="53" name="Égypte" />
+	<attribute id="54" name="Émirats Arabes Unis" />
+	<attribute id="55" name="Équateur" />
+	<attribute id="56" name="Érythrée" />
+	<attribute id="57" name="Espagne" />
+	<attribute id="58" name="Estonie" />
+	<attribute id="59" name="États-Unis" />
+	<attribute id="60" name="Éthiopie" />
+	<attribute id="61" name="Fidji" />
+	<attribute id="62" name="Finlande" />
+	<attribute id="63" name="France" />
+	<attribute id="64" name="Gabon" />
+	<attribute id="65" name="Gambie" />
+	<attribute id="66" name="Géorgie" />
+	<attribute id="67" name="Ghana" />
+	<attribute id="68" name="Grèce" />
+	<attribute id="69" name="Grenade" />
+	<attribute id="70" name="Guatemala" />
+	<attribute id="71" name="Guinée" />
+	<attribute id="72" name="Guinée" />
+	<attribute id="73" name="Guinée-Bissau" />
+	<attribute id="74" name="Guyana" />
+	<attribute id="75" name="Haïti" />
+	<attribute id="76" name="Honduras" />
+	<attribute id="77" name="Hongrie" />
+	<attribute id="78" name="Inde" />
+	<attribute id="79" name="Indonésie" />
+	<attribute id="80" name="Irak" />
+	<attribute id="81" name="Iran" />
+	<attribute id="82" name="Irlande" />
+	<attribute id="83" name="Islande" />
+	<attribute id="84" name="Israël" />
+	<attribute id="85" name="Italie" />
+	<attribute id="86" name="Jamaïque" />
+	<attribute id="87" name="Japon" />
+	<attribute id="88" name="Jordanie" />
+	<attribute id="89" name="Kazakhstan" />
+	<attribute id="90" name="Kenya" />
+	<attribute id="91" name="Kirghizistan" />
+	<attribute id="92" name="Kiribati" />
+	<attribute id="93" name="Koweït" />
+	<attribute id="94" name="Laos" />
+	<attribute id="95" name="Lesotho" />
+	<attribute id="96" name="Lettonie" />
+	<attribute id="97" name="Liban" />
+	<attribute id="98" name="Liberia" />
+	<attribute id="99" name="Libye" />
+	<attribute id="100" name="Liechtenstein" />
+	<attribute id="101" name="Lituanie" />
+	<attribute id="102" name="Luxembourg" />
+	<attribute id="103" name="Macédoine" />
+	<attribute id="104" name="Madagascar" />
+	<attribute id="105" name="Malaisie" />
+	<attribute id="106" name="Malawi" />
+	<attribute id="107" name="Maldives" />
+	<attribute id="108" name="Mali" />
+	<attribute id="109" name="Malte" />
+	<attribute id="110" name="Maroc" />
+	<attribute id="111" name="Marshall" />
+	<attribute id="112" name="Maurice" />
+	<attribute id="113" name="Mauritanie" />
+	<attribute id="114" name="Mexique" />
+	<attribute id="115" name="Micronésie" />
+	<attribute id="116" name="Moldavie" />
+	<attribute id="117" name="Monaco" />
+	<attribute id="118" name="Mongolie" />
+	<attribute id="119" name="Monténégro" />
+	<attribute id="120" name="Mozambique" />
+	<attribute id="121" name="Namibie" />
+	<attribute id="122" name="Nauru" />
+	<attribute id="123" name="Népal" />
+	<attribute id="124" name="Nicaragua" />
+	<attribute id="125" name="Niger" />
+	<attribute id="126" name="Nigéria" />
+	<attribute id="127" name="Norvège" />
+	<attribute id="128" name="Nouvelle Zélande" />
+	<attribute id="129" name="Oman" />
+	<attribute id="130" name="Ouganda" />
+	<attribute id="131" name="Ouzbékistan" />
+	<attribute id="132" name="Pakistan" />
+	<attribute id="133" name="Palestine" />
+	<attribute id="134" name="Panama" />
+	<attribute id="135" name="Papouasie-Nouvelle-Guinée" />
+	<attribute id="136" name="Paraguay" />
+	<attribute id="137" name="Pays-Bas" />
+	<attribute id="138" name="Pérou" />
+	<attribute id="139" name="Philippines" />
+	<attribute id="140" name="Pologne" />
+	<attribute id="141" name="Porto" />
+	<attribute id="142" name="Portugal" />
+	<attribute id="143" name="Qatar" />
+	<attribute id="144" name="République centrafricaine" />
+	<attribute id="145" name="République dominicaine" />
+	<attribute id="146" name="Roumanie" />
+	<attribute id="147" name="Royaume-Uni" />
+	<attribute id="148" name="Russie" />
+	<attribute id="149" name="Rwanda" />
+	<attribute id="150" name="Saint-Christophe-et-Niévès" />
+	<attribute id="151" name="Sainte-Lucie" />
+	<attribute id="152" name="Saint-Marin" />
+	<attribute id="153" name="Saint-Vincent-et-les-Grenadines" />
+	<attribute id="154" name="Salomon" />
+	<attribute id="155" name="Salvador" />
+	<attribute id="156" name="Samoa" />
+	<attribute id="157" name="Sao" />
+	<attribute id="158" name="Sénégal" />
+	<attribute id="159" name="Serbie" />
+	<attribute id="160" name="Seychelles" />
+	<attribute id="161" name="Sierra Leone" />
+	<attribute id="162" name="Singapour" />
+	<attribute id="163" name="République Slovaque" />
+	<attribute id="164" name="Slovénie" />
+	<attribute id="165" name="Somalie" />
+	<attribute id="166" name="Soudan" />
+	<attribute id="167" name="Sri Lanka" />
+	<attribute id="168" name="Suède" />
+	<attribute id="169" name="Suisse" />
+	<attribute id="170" name="Suriname" />
+	<attribute id="171" name="Swaziland" />
+	<attribute id="172" name="Syrie" />
+	<attribute id="173" name="Tadjikistan" />
+	<attribute id="174" name="Taiwan" />
+	<attribute id="175" name="Tanzanie" />
+	<attribute id="176" name="Tchad" />
+	<attribute id="177" name="République Tchèque" />
+	<attribute id="178" name="Thaïlande" />
+	<attribute id="179" name="Timor" />
+	<attribute id="180" name="Togo" />
+	<attribute id="181" name="Tonga" />
+	<attribute id="182" name="Trinité-et-Tobago" />
+	<attribute id="183" name="Tunisie" />
+	<attribute id="184" name="Turkménistan" />
+	<attribute id="185" name="Turquie" />
+	<attribute id="186" name="Tuvalu" />
+	<attribute id="187" name="Ukraine" />
+	<attribute id="188" name="Uruguay" />
+	<attribute id="189" name="Vanuatu" />
+	<attribute id="190" name="Vatican" />
+	<attribute id="191" name="Venezuela" />
+	<attribute id="192" name="Viêtnam" />
+	<attribute id="193" name="Yémen" />
+	<attribute id="194" name="Zambie" />
+	<attribute id="195" name="Zimbabwe" />
+</wps>

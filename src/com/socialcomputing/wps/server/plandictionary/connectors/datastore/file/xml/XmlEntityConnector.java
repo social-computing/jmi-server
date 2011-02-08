@@ -59,7 +59,6 @@ public class XmlEntityConnector extends FileEntityConnector {
 			for( Element el2: (List<Element>)el.getChildren( m_AttributeMarkup)) {
 				Attribute attribute = addAttribute( el2.getAttributeValue( m_AttributeId));
 				entity.addAttribute( attribute, 1);
-				attribute.addEntity( entity);
 			}
 		}
 		for( Element el: (List<Element>)m_Root.getChildren( m_AttributeMarkup)) {

@@ -70,20 +70,16 @@ public class DatastoreAffinityGroupReader implements iAffinityGroupReader {
 			case AnalysisProfile.DISCOVERY_PLAN:
 				Map<String,Integer> set2 = new HashMap<String,Integer>();
 				for( String entityId : m_entityConnector.m_Attributes.get( id).m_Entities) {
-					for( AttributeEnumeratorItem attributeItem : m_entityConnector.m_Entities.get( entityId).m_Attributes) {
-						for( String entityId2 : m_entityConnector.m_Attributes.get( attributeItem.m_Id).m_Entities) {
-							if( set2.containsKey( entityId2)) {
-								int pond = set2.get( entityId2) + 1;
-								set2.put( entityId2, pond);
-								if( pond > maxPond)
-									maxPond = pond;
-							}
-							else {
-								set2.put( entityId2, 1);
-								if( maxPond < 1)
-									maxPond = 1;
-							}
-						}
+					if( set2.containsKey( entityId)) {
+						int pond = set2.get( entityId) + 1;
+						set2.put( entityId, pond);
+						if( pond > maxPond)
+							maxPond = pond;
+					}
+					else {
+						set2.put( entityId, 1);
+						if( maxPond < 1)
+							maxPond = 1;
 					}
 				}
 				result = new StringAndFloat[ set2.size()];

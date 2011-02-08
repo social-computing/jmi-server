@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+
+<!-- =====================================================================  -->
+<!-- SOLR-entities : data connectors description -->
+<!-- =====================================================================  -->
+<!ELEMENT SOLR-entities (comment?, SOLR-connection) >
+<!ATTLIST SOLR-entities	name    	CDATA    #REQUIRED>
+<!ATTLIST SOLR-entities	class   	CDATA   "com.socialcomputing.wps.server.plandictionary.connectors.datastore.searchengine.solr.SolrEntityConnector" >
+<!ATTLIST SOLR-entities	queryParam	CDATA   #REQUIRED>
+			
+<!-- a SOLR connection -->
+<!ELEMENT SOLR-connection 	EMPTY>
+					
