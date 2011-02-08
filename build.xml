@@ -7,17 +7,17 @@
 	<property name="build" location="WebContent/WEB-INF" />
 	<property name="dist" location="dist" />
 	<property name="ivy.lib.dir" location="WebContent/WEB-INF/lib" />
+	<property name="java.home" location="${JAVA_HOME}" />
 
 	<path id="project.class.path">
 		<fileset dir="${ivy.lib.dir}" includes="**/*.jar"/>
+		<fileset dir="${java.home}/lib" includes="plugin.jar"/>
 	</path>
 
 	<target name="all" depends="genreport,resolve,compile,applet,server" />
 
 	<target name="cleanlibdir" description="Clean lib directory">
-		<delete>
-			<fileset dir="${ivy.lib.dir}" includes="*.jar" />
-		</delete>
+		<delete dir="${ivy.lib.dir}" />
 	</target>
 
 	<target name="resolve" depends="cleanlibdir" description="Retrieve dependencies with ivy">
@@ -35,8 +35,12 @@
         </echo>
 		<echo file="${src}/com/socialcomputing/wps/client/applet/AppletVersion.jsp">&#x3C;%! final String APPLET_VERSION="${applet.version}"; %&#x3E;</echo>
 		<echo file="${src}/com/socialcomputing/wps/client/applet/AppletVersion.txt">${applet.version}</echo>
-		<javac srcdir="${test}" destdir="${build}/classes" classpathref="project.class.path" />
+		<mkdir dir="WebContent/WEB-INF/classes" />
 		<javac srcdir="${src}" destdir="${build}/classes" classpathref="project.class.path" />
+	</target>
+	
+	<target name="test" depends="compile">
+	    <javac srcdir="${test}" destdir="${build}/classes" classpathref="project.class.path" />
 	</target>
 
 	<target name="applet" depends="compile">
@@ -50,7 +54,6 @@
 		<copy file="${src}/com/socialcomputing/wps/client/applet/AppletVersion.jsp" tofile="WebContent/applet/AppletVersion.jsp" />
 		<jar destfile="${dist}/WPS.jar" basedir="${build}/classes" includes="com/socialcomputing/wps/**,com/socialcomputing/utils/**" />
         <!--copy file="${dist}/WPS.jar" tofile="WebContent/WEB-INF/lib/WPS.jar" /-->
-		<mkdir dir="WebContent/WEB-INF/classes" />
 		<copy file="${src}/hibernate.cfg.xml" tofile="WebContent/WEB-INF/classes/hibernate.cfg.xml" />
 		<copy file="${src}/ehcache.xml" tofile="WebContent/WEB-INF/classes/ehcache.xml" />
 		<copy file="${src}/logback.xml" tofile="WebContent/WEB-INF/classes/logback.xml" />

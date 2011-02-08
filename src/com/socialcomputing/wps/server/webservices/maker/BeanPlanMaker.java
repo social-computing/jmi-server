@@ -16,8 +16,11 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import org.hibernate.Session;
+
 import com.socialcomputing.utils.EZTimer;
 import com.socialcomputing.utils.database.DatabaseHelper;
+import com.socialcomputing.utils.database.HibernateUtil;
 import com.socialcomputing.wps.server.affinityengine.RecommendationInterface;
 import com.socialcomputing.wps.server.analysisengine.AnalysisProcess;
 import com.socialcomputing.wps.server.generator.PlanContainer;
@@ -239,7 +242,7 @@ public class BeanPlanMaker implements PlanMaker {
 	}
 
 	private Connection getConnection() throws SQLException, RemoteException {
-		if (m_DataSource == null) {
+		/* if (m_DataSource == null) {
 			try {
 				Context context = new InitialContext();
 				m_DataSource = (DataSource) context.lookup("java:comp/env/jdbc/WPSPooledDS");
@@ -247,12 +250,10 @@ public class BeanPlanMaker implements PlanMaker {
 				throw new RemoteException("Could not obtain WPS DataSource: " + e.getMessage());
 			}
 		}
-		Connection connection = m_DataSource.getConnection();
-		// if(
-		// connection.getMetaData().getDatabaseProductName().equalsIgnoreCase(
-		// "MySQL"))
-		// m_IsMySQL = true;
-		return connection;
+		Connection connection = m_DataSource.getConnection(); */
+		Session session = HibernateUtil.currentSession();
+		
+		return session.connection();
 	}
 
 }

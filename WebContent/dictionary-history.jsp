@@ -1,3 +1,5 @@
+<%@page import="com.socialcomputing.utils.database.HibernateUtil"%>
+<%@page import="org.hibernate.Session"%>
 <%@page import="com.socialcomputing.wps.server.persistence.Dictionary"%>
 <%@page import="com.socialcomputing.wps.server.persistence.DictionaryManager"%>
 <%@page import="com.socialcomputing.wps.server.persistence.hibernate.DictionaryManagerImpl"%>
@@ -112,8 +114,11 @@ if( sortquery == null) sortquery = "date desc";
 String tableName = com.socialcomputing.wps.server.plandictionary.WPSDictionary.getHistoryTableName( dic.getName());
 
 Context context = new InitialContext();
-DataSource ds = (DataSource) context.lookup("java:comp/env/jdbc/WPSPooledDS");
-Connection  connection = ds.getConnection();
+//DataSource ds = (DataSource) context.lookup("java:comp/env/jdbc/WPSPooledDS");
+//Connection  connection = ds.getConnection();
+Session s = HibernateUtil.currentSession();
+Connection connection = s.connection();
+
 
 Statement st = connection.createStatement();
 ResultSet rs = st.executeQuery( "select count(*) from " + tableName);
