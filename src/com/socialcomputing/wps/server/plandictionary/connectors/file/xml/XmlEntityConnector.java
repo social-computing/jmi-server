@@ -9,6 +9,7 @@ import org.jdom.Element;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.file.Attribute;
+import com.socialcomputing.wps.server.plandictionary.connectors.file.AttributePropertyDefinition;
 import com.socialcomputing.wps.server.plandictionary.connectors.file.Entity;
 import com.socialcomputing.wps.server.plandictionary.connectors.file.FileEntityConnector;
 
@@ -33,8 +34,6 @@ import com.socialcomputing.wps.server.plandictionary.connectors.file.FileEntityC
 public class XmlEntityConnector extends FileEntityConnector {
 	protected	Element m_Root = null;
 	protected	String m_EntityId = null, m_EntityMarkup = null, m_AttributeId = null, m_AttributeMarkup = null;
-	protected 	Set<String> entityProperties = new HashSet<String>();
-	protected 	Set<String> attributeProperties = new HashSet<String>();
 	
 	static XmlEntityConnector readObject(org.jdom.Element element) {
 		XmlEntityConnector connector = new XmlEntityConnector( element.getAttributeValue("name"));
@@ -51,7 +50,7 @@ public class XmlEntityConnector extends FileEntityConnector {
 		connector.m_AttributeMarkup = attribute.getAttributeValue( "markup");
 		connector.m_AttributeId = attribute.getAttributeValue( "id");
 		for( Element property: (List<Element>)attribute.getChildren( "XML-property")) {
-			connector.attributeProperties.add( property.getAttributeValue( "id"));
+			connector.attributeProperties.add( new AttributePropertyDefinition( property.getAttributeValue( "id"), property.getAttributeValue( "entity")));
 		}
 	
 		return connector;
@@ -78,14 +77,17 @@ public class XmlEntityConnector extends FileEntityConnector {
 			
 			for( Element el2: (List<Element>)el.getChildren( m_AttributeMarkup)) {
 				Attribute attribute = addAttribute( el2.getAttributeValue( m_AttributeId));
-				entity.addAttribute( attribute.getId(), 0);
+				entity.addAttribute( attribute, 1);
 			}
 		}
 		for( Element el: (List<Element>)m_Root.getChildren( m_AttributeMarkup)) {
 			Attribute attribute = addAttribute( el.getAttributeValue( m_AttributeId));
-			for( String property : attributeProperties) {
-				attribute.addProperty( property, el.getAttributeValue( property));
+			for( AttributePropertyDefinition property : attributeProperties) {
+				if( property.isSimple()) {
+					attribute.addProperty( property, el.getAttributeValue( property.getName()));
+				}
 			}
+			addEntityProperties( attribute);
 		}
 	}
 

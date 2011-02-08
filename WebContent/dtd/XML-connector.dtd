@@ -17,6 +17,7 @@
 
 <!ELEMENT XML-property 	EMPTY>
 <!ATTLIST XML-property	id    		CDATA    #REQUIRED>
+<!ATTLIST XML-property	entity    	CDATA    #IMPLIED>
 
 <!ELEMENT XML-attribute (XML-property*)>
 <!ATTLIST XML-attribute	markup		   	CDATA    #REQUIRED>

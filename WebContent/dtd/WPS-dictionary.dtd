@@ -18,7 +18,7 @@
 <!-- a comment -->
 <!ELEMENT comment 			(#PCDATA)>
 <!-- an url -->
-<!ELEMENT url 			(#PCDATA)>
+<!ELEMENT url 				(#PCDATA)>
 
 
 <!-- =====================================================================  -->

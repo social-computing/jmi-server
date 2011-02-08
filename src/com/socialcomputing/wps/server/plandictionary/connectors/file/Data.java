@@ -9,6 +9,7 @@ public abstract class Data {
 	public Data( String id) {
 		m_Id = id;
 		m_Properties = new Hashtable<String, Object>();
+		addProperty( "id", id);
 	}
 
 	public String getId() {

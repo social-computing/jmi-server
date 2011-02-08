@@ -6,8 +6,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Set;
 
 import org.jdom.Element;
 
@@ -28,6 +30,9 @@ public abstract class FileEntityConnector implements iEntityConnector {
 	
 	protected Hashtable<String, Entity> m_Entities = new Hashtable<String, Entity>();
 	protected Hashtable<String, Attribute> m_Attributes = new Hashtable<String, Attribute>();
+
+	protected 	Set<String> entityProperties = new HashSet<String>();
+	protected 	Set<AttributePropertyDefinition> attributeProperties = new HashSet<AttributePropertyDefinition>();
 
 	protected 	List<FileAffinityGroupReader> 	affinityGroupReaders = new ArrayList<FileAffinityGroupReader>();
 	protected 	List<FileProfileConnector> 		profileConnectors = new ArrayList<FileProfileConnector>();
@@ -153,7 +158,9 @@ public abstract class FileEntityConnector implements iEntityConnector {
 		return m_Entities.get( id);
 	}
 	protected Entity addEntity( String id) {
-		Entity entity = new Entity( id);
+		Entity entity = getEntity(id);
+		if( entity == null)
+			entity = new Entity( id);
 		m_Entities.put( id, entity);
 		return entity;
 	}
@@ -161,8 +168,25 @@ public abstract class FileEntityConnector implements iEntityConnector {
 		return m_Attributes.get( id);
 	}
 	protected Attribute addAttribute( String id) {
-		Attribute attribute = new Attribute( id);
+		Attribute attribute = getAttribute( id);
+		if( attribute == null)
+			attribute = new Attribute( id);
 		m_Attributes.put( id, attribute);
 		return attribute;
+	}
+	public void addEntityProperties(Attribute attribute) {
+		for( AttributePropertyDefinition propDefinition : attributeProperties) {
+			if( !propDefinition.isSimple()) {
+				ArrayList<String> property = new ArrayList<String>();
+				for( Entity entity : m_Entities.values()) {
+					if( entity.containsAttribute( attribute)) {
+						String value = ( String )entity.getProperties().get( propDefinition.getEntity());
+						if( value != null)
+							property.add( value);
+					}
+				}
+				attribute.addProperty( propDefinition, property.toArray( new String[ property.size()]));
+			}
+		}
 	}
 }

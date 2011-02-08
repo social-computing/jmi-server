@@ -13,9 +13,16 @@ public class Entity extends Data {
 		super(id);
 	}
 	
-	public void addAttribute( String id, float ponderation) {
-		m_Attributes.add( new AttributeEnumeratorItem( id, ponderation));
+	public void addAttribute( Attribute attribute, float ponderation) {
+		m_Attributes.add( new AttributeEnumeratorItem( attribute.getId(), ponderation));
 	}
 	
+	public boolean containsAttribute( Attribute attribute) {
+		for( AttributeEnumeratorItem item :  m_Attributes) {
+			if( item.m_Id.equalsIgnoreCase( attribute.getId()))
+				return true;
+		}
+		return false;
+	}
 	
 }
