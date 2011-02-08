@@ -1,35 +1,15 @@
-package com.socialcomputing.wps.server.plandictionary.connectors.file.xml;
+package com.socialcomputing.wps.server.plandictionary.connectors.datastore.file.xml;
 
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Set;
 
 import org.jdom.Element;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
-import com.socialcomputing.wps.server.plandictionary.connectors.file.Attribute;
-import com.socialcomputing.wps.server.plandictionary.connectors.file.AttributePropertyDefinition;
-import com.socialcomputing.wps.server.plandictionary.connectors.file.Entity;
-import com.socialcomputing.wps.server.plandictionary.connectors.file.FileEntityConnector;
-
-/**
- * <p>
- * Title: WPS Connectors
- * </p>
- * <p>
- * Description:
- * </p>
- * <p>
- * Copyright: Copyright (c) 2002
- * </p>
- * <p>
- * Company: MapStan
- * </p>
- * 
- * @author unascribed
- * @version 1.0
- */
+import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Attribute;
+import com.socialcomputing.wps.server.plandictionary.connectors.datastore.AttributePropertyDefinition;
+import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Entity;
+import com.socialcomputing.wps.server.plandictionary.connectors.datastore.file.FileEntityConnector;
 
 public class XmlEntityConnector extends FileEntityConnector {
 	protected	Element m_Root = null;
@@ -61,9 +41,10 @@ public class XmlEntityConnector extends FileEntityConnector {
 	}
 
 	@Override
-	public void openConnections(Hashtable<String, Object> wpsparams) throws WPSConnectorException {
-		super.openConnections( wpsparams);
+	public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
+		super.openConnections( planType, wpsparams);
 		try {
+			// TODO SAX Parser => faster
 			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(false);
 			org.jdom.Document doc = builder.build(m_Stream);
 			m_Root = doc.getRootElement();
@@ -78,6 +59,7 @@ public class XmlEntityConnector extends FileEntityConnector {
 			for( Element el2: (List<Element>)el.getChildren( m_AttributeMarkup)) {
 				Attribute attribute = addAttribute( el2.getAttributeValue( m_AttributeId));
 				entity.addAttribute( attribute, 1);
+				attribute.addEntity( entity);
 			}
 		}
 		for( Element el: (List<Element>)m_Root.getChildren( m_AttributeMarkup)) {

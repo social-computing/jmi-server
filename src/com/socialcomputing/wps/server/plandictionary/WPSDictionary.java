@@ -208,7 +208,7 @@ public class WPSDictionary implements java.io.Serializable
 		m_Name = name;
 	}
 
-	public void openConnections( Hashtable<String, Object> wpsparams) throws WPSConnectorException
+	public void openConnections( int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException
 	{
 		// V\uFFFDrifications de base
 		if( m_EntitiesConnector == null)
@@ -220,7 +220,7 @@ public class WPSDictionary implements java.io.Serializable
 			model.setEntitiesConnector( m_EntitiesConnector);
 		}
 		// Ouverture des bases
-		m_EntitiesConnector.openConnections( wpsparams);
+		m_EntitiesConnector.openConnections( planType, wpsparams);
 	}
 
 	public void closeConnections()  throws WPSConnectorException

@@ -1,4 +1,4 @@
-package com.socialcomputing.wps.server.plandictionary.connectors.file;
+package com.socialcomputing.wps.server.plandictionary.connectors.datastore;
 
 public class AttributePropertyDefinition {
 

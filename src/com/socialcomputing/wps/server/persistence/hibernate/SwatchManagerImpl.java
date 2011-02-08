@@ -2,7 +2,6 @@ package com.socialcomputing.wps.server.persistence.hibernate;
 
 import java.util.Collection;
 
-import org.apache.commons.collections.functors.SwitchTransformer;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 

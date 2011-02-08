@@ -1,4 +1,4 @@
-package com.socialcomputing.wps.server.plandictionary.connectors.file;
+package com.socialcomputing.wps.server.plandictionary.connectors.datastore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +18,14 @@ public class Entity extends Data {
 	}
 	
 	public boolean containsAttribute( Attribute attribute) {
+		return containsAttribute( attribute.getId());
+	}
+	
+	public boolean containsAttribute( String attribute) {
 		for( AttributeEnumeratorItem item :  m_Attributes) {
-			if( item.m_Id.equalsIgnoreCase( attribute.getId()))
+			if( item.m_Id.equalsIgnoreCase( attribute))
 				return true;
 		}
 		return false;
 	}
-	
 }

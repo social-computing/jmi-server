@@ -1,4 +1,4 @@
-package com.socialcomputing.wps.server.plandictionary.connectors.file;
+package com.socialcomputing.wps.server.plandictionary.connectors.datastore;
 
 import java.util.Collection;
 import java.util.Hashtable;
@@ -13,18 +13,18 @@ import com.socialcomputing.wps.server.plandictionary.connectors.iProfileConnecto
 import com.socialcomputing.wps.server.plandictionary.connectors.iSelectionConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iSubAttributeConnector;
 
-public class FileProfileConnector implements iProfileConnector {
+public class DatastoreProfileConnector implements iProfileConnector {
 	protected String m_Name = WPSDictionary.DEFAULT_NAME;
-	protected FileEntityConnector m_FileEntityConnector = null;
+	protected DatastoreEntityConnector m_entityConnector = null;
 	
-	static FileProfileConnector readObject( Element element)
+	static DatastoreProfileConnector readObject( Element element)
 	{
-		FileProfileConnector profile = new FileProfileConnector();
+		DatastoreProfileConnector profile = new DatastoreProfileConnector();
 		return profile;
 	}
 	
-	public void openConnections(Hashtable<String, Object> wpsparams, FileEntityConnector fileEntityConnector)  {
-		m_FileEntityConnector = fileEntityConnector;
+	public void openConnections( DatastoreEntityConnector entityConnector)  {
+		m_entityConnector = entityConnector;
 	}
 
 	public void closeConnections() {
@@ -43,7 +43,7 @@ public class FileProfileConnector implements iProfileConnector {
 
 	@Override
 	public iEnumerator<AttributeEnumeratorItem> getEnumerator(String entityId) throws WPSConnectorException {
-		return new DataEnumerator<AttributeEnumeratorItem>( m_FileEntityConnector.getEntity(entityId).m_Attributes);
+		return new DataEnumerator<AttributeEnumeratorItem>( m_entityConnector.getEntity(entityId).m_Attributes);
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class FileProfileConnector implements iProfileConnector {
 
 	@Override
 	public Hashtable<String, Object> getProperties(String attributeId, boolean bInBase, String entityId) throws WPSConnectorException {
-		return m_FileEntityConnector.getAttribute( attributeId).getProperties();
+		return m_entityConnector.getAttribute( attributeId).getProperties();
 	}
 
 	@Override

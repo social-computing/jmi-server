@@ -94,7 +94,7 @@ public class BeanAffinityScheduler implements AffinityScheduler {
 			
 			connection = this.getConnection();
 			dico = 	dictionaryLoader.getDictionary();
-			dico.openConnections( null);
+			dico.openConnections( 0, null);
 			AffinityProcess process = new AffinityProcess( dico, connection);
 			//Collection col = process.compute();
 			process.compute();
@@ -125,7 +125,7 @@ public class BeanAffinityScheduler implements AffinityScheduler {
 			
 			connection = this.getConnection();
 			dico = 	dictionaryLoader.getDictionary();
-			dico.openConnections(  null);
+			dico.openConnections( 0, null);
 			
 			AffinityProcess process = new AffinityProcess( dico, entities, connection);
 			//Collection col = process.compute();

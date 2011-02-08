@@ -123,7 +123,8 @@ public class JDBCEntityConnector implements iEntityConnector, Serializable {
 		return m_Description;
 	}
 
-	public void openConnections(Hashtable<String, Object> wpsparams) throws WPSConnectorException {
+	@Override
+	public void openConnections( int planType,Hashtable<String, Object> wpsparams) throws WPSConnectorException {
 		m_Connection = m_ConnectionProfile.getConnection();
 		if (m_AffinityGroupReaders.size() > 0) {
 			for (JDBCAffinityGroupReader j : m_AffinityGroupReaders.values()) {

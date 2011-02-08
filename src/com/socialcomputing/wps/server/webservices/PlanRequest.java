@@ -3,8 +3,6 @@ package com.socialcomputing.wps.server.webservices;
 import java.sql.Connection;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Iterator;
-//import java.util.Set;
 import java.util.StringTokenizer;
 
 import com.socialcomputing.wps.client.applet.Env;
@@ -38,7 +36,7 @@ public class PlanRequest
 	 * "displayProfile" : force the display profile
 	 * "appletSize" : dimension of the Applet ( ex: "appletSize=300,400")
 	 */
-	private Hashtable           		m_RequestParameters = null;
+	private Hashtable<String, Object>   m_RequestParameters = null;
 	private Hashtable<String, XSwatch>	m_LoadedSwatch = null;
 	private AnalysisProfile        		m_AnalysisProfile = null;
 	private AffinityReaderProfile  		m_AffinityReaderProfile = null;
@@ -53,7 +51,7 @@ public class PlanRequest
 	// Identitede segmentation
 	public RequestingClassifyId m_classifyId = null;
 
-	public PlanRequest( Connection WPSConnection, WPSDictionary dico, Hashtable parameters ) throws WPSConnectorException
+	public PlanRequest( Connection WPSConnection, WPSDictionary dico, Hashtable<String, Object> parameters ) throws WPSConnectorException
 	{
 		m_LoadedSwatch = new Hashtable<String, XSwatch>();
 		m_Dictionary = dico;
@@ -62,10 +60,8 @@ public class PlanRequest
 		m_classifyId = new RequestingClassifyId( this.getParameter( "classifyId") != null ? this.getParameter( "classifyId") : m_entityId);
 
 		{   // Initialisation des AffinityReader par defauts (built-in)
-			Iterator it = m_Dictionary.m_AffinityReaderProfiles.values().iterator();
-			while( it.hasNext())
+			for( AffinityReaderProfile profile : m_Dictionary.m_AffinityReaderProfiles.values())
 			{
-				AffinityReaderProfile profile = (AffinityReaderProfile) it.next();
 				if( profile.m_defaultConnector != null)
 					profile.m_defaultConnector.instanciate( WPSConnection, this);
 			}
@@ -174,12 +170,12 @@ public class PlanRequest
 	 * The Model find the Swatch corresponding to this id and calls getBoundNames.
 	 * Those names can be cached by the ServerSwatch
 	 */
-	public Hashtable getEntityProps( String swatchName, String id ) throws WPSConnectorException
+	public Hashtable<String, Object> getEntityProps( String swatchName, String id ) throws WPSConnectorException
 	{
 		// DB properties
-		Hashtable dbProperties = m_Dictionary.getEntityConnector().getProperties( id);
+		Hashtable<String, Object> dbProperties = m_Dictionary.getEntityConnector().getProperties( id);
 
-		Hashtable swatchProperties = new Hashtable();
+		Hashtable<String, Object> swatchProperties = new Hashtable<String, Object>();
 		XSwatch swatch = this.getSwatch( swatchName);
 
 		AnalysisProfile profile = this.getAnalysisProfile();
@@ -271,7 +267,7 @@ public class PlanRequest
 	 * The Model find the Swatch corresponding to this id and calls getBoundNames.
 	 * Those names can be cached by the XSwatch.
 	 */
-	public  void putAttributeProps( Recommendable recommendable, XSwatch restSwh, XSwatch curSwh, Hashtable props ) throws WPSConnectorException
+	public  void putAttributeProps( Recommendable recommendable, XSwatch restSwh, XSwatch curSwh, Hashtable<String, Object> props ) throws WPSConnectorException
 	{
 		// DB properties
 		boolean         isBase          = recommendable.isRef();
@@ -473,10 +469,10 @@ public class PlanRequest
 //		props.put( "SELECTION", new Integer( propSelection));
 	}
 
-	private Hashtable transformRecommendation( Recommendable recommendable, AnalysisProfile profile, int recIndex ) throws WPSConnectorException
+	private Hashtable<String, Object> transformRecommendation( Recommendable recommendable, AnalysisProfile profile, int recIndex ) throws WPSConnectorException
 	{
 		String[]    strIds  = (String[])recommendable.getRecommendations( recIndex ).toArray( new String[0] );
-		Hashtable   props   = new Hashtable();
+		Hashtable<String, Object>   props   = new Hashtable<String, Object>();
 		int         i, size = strIds.length;
 
 		for ( i = 0; i < size; i++ )

@@ -9,7 +9,7 @@ public interface iEntityConnector
 
    public abstract  String getDescription(  );
 
-   public abstract  void openConnections( Hashtable<String, Object> wpsparams) throws WPSConnectorException;
+   public abstract  void openConnections( int planType,Hashtable<String, Object> wpsparams) throws WPSConnectorException;
 
    public abstract  void closeConnections(  ) throws WPSConnectorException;
 

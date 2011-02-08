@@ -74,7 +74,8 @@ public class JavaEntityConnector implements iEntityConnector, Serializable
 		return s_Description;
 	}
 
-	public void openConnections( Hashtable<String, Object> wpsparams) throws WPSConnectorException
+	@Override
+	public void openConnections( int planType,Hashtable<String, Object> wpsparams) throws WPSConnectorException
 	{
 		if( m_javaPlanParameter != null)
 		{
@@ -113,6 +114,7 @@ public class JavaEntityConnector implements iEntityConnector, Serializable
 		m_AffReader.openConnections( m_PlanData);
 	}
 
+	@Override
 	public void closeConnections()
 	{
 	}

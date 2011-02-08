@@ -5,7 +5,7 @@
 <!-- =====================================================================  -->
 <!ELEMENT XML-entities (comment?, URL-connection, XML-entity, XML-attribute)>
 <!ATTLIST XML-entities	name    CDATA    #REQUIRED>
-<!ATTLIST XML-entities	class   CDATA    "com.socialcomputing.wps.server.plandictionary.connectors.file.xml.XmlEntityConnector" >
+<!ATTLIST XML-entities	class   CDATA    "com.socialcomputing.wps.server.plandictionary.connectors.datastore.file.xml.XmlEntityConnector" >
 
 
 <!-- an URL connection -->

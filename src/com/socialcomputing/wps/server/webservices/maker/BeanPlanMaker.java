@@ -137,7 +137,7 @@ public class BeanPlanMaker implements PlanMaker {
 			}
 
 			// PLANREQUEST CREATION
-			dico.openConnections(params);
+			dico.openConnections( planRequest.getAnalysisProfile().m_planType, params);
 			status = Steps.DictionaryOpened;
 
 			// AFFINITY GROUP RETRIEVAL

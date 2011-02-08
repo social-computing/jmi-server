@@ -133,19 +133,16 @@ public class PlanGenerator {
 		// SwatchLoaderHome swatchLoaderHome = (SwatchLoaderHome)
 		// PortableRemoteObject.narrow( planPrm.m_loader, SwatchLoaderHome.class
 		// );
-		PlanRequest planRequest = new PlanRequest(planPrm.m_connection,
-				planPrm.m_dico, planPrm.m_params);
+		PlanRequest planRequest = new PlanRequest(planPrm.m_connection, planPrm.m_dico, planPrm.m_params);
 		timer.showElapsedTime("create PlanRequest");
 
 		// AFFINITY GROUP RETRIEVAL
-		RecommendationInterface affinity = new RecommendationInterface(
-				planRequest);
-		Collection affinityGroup = affinity.retrieveAffinityGroup();
+		RecommendationInterface affinity = new RecommendationInterface(planRequest);
+		Collection<String> affinityGroup = affinity.retrieveAffinityGroup();
 		timer.showElapsedTime("retrieve AffinityGroup");
 
 		// ANALYSIS ENGINE
-		AnalysisProcess analysisEngine = new AnalysisProcess(planRequest,
-				affinityGroup, affinity);
+		AnalysisProcess analysisEngine = new AnalysisProcess(planRequest, affinityGroup, affinity);
 		timer.showElapsedTime("create analysisEngine");
 
 		ProtoPlan proto = analysisEngine.getProtoPlan();
@@ -190,9 +187,8 @@ public class PlanGenerator {
 	 * @return A new 'properties' element describing a connection to scharon.
 	 */
 	private Element getProperties() {
-		Element properties = new Element("properties"), parameters = new Element(
-				"parameters"), parameter = new Element("parameter"), redirect = new Element(
-				"redirect");
+		Element properties = new Element("properties"), parameters = new Element("parameters"), parameter = new Element(
+				"parameter"), redirect = new Element("redirect");
 
 		properties.setAttribute("name", "MapStan Search/MapStan Search");
 		properties.setAttribute("server", "http://scharon:80/");
@@ -231,8 +227,7 @@ public class PlanGenerator {
 	 */
 	private byte[] getSerialPlan(Env env, Plan plan) throws IOException {
 		ByteArrayOutputStream baOut = new ByteArrayOutputStream();
-		ObjectOutputStream objOut = new ObjectOutputStream(
-				new GZIPOutputStream(baOut));
+		ObjectOutputStream objOut = new ObjectOutputStream(new GZIPOutputStream(baOut));
 
 		objOut.writeObject(env);
 		objOut.writeObject(plan);
@@ -259,12 +254,10 @@ public class PlanGenerator {
 	 *            True if the serialized WPSApplet Plan should be compressed
 	 *            using GZIP.
 	 */
-	private void writeObject(Env env, Plan plan, PlanParams planPrm,
-			boolean needComp) {
+	private void writeObject(Env env, Plan plan, PlanParams planPrm, boolean needComp) {
 		try {
 			String outPath = "C:/Documents and Settings/flugue/Desktop/temp/";
-			FileOutputStream out = new FileOutputStream(outPath
-					+ planPrm.getPlanName() + ".mapstan");
+			FileOutputStream out = new FileOutputStream(outPath + planPrm.getPlanName() + ".mapstan");
 			byte[] serPlan = getSerialPlan(env, plan);
 
 			if (out != null) {
@@ -333,37 +326,37 @@ public class PlanGenerator {
 			s_params = new EZParams(args);
 
 			EZTimer timer = new EZTimer();
-			boolean testDeg = s_params.isEnabled("degenerate"), testNet = s_params
-					.isEnabled("testNet"), isVisual = s_params
+			boolean testDeg = s_params.isEnabled("degenerate"), testNet = s_params.isEnabled("testNet"), isVisual = s_params
 					.isEnabled("visual");
 			PlanParams[] params = new PlanParams[] {
-					new PlanParams("charon", "Boosol",
-							AnalysisProfile.PERSONAL_PLAN, 1), // 0 flugue Plan
-					new PlanParams("charon", "SEngine",
-							AnalysisProfile.PERSONAL_PLAN, 1), // 1 mapstan
-					new PlanParams("charon", "SEngine",
-							AnalysisProfile.PERSONAL_PLAN, 12), // 2 amiga ppc
-					new PlanParams("charon", "SEngine",
-							AnalysisProfile.DISCOVERY_PLAN, 25), // 3
-																	// mapstan.net
-					new PlanParams("charon", "SEngine",
-							AnalysisProfile.DISCOVERY_PLAN, 1), // 4 mapstan.com
-					new PlanParams("charon", "SEngine",
-							AnalysisProfile.DISCOVERY_PLAN, 4), // 5 mapstan.net
-					new PlanParams("charon", "SEngine",
-							AnalysisProfile.DISCOVERY_PLAN, 250), // 6
-																	// linternaute
-					new PlanParams("charon", "SEngine",
-							AnalysisProfile.PERSONAL_PLAN, 31206),// 7 Amiga PPC
-					new PlanParams("charon", "SEngine",
-							AnalysisProfile.PERSONAL_PLAN, 59863),// 8 mapstan
-																	// search
-					new PlanParams("charon", "Boosol",
-							AnalysisProfile.PERSONAL_PLAN, 2), // 9 espinat Plan
-					new PlanParams("charon", "Boosol",
-							AnalysisProfile.GLOBAL_PLAN, 6227), // 10
-					new PlanParams("charon", "SEngine",
-							AnalysisProfile.PERSONAL_PLAN, 27), // 11 bug
+					new PlanParams("charon", "Boosol", AnalysisProfile.PERSONAL_PLAN, 1), // 0
+																							// flugue
+																							// Plan
+					new PlanParams("charon", "SEngine", AnalysisProfile.PERSONAL_PLAN, 1), // 1
+																							// mapstan
+					new PlanParams("charon", "SEngine", AnalysisProfile.PERSONAL_PLAN, 12), // 2
+																							// amiga
+																							// ppc
+					new PlanParams("charon", "SEngine", AnalysisProfile.DISCOVERY_PLAN, 25), // 3
+																								// mapstan.net
+					new PlanParams("charon", "SEngine", AnalysisProfile.DISCOVERY_PLAN, 1), // 4
+																							// mapstan.com
+					new PlanParams("charon", "SEngine", AnalysisProfile.DISCOVERY_PLAN, 4), // 5
+																							// mapstan.net
+					new PlanParams("charon", "SEngine", AnalysisProfile.DISCOVERY_PLAN, 250), // 6
+																								// linternaute
+					new PlanParams("charon", "SEngine", AnalysisProfile.PERSONAL_PLAN, 31206),// 7
+																								// Amiga
+																								// PPC
+					new PlanParams("charon", "SEngine", AnalysisProfile.PERSONAL_PLAN, 59863),// 8
+																								// mapstan
+																								// search
+					new PlanParams("charon", "Boosol", AnalysisProfile.PERSONAL_PLAN, 2), // 9
+																							// espinat
+																							// Plan
+					new PlanParams("charon", "Boosol", AnalysisProfile.GLOBAL_PLAN, 6227), // 10
+					new PlanParams("charon", "SEngine", AnalysisProfile.PERSONAL_PLAN, 27), // 11
+																							// bug
 			};
 
 			PlanParams planPrm = params[11];
@@ -382,16 +375,14 @@ public class PlanGenerator {
 
 					if (testNet) {
 						String item = enumerator.next();
-						planPrm = new PlanParams("charon", "SEngine",
-								AnalysisProfile.PERSONAL_PLAN,
+						planPrm = new PlanParams("charon", "SEngine", AnalysisProfile.PERSONAL_PLAN,
 								Integer.parseInt(item));
 					}
 
 					protoPlan = preGenerate(planPrm);
 					timer.showElapsedTime("init " + planPrm.getPlanName());
 
-					System.out
-							.println("\n--==< PLAN GENERATION STARTED >==--\n");
+					System.out.println("\n--==< PLAN GENERATION STARTED >==--\n");
 					timer.reset();
 
 					planGenerator = new PlanGenerator();
@@ -403,8 +394,7 @@ public class PlanGenerator {
 														// "output", SERIALZ_OUT
 														// ));
 
-					System.out
-							.println("\n--==< PLAN GENERATION FINISHED >==--\n");
+					System.out.println("\n--==< PLAN GENERATION FINISHED >==--\n");
 				} while (testNet && enumerator.hasNext());
 			}
 		} catch (Exception e) {
@@ -415,7 +405,7 @@ public class PlanGenerator {
 	private static iEnumerator<String> getNetEnumerator()
 			throws com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException {
 		WPSDictionary dico = WPSDictionaryTest.CreateTestInstance("Boosol");
-		dico.openConnections(null);
+		dico.openConnections(0, null);
 		return dico.getEntityConnector().getEnumerator();
 	}
 }
@@ -509,8 +499,7 @@ class PlanParams {
 	protected String getPlanName() {
 		String type = (String) m_params.get("analysisProfile");
 
-		return type == null ? m_name + "_" + m_id : m_name + "_" + type + "_"
-				+ m_id;
+		return type == null ? m_name + "_" + m_id : m_name + "_" + type + "_" + m_id;
 	}
 
 	/**
@@ -518,8 +507,8 @@ class PlanParams {
 	 * 
 	 * @return A parameter table.
 	 */
-	protected Hashtable getParams() {
-		Hashtable params = new Hashtable();
+	protected Hashtable<String, Object> getParams() {
+		Hashtable<String, Object> params = new Hashtable<String, Object>();
 
 		params.put("language", "en");
 		params.put("width", "800");
@@ -544,8 +533,7 @@ class PlanParams {
 	 * @return a new Conection to the Server.
 	 */
 	protected Connection getConnection() {
-		String connectUrl = "jdbc:mysql://" + m_server
-				+ ":3306/WPS?user=boosol&password=boosol";
+		String connectUrl = "jdbc:mysql://" + m_server + ":3306/WPS?user=boosol&password=boosol";
 
 		try {
 			Class.forName("org.gjt.mm.mysql.Driver");
@@ -576,8 +564,7 @@ class PlanParams {
 	protected Object getSwatchLoader() {
 		Hashtable envCtx = new Hashtable();
 
-		envCtx.put(Context.INITIAL_CONTEXT_FACTORY,
-				"com.evermind.server.rmi.RMIInitialContextFactory");
+		envCtx.put(Context.INITIAL_CONTEXT_FACTORY, "com.evermind.server.rmi.RMIInitialContextFactory");
 		envCtx.put(Context.PROVIDER_URL, "ormi://" + m_server + "/WPS");
 		envCtx.put(Context.SECURITY_PRINCIPAL, "admin");
 		envCtx.put(Context.SECURITY_CREDENTIALS, "youarehere");
@@ -598,13 +585,12 @@ class PlanParams {
 	 * 
 	 * @return True if the connection to the WPS Server is opened.
 	 */
-	protected void init()
-			throws com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException {
+	protected void init() throws com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException {
 		m_params = getParams();
 		m_connection = getConnection();
 		m_dico = getDictionnary();
 
-		m_dico.openConnections(null);
+		m_dico.openConnections(0, null);
 		m_loader = getSwatchLoader();
 	}
 }
