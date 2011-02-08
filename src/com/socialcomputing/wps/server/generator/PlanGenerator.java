@@ -1,28 +1,36 @@
 package com.socialcomputing.wps.server.generator;
 
 //import java.awt.Point;
-import java.util.*;
-import java.io.*;
-import java.sql.*;
-import java.util.zip.*;
-import javax.naming.*;
-//import javax.swing.*;
-//import javax.rmi.PortableRemoteObject;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.Collection;
+import java.util.Hashtable;
+import java.util.zip.Deflater;
+import java.util.zip.GZIPOutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
-import org.jdom.*;
-//import org.jdom.input.*;
-import org.jdom.output.*;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 
-import com.socialcomputing.wps.client.*;
+import org.jdom.Element;
+import org.jdom.output.XMLOutputter;
+
+import com.socialcomputing.utils.EZParams;
+import com.socialcomputing.utils.EZTimer;
+import com.socialcomputing.utils.math.EZMath;
 import com.socialcomputing.wps.client.applet.Env;
 import com.socialcomputing.wps.client.applet.Plan;
-import com.socialcomputing.wps.server.affinityengine.*;
-import com.socialcomputing.wps.server.analysisengine.*;
-import com.socialcomputing.wps.server.plandictionary.*;
-import com.socialcomputing.wps.server.plandictionary.connectors.*;
-import com.socialcomputing.wps.server.webservices.*;
-import com.socialcomputing.utils.*;
-import com.socialcomputing.utils.math.*;
+import com.socialcomputing.wps.server.affinityengine.RecommendationInterface;
+import com.socialcomputing.wps.server.analysisengine.AnalysisProcess;
+import com.socialcomputing.wps.server.plandictionary.AnalysisProfile;
+import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
+import com.socialcomputing.wps.server.webservices.PlanRequest;
 
 //import com.socialcomputing.wps.server.generator.*;
 
@@ -254,7 +262,7 @@ public class PlanGenerator {
 	 *            True if the serialized WPSApplet Plan should be compressed
 	 *            using GZIP.
 	 */
-	public void writeObject(Env env, Plan plan, PlanParams planPrm,
+	public void writeObject(Env env, Plan plan, PlanParams planPrm, boolean visual) {
 		try {
 			String outPath = "C:/Documents and Settings/flugue/Desktop/temp/";
 			FileOutputStream out = new FileOutputStream(outPath + planPrm.getPlanName() + ".mapstan");
@@ -305,9 +313,6 @@ public class PlanGenerator {
 	public void writeXML(Env env, Plan plan, PlanParams planPrm) {
 	}
 
-					new PlanParams("charon", "SEngine", AnalysisProfile.DISCOVERY_PLAN, 25), // 3
-																								// mapstan
-		dico.openConnections(0, null);
 }
 
 /**
