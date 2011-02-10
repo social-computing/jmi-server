@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <ehcache>
-    <diskStore path="java.io.tmp"/> 
+    <diskStore path="java.io.tmpdir"/> 
     
     <defaultCache
         maxElementsInMemory="10000"
