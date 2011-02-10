@@ -11,11 +11,6 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.zip.GZIPOutputStream;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
 import org.hibernate.Session;
 
 import com.socialcomputing.utils.EZTimer;
@@ -34,9 +29,6 @@ import com.socialcomputing.wps.server.webservices.PlanRequest;
 
 public class BeanPlanMaker implements PlanMaker {
 
-	private DataSource m_DataSource = null;
-
-	// private boolean m_IsMySQL = false;
 
 	private class Steps {
 		static final int PlanMakerStarted = 0x00000001;
@@ -116,7 +108,7 @@ public class BeanPlanMaker implements PlanMaker {
 		try {
 			connection = getConnection();
 
-			// EJB DICTIONARY RETRIEVAL
+			// DICTIONARY LOADER
 			DictionaryManagerImpl manager = new DictionaryManagerImpl();
 			Dictionary dictionaryLoader = manager.findByName(name);
 			results.put("PLAN_NAME", name);
@@ -160,14 +152,11 @@ public class BeanPlanMaker implements PlanMaker {
 
 			container = new PlanContainer(planGenerator.getEnv(), planGenerator.getPlan());
 			container.m_protoPlan = proto;
+			status = Steps.EnvInitialized;
 
-			recordPlanCreationInHistory(connection, name, planRequest.getAnalysisProfile().m_planType,
-					planRequest.m_entityId, params, useragent, System.currentTimeMillis() - startTime);
 		} catch (Exception e) {
 			e.printStackTrace();
-			recordPlanCreationInHistory(connection, name, null, null, params, useragent, System.currentTimeMillis()
-					- startTime, status, e.getMessage());
-			throw new RemoteException(e.getMessage());
+			throw new RemoteException( e.getMessage());
 		} finally {
 			try {
 				if (connection != null)
@@ -181,78 +170,8 @@ public class BeanPlanMaker implements PlanMaker {
 		return container;
 	}
 
-	private void recordPlanCreationInHistory(Connection connection, String plan, int type, String user,
-			Hashtable<String, Object> params, String useragent, long duration) {
-		String stype = null;
-		switch (type) {
-		case AnalysisProfile.DISCOVERY_PLAN:
-			stype = "DISCOVERY";
-			break;
-		case AnalysisProfile.GLOBAL_PLAN:
-			stype = "GLOBAL";
-			break;
-		case AnalysisProfile.PERSONAL_PLAN:
-			stype = "PERSONAL";
-			break;
-		}
-		recordPlanCreationInHistory(connection, plan, stype, user, params, useragent, duration, 0, "");
-	}
-
-	private void recordPlanCreationInHistory(Connection connection, String plan, String type, String user,
-			Hashtable<String, Object> params, String useragent, long duration, int status, String info) {
-		try {
-			InetAddress local = InetAddress.getLocalHost();
-			PreparedStatement st = null;
-			switch (DatabaseHelper.GetDbType(connection)) {
-			case DatabaseHelper.DB_MYSQL:
-				st = connection
-						.prepareStatement("insert into "
-								+ WPSDictionary.getHistoryTableName(plan)
-								+ " (iduser, type, status, duration, server, parameters, info, agent, date) values( ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
-				break;
-			case DatabaseHelper.DB_SQLSERVER:
-				st = connection
-						.prepareStatement("insert into "
-								+ WPSDictionary.getHistoryTableName(plan)
-								+ " (iduser, type, status, duration, server, parameters, info, agent, date) values( ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())");
-				break;
-			case DatabaseHelper.DB_HSQL:
-				st = connection
-						.prepareStatement("insert into "
-								+ WPSDictionary.getHistoryTableName(plan)
-								+ " (iduser, type, status, duration, server, parameters, info, agent, date) values( ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
-				break;
-			}
-			if (st != null) {
-				st.setString(1, ((user == null) ? "" : user));
-				st.setString(2, ((type == null) ? "UNDEFINED" : type));
-				st.setInt(3, status);
-				st.setLong(4, duration);
-				st.setString(5, local.getHostAddress());
-				st.setString(6, params.toString());
-				st.setString(7, ((info == null) ? "No information available" : info));
-				st.setString(8, ((useragent == null) ? "" : useragent));
-				st.executeUpdate();
-				st.close();
-			} else
-				throw new RemoteException("DB Type not supported");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	private Connection getConnection() throws SQLException, RemoteException {
-		/* if (m_DataSource == null) {
-			try {
-				Context context = new InitialContext();
-				m_DataSource = (DataSource) context.lookup("java:comp/env/jdbc/WPSPooledDS");
-			} catch (NamingException e) {
-				throw new RemoteException("Could not obtain WPS DataSource: " + e.getMessage());
-			}
-		}
-		Connection connection = m_DataSource.getConnection(); */
 		Session session = HibernateUtil.currentSession();
-		
 		return session.connection();
 	}
 
