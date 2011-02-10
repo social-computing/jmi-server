@@ -56,6 +56,13 @@
       <artifactId>jdom</artifactId>
       <version>1.1</version>
     </dependency>
+    <!-- Check if it is really needed or if there is a mistake in an hibernate
+    property or with annotations -->
+    <dependency>
+      <groupId>org.javassist</groupId>
+      <artifactId>javassist</artifactId>
+      <version>3.14.0-GA</version>
+    </dependency>
 
     <!-- Compilation only dependencies -->
     <dependency>
