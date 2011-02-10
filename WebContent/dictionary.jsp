@@ -52,7 +52,6 @@ Dictionary dic = manager.findByName(request.getParameter( "dictionary"));
 </tr>
 <tr>
 <td><a href="view_def.jsp?type=plan&dictionary=<%=java.net.URLEncoder.encode(dic.getName(),"UTF-8")%>" target="_blank"><span class="texblanc">View definition</span></a></td>
-<td><a href="dictionary-history.jsp?dictionary=<%=java.net.URLEncoder.encode(dic.getName(),"UTF-8")%>" target="_blank"><span class="texblanc">View history</span></a></td>
 </tr>
 <tr><td>&nbsp;</td></tr>
 <tr><td>
