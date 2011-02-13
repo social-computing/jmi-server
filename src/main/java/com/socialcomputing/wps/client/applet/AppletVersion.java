@@ -1,3 +1,5 @@
 package com.socialcomputing.wps.client.applet; 
-            public final class AppletVersion { public static final String APPLET_VERSION="2.0";}
-        
+
+public final class AppletVersion { 
+    public static final String APPLET_VERSION="${applet.version}";
+}        

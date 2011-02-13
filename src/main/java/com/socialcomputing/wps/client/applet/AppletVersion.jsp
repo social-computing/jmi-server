@@ -1,1 +1,0 @@
-<%! final String APPLET_VERSION="2.0"; %>
