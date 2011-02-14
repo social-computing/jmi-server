@@ -96,7 +96,7 @@
     <dependency>
       <groupId>com.sun</groupId>
       <artifactId>plugin</artifactId>
-      <version>the jdk version here</version>
+      <version>1.6</version>
       <scope>system</scope>
       <systemPath>${java.home}/lib/plugin.jar</systemPath>
     </dependency>
@@ -116,13 +116,13 @@
     <!-- Configuration of a ressource directory to enable filtering 
          Used here to replace applet.version with the property defined here -->
     <resources>
+      <!--  
       <resource>
         <directory>src/main/java</directory>
         <includes>
           <include>**/client/applet/Applet*</include>
         </includes>
         <filtering>true</filtering>
-        <targetPath>../filtered-sources/java</targetPath>
       </resource>
       <resource>
         <directory>src/main/java</directory>
@@ -130,8 +130,8 @@
           <exclude>**/client/applet/Applet*</exclude>
         </excludes>
         <filtering>false</filtering>
-        <targetPath>../filtered-sources/java</targetPath>
       </resource>
+      -->
       <!-- Needed because we override default rule -->
       <resource>
         <directory>src/main/resources</directory>
@@ -140,7 +140,7 @@
     </resources>
 
     <plugins>
-   
+    
       <!-- Creation of the applet jar -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -184,7 +184,7 @@
 
     <!-- Overrule the default pom source directory to match
          our generated sources so the compiler will pick them up -->
-    <sourceDirectory>target/filtered-sources/java</sourceDirectory>
+    <!-- <sourceDirectory>target/filtered-sources/java</sourceDirectory> -->
 
     <finalName>wps</finalName>
   </build>
