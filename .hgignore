@@ -1,8 +1,15 @@
+syntax: glob
+
 .classpath
 .settings
 .project
-(^)*.metadata
-(^)*.class
-(^)*.war
-(^)*.jar
+.DS_Store
+target
 
+syntax: regexp
+
+.orig
+.metadata
+.class
+.jar
+.war
