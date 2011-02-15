@@ -4,8 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Hashtable;
 
-import com.socialcomputing.wps.server.generator.RecommendationGroup;
-
 /**
  * <p>Title: Token</p>
  * <p>Description: A Token is an atomic part of a text holding properties.<br>
