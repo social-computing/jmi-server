@@ -103,7 +103,7 @@ public class PlanGeneratorTest {
 	public static iEnumerator<String> getNetEnumerator()
 			throws com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException {
 		WPSDictionary dico = WPSDictionary.CreateTestInstance("Boosol");
-		dico.openConnections(null);
+		dico.openConnections(0, null);
 		return dico.getEntityConnector().getEnumerator();
 	}
 
