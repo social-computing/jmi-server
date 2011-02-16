@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -32,16 +33,16 @@ public class DictionaryImpl implements Serializable, Dictionary {
 	private static String s_DateFormat = "yyyy/MM/dd HH:mm:ss";
 	
 	@Id
-	//@Column(name = "name", columnDefinition="varchar(255) default ''")
-	@Column(name = "name")
+	@Column(name = "name", columnDefinition="varchar(255) default ''")
+	//@Column(name="name")
 	String name;
 	
-	//@Column(name = "dictionary", columnDefinition="text")
-	@Column(name = "dictionary")
+	@Column(name = "dictionary", columnDefinition="text")
+	//@Column(name = "dictionary")
 	String dictionary;
 	
-	//@Column(name = "filteringdate", nullable=false, columnDefinition="varchar(50) default ''")
-	@Column(name = "filteringdate")
+	@Column(name = "filteringdate", nullable=false, columnDefinition="varchar(50) default ''")
+	//@Column(name = "filteringdate")
 	String filteringdate;
 	
 	@Transient

@@ -3,14 +3,18 @@ package com.socialcomputing.wps.server.persistence.hibernate;
 import java.io.Serializable;
 import java.io.StringReader;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Index;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -27,17 +31,19 @@ import com.socialcomputing.wps.server.swatchs.XSwatch;
 class SwatchImpl implements Serializable, Swatch {
 
 	@Id
-	//@Column(name = "name", columnDefinition="varchar(255) default ''")
-	@Column(name = "name")
+	@Column(name = "name", columnDefinition="varchar(255) default ''")
+	//@Column(name = "name")
 	String name;
 	
-	//@Column(name = "swatch", columnDefinition="text")
-	@Column(name = "swatch")
+	@Column(name = "swatch", columnDefinition="text")
+	//@Column(name = "swatch")
 	String swatch;
 	
 	@Transient
 	private XSwatch m_Swatch = null;
 	
+	@OneToOne
+	DictionaryImpl dictionary;
 
 	public SwatchImpl() {
 		this.name = null;
