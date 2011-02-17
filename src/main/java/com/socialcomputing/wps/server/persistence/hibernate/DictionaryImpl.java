@@ -5,11 +5,15 @@ import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.StringTokenizer;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -22,6 +26,7 @@ import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 
 import com.socialcomputing.wps.server.persistence.Dictionary;
+import com.socialcomputing.wps.server.persistence.Swatch;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 
 @Entity
@@ -47,6 +52,10 @@ public class DictionaryImpl implements Serializable, Dictionary {
 	
 	@Transient
 	private WPSDictionary m_Dico = null; // Speeder
+	
+	//@OneToMany(cascade=CascadeType.ALL, targetEntity=SwatchImpl.class )
+	@OneToMany(mappedBy="dictionary")
+	public List<SwatchImpl> swatchs;
 	
 	public DictionaryImpl() {
 		this.dictionary = null;

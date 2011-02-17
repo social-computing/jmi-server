@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -42,9 +43,10 @@ class SwatchImpl implements Serializable, Swatch {
 	@Transient
 	private XSwatch m_Swatch = null;
 	
-	@OneToOne
-	DictionaryImpl dictionary;
-
+	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
+	@JoinColumn(name="swatch_dictionaryName")
+	private DictionaryImpl dictionary;
+	
 	public SwatchImpl() {
 		this.name = null;
 		this.swatch = null;
