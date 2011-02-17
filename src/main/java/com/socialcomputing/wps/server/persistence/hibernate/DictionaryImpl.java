@@ -54,14 +54,13 @@ public class DictionaryImpl implements Serializable, Dictionary {
 	private WPSDictionary m_Dico = null; // Speeder
 	
 	//@OneToMany(cascade=CascadeType.ALL, targetEntity=SwatchImpl.class )
-	@OneToMany(mappedBy="dictionary")
-	public List<SwatchImpl> swatchs;
+	@OneToMany(mappedBy="dictionary", targetEntity=SwatchImpl.class)
+	private List<Swatch> swatchs;
 	
 	public DictionaryImpl() {
 		this.dictionary = null;
 		this.name = null;
 		this.filteringdate = null;
-		
 	}
 	
 	public DictionaryImpl(String name, String dictionary, String filteringdate) {
@@ -70,6 +69,10 @@ public class DictionaryImpl implements Serializable, Dictionary {
 		this.filteringdate = filteringdate;
 	}
 	
+	public List<Swatch> getSwatchs() {
+		return swatchs;
+	}
+
 	public String getName() {
 		return name;
 	}

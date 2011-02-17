@@ -1,5 +1,10 @@
 package com.socialcomputing.wps.server.persistence;
 
+import java.util.Date;
+import java.util.List;
+
+import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
+
 
 /**
  * Title:        DictionaryLoader
@@ -12,11 +17,12 @@ package com.socialcomputing.wps.server.persistence;
 
 public interface Dictionary
 {
-	public java.lang.String getName();
-	public com.socialcomputing.wps.server.plandictionary.WPSDictionary getDictionary();
-	public void setDefinition( java.lang.String definition);
-	public java.lang.String getDefinition();
+	public String getName();
+	public WPSDictionary getDictionary();
+	public void setDefinition(String definition);
+	public String getDefinition();
 	public void setFilteringdate(String filteringdate);
-	public java.util.Date getNextFilteringDate();
-	public java.util.Date computeNextFilteringDate();
+	public Date getNextFilteringDate();
+	public Date computeNextFilteringDate();
+	public List<Swatch> getSwatchs();
 }
