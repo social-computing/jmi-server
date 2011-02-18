@@ -19,7 +19,7 @@ public long getLastModified(HttpServletRequest request) {
 <%
 DictionaryManager dManager = new DictionaryManagerImpl();
 SwatchManager sManager = new SwatchManagerImpl();
-Collection<Swatch> sws = sManager.findAll(); 
+//Collection<Swatch> sws = sManager.findAll(); 
 Collection<Dictionary> dics = dManager.findAll();
 
 //Context context = new InitialContext();
@@ -66,15 +66,36 @@ DatabaseMetaData meta = connection.getMetaData();
 	  <td nowrap><span class="subTitleBlue"># dictionaries</span></td>
 	  <td align="center" nowrap><span class="texblanc"><b><%=dics.size()%></b></span></td>
 	 </tr>
-	 <tr>
-	  <td nowrap><span class="subTitleBlue"># swatches</span></td>
-	  <td align="center" width="50%" nowrap><span class="texblanc"><b><%=sws.size()%></b></span></td>
-	 </tr>
 	</table>
   </td>
   <td>&nbsp;</td>
  </tr>
 </table>
+
+<br/><br/>
+
+<!-- UPLOAD DICTIONARY -->
+<% if( request.getParameter( "openresults") != null && session.getValue( "UploadDefinitionFileResults") != null)
+{%>	
+	<script language="javascript">
+		var win = window.open( 'upload_results.jsp', 'mpstadminresults', 'width=600,height=600,scrollbars=yes,resizable=yes,dependent=yes');
+		win.focus();
+	</script>
+<%}%>	
+<form name="test" enctype="multipart/form-data" method="POST" action="upload">
+	<input type="hidden" name="action" value="uploadSearchFile" />
+	<input type="hidden" name="redirect" value="./upload.jsp?openresults=1" />
+	<table width="100%" align="center" border="0" cellpadding="0" cellspacing="0" >
+	<tr>
+	<td><span class="subTitleBlue">Load a defintion file (*.xml, *.zip) : </span></td> 
+	<td><input type="file" name="definitionFile" size="50" ></td>
+	</tr>
+	<tr>
+	<td />
+	<td><input type="submit" value="Load" /></td>
+	</tr>
+	</table>
+</form>
 </body>
 </html>
 <%

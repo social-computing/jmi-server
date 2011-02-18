@@ -9,13 +9,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Index;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -28,7 +26,7 @@ import com.socialcomputing.wps.server.swatchs.XSwatch;
 @Entity
 @Table(name = "swatchs")
 @org.hibernate.annotations.Table(appliesTo="swatchs", indexes = {@Index(name="PRIMARY", columnNames={"name"})})
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 class SwatchImpl implements Serializable, Swatch {
 
 	@Id

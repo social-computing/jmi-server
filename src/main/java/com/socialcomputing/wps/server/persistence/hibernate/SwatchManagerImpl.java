@@ -91,7 +91,7 @@ public class SwatchManagerImpl implements SwatchManager {
 		try {
 			session = HibernateUtil.currentSession();
 			tx = session.beginTransaction();
-			Swatch s = (Swatch) session.get(Swatch.class, name);
+			Swatch s = (Swatch) session.get(SwatchImpl.class, name);
 			session.delete(s);
 		} catch (Exception e) {
 			e.printStackTrace();
