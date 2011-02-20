@@ -6,8 +6,8 @@
 <!ENTITY % XML-entities SYSTEM "XML-connector.dtd" >
 %XML-entities;
 
-<!ENTITY % JAVA-entities SYSTEM "SOLR-connector.dtd" >
-%JAVA-entities;
+<!ENTITY % SOLR-entities SYSTEM "SOLR-connector.dtd" >
+%SOLR-entities;
 
 <!ENTITY % Relax-params SYSTEM "Relax-params.dtd" >
 %Relax-params;

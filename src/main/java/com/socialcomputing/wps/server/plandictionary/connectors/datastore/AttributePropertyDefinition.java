@@ -1,11 +1,17 @@
 package com.socialcomputing.wps.server.plandictionary.connectors.datastore;
 
+/**
+ * 
+ * @author Franck Valetas
+ * @author Jonathan Dray
+ *
+ */
 public class AttributePropertyDefinition {
 
-	protected String m_Name, m_Entity;
+	private final String m_Name, m_Entity;
 	
-	public AttributePropertyDefinition(String name, String entity) {
-		super();
+	public AttributePropertyDefinition(String name, 
+	                                   String entity) {
 		this.m_Name = name;
 		this.m_Entity = entity;
 	}

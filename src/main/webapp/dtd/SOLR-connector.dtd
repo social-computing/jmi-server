@@ -3,11 +3,23 @@
 <!-- =====================================================================  -->
 <!-- SOLR-entities : data connectors description -->
 <!-- =====================================================================  -->
-<!ELEMENT SOLR-entities (comment?, SOLR-connection) >
+<!ELEMENT SOLR-entities (comment?, SOLR-connection, entity, attribute) >
 <!ATTLIST SOLR-entities	name    	CDATA    #REQUIRED>
 <!ATTLIST SOLR-entities	class   	CDATA   "com.socialcomputing.wps.server.plandictionary.connectors.datastore.searchengine.solr.SolrEntityConnector" >
 <!ATTLIST SOLR-entities	queryParam	CDATA   #REQUIRED>
+	
 			
-<!-- a SOLR connection -->
-<!ELEMENT SOLR-connection 	EMPTY>
-					
+<!-- Connection to the Solr server -->
+<!ELEMENT SOLR-connection (url, max-results)>
+
+<!ELEMENT entity (property*) >
+<!ATTLIST entity field CDATA #REQUIRED> 
+
+<!ELEMENT attribute (property*) >
+<!ATTLIST attribute id CDATA #REQUIRED> 
+
+<!ELEMENT property EMPTY>	
+<!ATTLIST property id CDATA #REQUIRED>
+<!ATTLIST property field CDATA #IMPLIED>
+
+<!ELEMENT max-results (#PCDATA)>

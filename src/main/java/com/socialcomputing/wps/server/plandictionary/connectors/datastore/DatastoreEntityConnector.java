@@ -7,6 +7,9 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iAffinityGroupReader;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierConnector;
@@ -16,7 +19,10 @@ import com.socialcomputing.wps.server.plandictionary.connectors.iProfileConnecto
 import com.socialcomputing.wps.server.plandictionary.connectors.iSelectionConnector;
 
 public abstract class DatastoreEntityConnector implements iEntityConnector {
-	public String m_Name = null;
+	
+    private final static Logger LOG = LoggerFactory.getLogger(DatastoreEntityConnector.class);
+    private final String m_Name;
+    
 	public String m_Description = null;
 	protected Hashtable<String, Object> m_WPSParams = null;
 	protected int m_planType;
@@ -31,7 +37,7 @@ public abstract class DatastoreEntityConnector implements iEntityConnector {
 	protected 	List<DatastoreProfileConnector> 	profileConnectors 	 = new ArrayList<DatastoreProfileConnector>();
 	
 	public DatastoreEntityConnector(String name) {
-		m_Name = name;
+		this.m_Name = name;
 	}
 
 	public void _readObject(org.jdom.Element element) {
@@ -147,6 +153,7 @@ public abstract class DatastoreEntityConnector implements iEntityConnector {
 		m_Attributes.put( id, attribute);
 		return attribute;
 	}
+		
 	public void addEntityProperties(Attribute attribute) {
 		for( AttributePropertyDefinition propDefinition : attributeProperties) {
 			if( !propDefinition.isSimple()) {

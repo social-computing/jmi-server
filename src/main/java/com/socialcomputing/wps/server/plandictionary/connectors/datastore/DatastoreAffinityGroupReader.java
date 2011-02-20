@@ -8,6 +8,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jdom.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.socialcomputing.wps.server.plandictionary.AnalysisProfile;
 import com.socialcomputing.wps.server.plandictionary.connectors.AttributeEnumeratorItem;
@@ -17,7 +19,10 @@ import com.socialcomputing.wps.server.plandictionary.connectors.datastore.file.F
 import com.socialcomputing.wps.server.utils.StringAndFloat;
 
 public class DatastoreAffinityGroupReader implements iAffinityGroupReader {
-	protected DatastoreEntityConnector m_entityConnector = null;
+	
+    private final static Logger LOG = LoggerFactory.getLogger(DatastoreAffinityGroupReader.class);
+    
+    protected DatastoreEntityConnector m_entityConnector = null;
 	
 	static DatastoreAffinityGroupReader readObject( Element element)
 	{
@@ -40,14 +45,17 @@ public class DatastoreAffinityGroupReader implements iAffinityGroupReader {
 		switch( m_entityConnector.m_planType)
 		{
 			case AnalysisProfile.GLOBAL_PLAN:
+			    LOG.debug("global plan");
 				result = new StringAndFloat[  m_entityConnector.m_Entities.size()];
 				for( String id2 : m_entityConnector.m_Entities.keySet()) {
 					result[i++] = new StringAndFloat( id2, 1);
 				}
 				break;
+				
 			case AnalysisProfile.PERSONAL_PLAN:
-				Map<String,Integer> set = new HashMap<String,Integer>();
-				for( AttributeEnumeratorItem attributeItem : m_entityConnector.m_Entities.get( id).m_Attributes) {
+			    LOG.debug("Personal plan with id = {}", id);
+				Map<String, Integer> set = new HashMap<String, Integer> ();
+				for(AttributeEnumeratorItem attributeItem : m_entityConnector.m_Entities.get(id).m_Attributes) {
 					for( String entityId2 : m_entityConnector.m_Attributes.get( attributeItem.m_Id).m_Entities) {
 						if( set.containsKey( entityId2)) {
 							int pond = set.get( entityId2) + 1;
@@ -67,7 +75,9 @@ public class DatastoreAffinityGroupReader implements iAffinityGroupReader {
 					result[i++] = new StringAndFloat( entry.getKey(), (maxPond - entry.getValue()) / maxPond);
 				}
 				break;
+				
 			case AnalysisProfile.DISCOVERY_PLAN:
+			    LOG.debug("discovery plan with id = {}", id);
 				Map<String,Integer> set2 = new HashMap<String,Integer>();
 				for( String entityId : m_entityConnector.m_Attributes.get( id).m_Entities) {
 					if( set2.containsKey( entityId)) {

@@ -83,15 +83,24 @@ public long getLastModified(HttpServletRequest request) {
 </HEAD>
 <BODY bgcolor=7f9fdf topmargin=0 leftmargin=0 marginheight=0 marginwidth=0>
 <%
-boolean error = request.getParameter( "error") != null;
+boolean error = request.getParameter("error") != null;
 if( !error)
 {
 	StringBuffer appletParams = new StringBuffer();
-	appletParams.append( "planName=sample");
-	String group = request.getParameter( "group");
+	
+	// Mysql based dictionary by default  
+	appletParams.append("planName=sample");
+	
+	// Uncomment to switch to Solr based dictionary
+	//appletParams.append("planName=Solr_sample");
+	
+	// Uncomment to switch to XML based dictionary
+	//appletParams.append("planName=Xml_sample");	
+	
+	String group = request.getParameter("group");
 	if( group != null)
 	{
-		appletParams.append( "&entityId=");
+		appletParams.append("&entityId=");
 		appletParams.append(java.net.URLEncoder.encode(group, "UTF-8"));
 	}
 	else
