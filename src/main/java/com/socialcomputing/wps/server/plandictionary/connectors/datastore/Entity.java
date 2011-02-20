@@ -29,4 +29,9 @@ public class Entity extends Data {
 		}
 		return false;
 	}
+	
+   @Override
+    public String toString() {
+        return "Entity: " + super.toString();
+    }
 }

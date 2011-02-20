@@ -3,11 +3,20 @@
 <!DOCTYPE dictionary SYSTEM "WPS-dictionary.dtd" >
 
 <dictionary name="Solr_sample" >
-	<comment>Sample Xml Plan Dictionary</comment>
+	<comment>Sample Solr Plan Dictionary</comment>
 
-	<entities>
-		<SOLR-entities name="SOLR Sample" queryParam="q">
-			<SOLR-connection></SOLR-connection>
+	<entities>		
+		<SOLR-entities name="SOLR Sample" queryParam="assetTagNames:[* TO *]">
+			<SOLR-connection>
+				<url>http://192.168.56.11:8080/solr/liferay</url>
+				<max-results>50</max-results>
+			</SOLR-connection>
+			
+			<entity field="assetTagNames" />		
+				
+			<attribute id="uid">
+				<property id="name" field="title" />
+			</attribute>
 		</SOLR-entities>
 	</entities>
 	

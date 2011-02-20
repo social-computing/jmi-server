@@ -11,11 +11,16 @@ public class Attribute extends Data {
 		super(id);
 	}
 
-	public void addProperty( AttributePropertyDefinition definition, Object value) {
-		addProperty( definition.m_Name, value);
+	public void addProperty(AttributePropertyDefinition definition, Object value) {
+		addProperty(definition.getName(), value);
 	}
 
-	public void addEntity( Entity entity) {
-		m_Entities.add( entity.getId());
+	public void addEntity(Entity entity) {
+		m_Entities.add(entity.getId());
+	}
+	
+	@Override
+	public String toString() {
+	    return "Attribute: " + super.toString();
 	}
 }

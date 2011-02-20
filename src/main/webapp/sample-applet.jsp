@@ -88,6 +88,8 @@ if( !error)
 {
 	StringBuffer appletParams = new StringBuffer();
 	appletParams.append( "planName=sample");
+	//appletParams.append( "planName=Solr_sample");
+	//appletParams.append("planName=Xml_sample");	
 	String group = request.getParameter( "group");
 	if( group != null)
 	{

@@ -19,6 +19,8 @@ import org.hibernate.annotations.Index;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.socialcomputing.wps.server.persistence.Dictionary;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
@@ -29,6 +31,7 @@ import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class DictionaryImpl implements Serializable, Dictionary {
 
+    private final static Logger LOG = LoggerFactory.getLogger(DictionaryImpl.class);
 	private static String s_DateFormat = "yyyy/MM/dd HH:mm:ss";
 	
 	@Id
@@ -93,7 +96,9 @@ public class DictionaryImpl implements Serializable, Dictionary {
 				SAXBuilder builder = new SAXBuilder(false);
 				Document doc = builder.build(new StringReader(dictionary));
 				Element root = doc.getRootElement();
-				m_Dico = WPSDictionary.readObject( root);
+				LOG.debug("Getting XML configuration from database");
+				LOG.debug("Root element of the JDOM Tree : {}", root.toString());
+				m_Dico = WPSDictionary.readObject(root);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

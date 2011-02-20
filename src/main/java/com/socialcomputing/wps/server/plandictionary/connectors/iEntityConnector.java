@@ -3,39 +3,117 @@ package com.socialcomputing.wps.server.plandictionary.connectors;
 import java.util.Collection;
 import java.util.Hashtable;
 
-public interface iEntityConnector
-{
-   public abstract  String getName(  );
+public interface iEntityConnector {
+    
+    /**
+     * Name of the connector
+     * 
+     * @return the connector's name
+     */
+    String getName();
+    
+    /**
+     * Description of the connector
+     * 
+     * @return the connector's description
+     */
+    String getDescription();
 
-   public abstract  String getDescription(  );
+    /**
+     * Open connections to read data from the backend
+     * 
+     * @param planType
+     * @param wpsparams
+     * @throws WPSConnectorException
+     */
+    void openConnections(int planType, Hashtable<String, Object> wpsparams)
+            throws WPSConnectorException;
 
-   public abstract  void openConnections( int planType,Hashtable<String, Object> wpsparams) throws WPSConnectorException;
+    /**
+     * Close all opened connections 
+     * 
+     * @throws WPSConnectorException
+     */
+    void closeConnections() throws WPSConnectorException;
 
-   public abstract  void closeConnections(  ) throws WPSConnectorException;
+    /**
+     *  Load the entity properties (image, age, income, ...).
+     *  
+     * @param entityId
+     * @return
+     * @throws WPSConnectorException
+     */
+    Hashtable<String, Object> getProperties(String entityId) throws WPSConnectorException;
 
-/**
-  * Load the entity properties (image, age, income, ...). */
-   public abstract  Hashtable<String, Object> getProperties( String entityId ) throws WPSConnectorException;
+    /**
+     *  
+     * @return
+     * @throws WPSConnectorException
+     */
+    iEnumerator<String> getEnumerator() throws WPSConnectorException;
 
-   public abstract  iEnumerator<String> getEnumerator() throws WPSConnectorException;
+    /**
+     * 
+     * @return
+     * @throws WPSConnectorException
+     */
+    Collection<iAffinityGroupReader> getAffinityGroupReaders()
+            throws WPSConnectorException;
 
-/**
-  * Retrieve a collection of interface iAffinityGroupReader    */
-   public abstract  Collection getAffinityGroupReaders() throws WPSConnectorException;
+    /**
+     * 
+     * 
+     * @param affGrpReader
+     * @return
+     * @throws WPSConnectorException
+     */
+    iAffinityGroupReader getAffinityGroupReader(String affGrpReader)
+            throws WPSConnectorException;
 
-   public abstract  iAffinityGroupReader getAffinityGroupReader( String affGrpReader ) throws WPSConnectorException;
+    /**
+     * 
+     * 
+     * @return
+     * @throws WPSConnectorException
+     */
+    Collection<iProfileConnector> getProfiles() throws WPSConnectorException;
 
-/**
-  * Retrieve a collection of interface iProfileConnector    */
-   public abstract  Collection getProfiles() throws WPSConnectorException;
 
-   public abstract  iProfileConnector getProfile( String profile ) throws WPSConnectorException;
+    /**
+     * 
+     * @param profile
+     * @return
+     * @throws WPSConnectorException
+     */
+    iProfileConnector getProfile(String profile) throws WPSConnectorException;
 
-   public abstract  Collection<iClassifierConnector> getClassifiers(  ) throws WPSConnectorException;
+    /**
+     * 
+     * @return
+     * @throws WPSConnectorException
+     */
+    Collection<iClassifierConnector> getClassifiers() throws WPSConnectorException;
 
-   public abstract  iClassifierConnector getClassifier( String classifierId ) throws WPSConnectorException;
+    /**
+     * 
+     * @param classifierId
+     * @return
+     * @throws WPSConnectorException
+     */
+    iClassifierConnector getClassifier(String classifierId) throws WPSConnectorException;
 
-   public abstract Collection<iSelectionConnector> getSelections() throws WPSConnectorException;
-
-   public abstract  iSelectionConnector getSelection( String selectionId) throws WPSConnectorException;
+    /**
+     * 
+     * @return
+     * @throws WPSConnectorException
+     */
+    Collection<iSelectionConnector> getSelections() throws WPSConnectorException;
+    
+    /**
+     * 
+     * @param selectionId
+     * @return
+     * @throws WPSConnectorException
+     */
+    iSelectionConnector getSelection(String selectionId) throws WPSConnectorException;
 }
