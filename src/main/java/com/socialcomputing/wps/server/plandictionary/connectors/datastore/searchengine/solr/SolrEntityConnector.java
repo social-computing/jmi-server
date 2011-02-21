@@ -1,7 +1,6 @@
 package com.socialcomputing.wps.server.plandictionary.connectors.datastore.searchengine.solr;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
@@ -12,24 +11,30 @@ import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.jdom.Element;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+import com.socialcomputing.utils.http.BasicAuthHttpClient;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Attribute;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.AttributePropertyDefinition;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Entity;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.searchengine.SearchengineEntityConnector;
 
+/**
+ * 
+ * @author Jonathan Dray <jonathan@social-computing.com>
+ * @author Franck Valetas <franck@social-computing.com>
+ *
+ * Entity connector that queries a Solr search server.
+ * 
+ */
 public class SolrEntityConnector extends SearchengineEntityConnector {
 
     private final static Logger LOG = LoggerFactory.getLogger(SolrEntityConnector.class);
     
-	private final String queryParam;
-	private final int maxResults;
 	private final CommonsHttpSolrServer solrClient;
+	private final QueryParameters queryParameters;
 	private final String entityField;
 	private final String attributeId;
 	
@@ -49,23 +54,44 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 	    String name = element.getAttributeValue("name");
 	    LOG.debug("  - name = {}", name);
 	    
-	    String queryParam = element.getAttributeValue("queryParam");
-	    LOG.debug("  - query = {}", queryParam);
-	    
-	    Element solrConnection = element.getChild("SOLR-connection");
-	    // Getting remote server url
-	    URL solrServerUrl = null;
+
+	    // Reading Solr connection element
+	    Element connectionElement = element.getChild("connection");
+	    String connectionUrl = connectionElement.getChildText("url");
+	    LOG.debug("  - url = {}", connectionUrl);
+	    Element authenticationElement = connectionElement.getChild("authentication");
+	    CommonsHttpSolrServer solrClient;
 	    try {
-	        String solrUrl = solrConnection.getChildText("url");
-	        LOG.debug("  - url = {}", solrUrl);
-            solrServerUrl = new URL(solrUrl);
-        } 
+    	    if(authenticationElement != null) {
+    	        String username = authenticationElement.getChildText("username");
+    	        String password = authenticationElement.getChildText("password");
+    	        LOG.debug("  - authentication with user '{}' and password '{}'",
+    	                  username, password);
+    	        solrClient = new CommonsHttpSolrServer(connectionUrl, 
+                        new BasicAuthHttpClient(username, password));
+    	    }
+    	    else {
+    	        LOG.debug("  - authentication is not set");
+    	        solrClient = new CommonsHttpSolrServer(connectionUrl);
+    	    }
+	    } 
         catch (MalformedURLException e) {
             throw new WPSConnectorException("Invalid Solr connection URL in dictionary configuration file", e);
         }
+        
+        
+        // Reading Solr query parameters names and default values
+        Element queryElement = element.getChild("query");
+        Element queryString = queryElement.getChild("query-string");
+        Element maxResults = queryElement.getChild("max-results");
+        QueryParameters queryParameters = 
+            new QueryParameters(new QueryParameter<String>(queryString.getAttributeValue("param"),
+                                                           queryString.getAttributeValue("default")),
+                                new QueryParameter<Integer>(maxResults.getAttributeValue("param"),
+                                                            Integer.valueOf(maxResults.getAttributeValue("default")))
+                               );
+        LOG.debug("  - query parameters= {}", queryParameters);
 	    
-        int maxResults = Integer.parseInt(solrConnection.getChildText("max-results"));
-        LOG.debug("  - max results = {}", maxResults);
 	    
         // Reading entity and attribute definition
         Element entity = element.getChild("entity");
@@ -73,13 +99,12 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
         String entityField = entity.getAttributeValue("field");
         String attributeId = attribute.getAttributeValue("id"); 
         
-        // Initialize the Solr connector with read properties
+        // Initialize the Solr connector
 		SolrEntityConnector connector 
 		    = new SolrEntityConnector(
-		            name, 
-		            queryParam,
-		            solrServerUrl,
-		            maxResults,
+		            name,
+		            solrClient,
+		            queryParameters,
 		            entityField,
 		            attributeId);
 		connector._readObject(element);
@@ -99,20 +124,17 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 	 * Default Constructor
 	 * 
 	 * @param name name of the connector instance
-	 * @param queryParam 
-	 * @param solrServerUrl url of the remote solr server
-	 * @param maxResults maximum number of results to fetch
+     * @param solrClient A Solr client instance
+	 * @param queryParameters List of query parameters to read and their default values
 	 */
-	public SolrEntityConnector(String name, 
-	                           String queryParam,
-	                           URL solrServerUrl,
-	                           int maxResults,
+	public SolrEntityConnector(String name,
+	                           CommonsHttpSolrServer solrClient,
+	                           QueryParameters queryParameters,
 	                           String entityField,
 	                           String attributeId) {
 		super(name);
-		this.queryParam = queryParam;
-		this.solrClient = new CommonsHttpSolrServer(solrServerUrl);
-		this.maxResults = maxResults;
+		this.solrClient = solrClient;
+		this.queryParameters = queryParameters;
 		this.entityField = entityField;
 		this.attributeId = attributeId;
 	}
@@ -124,9 +146,16 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 		
 	    super.openConnections(planType, wpsparams);
 		
+	    // Query parameters 
+	    QueryParameter<String> queryString = this.queryParameters.getQueryString();
+	    String query = (String) wpsparams.get(queryString.getName()); 
+	   
+	    QueryParameter<Integer> maxResults = this.queryParameters.getMaxResults();
+	    Integer max = Integer.valueOf((String) wpsparams.get(maxResults.getName()));
+	    
 	    SolrQuery solrQuery = 
-	        new SolrQuery(this.queryParam)
-	            .setRows(this.maxResults);
+	        new SolrQuery((query != null) ? query : queryString.getValue())
+	            .setRows((max != null) ? max : maxResults.getValue());
 
 	    // Query the solr server
 	    QueryResponse response;

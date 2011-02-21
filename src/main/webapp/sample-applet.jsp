@@ -94,7 +94,9 @@ if( !error)
 	appletParams.append("{planName:'sample'");
 	
 	// Uncomment to switch to Solr based dictionary
-	//appletParams.append("{planName:'Solr_sample'");
+	// appletParams.append("{planName:'Solr_sample'")
+	//			.append(",").append("maxResults:'").append("20'")
+	//			.append(",").append("q:'").append("fulltext:retraite AND assetTagNames:[* TO *]'");
 	
 	// Uncomment to switch to XML based dictionary
 	//appletParams.append("{planName:'Xml_sample'");

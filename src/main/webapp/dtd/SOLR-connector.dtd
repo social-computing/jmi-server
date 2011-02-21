@@ -3,15 +3,32 @@
 <!-- =====================================================================  -->
 <!-- SOLR-entities : data connectors description -->
 <!-- =====================================================================  -->
-<!ELEMENT SOLR-entities (comment?, SOLR-connection, entity, attribute) >
+<!ELEMENT SOLR-entities (comment?, connection, query, entity, attribute) >
 <!ATTLIST SOLR-entities	name    	CDATA    #REQUIRED>
 <!ATTLIST SOLR-entities	class   	CDATA   "com.socialcomputing.wps.server.plandictionary.connectors.datastore.searchengine.solr.SolrEntityConnector" >
-<!ATTLIST SOLR-entities	queryParam	CDATA   #REQUIRED>
+<!-- <!ATTLIST SOLR-entities	queryParam	CDATA   #REQUIRED> -->
 	
 			
 <!-- Connection to the Solr server -->
-<!ELEMENT SOLR-connection (url, max-results)>
+<!ELEMENT connection (url, authentication?)>
+<!ELEMENT authentication (username, password)>
+<!ELEMENT username (#PCDATA)>
+<!ELEMENT password (#PCDATA)>
 
+
+<!-- Solr query parameters -->
+<!ELEMENT query (query-string, max-results)>
+
+<!ELEMENT query-string EMPTY>
+<!ATTLIST query-string param CDATA #REQUIRED>
+<!ATTLIST query-string default CDATA #REQUIRED>
+
+<!ELEMENT max-results EMPTY>
+<!ATTLIST max-results param CDATA #REQUIRED>
+<!ATTLIST max-results default CDATA #REQUIRED>
+
+
+<!-- Attribute and entity definition -->
 <!ELEMENT entity (property*) >
 <!ATTLIST entity field CDATA #REQUIRED> 
 
@@ -21,5 +38,3 @@
 <!ELEMENT property EMPTY>	
 <!ATTLIST property id CDATA #REQUIRED>
 <!ATTLIST property field CDATA #IMPLIED>
-
-<!ELEMENT max-results (#PCDATA)>

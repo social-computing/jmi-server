@@ -6,11 +6,19 @@
 	<comment>Sample Solr Plan Dictionary</comment>
 
 	<entities>		
-		<SOLR-entities name="SOLR Sample" queryParam="assetTagNames:[* TO *]">
-			<SOLR-connection>
-				<url>http://dev.centreressources.com:8280/solr/liferay</url>
-				<max-results>50</max-results>
-			</SOLR-connection>
+		<SOLR-entities name="SOLR Sample">
+			<connection>
+				<url>https://www.centreressources.com/admin/solr/liferay/</url>
+				<authentication>
+					<username>socialcomputing</username>
+					<password>vIL30BQvnsSoDsXA</password>
+				</authentication>
+			</connection>
+			
+			<query>
+				<query-string param="q" default="assetTagNames:[* TO *]" />
+				<max-results param="maxResults" default="50" />
+			</query>
 			
 			<entity field="assetTagNames" />		
 				
