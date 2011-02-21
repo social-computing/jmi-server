@@ -8,7 +8,9 @@ public long getLastModified(HttpServletRequest request) {
 <HTML>
 <HEAD>
 <link rel="stylesheet" href="./wps.css">
-<SCRIPT LANGUAGE="JavaScript" >
+<script language="JavaScript" src="./applet/jquery.js" ></script>
+<script language="JavaScript" src="./applet/jquery.wpsmap.js" ></script>
+<script language="JavaScript" >
 	function onAppletReady()
 	{
 		var	doc = parent._appletFrame.document;
@@ -89,56 +91,39 @@ if( !error)
 	StringBuffer appletParams = new StringBuffer();
 	
 	// Mysql based dictionary by default  
-	appletParams.append("planName=sample");
+	appletParams.append("{planName:'sample'");
 	
 	// Uncomment to switch to Solr based dictionary
-	//appletParams.append("planName=Solr_sample");
+	//appletParams.append("{planName:'Solr_sample'");
 	
 	// Uncomment to switch to XML based dictionary
-	//appletParams.append("planName=Xml_sample");	
+	//appletParams.append("{planName:'Xml_sample'");
 	
 	String group = request.getParameter("group");
 	if( group != null)
 	{
-		appletParams.append("&entityId=");
-		appletParams.append(java.net.URLEncoder.encode(group, "UTF-8"));
+		appletParams.append(",entityId:'").append( group).append( "'");
 	}
 	else
 	{
 		String discover = request.getParameter( "discover");
 		if( discover != null)
 		{
-			appletParams.append( "&analysisProfile=DiscoveryProfile&attributeId=");
-			appletParams.append( discover);
+			appletParams.append( ",analysisProfile:'DiscoveryProfile',attributeId:'").append( discover).append( "'");
 		}
 		else
 		{		
-			appletParams.append( "&analysisProfile=GlobalProfile");
+			appletParams.append( ",analysisProfile:'GlobalProfile'");
 		}
 	}
+	appletParams.append( "}");
 	%>	
-	<APPLET name="WPSApplet" archive="WPSApplet<%=APPLET_VERSION%>.jar" code="com.socialcomputing.wps.client.applet.WPSApplet.class" codebase="./applet/" MAYSCRIPT="mayscript" align="middle" hspace="0" vspace="0" width="100%" height="100%">
-		<PARAM NAME="WPSParameters"		VALUE="<%=appletParams.toString()%>" />
-		<PARAM NAME="ServletUrl"		VALUE="../maker" />
-		<PARAM NAME="VoidPlanUrl"    	VALUE="../sample-applet.jsp?error=nodata&<%=appletParams.toString()%>" />
-		<PARAM NAME="NoScriptUrl"     	VALUE="../noscript.jsp" />
-		<PARAM NAME="ErrorPlanUrl"    	VALUE="../sample-applet.jsp?error=internal&<%=appletParams.toString()%>" />
-		<PARAM NAME="ComputeMsg"      	VALUE="Sample computing..." />
-		<PARAM NAME="DownloadMsg"    	VALUE="Sample loading..." />
-		<PARAM NAME="InitColor"			VALUE="336699" />
-		<PARAM NAME="OnAppletReadyFunc" VALUE="javascript:_toolsFrame:onAppletReady()" />
-		<PARAM NAME="HTTPHeaderName0" 	VALUE="COOKIE" />
-		<PARAM NAME="HTTPHeaderSetValue0" VALUE="JSESSIONID=<%=session.getId()%>" />			
-		<p align="center"><span class="texblanc"><br><br>
-			Votre navigateur ne permet pas l'affichage d'applets java.<br><br>
-			Si vous n'avez pas de JVM vous pouvez télécharger 'Java Software' ici : <a href="http://www.java.com"  target="_blank">http://www.java.com</a>.<br><br>
-			Si vous avez une JVM changez les paramètres de sécurité en autorisant l'exécution de programmes Java.<br><br>
-			Pour Internet Explorer sous Windows allez dans le menu 'Outils' -> 'Options Internet', <br>
-			cliquez l'onglet 'Sécurité' puis le bouton 'Personnaliser'.<br>
-			Changez le paramètre de 'Microsoft VM' / 'Java'<br><br>
-			Pour les autres navigateurs, consultez la documentation pour effectuer cette autorisation.
-		</span></p>
-	</APPLET>
+	<script type="text/javascript"> 
+		$(document).ready(function(){
+			$("#map").wpsmap( {wps: <%=appletParams.toString()%>, display: {color:'336699'}});
+		});
+	</script>
+	<div id="map" width="100%" height="100%"></div>
 <%}
 else {	%>
 	<table width="500" border="0" cellpadding="0" cellspacing="0" align="center">
