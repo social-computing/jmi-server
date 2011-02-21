@@ -35,10 +35,14 @@ Collection<Dictionary> dics = dManager.findAll();
 		</ul>
 	</td>
 </tr>
+<!-- 
 <tr><td height=20 >&nbsp;</td></tr>
 <tr><td align="left" nowrap><a href="swatches.jsp" >Swatches</a></td></tr>
+ -->
+<!-- 
 <tr><td height=20 >&nbsp;</td></tr>
-<!-- <tr><td align="left" nowrap><a href="upload.jsp" >Upload</a></td></tr> -->
+<tr><td align="left" nowrap><a href="upload.jsp" >Upload</a></td></tr>
+-->
 <tr><td height=20 >&nbsp;</td></tr>
 <tr><td height=20 ><hr noshade align="center" width="50%" size="1"></td></tr>
 <tr><td height=20 >&nbsp;</td></tr>
