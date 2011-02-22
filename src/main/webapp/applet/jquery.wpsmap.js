@@ -15,6 +15,7 @@ function onWpsReady( id) {
 		}, options['display']);
 		var pluginOptions = $.extend({
 			version: '1.0-SNAPSHOT',
+			name: 'WPSApplet',
 			codebase: './applet/',
 			wpsurl: '../maker'
 		}, options['plugin']);
@@ -24,7 +25,7 @@ function onWpsReady( id) {
 		// this.css("background-color")
         return this.each(function() {
 			wpsparams = jQuery.param( options['wps']);
-			html = '<APPLET name="WPSApplet" archive="WPSApplet' + pluginOptions.version + '.jar" code="com.socialcomputing.wps.client.applet.WPSApplet.class" codebase="'+ pluginOptions.codebase + '" MAYSCRIPT="mayscript" align="middle" hspace="0" vspace="0" width="100%" height="100%">'
+			html = '<APPLET name="' + pluginOptions.name + '" archive="WPSApplet' + pluginOptions.version + '.jar" code="com.socialcomputing.wps.client.applet.WPSApplet.class" codebase="'+ pluginOptions.codebase + '" MAYSCRIPT="mayscript" align="middle" hspace="0" vspace="0" width="100%" height="100%">'
 				+  '<PARAM NAME="WPSParameters"		VALUE="' + wpsparams + '" />'
 				+  '<PARAM NAME="ServletUrl"		VALUE="' + pluginOptions.wpsurl + '" />'
 				+  '<PARAM NAME="ComputeMsg"      	VALUE="' + displayOptions.compute + '" />'
@@ -36,8 +37,6 @@ function onWpsReady( id) {
 				html = html + '<PARAM NAME="NoScriptUrl"     	VALUE="' + handlerOptions.noscript + '/>';
 			if(handlerOptions.error)
 				html = html + '<PARAM NAME="ErrorPlanUrl"    	VALUE="' + handlerOptions.error + wpsparams + '" />';
-			//if(handler.onready)
-				//html = html + '<PARAM NAME="OnAppletReadyFunc"  VALUE="' + handler.onready + '" />';
 			html = html + '<PARAM NAME="OnAppletReadyFunc"  VALUE="javascript:onWpsReady(' + this.id + ')" />';
 			if(pluginOptions.wakeupurl)
 				html = html + '<PARAM NAME="WakeUpURL"  VALUE="' + handler.wakeupurl + '" />';
