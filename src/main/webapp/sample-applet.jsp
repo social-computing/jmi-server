@@ -8,9 +8,9 @@ public long getLastModified(HttpServletRequest request) {
 <HTML>
 <HEAD>
 <link rel="stylesheet" href="./wps.css">
-<script language="JavaScript" src="./applet/jquery.js" ></script>
-<script language="JavaScript" src="./applet/jquery.wpsmap.js" ></script>
-<script language="JavaScript" >
+<script type="text/javascript" src="./applet/jquery.js" ></script>
+<script type="text/javascript" src="./applet/jquery.wpsmap.js" ></script>
+<script type="text/javascript" >
 	function onAppletReady()
 	{
 		var	doc = parent._appletFrame.document;
@@ -94,7 +94,7 @@ if( !error)
 	appletParams.append("{planName:'sample'");
 	
 	// Uncomment to switch to Solr based dictionary
-	// appletParams.append("{planName:'Solr_sample'")
+	 //appletParams.append("{planName:'Solr_sample'")
 	//			.append(",").append("maxResults:'").append("20'")
 	//			.append(",").append("q:'").append("fulltext:retraite AND assetTagNames:[* TO *]'");
 	
@@ -122,8 +122,18 @@ if( !error)
 	%>	
 	<script type="text/javascript"> 
 		$(document).ready(function(){
-			$("#map").wpsmap( {wps: <%=appletParams.toString()%>, display: {color:'336699'}});
-		});
+			$("#map").bind('ready', function() {
+				onAppletReady();
+				});
+			$("#map").wpsmap({
+					wps: <%=appletParams.toString()%>, 
+					display: {color:'336699'},
+					handler: {empty: '../sample-applet.jsp?error=nodata&', 
+							  noscript: '../noscript.jsp', 
+							  error: '../sample-applet.jsp?error=internal&',
+							  onready: 'javascript:_toolsFrame:onAppletReady()'}
+					});
+				});
 	</script>
 	<div id="map" width="100%" height="100%"></div>
 <%}
