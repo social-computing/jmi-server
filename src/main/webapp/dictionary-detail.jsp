@@ -117,7 +117,7 @@ Dictionary : <%=dictionaryName %>
 		win.focus();
 	</script>
 <%}%>	
-<form name="test" enctype="multipart/form-data" method="POST" action="upload">
+<form name="upload" enctype="multipart/form-data" method="POST" action="upload">
 	<input type="hidden" name="action" value="uploadSwatchFile" />
 	<input type="hidden" name="dictionary" value="<%=dictionaryName %>" />
 	<input type="hidden" name="redirect" value="./dictionary-detail.jsp?dictionary=<%=dictionaryName %>&openresults=1" />
