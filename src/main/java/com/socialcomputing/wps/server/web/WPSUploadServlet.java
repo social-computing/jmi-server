@@ -17,6 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
@@ -27,6 +31,7 @@ import com.socialcomputing.wps.server.persistence.Dictionary;
 import com.socialcomputing.wps.server.persistence.DictionaryManager;
 import com.socialcomputing.wps.server.persistence.Swatch;
 import com.socialcomputing.wps.server.persistence.SwatchManager;
+import com.socialcomputing.wps.server.persistence.hibernate.DictionaryImpl;
 import com.socialcomputing.wps.server.persistence.hibernate.DictionaryManagerImpl;
 import com.socialcomputing.wps.server.persistence.hibernate.SwatchManagerImpl;
 
@@ -57,39 +62,39 @@ public class WPSUploadServlet extends HttpServlet {
         HibernateUtil.currentSession();
         ExtendedRequest exrequest = new ExtendedRequest(request);
         String action = exrequest.getParameter("action");
+        String dictionaryName = exrequest.getParameter("dictionary");
         if (action != null) {
-            if (action.equalsIgnoreCase("uploadSearchFile")) {
-                InternalReport report = uploadDefinitionFile(exrequest.getFileParameter("definitionFile"));
-                HttpSession session = request.getSession();
-                session.setAttribute("UploadDefinitionFileResults", report);
+            InternalReport report = report = uploadDefinitionFile(exrequest.getFileParameter("definitionFile"), action, dictionaryName);
+            HttpSession session = request.getSession();
+            session.setAttribute("UploadDefinitionFileResults", report);
 
-                response.setContentType("text/html");
-                PrintWriter out = response.getWriter();
-                out.print("<html><head><meta http-equiv=\"Refresh\" content=\"0; URL=");
-                out.print(exrequest.getParameter("redirect"));
-                out.print("\"></head></html>");
-                out.close();
-                HibernateUtil.closeSession();
-                response.setStatus(HttpServletResponse.SC_OK);
-                return;
-            }
+            response.setContentType("text/html");
+            PrintWriter out = response.getWriter();
+            out.print("<html><head><meta http-equiv=\"Refresh\" content=\"0; URL=");
+            out.print(exrequest.getParameter("redirect"));
+            out.print("\"></head></html>");
+            out.close();
+            HibernateUtil.closeSession();
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+
         }
         HibernateUtil.closeSession();
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
     }
 
-    private InternalReport uploadDefinitionFile(UploadedFile file) throws ServletException, IOException {
+    private InternalReport uploadDefinitionFile(UploadedFile file, String action, String dictionaryName) throws ServletException, IOException {
         InternalReport report = new InternalReport();
         if (file == null)
             return report;
         try {
             if (file.getContentFilename().endsWith(".xml")) {
-                org.jdom.input.SAXBuilder saxBuilder = new org.jdom.input.SAXBuilder(true);
+                SAXBuilder saxBuilder = new SAXBuilder(true);
                 saxBuilder.setEntityResolver(new WPSResolver());
-                uploadFile(saxBuilder, report, file.getContentFilename(), new String(file.getBytes()));
+                uploadFile(saxBuilder, report, file.getContentFilename(), new String(file.getBytes()), action, dictionaryName);
             }
             else
-                uploadZipFile(report, file.getBytes());
+                uploadZipFile(report, file.getBytes(), action, dictionaryName);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -144,7 +149,7 @@ public class WPSUploadServlet extends HttpServlet {
         return sb.toString();
     }
 
-    private void uploadZipFile(InternalReport output, byte[] definitionFile) throws Exception {
+    private void uploadZipFile(InternalReport output, byte[] definitionFile, String action, String dictionaryName) throws Exception {
         Hashtable<String, String> dtds = new Hashtable<String, String>();
         Hashtable<String, String> files = new Hashtable<String, String>();
         String name = null;
@@ -166,43 +171,49 @@ public class WPSUploadServlet extends HttpServlet {
             input.closeEntry();
             entry = input.getNextEntry();
         }
-        org.jdom.input.SAXBuilder saxBuilder = new org.jdom.input.SAXBuilder(true);
+        SAXBuilder saxBuilder = new SAXBuilder(true);
         saxBuilder.setEntityResolver(new WPSResolver(dtds));
         output.setLastActionResult("done.");
         output.skipLine();
 
         for (String name1 : files.keySet()) {
             if (name1.endsWith(".xml")) {
-                uploadFile(saxBuilder, output, name1, files.get(name1));
+                uploadFile(saxBuilder, output, name1, files.get(name1), action, dictionaryName);
             }
         }
     }
 
-    private void uploadFile(org.jdom.input.SAXBuilder saxBuilder, InternalReport output, String name, String definition)
+    private void uploadFile(SAXBuilder saxBuilder, InternalReport output, String name, String definition, String action, String dictionaryName)
             throws Exception {
         output.addAction(0, "Reading definition file '" + name + "'");
-        org.jdom.Document doc = saxBuilder.build(new StringReader(definition), ".");
-        org.jdom.Element root = doc.getRootElement();
+        Document doc = saxBuilder.build(new StringReader(definition), ".");
+        Element root = doc.getRootElement();
 
         CharArrayWriter bout = new CharArrayWriter();
-        org.jdom.output.XMLOutputter op = new org.jdom.output.XMLOutputter();
+        XMLOutputter op = new XMLOutputter();
 
-        if (root.getName().equalsIgnoreCase("dictionaries")) {
-            List lst = root.getChildren("dictionary");
-            for (int i = 0; i < lst.size(); ++i) {
-                org.jdom.Element subelem = (org.jdom.Element) lst.get(i);
-                op.output(subelem, bout);
-                uploadDictionary(subelem.getAttributeValue("name"), bout.toString(), output);
-                bout.reset();
+        
+        if (action.equalsIgnoreCase("uploadDictionaryFile")) {
+         // Upload dictionary
+            if (root.getName().equalsIgnoreCase("dictionaries")) {
+                List lst = root.getChildren("dictionary");
+                for (int i = 0; i < lst.size(); ++i) {
+                    org.jdom.Element subelem = (org.jdom.Element) lst.get(i);
+                    op.output(subelem, bout);
+                    uploadDictionary(subelem.getAttributeValue("name"), bout.toString(), output);
+                    bout.reset();
+                }
             }
-        }
-        else if (root.getName().equalsIgnoreCase("dictionary")) {
-            op.output(root, bout);
-            uploadDictionary(root.getAttributeValue("name"), bout.toString(), output);
-        }
-        else if (root.getName().equalsIgnoreCase("swatch")) {
-            op.output(root, bout);
-            uploadSwatch(root.getAttributeValue("name"), bout.toString(), output);
+            else if (root.getName().equalsIgnoreCase("dictionary")) {
+                op.output(root, bout);
+                uploadDictionary(root.getAttributeValue("name"), bout.toString(), output);
+            }
+        } else if (action.equalsIgnoreCase("uploadSwatchFile")) {
+         // Upload swatch
+            if (root.getName().equalsIgnoreCase("swatch")) {
+                op.output(root, bout);
+                uploadSwatch(root.getAttributeValue("name"), bout.toString(), output, dictionaryName);
+            }
         }
     }
 
@@ -227,17 +238,22 @@ public class WPSUploadServlet extends HttpServlet {
         }
     }
 
-    private void uploadSwatch(String name, String definition, InternalReport output) {
+    private void uploadSwatch(String name, String definition, InternalReport output, String dictionaryName) {
         output.addAction(1, "Swatch '" + name + "'");
         try {
             SwatchManager swatchManager = new SwatchManagerImpl();
+            DictionaryManager dictionaryManager = new DictionaryManagerImpl();
+            
             Swatch swatch = swatchManager.findByName(name);
+            Dictionary dictionary = dictionaryManager.findByName(dictionaryName);
+            
             if (swatch == null) {
-                swatch = swatchManager.create(name, definition);
+                swatch = swatchManager.create(name, definition, dictionary);
                 output.setLastActionResult("created.");
             }
             else {
                 swatch.setDefinition(definition);
+                swatch.setDictionary(dictionary);
                 swatchManager.update(swatch);
                 output.setLastActionResult("updated.");
             }
