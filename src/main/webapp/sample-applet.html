@@ -130,7 +130,7 @@
 	}
 	function setMap( params) {
 		// Mysql based dictionary by default  
-		params['planName'] = 'sample';
+		//params['planName'] = 'sample';
 		
 		// Uncomment to switch to Solr based dictionary
 		//params['planName'] = 'Solr_sample';
@@ -138,15 +138,12 @@
 		//params['q'] = 'fulltext:retraite AND assetTagNames:[* TO *]';
 		
 		// Uncomment to switch to XML based dictionary
-		//params['planName'] = 'Xml_sample';
+		params['planName'] = 'Xmll_sample';
 
+		params['noscript'] = '../noscript.jsp';
 		$("#map").wpsmap({
 			wps: params, 
-			display: {color:'336699'},
-			handler: {empty: '../sample-applet.jsp?error=nodata&', 
-					  noscript: '../noscript.jsp', 
-					  error: '../sample-applet.jsp?error=internal&',
-					  onready: 'javascript:_toolsFrame:onAppletReady()'}
+			display: {color:'336699'}
 		});
 	}
 	// Fired from applet
@@ -164,8 +161,14 @@
 <BODY bgcolor=7f9fdf topmargin=0 leftmargin=0 marginheight=0 marginwidth=0>
 	<script type="text/javascript"> 
 		$(document).ready(function(){
-			$("#map").bind('ready', function() {
+			$("#map").bind('ready', function(e) {
 				onMapReady();
+				});
+			$("#map").bind('void', function(e) {
+				$("#map").html("<h1>Void map</h1>");
+				});
+			$("#map").bind('error', function(e) {
+				$("#map").html("<h1>Error !</h1>");
 				});
 			setMap( {analysisProfile:'GlobalProfile'});
 			$('#titre').html( "All");

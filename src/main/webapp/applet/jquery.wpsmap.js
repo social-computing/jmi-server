@@ -1,6 +1,19 @@
 function onWpsReady( id) {
 	$( '#' + id).trigger( jQuery.Event("ready"));
 }
+function onWpsVoid( id) {
+	$( '#' + id).trigger( jQuery.Event("void"));
+}
+function onWpsError( id) {
+	var e = jQuery.Event("error");
+/*	var context = '{';
+	for( var i = 1; i < arguments.length; i++ ) {
+		context = context + arguments[i] + ',';
+	}
+	e.props.toto = "44";
+	context = context + '}';*/
+	$( '#' + id).trigger( e);
+}
 
 (function($){
   $.fn.extend({ 
@@ -19,8 +32,6 @@ function onWpsReady( id) {
 			codebase: './applet/',
 			wpsurl: '../maker'
 		}, options['plugin']);
-		var handlerOptions = $.extend({
-		}, options['handler']);
 		
 		// this.css("background-color")
         return this.each(function() {
@@ -31,17 +42,15 @@ function onWpsReady( id) {
 				+  '<PARAM NAME="ComputeMsg"      	VALUE="' + displayOptions.compute + '" />'
 				+  '<PARAM NAME="DownloadMsg"    	VALUE="' + displayOptions.load + '" />'
 				+  '<PARAM NAME="InitColor"			VALUE="' + displayOptions.color + '" />';
-			if(handlerOptions.empty)
-				html = html + '<PARAM NAME="VoidPlanUrl"    	VALUE="' + handlerOptions.empty + wpsparams + '" />';
-			if(handlerOptions.noscript)
-				html = html + '<PARAM NAME="NoScriptUrl"     	VALUE="' + handlerOptions.noscript + '/>';
-			if(handlerOptions.error)
-				html = html + '<PARAM NAME="ErrorPlanUrl"    	VALUE="' + handlerOptions.error + wpsparams + '" />';
-			html = html + '<PARAM NAME="OnAppletReadyFunc"  VALUE="javascript:onWpsReady(' + this.id + ')" />';
+			if(pluginOptions.noscript)
+				html = html + '<PARAM NAME="NoScriptUrl"     	VALUE="' + pluginOptions.noscript + '/>';
+			html = html + '<PARAM NAME="OnVoidMapFunc"    	VALUE="javascript:onWpsVoid(' + this.id + ')" />';
+			html = html + '<PARAM NAME="OnErrorMapFunc"    	VALUE="javascript:onWpsError(' + this.id + ', {s$err-context})" />';
+			html = html + '<PARAM NAME="OnMapReadyFunc"  	VALUE="javascript:onWpsReady(' + this.id + ')" />';
 			if(pluginOptions.wakeupurl)
-				html = html + '<PARAM NAME="WakeUpURL"  VALUE="' + handler.wakeupurl + '" />';
+				html = html + '<PARAM NAME="WakeUpURL"  VALUE="' + pluginOptions.wakeupurl + '" />';
 			if(pluginOptions.wakeupdelay)
-				html = html + '<PARAM NAME="WakeUpDelay"  VALUE="' + handler.wakeupdelay + '" />';
+				html = html + '<PARAM NAME="WakeUpDelay"  VALUE="' + pluginOptions.wakeupdelay + '" />';
 			if(displayOptions.print)
 				html = html + '<PARAM NAME="NeedPrint"  VALUE="' + displayOptions.print + '" />';
 			// TODO les headers HTTP
