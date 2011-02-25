@@ -83,11 +83,11 @@ DatabaseMetaData meta = connection.getMetaData();
 	</script>
 <%}%>	
 <form name="test" enctype="multipart/form-data" method="POST" action="upload">
-	<input type="hidden" name="action" value="uploadSearchFile" />
-	<input type="hidden" name="redirect" value="./upload.jsp?openresults=1" />
+	<input type="hidden" name="action" value="uploadDictionaryFile" />
+	<input type="hidden" name="redirect" value="./info.jsp?openresults=1" />
 	<table width="100%" align="center" border="0" cellpadding="0" cellspacing="0" >
 	<tr>
-	<td><span class="subTitleBlue">Load a defintion file (*.xml, *.zip) : </span></td> 
+	<td><span class="subTitleBlue">Load a dictionary file (*.xml, *.zip) : </span></td> 
 	<td><input type="file" name="definitionFile" size="50" ></td>
 	</tr>
 	<tr>

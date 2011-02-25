@@ -117,10 +117,10 @@ Dictionary : <%=dictionaryName %>
 		win.focus();
 	</script>
 <%}%>	
-<form name="test" enctype="multipart/form-data" method="POST" action="upload">
-	<input type="hidden" name="action" value="uploadSearchFile" />
+<form name="upload" enctype="multipart/form-data" method="POST" action="upload">
+	<input type="hidden" name="action" value="uploadSwatchFile" />
 	<input type="hidden" name="dictionary" value="<%=dictionaryName %>" />
-	<input type="hidden" name="redirect" value="./dictionary-detail.jsp?dictionary=<%=dictionaryName %>?openresults=1" />
+	<input type="hidden" name="redirect" value="./dictionary-detail.jsp?dictionary=<%=dictionaryName %>&openresults=1" />
 	<table width="100%" align="center" border="0" cellpadding="0" cellspacing="0" >
 		<tr>
 			<td><span class="subTitleBlue">Load a swatch file (*.xml, *.zip) : </span></td> 

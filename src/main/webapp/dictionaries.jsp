@@ -17,24 +17,22 @@ public long getLastModified(HttpServletRequest request) {
 <link rel="stylesheet" href="./result.css">
 <base target="main">
 <SCRIPT LANGUAGE="JavaScript1.2" > 
-	function SubmitForm(resetStart)
-	{
-		if( resetStart)
+	function SubmitForm(resetStart) {
+		if (resetStart)
 			ResetStart();
 		document.test.submit();
 		return true;
 	}
-	function Delete()
-	{
-		if( confirm("Are you sure you want to delete selected dictionnaires ?"))
-		{
+	
+	function Delete() {
+		if( confirm("Are you sure you want to delete selected dictionnaires ?")) {
 			document.test.confirmdelete.value = 'y';
 			document.test.submit();
 		}
 		return false;
 	}
-	function OnExport( content, contentType)
-	{
+	
+	function OnExport(content, contentType){
 		document.test.content.value = content;
 		document.test.contentType.value = contentType;
 		document.test.submit();
@@ -47,15 +45,11 @@ public long getLastModified(HttpServletRequest request) {
 <%
 DictionaryManager manager = new DictionaryManagerImpl();
 
-if( request.getParameter( "confirmdelete") != null && request.getParameter( "confirmdelete").equalsIgnoreCase( "y"))
-{
-
-	int maxDelete = Integer.parseInt( request.getParameter( "maxdelete"));
-	for( int i = 0; i < maxDelete; i++)
-	{
-		if( request.getParameter( "delete" + i) != null)
-		{	
-			manager.remove( request.getParameter( "delete" + i) );
+if (request.getParameter("confirmdelete") != null && request.getParameter("confirmdelete").equalsIgnoreCase("y")) {
+	int maxDelete = Integer.parseInt(request.getParameter("maxdelete"));
+	for (int i = 0; i < maxDelete; i++)	{
+		if (request.getParameter("delete" + i) != null){ 	
+			manager.remove(request.getParameter("delete" + i));
 		}
 	}
 }
@@ -83,8 +77,7 @@ Collection<Dictionary> dics = manager.findAll();
  </tr>
 <%	
 	Iterator<Dictionary> it = dics.iterator();
-	for( int i = 0; it.hasNext(); ++i)
-	{
+	for (int i = 0 ; it.hasNext() ; ++i) {
 		Dictionary dic = (Dictionary) it.next();
 		%><tr>
 		<td align="center" nowrap><span class="texblanc"><%=i+1%></span></td>
@@ -101,12 +94,11 @@ Collection<Dictionary> dics = manager.findAll();
 </body>
 </html>
 <%
-if( request.getParameter( "content") != null && request.getParameter( "content").length() > 0)
-{
-	StringBuffer sb = new StringBuffer( "action=export");
-	sb.append( "&");
-	sb.append( request.getQueryString());
+if( request.getParameter("content") != null && request.getParameter("content").length() > 0) {
+	StringBuffer sb = new StringBuffer("action=export");
+	sb.append("&");
+	sb.append(request.getQueryString());
 	//out.print( sb.toString());
-	out.print( "<iframe height=0 width=0 src=\"../sadmin?" + sb.toString() + "\"></iframe>");
+	out.print("<iframe height=0 width=0 src=\"../sadmin?" + sb.toString() + "\"></iframe>");
 }
 %>

@@ -20,6 +20,7 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+import com.socialcomputing.wps.server.persistence.Dictionary;
 import com.socialcomputing.wps.server.persistence.Swatch;
 import com.socialcomputing.wps.server.swatchs.XSwatch;
 
@@ -55,6 +56,12 @@ class SwatchImpl implements Serializable, Swatch {
         this.name = name;
         this.swatch = swatch;
     }
+    
+    public SwatchImpl(String name, String swatch, Dictionary dictionary) {
+        this.name = name;
+        this.swatch = swatch;
+        this.dictionary = (DictionaryImpl) dictionary;
+    }
 
     public String getName() {
         return name;
@@ -73,6 +80,11 @@ class SwatchImpl implements Serializable, Swatch {
     public void setDefinition(String definition) throws JDOMException {
         this.swatch = definition;
         this.m_Swatch = null;
+    }
+    
+    @Override
+    public void setDictionary(Dictionary dictionary) throws JDOMException {
+        this.dictionary = (DictionaryImpl) dictionary;
     }
 
     @Override

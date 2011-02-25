@@ -15,7 +15,6 @@ Collection<Dictionary> dics = dManager.findAll();
 %>
 <html>
 <head>
-<title>Administration Societe.com</title>
 <link rel="stylesheet" href="wps.css">
 <link rel="stylesheet" href="menu.css">
 <base target="main">
@@ -53,7 +52,7 @@ Collection<Dictionary> dics = dManager.findAll();
 <tr><td height=20 >&nbsp;</td></tr>
 <tr><td height=20 ><hr noshade align="center" width="50%" size="1"></td></tr>
 <tr><td height=20 >&nbsp;</td></tr>
-   <tr><td align="left" nowrap><a href="sample.jsp" >Sample</a></td></tr>
+   <tr><td align="left" nowrap><a href="sample-applet.html" >Sample</a></td></tr>
 </table>
 </body>
 </html>

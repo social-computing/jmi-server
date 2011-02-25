@@ -6,6 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.socialcomputing.utils.database.HibernateUtil;
+import com.socialcomputing.wps.server.persistence.Dictionary;
 import com.socialcomputing.wps.server.persistence.Swatch;
 import com.socialcomputing.wps.server.persistence.SwatchManager;
 
@@ -53,14 +54,14 @@ public class SwatchManagerImpl implements SwatchManager {
     }
 
     @Override
-    public Swatch create(String name, String definition) {
+    public Swatch create(String name, String definition, Dictionary dictionary) {
         Swatch result = null;
         Session session = null;
         Transaction tx = null;
         try {
             session = HibernateUtil.currentSession();
             tx = session.beginTransaction();
-            result = new SwatchImpl(name, definition);
+            result = new SwatchImpl(name, definition, dictionary);
             session.save(result);
         }
         catch (Exception e) {

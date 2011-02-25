@@ -8,6 +8,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -55,7 +56,7 @@ public class DictionaryImpl implements Serializable, Dictionary {
     private WPSDictionary m_Dico = null; // Speeder
 
     // @OneToMany(cascade=CascadeType.ALL, targetEntity=SwatchImpl.class )
-    @OneToMany(mappedBy = "dictionary", targetEntity = SwatchImpl.class)
+    @OneToMany(mappedBy = "dictionary", targetEntity = SwatchImpl.class, cascade={CascadeType.ALL})
     private List<Swatch> swatchs;
 
     public DictionaryImpl() {
