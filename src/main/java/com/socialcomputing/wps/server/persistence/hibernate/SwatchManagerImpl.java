@@ -7,6 +7,7 @@ import org.hibernate.Transaction;
 
 import com.socialcomputing.utils.database.HibernateUtil;
 import com.socialcomputing.wps.server.persistence.Dictionary;
+import com.socialcomputing.wps.server.persistence.DictionaryManager;
 import com.socialcomputing.wps.server.persistence.Swatch;
 import com.socialcomputing.wps.server.persistence.SwatchManager;
 
@@ -34,14 +35,15 @@ public class SwatchManagerImpl implements SwatchManager {
     }
 
     @Override
-    public Swatch findByName(String name) {
+    public Swatch findByName(String name, String dictionaryName) {
         Swatch result = null;
+        SwatchPk swatchPk = new SwatchPk(name, dictionaryName);
         Session session = null;
         Transaction tx = null;
         try {
             session = HibernateUtil.currentSession();
             tx = session.beginTransaction();
-            result = (Swatch) session.get(SwatchImpl.class, name);
+            result = (Swatch) session.get(SwatchImpl.class, swatchPk);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -54,14 +56,15 @@ public class SwatchManagerImpl implements SwatchManager {
     }
 
     @Override
-    public Swatch create(String name, String definition, Dictionary dictionary) {
+    public Swatch create(String name, String definition, String dictionaryName) {
         Swatch result = null;
+        SwatchPk swatchPk = new SwatchPk(name, dictionaryName);
         Session session = null;
         Transaction tx = null;
         try {
             session = HibernateUtil.currentSession();
             tx = session.beginTransaction();
-            result = new SwatchImpl(name, definition, dictionary);
+            result = new SwatchImpl(swatchPk, definition);
             session.save(result);
         }
         catch (Exception e) {
@@ -93,13 +96,18 @@ public class SwatchManagerImpl implements SwatchManager {
     }
 
     @Override
-    public void remove(String name) {
+    public void remove(String name, String dicoName) {
+        SwatchPk swatchPk = new SwatchPk(name, dicoName);
         Session session = null;
         Transaction tx = null;
+        DictionaryManager dManager = new DictionaryManagerImpl();
+        Dictionary d = dManager.findByName(dicoName);
+        
         try {
             session = HibernateUtil.currentSession();
             tx = session.beginTransaction();
-            Swatch s = (Swatch) session.get(SwatchImpl.class, name);
+            Swatch s = (Swatch) session.get(SwatchImpl.class, swatchPk);
+            d.getSwatchs().remove(s);
             session.delete(s);
         }
         catch (Exception e) {

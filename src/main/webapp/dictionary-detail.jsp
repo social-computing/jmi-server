@@ -61,9 +61,9 @@ if (request.getParameter("confirmdelete") != null && request.getParameter("confi
 	int maxDelete = Integer.parseInt( request.getParameter("maxdelete"));
 	for (int i = 0; i < maxDelete; i++)
 	{
-		if( request.getParameter("delete" + i) != null)
+		if( request.getParameter("swatch" + i) != null)
 		{	// Delete
-			manager.remove(request.getParameter("delete" + i) );
+			manager.remove(request.getParameter("swatch" + i), request.getParameter("dico" + i));
 		}
 	}
 }
@@ -94,10 +94,13 @@ Dictionary : <%=dictionaryName %>
 	int i = 0;
 	for(Swatch sw : ls)
 	{
+	    String swatchName = sw.getSwatchPk().getName();
+	    String dicoName = sw.getSwatchPk().getDictionaryName();
 		%><tr>
 		<td align="center" nowrap><span class="texblanc"><%=i+1%></span></td>
-		<td align="center" valign="top"><input type="checkbox" name="delete<%=i%>" value="<%=sw.getName()%>" /></td>
-		<td nowrap><a href="swatch.jsp?swatch=<%=java.net.URLEncoder.encode(sw.getName(),"UTF-8")%>" ><span class="texblanc"><%=sw.getName()%></span></a></td>
+		<input type="hidden" name="dico<%=i%>" value="<%=dicoName%>" />
+		<td align="center" valign="top"><input type="checkbox" name="swatch<%=i%>" value="<%=swatchName%>" /></td>
+		<td nowrap><a href="swatch.jsp?swatch=<%=java.net.URLEncoder.encode(swatchName,"UTF-8")%>" ><span class="texblanc"><%=swatchName%></span></a></td>
 		</tr><%
 		i++;
 	}

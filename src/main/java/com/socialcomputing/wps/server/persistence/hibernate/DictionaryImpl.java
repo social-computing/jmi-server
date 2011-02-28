@@ -55,8 +55,8 @@ public class DictionaryImpl implements Serializable, Dictionary {
     @Transient
     private WPSDictionary m_Dico = null; // Speeder
 
-    // @OneToMany(cascade=CascadeType.ALL, targetEntity=SwatchImpl.class )
     @OneToMany(mappedBy = "dictionary", targetEntity = SwatchImpl.class, cascade={CascadeType.ALL})
+    //@OneToMany(targetEntity = SwatchImpl.class, cascade={CascadeType.ALL})
     private List<Swatch> swatchs;
 
     public DictionaryImpl() {

@@ -2,6 +2,7 @@ package com.socialcomputing.wps.server.persistence;
 
 import org.jdom.JDOMException;
 
+import com.socialcomputing.wps.server.persistence.hibernate.SwatchPk;
 import com.socialcomputing.wps.server.swatchs.XSwatch;
 
 /**
@@ -13,13 +14,15 @@ import com.socialcomputing.wps.server.swatchs.XSwatch;
  */
 
 public interface Swatch {
-    public String getName();
+    //public String getName();
 
     public XSwatch getSwatch() throws JDOMException;
 
     public void setDefinition(String definition) throws JDOMException;
     
-    public void setDictionary(Dictionary dictionary) throws JDOMException;
-
+    public SwatchPk getSwatchPk();
+    
+    public void setSwatchPk(SwatchPk swatchPk);
+    
     public String getDefinition();
 }
