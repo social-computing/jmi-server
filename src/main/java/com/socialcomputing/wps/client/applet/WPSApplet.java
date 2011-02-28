@@ -118,11 +118,7 @@ public final class WPSApplet extends Applet implements Runnable, ActionListener,
 	 * System information.
 	 * This is used for debug purpose and will be send by email in case of an exception.
 	 */
-	protected	String           	m_system    	= addCGIParam( "os", System.getProperty( "os.name" ), false )+
-													addCGIParam( "osVers", System.getProperty( "os.version" ), false )+
-													addCGIParam( "arch", System.getProperty( "os.arch" ), false )+
-													addCGIParam( "java", System.getProperty( "java.class.version" ), false );
-
+	protected	StringBuffer         m_system    	= new StringBuffer(); 
 	/**
 	 * LiveConnect bridge to Javascript.
 	 * If it can't be initialized, an alternate page is used to simulate the bridge.
@@ -196,18 +192,17 @@ public final class WPSApplet extends Applet implements Runnable, ActionListener,
 	public void init( )
 	{
 		String	build	= null;
+		addJSonParam( m_system, "os", System.getProperty( "os.name" ), true);
+        addJSonParam( m_system, "osVers", System.getProperty( "os.version" ), false);
+        addJSonParam( m_system, "arch", System.getProperty( "os.arch" ), false);
+        addJSonParam( m_system, "java", System.getProperty( "java.class.version" ), false);
 
 		// MS JVM build
 		// ON try { build = com.ms.util.SystemVersionManager.getVMVersion().getProperty( "BuildIncrement" ); } catch ( Throwable t ){}
 		// Mac MRJ version
 		if ( build == null ) try { build = System.getProperty( "mrj.version" ); } catch ( Throwable t ){}
 		if ( build != null )
-			try {
-				m_system += "&VM=" + URLEncoder.encode( build , "UTF-8" );
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-
+		        addJSonParam( m_system, "VM", build, false);
 		//      LiveConnect!
 		try  { m_planWindow = JSObject.getWindow( this );} catch( Throwable t ) { m_planWindow = null; }
 
@@ -258,7 +253,7 @@ public final class WPSApplet extends Applet implements Runnable, ActionListener,
 					computeMsg      = getParameter( "ComputeMsg" ),     // "Connecting to WPS Server"
 					downloadMsg		= getParameter( "DownloadMsg" ),    // "Downloading your Plan"
 //					initMsg			= getParameter( "initMsg" );        // "Initializing your plan"
-					jsCallback      = getParameter( "OnAppletReadyFunc" ),
+					jsCallback      = getParameter( "OnMapReadyFunc" ),
 					bgImageUrl		= getParameter( "bgImageUrl" ),
 					needPrint      	= getParameter( "NeedPrint" );
 
@@ -394,11 +389,26 @@ public final class WPSApplet extends Applet implements Runnable, ActionListener,
 			}
 			else    // The Plan is void or can't be delivered, let's show a page to explain why!
 			{
-				m_debugStage    = "Error Page redirection";
+				m_debugStage    = "Void map";
 				if( m_WPSSize == 0)
 				{
-					String  redirectStr = getParameter( "VoidPlanUrl" ); // Empty Plan
-					getAppletContext().showDocument( convertURL( redirectStr ), "_self" );
+	                try
+	                {
+	                    String  callback = getParameter( "OnVoidMapFunc" ); // Empty Plan
+	                    if( callback != null )
+	                    {
+	                        Hashtable t = new Hashtable();
+	                        Hashtable props = m_env == null ? new Hashtable() : m_env.m_props;
+	                        props.put("$err-context", m_system.toString());
+	                        t.put( "ENV", props);
+	                        String s = Base.parseString( callback, t, false);
+                            performAction( s);
+	                    }
+	                }
+	                catch ( Exception e )
+	                {
+	                    System.out.println( "JSObject not ready" );
+	                }
 				}
 				else
 				{
@@ -456,19 +466,32 @@ public final class WPSApplet extends Applet implements Runnable, ActionListener,
 	{
 		try
 		{
-			String  redirectStr =   ("source=" + (client ? "client" : "server")) +
-									addCGIParam( "stack", stack, false ) +
-									addCGIParam( "header", m_httpHdr == null ? "null" : m_httpHdr, false  ) +
-									addCGIParam( "jsObj", m_planWindow == null ? "null" : "OK", false  ) +
-									addCGIParam( "size", m_size.toString(), false ) +
-									addCGIParam( "stage", m_debugStage, false  ) +
-									addCGIParam( "pb", m_error, false  ) +
-									addCGIParam( "wpssize", String.valueOf( m_WPSSize), false  ) +
-									addCGIParam( "version", AppletVersion.APPLET_VERSION, false  ) +
-									m_system;
-			URL     redirectURL = convertURL( addCGIParam( getParameter( "ErrorPlanUrl" ), redirectStr, true ));
-			System.out.println( redirectURL );
-			getAppletContext().showDocument( redirectURL, "_self" );
+		    addJSonParam( m_system, "source", (client ? "client" : "server"), false);
+            addJSonParam( m_system, "stack", stack, false);
+            addJSonParam( m_system, "header", m_httpHdr == null ? "null" : m_httpHdr, false);
+            addJSonParam( m_system, "jsObj", m_planWindow == null ? "null" : "OK", false);
+            addJSonParam( m_system, "size", m_size.toString(), false);
+            addJSonParam( m_system, "stage", m_debugStage, false);
+            addJSonParam( m_system, "pb", m_error, false);
+            addJSonParam( m_system, "wpssize", String.valueOf( m_WPSSize), false);
+            addJSonParam( m_system, "version", AppletVersion.APPLET_VERSION, false);
+            try
+            {
+                String  callback = getParameter( "OnErrorMapFunc" ); 
+                if( callback != null )
+                {
+                    Hashtable t = new Hashtable();
+                    Hashtable props = m_env == null ? new Hashtable() : m_env.m_props;
+                    props.put("$err-context", m_system.toString());
+                    t.put( "ENV", props);
+                    String s = Base.parseString( callback, t, false);
+                    performAction( s);
+                }
+            }
+            catch ( Exception e )
+            {
+                System.out.println( "JSObject not ready" );
+            }
 		}
 		catch( Exception ex ) {
 			ex.printStackTrace();
@@ -631,7 +654,7 @@ public final class WPSApplet extends Applet implements Runnable, ActionListener,
 	 * @param actionStr		An URL like string describing what action to do.
 	 * @throws UnsupportedEncodingException 
 	 */
-	public void performAction( String actionStr ) throws UnsupportedEncodingException
+	public void performAction( String actionStr) throws UnsupportedEncodingException
 	{
 		final String    jsStr       = "javascript";
 
@@ -1284,4 +1307,15 @@ public final class WPSApplet extends Applet implements Runnable, ActionListener,
 				return "";
 			}
 	}
+    private StringBuffer addJSonParam( StringBuffer buffer, String param, String value, boolean first)
+    {
+        if( !first)
+            buffer.append(',');
+        String evalue="";
+        try {
+            evalue = URLEncoder.encode( value , "UTF-8" );
+        } catch (UnsupportedEncodingException e) {
+        }
+        return buffer.append(param).append( ":\"").append(evalue).append('"');
+    }
 }

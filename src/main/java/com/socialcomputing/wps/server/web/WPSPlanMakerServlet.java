@@ -23,12 +23,14 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 //import javax.xml.registry.DeleteException;
 
-public class WPSPlanMakerServlet extends HttpServlet
-{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1343674940328653700L;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class WPSPlanMakerServlet extends HttpServlet {
+
+    private static final long serialVersionUID = -1343674940328653700L;
+    private static final Logger LOG = LoggerFactory.getLogger(WPSPlanMakerServlet.class);
+                                                              
 	static Hashtable m_bufferedPlans = new Hashtable();
 
 	/*
@@ -111,6 +113,7 @@ public class WPSPlanMakerServlet extends HttpServlet
 		}
 		catch( Exception e)
 		{
+		    LOG.error(e.getMessage(), e);
 			response.setContentType("application/octet-stream");
 			out.writeInt( -1);
 			StringWriter    writer  = new StringWriter();

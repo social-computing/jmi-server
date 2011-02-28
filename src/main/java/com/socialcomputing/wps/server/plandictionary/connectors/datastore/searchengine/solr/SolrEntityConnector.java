@@ -145,13 +145,16 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 	        throws WPSConnectorException {
 		
 	    super.openConnections(planType, wpsparams);
-		
+	    LOG.info("Query remote search server to get attributes and entities");
+	    
 	    // Query parameters 
 	    QueryParameter<String> queryString = this.queryParameters.getQueryString();
-	    String query = (String) wpsparams.get(queryString.getName()); 
-	   
+	    String query = (String) wpsparams.get(queryString.getName());
+	    LOG.debug("  - query: {}", query);
+	    
 	    QueryParameter<Integer> maxResults = this.queryParameters.getMaxResults();
 	    Integer max = Integer.valueOf((String) wpsparams.get(maxResults.getName()));
+	    LOG.debug("  - max results: {}", max);
 	    
 	    SolrQuery solrQuery = 
 	        new SolrQuery((query != null) ? query : queryString.getValue())
