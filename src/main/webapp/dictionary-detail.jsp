@@ -100,7 +100,7 @@ Dictionary : <%=dictionaryName %>
 		<td align="center" nowrap><span class="texblanc"><%=i+1%></span></td>
 		<input type="hidden" name="dico<%=i%>" value="<%=dicoName%>" />
 		<td align="center" valign="top"><input type="checkbox" name="swatch<%=i%>" value="<%=swatchName%>" /></td>
-		<td nowrap><a href="swatch.jsp?swatch=<%=java.net.URLEncoder.encode(swatchName,"UTF-8")%>" ><span class="texblanc"><%=swatchName%></span></a></td>
+		<td nowrap><a href="swatch.jsp?dictionary=<%=dicoName %>&swatch=<%=java.net.URLEncoder.encode(swatchName,"UTF-8")%>" ><span class="texblanc"><%=swatchName%></span></a></td>
 		</tr><%
 		i++;
 	}

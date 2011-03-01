@@ -12,17 +12,19 @@ public long getLastModified(HttpServletRequest request) {
 }%>
 <%
 response.setContentType( "text/xml");
-//out.print( "<?xml version='1.0' encoding='ISO-8859-1'?>");
-if( request.getParameter( "dictionary") != null)
-{
-	DictionaryManager managerD = new DictionaryManagerImpl();
-	Dictionary dic = managerD.findByName( request.getParameter("dictionary"));
-	out.print( dic.getDefinition());
-}
-else if( request.getParameter( "swatch") != null)
-{
-	SwatchManager managerS = new SwatchManagerImpl();
-	Swatch swatch = managerS.findByName(request.getParameter("swatch"));
-	out.print(swatch.getDefinition());
+
+String dictionaryName = request.getParameter( "dictionary");
+String swatchName = request.getParameter("swatch");
+
+if (dictionaryName != null) {
+    if (swatchName == null) {
+		DictionaryManager managerD = new DictionaryManagerImpl();
+		Dictionary dic = managerD.findByName(dictionaryName);
+		out.print(dic.getDefinition());
+    } else {
+		SwatchManager managerS = new SwatchManagerImpl();
+		Swatch swatch = managerS.findByName(swatchName, dictionaryName);
+		out.print(swatch.getDefinition());
+    }
 }
 %>

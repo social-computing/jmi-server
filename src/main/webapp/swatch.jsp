@@ -43,15 +43,16 @@ public long getLastModified(HttpServletRequest request) {
 <!--iframe height="0" width="0" src="../exportrequest.jsp"></iframe-->
 <%
 if(request.getParameter("swatch") == null) return;
+if(request.getParameter("dictionary") == null) return;
 SwatchManager manager = new SwatchManagerImpl();
-Swatch sw = manager.findByName(request.getParameter("swatch"));
+Swatch sw = manager.findByName(request.getParameter("swatch"), request.getParameter("dictionary"));
 %>
 <table width="100%">
 <tr>
-<td><h1>swatch : <%=sw.getName()%></h1></td>
+<td><h1>swatch : <%=sw.getSwatchPk().getName()%></h1></td>
 </tr>
 <tr>
-<td><a href="view_def.jsp?swatch=<%=java.net.URLEncoder.encode(sw.getName(), "UTF-8")%>" target="_blank"><span class="texblanc">View definition</span></a></td>
+<td><a href="view_def.jsp?dictionary=<%=request.getParameter("dictionary")%>&swatch=<%=java.net.URLEncoder.encode(sw.getSwatchPk().getName(), "UTF-8")%>" target="_blank"><span class="texblanc">View definition</span></a></td>
 </tr>
 <tr><td>&nbsp;</td></tr>
 </table>
