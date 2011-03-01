@@ -5,8 +5,8 @@ import java.io.StringReader;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -14,7 +14,6 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Index;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -26,51 +25,33 @@ import com.socialcomputing.wps.server.swatchs.XSwatch;
 
 @Entity
 @Table(name = "swatchs")
-@org.hibernate.annotations.Table(appliesTo = "swatchs",
-                                 indexes = { @Index(name = "PRIMARY", columnNames = { "name" }) })
+@org.hibernate.annotations.Table(appliesTo = "swatchs")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-class SwatchImpl implements Serializable, Swatch {
+public class SwatchImpl implements Serializable, Swatch {
 
-    @Id
-    @Column(name = "name", columnDefinition = "varchar(255) default ''")
-    // @Column(name = "name")
-    String name;
+    @EmbeddedId
+    SwatchPk swatchPk;
+    
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
+    @JoinColumn(name = "dictionaryName", unique = false, nullable = false, insertable = false, updatable = false)
+    DictionaryImpl dictionary;
 
     @Column(name = "swatch", columnDefinition = "text")
-    // @Column(name = "swatch")
     String swatch;
 
     @Transient
     private XSwatch m_Swatch = null;
 
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
-    @JoinColumn(name = "swatch_dictionaryName")
-    private DictionaryImpl dictionary;
-
     public SwatchImpl() {
-        this.name = null;
+        this.swatchPk = null;
         this.swatch = null;
     }
-
-    public SwatchImpl(String name, String swatch) {
-        this.name = name;
+    
+    public SwatchImpl(SwatchPk swatchPk, String swatch) {
+        this.swatchPk = swatchPk;
         this.swatch = swatch;
     }
     
-    public SwatchImpl(String name, String swatch, Dictionary dictionary) {
-        this.name = name;
-        this.swatch = swatch;
-        this.dictionary = (DictionaryImpl) dictionary;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     @Override
     public String getDefinition() {
         return swatch;
@@ -82,9 +63,12 @@ class SwatchImpl implements Serializable, Swatch {
         this.m_Swatch = null;
     }
     
-    @Override
-    public void setDictionary(Dictionary dictionary) throws JDOMException {
-        this.dictionary = (DictionaryImpl) dictionary;
+    public SwatchPk getSwatchPk() {
+        return swatchPk;
+    }
+
+    public void setSwatchPk(SwatchPk swatchPk) {
+        this.swatchPk = swatchPk;
     }
 
     @Override

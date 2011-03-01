@@ -34,6 +34,7 @@ import com.socialcomputing.wps.server.persistence.SwatchManager;
 import com.socialcomputing.wps.server.persistence.hibernate.DictionaryImpl;
 import com.socialcomputing.wps.server.persistence.hibernate.DictionaryManagerImpl;
 import com.socialcomputing.wps.server.persistence.hibernate.SwatchManagerImpl;
+import com.socialcomputing.wps.server.persistence.hibernate.SwatchPk;
 
 /**
  * Title: Users Description: Copyright: Copyright (c) 2001 Company: VOYEZ VOUS
@@ -243,17 +244,17 @@ public class WPSUploadServlet extends HttpServlet {
         try {
             SwatchManager swatchManager = new SwatchManagerImpl();
             DictionaryManager dictionaryManager = new DictionaryManagerImpl();
-            
-            Swatch swatch = swatchManager.findByName(name);
             Dictionary dictionary = dictionaryManager.findByName(dictionaryName);
+            Swatch swatch = swatchManager.findByName(name, dictionaryName);
+            
             
             if (swatch == null) {
-                swatch = swatchManager.create(name, definition, dictionary);
+                swatch = swatchManager.create(name, definition, dictionaryName);
                 output.setLastActionResult("created.");
             }
             else {
                 swatch.setDefinition(definition);
-                swatch.setDictionary(dictionary);
+                swatch.setSwatchPk(new SwatchPk(name, dictionaryName));
                 swatchManager.update(swatch);
                 output.setLastActionResult("updated.");
             }
