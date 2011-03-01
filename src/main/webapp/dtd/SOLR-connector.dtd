@@ -3,7 +3,7 @@
 <!-- =====================================================================  -->
 <!-- SOLR-entities : data connectors description -->
 <!-- =====================================================================  -->
-<!ELEMENT SOLR-entities (comment?, connection, query, entity, attribute) >
+<!ELEMENT SOLR-entities (comment?, connection, query, entity, attribute, invert?) >
 <!ATTLIST SOLR-entities	name    	CDATA    #REQUIRED>
 <!ATTLIST SOLR-entities	class   	CDATA   "com.socialcomputing.wps.server.plandictionary.connectors.datastore.searchengine.solr.SolrEntityConnector" >
 <!-- <!ATTLIST SOLR-entities	queryParam	CDATA   #REQUIRED> -->
@@ -38,3 +38,5 @@
 <!ELEMENT property EMPTY>	
 <!ATTLIST property id CDATA #REQUIRED>
 <!ATTLIST property field CDATA #IMPLIED>
+
+<!ELEMENT invert EMPTY>

@@ -133,17 +133,18 @@
 		//params['planName'] = 'sample';
 		
 		// Uncomment to switch to Solr based dictionary
-		//params['planName'] = 'Solr_sample';
-		//params['maxResults'] = '20';
-		//params['q'] = 'fulltext:retraite AND assetTagNames:[* TO *]';
+		// params['planName'] = 'Solr_sample';
+		// params['maxResults'] = '20';
+		// params['q'] = 'fulltext:retraite AND assetTagNames:[* TO *]';
+		// params['invert'] = true;
 		
 		// Uncomment to switch to XML based dictionary
-		params['planName'] = 'Xmll_sample';
+		params['planName'] = 'Xml_sample';
 
-		params['noscript'] = '../noscript.jsp';
 		$("#map").wpsmap({
 			wps: params, 
-			display: {color:'336699'}
+			display: {color:'336699'},
+			plugin: {noscript:'../noscript.jsp'}
 		});
 	}
 	// Fired from applet

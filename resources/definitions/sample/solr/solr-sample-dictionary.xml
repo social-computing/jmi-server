@@ -7,6 +7,7 @@
 
 	<entities>		
 		<SOLR-entities name="SOLR Sample">
+		    <comment>Configuration for Solr server on Centre ressources production environment</comment>
 			<connection>
 				<url>https://www.centreressources.com/admin/solr/liferay/</url>
 				<authentication>
@@ -25,6 +26,9 @@
 			<attribute id="uid">
 				<property id="name" field="title" />
 			</attribute>
+			
+			<!-- Inveesion of entities and attributes in map construction -->
+			<invert />
 		</SOLR-entities>
 	</entities>
 	
