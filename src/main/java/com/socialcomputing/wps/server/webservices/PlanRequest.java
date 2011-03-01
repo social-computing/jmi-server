@@ -577,7 +577,7 @@ public class PlanRequest
 					//SwatchLoader loader = m_SwatchLoaderHome.findByPrimaryKey( swatchName);
 					//swatch = loader.getSwatch();
 					SwatchManagerImpl manager =  new SwatchManagerImpl();
-					Swatch swatchLoader = manager.findByName(swatchName);					
+					Swatch swatchLoader = manager.findByName( swatchName, m_Dictionary.m_Name);					
 					swatch = swatchLoader.getSwatch();
 					
 					m_LoadedSwatch.put( swatchName, swatch );

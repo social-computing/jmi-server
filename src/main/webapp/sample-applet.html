@@ -138,12 +138,12 @@
 		//params['q'] = 'fulltext:retraite AND assetTagNames:[* TO *]';
 		
 		// Uncomment to switch to XML based dictionary
-		params['planName'] = 'Xmll_sample';
+		params['planName'] = 'Xml_sample';
 
-		params['noscript'] = '../noscript.jsp';
 		$("#map").wpsmap({
 			wps: params, 
-			display: {color:'336699'}
+			display: {color:'336699'},
+			plugin: {noscript:'../noscript.jsp'}
 		});
 	}
 	// Fired from applet
