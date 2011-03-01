@@ -20,7 +20,6 @@ import com.socialcomputing.wps.server.plandictionary.connectors.iSelectionConnec
 
 public abstract class DatastoreEntityConnector implements iEntityConnector {
 	
-    private final static Logger LOG = LoggerFactory.getLogger(DatastoreEntityConnector.class);
     private final String m_Name;
     
 	public String m_Description = null;

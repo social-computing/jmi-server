@@ -2,8 +2,10 @@ package com.socialcomputing.wps.server.plandictionary.connectors.datastore.searc
 
 import java.net.MalformedURLException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -31,23 +33,26 @@ import com.socialcomputing.wps.server.plandictionary.connectors.datastore.search
  */
 public class SolrEntityConnector extends SearchengineEntityConnector {
 
-    private final static Logger LOG = LoggerFactory.getLogger(SolrEntityConnector.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SolrEntityConnector.class);
+    private static final String INVERT_PARAM = "invert";
     
 	private final CommonsHttpSolrServer solrClient;
 	private final QueryParameters queryParameters;
 	private final String entityField;
 	private final String attributeId;
+	private final boolean invert;
+
 	
-	
-	/**
-	 * Static method to construct a SolrEntityConnector from a JDOM Tree
-	 * Used to map the XML Configuration stored in database to a solr connector instance
-	 * 
-	 * @param element a JDOM element
-	 * @return a SolrEntityConnector instance
-	 * @throws WPSConnectorException 
-	 */
-	static SolrEntityConnector readObject(Element element) 
+    /**
+     * Static method to construct a SolrEntityConnector from a JDOM Tree used to
+     * map the XML Configuration stored in database to a solr connector instance
+     * 
+     * @param element
+     *            a JDOM element
+     * @return a SolrEntityConnector instance
+     * @throws WPSConnectorException
+     */
+	public static SolrEntityConnector readObject(Element element) 
 	        throws WPSConnectorException {
 
 	    LOG.info("Reading Solr configuration from JDOM tree : {}", element.toString());
@@ -90,9 +95,12 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
                                 new QueryParameter<Integer>(maxResults.getAttributeValue("param"),
                                                             Integer.valueOf(maxResults.getAttributeValue("default")))
                                );
-        LOG.debug("  - query parameters= {}", queryParameters);
+        LOG.debug("  - query parameters = {}", queryParameters);
 	    
-	    
+        Element invertElement = element.getChild("invert");
+        boolean invert = (invertElement == null ) ? false : true;
+        LOG.debug("  - invert = {}", invert);
+        
         // Reading entity and attribute definition
         Element entity = element.getChild("entity");
         Element attribute = element.getChild("attribute");
@@ -106,7 +114,8 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 		            solrClient,
 		            queryParameters,
 		            entityField,
-		            attributeId);
+		            attributeId,
+		            invert);
 		connector._readObject(element);
 
 		// TODO : change this !
@@ -120,26 +129,52 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 	}
 	
 	
-	/**
-	 * Default Constructor
-	 * 
-	 * @param name name of the connector instance
-     * @param solrClient A Solr client instance
-	 * @param queryParameters List of query parameters to read and their default values
-	 */
+    /**
+     * Default Constructor
+     * 
+     * @param name
+     *            name of the connector instance
+     * @param solrClient
+     *            A Solr client instance
+     * @param queryParameters
+     *            List of query parameters to read and their default values
+     */
 	public SolrEntityConnector(String name,
 	                           CommonsHttpSolrServer solrClient,
 	                           QueryParameters queryParameters,
 	                           String entityField,
 	                           String attributeId) {
-		super(name);
-		this.solrClient = solrClient;
-		this.queryParameters = queryParameters;
-		this.entityField = entityField;
-		this.attributeId = attributeId;
+		this(name, solrClient, queryParameters, entityField, attributeId, false);
 	}
+	
+	
+    /**
+     * Constructor with inversion parameter
+     * 
+     * @param name
+     *            name of the connector instance
+     * @param solrClient
+     *            A Solr client instance
+     * @param queryParameters
+     *            List of query parameters to read and their default values
+     */
+    public SolrEntityConnector(String name,
+                               CommonsHttpSolrServer solrClient,
+                               QueryParameters queryParameters,
+                               String entityField,
+                               String attributeId,
+                               boolean invert) {
+        super(name);
+        this.solrClient = solrClient;
+        this.queryParameters = queryParameters;
+        this.entityField = entityField;
+        this.attributeId = attributeId;
+        this.invert = invert;
+    }
 
 	
+
+    
 	@Override
 	public void openConnections(int planType, Hashtable<String, Object> wpsparams)
 	        throws WPSConnectorException {
@@ -154,7 +189,12 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 	    
 	    QueryParameter<Integer> maxResults = this.queryParameters.getMaxResults();
 	    Integer max = Integer.valueOf((String) wpsparams.get(maxResults.getName()));
-	    LOG.debug("  - max results: {}", max);
+        LOG.debug("  - max results: {}", max);
+	    
+	    Object invertParam = wpsparams.get(SolrEntityConnector.INVERT_PARAM);
+	    boolean invert = (invertParam != null) ? (Boolean.parseBoolean((String) invertParam)) : this.invert;
+
+	    LOG.debug("  - invert: {}", invert);
 	    
 	    SolrQuery solrQuery = 
 	        new SolrQuery((query != null) ? query : queryString.getValue())
@@ -171,18 +211,20 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 
 	    // Iterate through answers and populate entities and attributes
 	    // For now, entities are values of a field type and attributes are documents matching the query
-	    LOG.info("Loading elements and attributes");
+	    LOG.info("Number of documents found : {} in {}", response.getResults().getNumFound(), response.getQTime());
 	    
+	       
 	    for(SolrDocument document : response.getResults()) {
 	        
-	        String attributeId = 
+	        String documentId = 
 	            (String)document.getFieldValue(this.attributeId);
-	        Attribute attribute = addAttribute(attributeId);
 	        
-	        // Mapping document properties to attribute properties
-	        // TODO : change this !
-	        for(AttributePropertyDefinition property : this.attributeProperties) {
-	            String field;
+	        // Reading document properties
+            // TODO : change this, it shouldn't use AttributePropertyDefinition
+	        LOG.debug("Reading document properties: ");
+            Map<String, String> documentProperties = new HashMap<String, String>();
+            for(AttributePropertyDefinition property : this.attributeProperties) {
+                String field;
                 if(property.isSimple()) {
                     field = property.getName();
                 }
@@ -190,26 +232,41 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
                     field = property.getEntity();
                 }
                 String fieldValue = (String)document.getFieldValue(field);
-                attribute.addProperty(property, (fieldValue == null) ? "" : fieldValue);
+                documentProperties.put(property.getName(), (fieldValue == null) ? "" : fieldValue);
+                LOG.debug(" - {} : {}", property.getName(), documentProperties.get(property.getName()));
             }
-	        LOG.debug("Adding an attribute : {}", attribute);
+            
+            // Get a list of relational field elements from each document
+            Collection<Object> relFieldValues = document.getFieldValues(this.entityField);
 	        
-	        // Get a list of elements from each document
-	        Collection<Object> elements = document.getFieldValues(this.entityField);
-	       
-	        if(elements != null) {
-    	        for(Object element : elements) {
-    	            String elementStr = (String) element;
-    	            Entity entity = addEntity(elementStr);
-    	            
-    	            // Sub optimal ? Erase entity name each time it is found in a document ... 
-    	            // Use the tag value as the name to display
-    	            entity.addProperty("name", elementStr);
-    	            entity.addAttribute(attribute, 1);
-    	            
-    	            LOG.debug("Adding or updating an entity : {}", entity);
-    	        }
-	        }
+            if(invert) {
+                Entity entity = addEntity(documentId);
+                entity.addProperties(documentProperties);
+                if(relFieldValues != null) {
+                    for(Object relField : relFieldValues) {
+                        String relFieldValue = (String) relField;
+                        Attribute attribute = addAttribute(relFieldValue);
+
+                        attribute.addProperty("name", relFieldValue);
+                        entity.addAttribute(attribute, 1);
+                    }
+                }
+                LOG.debug("Entity added: {}", entity);
+            }
+            else {
+                Attribute attribute = addAttribute(documentId);
+                attribute.addProperties(documentProperties);
+                if(relFieldValues != null) {
+                    for(Object relField : relFieldValues) {
+                        String relFieldValue = (String) relField;
+                        Entity entity = addEntity(relFieldValue);
+                        
+                        entity.addProperty("name", relFieldValue);
+                        entity.addAttribute(attribute, 1);                        
+                    }
+                }
+                LOG.debug("Attribute added: {}", attribute);
+            }
 	    }
 	}
 	

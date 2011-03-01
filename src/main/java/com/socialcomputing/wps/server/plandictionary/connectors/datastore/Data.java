@@ -1,31 +1,64 @@
 package com.socialcomputing.wps.server.plandictionary.connectors.datastore;
 
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Map.Entry;
 
+/**
+ * 
+ * @author Franck Valetas <franck.valetas@social-computing.com>
+ * @author Jonathan Dray <jonathan.dray@social-computing.com>
+ * 
+ * Representation of some data with a String identifier and 
+ * a Map of parameters
+ *
+ */
 public abstract class Data {
-	protected String m_Id;
-	protected Hashtable<String, Object> m_Properties;
+	protected final String m_Id;
+	protected final Hashtable<String, Object> m_Properties;
 	
-	public Data( String id) {
-		m_Id = id;
-		m_Properties = new Hashtable<String, Object>();
-		addProperty( "id", id);
+	public Data(String id) {
+		this.m_Id = id;
+		this.m_Properties = new Hashtable<String, Object>();
+		addProperty("id", id);
 	}
 
-	public String getId() {
-		return m_Id;
+	
+    /**
+     * Add a property to this element
+     * 
+     * @param name
+     *            name of the property
+     * @param value
+     *            property's value
+     */
+	public void addProperty(String name, Object value) {
+		this.m_Properties.put(name, value);
 	}
 	
-	public Hashtable<String, Object> getProperties() {
-		return m_Properties;
+	
+    /**
+     * Add multiple properties to this element
+     * 
+     * @param properties
+     *            a map of properties with keys and values
+     */
+	public void addProperties(Map<String, ? extends Object> properties) {
+	    this.m_Properties.putAll(properties);
 	}
 	
-	public void addProperty( String name, Object value) {
-		m_Properties.put( name, value);
-	}
-	
-   @Override
+
+    public String getId() {
+        return this.m_Id;
+    }
+    
+    
+    public Hashtable<String, Object> getProperties() {
+        return this.m_Properties;
+    }
+
+    
+    @Override
     public String toString() {
         StringBuilder sb = 
             new StringBuilder().append(this.m_Id)
