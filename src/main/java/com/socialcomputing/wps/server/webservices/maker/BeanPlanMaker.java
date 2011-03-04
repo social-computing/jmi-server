@@ -49,24 +49,27 @@ public class BeanPlanMaker implements PlanMaker {
             if (mime == null)
                 mime = "application/octet-stream";
             PlanContainer planContainer = _createPlan(params, result);
-            if (planContainer.m_env != null) {
-                if (mime.equals("application/octet-stream")) {
+            if (mime.equals("application/octet-stream")) {
+                if (planContainer.m_env != null) {
                     ByteArrayOutputStream bout = new ByteArrayOutputStream(32768);
                     ObjectOutputStream objectOutStream = new ObjectOutputStream(new GZIPOutputStream(bout));
                     objectOutStream.writeObject(planContainer.m_env);
                     objectOutStream.writeObject(planContainer.m_plan);
                     objectOutStream.close();
                     result.put("PLAN", bout.toByteArray());
-                    result.put("PLAN_MIME", mime);
                 }
-                else if (mime.equals("text/xml")) {
-                    result.put("PLAN", planContainer.m_protoPlan.getXML());
-                    result.put("PLAN_MIME", mime);
+                else {
+                    result.put("PLAN", new byte[0]);
                 }
-                else if (mime.equals("text/java")) {
-                    result.put("PLAN", planContainer);
-                    result.put("PLAN_MIME", mime);
-                }
+                result.put("PLAN_MIME", mime);
+            }
+            else if (mime.equals("text/xml")) {
+                result.put("PLAN", planContainer.m_protoPlan.getXML());
+                result.put("PLAN_MIME", mime);
+            }
+            else if (mime.equals("text/java")) {
+                result.put("PLAN", planContainer);
+                result.put("PLAN_MIME", mime);
             }
 
             timer.showElapsedTime("ALL STEPS");
