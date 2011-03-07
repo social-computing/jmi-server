@@ -82,7 +82,7 @@ Collection<Dictionary> dics = manager.findAll();
 		%><tr>
 		<td align="center" nowrap><span class="texblanc"><%=i+1%></span></td>
 		<td align="center" valign="top"><input type="checkbox" name="delete<%=i%>" value="<%=dic.getName()%>" /></td>
-		<td nowrap><span class="texblanc"><a href="dictionary.jsp?dictionary=<%=java.net.URLEncoder.encode(dic.getName(),"UTF-8")%>" ><%=dic.getName()%></a></span></td>
+		<td nowrap><span class="texblanc"><a href="dictionary-detail.jsp?dictionary=<%=java.net.URLEncoder.encode(dic.getName(),"UTF-8")%>" ><%=dic.getName()%></a></span></td>
 		<td nowrap><span class="texblanc"><%=(dic.getNextFilteringDate()==null ? "&nbsp;" : dic.getNextFilteringDate().toString())%></span></td>
 		</tr><%
 	}

@@ -79,8 +79,6 @@ Swatch sw = manager.findByName(request.getParameter("swatch"), request.getParame
 <tr><td>&nbsp;</td></tr>
 </table>
 
-<a class="iframe" href="http://www.google.com">This goes to iframe</a>
-
 
 </body>
 </html>
