@@ -25,6 +25,9 @@ List<Swatch> ls = dic.getSwatchs();
 <head>
 <link rel="stylesheet" href="./wps.css">
 <link rel="stylesheet" href="./result.css">
+<script type="text/javascript" src="./applet/jquery.js" ></script>
+<script type="text/javascript" src="javascript/jquery.fancybox-1.3.4.pack.js"></script>
+<link rel="stylesheet" href="css/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
 <base target="main">
 <SCRIPT LANGUAGE="JavaScript1.2" > 
 	function SubmitForm(resetStart)
@@ -53,6 +56,29 @@ List<Swatch> ls = dic.getSwatchs();
 </SCRIPT>
 </head>
 <body bgcolor=7f9fdf>
+<script>
+$(document).ready(function() {
+
+    /* This is basic - uses default settings */
+    $("a#single_image").fancybox();
+        
+    /* Using custom settings */
+    $("a#inline").fancybox({
+        'hideOnContentClick': true
+    });
+
+    /* Apply fancybox to multiple items */
+        
+    $("a.iframe").fancybox({
+        'width'                : '75%',
+        'height'            : '75%',
+        'autoScale'         : false,
+        'transitionIn'        : 'none',
+        'transitionOut'        : 'none',
+        'type'                : 'iframe'
+    });
+});
+</script>
 <!--iframe height="0" width="0" src="../exportrequest.jsp"></iframe-->
 <%
 SwatchManager manager = new SwatchManagerImpl();
@@ -70,15 +96,15 @@ if (request.getParameter("confirmdelete") != null && request.getParameter("confi
 %>
 
 
-
-
-
 <table width="100%">
 <tr>
 <td><h1>Dictionary : <%=dictionaryName %></h1></td>
 </tr>
 <tr>
-<td><a href="view_def.jsp?type=plan&dictionary=<%=java.net.URLEncoder.encode(dictionaryName,"UTF-8")%>" target="_blank"><span class="texblanc">View definition</span></a></td>
+<td><a class="iframe" href="view_def.jsp?type=plan&dictionary=<%=java.net.URLEncoder.encode(dictionaryName,"UTF-8")%>" target="_blank"><span class="texblanc">View definition</span></a></td>
+</tr>
+<tr>
+<td><a class="iframe" href="edit_def.jsp?dictionary=<%=java.net.URLEncoder.encode(dictionaryName,"UTF-8")%>" target="_blank"><span class="texblanc">Edit definition</span></a></td>
 </tr>
 <tr><td>&nbsp;</td></tr>
 <tr><td>
@@ -101,9 +127,8 @@ if (request.getParameter("confirmdelete") != null && request.getParameter("confi
 </td></tr>
 </table>
 
-
-
 <br/><br/>
+
 <form name="test" method="GET" action="dictionary-detail.jsp">
 <input type="hidden" name="dictionary" value="<%=dictionaryName%>" />
 <input type="hidden" name="confirmdelete" value="n" />
