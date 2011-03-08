@@ -29,152 +29,159 @@ import com.socialcomputing.wps.server.webservices.PlanRequest;
 
 public class BeanPlanMaker implements PlanMaker {
 
+    private class Steps {
+        static final int PlanMakerStarted = 0x00000001;
+        static final int DictionaryLoaded = 0x00000002;
+        static final int DictionaryOpened = 0x00000004;
+        static final int AffinityGroupComputed = 0x00000010;
+        static final int AnalysisPassed = 0x00000100;
+        static final int PlanGenerated = 0x00001000;
+        static final int EnvInitialized = 0x00002000;
+    }
 
-	private class Steps {
-		static final int PlanMakerStarted = 0x00000001;
-		static final int DictionaryLoaded = 0x00000002;
-		static final int DictionaryOpened = 0x00000004;
-		static final int AffinityGroupComputed = 0x00000010;
-		static final int AnalysisPassed = 0x00000100;
-		static final int PlanGenerated = 0x00001000;
-		static final int EnvInitialized = 0x00002000;
-	}
+    @Override
+    public Hashtable<String, Object> createPlan(Hashtable<String, Object> params) throws RemoteException {
+        Hashtable<String, Object> result = new Hashtable<String, Object>();
+        try {
+            EZTimer timer = new EZTimer();
 
-	@Override
-	public Hashtable<String, Object> createPlan(Hashtable<String, Object> params) throws RemoteException {
-		Hashtable<String, Object> result = new Hashtable<String, Object>();
-		try {
-			EZTimer timer = new EZTimer();
+            String mime = (String) params.get("PLAN_MIME");
+            if (mime == null)
+                mime = "application/octet-stream";
+            PlanContainer planContainer = _createPlan(params, result);
+            if (mime.equals("application/octet-stream")) {
+                if (planContainer.m_env != null) {
+                    ByteArrayOutputStream bout = new ByteArrayOutputStream(32768);
+                    ObjectOutputStream objectOutStream = new ObjectOutputStream(new GZIPOutputStream(bout));
+                    objectOutStream.writeObject(planContainer.m_env);
+                    objectOutStream.writeObject(planContainer.m_plan);
+                    objectOutStream.close();
+                    result.put("PLAN", bout.toByteArray());
+                }
+                else {
+                    result.put("PLAN", new byte[0]);
+                }
+                result.put("PLAN_MIME", mime);
+            }
+            else if (mime.equals("text/xml")) {
+                result.put("PLAN", planContainer.m_protoPlan.getXML());
+                result.put("PLAN_MIME", mime);
+            }
+            else if (mime.equals("text/java")) {
+                result.put("PLAN", planContainer);
+                result.put("PLAN_MIME", mime);
+            }
 
-			String mime = (String) params.get("PLAN_MIME");
-			if (mime == null)
-				mime = "application/octet-stream";
-			PlanContainer planContainer = _createPlan(params, result);
-			if (planContainer.m_env != null) {
-				if (mime.equals("application/octet-stream")) {
-					ByteArrayOutputStream bout = new ByteArrayOutputStream(32768);
-					ObjectOutputStream objectOutStream = new ObjectOutputStream(new GZIPOutputStream(bout));
-					objectOutStream.writeObject(planContainer.m_env);
-					objectOutStream.writeObject(planContainer.m_plan);
-					objectOutStream.close();
-					result.put("PLAN", bout.toByteArray());
-					result.put("PLAN_MIME", mime);
-				} else if (mime.equals("text/xml")) {
-					result.put("PLAN", planContainer.m_protoPlan.getXML());
-					result.put("PLAN_MIME", mime);
-				} else if (mime.equals("text/java")) {
-					result.put("PLAN", planContainer);
-					result.put("PLAN_MIME", mime);
-				}
-			}
+            timer.showElapsedTime("ALL STEPS");
+            return result;
+        }
+        catch (Exception e) {
+            throw new RemoteException("WPS can't create plan " + (String) params.get("planName") + " : "
+                    + e.getMessage());
+        }
+    }
 
-			timer.showElapsedTime("ALL STEPS");
-			return result;
-		} catch (Exception e) {
-			throw new RemoteException("WPS can't create plan " + (String) params.get("planName") + " : "
-					+ e.getMessage());
-		}
-	}
+    private PlanContainer _createPlan(Hashtable<String, Object> params, Hashtable<String, Object> results)
+            throws RemoteException {
+        int status = Steps.PlanMakerStarted;
+        boolean isVisual = false;
+        Connection connection = null;
+        WPSDictionary dico = null;
+        PlanContainer container = null;
+        PlanRequest planRequest = null;
 
-	private PlanContainer _createPlan(Hashtable<String, Object> params, Hashtable<String, Object> results)
-			throws RemoteException {
-		int status = Steps.PlanMakerStarted;
-		boolean isVisual = false;
-		Connection connection = null;
-		WPSDictionary dico = null;
-		PlanContainer container = null;
-		PlanRequest planRequest = null;
+        long startTime = System.currentTimeMillis();
 
-		long startTime = System.currentTimeMillis();
+        String name = (String) params.get("planName");
+        if (name == null)
+            throw new RemoteException("WPS parameter 'planName' missing.");
+        String x = (String) params.get("width");
+        if (x != null && Integer.parseInt(x) == 0)
+            throw new RemoteException("WPS parameter 'width' can't be 0.");
+        x = (String) params.get("height");
+        if (x != null && Integer.parseInt(x) == 0)
+            throw new RemoteException("WPS parameter 'height' can't be 0.");
 
-		String name = (String) params.get("planName");
-		if (name == null)
-			throw new RemoteException("WPS parameter 'planName' missing.");
-		String x = (String) params.get("width");
-		if (x != null && Integer.parseInt(x) == 0)
-			throw new RemoteException("WPS parameter 'width' can't be 0.");
-		x = (String) params.get("height");
-		if (x != null && Integer.parseInt(x) == 0)
-			throw new RemoteException("WPS parameter 'height' can't be 0.");
+        String useragent = (String) params.get("User-Agent");
+        if (useragent == null)
+            useragent = "<unknown>";
 
-		String useragent = (String) params.get("User-Agent");
-		if (useragent == null)
-			useragent = "<unknown>";
+        x = (String) params.get("wpsDebugRelaxation");
+        if (x != null && Integer.parseInt(x) == 1)
+            isVisual = true;
 
-		x = (String) params.get("wpsDebugRelaxation");
-		if (x != null && Integer.parseInt(x) == 1)
-			isVisual = true;
+        try {
+            connection = getConnection();
 
-		try {
-			connection = getConnection();
+            // DICTIONARY LOADER
+            DictionaryManagerImpl manager = new DictionaryManagerImpl();
+            Dictionary dictionaryLoader = manager.findByName(name);
+            if (dictionaryLoader == null)
+                throw new RemoteException("WPS parameter can't find dictionary " + name);
+            results.put("PLAN_NAME", name);
 
-			// DICTIONARY LOADER
-			DictionaryManagerImpl manager = new DictionaryManagerImpl();
-			Dictionary dictionaryLoader = manager.findByName(name);
-			if( dictionaryLoader == null)
-			    throw new RemoteException("WPS parameter can't find dictionary " + name);
-			results.put("PLAN_NAME", name);
+            // DICTIONARY RETRIEVAL
+            dico = dictionaryLoader.getDictionary();
+            status = Steps.DictionaryLoaded;
 
-			// DICTIONARY RETRIEVAL
-			dico = dictionaryLoader.getDictionary();
-			status = Steps.DictionaryLoaded;
+            // PLANREQUEST CREATION
+            planRequest = new PlanRequest(connection, dico, params);
+            switch (planRequest.getAnalysisProfile().m_planType) {
+                case AnalysisProfile.PERSONAL_PLAN:
+                    results.put("PLAN_TYPE", "PERSONAL");
+                    break;
+                case AnalysisProfile.GLOBAL_PLAN:
+                    results.put("PLAN_TYPE", "GLOBAL");
+                    break;
+                case AnalysisProfile.DISCOVERY_PLAN:
+                    results.put("PLAN_TYPE", "DISCOVERY");
+                    break;
+            }
 
-			// PLANREQUEST CREATION
-			planRequest = new PlanRequest(connection, dico, params);
-			switch (planRequest.getAnalysisProfile().m_planType) {
-			case AnalysisProfile.PERSONAL_PLAN:
-				results.put("PLAN_TYPE", "PERSONAL");
-				break;
-			case AnalysisProfile.GLOBAL_PLAN:
-				results.put("PLAN_TYPE", "GLOBAL");
-				break;
-			case AnalysisProfile.DISCOVERY_PLAN:
-				results.put("PLAN_TYPE", "DISCOVERY");
-				break;
-			}
+            // PLANREQUEST CREATION
+            dico.openConnections(planRequest.getAnalysisProfile().m_planType, params);
+            status = Steps.DictionaryOpened;
 
-			// PLANREQUEST CREATION
-			dico.openConnections( planRequest.getAnalysisProfile().m_planType, params);
-			status = Steps.DictionaryOpened;
+            // AFFINITY GROUP RETRIEVAL
+            RecommendationInterface affinity = new RecommendationInterface(planRequest);
+            Collection<String> affinityGroup = affinity.retrieveAffinityGroup();
+            status = Steps.AffinityGroupComputed;
 
-			// AFFINITY GROUP RETRIEVAL
-			RecommendationInterface affinity = new RecommendationInterface(planRequest);
-			Collection<String> affinityGroup = affinity.retrieveAffinityGroup();
-			status = Steps.AffinityGroupComputed;
+            // ANALYSIS MOTOR
+            AnalysisProcess analysisEngine = new AnalysisProcess(planRequest, affinityGroup, affinity);
+            ProtoPlan proto = analysisEngine.getProtoPlan();
+            status = Steps.AnalysisPassed;
 
-			// ANALYSIS MOTOR
-			AnalysisProcess analysisEngine = new AnalysisProcess(planRequest, affinityGroup, affinity);
-			ProtoPlan proto = analysisEngine.getProtoPlan();
-			status = Steps.AnalysisPassed;
+            // PLAN GENERATOR
+            PlanGenerator planGenerator = new PlanGenerator();
+            planGenerator.generatePlan(proto, isVisual);
+            status = Steps.PlanGenerated;
 
-			// PLAN GENERATOR
-			PlanGenerator planGenerator = new PlanGenerator();
-			planGenerator.generatePlan(proto, isVisual);
-			status = Steps.PlanGenerated;
+            container = new PlanContainer(planGenerator.getEnv(), planGenerator.getPlan());
+            container.m_protoPlan = proto;
+            status = Steps.EnvInitialized;
 
-			container = new PlanContainer(planGenerator.getEnv(), planGenerator.getPlan());
-			container.m_protoPlan = proto;
-			status = Steps.EnvInitialized;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw new RemoteException(e.getMessage());
+        }
+        finally {
+            try {
+                if (connection != null)
+                    connection.close();
+                if (dico != null)
+                    dico.closeConnections();
+            }
+            catch (Exception e) {}
+        }
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RemoteException( e.getMessage());
-		} finally {
-			try {
-				if (connection != null)
-					connection.close();
-				if (dico != null)
-					dico.closeConnections();
-			} catch (Exception e) {
-			}
-		}
+        return container;
+    }
 
-		return container;
-	}
-
-	private Connection getConnection() throws SQLException, RemoteException {
-		Session session = HibernateUtil.currentSession();
-		return session.connection();
-	}
+    private Connection getConnection() throws SQLException, RemoteException {
+        Session session = HibernateUtil.currentSession();
+        return session.connection();
+    }
 
 }
