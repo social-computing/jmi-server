@@ -17,17 +17,37 @@
 		<property name="connection.username">sa</property>
 		<property name="connection.password"></property>
 		 -->
+		 
+		<!-- pooling configuration with 3rd party c3p0 lib -->
+		<!-- Min pool size -->
+        <property name="c3p0.min_size">5</property>
+        <!--Max pool size -->
+        <property name="c3p0.max_size">20</property>
+        <!-- Max idle time -->
+        <property name="c3p0.timeout">1800</property>
+        <!--Max statements - size of the prepared statement cache -->
+        <property name="c3p0.max_statements">50</property>
+        <!-- Set the pooling implementation to c3p0 -->
+        <property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
 		
-		<property name="connection.pool_size">10</property>
-		<property name="connection.autocommit">true</property>
 		
+		<!-- Not recommended in hibernate documentation
+		<property name="connection.autocommit">true</property> --> 
+        <!-- The use of this feature is not recommended, because it has side effects related to session state and data consistency  -->
+		<!-- <property name="hibernate.connection.autoReconnect">true</property>  -->
+		
+		<!-- Cache configuration -->
 		<property name="hibernate.cache.region.factory_class">net.sf.ehcache.hibernate.EhCacheRegionFactory</property>
 		<property name="hibernate.cache.use_query_cache">true</property>
 		<property name="hibernate.cache.use_second_level_cache">true</property>
 		<property name="net.sf.ehcache.configurationResourceName">ehcache.xml</property>
 		
+		
 		<property name="hbm2ddl.auto">update</property>
+		
+		<!-- For debug only -->
 		<property name="show_sql">true</property>
+		
 		<property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
 		<property name="current_session_context_class">thread</property>
 		<mapping class="com.socialcomputing.wps.server.persistence.hibernate.DictionaryImpl"/>

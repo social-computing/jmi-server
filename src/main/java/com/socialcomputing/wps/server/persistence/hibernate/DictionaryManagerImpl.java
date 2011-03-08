@@ -2,8 +2,11 @@ package com.socialcomputing.wps.server.persistence.hibernate;
 
 import java.util.Collection;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.socialcomputing.utils.database.DatabaseHelper;
 import com.socialcomputing.utils.database.HibernateUtil;
@@ -13,6 +16,8 @@ import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 
 public class DictionaryManagerImpl implements DictionaryManager {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DictionaryManagerImpl.class);
+    
     @Override
     public Collection<Dictionary> findAll() {
         Collection<Dictionary> results = null;
@@ -22,14 +27,18 @@ public class DictionaryManagerImpl implements DictionaryManager {
             session = HibernateUtil.currentSession();
             tx = session.beginTransaction();
             results = session.createQuery("from DictionaryImpl").list();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
             tx.commit();
-            // HibernateUtil.closeSession();
         }
+        catch (HibernateException e) {
+            // If a transaction was opened before the error occured
+            if ( tx != null )
+                tx.rollback();
+            LOG.error(e.getMessage(), e);
+        }
+        // Do not close session here yet
+        //        finally {
+        //            HibernateUtil.closeSession();
+        //        }
         return results;
     }
 
@@ -42,15 +51,19 @@ public class DictionaryManagerImpl implements DictionaryManager {
             session = HibernateUtil.currentSession();
             tx = session.beginTransaction();
             result = (Dictionary) session.get(DictionaryImpl.class, name);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
             tx.commit();
-            // HibernateUtil.closeSession();
         }
-
+        catch (HibernateException e) {
+            // If a transaction was opened before the error occured
+            if ( tx != null )
+                tx.rollback();
+            LOG.error(e.getMessage(), e);
+        }
+        // Do not close session here yet 
+        // closed in jsp files
+        //        finally {
+        //            HibernateUtil.closeSession();
+        //        }
         return result;
     }
 
@@ -62,6 +75,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
         try {
             session = HibernateUtil.currentSession();
             tx = session.beginTransaction();
+            
             result = new DictionaryImpl(name, definition, "");
             session.save(result);
             String coefTable = WPSDictionary.getCoefficientTableName(name);
@@ -85,17 +99,24 @@ public class DictionaryManagerImpl implements DictionaryManager {
                     session.createSQLQuery("create table " + queueTable + " (id varchar(255) not null, date timestamp)");
             }
             session.createSQLQuery("create index id on " + queueTable + " (id)").executeUpdate();
+            tx.commit();
         }
         catch (Exception e) {
-            e.printStackTrace();
+            // If a transaction was opened before the error occured
+            if ( tx != null )
+                tx.rollback();
+            LOG.error(e.getMessage(), e);
         }
-        finally {
-            tx.commit();
-            // HibernateUtil.closeSession();
-        }
+        // Do not close session here yet 
+        // closed in jsp files
+        // finally {
+        //     tx.commit();
+        //     HibernateUtil.closeSession();
+        // }
         return result;
     }
 
+    
     @Override
     public void update(Dictionary dictionary) {
         Session session = null;
@@ -104,14 +125,18 @@ public class DictionaryManagerImpl implements DictionaryManager {
             session = HibernateUtil.currentSession();
             tx = session.beginTransaction();
             session.update(dictionary);
+            tx.commit();
         }
         catch (Exception e) {
-            e.printStackTrace();
+            // If a transaction was opened before the error occured
+            if ( tx != null )
+                tx.rollback();
+            LOG.error(e.getMessage(), e);
         }
-        finally {
-            tx.commit();
-            // HibernateUtil.closeSession();
-        }
+        // finally {
+        //     tx.commit();
+        //     HibernateUtil.closeSession();
+        // }
     }
 
     @Override
@@ -125,14 +150,18 @@ public class DictionaryManagerImpl implements DictionaryManager {
             session.delete(d);
             session.createSQLQuery("drop table " + WPSDictionary.getCoefficientTableName(name)).executeUpdate();
             session.createSQLQuery("drop table " + WPSDictionary.getCoefficientQueuingTableName(name)).executeUpdate();
+            tx.commit();
         }
         catch (Exception e) {
-            e.printStackTrace();
+            // If a transaction was opened before the error occured
+            if ( tx != null )
+                tx.rollback();
+            LOG.error(e.getMessage(), e);
         }
-        finally {
-            tx.commit();
-            // HibernateUtil.closeSession();
-        }
+        // finally {
+        //     tx.commit();
+        //     HibernateUtil.closeSession();
+        // }
     }
 
 }

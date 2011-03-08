@@ -2,8 +2,11 @@ package com.socialcomputing.wps.server.persistence.hibernate;
 
 import java.util.Collection;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.socialcomputing.utils.database.HibernateUtil;
 import com.socialcomputing.wps.server.persistence.Dictionary;
@@ -13,6 +16,8 @@ import com.socialcomputing.wps.server.persistence.SwatchManager;
 
 public class SwatchManagerImpl implements SwatchManager {
 
+    private static final Logger LOG = LoggerFactory.getLogger(SwatchManagerImpl.class);
+                                                              
     @Override
     public Collection<Swatch> findAll() {
         Collection<Swatch> results = null;
@@ -22,14 +27,19 @@ public class SwatchManagerImpl implements SwatchManager {
             session = HibernateUtil.currentSession();
             tx = session.beginTransaction();
             results = session.createQuery("from SwatchImpl").list();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
             tx.commit();
-            // HibernateUtil.closeSession();
         }
+        catch (HibernateException e) {
+            // If a transaction was opened before the error occured
+            if ( tx != null )
+                tx.rollback();
+            LOG.error(e.getMessage(), e);
+        }
+        // Do not close session here yet 
+        // closed in jsp files
+        //        finally {
+        //            HibernateUtil.closeSession();
+        //        }
 
         return results;
     }
@@ -45,16 +55,21 @@ public class SwatchManagerImpl implements SwatchManager {
             tx = session.beginTransaction();
             result = (Swatch) session.get(SwatchImpl.class, swatchPk);
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        catch (HibernateException e) {
+            // If a transaction was opened before the error occured
+            if ( tx != null )
+                tx.rollback();
+            LOG.error(e.getMessage(), e);
         }
-        finally {
-            tx.commit();
-            // HibernateUtil.closeSession();
-        }
+        // Do not close session here yet 
+        // closed in jsp files
+        //        finally {
+        //            HibernateUtil.closeSession();
+        //        }
         return result;
     }
 
+    
     @Override
     public Swatch create(String name, String definition, String dictionaryName) {
         Swatch result = null;
@@ -66,14 +81,19 @@ public class SwatchManagerImpl implements SwatchManager {
             tx = session.beginTransaction();
             result = new SwatchImpl(swatchPk, definition);
             session.save(result);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
             tx.commit();
-            // HibernateUtil.closeSession();
         }
+        catch (HibernateException e) {
+            // If a transaction was opened before the error occured
+            if ( tx != null )
+                tx.rollback();
+            LOG.error(e.getMessage(), e);
+        }
+        // Do not close session here yet 
+        // closed in jsp files
+        //        finally {
+        //            HibernateUtil.closeSession();
+        //        }
         return result;
     }
 
@@ -85,16 +105,22 @@ public class SwatchManagerImpl implements SwatchManager {
             session = HibernateUtil.currentSession();
             tx = session.beginTransaction();
             session.update(swatch);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
             tx.commit();
-            // HibernateUtil.closeSession();
         }
+        catch (HibernateException e) {
+            // If a transaction was opened before the error occured
+            if ( tx != null )
+                tx.rollback();
+            LOG.error(e.getMessage(), e);
+        }
+        // Do not close session here yet 
+        // closed in jsp files
+        //        finally {
+        //            HibernateUtil.closeSession();
+        //        }
     }
 
+    
     @Override
     public void remove(String name, String dicoName) {
         SwatchPk swatchPk = new SwatchPk(name, dicoName);
@@ -109,13 +135,18 @@ public class SwatchManagerImpl implements SwatchManager {
             Swatch s = (Swatch) session.get(SwatchImpl.class, swatchPk);
             d.getSwatchs().remove(s);
             session.delete(s);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
             tx.commit();
-            // HibernateUtil.closeSession();
         }
+        catch (HibernateException e) {
+            // If a transaction was opened before the error occured
+            if ( tx != null )
+                tx.rollback();
+            LOG.error(e.getMessage(), e);
+        }
+        // Do not close session here yet 
+        // closed in jsp files
+        //        finally {
+        //            HibernateUtil.closeSession();
+        //        }
     }
 }
