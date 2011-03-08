@@ -65,7 +65,13 @@ public class WPSUploadServlet extends HttpServlet {
         String action = exrequest.getParameter("action");
         String dictionaryName = exrequest.getParameter("dictionary");
         if (action != null) {
-            InternalReport report = report = uploadDefinitionFile(exrequest.getFileParameter("definitionFile"), action, dictionaryName);
+            InternalReport report = null;
+            if (action.equalsIgnoreCase("updateDictionary") || action.equalsIgnoreCase("updateSwatch")) {
+                report = updateDefinition(exrequest.getParameter("definition"), action, dictionaryName);
+            }
+            else {
+                report = uploadDefinitionFile(exrequest.getFileParameter("definitionFile"), action, dictionaryName);
+            }
             HttpSession session = request.getSession();
             session.setAttribute("UploadDefinitionFileResults", report);
 
@@ -78,13 +84,13 @@ public class WPSUploadServlet extends HttpServlet {
             HibernateUtil.closeSession();
             response.setStatus(HttpServletResponse.SC_OK);
             return;
-
         }
         HibernateUtil.closeSession();
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
     }
 
-    private InternalReport uploadDefinitionFile(UploadedFile file, String action, String dictionaryName) throws ServletException, IOException {
+    private InternalReport uploadDefinitionFile(UploadedFile file, String action, String dictionaryName)
+            throws ServletException, IOException {
         InternalReport report = new InternalReport();
         if (file == null)
             return report;
@@ -92,14 +98,59 @@ public class WPSUploadServlet extends HttpServlet {
             if (file.getContentFilename().endsWith(".xml")) {
                 SAXBuilder saxBuilder = new SAXBuilder(true);
                 saxBuilder.setEntityResolver(new WPSResolver());
-                uploadFile(saxBuilder, report, file.getContentFilename(), new String(file.getBytes()), action, dictionaryName);
-            }
-            else
+                uploadFile(saxBuilder, report, file.getContentFilename(), new String(file.getBytes()), action,
+                           dictionaryName);
+            } else
                 uploadZipFile(report, file.getBytes(), action, dictionaryName);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             report.setLastActionResult("Error uploadDefinitionFile : " + e.getMessage());
+        }
+        return report;
+    }
+
+    private InternalReport updateDefinition(String definition, String action, String dictionaryName)
+            throws ServletException, IOException {
+        InternalReport report = new InternalReport();
+        if (definition == null)
+            return report;
+        try {
+            SAXBuilder saxBuilder = new SAXBuilder(true);
+            saxBuilder.setEntityResolver(new WPSResolver());
+            if (action.equalsIgnoreCase("updateDictionary")) {
+                definition = "<!DOCTYPE dictionary SYSTEM \"WPS-dictionary.dtd\" >" + definition;
+            } else {
+                definition = "<!DOCTYPE swatch SYSTEM \"swatch.dtd\">" + definition;
+            }
+            Document doc = saxBuilder.build(new StringReader(definition), ".");
+            Element root = doc.getRootElement();
+
+            CharArrayWriter bout = new CharArrayWriter();
+            XMLOutputter op = new XMLOutputter();
+            if (action.equalsIgnoreCase("updateDictionary")) {
+                // Update dictionary definition
+                if (root.getName().equalsIgnoreCase("dictionaries")) {  
+                    List lst = root.getChildren("dictionary");
+                    for (int i = 0; i < lst.size(); ++i) {
+                        Element subelem = (Element) lst.get(i);
+                        op.output(subelem, bout);
+                        uploadDictionary(subelem.getAttributeValue("name"), bout.toString(), report);
+                        bout.reset();
+                    }
+                } else if (root.getName().equalsIgnoreCase("dictionary")) {
+                    op.output(root, bout);
+                    uploadDictionary(root.getAttributeValue("name"), bout.toString(), report);
+                }
+            } else if (action.equalsIgnoreCase("updateSwatch")) {
+                // Update swatch definition
+                if (root.getName().equalsIgnoreCase("swatch")) {
+                    op.output(root, bout);
+                    uploadSwatch(root.getAttributeValue("name"), bout.toString(), report, dictionaryName);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            report.setLastActionResult("Error updateDefinition : " + e.getMessage());
         }
         return report;
     }
@@ -150,7 +201,8 @@ public class WPSUploadServlet extends HttpServlet {
         return sb.toString();
     }
 
-    private void uploadZipFile(InternalReport output, byte[] definitionFile, String action, String dictionaryName) throws Exception {
+    private void uploadZipFile(InternalReport output, byte[] definitionFile, String action, String dictionaryName)
+            throws Exception {
         Hashtable<String, String> dtds = new Hashtable<String, String>();
         Hashtable<String, String> files = new Hashtable<String, String>();
         String name = null;
@@ -184,8 +236,8 @@ public class WPSUploadServlet extends HttpServlet {
         }
     }
 
-    private void uploadFile(SAXBuilder saxBuilder, InternalReport output, String name, String definition, String action, String dictionaryName)
-            throws Exception {
+    private void uploadFile(SAXBuilder saxBuilder, InternalReport output, String name, String definition,
+                            String action, String dictionaryName) throws Exception {
         output.addAction(0, "Reading definition file '" + name + "'");
         Document doc = saxBuilder.build(new StringReader(definition), ".");
         Element root = doc.getRootElement();
@@ -193,9 +245,8 @@ public class WPSUploadServlet extends HttpServlet {
         CharArrayWriter bout = new CharArrayWriter();
         XMLOutputter op = new XMLOutputter();
 
-        
         if (action.equalsIgnoreCase("uploadDictionaryFile")) {
-         // Upload dictionary
+            // Upload dictionary
             if (root.getName().equalsIgnoreCase("dictionaries")) {
                 List lst = root.getChildren("dictionary");
                 for (int i = 0; i < lst.size(); ++i) {
@@ -209,8 +260,9 @@ public class WPSUploadServlet extends HttpServlet {
                 op.output(root, bout);
                 uploadDictionary(root.getAttributeValue("name"), bout.toString(), output);
             }
-        } else if (action.equalsIgnoreCase("uploadSwatchFile")) {
-         // Upload swatch
+        }
+        else if (action.equalsIgnoreCase("uploadSwatchFile")) {
+            // Upload swatch
             if (root.getName().equalsIgnoreCase("swatch")) {
                 op.output(root, bout);
                 uploadSwatch(root.getAttributeValue("name"), bout.toString(), output, dictionaryName);
@@ -246,8 +298,7 @@ public class WPSUploadServlet extends HttpServlet {
             DictionaryManager dictionaryManager = new DictionaryManagerImpl();
             Dictionary dictionary = dictionaryManager.findByName(dictionaryName);
             Swatch swatch = swatchManager.findByName(name, dictionaryName);
-            
-            
+
             if (swatch == null) {
                 swatch = swatchManager.create(name, definition, dictionaryName);
                 output.setLastActionResult("created.");

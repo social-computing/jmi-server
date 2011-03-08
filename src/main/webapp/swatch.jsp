@@ -76,10 +76,11 @@ Swatch sw = manager.findByName(request.getParameter("swatch"), request.getParame
 <tr>
 <td><a class="iframe" href="view_def.jsp?dictionary=<%=request.getParameter("dictionary")%>&swatch=<%=java.net.URLEncoder.encode(sw.getSwatchPk().getName(), "UTF-8")%>" target="_blank"><span class="texblanc">View definition</span></a></td>
 </tr>
+<tr>
+<td><a class="iframe" href="edit_def.jsp?dictionary=<%=request.getParameter("dictionary")%>&swatch=<%=java.net.URLEncoder.encode(sw.getSwatchPk().getName(), "UTF-8")%>" target="_blank"><span class="texblanc">Edit definition</span></a></td>
+</tr>
 <tr><td>&nbsp;</td></tr>
 </table>
-
-<a class="iframe" href="http://www.google.com">This goes to iframe</a>
 
 
 </body>

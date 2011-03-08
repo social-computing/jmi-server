@@ -20,11 +20,11 @@ if (dictionaryName != null) {
     if (swatchName == null) {
 		DictionaryManager managerD = new DictionaryManagerImpl();
 		Dictionary dic = managerD.findByName(dictionaryName);
-		out.print(dic.getDefinition());
+		%><%=dic.getDefinition() %><%
     } else {
 		SwatchManager managerS = new SwatchManagerImpl();
 		Swatch swatch = managerS.findByName(swatchName, dictionaryName);
-		out.print(swatch.getDefinition());
+		%><%=swatch.getDefinition() %><%
     }
 }
 %>
