@@ -12,6 +12,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.params.MoreLikeThisParams;
 import org.jdom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,7 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 
     private static final Logger LOG = LoggerFactory.getLogger(SolrEntityConnector.class);
     private static final String INVERT_PARAM = "invert";
+    private static final String SEARCH_DOCUMENT_ID_PARAM = "searchDocumentId";
     
 	private final CommonsHttpSolrServer solrClient;
 	private final QueryParameters queryParameters;
@@ -97,7 +99,8 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
                                );
         LOG.debug("  - query parameters = {}", queryParameters);
 	    
-        Element invertElement = element.getChild("invert");
+        // Reading invert parameter
+        Element invertElement = element.getChild(INVERT_PARAM);
         boolean invert = (invertElement == null ) ? false : true;
         LOG.debug("  - invert = {}", invert);
         
@@ -106,16 +109,13 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
         Element attribute = element.getChild("attribute");
         String entityField = entity.getAttributeValue("field");
         String attributeId = attribute.getAttributeValue("id"); 
+
         
         // Initialize the Solr connector
-		SolrEntityConnector connector 
-		    = new SolrEntityConnector(
-		            name,
-		            solrClient,
-		            queryParameters,
-		            entityField,
-		            attributeId,
-		            invert);
+		SolrEntityConnector connector
+		    = new SolrEntityConnector(name, solrClient, queryParameters, entityField, attributeId, invert);
+		
+		// Call the initialisation in parent classes
 		connector._readObject(element);
 
 		// TODO : change this !
@@ -171,7 +171,6 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
         this.attributeId = attributeId;
         this.invert = invert;
     }
-
 	
 
     
@@ -191,14 +190,30 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 	    Integer max = Integer.valueOf((String) wpsparams.get(maxResults.getName()));
         LOG.debug("  - max results: {}", max);
 	    
-	    Object invertParam = wpsparams.get(SolrEntityConnector.INVERT_PARAM);
+	    Object invertParam = wpsparams.get(INVERT_PARAM);
 	    boolean invert = (invertParam != null) ? (Boolean.parseBoolean((String) invertParam)) : this.invert;
-
 	    LOG.debug("  - invert: {}", invert);
 	    
-	    SolrQuery solrQuery = 
-	        new SolrQuery((query != null) ? query : queryString.getValue())
-	            .setRows((max != null) ? max : maxResults.getValue());
+	    String searchDocumentId = (String) wpsparams.get(SEARCH_DOCUMENT_ID_PARAM);
+	    LOG.debug("  - search document id: {}", searchDocumentId);
+
+	    // Construct the query
+	    SolrQuery solrQuery;
+        if (searchDocumentId != null) {
+            solrQuery = 
+                new SolrQuery().setQueryType("/" + MoreLikeThisParams.MLT);
+                solrQuery.setRows(30)
+                         .setQuery("uid:" + searchDocumentId)
+                         .set(MoreLikeThisParams.MATCH_INCLUDE, true)
+                         .set(MoreLikeThisParams.MIN_DOC_FREQ, 1)
+                         .set(MoreLikeThisParams.MIN_TERM_FREQ, 1)
+                         .set(MoreLikeThisParams.SIMILARITY_FIELDS, "title, content");
+        }
+        else {
+            solrQuery = 
+                new SolrQuery((query != null) ? query : queryString.getValue());
+        }
+	    solrQuery.setRows((max != null) ? max : maxResults.getValue());
 
 	    // Query the solr server
 	    QueryResponse response;
@@ -274,6 +289,6 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 	@Override
 	public void closeConnections() throws WPSConnectorException {
 		super.closeConnections();
-		// Nothing to do here as 
+		// Nothing to do here
 	}	
 }
