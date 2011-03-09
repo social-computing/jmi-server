@@ -1,5 +1,8 @@
 package com.socialcomputing.wps.server.webservices.maker;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -20,8 +23,11 @@ public class PlanService {
     
     @GET 
     @Produces(MediaType.APPLICATION_JSON)
-    public String getPlan() {
-        return "test";
+    public Map<String, String> getPlan() {
+        Map<String, String> values = new HashMap<String, String>();
+        values.put("element1", "value1");
+        values.put("element2", "value2");
+        return values;
     }
 
 }

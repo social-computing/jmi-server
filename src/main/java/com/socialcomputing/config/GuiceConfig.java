@@ -1,5 +1,12 @@
 package com.socialcomputing.config;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.ws.rs.ext.MessageBodyWriter;
+
+import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
@@ -23,7 +30,10 @@ public class GuiceConfig extends GuiceServletContextListener {
             @Override
             protected void configureServlets() {
                 bind(PlanService.class);
-                serve("/test/*").with(GuiceContainer.class);
+                bind(MessageBodyWriter.class).to(JacksonJsonProvider.class);
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("com.sun.jersey.api.json.POJOMappingFeature", "true");
+                serve("/services/*").with(GuiceContainer.class, params);
             }
         });
     }

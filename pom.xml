@@ -105,10 +105,15 @@
     
     <!-- Sun Jax-RS implementation -->
     <dependency>
-      <groupId>com.sun.jersey</groupId>
-      <artifactId>jersey-server</artifactId>
+      <groupId>com.sun.jersey.contribs</groupId>
+      <artifactId>jersey-guice</artifactId>
       <version>1.5</version>
-      <exclusions>
+    </dependency>
+    <dependency>
+	  <groupId>com.sun.jersey</groupId>
+	  <artifactId>jersey-json</artifactId>
+	  <version>1.5</version>
+	  <exclusions>
 		<exclusion>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-core-asl</artifactId>
@@ -126,11 +131,6 @@
 			<groupId>org.codehaus.jettison</groupId>
 		</exclusion>
 	  </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.jersey.contribs</groupId>
-      <artifactId>jersey-guice</artifactId>
-      <version>1.5</version>
     </dependency>
 
     <!-- Solr client library (used by the solr connector) -->
