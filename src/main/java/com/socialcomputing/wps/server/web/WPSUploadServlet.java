@@ -64,7 +64,7 @@ public class WPSUploadServlet extends HttpServlet {
         ExtendedRequest exrequest = new ExtendedRequest(request);
         String action = exrequest.getParameter("action");
         String dictionaryName = exrequest.getParameter("dictionary");
-        if (action != null) {
+        if (action != null) {fd
             InternalReport report = null;
             if (action.equalsIgnoreCase("updateDictionary") || action.equalsIgnoreCase("updateSwatch")) {
                 report = updateDefinition(exrequest.getParameter("definition"), action, dictionaryName);
