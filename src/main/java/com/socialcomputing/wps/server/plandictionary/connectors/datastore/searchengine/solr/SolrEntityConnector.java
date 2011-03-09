@@ -12,6 +12,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.MoreLikeThisParams;
 import org.jdom.Element;
 import org.slf4j.Logger;
@@ -44,6 +45,25 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 	private final String attributeId;
 	private final boolean invert;
 
+	
+	/**
+	 * Query the Solr server  
+	 * 
+	 * @param solrQuery a valid Solr query
+	 * @return A list of Solr documents
+	 * @throws WPSConnectorException if something bad happened when connecting to the Solr server
+	 */
+	private SolrDocumentList query(SolrQuery solrQuery) throws WPSConnectorException {
+        QueryResponse response;
+        try {
+            response = this.solrClient.query(solrQuery);
+        } 
+        catch (SolrServerException e) {
+            throw new WPSConnectorException("Erreur while connecting to Solr server", e);
+        }
+        LOG.info("Number of documents found : {} in {} seconds", response.getResults().getNumFound(), response.getQTime());
+        return response.getResults();
+	}
 	
     /**
      * Static method to construct a SolrEntityConnector from a JDOM Tree used to
@@ -198,45 +218,46 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 	    LOG.debug("  - search document id: {}", searchDocumentId);
 
 	    // Construct the query
-	    SolrQuery solrQuery;
+	    SolrDocumentList documents;
         if (searchDocumentId != null) {
+            SolrQuery solrQuery = new SolrQuery("uid:" + searchDocumentId)
+                                      .setRows(1);
+            
+            SolrDocumentList docs = this.query(solrQuery);
+            if(docs.size() != 1) {
+                throw new WPSConnectorException("Invalid number of results");
+            }
+            SolrDocument document = docs.get(0);
+            
             solrQuery = 
                 new SolrQuery().setQueryType("/" + MoreLikeThisParams.MLT);
-                solrQuery.setRows(30)
+                solrQuery.setRows((max != null) ? max : maxResults.getValue())
                          .setQuery("uid:" + searchDocumentId)
                          .set(MoreLikeThisParams.MATCH_INCLUDE, true)
                          .set(MoreLikeThisParams.MIN_DOC_FREQ, 1)
                          .set(MoreLikeThisParams.MIN_TERM_FREQ, 1)
                          .set(MoreLikeThisParams.SIMILARITY_FIELDS, "title, content");
+            documents = this.query(solrQuery);
+            documents.add(document);
         }
         else {
-            solrQuery = 
-                new SolrQuery((query != null) ? query : queryString.getValue());
+            SolrQuery solrQuery = 
+                new SolrQuery((query != null) ? query : queryString.getValue())
+                    .setRows((max != null) ? max : maxResults.getValue());
+            
+            documents = this.query(solrQuery);
         }
-	    solrQuery.setRows((max != null) ? max : maxResults.getValue());
-
-	    // Query the solr server
-	    QueryResponse response;
-	    try {
-            response = this.solrClient.query(solrQuery);
-        } 
-	    catch (SolrServerException e) {
-            throw new WPSConnectorException("Erreur while connecting to Solr server", e);
-        }
+	   
 
 	    // Iterate through answers and populate entities and attributes
 	    // For now, entities are values of a field type and attributes are documents matching the query
-	    LOG.info("Number of documents found : {} in {}", response.getResults().getNumFound(), response.getQTime());
-	    
-	       
-	    for(SolrDocument document : response.getResults()) {
+	    for(SolrDocument document : documents) {
 	        
 	        String documentId = 
 	            (String)document.getFieldValue(this.attributeId);
 	        
 	        // Reading document properties
             // TODO : change this, it shouldn't use AttributePropertyDefinition
-	        LOG.debug("Reading document properties: ");
             Map<String, String> documentProperties = new HashMap<String, String>();
             for(AttributePropertyDefinition property : this.attributeProperties) {
                 String field;
@@ -248,7 +269,6 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
                 }
                 String fieldValue = (String)document.getFieldValue(field);
                 documentProperties.put(property.getName(), (fieldValue == null) ? "" : fieldValue);
-                LOG.debug(" - {} : {}", property.getName(), documentProperties.get(property.getName()));
             }
             
             // Get a list of relational field elements from each document
@@ -263,6 +283,7 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
                         Attribute attribute = addAttribute(relFieldValue);
 
                         attribute.addProperty("name", relFieldValue);
+                        LOG.debug("  - Attribute added: {}", attribute);
                         entity.addAttribute(attribute, 1);
                     }
                 }
@@ -277,7 +298,8 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
                         Entity entity = addEntity(relFieldValue);
                         
                         entity.addProperty("name", relFieldValue);
-                        entity.addAttribute(attribute, 1);                        
+                        entity.addAttribute(attribute, 1);
+                        LOG.debug("  - Entity added: {}", entity);
                     }
                 }
                 LOG.debug("Attribute added: {}", attribute);
