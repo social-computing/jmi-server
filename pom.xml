@@ -204,6 +204,17 @@
           </webResources>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>tomcat-maven-plugin</artifactId>
+        <version>1.1</version>
+        <configuration>
+            <url>http://localhost:8080/manager/html</url>
+            <username>toto</username>
+            <password>tata</password>
+        </configuration>
+      </plugin>
+
     </plugins>
 
     <!-- Overrule the default pom source directory to match
