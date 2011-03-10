@@ -10,7 +10,7 @@
     </appender>
     <!-- Log file -->
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>${catalina.home}/logs/wps.log</file>
+        <file>${logback.path}/wps.log</file>
         <append>false</append>
         <encoder>
             <pattern>%d|%-5level| %logger{36} - %msg%n</pattern>
