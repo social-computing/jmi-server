@@ -209,9 +209,9 @@
         <artifactId>tomcat-maven-plugin</artifactId>
         <version>1.1</version>
         <configuration>
-            <url>http://localhost:8080/manager/html</url>
-            <username>toto</username>
-            <password>tata</password>
+            <url>http://dev.centreressources.com:8280/manager/html</url>
+            <username>social</username>
+            <password>computing</password>
         </configuration>
       </plugin>
 
