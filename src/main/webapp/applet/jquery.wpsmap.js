@@ -6,13 +6,15 @@ function onWpsVoid( id) {
 }
 function onWpsError( id) {
 	var e = jQuery.Event("error");
-/*	var context = '{';
+	var context = new Object();
 	for( var i = 1; i < arguments.length; i++ ) {
-		context = context + arguments[i] + ',';
+		var pos = arguments[i].indexOf(":");
+		if( pos == -1)
+			context[i] = arguments[i];
+		else
+			context[ arguments[i].substring( 0, pos)] = arguments[i].substring( pos+1);
 	}
-	e.props.toto = "44";
-	context = context + '}';*/
-	$( '#' + id).trigger( e);
+	$( '#' + id).trigger( e, context);
 }
 
 (function($){

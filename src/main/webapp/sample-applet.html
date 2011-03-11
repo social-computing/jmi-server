@@ -173,8 +173,12 @@
 			$("#map").bind('void', function(e) {
 				$("#map").html("<h1>Void map</h1>");
 				});
-			$("#map").bind('error', function(e) {
-				$("#map").html("<h1>Error !</h1>");
+			$("#map").bind('error', function(e, context) {
+				error = "<h1>Error !</h1><br/>";
+				jQuery.each( context, function(name, value) {
+						error = error + name + ": " + value + "<br/>"
+					});
+				$("#map").html( error);
 				});
 			setMap( {analysisProfile:'GlobalProfile'});
 			$('#titre').html( "All");
