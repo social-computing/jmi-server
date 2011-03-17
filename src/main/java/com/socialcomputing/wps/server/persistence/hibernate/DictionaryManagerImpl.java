@@ -93,10 +93,10 @@ public class DictionaryManagerImpl implements DictionaryManager {
                     break;
                 case DatabaseHelper.DB_SQLSERVER:
                     session.createSQLQuery("create table " + queueTable
-                            + " (id varchar(255) not null, date DATETIME DEFAULT (getdate()))");
+                            + " (id varchar(255) not null, date DATETIME DEFAULT (getdate()))").executeUpdate();
                     break;
                 case DatabaseHelper.DB_HSQL:
-                    session.createSQLQuery("create table " + queueTable + " (id varchar(255) not null, date timestamp)");
+                    session.createSQLQuery("create table " + queueTable + " (id varchar(255) not null, date timestamp)").executeUpdate();
             }
             session.createSQLQuery("create index id on " + queueTable + " (id)").executeUpdate();
             tx.commit();

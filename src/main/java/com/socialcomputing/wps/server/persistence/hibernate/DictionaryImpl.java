@@ -31,7 +31,7 @@ import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 
 @Entity
 @Table(name = "dictionaries")
-@org.hibernate.annotations.Table(appliesTo = "dictionaries", indexes = { @Index(name = "PRIMARY",
+@org.hibernate.annotations.Table(appliesTo = "dictionaries", indexes = { @Index(name = "idx_dic",
                                                                                 columnNames = { "name" }) })
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class DictionaryImpl implements Serializable, Dictionary {
