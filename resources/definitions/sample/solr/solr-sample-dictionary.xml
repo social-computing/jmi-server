@@ -25,10 +25,12 @@
 				
 			<attribute id="uid">
 				<property id="name" field="title" />
+				<property id="poss_id" entity="id" />
+				<property id="poss_name" entity="name" />
 			</attribute>
 			
-			<!-- Inveesion of entities and attributes in map construction -->
-			<invert />
+			<!-- Inversion of entities and attributes in map construction -->
+			<!-- <invert /> -->
 		</SOLR-entities>
 	</entities>
 	

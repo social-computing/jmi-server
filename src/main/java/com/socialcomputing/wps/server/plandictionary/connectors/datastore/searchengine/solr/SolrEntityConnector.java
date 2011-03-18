@@ -3,9 +3,11 @@ package com.socialcomputing.wps.server.plandictionary.connectors.datastore.searc
 import java.net.MalformedURLException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -44,6 +46,7 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 	private final String entityField;
 	private final String attributeId;
 	private final boolean invert;
+	private Set<AttributePropertyDefinition> simpleAttributeDefinitions;
 
 	
 	/**
@@ -138,13 +141,21 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 		// Call the initialisation in parent classes
 		connector._readObject(element);
 
-		// TODO : change this !
+		// Read document properties definition
+		// If a propery contains an entity attribute, it refers to  the id of the entity property to map 
+		// to the attribute as a property
 		for(Element property : (List<Element>) attribute.getChildren("property")) {
-            connector.attributeProperties.add(
-                    new AttributePropertyDefinition(property.getAttributeValue("id"),
+		    if(property.getAttributeValue("entity") !=  null) {
+		        connector.attributeProperties.add(
+		            new AttributePropertyDefinition(property.getAttributeValue("id"),
+		                                            property.getAttributeValue("entity")));    
+		    }
+		    else{
+		        connector.addSimpleAttributeDefinition(
+		            new AttributePropertyDefinition(property.getAttributeValue("id"),
                                                     property.getAttributeValue("field")));
+		    }
         }
-		
 		return connector;
 	}
 	
@@ -190,8 +201,22 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
         this.entityField = entityField;
         this.attributeId = attributeId;
         this.invert = invert;
+        this.simpleAttributeDefinitions = new HashSet<AttributePropertyDefinition>();
     }
 	
+    
+    /**
+     * Add a property definition for attribute.
+     * A property defintion express the mapping to apply to get a property value from a document field 
+     * 
+     * @param attributePropertyDefinition
+     */
+    public void addSimpleAttributeDefinition(AttributePropertyDefinition attributePropertyDefinition) {
+        if(attributePropertyDefinition == null) {
+            throw new IllegalArgumentException("attributePropertyDefinition");
+        }
+        this.simpleAttributeDefinitions.add(attributePropertyDefinition);
+    }
 
     
 	@Override
@@ -257,9 +282,8 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 	            (String)document.getFieldValue(this.attributeId);
 	        
 	        // Reading document properties
-            // TODO : change this, it shouldn't use AttributePropertyDefinition
             Map<String, String> documentProperties = new HashMap<String, String>();
-            for(AttributePropertyDefinition property : this.attributeProperties) {
+            for(AttributePropertyDefinition property : this.simpleAttributeDefinitions) {
                 String field;
                 if(property.isSimple()) {
                     field = property.getName();
@@ -304,6 +328,11 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
                 }
                 LOG.debug("Attribute added: {}", attribute);
             }
+	    }
+	    
+	    // Set attribute properties (POSS_ID and POSS_NAME)
+	    for(Attribute attribute : this.m_Attributes.values()) {
+	        this.addEntityProperties(attribute);
 	    }
 	}
 	

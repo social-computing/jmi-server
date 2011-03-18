@@ -1,7 +1,9 @@
 package com.socialcomputing.wps.server.plandictionary.connectors.datastore;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 /**
@@ -66,8 +68,22 @@ public abstract class Data {
         
         // Adding list of properties to the list of displayed values
         for(Entry<String, Object> property : this.m_Properties.entrySet()) {
-            sb.append(property.getKey()).append(" => ")
-              .append(property.getValue()).append(", ");
+            sb.append(property.getKey()).append(" => ");
+            Object value = property.getValue();
+            if (value instanceof String[]) {
+                String[] new_name = (String[]) value;
+
+                sb.append("[");
+                for(String s : new_name) {
+                    sb.append(s).append(", ");
+                }
+                sb.append("]");
+                
+            }
+            else {
+                sb.append(property.getValue());
+            }
+            sb.append(",");
         }
         
         sb.append("}");

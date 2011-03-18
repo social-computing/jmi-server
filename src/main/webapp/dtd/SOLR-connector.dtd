@@ -38,5 +38,6 @@
 <!ELEMENT property EMPTY>	
 <!ATTLIST property id CDATA #REQUIRED>
 <!ATTLIST property field CDATA #IMPLIED>
+<!ATTLIST property entity CDATA #IMPLIED>
 
 <!ELEMENT invert EMPTY>
