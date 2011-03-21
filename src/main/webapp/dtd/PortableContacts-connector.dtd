@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+
+<!-- =====================================================================  -->
+<!-- XML-entities : data connectors description -->
+<!-- =====================================================================  -->
+<!ELEMENT PortableContacts-entities (comment?, URL-connection)>
+<!ATTLIST PortableContacts-entities	name    CDATA    #REQUIRED>
+<!ATTLIST PortableContacts-entities	class   CDATA    "com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.portablecontacts.PortableContactsEntityConnector" >
+
+
+
