@@ -39,7 +39,7 @@ public class SocialEntityConnector extends DatastoreEntityConnector {
         if( person == null) {
             person = new Person( addEntity(id), addAttribute(id));
             persons.put( id, person);
-            setFriendShip( person, person, 0.1f);
+            setFriendShip( person, person, 1);
         }
         return person;
     }

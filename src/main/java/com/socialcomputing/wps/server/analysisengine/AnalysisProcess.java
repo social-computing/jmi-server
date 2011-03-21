@@ -423,7 +423,7 @@ public class AnalysisProcess {
 		}
 		if (tree.size() == 0)
 			return new ArrayList<ObjectStringStat>();
-		ObjectStringStat[] array = ( ObjectStringStat[])tree.toArray();
+		ObjectStringStat[] array = tree.toArray( new ObjectStringStat[tree.size()]);
 
 		Collection<ObjectStringStat> entRet = null;
 		if (m_Profile.m_EntitiesMaxNb<array.length)
