@@ -174,10 +174,15 @@ public class WPSUploadServlet extends HttpServlet {
                 iSource.setSystemId(".");
             }
             else {
-                FileReader fr = new java.io.FileReader(getServletContext().getRealPath("dtd/" + extractPath(systemId)));
-                iSource = new InputSource(fr);// new java.io.FileReader( "/" +
+                try {
+                //FileReader fr = new java.io.FileReader(getServletContext().getRealPath("dtd/" + extractPath(systemId)));
+                //iSource = new InputSource(fr);// new java.io.FileReader( "/" +
                                               // extractPath( systemId)));
-                iSource.setSystemId(".");
+                    iSource = new InputSource(getServletContext().getResourceAsStream("/dtd/" + extractPath(systemId)));
+                    iSource.setSystemId(".");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
             return iSource;
         }

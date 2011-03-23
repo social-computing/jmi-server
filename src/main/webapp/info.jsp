@@ -75,7 +75,8 @@ DatabaseMetaData meta = connection.getMetaData();
 <br/><br/>
 
 <!-- UPLOAD DICTIONARY -->
-<% if( request.getParameter( "openresults") != null && session.getValue( "UploadDefinitionFileResults") != null)
+<% 
+if( request.getParameter( "openresults") != null && session.getAttribute( "UploadDefinitionFileResults") != null)
 {%>	
 	<script language="javascript">
 		var win = window.open( 'upload_results.jsp', 'mpstadminresults', 'width=600,height=600,scrollbars=yes,resizable=yes,dependent=yes');
