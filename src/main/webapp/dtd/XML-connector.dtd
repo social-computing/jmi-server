@@ -7,10 +7,6 @@
 <!ATTLIST XML-entities	name    CDATA    #REQUIRED>
 <!ATTLIST XML-entities	class   CDATA    "com.socialcomputing.wps.server.plandictionary.connectors.datastore.file.xml.XmlEntityConnector" >
 
-
-<!-- an URL connection -->
-<!ELEMENT URL-connection 	(url)>
-
 <!ELEMENT XML-entity 	(XML-property*)>
 <!ATTLIST XML-entity	markup	    CDATA    #REQUIRED>
 <!ATTLIST XML-entity	id    		CDATA    #REQUIRED>

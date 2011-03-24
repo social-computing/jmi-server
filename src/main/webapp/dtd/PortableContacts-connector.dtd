@@ -3,7 +3,7 @@
 <!-- =====================================================================  -->
 <!-- XML-entities : data connectors description -->
 <!-- =====================================================================  -->
-<!ELEMENT PortableContacts-entities (comment?, URL-connection)>
+<!ELEMENT PortableContacts-entities (comment?, oAuth2, URL-connection)>
 <!ATTLIST PortableContacts-entities	name    CDATA    #REQUIRED>
 <!ATTLIST PortableContacts-entities	class   CDATA    "com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.portablecontacts.PortableContactsEntityConnector" >
 

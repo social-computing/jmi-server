@@ -7,8 +7,14 @@
 
 	<entities>
 		<PortableContacts-entities name="Portable Contacts Sample">
+			<oAuth2 clientId="15510358114.apps.googleusercontent.com" clientSecret="u6ESKRIGpb7f61D2iI94Ztav">
+				<url>https://accounts.google.com/o/oauth2/auth</url>
+				<url-parameter name="redirect_uri">urn:ietf:wg:oauth:2.0:oob</url-parameter>
+				<url-parameter name="response_type">code</url-parameter>
+				<url-parameter name="scope">https://www-opensocial.googleusercontent.com/api/people/franck.valetas/@all</url-parameter>
+			</oAuth2>
 			<URL-connection>
-				<url>http://localhost:8080/wps/data/SampleData.xml</url>
+				<url>https://graph.facebook.com/me/accounts</url>
 			</URL-connection>
 	
 		</PortableContacts-entities>
@@ -20,7 +26,7 @@
 	<affinity-reader-profile name="DiscoveryAffReader" affinity-reader-ref="*" threshold="100" />
 	<affinity-reader-profile name="GlobalAffReader" affinity-reader-ref="*" threshold="100" />
 
-	<analysis-profile name="Profile" attributes-ref="JDBC_Profile" type="personal" attribute-size="frequency">
+	<analysis-profile name="Profile" attributes-ref="*" type="personal" attribute-size="frequency" attributes-max="300" attributes-base-max="1000">
 		<props-mapping>
 			<entity-props-mapping>
 				<mapping key="ID" 	value="id" />
@@ -39,7 +45,7 @@
 		</entities-recommendation>
 	</analysis-profile>
 
-	<analysis-profile name="DiscoveryProfile" attributes-ref="JDBC_Profile" type="discovery" attribute-size="frequency" attributes-max="300" >
+	<analysis-profile name="DiscoveryProfile" attributes-ref="*" type="discovery" attribute-size="frequency" attributes-max="300" attributes-base-max="1000" >
 		<props-mapping>
 			<entity-props-mapping>
 				<mapping key="ID" 	value="id" />
@@ -58,7 +64,7 @@
 		</entities-recommendation>
 	</analysis-profile>
 
-	<analysis-profile name="GlobalProfile" attributes-ref="JDBC_Profile" type="global" attribute-size="same" attributes-max="300" >
+	<analysis-profile name="GlobalProfile" attributes-ref="*" type="global" attribute-size="same" attributes-max="300" >
 		<props-mapping>
 			<entity-props-mapping>
 				<mapping key="ID" 	value="id" />

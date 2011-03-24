@@ -8,9 +8,8 @@ import org.jdom.Element;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.DatastoreEntityConnector;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Entity;
 
-public class SocialEntityConnector extends DatastoreEntityConnector {
+public abstract class SocialEntityConnector extends DatastoreEntityConnector {
     
     protected HashMap<String, Person> persons;
 

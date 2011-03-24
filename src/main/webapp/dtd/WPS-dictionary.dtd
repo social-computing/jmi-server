@@ -20,8 +20,20 @@
 <!-- =====================================================================  -->
 <!-- a comment -->
 <!ELEMENT comment 			(#PCDATA)>
-<!-- an url -->
+<!-- an URL connection -->
+<!ELEMENT URL-connection 	(url,url-parameter*)>
+
+<!-- oAuth2 authentication -->
+<!ELEMENT oAuth2 			(url,url-parameter*)>
+<!ATTLIST oAuth2 clientId	 	NMTOKEN 	#REQUIRED>
+<!ATTLIST oAuth2 clientSecret	NMTOKEN 	#REQUIRED>
+
 <!ELEMENT url 				(#PCDATA)>
+
+<!ELEMENT url-parameter 	(#PCDATA)>
+<!ATTLIST url-parameter name NMTOKEN 	#REQUIRED>
+
+
 
 
 <!-- =====================================================================  -->

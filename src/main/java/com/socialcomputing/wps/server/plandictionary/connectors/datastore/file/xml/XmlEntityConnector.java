@@ -46,7 +46,7 @@ public class XmlEntityConnector extends FileEntityConnector {
 		try {
 			// TODO SAX Parser => faster
 			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(false);
-			org.jdom.Document doc = builder.build(m_Stream);
+			org.jdom.Document doc = builder.build( urlHelper.getStream());
 			m_Root = doc.getRootElement();
 		} catch (Exception e) {
 		}
