@@ -13,16 +13,10 @@ public long getLastModified(HttpServletRequest request) {
 DictionaryManager dManager = new DictionaryManagerImpl();
 Collection<Dictionary> dics = dManager.findAll();
 %>
-<html>
-<head>
-<link rel="stylesheet" href="wps.css">
-<link rel="stylesheet" href="menu.css">
-<base target="main">
-</head>
-<body bgcolor="cfdfff">
+
 <table>
 <tr><td height=20 >&nbsp;</td></tr>
-<tr><td align="left" nowrap><a href="info.jsp" >Information</a></td></tr>
+<tr><td align="left" nowrap><a href="welcome.jsp" >Information</a></td></tr>
 <tr><td height=20 >&nbsp;</td></tr>
 <tr><td align="left" nowrap><a href="dictionaries.jsp" >Dictionaries</a></td></tr>
 <tr>
@@ -52,8 +46,6 @@ Collection<Dictionary> dics = dManager.findAll();
 <tr><td height=20 >&nbsp;</td></tr>
 <tr><td height=20 ><hr noshade align="center" width="50%" size="1"></td></tr>
 <tr><td height=20 >&nbsp;</td></tr>
-   <tr><td align="left" nowrap><a href="sample-applet.html" >Sample</a></td></tr>
+<tr><td align="left" nowrap><a href="sample-applet.html" >Sample</a></td></tr>
 </table>
-</body>
-</html>
 

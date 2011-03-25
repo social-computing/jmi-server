@@ -21,41 +21,48 @@ Dictionary dic = dManager.findByName(dictionaryName);
 List<Swatch> ls = dic.getSwatchs();
 %>
 
+
 <html>
-<head>
-<link rel="stylesheet" href="./wps.css">
-<link rel="stylesheet" href="./result.css">
-<script type="text/javascript" src="./applet/jquery.js" ></script>
-<script type="text/javascript" src="javascript/jquery.fancybox-1.3.4.pack.js"></script>
-<link rel="stylesheet" href="css/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
-<base target="main">
-<SCRIPT LANGUAGE="JavaScript1.2" > 
-	function SubmitForm(resetStart)
-	{
-		if( resetStart)
-			ResetStart();
-		document.test.submit();
-		return true;
-	}
-	function Delete()
-	{
-		if( confirm("Are you sure you want to delete selected swatches ?"))
-		{
-			document.test.confirmdelete.value = 'y';
-			document.test.submit();
-		}
-		return false;
-	}
-	function OnExport( content, contentType)
-	{
-		document.test.content.value = content;
-		document.test.contentType.value = contentType;
-		document.test.submit();
-		return false;
-	}
-</SCRIPT>
-</head>
-<body bgcolor=7f9fdf>
+	<head>
+		<title>WPS Administration</title>
+		<META http-equiv="content-type" content="text/html;charset=ISO-8859-1">
+		<META http-equiv="content-language" content="fr-FX">
+		<link rel="stylesheet" href="css/main.css"/>
+		<link rel="stylesheet" href="css/wps.css">
+		<script type="text/javascript" src="./applet/jquery.js" ></script>
+		<script type="text/javascript" src="javascript/jquery.fancybox-1.3.4.pack.js"></script>
+		<link rel="stylesheet" href="css/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
+		<SCRIPT LANGUAGE="JavaScript1.2" > 
+			function SubmitForm(resetStart)
+			{
+				if( resetStart)
+					ResetStart();
+				document.test.submit();
+				return true;
+			}
+			function Delete()
+			{
+				if( confirm("Are you sure you want to delete selected swatches ?"))
+				{
+					document.test.confirmdelete.value = 'y';
+					document.test.submit();
+				}
+				return false;
+			}
+			function OnExport( content, contentType)
+			{
+				document.test.content.value = content;
+				document.test.contentType.value = contentType;
+				document.test.submit();
+				return false;
+			}
+		</SCRIPT>
+	</head>
+	<body>
+	<div id="top"><jsp:include page="top.jsp" /></div>
+	<div id="menu"><jsp:include page="menu.jsp" /></div>
+	<div id="content">
+
 <script>
 $(document).ready(function() {
 
@@ -192,7 +199,7 @@ if (request.getParameter("confirmdelete") != null && request.getParameter("confi
 		</tr>
 	</table>
 </form>
-
+</div>
 </body>
 </html>
 <%

@@ -6,19 +6,28 @@ public long getLastModified(HttpServletRequest request) {
 %>
 
 <html>
-<head>
-<link rel="stylesheet" href="./wps.css">
-<base target="main">
-<script>
-	function Auth()
-	{
-		var win = window.open( 'Base64Credential.jsp', 'base64', 'width=700,height=200,scrollbars=yes,resizable=yes,dependent=yes');
-		win.focus();
-		return false;
-	}
-</script>
-</head>
-<body bgcolor=7f9fdf>
+	<head>
+		<title>WPS Administration</title>
+		<META http-equiv="content-type" content="text/html;charset=ISO-8859-1">
+		<META http-equiv="content-language" content="fr-FX">
+		<link rel="stylesheet" href="css/main.css"/>
+		<link rel="stylesheet" href="css/wps.css">
+		<script>
+			function Auth()
+			{
+				var win = window.open( 'Base64Credential.jsp', 'base64', 'width=700,height=200,scrollbars=yes,resizable=yes,dependent=yes');
+				win.focus();
+				return false;
+			}
+		</script>
+	</head>
+	
+	<body>
+	<div id="top"><jsp:include page="top.jsp" /></div>
+	<div id="menu"><jsp:include page="menu.jsp" /></div>
+	<div id="content">
+
+
 <span class="subTitleBlue" >WPS Applet template</span>
 <table width="100%" border=0>
 <tr><td>ServletURL and WPSParameters are mandatory, others are optional</td></tr>
@@ -166,6 +175,7 @@ public long getLastModified(HttpServletRequest request) {
 	<td>Display selection 'selName'</td>
 </tr>
 </table>
+</div>
 </body>
 </html>
  

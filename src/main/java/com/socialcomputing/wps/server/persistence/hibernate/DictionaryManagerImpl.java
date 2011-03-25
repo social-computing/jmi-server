@@ -49,6 +49,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
         Transaction tx = null;
         try {
             session = HibernateUtil.currentSession();
+            System.out.println("@@@@@@@ " + session.toString());
             tx = session.beginTransaction();
             result = (Dictionary) session.get(DictionaryImpl.class, name);
             tx.commit();

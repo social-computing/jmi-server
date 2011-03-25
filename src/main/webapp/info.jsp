@@ -30,16 +30,9 @@ Connection connection = s.connection();
 
 DatabaseMetaData meta = connection.getMetaData();
 %>
-<html>
-<head>
-<link rel="stylesheet" href="./wps.css">
-<link rel="stylesheet" href="./result.css">
-<base target="main">
-</head>
-<body>
-<body bgcolor=7f9fdf>
 
-<table border=0 width=100%">
+
+<table border=0 width="100%">
  <tr> 
   <td>
 	<table width="100%" border=1>
@@ -85,7 +78,7 @@ if( request.getParameter( "openresults") != null && session.getAttribute( "Uploa
 <%}%>	
 <form name="test" enctype="multipart/form-data" method="POST" action="upload">
 	<input type="hidden" name="action" value="uploadDictionaryFile" />
-	<input type="hidden" name="redirect" value="./info.jsp?openresults=1" />
+	<input type="hidden" name="redirect" value="./welcome.jsp?openresults=1" />
 	<table width="100%" align="center" border="0" cellpadding="0" cellspacing="0" >
 	<tr>
 	<td><span class="subTitleBlue">Load a dictionary file (*.xml, *.zip) : </span></td> 
@@ -97,8 +90,7 @@ if( request.getParameter( "openresults") != null && session.getAttribute( "Uploa
 	</tr>
 	</table>
 </form>
-</body>
-</html>
+
 <%
 connection.close();
 %>

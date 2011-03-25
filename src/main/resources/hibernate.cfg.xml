@@ -44,7 +44,6 @@
 		<property name="hibernate.cache.use_second_level_cache">true</property>
 		<property name="net.sf.ehcache.configurationResourceName">ehcache.xml</property>
 		
-		
 		<property name="hbm2ddl.auto">update</property>
 		
 		<!-- For debug only -->
