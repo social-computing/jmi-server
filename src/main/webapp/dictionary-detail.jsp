@@ -75,7 +75,7 @@ $(document).ready(function() {
     });
 
     /* Apply fancybox to multiple items */
-        
+    parent.$.fancybox.close();
     $("a.iframe").fancybox({
         'width'                : '75%',
         'height'            : '75%',
@@ -108,10 +108,10 @@ if (request.getParameter("confirmdelete") != null && request.getParameter("confi
 <td><h1>Dictionary : <%=dictionaryName %></h1></td>
 </tr>
 <tr>
-<td><a class="iframe" href="view_def.jsp?type=plan&dictionary=<%=java.net.URLEncoder.encode(dictionaryName,"UTF-8")%>" target="_blank"><span class="texblanc">View definition</span></a></td>
+<td><a class="iframe" href="view_def.jsp?type=plan&dictionary=<%=java.net.URLEncoder.encode(dictionaryName,"UTF-8")%>"><span class="texblanc">View definition</span></a></td>
 </tr>
 <tr>
-<td><a class="iframe" href="edit_def.jsp?dictionary=<%=java.net.URLEncoder.encode(dictionaryName,"UTF-8")%>" target="_blank"><span class="texblanc">Edit definition</span></a></td>
+<td><a class="iframe" href="edit_def.jsp?dictionary=<%=java.net.URLEncoder.encode(dictionaryName,"UTF-8")%>"><span class="texblanc">Edit definition</span></a></td>
 </tr>
 <tr><td>&nbsp;</td></tr>
 <tr><td>

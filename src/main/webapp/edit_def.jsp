@@ -8,9 +8,8 @@
 
 <html>
 <head>
-<base target="main">
-<link rel="stylesheet" href="./wps.css">
-<link rel="stylesheet" href="./result.css">
+<link rel="stylesheet" href="css/wps.css" />
+<link rel="stylesheet" href="css/main.css" />
 <style type="text/css">
 textarea {
 	width: 75%;
@@ -20,7 +19,7 @@ textarea {
 
 </head>
 
-<body bgcolor=7f9fdf>
+<body>
 
 <form name="upload" enctype="multipart/form-data" method="POST" action="upload">
 <%

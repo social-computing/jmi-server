@@ -76,11 +76,12 @@ public class WPSUploadServlet extends HttpServlet {
             session.setAttribute("UploadDefinitionFileResults", report);
 
             response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
+            /*PrintWriter out = response.getWriter();
             out.print("<html><head><meta http-equiv=\"Refresh\" content=\"0; URL=");
             out.print(exrequest.getParameter("redirect"));
             out.print("\"></head></html>");
-            out.close();
+            out.close();*/
+            response.sendRedirect(exrequest.getParameter("redirect"));
             HibernateUtil.closeSession();
             response.setStatus(HttpServletResponse.SC_OK);
             return;
