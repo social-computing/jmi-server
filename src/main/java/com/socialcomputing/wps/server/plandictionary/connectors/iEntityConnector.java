@@ -4,14 +4,14 @@ import java.util.Collection;
 import java.util.Hashtable;
 
 public interface iEntityConnector {
-    
+
     /**
      * Name of the connector
      * 
      * @return the connector's name
      */
     String getName();
-    
+
     /**
      * Description of the connector
      * 
@@ -26,19 +26,18 @@ public interface iEntityConnector {
      * @param wpsparams
      * @throws WPSConnectorException
      */
-    void openConnections(int planType, Hashtable<String, Object> wpsparams)
-            throws WPSConnectorException;
+    void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException;
 
     /**
-     * Close all opened connections 
+     * Close all opened connections
      * 
      * @throws WPSConnectorException
      */
     void closeConnections() throws WPSConnectorException;
 
     /**
-     *  Load the entity properties (image, age, income, ...).
-     *  
+     * Load the entity properties (image, age, income, ...).
+     * 
      * @param entityId
      * @return
      * @throws WPSConnectorException
@@ -46,7 +45,7 @@ public interface iEntityConnector {
     Hashtable<String, Object> getProperties(String entityId) throws WPSConnectorException;
 
     /**
-     *  
+     * 
      * @return
      * @throws WPSConnectorException
      */
@@ -57,8 +56,7 @@ public interface iEntityConnector {
      * @return
      * @throws WPSConnectorException
      */
-    Collection<iAffinityGroupReader> getAffinityGroupReaders()
-            throws WPSConnectorException;
+    Collection<iAffinityGroupReader> getAffinityGroupReaders() throws WPSConnectorException;
 
     /**
      * 
@@ -67,8 +65,7 @@ public interface iEntityConnector {
      * @return
      * @throws WPSConnectorException
      */
-    iAffinityGroupReader getAffinityGroupReader(String affGrpReader)
-            throws WPSConnectorException;
+    iAffinityGroupReader getAffinityGroupReader(String affGrpReader) throws WPSConnectorException;
 
     /**
      * 
@@ -77,7 +74,6 @@ public interface iEntityConnector {
      * @throws WPSConnectorException
      */
     Collection<iProfileConnector> getProfiles() throws WPSConnectorException;
-
 
     /**
      * 
@@ -108,7 +104,7 @@ public interface iEntityConnector {
      * @throws WPSConnectorException
      */
     Collection<iSelectionConnector> getSelections() throws WPSConnectorException;
-    
+
     /**
      * 
      * @param selectionId

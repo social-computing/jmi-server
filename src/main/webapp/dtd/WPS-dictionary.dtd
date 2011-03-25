@@ -9,6 +9,9 @@
 <!ENTITY % SOLR-entities SYSTEM "SOLR-connector.dtd" >
 %SOLR-entities;
 
+<!ENTITY % PortableContacts-entities SYSTEM "PortableContacts-connector.dtd" >
+%PortableContacts-entities;
+
 <!ENTITY % Relax-params SYSTEM "Relax-params.dtd" >
 %Relax-params;
 
@@ -17,8 +20,20 @@
 <!-- =====================================================================  -->
 <!-- a comment -->
 <!ELEMENT comment 			(#PCDATA)>
-<!-- an url -->
+<!-- an URL connection -->
+<!ELEMENT URL-connection 	(url,url-parameter*)>
+
+<!-- oAuth2 authentication -->
+<!ELEMENT oAuth2 			(url,url-parameter*)>
+<!ATTLIST oAuth2 clientId	 	NMTOKEN 	#REQUIRED>
+<!ATTLIST oAuth2 clientSecret	NMTOKEN 	#REQUIRED>
+
 <!ELEMENT url 				(#PCDATA)>
+
+<!ELEMENT url-parameter 	(#PCDATA)>
+<!ATTLIST url-parameter name NMTOKEN 	#REQUIRED>
+
+
 
 
 <!-- =====================================================================  -->
@@ -32,7 +47,7 @@
 <!ELEMENT dictionary (comment?, entities, env-property*, filtering-scheduling?, filtering-profile*, affinity-reader-profile+, analysis-profile+, display-profile+, segmentation)>
 <!ATTLIST dictionary name   NMTOKEN 	#REQUIRED>
 
-<!ELEMENT entities (JDBC-entities|XML-entities|SOLR-entities)>
+<!ELEMENT entities (JDBC-entities|XML-entities|SOLR-entities|PortableContacts-entities)>
 
 <!-- =====================================================================  -->
 <!-- Env Properties : fixing env properties -->

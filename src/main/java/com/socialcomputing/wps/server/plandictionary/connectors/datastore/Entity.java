@@ -14,8 +14,11 @@ public class Entity extends Data {
 	}
 	
 	public void addAttribute( Attribute attribute, float ponderation) {
-		m_Attributes.add( new AttributeEnumeratorItem( attribute.getId(), ponderation));
-		attribute.addEntity( this); // reverse pour le groupe d'affinités
+	    AttributeEnumeratorItem item = new AttributeEnumeratorItem( attribute.getId(), ponderation);
+	    if( !m_Attributes.contains( item)) {
+    		m_Attributes.add( item);
+    		attribute.addEntity( this); // reverse pour le groupe d'affinités
+	    }
 	}
 	
 	public boolean containsAttribute( Attribute attribute) {
