@@ -2,19 +2,20 @@
 
 <!DOCTYPE dictionary SYSTEM "WPS-dictionary.dtd" >
 
-<dictionary name="PortableContacts_sample" >
-	<comment>Sample Portable Contacts Plan Dictionary</comment>
+<dictionary name="Google_sample" >
+	<comment>Google sample Plan Dictionary</comment>
 
 	<entities>
-		<PortableContacts-entities name="Portable Contacts Sample">
-			<oAuth2 clientId="15510358114.apps.googleusercontent.com" clientSecret="u6ESKRIGpb7f61D2iI94Ztav">
+		<PortableContacts-entities name="Google Contacts Sample">
+			<!--oAuth2 clientId="15510358114.apps.googleusercontent.com" clientSecret="u6ESKRIGpb7f61D2iI94Ztav">
 				<url>https://accounts.google.com/o/oauth2/auth</url>
 				<url-parameter name="redirect_uri">urn:ietf:wg:oauth:2.0:oob</url-parameter>
 				<url-parameter name="response_type">code</url-parameter>
 				<url-parameter name="scope">https://www-opensocial.googleusercontent.com/api/people/franck.valetas/@all</url-parameter>
-			</oAuth2>
+			</oAuth2-->
 			<URL-connection>
-				<url>https://graph.facebook.com/me/accounts</url>
+				<url>https://www-opensocial.googleusercontent.com/api/people/@me/@all</url>
+				<url-parameter name="code">{$google-auth-code}</url-parameter>
 			</URL-connection>
 	
 		</PortableContacts-entities>

@@ -1,17 +1,13 @@
 package com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.portablecontacts;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.Hashtable;
 
 import org.jdom.Element;
 import org.json.simple.JSONValue;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.file.FileEntityConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.SocialEntityConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.utils.OAuth2Helper;
 import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper;
@@ -45,10 +41,23 @@ public class PortableContactsEntityConnector extends SocialEntityConnector {
     public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
         super.openConnections( planType, wpsparams);
         oAuth2Helper.openConnections( planType, wpsparams);
-        urlHelper.addParameter( "access_token", oAuth2Helper.getToken());
+        if( oAuth2Helper.getToken() != null)
+            urlHelper.addParameter( "access_token", oAuth2Helper.getToken());
         urlHelper.openConnections( planType, wpsparams);
         
-        Object obj = JSONValue.parse( new InputStreamReader( urlHelper.getStream()));
+        char buffer[] = new char[1024];
+        int n;
+        try {
+            InputStreamReader is = new InputStreamReader( urlHelper.getStream());
+            do {
+                n = is.read( buffer);
+                System.out.print( buffer);
+            } while( n > 0);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        //Object obj = JSONValue.parse( new InputStreamReader( urlHelper.getStream()));
         
         addPerson( "Franck").addProperty( "name", "Franck");
         addPerson( "Pierre").addProperty( "name", "Pierre");

@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import com.socialcomputing.utils.servlet.HtmlEncoder;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 
-public class UrlHelper implements iConnectorHelper {
+public class UrlHelper extends ConnectorHelper {
     private static final Logger LOG = LoggerFactory.getLogger(UrlHelper.class);
 
     protected String url = null;
@@ -38,16 +38,15 @@ public class UrlHelper implements iConnectorHelper {
 
     @Override
     public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
-        // TODO Traitement des variables de l'url, POST ou GET des
-        // paramètres....
+        // TODO POST ou GET 
         StringBuilder sb = new StringBuilder( url);
         boolean first = true;
         for( NameValuePair param : defParams) {
-            sb.append( first ? '?' : '&').append( param.getName()).append( '=').append( HtmlEncoder.encode( param.getValue()));
+            sb.append( first ? '?' : '&').append( param.getName()).append( '=').append( HtmlEncoder.encode( super.ReplaceParameter( param.getValue(), wpsparams)));
             first = false;
         }
         for( NameValuePair param : curParams) {
-            sb.append( first ? '?' : '&').append( param.getName()).append( '=').append( HtmlEncoder.encode( param.getValue()));
+            sb.append( first ? '?' : '&').append( param.getName()).append( '=').append( HtmlEncoder.encode( super.ReplaceParameter( param.getValue(), wpsparams)));
             first = false;
         }
         try {
@@ -58,7 +57,7 @@ public class UrlHelper implements iConnectorHelper {
             connection.setUseCaches(false);
             stream = connection.getInputStream();
         } catch (IOException e) {
-            throw new WPSConnectorException("", e);
+            throw new WPSConnectorException("openConnections: ", e);
         }
     }
 

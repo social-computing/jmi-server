@@ -9,6 +9,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 import org.apache.commons.httpclient.NameValuePair;
+import org.hibernate.annotations.Immutable;
 import org.jdom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import com.socialcomputing.utils.servlet.HtmlEncoder;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 
-public class OAuth2Helper implements iConnectorHelper {
+public class OAuth2Helper extends ConnectorHelper {
     private static final Logger LOG = LoggerFactory.getLogger(OAuth2Helper.class);
 
     protected String clientId, clientSecret;
@@ -26,18 +27,23 @@ public class OAuth2Helper implements iConnectorHelper {
     
     @Override
     public void readObject(Element element) {
+        url = null;
+        token = null;
         Element oAuth2 = element.getChild("oAuth2");
-        url = oAuth2.getChildText("url");
-        clientId = oAuth2.getAttributeValue( "clientId");
-        clientSecret = oAuth2.getAttributeValue( "clientSecret");
-        params = new ArrayList<NameValuePair>();
-        for( Element elem : (List<Element>)oAuth2.getChildren( "url-parameter")) {
-            params.add( new NameValuePair( elem.getAttributeValue( "name"), elem.getText()));
+        if( oAuth2 != null) {
+            url = oAuth2.getChildText("url");
+            clientId = oAuth2.getAttributeValue( "clientId");
+            clientSecret = oAuth2.getAttributeValue( "clientSecret");
+            params = new ArrayList<NameValuePair>();
+            for( Element elem : (List<Element>)oAuth2.getChildren( "url-parameter")) {
+                params.add( new NameValuePair( elem.getAttributeValue( "name"), elem.getText()));
+            }
         }
     }
     
     @Override
     public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
+        if( url == null) return;
         StringBuilder sb = new StringBuilder( url);
         sb.append( '?').append( "client_id").append( '=').append( clientId);
         sb.append( '&').append( "client_secret").append( '=').append( clientSecret);
@@ -54,12 +60,13 @@ public class OAuth2Helper implements iConnectorHelper {
             char buffer[] = new char[500];
             int n = is.read( buffer);
             token = new String( buffer, 0, n);
+            LOG.debug("  - token = {}", token);
             token = token.substring( token.indexOf( '=') + 1);
         } catch (IOException e) {
             throw new WPSConnectorException("", e);
         }
     }
-
+    
     @Override
     public void closeConnections() throws WPSConnectorException {
     }
@@ -67,4 +74,5 @@ public class OAuth2Helper implements iConnectorHelper {
     public String getToken() {
         return token;
     }
+
 }
