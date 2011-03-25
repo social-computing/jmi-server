@@ -11,6 +11,20 @@ public long getLastModified(HttpServletRequest request) {
 }
 %>
 
+<%
+DictionaryManager manager = new DictionaryManagerImpl();
+
+if (request.getParameter("confirmdelete") != null && request.getParameter("confirmdelete").equalsIgnoreCase("y")) {
+	int maxDelete = Integer.parseInt(request.getParameter("maxdelete"));
+	for (int i = 0; i < maxDelete; i++)	{
+		if (request.getParameter("delete" + i) != null){ 	
+			manager.remove(request.getParameter("delete" + i));
+		}
+	}
+}
+Collection<Dictionary> dics = manager.findAll();
+%>
+
 <html>
 	<head>
 		<title>WPS Administration</title>
@@ -46,58 +60,43 @@ public long getLastModified(HttpServletRequest request) {
 	<div id="top"><jsp:include page="top.jsp" /></div>
 	<div id="menu"><jsp:include page="menu.jsp" /></div>
 	<div id="content">
-
-
-<!--iframe height="0" width="0" src="../exportrequest.jsp"></iframe-->
-<%
-DictionaryManager manager = new DictionaryManagerImpl();
-
-if (request.getParameter("confirmdelete") != null && request.getParameter("confirmdelete").equalsIgnoreCase("y")) {
-	int maxDelete = Integer.parseInt(request.getParameter("maxdelete"));
-	for (int i = 0; i < maxDelete; i++)	{
-		if (request.getParameter("delete" + i) != null){ 	
-			manager.remove(request.getParameter("delete" + i));
-		}
-	}
-}
-Collection<Dictionary> dics = manager.findAll();
-%>
-<form name="test" method="GET" action="dictionaries.jsp">
-<input type="hidden" name="confirmdelete" value="n" />
-
-<!-- For export -->
-<input type="hidden" name="content" value="" />
-<input type="hidden" name="contentType" value="" />
-
-<input type="hidden" name="maxdelete" value="<%=dics.size()%>" />
- 
-<br>
-<table width="100%" >
-<tr><td colspan="4" >
-<table border=1 width="100%">
-
- <tr>
-  <th width="8%" ><span class="subTitleBlue">#</span></th>
-  <th width="8%" ><a href="" title="Delete selected dictionaries" onclick="javascript:return Delete()">delete</a></th>
-  <th width="60%" ><span class="subTitleBlue">name</span></th>
-  <th width="24%" ><span class="subTitleBlue">next filtering date</span></th>
- </tr>
-<%	
-	Iterator<Dictionary> it = dics.iterator();
-	for (int i = 0 ; it.hasNext() ; ++i) {
-		Dictionary dic = (Dictionary) it.next();
-		%><tr>
-		<td align="center" nowrap><span class="texblanc"><%=i+1%></span></td>
-		<td align="center" valign="top"><input type="checkbox" name="delete<%=i%>" value="<%=dic.getName()%>" /></td>
-		<td nowrap><span class="texblanc"><a href="dictionary-detail.jsp?dictionary=<%=java.net.URLEncoder.encode(dic.getName(),"UTF-8")%>" ><%=dic.getName()%></a></span></td>
-		<td nowrap><span class="texblanc"><%=(dic.getNextFilteringDate()==null ? "&nbsp;" : dic.getNextFilteringDate().toString())%></span></td>
-		</tr><%
-	}
-%>	
-</table>
-</td></tr>
-</table>
-</form>
+	
+		<form name="test" method="GET" action="dictionaries.jsp">
+		<input type="hidden" name="confirmdelete" value="n" />
+		
+		<!-- For export -->
+		<input type="hidden" name="content" value="" />
+		<input type="hidden" name="contentType" value="" />
+		
+		<input type="hidden" name="maxdelete" value="<%=dics.size()%>" />
+		 
+		<br>
+		<table width="100%" >
+		<tr><td colspan="4" >
+		<table border=1 width="100%">
+		
+		 <tr>
+		  <th width="8%" ><span class="subTitleBlue">#</span></th>
+		  <th width="8%" ><a href="" title="Delete selected dictionaries" onclick="javascript:return Delete()">delete</a></th>
+		  <th width="60%" ><span class="subTitleBlue">name</span></th>
+		  <th width="24%" ><span class="subTitleBlue">next filtering date</span></th>
+		 </tr>
+		<%	
+			Iterator<Dictionary> it = dics.iterator();
+			for (int i = 0 ; it.hasNext() ; ++i) {
+				Dictionary dic = (Dictionary) it.next();
+				%><tr>
+				<td align="center" nowrap><span class="texblanc"><%=i+1%></span></td>
+				<td align="center" valign="top"><input type="checkbox" name="delete<%=i%>" value="<%=dic.getName()%>" /></td>
+				<td nowrap><span class="texblanc"><a href="dictionary-detail.jsp?dictionary=<%=java.net.URLEncoder.encode(dic.getName(),"UTF-8")%>" ><%=dic.getName()%></a></span></td>
+				<td nowrap><span class="texblanc"><%=(dic.getNextFilteringDate()==null ? "&nbsp;" : dic.getNextFilteringDate().toString())%></span></td>
+				</tr><%
+			}
+		%>	
+		</table>
+		</td></tr>
+		</table>
+		</form>
 </div>
 </body>
 </html>
