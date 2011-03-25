@@ -4,12 +4,12 @@
 <%
 String code = request.getParameter("code");
 if( code == null) { %>
-<meta http-equiv="refresh" content="0; url=https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://dev.centreressources.com" />
+<meta http-equiv="refresh" content="0; url=https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://denis.social-computing.org:8080/wps/social/facebook.jsp" />
 <title>Redirection</title>
 <meta name="robots" content="noindex,follow" />
 </head>
 <body>
-<p><a href="https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://dev.centreressources.com">Redirection</a></p>
+<p><a href="https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://denis.social-computing.org:8080/wps/social/facebook.jsp">Redirection</a></p>
 </body>
 </html>
 <%} else {%>
