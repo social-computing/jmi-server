@@ -249,7 +249,7 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
                                       .setRows(1);
             
             SolrDocumentList docs = this.query(solrQuery);
-            if(docs.size() != 1) {
+            if(docs.size() < 1) {
                 throw new WPSConnectorException("Invalid number of results");
             }
             SolrDocument document = docs.get(0);

@@ -12,6 +12,8 @@ import java.util.Hashtable;
 import java.util.zip.GZIPOutputStream;
 
 import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.socialcomputing.utils.EZTimer;
 import com.socialcomputing.utils.database.DatabaseHelper;
@@ -29,6 +31,8 @@ import com.socialcomputing.wps.server.webservices.PlanRequest;
 
 public class BeanPlanMaker implements PlanMaker {
 
+    private static final Logger LOG = LoggerFactory.getLogger(BeanPlanMaker.class);
+    
     private class Steps {
         static final int PlanMakerStarted = 0x00000001;
         static final int DictionaryLoaded = 0x00000002;
@@ -76,6 +80,7 @@ public class BeanPlanMaker implements PlanMaker {
             return result;
         }
         catch (Exception e) {
+            LOG.error(e.getMessage(), e);
             throw new RemoteException("WPS can't create plan " + (String) params.get("planName") + " : "
                     + e.getMessage());
         }
