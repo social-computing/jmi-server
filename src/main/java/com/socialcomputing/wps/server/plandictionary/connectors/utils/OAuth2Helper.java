@@ -48,7 +48,7 @@ public class OAuth2Helper extends ConnectorHelper {
         sb.append( '?').append( "client_id").append( '=').append( clientId);
         sb.append( '&').append( "client_secret").append( '=').append( clientSecret);
         for( NameValuePair param : params) {
-            sb.append( '&').append( param.getName()).append( '=').append( HtmlEncoder.encode( param.getValue()));
+            sb.append( '&').append( param.getName()).append( '=').append( HtmlEncoder.encode( super.ReplaceParameter( param.getValue(), wpsparams)));
         }
         try {
             LOG.debug("  - url = {}", sb.toString());
