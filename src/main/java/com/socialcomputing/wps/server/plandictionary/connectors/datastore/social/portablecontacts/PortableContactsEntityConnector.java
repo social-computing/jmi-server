@@ -45,19 +45,7 @@ public class PortableContactsEntityConnector extends SocialEntityConnector {
             urlHelper.addParameter( "access_token", oAuth2Helper.getToken());
         urlHelper.openConnections( planType, wpsparams);
         
-        char buffer[] = new char[1024];
-        int n;
-        try {
-            InputStreamReader is = new InputStreamReader( urlHelper.getStream());
-            do {
-                n = is.read( buffer);
-                System.out.print( buffer);
-            } while( n > 0);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        //Object obj = JSONValue.parse( new InputStreamReader( urlHelper.getStream()));
+        Object obj = JSONValue.parse( new InputStreamReader( urlHelper.getStream()));
         
         addPerson( "Franck").addProperty( "name", "Franck");
         addPerson( "Pierre").addProperty( "name", "Pierre");
