@@ -6,16 +6,15 @@
 	<comment>Sample Facebook friends Plan Dictionary</comment>
 
 	<entities>
-		<PortableContacts-entities name="Facebook Sample">
+		<Facebook-entities name="Facebook Sample">
 			<oAuth2 clientId="108710779211353" clientSecret="e155ed50ccf90de8d9c7dafbd88bb92d">
 				<url>https://graph.facebook.com/oauth/access_token</url>
 				<url-parameter name="code">{$fb-auth-code}</url-parameter>
 				<url-parameter name="redirect_uri">http://denis.social-computing.org:8080/wps/social/facebook.jsp</url-parameter>
 			</oAuth2>
-			<URL-connection>
-				<url>https://graph.facebook.com/me/friends</url>
-			</URL-connection>
-		</PortableContacts-entities>
+			<Facebook-property id="poss_id" entity="id" />
+			<Facebook-property id="poss_name" entity="name" />
+		</Facebook-entities>
 	</entities>
 	
 	<env-property name="$web_context" value ="/wps" />

@@ -7,6 +7,7 @@ import java.util.List;
 import org.jdom.Element;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Attribute;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.DatastoreEntityConnector;
 
 public abstract class SocialEntityConnector extends DatastoreEntityConnector {
@@ -51,6 +52,12 @@ public abstract class SocialEntityConnector extends DatastoreEntityConnector {
         Person person = addPerson( id);
         for( String friend : friends) {
             setFriendShip( person, addPerson( friend), 1);
+        }
+    }
+    
+    public void setEntityProperities() {
+        for( Attribute attribute : m_Attributes.values()) {
+            addEntityProperties( attribute);
         }
     }
 

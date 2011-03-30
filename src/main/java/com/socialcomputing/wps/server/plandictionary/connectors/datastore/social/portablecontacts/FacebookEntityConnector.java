@@ -11,25 +11,25 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Attribute;
+import com.socialcomputing.wps.server.plandictionary.connectors.datastore.AttributePropertyDefinition;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.SocialEntityConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.utils.OAuth2Helper;
 import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper;
 import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper.Type;
 
-public class PortableContactsEntityConnector extends SocialEntityConnector {
+public class FacebookEntityConnector extends SocialEntityConnector {
 
-    protected UrlHelper urlHelper;
     protected OAuth2Helper oAuth2Helper;
 
-    static PortableContactsEntityConnector readObject(org.jdom.Element element) {
-        PortableContactsEntityConnector connector = new PortableContactsEntityConnector( element.getAttributeValue("name"));
+    static FacebookEntityConnector readObject(org.jdom.Element element) {
+        FacebookEntityConnector connector = new FacebookEntityConnector( element.getAttributeValue("name"));
         connector._readObject( element);
         return connector;
     }
     
-    public PortableContactsEntityConnector(String name) {
+    public FacebookEntityConnector(String name) {
         super(name);
-        urlHelper = new UrlHelper();
         oAuth2Helper = new OAuth2Helper();
     }
 
@@ -37,7 +37,9 @@ public class PortableContactsEntityConnector extends SocialEntityConnector {
     public void _readObject(Element element) {
         super._readObject(element);
         oAuth2Helper.readObject(element);
-        urlHelper.readObject(element);
+        for( Element property: (List<Element>)element.getChildren( "Facebook-property")) {
+            attributeProperties.add( new AttributePropertyDefinition( property.getAttributeValue( "id"), property.getAttributeValue( "entity")));
+        }
     }
 
 
@@ -45,13 +47,13 @@ public class PortableContactsEntityConnector extends SocialEntityConnector {
     public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
         super.openConnections( planType, wpsparams);
         oAuth2Helper.openConnections( planType, wpsparams);
-        if( oAuth2Helper.getToken() != null)
-            urlHelper.addParameter( "access_token", oAuth2Helper.getToken());
-        urlHelper.openConnections( planType, wpsparams);
-        
-        JSONObject jobj = ( JSONObject)JSONValue.parse( new InputStreamReader(urlHelper.getStream()));
         
         // Liste amis
+        UrlHelper urlHelper = new UrlHelper();
+        urlHelper.setUrl( "https://graph.facebook.com/me/friends");
+        urlHelper.addParameter( "access_token", oAuth2Helper.getToken());
+        urlHelper.openConnections( planType, wpsparams);
+        JSONObject jobj = ( JSONObject)JSONValue.parse( new InputStreamReader(urlHelper.getStream()));
         List<String> friendslist = new ArrayList<String>();
         JSONArray array=(JSONArray)jobj.get( "data");
         for (int i = 0 ; i < array.size() ; i++) {
@@ -99,13 +101,15 @@ public class PortableContactsEntityConnector extends SocialEntityConnector {
         
         // Je suis amis avec tous mes amis
         //setFriendShip((String)me.get("id"), friendslist);
+        
+        // AJout des propriétés d'entités sur les attributs
+        setEntityProperities();
     }
 
 
     @Override
     public void closeConnections() throws WPSConnectorException {
         super.closeConnections();
-        urlHelper.closeConnections();
         oAuth2Helper.closeConnections();
     }
     
