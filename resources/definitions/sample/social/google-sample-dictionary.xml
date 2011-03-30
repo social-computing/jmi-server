@@ -6,19 +6,23 @@
 	<comment>Google sample Plan Dictionary</comment>
 
 	<entities>
-		<PortableContacts-entities name="Google Contacts Sample">
-			<!--oAuth2 clientId="15510358114.apps.googleusercontent.com" clientSecret="u6ESKRIGpb7f61D2iI94Ztav">
-				<url>https://accounts.google.com/o/oauth2/auth</url>
-				<url-parameter name="redirect_uri">urn:ietf:wg:oauth:2.0:oob</url-parameter>
-				<url-parameter name="response_type">code</url-parameter>
-				<url-parameter name="scope">https://www-opensocial.googleusercontent.com/api/people/franck.valetas/@all</url-parameter>
-			</oAuth2-->
-			<URL-connection>
-				<url>https://www-opensocial.googleusercontent.com/api/people/@me/@all</url>
+		<Google-entities name="Google Contacts Sample">
+			<!-- <oAuth2 clientId="751906755651.apps.googleusercontent.com" clientSecret="dM7OJL5k0XHE4dCYpwYzrEjl">
+				<url>https://accounts.google.com/o/oauth2/token</url>
 				<url-parameter name="code">{$google-auth-code}</url-parameter>
+				<url-parameter name="redirect_uri">http://denis.social-computing.org:8080/wps/social/google.jsp</url-parameter>
+				<url-parameter name="grant_type">authorization_code</url-parameter>
+			</oAuth2>
+			 -->
+			<URL-connection>
+				<url>https://accounts.google.com/o/oauth2/token</url>
+				<url-parameter name="code">{$google-auth-code}</url-parameter>
+				<url-parameter name="client_id">751906755651.apps.googleusercontent.com</url-parameter>
+				<url-parameter name="client_secret">dM7OJL5k0XHE4dCYpwYzrEjl</url-parameter>
+				<url-parameter name="redirect_uri">http://denis.social-computing.org:8080/wps/social/google.jsp</url-parameter>
+				<url-parameter name="grant_type">authorization_code</url-parameter>
 			</URL-connection>
-	
-		</PortableContacts-entities>
+		</Google-entities>
 	</entities>
 	
 	<env-property name="$web_context" value ="/wps" />

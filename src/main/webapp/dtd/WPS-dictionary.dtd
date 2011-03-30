@@ -15,6 +15,9 @@
 <!ENTITY % Facebook-entities SYSTEM "Facebook-connector.dtd" >
 %Facebook-entities;
 
+<!ENTITY % Google-entities SYSTEM "Google-connector.dtd" >
+%Google-entities;
+
 <!ENTITY % Relax-params SYSTEM "Relax-params.dtd" >
 %Relax-params;
 
@@ -54,7 +57,7 @@
 <!ELEMENT dictionary (comment?, entities, env-property*, filtering-scheduling?, filtering-profile*, affinity-reader-profile+, analysis-profile+, display-profile+, segmentation)>
 <!ATTLIST dictionary name   NMTOKEN 	#REQUIRED>
 
-<!ELEMENT entities (JDBC-entities|XML-entities|SOLR-entities|Facebook-entities|PortableContacts-entities)>
+<!ELEMENT entities (JDBC-entities|XML-entities|SOLR-entities|Facebook-entities|Google-entities|PortableContacts-entities)>
 
 <!-- =====================================================================  -->
 <!-- Env Properties : fixing env properties -->

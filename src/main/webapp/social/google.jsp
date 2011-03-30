@@ -4,12 +4,12 @@
 <%
 String code = request.getParameter("code");
 if( code == null) { %>
-<meta http-equiv="refresh" content="0; url=https://accounts.google.com/o/oauth2/auth?client_id=15510358114.apps.googleusercontent.com&redirect_uri=http://denis.social-computing.org:8080/wps/social/google.jsp&scope=https://www.google.com/m8/feeds/&response_type=code" />
+<meta http-equiv="refresh" content="0; url=https://accounts.google.com/o/oauth2/auth?client_id=751906755651.apps.googleusercontent.com&redirect_uri=http://denis.social-computing.org:8080/wps/social/google.jsp&scope=https://www.google.com/m8/feeds/&response_type=code" />
 <title>Redirection</title>
 <meta name="robots" content="noindex,follow" />
 </head>
 <body>
-<p><a href="https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://denis.social-computing.org:8080/wps/social/google.jsp">Redirection</a></p>
+<p><a href="https://accounts.google.com/o/oauth2/auth?client_id=751906755651.apps.googleusercontent.com&redirect_uri=http://denis.social-computing.org:8080/wps/social/google.jsp&scope=https://www.google.com/m8/feeds/&response_type=code">Redirection</a></p>
 </body>
 </html>
 <%} else {%>
