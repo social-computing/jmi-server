@@ -24,7 +24,7 @@
 <!-- a comment -->
 <!ELEMENT comment 			(#PCDATA)>
 <!-- an URL connection -->
-<!ELEMENT URL-connection 	(url,url-parameter*)>
+<!ELEMENT URL-connection 	(url,basic-authentication?,url-parameter*)>
 <!ATTLIST URL-connection 	type	CDATA    "GET">
 
 <!-- oAuth2 authentication -->
@@ -37,7 +37,10 @@
 <!ELEMENT url-parameter 	(#PCDATA)>
 <!ATTLIST url-parameter name NMTOKEN 	#REQUIRED>
 
-
+<-- Basic authentication -->
+<!ELEMENT basic-authentication #EMPTY>
+<!ATTLIST basic-authentication username NMTOKEN 	#REQUIRED>
+<!ATTLIST basic-authentication password NMTOKEN 	#REQUIRED>
 
 
 <!-- =====================================================================  -->

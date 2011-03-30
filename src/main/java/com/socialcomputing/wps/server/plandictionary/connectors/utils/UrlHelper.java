@@ -15,6 +15,8 @@ import org.jdom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import sun.misc.BASE64Encoder;
+
 import com.socialcomputing.utils.servlet.HtmlEncoder;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 
@@ -29,6 +31,8 @@ public class UrlHelper extends ConnectorHelper {
     protected String url = null;
     protected List<NameValuePair> defParams;
     protected List<NameValuePair> curParams;
+    protected boolean basicAuth = false;
+    protected String user, password;
 
     protected InputStream stream = null;
 
@@ -43,6 +47,12 @@ public class UrlHelper extends ConnectorHelper {
             defParams.add( new NameValuePair( elem.getAttributeValue( "name"), elem.getText()));
         }
         curParams = new ArrayList<NameValuePair>();
+        Element basic = connection.getChild( "basic-authentication");
+        if(  basic != null) {
+            basicAuth = true;
+            user = basic.getAttributeValue( "username");
+            password = basic.getAttributeValue( "password");
+        }
     }
 
     @Override
@@ -69,6 +79,12 @@ public class UrlHelper extends ConnectorHelper {
             URLConnection connection = u.openConnection();
             connection.setUseCaches(false);
             connection.setDoInput(true);
+            if( basicAuth) {
+                BASE64Encoder enc = new BASE64Encoder();
+                String userpassword = user + ":" + password;
+                String encodedAuthorization = enc.encode( userpassword.getBytes());
+                connection.setRequestProperty( "Authorization", "Basic " + encodedAuthorization);
+            }
             if( type == Type.POST && connection instanceof HttpURLConnection) {
                 HttpURLConnection httpConnection = ( HttpURLConnection) connection;
                 httpConnection.setDoOutput(true);
