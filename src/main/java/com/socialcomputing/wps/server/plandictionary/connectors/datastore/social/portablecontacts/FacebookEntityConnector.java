@@ -74,30 +74,32 @@ public class FacebookEntityConnector extends SocialEntityConnector {
 //        addPerson((String)me.get("id")).addProperty("name", me.get("name"));
         
         // Amis d'amis
-        StringBuilder sb1 = new StringBuilder();
-        StringBuilder sb2 = new StringBuilder();
+        
         for (int i = 0 ; i < friendslist.size() -1 ; i++) {
+            StringBuilder sb1 = new StringBuilder();
+            StringBuilder sb2 = new StringBuilder();
             for (int j = i + 1 ; j < friendslist.size() ; j++) {
                 sb1.append(friendslist.get(i)).append(",");
                 sb2.append(friendslist.get(j)).append(",");
             }
+            String areFriends = "https://api.facebook.com/method/friends.areFriends";
+            UrlHelper uh1 = new UrlHelper();
+            uh1.setUrl(areFriends);
+            uh1.setType( Type.POST);
+            uh1.addParameter("uids1", sb1.toString());
+            uh1.addParameter("uids2", sb2.toString());
+            uh1.addParameter("access_token", oAuth2Helper.getToken());
+            uh1.addParameter("format", "json");
+            uh1.openConnections( planType, wpsparams);
+            JSONArray r =  (JSONArray)JSONValue.parse(new InputStreamReader(uh1.getStream()));
+            for (int k = 0 ; k < r.size() ; k++) {
+                JSONObject rs = (JSONObject) r.get(k);
+                //System.out.println(rs.get("uid1") + "=>" + rs.get("uid2") + "=>" + rs.get("are_friends"));
+                if ( (Boolean)rs.get("are_friends"))
+                    setFriendShip(((Long)rs.get("uid1")).toString(), ((Long)rs.get("uid2")).toString());
+            }
         }
-        String areFriends = "https://api.facebook.com/method/friends.areFriends";
-        UrlHelper uh1 = new UrlHelper();
-        uh1.setUrl(areFriends);
-        uh1.setType( Type.POST);
-        uh1.addParameter("uids1", sb1.toString());
-        uh1.addParameter("uids2", sb2.toString());
-        uh1.addParameter("access_token", oAuth2Helper.getToken());
-        uh1.addParameter("format", "json");
-        uh1.openConnections( planType, wpsparams);
-        JSONArray r =  (JSONArray)JSONValue.parse(new InputStreamReader(uh1.getStream()));
-        for (int k = 0 ; k < r.size() ; k++) {
-            JSONObject rs = (JSONObject) r.get(k);
-            //System.out.println(rs.get("uid1") + "=>" + rs.get("uid2") + "=>" + rs.get("are_friends"));
-            if ( (Boolean)rs.get("are_friends"))
-                setFriendShip(((Long)rs.get("uid1")).toString(), ((Long)rs.get("uid2")).toString());
-        }
+        
         
         // Je suis amis avec tous mes amis
         //setFriendShip((String)me.get("id"), friendslist);
