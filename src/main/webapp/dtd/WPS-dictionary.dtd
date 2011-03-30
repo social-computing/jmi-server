@@ -37,8 +37,8 @@
 <!ELEMENT url-parameter 	(#PCDATA)>
 <!ATTLIST url-parameter name NMTOKEN 	#REQUIRED>
 
-<-- Basic authentication -->
-<!ELEMENT basic-authentication #EMPTY>
+<!-- Basic authentication -->
+<!ELEMENT basic-authentication EMPTY>
 <!ATTLIST basic-authentication username NMTOKEN 	#REQUIRED>
 <!ATTLIST basic-authentication password NMTOKEN 	#REQUIRED>
 
