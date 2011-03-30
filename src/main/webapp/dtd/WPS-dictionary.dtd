@@ -22,6 +22,7 @@
 <!ELEMENT comment 			(#PCDATA)>
 <!-- an URL connection -->
 <!ELEMENT URL-connection 	(url,url-parameter*)>
+<!ATTLIST URL-connection 	type	CDATA    "GET">
 
 <!-- oAuth2 authentication -->
 <!ELEMENT oAuth2 			(url,url-parameter*)>
