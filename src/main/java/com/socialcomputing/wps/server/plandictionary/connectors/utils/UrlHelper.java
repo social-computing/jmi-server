@@ -41,13 +41,17 @@ public class UrlHelper extends ConnectorHelper {
         // TODO POST ou GET 
         StringBuilder sb = new StringBuilder( url);
         boolean first = true;
-        for( NameValuePair param : defParams) {
-            sb.append( first ? '?' : '&').append( param.getName()).append( '=').append( HtmlEncoder.encode( super.ReplaceParameter( param.getValue(), wpsparams)));
-            first = false;
+        if (defParams != null) {
+            for( NameValuePair param : defParams) {
+                sb.append( first ? '?' : '&').append( param.getName()).append( '=').append( HtmlEncoder.encode( super.ReplaceParameter( param.getValue(), wpsparams)));
+                first = false;
+            }
         }
-        for( NameValuePair param : curParams) {
-            sb.append( first ? '?' : '&').append( param.getName()).append( '=').append( HtmlEncoder.encode( super.ReplaceParameter( param.getValue(), wpsparams)));
-            first = false;
+        if (curParams != null) { 
+            for( NameValuePair param : curParams) {
+                sb.append( first ? '?' : '&').append( param.getName()).append( '=').append( HtmlEncoder.encode( super.ReplaceParameter( param.getValue(), wpsparams)));
+                first = false;
+            }
         }
         try {
             LOG.debug("  - url = {}", sb.toString());
@@ -77,6 +81,12 @@ public class UrlHelper extends ConnectorHelper {
     }
 
     public void addParameter( String name, String value) {
+        if (curParams == null)
+            curParams = new ArrayList<NameValuePair>();
         curParams.add( new NameValuePair( name, value));
+    }
+    
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
