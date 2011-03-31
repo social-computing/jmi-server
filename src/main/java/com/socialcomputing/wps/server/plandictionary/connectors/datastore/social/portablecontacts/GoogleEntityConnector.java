@@ -1,13 +1,6 @@
 package com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.portablecontacts;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -17,16 +10,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Attribute;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.AttributePropertyDefinition;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.SocialEntityConnector;
-import com.socialcomputing.wps.server.plandictionary.connectors.utils.OAuth2Helper;
 import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper;
-import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper.Type;
 
 public class GoogleEntityConnector extends SocialEntityConnector {
 
-    protected UrlHelper urlHelper;
+    protected UrlHelper oAuth2Helper;
 
     static GoogleEntityConnector readObject(org.jdom.Element element) {
         GoogleEntityConnector connector = new GoogleEntityConnector( element.getAttributeValue("name"));
@@ -36,13 +26,13 @@ public class GoogleEntityConnector extends SocialEntityConnector {
     
     public GoogleEntityConnector(String name) {
         super(name);
-        urlHelper = new UrlHelper();
+        oAuth2Helper = new UrlHelper();
     }
 
     @Override
     public void _readObject(Element element) {
         super._readObject(element);
-        urlHelper.readObject(element);
+        oAuth2Helper.readObject(element);
         for( Element property: (List<Element>)element.getChildren( "Google-property")) {
             attributeProperties.add( new AttributePropertyDefinition( property.getAttributeValue( "id"), property.getAttributeValue( "entity")));
         }
@@ -52,9 +42,8 @@ public class GoogleEntityConnector extends SocialEntityConnector {
     @Override
     public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
         super.openConnections( planType, wpsparams);
-        urlHelper.setType(Type.POST);
-        urlHelper.openConnections( planType, wpsparams);
-        JSONObject jobj = ( JSONObject)JSONValue.parse( new InputStreamReader(urlHelper.getStream()));
+        oAuth2Helper.openConnections( planType, wpsparams);
+        JSONObject jobj = ( JSONObject)JSONValue.parse( new InputStreamReader(oAuth2Helper.getStream()));
         System.out.println(" - access_token = " + jobj.get("access_token"));
         
         // Liste contact
@@ -83,7 +72,7 @@ public class GoogleEntityConnector extends SocialEntityConnector {
     @Override
     public void closeConnections() throws WPSConnectorException {
         super.closeConnections();
-        urlHelper.closeConnections();
+        oAuth2Helper.closeConnections();
     }
     
 }

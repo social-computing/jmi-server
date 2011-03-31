@@ -3,7 +3,7 @@
 <!-- =====================================================================  -->
 <!-- XML-entities : data connectors description -->
 <!-- =====================================================================  -->
-<!ELEMENT Facebook-entities (comment?, oAuth2?, Facebook-property*)>
+<!ELEMENT Facebook-entities (comment?, URL-connection, Facebook-property*)>
 <!ATTLIST Facebook-entities	name    CDATA    #REQUIRED>
 <!ATTLIST Facebook-entities	class   CDATA    "com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.portablecontacts.FacebookEntityConnector" >
 

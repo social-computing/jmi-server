@@ -11,16 +11,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Attribute;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.AttributePropertyDefinition;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.SocialEntityConnector;
-import com.socialcomputing.wps.server.plandictionary.connectors.utils.OAuth2Helper;
 import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper;
 import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper.Type;
 
 public class FacebookEntityConnector extends SocialEntityConnector {
 
-    protected OAuth2Helper oAuth2Helper;
+    protected UrlHelper oAuth2Helper;
 
     static FacebookEntityConnector readObject(org.jdom.Element element) {
         FacebookEntityConnector connector = new FacebookEntityConnector( element.getAttributeValue("name"));
@@ -30,13 +28,13 @@ public class FacebookEntityConnector extends SocialEntityConnector {
     
     public FacebookEntityConnector(String name) {
         super(name);
-        oAuth2Helper = new OAuth2Helper();
+        oAuth2Helper = new UrlHelper();
     }
 
     @Override
     public void _readObject(Element element) {
         super._readObject(element);
-        oAuth2Helper.readObject(element);
+        oAuth2Helper.readObject( element);
         for( Element property: (List<Element>)element.getChildren( "Facebook-property")) {
             attributeProperties.add( new AttributePropertyDefinition( property.getAttributeValue( "id"), property.getAttributeValue( "entity")));
         }
@@ -47,11 +45,13 @@ public class FacebookEntityConnector extends SocialEntityConnector {
     public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
         super.openConnections( planType, wpsparams);
         oAuth2Helper.openConnections( planType, wpsparams);
+        String token = oAuth2Helper.getResult();
+        token = token.substring( token.indexOf( '=') + 1);
         
         // Liste amis
         UrlHelper urlHelper = new UrlHelper();
         urlHelper.setUrl( "https://graph.facebook.com/me/friends");
-        urlHelper.addParameter( "access_token", oAuth2Helper.getToken());
+        urlHelper.addParameter( "access_token", token);
         urlHelper.openConnections( planType, wpsparams);
         JSONObject jobj = ( JSONObject)JSONValue.parse( new InputStreamReader(urlHelper.getStream()));
         List<String> friendslist = new ArrayList<String>();
@@ -88,7 +88,7 @@ public class FacebookEntityConnector extends SocialEntityConnector {
             uh1.setType( Type.POST);
             uh1.addParameter("uids1", sb1.toString());
             uh1.addParameter("uids2", sb2.toString());
-            uh1.addParameter("access_token", oAuth2Helper.getToken());
+            uh1.addParameter("access_token", token);
             uh1.addParameter("format", "json");
             uh1.openConnections( planType, wpsparams);
             JSONArray r =  (JSONArray)JSONValue.parse(new InputStreamReader(uh1.getStream()));

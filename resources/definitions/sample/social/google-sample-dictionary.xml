@@ -7,14 +7,7 @@
 
 	<entities>
 		<Google-entities name="Google Contacts Sample">
-			<!-- <oAuth2 clientId="751906755651.apps.googleusercontent.com" clientSecret="dM7OJL5k0XHE4dCYpwYzrEjl">
-				<url>https://accounts.google.com/o/oauth2/token</url>
-				<url-parameter name="code">{$google-auth-code}</url-parameter>
-				<url-parameter name="redirect_uri">http://denis.social-computing.org:8080/wps/social/google.jsp</url-parameter>
-				<url-parameter name="grant_type">authorization_code</url-parameter>
-			</oAuth2>
-			 -->
-			<URL-connection>
+			<URL-connection type="POST">
 				<url>https://accounts.google.com/o/oauth2/token</url>
 				<url-parameter name="code">{$google-auth-code}</url-parameter>
 				<url-parameter name="client_id">751906755651.apps.googleusercontent.com</url-parameter>

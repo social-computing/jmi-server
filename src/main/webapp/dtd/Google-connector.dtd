@@ -3,7 +3,7 @@
 <!-- =====================================================================  -->
 <!-- XML-entities : data connectors description -->
 <!-- =====================================================================  -->
-<!ELEMENT Google-entities (comment?, oAuth2?, URL-connection?)>
+<!ELEMENT Google-entities (comment?, URL-connection, Google-property*)>
 <!ATTLIST Google-entities	name    CDATA    #REQUIRED>
 <!ATTLIST Google-entities	class   CDATA    "com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.portablecontacts.GoogleEntityConnector" >
 

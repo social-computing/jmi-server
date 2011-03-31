@@ -26,14 +26,10 @@
 <!-- =====================================================================  -->
 <!-- a comment -->
 <!ELEMENT comment 			(#PCDATA)>
+
 <!-- an URL connection -->
 <!ELEMENT URL-connection 	(url,basic-authentication?,url-parameter*)>
 <!ATTLIST URL-connection 	type	CDATA    "GET">
-
-<!-- oAuth2 authentication -->
-<!ELEMENT oAuth2 			(url,url-parameter*)>
-<!ATTLIST oAuth2 clientId	 	NMTOKEN 	#REQUIRED>
-<!ATTLIST oAuth2 clientSecret	NMTOKEN 	#REQUIRED>
 
 <!ELEMENT url 				(#PCDATA)>
 

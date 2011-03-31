@@ -7,11 +7,13 @@
 
 	<entities>
 		<Facebook-entities name="Facebook Sample">
-			<oAuth2 clientId="108710779211353" clientSecret="e155ed50ccf90de8d9c7dafbd88bb92d">
+			<URL-connection>
 				<url>https://graph.facebook.com/oauth/access_token</url>
 				<url-parameter name="code">{$fb-auth-code}</url-parameter>
+				<url-parameter name="client_id">108710779211353</url-parameter>
+				<url-parameter name="client_secret">e155ed50ccf90de8d9c7dafbd88bb92d</url-parameter>
 				<url-parameter name="redirect_uri">http://denis.social-computing.org:8080/wps/social/facebook.jsp</url-parameter>
-			</oAuth2>
+			</URL-connection>
 			<Facebook-property id="poss_id" entity="id" />
 			<Facebook-property id="poss_name" entity="name" />
 		</Facebook-entities>

@@ -168,7 +168,7 @@ public class BeanPlanMaker implements PlanMaker {
 
         }
         catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
             throw new RemoteException(e.getMessage());
         }
         finally {
