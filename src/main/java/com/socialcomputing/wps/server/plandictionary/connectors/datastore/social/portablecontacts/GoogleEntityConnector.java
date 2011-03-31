@@ -61,6 +61,7 @@ public class GoogleEntityConnector extends SocialEntityConnector {
         UrlHelper uh = new UrlHelper();
         uh.setUrl( "https://www.google.com/m8/feeds/contacts/default/full");
         uh.addParameter("oauth_token", (String)jobj.get("access_token"));
+        uh.addParameter("max-results", "100");
         uh.addParameter("alt", "json");
         
         uh.openConnections( planType, wpsparams);
