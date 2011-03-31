@@ -3,7 +3,7 @@
       xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.socialcomputing.wps</groupId>
-  <artifactId>wps</artifactId>
+  <artifactId>wps-jersey</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>WPS project</name>
@@ -132,6 +132,7 @@
 		</exclusion>
 	  </exclusions>
     </dependency>
+    
 
     <!-- Solr client library (used by the solr connector) -->
     <dependency>
@@ -175,6 +176,25 @@
       <version>4.8.2</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+	  <artifactId>jetty-webapp</artifactId>
+	  <version>${jetty.version}</version>
+	  <scope>test</scope>
+	</dependency>
+	<dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-client</artifactId>
+      <version>1.5</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+	  <groupId>mysql</groupId>
+	  <artifactId>mysql-connector-java</artifactId>
+	  <version>5.1.15</version>
+	  <scope>test</scope>
+	</dependency>
+    
   </dependencies>
 
   <!-- Build properties -->
@@ -254,5 +274,7 @@
   <!-- Global properties -->
   <properties>
     <applet.version>${project.version}</applet.version>
+    <jetty.version>8.0.0.M2</jetty.version>
+    <jersey.version>1.5</jersey.version>
   </properties>
 </project>
