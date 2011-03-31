@@ -1,8 +1,13 @@
 package com.socialcomputing.wps.server.plandictionary.connectors.utils;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -38,7 +43,7 @@ public class UrlHelper extends ConnectorHelper {
 
     @Override
     public void readObject(Element element) {
-        Element connection = element.getChild("URL-connection");
+        Element connection = element.getChild( "URL-connection");
         url = connection.getChildText("url");
         if( connection.getAttributeValue( "type") != null && connection.getAttributeValue( "type").equalsIgnoreCase( "POST"))
             type = Type.POST;
@@ -126,6 +131,22 @@ public class UrlHelper extends ConnectorHelper {
         return stream;
     }
 
+    public String getResult() throws WPSConnectorException {
+        Writer writer = new StringWriter();
+        Reader reader = new BufferedReader( new InputStreamReader( stream));
+        char[] buffer = new char[1024];
+        int n;
+        try {
+            while ((n = reader.read(buffer)) != -1) {
+                writer.write(buffer, 0, n);
+            }
+        }
+        catch (IOException e) {
+            throw new WPSConnectorException( "UrlHelper read failed",  e);
+        }
+        return writer.toString();
+    }
+    
     public void addParameter( String name, String value) {
         if (curParams == null)
             curParams = new ArrayList<NameValuePair>();
