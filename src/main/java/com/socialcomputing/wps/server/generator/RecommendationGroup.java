@@ -21,7 +21,7 @@ public class RecommendationGroup extends ProtoObject
 	/**
 	 * Ids of sub attributes which are recommended
 	 */
-	public Collection     m_recommendations = null;
+	public Collection<String> m_recommendations = null;
 
 	public RecommendationGroup( String strId )
 	{
@@ -38,8 +38,7 @@ public class RecommendationGroup extends ProtoObject
 		super( strId, type, num );
 	}
 
-	public void setRecommendations(Collection recommendations)
-	{
+	public void setRecommendations(Collection<String> recommendations) {
 		m_recommendations=recommendations;
 	}
 

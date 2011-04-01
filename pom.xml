@@ -115,14 +115,6 @@
 	  <version>1.5</version>
 	  <exclusions>
 		<exclusion>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-asl</artifactId>
-		</exclusion>
-		<exclusion>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-		</exclusion>
-		<exclusion>
 			<artifactId>jaxb-impl</artifactId>
 			<groupId>com.sun.xml.bind</groupId>
 		</exclusion>

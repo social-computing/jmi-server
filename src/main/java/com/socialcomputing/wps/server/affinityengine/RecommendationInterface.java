@@ -50,20 +50,17 @@ public class RecommendationInterface
 
 	/**
 	* Get subattributes to recommand for a given entity and a attribut */
-	public  Collection getRecommendations( String attribut )
+	public Collection<String> getRecommendations( String attribut )
 	{
 		if( m_RecommendationProcess == null) return null;
+		
 		// entity
-		Collection ret=m_RecommendationProcess.getRecommendations(attribut);
-		if ( ret == null) return null;
+		Collection<StringAndFloat> ret = m_RecommendationProcess.getRecommendations(attribut);
 
-		Collection aColl=new ArrayList();
-		Iterator it=ret.iterator();
-		while (it.hasNext())
-		  {
-			aColl.add(((StringAndFloat)it.next()).m_Id);
-		  }
-
+		Collection<String> aColl = new ArrayList<String>();
+		for(StringAndFloat recommendation : ret) {
+		    aColl.add(recommendation.m_Id);
+		}
 		return aColl;
 	}
 

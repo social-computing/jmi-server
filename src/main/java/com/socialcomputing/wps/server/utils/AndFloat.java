@@ -25,33 +25,21 @@ package com.socialcomputing.wps.server.utils;
   *
   * ********************************************************** */
 
-public class AndFloat implements Comparable
-{
+public class AndFloat implements Comparable<AndFloat> {
 
- public float m_value = 0;
+   public float m_value = 0;
 
-
-// Get/Set Methods For Member Variables
-
-
-/**
- */
-   public  int compareTo( Object o )
-   {
-    float val2=((AndFloat)o).m_value;
-    return (val2<m_value? -1: (val2==m_value?0:1));
+   public int compareTo(AndFloat anotherAndFloat) {
+       float val2 = anotherAndFloat.m_value;
+       return (val2 < m_value ? -1: (val2 == m_value ? 0: 1));
    }
 
-
-/**
- */
-   public  AndFloat(  float value )
-   {
-    m_value=value;
+   public AndFloat(float value) {
+       m_value = value;
    }
-   public  String toString(  )
-   {
-   String temp= new String((new Float(m_value)).toString());
-   return temp;
+
+   @Override
+   public String toString() {
+       return Float.toString(m_value);
    }
 }

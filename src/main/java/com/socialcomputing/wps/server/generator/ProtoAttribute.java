@@ -59,7 +59,7 @@ public class ProtoAttribute implements MapableAtt
 	/**
 	 * clusterized children of this or null if this is not a cluster.
 	 */
-	public ArrayList        m_children;
+	public ArrayList<ProtoAttribute>        m_children;
 
 	/**
 	 * Parent Attribute of this is it is clusterized or null if this is cluster.
@@ -258,9 +258,8 @@ public class ProtoAttribute implements MapableAtt
 	/**
 	 * See espinat@mapstan.com
 	 */
-	public Collection getRecommendations(int recomType)
-	{
-		Collection ret=null;
+	public Collection<String> getRecommendations(int recomType) {
+		Collection<String> ret = null;
 
 		if (m_recomGroups!=null && ((m_recomGroups[recomType])!=null) )
 		   ret=m_recomGroups[recomType].m_recommendations;
@@ -271,26 +270,20 @@ public class ProtoAttribute implements MapableAtt
 	/**
 	 * See espinat@mapstan.com
 	 */
-	public TreeSet getAllRecommendations(int recomType)
+	public TreeSet<String> getAllRecommendations(int recomType)
 	{
-		TreeSet set=new TreeSet();
-		Collection coll;
-		ProtoAttribute child=null;
+		TreeSet<String> set = new TreeSet<String>();
+		Collection<String> recommendations;
 
-		if ((coll=getRecommendations(recomType))!=null)
-		   set.addAll(coll);
+		if ((recommendations = getRecommendations(recomType)) != null)
+		   set.addAll(recommendations);
 
-		if (m_children!=null)
-		   {
-				Iterator it=m_children.iterator();
-
-				while (it.hasNext())
-					  {
-					  child=(ProtoAttribute)it.next();
-					  if ((coll=child.getRecommendations(recomType))!=null)
-						 set.addAll(coll);
-					  }
-		   }
+		if (m_children !=null) {
+		    for(ProtoAttribute child : m_children) {
+		        if ((recommendations = child.getRecommendations(recomType)) != null)
+		            set.addAll(recommendations);
+			}
+		}
 		return set;
 	}
 

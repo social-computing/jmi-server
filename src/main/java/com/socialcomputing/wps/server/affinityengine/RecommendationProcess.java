@@ -54,7 +54,7 @@ public class RecommendationProcess {
 	/**
 	 * key = Attribute Id (String) object = SubAttributes Recom (String)
 	 */
-	private HashMap m_Recommendations = new HashMap();
+	private HashMap<String, Collection<StringAndFloat>> m_Recommendations = new HashMap<String, Collection<StringAndFloat>>();
 	private String m_RefEntity = null;
 	private String[] m_RefAttributes = null;
 	private String[] m_RefSAttributes = null;
@@ -206,11 +206,11 @@ public class RecommendationProcess {
 	/**
 	 * give recommendations for a given attribute read in m_Recommdations
 	 */
-	public Collection getRecommendations(String attribute) {
+	public Collection<StringAndFloat> getRecommendations(String attribute) {
 		if (m_Recommendations == null)
-			return new ArrayList();
+			return new ArrayList<StringAndFloat>();
 		else
-			return (Collection) (m_Recommendations.get(attribute));
+			return m_Recommendations.get(attribute);
 	}
 
 	/*

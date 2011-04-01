@@ -25,23 +25,17 @@ package com.socialcomputing.wps.server.utils;
   *
   * ********************************************************** */
 
-public class StringAndFloat extends AndFloat
-{
+public class StringAndFloat extends AndFloat {
+    
+    public String m_Id = null;
 
- public String m_Id = null;
+    public StringAndFloat(String id, float value ) {
+        super(value);
+        m_Id = id;
+    }
 
-
-/**
- */
-   public  StringAndFloat( String id, float value )
-   {
-	super(value);
-	m_Id=id;
-   }
-
-   public  String toString(  )
-   {
-   String temp= new String(m_Id+"/"+super.toString());
-   return temp;
+    @Override
+    public String toString() {
+        return "" + m_Id + "/" + super.toString();
    }
 }
