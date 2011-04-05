@@ -32,7 +32,8 @@ function onWpsError( id) {
 			version: '1.0-SNAPSHOT',
 			name: 'WPSApplet',
 			codebase: './applet/',
-			wpsurl: '../maker'
+			wpsurl: '../services/',
+			wpsclient: '0'
 		}, options['plugin']);
 		
 		// this.css("background-color")
@@ -40,7 +41,7 @@ function onWpsError( id) {
 			wpsparams = jQuery.param( options['wps']);
 			html = '<APPLET name="' + pluginOptions.name + '" archive="WPSApplet' + pluginOptions.version + '.jar" code="com.socialcomputing.wps.client.applet.WPSApplet.class" codebase="'+ pluginOptions.codebase + '" MAYSCRIPT="mayscript" align="middle" hspace="0" vspace="0" width="100%" height="100%">'
 				+  '<PARAM NAME="WPSParameters"		VALUE="' + wpsparams + '" />'
-				+  '<PARAM NAME="ServletUrl"		VALUE="' + pluginOptions.wpsurl + '" />'
+				+  '<PARAM NAME="ServletUrl"		VALUE="' + pluginOptions.wpsurl + pluginOptions.wpsclient + '/maps/' + options['wps'].planName + '/java" />'
 				+  '<PARAM NAME="ComputeMsg"      	VALUE="' + displayOptions.compute + '" />'
 				+  '<PARAM NAME="DownloadMsg"    	VALUE="' + displayOptions.load + '" />'
 				+  '<PARAM NAME="InitColor"			VALUE="' + displayOptions.color + '" />';

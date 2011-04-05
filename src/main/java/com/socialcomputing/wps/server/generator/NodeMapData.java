@@ -218,6 +218,13 @@ public final class NodeMapData extends Node
 	}
 
 	/**
+     * @return the m_clientPos
+     */
+    public Point getM_clientPos() {
+        return m_clientPos;
+    }
+
+    /**
 	 * Gets the link between this and another node.
 	 * @param to	The other node of the link to find.
 	 * @return		The link between this and 'to' or null if there is none.

@@ -2,10 +2,8 @@ package com.socialcomputing.wps.server.webservices.maker;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
 import java.rmi.RemoteException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Hashtable;
@@ -16,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.socialcomputing.utils.EZTimer;
-import com.socialcomputing.utils.database.DatabaseHelper;
 import com.socialcomputing.utils.database.HibernateUtil;
 import com.socialcomputing.wps.server.affinityengine.RecommendationInterface;
 import com.socialcomputing.wps.server.analysisengine.AnalysisProcess;
@@ -31,17 +28,10 @@ import com.socialcomputing.wps.server.webservices.PlanRequest;
 
 public class BeanPlanMaker implements PlanMaker {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BeanPlanMaker.class);
+    private final static Logger LOG = LoggerFactory.getLogger(BeanPlanMaker.class);
     
-    private class Steps {
-        static final int PlanMakerStarted = 0x00000001;
-        static final int DictionaryLoaded = 0x00000002;
-        static final int DictionaryOpened = 0x00000004;
-        static final int AffinityGroupComputed = 0x00000010;
-        static final int AnalysisPassed = 0x00000100;
-        static final int PlanGenerated = 0x00001000;
-        static final int EnvInitialized = 0x00002000;
-    }
+    private enum Steps {  PlanMakerStarted , DictionaryLoaded, DictionaryOpened, 
+        AffinityGroupComputed, AnalysisPassed, PlanGenerated, EnvInitialized };
 
     @Override
     public Hashtable<String, Object> createPlan(Hashtable<String, Object> params) throws RemoteException {
@@ -49,7 +39,7 @@ public class BeanPlanMaker implements PlanMaker {
         try {
             EZTimer timer = new EZTimer();
 
-            String mime = (String) params.get("PLAN_MIME");
+            String mime = (String) params.get( PlanMaker.PLAN_MIME);
             if (mime == null)
                 mime = "application/octet-stream";
             PlanContainer planContainer = _createPlan(params, result);
@@ -60,35 +50,35 @@ public class BeanPlanMaker implements PlanMaker {
                     objectOutStream.writeObject(planContainer.m_env);
                     objectOutStream.writeObject(planContainer.m_plan);
                     objectOutStream.close();
-                    result.put("PLAN", bout.toByteArray());
+                    result.put( PlanMaker.PLAN, bout.toByteArray());
                 }
                 else {
-                    result.put("PLAN", new byte[0]);
+                    result.put( PlanMaker.PLAN, new byte[0]);
                 }
-                result.put("PLAN_MIME", mime);
+                result.put( PlanMaker.PLAN_MIME, mime);
             }
             else if (mime.equals("text/xml")) {
-                result.put("PLAN", planContainer.m_protoPlan.getXML());
-                result.put("PLAN_MIME", mime);
+                //result.put("PLAN", planContainer.m_protoPlan.getXML());
+                result.put( PlanMaker.PLAN_MIME, mime);
             }
-            else if (mime.equals("text/java")) {
-                result.put("PLAN", planContainer);
-                result.put("PLAN_MIME", mime);
+            else if (mime.equals("application/json")) {
+                result.put( PlanMaker.PLAN, planContainer.toJson());
+                result.put( PlanMaker.PLAN_MIME, mime);
             }
+            result.put( PlanMaker.DURATION, timer.getElapsedTime());
 
             timer.showElapsedTime("ALL STEPS");
             return result;
         }
         catch (Exception e) {
             LOG.error(e.getMessage(), e);
-            throw new RemoteException("WPS can't create plan " + (String) params.get("planName") + " : "
-                    + e.getMessage());
+            throw new RemoteException("WPS can't create plan " + (String) params.get("planName") + " : " + e.getMessage());
         }
     }
 
     private PlanContainer _createPlan(Hashtable<String, Object> params, Hashtable<String, Object> results)
             throws RemoteException {
-        int status = Steps.PlanMakerStarted;
+        Steps status = Steps.PlanMakerStarted;
         boolean isVisual = false;
         Connection connection = null;
         WPSDictionary dico = null;
@@ -123,7 +113,7 @@ public class BeanPlanMaker implements PlanMaker {
             Dictionary dictionaryLoader = manager.findByName(name);
             if (dictionaryLoader == null)
                 throw new RemoteException("WPS parameter can't find dictionary " + name);
-            results.put("PLAN_NAME", name);
+            results.put( PlanMaker.PLAN_NAME, name);
 
             // DICTIONARY RETRIEVAL
             dico = dictionaryLoader.getDictionary();
@@ -133,13 +123,13 @@ public class BeanPlanMaker implements PlanMaker {
             planRequest = new PlanRequest(connection, dico, params);
             switch (planRequest.getAnalysisProfile().m_planType) {
                 case AnalysisProfile.PERSONAL_PLAN:
-                    results.put("PLAN_TYPE", "PERSONAL");
+                    results.put( PlanMaker.TYPE, "personal");
                     break;
                 case AnalysisProfile.GLOBAL_PLAN:
-                    results.put("PLAN_TYPE", "GLOBAL");
+                    results.put( PlanMaker.TYPE, "global");
                     break;
                 case AnalysisProfile.DISCOVERY_PLAN:
-                    results.put("PLAN_TYPE", "DISCOVERY");
+                    results.put( PlanMaker.TYPE, "discovery");
                     break;
             }
 
@@ -159,12 +149,11 @@ public class BeanPlanMaker implements PlanMaker {
 
             // PLAN GENERATOR
             PlanGenerator planGenerator = new PlanGenerator();
-            planGenerator.generatePlan(proto, isVisual);
+            planGenerator.generatePlan( proto, isVisual);
             status = Steps.PlanGenerated;
 
             container = new PlanContainer(planGenerator.getEnv(), planGenerator.getPlan());
-            container.m_protoPlan = proto;
-            status = Steps.EnvInitialized;
+           status = Steps.EnvInitialized;
 
         }
         catch (Exception e) {

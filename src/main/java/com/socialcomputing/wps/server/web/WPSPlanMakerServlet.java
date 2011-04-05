@@ -26,6 +26,7 @@ import javax.servlet.http.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Deprecated
 public class WPSPlanMakerServlet extends HttpServlet {
 
     private static final long serialVersionUID = -1343674940328653700L;
@@ -75,7 +76,6 @@ public class WPSPlanMakerServlet extends HttpServlet {
 				String name = ( String)enumvar.nextElement();
 				params.put( name, request.getParameter( name));
 			}
-			params.put( "User-Agent", request.getHeader( "User-Agent"));
 			params.put( "User-Agent", request.getHeader( "User-Agent") == null ? "unknown" : request.getHeader( "User-Agent"));
 
 			Hashtable<String, Object> result = null;
@@ -104,8 +104,8 @@ public class WPSPlanMakerServlet extends HttpServlet {
 			else  result = planmaker.createPlan( params);
 
 
-			response.setContentType( (String)result.get( "PLAN_MIME"));
-			byte[] bplan = ( byte[])result.get( "PLAN");
+			response.setContentType( (String)result.get( PlanMaker.PLAN_MIME));
+			byte[] bplan = ( byte[])result.get( PlanMaker.PLAN);
 			out.writeInt( bplan.length);
 			out.write( bplan);
 

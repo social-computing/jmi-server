@@ -3,7 +3,7 @@
       xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.socialcomputing.wps</groupId>
-  <artifactId>wps</artifactId>
+  <artifactId>wps-jersey</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>WPS project</name>
@@ -24,6 +24,14 @@
         <enabled>true</enabled>
         <updatePolicy>never</updatePolicy>
       </snapshots>
+    </repository>
+    
+    <!-- Oracle (SUN) official maven repository -->
+    <repository>
+        <id>maven2-repository.dev.java.net</id>
+        <name>Java.net Repository for Maven</name>
+        <url>http://download.java.net/maven/2/</url>
+        <layout>default</layout>
     </repository>
   </repositories>
 
@@ -94,7 +102,7 @@
       <artifactId>logback-classic</artifactId>
       <version>0.9.27</version>
     </dependency>
-
+    
 	<!--  Http client-->
 	<dependency>
 	    <groupId>commons-httpclient</groupId>
@@ -108,6 +116,31 @@
 	    <artifactId>json-simple</artifactId>
 	    <version>1.1</version>
 	</dependency>
+     
+    <!-- Sun Jax-RS implementation -->
+    <dependency>
+      <groupId>com.sun.jersey.contribs</groupId>
+      <artifactId>jersey-guice</artifactId>
+      <version>1.5</version>
+    </dependency>
+	
+	<!--  JSON simple -->
+    <dependency>
+	  <groupId>com.sun.jersey</groupId>
+	  <artifactId>jersey-json</artifactId>
+	  <version>1.5</version>
+	  <exclusions>
+		<exclusion>
+			<artifactId>jaxb-impl</artifactId>
+			<groupId>com.sun.xml.bind</groupId>
+		</exclusion>
+		<exclusion>
+			<artifactId>jettison</artifactId>
+			<groupId>org.codehaus.jettison</groupId>
+		</exclusion>
+	  </exclusions>
+    </dependency>
+    
 
     <!-- Solr client library (used by the solr connector) -->
     <dependency>
@@ -151,6 +184,25 @@
       <version>4.8.2</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+	  <artifactId>jetty-webapp</artifactId>
+	  <version>${jetty.version}</version>
+	  <scope>test</scope>
+	</dependency>
+	<dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-client</artifactId>
+      <version>1.5</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+	  <groupId>mysql</groupId>
+	  <artifactId>mysql-connector-java</artifactId>
+	  <version>5.1.15</version>
+	  <scope>test</scope>
+	</dependency>
+    
   </dependencies>
 
   <!-- Build properties -->
@@ -241,5 +293,7 @@
   <!-- Global properties -->
   <properties>
     <applet.version>${project.version}</applet.version>
+    <jetty.version>8.0.0.M2</jetty.version>
+    <jersey.version>1.5</jersey.version>
   </properties>
 </project>

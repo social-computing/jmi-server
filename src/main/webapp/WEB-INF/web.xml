@@ -71,4 +71,18 @@
 		<session-timeout>10</session-timeout> 
 	</session-config> 
   
+    <!-- Jersey Servlet filter configuration with Guice dependecy injection -->
+    <listener>
+        <listener-class>com.socialcomputing.config.GuiceConfig</listener-class>
+    </listener>
+    <filter>
+        <filter-name>Guice Filter</filter-name>
+        <filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>Guice Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+  
 </web-app>

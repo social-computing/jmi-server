@@ -13,5 +13,11 @@ import java.rmi.RemoteException;
 
 public interface PlanMaker //extends EJBObject
 {
+    public static final String PLAN_MIME    = "mime";
+    public static final String PLAN_NAME    = "name";
+    public static final String PLAN         = "map";
+    public static final String TYPE         = "type";
+    public static final String DURATION     = "duration";
+    
 	public java.util.Hashtable<String, Object> createPlan( java.util.Hashtable<String, Object> params) throws RemoteException;
 }

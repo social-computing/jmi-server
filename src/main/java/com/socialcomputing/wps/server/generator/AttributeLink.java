@@ -1,6 +1,7 @@
 package com.socialcomputing.wps.server.generator;
 
 import java.util.Collection;
+import java.util.Set;
 import java.util.TreeSet;
 
 import com.socialcomputing.wps.server.utils.TreeSetExt;
@@ -256,12 +257,16 @@ public class AttributeLink implements Comparable, MapableLink
 	/** Compute the intersection of 'from' and 'to' sets
 	 * 
 	 */
-	public Collection getRecommendations( int recomType )
+	public Collection<String> getRecommendations(int recomType)
 	{
-		TreeSet set1=((ProtoAttribute)m_from ).getAllRecommendations( recomType );
-		TreeSet set2=((ProtoAttribute)m_to ).getAllRecommendations( recomType );
+		Set<String> set1 = ((ProtoAttribute)m_from).getAllRecommendations(recomType);
+		Set<String> set2 = ((ProtoAttribute)m_to).getAllRecommendations(recomType);
 
-		return TreeSetExt.getIntersection( set1, set2 );
+		
+		//set1.
+		set1.retainAll(set2);
+		//return TreeSetExt.getIntersection( set1, set2 );
+		return set1;
 	}
 
 	/**
