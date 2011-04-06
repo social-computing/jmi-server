@@ -23,7 +23,7 @@ if( code == null) { %>
 		$("#map").wpsmap({
 			wps: params, 
 			display: {color:'336699'},
-			plugin: {codebase: '../applet/', wpsurl: './../maker', noscript:'../../noscript.jsp'}
+			plugin: {codebase: '../applet/', wpsurl: './../services/', noscript:'../../noscript.jsp'}
 		});
 	}
 	// Fired from applet
