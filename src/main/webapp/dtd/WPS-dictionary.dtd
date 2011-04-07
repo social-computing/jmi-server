@@ -9,11 +9,11 @@
 <!ENTITY % SOLR-entities SYSTEM "SOLR-connector.dtd" >
 %SOLR-entities;
 
-<!ENTITY % Facebook-entities SYSTEM "Social-connector.dtd" >
+<!ENTITY % Facebook-entities SYSTEM "Facebook-connector.dtd" >
 %Facebook-entities;
-<!ENTITY % Google-entities SYSTEM "Social-connector.dtd" >
+<!ENTITY % Google-entities SYSTEM "Google-connector.dtd" >
 %Google-entities;
-<!ENTITY % Twitter-entities SYSTEM "Social-connector.dtd" >
+<!ENTITY % Twitter-entities SYSTEM "Twitter-connector.dtd" >
 %Twitter-entities;
 
 <!ENTITY % Relax-params SYSTEM "Relax-params.dtd" >
