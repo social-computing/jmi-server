@@ -45,8 +45,13 @@ public class FacebookEntityConnector extends SocialEntityConnector {
     public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
         super.openConnections( planType, wpsparams);
         oAuth2Helper.openConnections( planType, wpsparams);
-        String token = oAuth2Helper.getResult();
-        token = token.substring( token.indexOf( '=') + 1);
+        String token = "";
+        for( String p : oAuth2Helper.getResult().split("&")) {
+            if( p.startsWith( "access_token=")) {
+                token = p.substring( p.indexOf( '=') + 1);
+                break;
+            }
+        }
         
         // Liste amis
         UrlHelper urlHelper = new UrlHelper();
