@@ -1,14 +1,20 @@
 package com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.portablecontacts;
 
 import java.io.InputStreamReader;
+import java.security.SignatureException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.jdom.Element;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+
+import sun.misc.BASE64Encoder;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.AttributePropertyDefinition;
@@ -17,6 +23,9 @@ import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper;
 import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper.Type;
 
 public class TwitterEntityConnector extends SocialEntityConnector {
+
+    private static final String FriendsUrl = "http://api.twitter.com/1/friends/ids.json";
+    private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 
     protected UrlHelper oAuth2Helper;
 
@@ -50,7 +59,9 @@ public class TwitterEntityConnector extends SocialEntityConnector {
         
         // Liste amis
         UrlHelper urlHelper = new UrlHelper();
-        urlHelper.setUrl( "https://graph.facebook.com/me/friends");
+        urlHelper.setUrl( FriendsUrl);
+        urlHelper.setType( Type.POST);
+        urlHelper.addParameter( "user_id", "SET USER ID");
         urlHelper.addParameter( "access_token", token);
         urlHelper.openConnections( planType, wpsparams);
         JSONObject jobj = ( JSONObject)JSONValue.parse( new InputStreamReader(urlHelper.getStream()));
@@ -74,10 +85,9 @@ public class TwitterEntityConnector extends SocialEntityConnector {
 //        addPerson((String)me.get("id")).addProperty("name", me.get("name"));
         
         // TODO followers
-        String friends = "http://api.twitter.com/1/friends/ids.json";
         for (int i = 0 ; i < friendslist.size() -1 ; i++) {
             UrlHelper uh1 = new UrlHelper();
-            uh1.setUrl( friends);
+            uh1.setUrl( FriendsUrl);
             uh1.setType( Type.POST);
             uh1.addParameter( "user_id", friendslist.get(i));
             uh1.addParameter( "access_token", token);
@@ -100,4 +110,21 @@ public class TwitterEntityConnector extends SocialEntityConnector {
         oAuth2Helper.closeConnections();
     }
     
+    public static String computeHMAC(String data, String key) throws java.security.SignatureException {
+        try {
+            SecretKeySpec signingKey = new SecretKeySpec(key.getBytes(), HMAC_SHA1_ALGORITHM);
+            Mac mac = Mac.getInstance( HMAC_SHA1_ALGORITHM);
+            mac.init(signingKey);
+
+            byte[] rawHmac = mac.doFinal(data.getBytes());
+
+            // base64-encode the hmac
+            BASE64Encoder enc = new BASE64Encoder();
+            return enc.encode( rawHmac);
+        }
+        catch (Exception e) {
+            throw new SignatureException("Failed to generate HMAC : " + e.getMessage());
+        }
+    }
+   
 }

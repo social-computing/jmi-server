@@ -11,6 +11,7 @@ import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -22,7 +23,6 @@ import org.slf4j.LoggerFactory;
 
 import sun.misc.BASE64Encoder;
 
-import com.socialcomputing.utils.servlet.HtmlEncoder;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 
 public class UrlHelper extends ConnectorHelper {
@@ -34,8 +34,9 @@ public class UrlHelper extends ConnectorHelper {
     
     protected Type type = Type.GET;
     protected String url = null;
-    protected List<NameValuePair> defParams;
-    protected List<NameValuePair> curParams;
+    protected List<NameValuePair> defParams = new ArrayList<NameValuePair>();
+    protected List<NameValuePair> curParams = new ArrayList<NameValuePair>();
+    protected List<NameValuePair> headerParams = new ArrayList<NameValuePair>();
     protected boolean basicAuth = false;
     protected String user, password;
 
@@ -47,11 +48,9 @@ public class UrlHelper extends ConnectorHelper {
         url = connection.getChildText("url");
         if( connection.getAttributeValue( "type") != null && connection.getAttributeValue( "type").equalsIgnoreCase( "POST"))
             type = Type.POST;
-        defParams = new ArrayList<NameValuePair>();
         for( Element elem : (List<Element>)connection.getChildren( "url-parameter")) {
             defParams.add( new NameValuePair( elem.getAttributeValue( "name"), elem.getText()));
         }
-        curParams = new ArrayList<NameValuePair>();
         Element basic = connection.getChild( "basic-authentication");
         if(  basic != null) {
             basicAuth = true;
@@ -67,20 +66,20 @@ public class UrlHelper extends ConnectorHelper {
         if (defParams != null) {
             for( NameValuePair param : defParams) {
                 if( !first) parameters.append( '&');
-                parameters.append( param.getName()).append( '=').append( HtmlEncoder.encode( super.ReplaceParameter( param.getValue(), wpsparams)));
+                parameters.append( param.getName()).append( '=').append( URLEncoder.encode( super.ReplaceParameter( param.getValue(), wpsparams)));
                 first = false;
             }
         }
         if (curParams != null) { 
             for( NameValuePair param : curParams) {
                 if( !first) parameters.append( '&');
-                parameters.append( param.getName()).append( '=').append( HtmlEncoder.encode( super.ReplaceParameter( param.getValue(), wpsparams)));
+                parameters.append( param.getName()).append( '=').append( URLEncoder.encode( super.ReplaceParameter( param.getValue(), wpsparams)));
                 first = false;
             }
         }
         try {
-            LOG.debug("  - url = {}, parmas = {}", url, parameters.toString());
-            URL u = new URL( type == Type.GET ? url + "?" + parameters.toString() : url);
+            LOG.debug(" url = {}, params = {}", url, parameters.toString());
+            URL u = new URL( type == Type.POST || (type == Type.GET && parameters.length() == 0) ? url : url + "?" + parameters.toString());
             URLConnection connection = u.openConnection();
             connection.setUseCaches(false);
             connection.setDoInput(true);
@@ -89,6 +88,9 @@ public class UrlHelper extends ConnectorHelper {
                 String userpassword = user + ":" + password;
                 String encodedAuthorization = enc.encode( userpassword.getBytes());
                 connection.setRequestProperty( "Authorization", "Basic " + encodedAuthorization);
+            }
+            for( NameValuePair header : headerParams) {
+                connection.setRequestProperty( header.getName(), header.getValue());
             }
             if( type == Type.POST && connection instanceof HttpURLConnection) {
                 HttpURLConnection httpConnection = ( HttpURLConnection) connection;
@@ -148,8 +150,10 @@ public class UrlHelper extends ConnectorHelper {
     }
     
     public void addParameter( String name, String value) {
-        if (curParams == null)
-            curParams = new ArrayList<NameValuePair>();
         curParams.add( new NameValuePair( name, value));
+    }
+    
+    public void addHeader( String name, String value) {
+        headerParams.add( new NameValuePair( name, value));
     }
 }
