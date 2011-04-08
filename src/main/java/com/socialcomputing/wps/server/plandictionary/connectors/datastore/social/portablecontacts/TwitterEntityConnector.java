@@ -95,10 +95,8 @@ public class TwitterEntityConnector extends SocialEntityConnector {
             uh.openConnections(planType, wpsparams);
             JSONArray jobj = (JSONArray) JSONValue.parse(uh.getResult());
             List<String> friendsids = new ArrayList<String>();
-            StringBuilder sb = new StringBuilder();
             for (int i = 0; i < jobj.size(); i++) {
                 friendsids.add(jobj.get(i).toString());
-                sb.append(jobj.get(i).toString()).append(",");
                 setFriendShip(user_id, jobj.get(i).toString());
             }
             
