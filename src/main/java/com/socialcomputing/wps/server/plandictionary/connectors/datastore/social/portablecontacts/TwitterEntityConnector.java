@@ -97,7 +97,6 @@ public class TwitterEntityConnector extends SocialEntityConnector {
             List<String> friendsids = new ArrayList<String>();
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < jobj.size(); i++) {
-                // System.out.println(jobj.get(i));
                 friendsids.add(jobj.get(i).toString());
                 sb.append(jobj.get(i).toString()).append(",");
                 setFriendShip(user_id, jobj.get(i).toString());
@@ -111,7 +110,6 @@ public class TwitterEntityConnector extends SocialEntityConnector {
                 uh1.openConnections(planType, wpsparams);
                 JSONObject user = (JSONObject) JSONValue.parse(uh1.getResult());
                 addPerson(id).addProperty("name", user.get("screen_name"));
-                //System.out.println(user.get("screen_name"));
                 
                 for (int k = j + 1 ; k < friendsids.size() ; k++) {
                     UrlHelper uh2 = new UrlHelper();
@@ -124,9 +122,6 @@ public class TwitterEntityConnector extends SocialEntityConnector {
                     }
                 }
             }
-                
-                
-            
             
         }
         catch (Exception e) {
