@@ -70,6 +70,7 @@ public class TwitterEntityConnector extends SocialEntityConnector {
                 screen_name = s.substring(s.indexOf( '=') + 1);                
             }
         }
+        addPerson( user_id).addProperty( "name", screen_name);
         
         try {
             OAuthHelper oAuth = new OAuthHelper();
