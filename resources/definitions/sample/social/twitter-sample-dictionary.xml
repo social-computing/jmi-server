@@ -6,7 +6,10 @@
 	<comment>Twitter sample Plan Dictionary</comment>
 
 	<entities>
-		<Twitter-entities name="Twitter Contacts Sample">
+		<Twitter-entities name="Twitter Contacts Sample" 
+				consumer-key="7v0Vnjoe1yWD7H40yXp2NA"
+				consumer-secret="sWg9k8F8AFLcKPJ70O76aw7hGj8zmpLVcDz4LD0m4" 
+				callback= "http://denis.social-computing.org:8080/wps/social/twitter.jsp" >
 			<URL-connection type="POST">
 				<url>https://api.twitter.com/oauth/access_token</url>
 				<url-parameter name="oauth_consumer_key">{$oauth_consumer_key}</url-parameter>

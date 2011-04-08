@@ -1,16 +1,5 @@
 package com.socialcomputing.wps.server.plandictionary.connectors.utils;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -25,7 +14,6 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.httpclient.NameValuePair;
-import org.jdom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +23,7 @@ import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorExce
 import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper.Type;
 
 public class OAuthHelper {
+    private static final Logger LOG = LoggerFactory.getLogger(OAuthHelper.class);
     
     protected List<NameValuePair> signatureParams = new ArrayList<NameValuePair>();
        
@@ -62,7 +51,17 @@ public class OAuthHelper {
         signatureParams.add( new NameValuePair( name, value));
     }
 
-    public String getSignature(String uri, String type) {
+    public String getOAuthHeader(String uri, String type, String secret) throws java.security.SignatureException {
+        String signature = getSignature( uri, type);
+        LOG.debug("signature = {}", signature);
+        String oAuthSignature = getOAuthSignature( signature, secret);
+        LOG.debug("oAuthSignature = {}", oAuthSignature);
+        String header = getAuthHeader( oAuthSignature);
+        LOG.debug("header = {}", header);
+        return header;
+    }
+    
+    protected String getSignature(String uri, String type) {
         StringBuilder signature = new StringBuilder( type + "&");
         signature.append( URLEncoder.encode( uri)).append( "&");
         Collections.sort( signatureParams, new Comparator<NameValuePair>() {
@@ -85,7 +84,7 @@ public class OAuthHelper {
         return signature.toString();
     }
 
-    public String getAuthHeader( String oAuthSignature) {
+    protected String getAuthHeader( String oAuthSignature) {
         StringBuilder header = new StringBuilder( "OAuth ");
         boolean first = true;
         for( NameValuePair param : signatureParams) {
@@ -99,7 +98,7 @@ public class OAuthHelper {
         return header.toString();
     }
     
-    public String getOAuthSignature(String data, String key) throws java.security.SignatureException {
+    protected String getOAuthSignature(String data, String key) throws java.security.SignatureException {
         try {
             String key2 = key + "&";
             SecretKeySpec signingKey = new SecretKeySpec( key2.getBytes(), "HmacSHA1");
@@ -115,34 +114,5 @@ public class OAuthHelper {
         catch (Exception e) {
             throw new SignatureException("Failed to generate HMAC : " + e.getMessage());
         }
-    }
-    
-    
-    public static void main( String[] args ) throws NoSuchAlgorithmException, SignatureException, WPSConnectorException
-    {
-        String consumer = "7v0Vnjoe1yWD7H40yXp2NA";
-        String secret = "sWg9k8F8AFLcKPJ70O76aw7hGj8zmpLVcDz4LD0m4";
-        String callback = "http://denis.social-computing.org:8080/wps/social/twitter.jsp";
-        OAuthHelper oAuth = new OAuthHelper();
-        oAuth.addSignatureParam( "oauth_callback", callback);
-        oAuth.addSignatureParam( "oauth_consumer_key", consumer);
-        oAuth.addSignatureParam( "oauth_nonce", oAuth.getNonce());
-        oAuth.addSignatureParam( "oauth_signature_method", "HMAC-SHA1");
-        oAuth.addSignatureParam( "oauth_timestamp", String.valueOf( System.currentTimeMillis()/1000));
-        oAuth.addSignatureParam( "oauth_version", "1.0");
-        String signature = oAuth.getSignature( "https://api.twitter.com/oauth/request_token", "POST");
-        System.out.println( signature);
-        String oAuthSignature = oAuth.getOAuthSignature( signature, secret);
-        System.out.println( oAuthSignature);
-        
-        UrlHelper uh = new UrlHelper();
-        uh.setUrl( "https://api.twitter.com/oauth/request_token");
-        uh.setType( Type.POST);
-        String header = oAuth.getAuthHeader( oAuthSignature);
-        System.out.println( header);
-        //uh.addHeader( "Authorization", header);
-        uh.openConnections( 0, new Hashtable<String, Object>());
-        //String key = uh.getResult();
-        //System.out.println( key);
     }
 }

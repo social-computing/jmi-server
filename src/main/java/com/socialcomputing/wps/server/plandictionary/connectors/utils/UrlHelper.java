@@ -41,8 +41,16 @@ public class UrlHelper extends ConnectorHelper {
     protected String user, password;
 
     protected InputStream stream = null;
+
+    public UrlHelper() {
+        super();
+    }
     
-    protected OAuthHelper oAuth = new OAuthHelper();
+    public UrlHelper(Type type, String url) {
+        super();
+        this.type = type;
+        this.url = url;
+    }
 
     @Override
     public void readObject(Element element) {
@@ -112,42 +120,6 @@ public class UrlHelper extends ConnectorHelper {
         }
     }
 
-    public String openConnectionsTwitter(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
-        String oauth_token_secret = null;
-        String oauth_consumer_secret = null;
-        if (defParams != null) {
-            for( NameValuePair param : defParams) {
-                if (param.getName().equals("oauth_token_secret")) {
-                    oauth_token_secret = super.ReplaceParameter(param.getValue(), wpsparams);
-                } else if (param.getName().equals("oauth_consumer_secret")) {
-                    oauth_consumer_secret = super.ReplaceParameter(param.getValue(), wpsparams);
-                } else {
-                    oAuth.addSignatureParam(param.getName(), URLEncoder.encode( super.ReplaceParameter( param.getValue(), wpsparams)));
-                }
-            }
-        }
-        try {
-            LOG.debug("oauth_token_secret = {}, oauth_consumer_secret = {}", oauth_token_secret, oauth_consumer_secret);
-            String secret = oauth_consumer_secret + "&" + oauth_token_secret;
-            oAuth.addSignatureParam( "oauth_nonce", oAuth.getNonce());
-            oAuth.addSignatureParam( "oauth_signature_method", "HMAC-SHA1");
-            oAuth.addSignatureParam( "oauth_timestamp", String.valueOf( System.currentTimeMillis()/1000));
-            oAuth.addSignatureParam( "oauth_version", "1.0");
-            String signature = oAuth.getSignature("https://api.twitter.com/oauth/access_token", "POST");
-            String oAuthSignature = oAuth.getOAuthSignature( signature, secret);
-            UrlHelper uh = new UrlHelper();
-            uh.setUrl( "https://api.twitter.com/oauth/access_token");
-            uh.setType( Type.POST);
-            String header = oAuth.getAuthHeader( oAuthSignature);
-            uh.addHeader( "Authorization", header);
-            uh.openConnections( 0, new Hashtable<String, Object>());
-            
-            return uh.getResult();
-        } catch (Exception e) {
-            throw new WPSConnectorException("openConnections: ", e);
-        }
-    }
-    
     
     @Override
     public void closeConnections() throws WPSConnectorException {
@@ -166,6 +138,10 @@ public class UrlHelper extends ConnectorHelper {
     
     public void setType(Type type) {
         this.type = type;
+    }
+    
+    public List<NameValuePair> getDefParams() {
+        return defParams;
     }
     
     public InputStream getStream() {

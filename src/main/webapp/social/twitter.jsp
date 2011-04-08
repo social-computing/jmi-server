@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <%@page import="java.util.Hashtable"%>
-<%@page import="com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper.Type"%>
-<%@page import="com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper"%>
-<%@page import="com.socialcomputing.wps.server.plandictionary.connectors.utils.OAuthHelper"%>
+<%@page import="com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.portablecontacts.TwitterEntityConnector"%>
 <html>
 	<head>
 <%
@@ -14,36 +12,22 @@ String secret = "sWg9k8F8AFLcKPJ70O76aw7hGj8zmpLVcDz4LD0m4";
 String callback = "http://denis.social-computing.org:8080/wps/social/twitter.jsp";
 
 if( oauth_token == null) {
-    OAuthHelper oAuth = new OAuthHelper();
-    oAuth.addSignatureParam( "oauth_callback", callback);
-    oAuth.addSignatureParam( "oauth_consumer_key", consumer);
-    oAuth.addSignatureParam( "oauth_nonce", oAuth.getNonce());
-    oAuth.addSignatureParam( "oauth_signature_method", "HMAC-SHA1");
-    oAuth.addSignatureParam( "oauth_timestamp", String.valueOf( System.currentTimeMillis()/1000));
-    oAuth.addSignatureParam( "oauth_version", "1.0");
-    String signature = oAuth.getSignature( "https://api.twitter.com/oauth/request_token", "POST");
-    String oAuthSignature = oAuth.getOAuthSignature( signature, secret);
-    
-    UrlHelper uh = new UrlHelper();
-    uh.setUrl( "https://api.twitter.com/oauth/request_token");
-    uh.setType( Type.POST);
-    String header = oAuth.getAuthHeader( oAuthSignature);
-    uh.addHeader( "Authorization", header);
-    uh.openConnections( 0, new Hashtable<String, Object>());
-    for( String p : uh.getResult().split("&")) {
+    String result = TwitterEntityConnector.GetTwitterRequestToken( consumer, secret, callback);
+    for( String p : result.split("&")) {
         if (p.startsWith( "oauth_token=")) {
             oauth_token = p.substring( p.indexOf( '=') + 1);
         } else if (p.startsWith( "oauth_token_secret=")) {
             oauth_token_secret = p.substring( p.indexOf( '=') + 1);
+            session.setAttribute( "oauth_token_secret", oauth_token_secret);
         }
     }
     %>
-	    <meta http-equiv="refresh" content="0; url=http://api.twitter.com/oauth/authorize?oauth_token=<%=oauth_token %>" />
+	    <meta http-equiv="refresh" content="0; url=http://api.twitter.com/oauth/authorize?oauth_token=<%=oauth_token %>&oauth_token_secret=<%=oauth_token_secret%>" />
 		<title>Redirection</title>
 		<meta name="robots" content="noindex,follow" />
 	</head>
 	<body>
-	<p><a href="http://api.twitter.com/oauth/authorize?oauth_token=<%=oauth_token %>">Redirection</a></p>
+	<p><a href="http://api.twitter.com/oauth/authorize?oauth_token=<%=oauth_token %>&oauth_token_secret=<%=oauth_token_secret%>">Redirection</a></p>
 <%
 } else {
 %>
@@ -52,11 +36,9 @@ if( oauth_token == null) {
     <script type="text/javascript" >
     	function setMap(params) {
     		params['planName'] = 'Twitter_sample';
-    		params['oauth_consumer_key'] = '<%=consumer%>';
     		params['oauth_token'] = '<%=oauth_token%>';
     		params['oauth_verifier'] = '<%=oauth_verifier%>';
-    		params['oauth_token_secret'] = '<%=oauth_token%>';
-    		params['oauth_consumer_secret'] = '<%=secret%>';
+    		params['oauth_token_secret'] = '<%= session.getAttribute( "oauth_token_secret")%>';
 
     		$("#map").wpsmap({
     			wps: params, 
