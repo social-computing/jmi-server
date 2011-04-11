@@ -7,8 +7,8 @@
 String oauth_token = request.getParameter("oauth_token");
 String oauth_token_secret = request.getParameter("oauth_token_secret");
 String oauth_verifier = request.getParameter("oauth_verifier");
-String consumer = "7v0Vnjoe1yWD7H40yXp2NA";
-String secret = "sWg9k8F8AFLcKPJ70O76aw7hGj8zmpLVcDz4LD0m4";
+String consumer = "CEtRSZrHKpPdXmaCbVF8jQ";
+String secret = "KaGfhstQYiDFYqYDHfIJHxJdg7sHFfrqoAE7zevhk";
 String callback = "http://denis.social-computing.org:8080/wps/social/twitter.jsp";
 
 if( oauth_token == null) {

@@ -1,5 +1,6 @@
 package com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.portablecontacts;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -24,8 +25,7 @@ public class TwitterEntityConnector extends SocialEntityConnector {
     private static final String AccessTokenUrl = "https://api.twitter.com/oauth/access_token";
     private static final String RequestTokenUrl = "https://api.twitter.com/oauth/request_token";
     private static final String FriendsIds = "http://api.twitter.com/1/friends/ids.json";
-    private static final String FriendsName = "http://api.twitter.com/1/users/show.json";
-    private static final String Friendship = "http://api.twitter.com/1/friendships/exists.json";
+    private static final String FriendsName = "http://api.twitter.com/1/users/lookup.json";
 
     protected UrlHelper oAuth2Helper;
     protected String oauthConsumerKey, oauthConsumerSecret, callback;
@@ -80,6 +80,20 @@ public class TwitterEntityConnector extends SocialEntityConnector {
         addPerson(user_id).addProperty("name", screen_name);
 
         try {
+            String secret = oauthConsumerSecret + "&" + oauth_token_secret;
+            UrlHelper uh = new UrlHelper(Type.GET, FriendsIds);
+            uh.addParameter("user_id", user_id);
+            uh.openConnections(planType, wpsparams);
+            JSONArray jobj = (JSONArray) JSONValue.parse(uh.getResult());
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < jobj.size(); i++) {
+                sb.append(jobj.get(i).toString());
+                if (i != jobj.size() -1 )
+                    sb.append(",");
+                setFriendShip(user_id, jobj.get(i).toString());
+            }
+            
+            
             OAuthHelper oAuth = new OAuthHelper();
             oAuth.addSignatureParam("oauth_consumer_key", oauthConsumerKey);
             oAuth.addSignatureParam("oauth_nonce", oAuth.getNonce());
@@ -87,38 +101,18 @@ public class TwitterEntityConnector extends SocialEntityConnector {
             oAuth.addSignatureParam("oauth_token", oauth_token);
             oAuth.addSignatureParam("oauth_timestamp", String.valueOf(System.currentTimeMillis() / 1000));
             oAuth.addSignatureParam("oauth_version", "1.0");
-            oAuth.addSignatureParam("user_id", user_id);
-            oAuth.addSignatureParam("screen_name", screen_name);
-            String secret = oauthConsumerSecret + "&" + oauth_token_secret;
-            UrlHelper uh = new UrlHelper(Type.GET, FriendsIds);
-            uh.addHeader("Authorization", oAuth.getOAuthHeader(FriendsIds, "POST", secret));
-            uh.openConnections(planType, wpsparams);
-            JSONArray jobj = (JSONArray) JSONValue.parse(uh.getResult());
-            List<String> friendsids = new ArrayList<String>();
-            for (int i = 0; i < jobj.size(); i++) {
-                friendsids.add(jobj.get(i).toString());
-                setFriendShip(user_id, jobj.get(i).toString());
-            }
+            oAuth.addSignatureParam("user_id", URLEncoder.encode(sb.toString()));
+            UrlHelper uh2 = new UrlHelper(Type.POST, FriendsName);
+            uh2.addHeader("Authorization", oAuth.getOAuthHeader(FriendsName, "POST", secret));
+            uh2.addParameter("user_id", sb.toString());
             
-            for (int j = 0 ; j < friendsids.size() - 1 ; j++) {
-                String id = friendsids.get(j);
-                UrlHelper uh1 = new UrlHelper();
-                uh1.setUrl(FriendsName);
-                uh1.addParameter("user_id", id);
-                uh1.openConnections(planType, wpsparams);
-                JSONObject user = (JSONObject) JSONValue.parse(uh1.getResult());
-                addPerson(id).addProperty("name", user.get("screen_name"));
-                
-                for (int k = j + 1 ; k < friendsids.size() ; k++) {
-                    UrlHelper uh2 = new UrlHelper();
-                    uh2.setUrl(Friendship);
-                    uh2.addParameter("user_a", id);
-                    uh2.addParameter("user_b", friendsids.get(k));
-                    uh2.openConnections(planType, wpsparams);
-                    if (uh2.getResult().equals("true")) {
-                        setFriendShip(id, friendsids.get(k));
-                    }
-                }
+            
+            uh2.openConnections(planType, wpsparams);
+            JSONArray jobj2 = (JSONArray) JSONValue.parse(uh2.getResult());
+            for (int i = 0 ; i < jobj2.size() ; i++) {
+                JSONObject user = (JSONObject) jobj2.get(i);
+                String id = user.get("id").toString();
+                addPerson(id).addProperty("name", (String) user.get("name"));
             }
             
         }
@@ -145,7 +139,7 @@ public class TwitterEntityConnector extends SocialEntityConnector {
             oAuth.addSignatureParam("oauth_timestamp", String.valueOf(System.currentTimeMillis() / 1000));
             oAuth.addSignatureParam("oauth_version", "1.0");
             UrlHelper uh = new UrlHelper(Type.POST, RequestTokenUrl);
-            uh.addHeader("Authorization", oAuth.getOAuthHeader(RequestTokenUrl, "POST", oauthConsumerSecret));
+            uh.addHeader("Authorization", oAuth.getOAuthHeader(RequestTokenUrl, "POST", oauthConsumerSecret + "&"));
             uh.openConnections(0, new Hashtable<String, Object>());
             return uh.getResult();
         }

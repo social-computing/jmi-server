@@ -100,8 +100,8 @@ public class OAuthHelper {
     
     protected String getOAuthSignature(String data, String key) throws java.security.SignatureException {
         try {
-            String key2 = key + "&";
-            SecretKeySpec signingKey = new SecretKeySpec( key2.getBytes(), "HmacSHA1");
+            //String key2 = key + "&";
+            SecretKeySpec signingKey = new SecretKeySpec( key.getBytes(), "HmacSHA1");
             Mac mac = Mac.getInstance( "HmacSHA1");
             mac.init( signingKey);
 
@@ -115,4 +115,5 @@ public class OAuthHelper {
             throw new SignatureException("Failed to generate HMAC : " + e.getMessage());
         }
     }
+    
 }
