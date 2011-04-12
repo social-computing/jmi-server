@@ -94,6 +94,8 @@ public class TwitterEntityConnector extends SocialEntityConnector {
             }
             
             
+            // Retrieve up to 100 users - http://dev.twitter.com/doc/get/users/lookup
+            // TODO Bypass request and user limits - http://dev.twitter.com/pages/rate-limiting
             OAuthHelper oAuth = new OAuthHelper();
             oAuth.addSignatureParam("oauth_consumer_key", oauthConsumerKey);
             oAuth.addSignatureParam("oauth_nonce", oAuth.getNonce());
