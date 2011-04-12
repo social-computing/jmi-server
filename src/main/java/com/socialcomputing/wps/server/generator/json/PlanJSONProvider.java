@@ -3,7 +3,7 @@
  */
 package com.socialcomputing.wps.server.generator.json;
 
-import com.socialcomputing.wps.server.generator.ProtoPlan;
+import com.socialcomputing.wps.server.generator.PlanContainer;
 
 /**
  * @author "Jonathan Dray <jonathan@social-computing.com>"
@@ -11,5 +11,5 @@ import com.socialcomputing.wps.server.generator.ProtoPlan;
  */
 public interface PlanJSONProvider {
 
-    String planToString(ProtoPlan plan, String planName);
+    String planToString(PlanContainer container);
 }

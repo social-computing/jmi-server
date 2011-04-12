@@ -58,6 +58,9 @@ public final class Swatch extends Base implements Serializable
 		m_satellites    = satellites;
 	}
 
+	public Satellite[] getSatellites() {
+	    return m_satellites;
+	}
 	
 	/**
 	 * Draws the satellites of this that have the required flags enabled.

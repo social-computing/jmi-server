@@ -97,7 +97,14 @@ public class ActiveZone extends Hashtable implements Serializable
 		m_restSwh   = restSwh;
 		m_curSwh    = curSwh;
 	}
+	
+	public Swatch getRestSwatch() {
+	    return m_restSwh;
+	}
 
+    public Swatch getCurSwatch() {
+        return m_curSwh;
+    }
 	/**
 	 * Perform basic buffer initialization to enhance real time performance.
 	 * This include transforming selection prop to an int flag,

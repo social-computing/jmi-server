@@ -1,8 +1,7 @@
 package com.socialcomputing.wps.server.generator.json.impl;
 
-import java.awt.Point;
 import java.io.IOException;
-import java.util.Collection;
+import java.util.Set;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -12,80 +11,40 @@ import org.codehaus.jackson.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.socialcomputing.wps.server.generator.AttributeLink;
-import com.socialcomputing.wps.server.generator.NodeMapData;
-import com.socialcomputing.wps.server.generator.ProtoAttribute;
-import com.socialcomputing.wps.server.generator.ProtoPlan;
-import com.socialcomputing.wps.server.generator.RecommendationGroup;
+import com.socialcomputing.wps.client.applet.ActiveZone;
+import com.socialcomputing.wps.client.applet.BagZone;
+import com.socialcomputing.wps.client.applet.ColorX;
+import com.socialcomputing.wps.client.applet.Env;
+import com.socialcomputing.wps.client.applet.LinkZone;
+import com.socialcomputing.wps.client.applet.Plan;
+import com.socialcomputing.wps.client.applet.Satellite;
+import com.socialcomputing.wps.client.applet.Swatch;
+import com.socialcomputing.wps.server.generator.PlanContainer;
 import com.socialcomputing.wps.server.generator.json.PlanJSONProvider;
 
 /**
- * @author "Jonathan Dray <jonathan@social-computing.com>"
- * FRV : ce n'est pas le protoplan qu'il faut traiter....
+ * @author "Jonathan Dray <jonathan@social-computing.com>" FRV : ce n'est pas le
+ *         protoplan qu'il faut traiter....
  */
 public class JacksonPlanJSONProvider implements PlanJSONProvider {
 
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final Logger LOG = LoggerFactory.getLogger(JacksonPlanJSONProvider.class);
-   
-    
-    /* (non-Javadoc)
-     * @see com.socialcomputing.wps.server.generator.json.PlanJSONProvider#planToString(com.socialcomputing.wps.server.generator.ProtoPlan)
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.socialcomputing.wps.server.generator.json.PlanJSONProvider#planToString
+     * (com.socialcomputing.wps.server.generator.ProtoPlan)
      */
     @Override
-    public String planToString(ProtoPlan plan, String planName) {
-        
+    public String planToString(PlanContainer container) {
+
         LOG.info("Generating JSON representation of the plan");
         // Create root object
-        ObjectNode rootNode = mapper.createObjectNode();
-        // Add the plan name
-        rootNode.put("planName", planName);
+        ObjectNode rootNode = getJSON(container);
 
-        // Add the array of nodes
-        ArrayNode nodes = mapper.createArrayNode();
-        for(ProtoAttribute attribute : plan.m_attributes) {
-            
-            // Construct a node json node with basic information
-            ObjectNode attNode = nodes.addObject();
-            attNode.put("id", attribute.m_strId);
-            attNode.put("size", attribute.m_size);
-            attNode.put("weight", attribute.m_weight);
-            
-            // If it is a base node, add the node position
-            NodeMapData nodeMapData = attribute.getMapData();
-            if(nodeMapData != null) {
-                Point p = nodeMapData.getM_clientPos();
-                ObjectNode positionNode = attNode.putObject("position");
-                positionNode.put("x", p.x);
-                positionNode.put("y", p.y);
-            }
-            // Else, add parent id
-            else {
-                attNode.put("parent", attribute.m_parent.m_strId);
-            }
-        }
-        rootNode.put("nodes", nodes);
-        
-        // Add the array of links
-        ArrayNode links = mapper.createArrayNode();
-        for(AttributeLink link : plan.m_attLinks) {
-            ObjectNode attLink = links.addObject();
-            attLink.put("id", link.getStrId());
-            ObjectNode nodesNode = attLink.putObject("nodes");
-            nodesNode.put("from", link.m_from.m_strId);
-            nodesNode.put("to", link.m_to.m_strId);
-            Collection<String> recommendations = link.getRecommendations(RecommendationGroup.ENTITIES_RECOM);
-            if(recommendations.size() > 0) {
-                ArrayNode recommendationsNode = mapper.createArrayNode();
-                for(String recommendation : recommendations) {
-                    recommendationsNode.add(recommendation);
-                }
-                attLink.put("recommendations", recommendationsNode);
-            }
-        }
-        rootNode.put("links", links);
-        
-        
         String result = null;
         try {
             result = mapper.writeValueAsString(rootNode);
@@ -101,6 +60,88 @@ public class JacksonPlanJSONProvider implements PlanJSONProvider {
         }
         LOG.info("End JSON");
         return result;
+
     }
 
+    protected ObjectNode getJSON(PlanContainer container) {
+        ObjectNode root = mapper.createObjectNode();
+        if (container.m_env == null) { return root; }
+        root.put("env", toJSON( container.m_env));
+        root.put("plan", toJSON( container.m_plan));
+        return root;
+    }
+
+    private ObjectNode toJSON( Env env) {
+        ObjectNode node = mapper.createObjectNode();
+        node.put("inColor", toJSON( env.m_inCol));
+        node.put("outColor", toJSON( env.m_outCol));
+        node.put("filterColor", toJSON( env.m_filterCol));
+        ObjectNode props = node.putObject( "props");
+        for( String key : (Set<String>)env.m_props.keySet()) {
+            props.put( key, (String)env.m_props.get( key));
+        }
+        return node;
+    }
+    
+    private ObjectNode toJSON( Plan plan) {
+        ObjectNode node = mapper.createObjectNode();
+        // Add the array of nodes
+        ArrayNode nodes = node.putArray( "nodes");
+        for (ActiveZone zone : plan.m_nodes) {
+            nodes.add( toJSON( zone));
+        }
+        // Add the array of links
+        ArrayNode links = node.putArray( "links");
+        for (ActiveZone zone : plan.m_links) {
+            ObjectNode attNode = nodes.addObject();
+        }
+        return node;
+    }
+    
+    private ObjectNode toJSON( ColorX color) {
+        ObjectNode node = mapper.createObjectNode();
+        node.put( "color", String.valueOf( color.m_color));
+        if( color.m_scolor == null)
+            node.putNull( "scolor");
+        else
+            node.put( "scolor", color.m_scolor);
+        return node;
+    }
+
+    private ObjectNode toJSON( ActiveZone zone) {
+        ObjectNode node = null;
+        if( zone instanceof BagZone)
+            node = toJSON(( BagZone)zone);
+        if( zone instanceof LinkZone)
+            node = toJSON(( LinkZone)zone);
+        if( node == null)
+            node = mapper.createObjectNode();
+        node.put( "curSwatch", toJSON( zone.getCurSwatch()));
+        node.put( "restSwatch", toJSON( zone.getRestSwatch()));
+        return node;
+    }
+    
+    private ObjectNode toJSON( BagZone zone) {
+        ObjectNode node = mapper.createObjectNode();
+        return node;
+    }
+    
+    private ObjectNode toJSON( LinkZone zone) {
+        ObjectNode node = mapper.createObjectNode();
+        return node;
+    }
+
+    private ObjectNode toJSON( Swatch swatch) {
+        ObjectNode node = mapper.createObjectNode();
+        ArrayNode sats = node.putArray( "satellites");
+        for (Satellite sat : swatch.getSatellites()) {
+            sats.add( toJSON( sat));
+        }
+        return node;
+    }
+    
+    private ObjectNode toJSON( Satellite satellite) {
+        ObjectNode node = mapper.createObjectNode();
+        return node;
+    }
 }

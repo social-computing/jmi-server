@@ -1,9 +1,21 @@
 package com.socialcomputing.wps.server.generator;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.zip.GZIPOutputStream;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ArrayNode;
+import org.codehaus.jackson.node.ObjectNode;
 
 import com.socialcomputing.wps.client.applet.Env;
 import com.socialcomputing.wps.client.applet.Plan;
+import com.socialcomputing.wps.server.generator.json.PlanJSONProvider;
+import com.socialcomputing.wps.server.generator.json.impl.JacksonPlanJSONProvider;
 
 /**
  * <p>Title: PlanContainer</p>
@@ -27,7 +39,22 @@ public class PlanContainer implements Serializable
 		m_plan = plan;
 	}
 	
+	public byte[] toBinary() throws IOException {
+        if (m_env != null) {
+            ByteArrayOutputStream bout = new ByteArrayOutputStream(32768);
+            ObjectOutputStream objectOutStream = new ObjectOutputStream(new GZIPOutputStream(bout));
+            objectOutStream.writeObject( m_env);
+            objectOutStream.writeObject( m_plan);
+            objectOutStream.close();
+            return bout.toByteArray();
+        }
+        else {
+            return new byte[0];
+        }
+	}
+	
 	public String toJson() {
-	    return "";
+        PlanJSONProvider provider = new JacksonPlanJSONProvider();
+        return provider.planToString( this);
 	}
 }

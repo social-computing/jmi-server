@@ -1,13 +1,10 @@
 package com.socialcomputing.wps.server.webservices.maker;
 
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectOutputStream;
 import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Hashtable;
-import java.util.zip.GZIPOutputStream;
 
 import org.hibernate.Session;
 import org.slf4j.Logger;
@@ -42,27 +39,18 @@ public class BeanPlanMaker implements PlanMaker {
             String mime = (String) params.get( PlanMaker.PLAN_MIME);
             if (mime == null)
                 mime = "application/octet-stream";
+            
             PlanContainer planContainer = _createPlan(params, result);
             if (mime.equals("application/octet-stream")) {
-                if (planContainer.m_env != null) {
-                    ByteArrayOutputStream bout = new ByteArrayOutputStream(32768);
-                    ObjectOutputStream objectOutStream = new ObjectOutputStream(new GZIPOutputStream(bout));
-                    objectOutStream.writeObject(planContainer.m_env);
-                    objectOutStream.writeObject(planContainer.m_plan);
-                    objectOutStream.close();
-                    result.put( PlanMaker.PLAN, bout.toByteArray());
-                }
-                else {
-                    result.put( PlanMaker.PLAN, new byte[0]);
-                }
-                result.put( PlanMaker.PLAN_MIME, mime);
-            }
-            else if (mime.equals("text/xml")) {
-                //result.put("PLAN", planContainer.m_protoPlan.getXML());
+                result.put( PlanMaker.PLAN, planContainer.toBinary());
                 result.put( PlanMaker.PLAN_MIME, mime);
             }
             else if (mime.equals("application/json")) {
                 result.put( PlanMaker.PLAN, planContainer.toJson());
+                result.put( PlanMaker.PLAN_MIME, mime);
+            }
+            else if (mime.equals("text/xml")) {
+                //result.put("PLAN", planContainer.m_protoPlan.getXML());
                 result.put( PlanMaker.PLAN_MIME, mime);
             }
             result.put( PlanMaker.DURATION, timer.getElapsedTime());
@@ -84,8 +72,6 @@ public class BeanPlanMaker implements PlanMaker {
         WPSDictionary dico = null;
         PlanContainer container = null;
         PlanRequest planRequest = null;
-
-        long startTime = System.currentTimeMillis();
 
         String name = (String) params.get("planName");
         if (name == null)
