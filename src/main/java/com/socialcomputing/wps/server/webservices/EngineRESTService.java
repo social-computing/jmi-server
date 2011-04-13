@@ -19,10 +19,12 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.codehaus.jackson.node.ObjectNode;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.socialcomputing.wps.server.generator.json.PlanJSONProvider;
 import com.socialcomputing.wps.server.webservices.maker.BeanPlanMaker;
 import com.socialcomputing.wps.server.webservices.maker.PlanMaker;
 
@@ -95,14 +97,14 @@ public class EngineRESTService {
         LOG.info("Plan name = {}", planName);
         PlanMaker planMaker = new BeanPlanMaker();
         Hashtable<String, Object> planParameters = this.getQueryParameters(userAgent, ui);
-        JSONObject jsonResults = new JSONObject();
+        ObjectNode jsonResults = PlanJSONProvider.GetMapper().createObjectNode();
         try {
             planParameters.put("planName", planName);
             planParameters.put(PlanMaker.PLAN_MIME, MediaType.APPLICATION_JSON);
 
             Hashtable<String, Object> wpsresults = planMaker.createPlan(planParameters);
-            for (String key : wpsresults.keySet()) {
-                jsonResults.put(key, wpsresults.get(key));
+             for (String key : wpsresults.keySet()) {
+                 PlanJSONProvider.putValue( jsonResults, key, wpsresults.get(key));
             }
         }
         catch (RemoteException e) {
@@ -110,7 +112,7 @@ public class EngineRESTService {
             jsonResults.put("name", planName);
             jsonResults.put("error", e.getMessage());
         }
-        return jsonResults.toJSONString();
+        return PlanJSONProvider.planToString(jsonResults);
     }
 
     /**
