@@ -44,7 +44,11 @@ public final class VContainer implements Serializable
 		return result;
 	}*/
 	
-	/**
+	public boolean isBound() {
+        return m_isBound;
+    }
+
+    /**
 	 * Create a Container holding a value or a reference.
 	 * @param value		Object or property name to hold.
 	 * @param isBound	True if the value is a property name.

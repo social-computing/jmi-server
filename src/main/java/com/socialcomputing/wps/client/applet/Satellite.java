@@ -448,11 +448,11 @@ public final class Satellite extends Base implements Serializable
 		}
 	}
 	
-	public ShapeX getM_shape() {
+	public ShapeX getShape() {
         return m_shape;
     }
 
-    public Slice[] getM_slices() {
+    public Slice[] getSlices() {
         return m_slices;
     }
 }
