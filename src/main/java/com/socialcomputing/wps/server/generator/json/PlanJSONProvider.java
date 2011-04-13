@@ -1,15 +1,19 @@
 package com.socialcomputing.wps.server.generator.json;
 
+import java.awt.Point;
 import java.io.IOException;
 import java.util.Set;
 
 import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import sun.security.action.PutAllAction;
 
 import com.socialcomputing.wps.client.applet.ActiveZone;
 import com.socialcomputing.wps.client.applet.BagZone;
@@ -69,39 +73,53 @@ public class PlanJSONProvider {
      */
     static public ObjectNode planToJSON(PlanContainer container) {
         LOG.info("Generating JSON representation of the plan");
-        // Create root object
-        return getJSON(container);
+        return toJSON(container);
     }
 
-    static public void putValue(ObjectNode node, String key, Object value) {
-        if( value instanceof String)
-            node.put(key, (String) value);
-        else if( value instanceof Integer)
-            node.put(key, (Integer) value);
-        else if( value instanceof Float)
-            node.put(key, (Float) value);
-        else if( value instanceof Long)
-            node.put(key, (Long) value);
-        else if( value instanceof ObjectNode)
-            node.put(key, (ObjectNode) value);
-        else if( value instanceof Slice)
-            node.put(key, toJSON((Slice)value));
-        else if( value instanceof MenuX)
-            node.put(key, toJSON((MenuX)value));
-        else if( value instanceof ColorX)
-            node.put(key, toJSON((ColorX)value)); 
-        else if( value instanceof Transfo)
-            node.put(key, toJSON((Transfo)value)); 
-        else if( value instanceof HTMLText)
-            node.put(key, toJSON((HTMLText)value)); 
-        else if( value instanceof FontX)
-            node.put(key, toJSON((FontX)value)); 
-        else {
-            System.out.println( "Class not bound: putValue: " + value.getClass().getSimpleName());
+    static public void putValue(ObjectNode parent, String key, Object value) {
+        if( value != null) {
+            if( value instanceof Object[]) {
+                fillArray( parent.putArray(key), (Object[])value);
+            }
+            else {
+                fillNode( parent, key, value);
+            }
         }
     }
     
-    static protected ObjectNode getJSON(PlanContainer container) {
+    static public void fillArray(ArrayNode tab, Object[] value) {
+        if( value == null)
+            return;
+        for (Object val : value) {
+            if (val instanceof String)
+                tab.add((String) val);
+            else if (val instanceof Integer)
+                tab.add((Integer) val);
+            else if (val instanceof Float)
+                tab.add((Float) val);
+            else if (val instanceof Long)
+                tab.add((Long) val);
+            else
+                tab.add(toJSON( val));
+        }
+    }
+    
+    static public void fillNode(ObjectNode node, String key, Object value) {
+        if( value == null)
+            return;
+        if (value instanceof String)
+            node.put(key, (String) value);
+        else if (value instanceof Integer)
+            node.put(key, (Integer) value);
+        else if (value instanceof Float)
+            node.put(key, (Float) value);
+        else if (value instanceof Long)
+            node.put(key, (Long) value);
+        else
+            node.put(key, toJSON( value));
+    }
+
+    static protected ObjectNode toJSON(PlanContainer container) {
         ObjectNode root = mapper.createObjectNode();
         if (container.m_env == null) { return root; }
         root.put("env", toJSON(container.m_env));
@@ -109,6 +127,29 @@ public class PlanJSONProvider {
         return root;
     }
 
+    static private ObjectNode toJSON(Object value) {
+        if (value instanceof ObjectNode)
+            return ( ObjectNode)value;
+        else if (value instanceof Slice)
+            return toJSON((Slice) value);
+        else if (value instanceof MenuX)
+            return toJSON((MenuX) value);
+        else if (value instanceof ColorX)
+            return toJSON((ColorX) value);
+        else if (value instanceof Transfo)
+            return toJSON((Transfo) value);
+        else if (value instanceof HTMLText)
+            return toJSON((HTMLText) value);
+        else if (value instanceof FontX)
+            return toJSON((FontX) value);
+        else if (value instanceof Point)
+            return toJSON((Point) value);
+        else {
+            LOG.error( "toJSON class '{}' not bound: ", value.getClass().getName());
+        }
+        return null;
+    }
+    
     static private ObjectNode toJSON(Env env) {
         ObjectNode node = mapper.createObjectNode();
         node.put("group_bit", Env.GROUP_BIT);
@@ -143,10 +184,17 @@ public class PlanJSONProvider {
         return node;
     }
 
+    static private ObjectNode toJSON(Point point) {
+        ObjectNode node = mapper.createObjectNode();
+        node.put("x", point.x);
+        node.put("y", point.y);
+        return node;
+    }
+    
     // TODO à checker
     static private ObjectNode toJSON(ColorX color) {
         ObjectNode node = mapper.createObjectNode();
-        node.put("color", String.valueOf(color.m_color));
+        node.put("color", color.m_color);
         if (color.m_scolor == null)
             node.putNull("scolor");
         else
@@ -172,6 +220,10 @@ public class PlanJSONProvider {
         node.put("flags", zone.m_flags);
         node.put("curSwatch", toJSON(zone.getCurSwatch()));
         node.put("restSwatch", toJSON(zone.getRestSwatch()));
+        ObjectNode propsnode = node.putObject("props");
+        for (String key : (Set<String>)zone.keySet()) {
+            putValue(propsnode, key, zone.get(key));
+        }
         return node;
     }
 
