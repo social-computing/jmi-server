@@ -120,22 +120,22 @@ public final class Satellite extends Base implements Serializable
 	/**
 	 * Draws only Selection sats.
 	 */
-	protected   static final int    SEL_TYP             = 0;
+	public   static final int    SEL_TYP             = 0;
 
 	/**
 	 * Draws only Tip sats.
 	 */
-	protected   static final int    TIP_TYP             = 1;
+	public   static final int    TIP_TYP             = 1;
 
 	/**
 	 * Draws all sats but Selection and tips ones.
 	 */
-	protected   static final int    BASE_TYP            = 2;
+	public   static final int    BASE_TYP            = 2;
 
 	/**
 	 * Draws all sats.
 	 */
-	protected   static final int    ALL_TYP             = 3;
+	public   static final int    ALL_TYP             = 3;
 
 	/**
 	 * JDK 1.1 serialVersionUID
@@ -148,7 +148,7 @@ public final class Satellite extends Base implements Serializable
 	 */
 	protected   ShapeX              m_shape;
 
-	/**
+    /**
 	 * The elementary slices that are stacked to draw this satellite.
 	 * They describe how to fill the shape.
 	 */
@@ -447,4 +447,12 @@ public final class Satellite extends Base implements Serializable
 			firstSat.execute( applet, zone, pos, actionId );
 		}
 	}
+	
+	public ShapeX getM_shape() {
+        return m_shape;
+    }
+
+    public Slice[] getM_slices() {
+        return m_slices;
+    }
 }

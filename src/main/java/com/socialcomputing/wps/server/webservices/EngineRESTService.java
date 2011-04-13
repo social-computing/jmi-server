@@ -41,79 +41,74 @@ public class EngineRESTService {
     /**
      * The method will process HTTP GET requests
      * 
-     * @param planName name of the plan to get
+     * @param planName
+     *            name of the plan to get
      * @param ui
      * @return a plan result in Java serialized objects
      */
     @GET
     @Path("{map}.java")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response getBinaryPlan(
-                                  @HeaderParam("User-Agent") String userAgent,
-                                  @PathParam("account") String account,
-                                  @PathParam("map") String planName,
-                                  @Context UriInfo ui) {
+    public Response getBinaryPlan(@HeaderParam("User-Agent") String userAgent, @PathParam("account") String account,
+                                  @PathParam("map") String planName, @Context UriInfo ui) {
         LOG.info("Plan name = {}", planName);
         PlanMaker planMaker = new BeanPlanMaker();
-        Hashtable<String, Object> planParameters = this.getQueryParameters( userAgent,ui);
+        Hashtable<String, Object> planParameters = this.getQueryParameters(userAgent, ui);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        DataOutputStream outputStream = new DataOutputStream( baos);
+        DataOutputStream outputStream = new DataOutputStream(baos);
         try {
             planParameters.put("planName", planName);
-            planParameters.put( PlanMaker.PLAN_MIME, MediaType.APPLICATION_OCTET_STREAM);
+            planParameters.put(PlanMaker.PLAN_MIME, MediaType.APPLICATION_OCTET_STREAM);
 
-            Hashtable<String, Object> results = planMaker.createPlan( planParameters);
-            byte[] bplan = ( byte[])results.get( PlanMaker.PLAN);
-            outputStream.writeInt( bplan.length);
-            outputStream.write( bplan);
+            Hashtable<String, Object> results = planMaker.createPlan(planParameters);
+            byte[] bplan = (byte[]) results.get(PlanMaker.PLAN);
+            outputStream.writeInt(bplan.length);
+            outputStream.write(bplan);
         }
         catch (Exception e) {
             LOG.error(e.getMessage(), e);
             try {
-                outputStream.writeInt( -1);
-                StringWriter    writer  = new StringWriter();
-                e.printStackTrace( new PrintWriter( writer ));
-                outputStream.writeUTF( writer.toString());
+                outputStream.writeInt(-1);
+                StringWriter writer = new StringWriter();
+                e.printStackTrace(new PrintWriter(writer));
+                outputStream.writeUTF(writer.toString());
             }
-            catch (IOException e1) {
-            }
+            catch (IOException e1) {}
         }
-        return Response.ok( baos.toByteArray(), MediaType.APPLICATION_OCTET_STREAM).build();
+        return Response.ok(baos.toByteArray(), MediaType.APPLICATION_OCTET_STREAM).build();
     }
-    
+
     /**
-     * The method will process HTTP GET requests
-     * And will produce content identified by the JSON exchange format
+     * The method will process HTTP GET requests And will produce content
+     * identified by the JSON exchange format
      * 
-     * @param planName name of the plan to get
+     * @param planName
+     *            name of the plan to get
      * @param ui
      * @return a plan result in JSON format
      */
-    @GET 
+    @GET
     @Path("{map}.json")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getJSonPlan(
-                              @HeaderParam("User-Agent") String userAgent,
-                              @PathParam("account") String account,
-                              @PathParam("map") String planName,
-                              @Context UriInfo ui) {
+    public String getJSonPlan(@HeaderParam("User-Agent") String userAgent, @PathParam("account") String account,
+                              @PathParam("map") String planName, @Context UriInfo ui) {
         LOG.info("Plan name = {}", planName);
         PlanMaker planMaker = new BeanPlanMaker();
         Hashtable<String, Object> planParameters = this.getQueryParameters(userAgent, ui);
         JSONObject jsonResults = new JSONObject();
         try {
             planParameters.put("planName", planName);
-            planParameters.put( PlanMaker.PLAN_MIME, MediaType.APPLICATION_JSON);
+            planParameters.put(PlanMaker.PLAN_MIME, MediaType.APPLICATION_JSON);
 
             Hashtable<String, Object> wpsresults = planMaker.createPlan(planParameters);
-            for( String key : wpsresults.keySet()) {
-                jsonResults.put( key, wpsresults.get( key));
+            for (String key : wpsresults.keySet()) {
+                jsonResults.put(key, wpsresults.get(key));
             }
         }
         catch (RemoteException e) {
             LOG.error(e.getMessage(), e);
-            jsonResults.put( "name", planName);
-            jsonResults.put( "error", e.getMessage());
+            jsonResults.put("name", planName);
+            jsonResults.put("error", e.getMessage());
         }
         return jsonResults.toJSONString();
     }
@@ -121,18 +116,19 @@ public class EngineRESTService {
     /**
      * Map query parameters from a Jersey MultivaluedMap to an HashTable
      * 
-     * @param ui UriInfo path and query information wrapper
+     * @param ui
+     *            UriInfo path and query information wrapper
      * @return HashTable of parameters
      */
     private Hashtable<String, Object> getQueryParameters(String userAgent, UriInfo ui) {
         MultivaluedMap<String, String> pathParams = ui.getQueryParameters();
         Hashtable<String, Object> queryParameters = new Hashtable<String, Object>();
-        for(String key :  pathParams.keySet()) {
+        for (String key : pathParams.keySet()) {
             LOG.info("  - query parameter {} = {}", key, pathParams.get(key).get(0));
             queryParameters.put(key, pathParams.get(key).get(0));
         }
-        if( userAgent != null)
-            queryParameters.put( "User-Agent", userAgent);
+        if (userAgent != null)
+            queryParameters.put("User-Agent", userAgent);
         return queryParameters;
     }
 
