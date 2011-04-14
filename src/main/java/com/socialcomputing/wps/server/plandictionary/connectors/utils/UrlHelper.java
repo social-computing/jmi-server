@@ -72,22 +72,23 @@ public class UrlHelper extends ConnectorHelper {
     @Override
     public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
         StringBuilder parameters = new StringBuilder();
-        boolean first = true;
-        if (defParams != null) {
-            for( NameValuePair param : defParams) {
-                if( !first) parameters.append( '&');
-                parameters.append( param.getName()).append( '=').append( URLEncoder.encode( super.ReplaceParameter( param.getValue(), wpsparams)));
-                first = false;
-            }
-        }
-        if (curParams != null) { 
-            for( NameValuePair param : curParams) {
-                if( !first) parameters.append( '&');
-                parameters.append( param.getName()).append( '=').append( URLEncoder.encode( super.ReplaceParameter( param.getValue(), wpsparams)));
-                first = false;
-            }
-        }
         try {
+            boolean first = true;
+            if (defParams != null) {
+                for( NameValuePair param : defParams) {
+                    if( !first) parameters.append( '&');
+                    parameters.append( param.getName()).append( '=').append( URLEncoder.encode( super.ReplaceParameter( param.getValue(), wpsparams), "UTF-8"));
+                    first = false;
+                }
+            }
+            if (curParams != null) { 
+                for( NameValuePair param : curParams) {
+                    if( !first) parameters.append( '&');
+                    parameters.append( param.getName()).append( '=').append( URLEncoder.encode( super.ReplaceParameter( param.getValue(), wpsparams), "UTF-8"));
+                    first = false;
+                }
+            }
+            
             LOG.debug(" url = {}, params = {}", url, parameters.toString());
             URL u = new URL( type == Type.POST || (type == Type.GET && parameters.length() == 0) ? url : url + "?" + parameters.toString());
             URLConnection connection = u.openConnection();

@@ -103,7 +103,7 @@ public class TwitterEntityConnector extends SocialEntityConnector {
             oAuth.addSignatureParam("oauth_token", oauth_token);
             oAuth.addSignatureParam("oauth_timestamp", String.valueOf(System.currentTimeMillis() / 1000));
             oAuth.addSignatureParam("oauth_version", "1.0");
-            oAuth.addSignatureParam("user_id", URLEncoder.encode(sb.toString()));
+            oAuth.addSignatureParam("user_id", URLEncoder.encode(sb.toString(), "UTF-8"));
             UrlHelper uh2 = new UrlHelper(Type.POST, FriendsName);
             uh2.addHeader("Authorization", oAuth.getOAuthHeader(FriendsName, "POST", secret));
             uh2.addParameter("user_id", sb.toString());

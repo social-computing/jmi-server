@@ -1,5 +1,6 @@
 package com.socialcomputing.wps.server.plandictionary.connectors.utils;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -51,7 +52,7 @@ public class OAuthHelper {
         signatureParams.add( new NameValuePair( name, value));
     }
 
-    public String getOAuthHeader(String uri, String type, String secret) throws java.security.SignatureException {
+    public String getOAuthHeader(String uri, String type, String secret) throws java.security.SignatureException, UnsupportedEncodingException {
         String signature = getSignature( uri, type);
         LOG.debug("signature = {}", signature);
         String oAuthSignature = getOAuthSignature( signature, secret);
@@ -61,7 +62,7 @@ public class OAuthHelper {
         return header;
     }
     
-    protected String getSignature(String uri, String type) {
+    protected String getSignature(String uri, String type) throws UnsupportedEncodingException {
         StringBuilder signature = new StringBuilder( type + "&");
         signature.append( URLEncoder.encode( uri)).append( "&");
         Collections.sort( signatureParams, new Comparator<NameValuePair>() {
@@ -73,28 +74,28 @@ public class OAuthHelper {
         for( NameValuePair param : signatureParams) {
             if( !first)
                 signature.append( "%26");       
-            signature.append( URLEncoder.encode( param.getName())).append( "%3D");
+            signature.append( URLEncoder.encode( param.getName(), "UTF-8")).append( "%3D");
             if( param.getName().equalsIgnoreCase( "oauth_callback"))
-                signature.append( URLEncoder.encode( URLEncoder.encode( param.getValue())));
+                signature.append( URLEncoder.encode( URLEncoder.encode( param.getValue(), "UTF-8"), "UTF-8"));
             else
-                signature.append( URLEncoder.encode( param.getValue()));
+                signature.append( URLEncoder.encode( param.getValue(), "UTF-8"));
             if( first)
                 first = false;
         }
         return signature.toString();
     }
 
-    protected String getAuthHeader( String oAuthSignature) {
+    protected String getAuthHeader( String oAuthSignature) throws UnsupportedEncodingException {
         StringBuilder header = new StringBuilder( "OAuth ");
         boolean first = true;
         for( NameValuePair param : signatureParams) {
             if( !first)
                 header.append( ", ");       
-            header.append( param.getName()).append( "=\"").append( URLEncoder.encode( param.getValue())).append( "\"");
+            header.append( param.getName()).append( "=\"").append( URLEncoder.encode( param.getValue(), "UTF-8")).append( "\"");
             if( first)
                 first = false;
         }
-        header.append( ", ").append( "oauth_signature").append( "=\"").append( URLEncoder.encode( oAuthSignature)).append( "\"");
+        header.append( ", ").append( "oauth_signature").append( "=\"").append( URLEncoder.encode( oAuthSignature, "UTF-8")).append( "\"");
         return header.toString();
     }
     
