@@ -1,7 +1,6 @@
 package com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.portablecontacts;
 
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 

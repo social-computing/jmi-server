@@ -5,15 +5,12 @@ import java.io.IOException;
 import java.util.Set;
 
 import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import sun.security.action.PutAllAction;
 
 import com.socialcomputing.wps.client.applet.ActiveZone;
 import com.socialcomputing.wps.client.applet.BagZone;
@@ -152,7 +149,6 @@ public class PlanJSONProvider {
     
     static private ObjectNode toJSON(Env env) {
         ObjectNode node = mapper.createObjectNode();
-        node.put("group_bit", Env.GROUP_BIT);
         node.put("flags", env.m_flags);
         node.put("inColor", toJSON(env.m_inCol));
         node.put("outColor", toJSON(env.m_outCol));

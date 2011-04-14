@@ -7,9 +7,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iAffinityGroupReader;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierConnector;
@@ -98,6 +95,7 @@ public abstract class DatastoreEntityConnector implements iEntityConnector {
         return affinityGroupReaders.get(0);
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public Collection getProfiles() throws WPSConnectorException {
         return profileConnectors;

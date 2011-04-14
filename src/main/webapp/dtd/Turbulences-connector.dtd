@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+
+<!-- =====================================================================  -->
+<!-- Turbulences-entities : data connectors description -->
+<!-- =====================================================================  -->
+<!ELEMENT Turbulences-entities (comment?, URL-connection, Facebook-property*)>
+<!ATTLIST Turbulences-entities	name    CDATA    #REQUIRED>
+<!ATTLIST Turbulences-entities	class   CDATA    "com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.portablecontacts.TurbulencesEntityConnector" >
+
+<!ELEMENT Turbulences-property 		EMPTY>
+<!ATTLIST Turbulences-property	id    	CDATA    #REQUIRED>
+<!ATTLIST Turbulences-property	entity  CDATA    #REQUIRED>
+
+
