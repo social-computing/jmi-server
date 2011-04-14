@@ -4,6 +4,9 @@ syntax: glob
 .settings
 .project
 .DS_Store
+.flexProperties
+.flexConfig.xml
+.actionScriptProperties
 target
 
 syntax: regexp
