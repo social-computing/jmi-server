@@ -1,12 +1,6 @@
 package com.socialcomputing.wps.server.webservices;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.rmi.RemoteException;
-import java.util.Hashtable;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -15,20 +9,19 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ArrayNode;
+import org.codehaus.jackson.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.socialcomputing.wps.server.persistence.Dictionary;
 import com.socialcomputing.wps.server.persistence.DictionaryManager;
 import com.socialcomputing.wps.server.persistence.hibernate.DictionaryManagerImpl;
-import com.socialcomputing.wps.server.webservices.maker.BeanPlanMaker;
-import com.socialcomputing.wps.server.webservices.maker.PlanMaker;
 
 /**
  * @author Jonathan Dray <jonathan@social-computing.com>
@@ -41,10 +34,14 @@ import com.socialcomputing.wps.server.webservices.maker.PlanMaker;
 public class PlanRESTService {
 
     private final static Logger LOG = LoggerFactory.getLogger(PlanRESTService.class);
+    private final static ObjectMapper mapper = new ObjectMapper();
 
  
     /**
      * The method will process HTTP GET requests
+     * @throws IOException 
+     * @throws JsonMappingException 
+     * @throws JsonGenerationException 
      * 
      */
     @GET 
@@ -52,18 +49,21 @@ public class PlanRESTService {
     @Produces(MediaType.APPLICATION_JSON)
     public String getMaps(
             @HeaderParam("User-Agent") String userAgent,
-            @Context UriInfo ui) {
+            @Context UriInfo ui) throws JsonGenerationException, JsonMappingException, IOException {
         LOG.info("REST API : /maps");
-        JSONArray jsonResults = new JSONArray();
+        ArrayNode jsonResults = mapper.createArrayNode();
         DictionaryManager manager = new DictionaryManagerImpl();
         for( Dictionary dictionary : manager.findAll()) {
             jsonResults.add( dictionary.getName());
         }
-        return jsonResults.toJSONString();
+        return mapper.writeValueAsString(jsonResults);
     }
 
     /**
      * The method will process HTTP GET requests
+     * @throws IOException 
+     * @throws JsonMappingException 
+     * @throws JsonGenerationException 
      * 
      */
     @GET 
@@ -72,14 +72,14 @@ public class PlanRESTService {
     public String getMap(
             @HeaderParam("User-Agent") String userAgent,
             @PathParam("map") String planName,
-            @Context UriInfo ui) {
+            @Context UriInfo ui) throws JsonGenerationException, JsonMappingException, IOException {
         LOG.info("REST API : /maps");
-        JSONObject jsonResults = new JSONObject();
+        ObjectNode jsonResults = mapper.createObjectNode();
         DictionaryManager manager = new DictionaryManagerImpl();
         Dictionary dictionary  = manager.findByName( planName);
         jsonResults.put( "name", dictionary.getName());
         jsonResults.put( "definition", dictionary.getDefinition());
-        return jsonResults.toJSONString();
+        return mapper.writeValueAsString(jsonResults);
     }
     
 }
