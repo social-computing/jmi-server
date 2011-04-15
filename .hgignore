@@ -8,6 +8,11 @@ syntax: glob
 .flexConfig.xml
 .actionScriptProperties
 target
+bin-debug
+bin-release
+build
+libs
+
 
 syntax: regexp
 
