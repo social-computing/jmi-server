@@ -272,6 +272,9 @@
             <goals>
               <goal>copy-flex-resources</goal>
             </goals>
+            <configuration>
+              <webappDirectory>${project.build.directory}/${project.build.finalName}/flex</webappDirectory>
+            </configuration>
           </execution>
         </executions>
       </plugin>
