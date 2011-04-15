@@ -12,6 +12,7 @@ bin-debug
 bin-release
 build
 libs
+wps-server/src/main/webapp/flex/wps-flex-1.0-SNAPSHOT.swf
 
 
 syntax: regexp
