@@ -15,7 +15,7 @@
 %Google-entities;
 <!ENTITY % Twitter-entities SYSTEM "Twitter-connector.dtd" >
 %Twitter-entities;
-<!ENTITY % Twitter-entities SYSTEM "Turbulences-connector.dtd" >
+<!ENTITY % Turbulences-entities SYSTEM "Turbulences-connector.dtd" >
 %Turbulences-entities;
 
 <!ENTITY % Relax-params SYSTEM "Relax-params.dtd" >
