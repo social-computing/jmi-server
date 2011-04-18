@@ -1,4 +1,4 @@
-package {
+package  {
     import java.awt.Font;
     import java.io.Serializable;
     import java.util.Hashtable;
@@ -42,7 +42,9 @@ package {
          * @param props		A property table that should hold props referenced by this containers.
          * @return			a new Font equivalent to this.
          */
-        function getFont( props:Hashtable):Font {
+        //function getFont( props:Hashtable):Font {
+        // Renommage fonction
+        function getFont2( props:Hashtable):Font {
             var font:Font;
             var flags:int= getFlags( props ),
                 size    = getInt( SIZE_VAL, props );

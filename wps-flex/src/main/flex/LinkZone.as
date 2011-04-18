@@ -1,4 +1,4 @@
-package {
+package  {
     import java.awt.Dimension;
     import java.awt.Graphics;
     //import java.awt.Graphics2D;
@@ -55,7 +55,7 @@ package {
          * @param g         A graphics compatible with the one that will be used for painting.
          * @param isFirst   True if init called for the first time.
          */
-        protected function init( applet:WPSApplet, g:Graphics, isFirst:Boolean):void {
+        protected override function init( applet:WPSApplet, g:Graphics, isFirst:Boolean):void {
             super.init( applet, g, isFirst );
             
             m_parent	= null;
@@ -88,7 +88,7 @@ package {
          * @param applet    WPSApplet owning this zone.
          * @param g         A Graphics on which this must be painted.
          */
-        public synchronized function paintCur( applet:WPSApplet, g:Graphics):void {
+        public function paintCur( applet:WPSApplet, g:Graphics):void {
             if( (m_flags & INVISIBLE_BIT) != 0) return;
             
             var bufGfx:Graphics= applet.m_plan.m_blitBuf.getGraphics();

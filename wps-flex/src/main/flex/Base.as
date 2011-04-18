@@ -1,4 +1,4 @@
-package {
+package  {
     import java.awt.Color;
     import java.awt.Graphics;
     import java.io.Serializable;
@@ -20,7 +20,7 @@ package {
      * @author flugue@mapstan.com
      * @version 1.0
      */
-    public class Base implements Serializable
+    public class Base
     {
         /**
          * String representation of a new-line.
@@ -279,7 +279,9 @@ package {
          * @return			A String containing <br> between each lines or null if the property doesn't exists or is void.
          * @throws UnsupportedEncodingException 
          */
-        protected function parseString(prop:int, props:Hashtable, isHtm:Boolean):String // throws UnsupportedEncodingException
+        //protected function parseString(prop:int, props:Hashtable, isHtm:Boolean):String // throws UnsupportedEncodingException
+        // Renommage nom fonction
+        protected function parseString2(prop:int, props:Hashtable, isHtm:Boolean):String // throws UnsupportedEncodingException
         {
             var text:String= getString( prop, props );
             var returnstring:String= null;
@@ -302,7 +304,9 @@ package {
          * @return			An array of String.
          * @throws UnsupportedEncodingException 
          */
-        protected function parseString(text:String, props:Hashtable):Array
+        //protected function parseString(text:String, props:Hashtable):Array
+        // Renommage nom fonction
+        protected function parseString3(text:String, props:Hashtable):Array
         {
             var tokens:Vector = parseTokens( text );
             var token:Token;

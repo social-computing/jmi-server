@@ -1,4 +1,4 @@
-package {
+package  {
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -19,7 +19,7 @@ import java.util.Hashtable;
  * @author flugue@mapstan.com
  * @version 1.0
  */
-public class Env implements Serializable, Runnable
+public class Env
 {
 	/**
 	 * True if this Plan is sound enabled.
@@ -87,14 +87,16 @@ public class Env implements Serializable, Runnable
 	 * Table containing icons and sounds.
 	 * This buffer stores all media object using a unique key to load them asynchronously during init.
 	 */
-	protected   transient var m_medias:Hashtable= null;
+    [transient]
+	protected var m_medias:Hashtable = null;
 
 	/**
 	 * A simple reference to the Applet.
 	 * This is necessary because the Thread must know the Applet.
 	 * But it is launch by run() that don't have any arguments.
 	 */
-	private   transient var m_applet:WPSApplet= null;
+    [transient]
+	private var m_applet:WPSApplet = null;
 
 	/**
 	 * If a selection has this flag set, it can be displayed by an external UI
@@ -145,7 +147,7 @@ public class Env implements Serializable, Runnable
 	 * Restart checking the images, and so on until all images are loaded.<br>
 	 * It is important to displayed images because else they will never be loaded!
 	 */
-	public synchronized function run():void {
+	public function run():void {
 		var tracker:MediaTracker= new MediaTracker( m_applet );
 		var enumvar:Enumeration;
 		var image:Image;

@@ -1,4 +1,4 @@
-package {
+package  {
     import java.applet.Applet;
     import java.awt.AlphaComposite;
     import java.awt.Color;
@@ -43,11 +43,6 @@ package {
      */
     public class WPSApplet extends Applet implements Runnable, ActionListener, MouseMotionListener, MouseListener, WaitListener/*, KeyListener, ComponentListener*/
     {
-        /**
-         * 
-         */
-        private static const serialVersionUID:Number= -5748751280134198642L;
-        
         /**
          * True if the browser using this Applet is a buggy IE with inconsistant drawing APIs.
          */
@@ -290,18 +285,18 @@ package {
                 if ( m_WPSSize > 0) // A Plan exists
                 {
                     m_debugStage    = "zipped Object stream creation";
-                    var is:ObjectInputStream= new ObjectInputStream( new GZIPInputStream ( new JaugeInputStream( inStm, m_WPSSize, downloadMsg ), 1024));
+                    var is1:ObjectInputStream= new ObjectInputStream( new GZIPInputStream ( new JaugeInputStream( inStm, m_WPSSize, downloadMsg ), 1024));
                     
                     // deserialize and init the Env object
                     m_debugStage    = "Env reading";
-                    m_env   = Env(is.readObject());
+                    m_env   = Env(is1.readObject());
                     
                     m_debugStage    = "Env init";
                     m_env.init( this, needPrint != null && needPrint.equalsIgnoreCase( "true" ));
                     
                     // deserialize and init the Plan object
                     m_debugStage    = "Plan reading";
-                    m_plan  = Plan(is.readObject());
+                    m_plan  = Plan(is1.readObject());
                     
                     //Graphics    g   = getGraphics();
                     

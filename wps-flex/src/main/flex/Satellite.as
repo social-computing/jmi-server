@@ -1,4 +1,4 @@
-package {
+package  {
     import java.applet.AudioClip;
     import java.awt.Graphics;
     import java.awt.Point;
@@ -345,7 +345,7 @@ package {
          * @param pos			The current cursor position. Used to popup a menu.
          * @param actionId		Type of event that triggers the action.[HOVER_VAL,CLICK_VAL,DBLCLICK_VAL].
          */
-        protected synchronized function execute( applet:WPSApplet, zone:ActiveZone, pos:Point, actionId:int):void {
+        protected function execute( applet:WPSApplet, zone:ActiveZone, pos:Point, actionId:int):void {
             var firstSat:Satellite= zone.m_curSwh.m_satellites[0];
             var isExe:Boolean= isDefined( actionId );
             
@@ -366,7 +366,7 @@ package {
                             action  = actions[i];
                             j       = action.indexOf( ' ' );
                             func    = action.substring( 0, j );
-                            args    = parseString( action.substring( j + 1, action.length()), zone )[0];
+                            args    = parseString3( action.substring( j + 1, action.length()), zone )[0];
                             
                             if ( func == ( "show" ))         // Shows a message in the StatusBar
                             {

@@ -1,4 +1,4 @@
-package {
+package  {
     /**
      * <p>Title: WaitListener</p>
      * <p>Description: A Listener to the Waiter class.<br>

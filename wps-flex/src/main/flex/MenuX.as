@@ -1,4 +1,4 @@
-package {
+package  {
     import java.awt.Font;
     import java.awt.Menu;
     import java.awt.MenuItem;
@@ -154,9 +154,9 @@ package {
                 redir   = parts.length > 2? parts[2] : null;
             //itemStr;
             var font:Font= getFont( zone );
-            var items:Array= parseString( title, zone ),
-                urls    = url != null ? parseString( url, zone ) : null,
-                redirs  = redir != null ? parseString( redir, zone ) : urls;
+            var items:Array= parseString3( title, zone ),
+                urls    = url != null ? parseString3( url, zone ) : null,
+                redirs  = redir != null ? parseString3( redir, zone ) : urls;
             //MenuItem    item;
             var i:int, n	= items.length,
                 m		= redirs != null ? redirs.length : 0;
@@ -206,7 +206,7 @@ package {
          * @return			the matching Font or null if the container is empty or the prop is null.
          */
         protected function getFont( props:Hashtable):Font {
-            var font:FontX= getFont( FONT_VAL, props );
+            var font:FontX= getFont2( FONT_VAL, props );
             
             return font != null ? font.getFont( props ): null;
         }

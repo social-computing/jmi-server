@@ -234,7 +234,7 @@ package {
             
             if ( data == null )
             {
-                var lines:String= parseString( TEXT_VAL, zone, true );
+                var lines:String= parseString2( TEXT_VAL, zone, true );
                 
                 if ( lines.length()> 0)
                 {
@@ -952,8 +952,7 @@ package {
      * @author flugue@mapstan.com
      * @version 1.0
      */
-    protected 
-    internal class FormatToken
+    protected class FormatToken
     {
         /**
          * Current line margins.

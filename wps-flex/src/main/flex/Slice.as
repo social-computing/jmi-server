@@ -1,4 +1,4 @@
-package {
+package  {
     import java.awt.Color;
     import java.awt.Font;
     import java.awt.Graphics;
@@ -94,7 +94,7 @@ package {
          * @param supCtr		This parent satellite center.
          * @throws UnsupportedEncodingException 
          */
-        protected synchronized function paint( applet:WPSApplet, g:Graphics, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point):void {
+        protected function paint( applet:WPSApplet, g:Graphics, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point):void {
             var text:HTMLText= getText( TEXT_VAL, zone );
             
             // Patch for IE old JVM JIT bug (build < 3000).
