@@ -1,50 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
-			   xmlns:mx="library://ns.adobe.com/flex/mx" 
-			   minWidth="955" minHeight="600" 
-			   xmlns:components="com.socialcomputing.wps.components.*"
-			   creationComplete="application1_creationCompleteHandler(event)" xmlns:planservice2="services.planservice2.*">
-	<fx:Script>
-		<![CDATA[
-			import com.socialcomputing.wps.services.planservice.PlanService;
-			
-			import mx.controls.Alert;
-			import mx.events.FlexEvent;
-			import mx.rpc.events.FaultEvent;
-
-			// TODO replace by parameter values
-			[Bindable]
-			private var planWidth:int = 640;
-			[Bindable]
-
-			private var planHeight:int = 480;
-			private var planUrl:String = "http://192.168.111.12:8180/wps-server/services/engine/";
-			private var planName:String = "Xml_sample";
-			private var entityId:int = 5;
-			
-			private var planService:PlanService = new PlanService(planUrl, planName);
-					
-			
-			protected function application1_creationCompleteHandler(event:FlexEvent):void
-			{
-			    planService.showBusyCursor = true;
-				planService.addEventListener(FaultEvent.FAULT, 
-					function(event:FaultEvent):void {Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)});
-				getPlanResult.token = planService.getPlan(5);
-			}
-
-			
-		]]>
-	</fx:Script>
-	
-	<fx:Declarations>
-		<s:CallResponder id="getPlanResult"/>
-	</fx:Declarations>
-	
-	<s:layout>
-		<s:VerticalLayout gap="20" />
-	</s:layout>
-	<s:Label text="Cartographie WPS :" />	
-	<components:Plan width="{planWidth}" height="{planHeight}"/>
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600">
+	<s:Label text="Hello World !" />
+    <fx:Script>
+        <![CDATA[
+            var a:Activable;
+            var az:ActiveZone;
+            var av:AppletVersion;
+            var bz:BagZone;
+            var b:Base;
+            var cx:ColorX;
+            var e:Env;
+            var fx:FontX;
+            var h:HTMLText;
+            var lz:LinkZone;
+            var mx:MenuX;
+            var p:Plan;
+            var sd:SatData;
+            var s:Satellite;
+            var sx:ShapeX;
+            var sl:Slice;
+            var sw:Swatch;
+            var t:Token;
+            var tr:Transfo;
+            var vc:VContainer;
+            var w:Waiter;
+            var wa:WaitListener;
+            var wps:WPSApplet;
+        ]]>
+    </fx:Script>
 </s:Application>
