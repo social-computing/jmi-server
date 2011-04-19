@@ -68,6 +68,34 @@
     </dependency>
 
     <dependency>
+      <groupId>com.adobe.flexbuilder.dcrad.fiber</groupId>
+      <artifactId>fiber</artifactId>
+      <version>4.0.1.277662</version>
+      <type>swc</type>
+    </dependency>
+
+    <dependency>
+      <groupId>com.adobe.flexbuilder.dcrad.fiber</groupId>
+      <artifactId>fiber_rb</artifactId>
+      <version>4.0.1.277662</version>
+      <type>swc</type>
+    </dependency>
+
+    <dependency>
+      <groupId>com.adobe.flexbuilder.dcrad.dcrad</groupId>
+      <artifactId>serializers</artifactId>
+      <version>4.0.1.277622</version>
+      <type>swc</type>
+    </dependency>
+
+    <dependency>
+      <groupId>com.adobe.flexbuilder.dcrad.dcrad</groupId>
+      <artifactId>serializers_rb</artifactId>
+      <version>4.0.1.277662</version>
+      <type>swc</type>
+    </dependency>
+
+    <dependency>
       <groupId>com.adobe.flexunit</groupId>
       <artifactId>flexunit</artifactId>
       <version>0.85</version>
