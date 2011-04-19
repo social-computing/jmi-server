@@ -205,7 +205,7 @@ package  {
          * @param props		A props table holding this FontX prop if it has one.
          * @return			the matching Font or null if the container is empty or the prop is null.
          */
-        protected function getFont( props:Hashtable):Font {
+        protected override function getFont(props:Hashtable):Font {
             var font:FontX= getFont2( FONT_VAL, props );
             
             return font != null ? font.getFont( props ): null;

@@ -122,7 +122,7 @@ package  {
          * @param props		Table that holds this property (if it is one).
          * @return			The size of the property list array or the maximum line number.
          */
-        function getListSize( props:Hashtable):int {
+        function getListSize( props:Array):int {
             var size:int= 1;
             
             if ( Base.isEnabled( m_flags, LIST_BIT ))
@@ -146,7 +146,7 @@ package  {
          * @return			A String representation of this Token after parsing.
          * @throws UnsupportedEncodingException 
          */
-        function toString(i:int, props:Hashtable):String {
+        function toString(i:int, props:Array):String {
             var tokenStr:String= null;
             
             if ( Base.isEnabled( m_flags, PROP_BIT ))       // Propertie

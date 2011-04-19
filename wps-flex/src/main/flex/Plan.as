@@ -424,7 +424,7 @@ package  {
                 }
             }
             
-            tipWaiter = new Waiter( this, new Object[]{ zone, slice, new Rectangle(), new Boolean( false ), key }, delay, length );
+            tipWaiter = new Waiter( this, new Array( zone, slice, new Rectangle(), new Boolean( false ), key ), delay, length );
             m_waiters.put( key, tipWaiter );
             tipWaiter.start();
         }
@@ -514,7 +514,7 @@ package  {
          * @param sy	Vertical scaling after translation.
          */
         private function resizePoint( zone:ActiveZone, i:int, dx:Number, dy:Number, sx:Number, sy:Number):void {
-            var p:Point= zone.get( "_VERTICES" ))[i];
+            var p:Point= zone.get("_VERTICES")[i];
             p.x = int(( sx *( p.x - dx )));
             p.y = int(( sy *( p.y - dy )));
         }

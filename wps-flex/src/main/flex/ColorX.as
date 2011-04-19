@@ -33,7 +33,7 @@ package  {
          * Creates a new ColorX using an int in ARGB format.
          * @param color	The raw ARGB color.
          */
-        public function ColorX( color:int)
+        public function ColorX(color:int)
         {
             m_color = color;
         }

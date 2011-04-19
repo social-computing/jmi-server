@@ -891,7 +891,7 @@ package {
      * @author flugue@mapstan.com
      * @version 1.0
      */
-    protected class TextToken
+    public class TextToken
     {
         /**
          * Text to write.
@@ -952,7 +952,7 @@ package {
      * @author flugue@mapstan.com
      * @version 1.0
      */
-    protected class FormatToken
+    public class FormatToken
     {
         /**
          * Current line margins.
