@@ -1,10 +1,8 @@
-package  {
-    import java.awt.Graphics;
-    import java.awt.Point;
-    import java.awt.Rectangle;
-    import java.io.UnsupportedEncodingException;
-    import java.util.Hashtable;
-    
+package com.socialcomputing.wps.script  {
+    import flash.display.Graphics;
+    import flash.geom.Point;
+    import flash.geom.Rectangle;
+
     /**
      * <p>Title: Swatch</p>
      * <p>Description: A template that describe how to draw a zone and interact with it.<br>
@@ -66,7 +64,7 @@ package  {
          * @param showLinks		True if links between satelites should be drawn. False for the opposite.
          * @throws UnsupportedEncodingException 
          */
-        protected function paint( applet:WPSApplet, g:Graphics, zone:ActiveZone, isCur:Boolean, isFront:Boolean, showTyp:int, showLinks:Boolean):void {
+        protected function paint(g:Graphics, zone:ActiveZone, isCur:Boolean, isFront:Boolean, showTyp:int, showLinks:Boolean):void {
             var sat:Satellite= m_satellites[0];
             var shape:ShapeX= sat.m_shape;
             //int             curSel  = applet.m_plan.m_curSel,
@@ -105,7 +103,7 @@ package  {
          * @param showTyp		Flags indicating what type of satellite to draw.(Satellite.XXX_TYP)
          * @throws UnsupportedEncodingException 
          */
-        protected function drawSats( applet:WPSApplet, g:Graphics, zone:ActiveZone, shape:ShapeX, transfo:Transfo, isLinkOnly:Boolean, isCur:Boolean, isFront:Boolean, showTyp:int):void // throws UnsupportedEncodingException
+        protected function drawSats(g:Graphics, zone:ActiveZone, shape:ShapeX, transfo:Transfo, isLinkOnly:Boolean, isCur:Boolean, isFront:Boolean, showTyp:int):void // throws UnsupportedEncodingException
         {
             var isBag:Boolean= zone is BagZone;
             var supZone:BagZone= isBag ? BagZone(zone ): null;
@@ -208,7 +206,7 @@ package  {
          * @return				This swatch bounding box for zone.
          * @throws UnsupportedEncodingException 
          */
-        function getBounds( applet:WPSApplet, g:Graphics, zone:ActiveZone, isCurZone:Boolean):Rectangle {
+        function getBounds(g:Graphics, zone:ActiveZone, isCurZone:Boolean):Rectangle {
             var bounds:Rectangle= new Rectangle();
             var sat:Satellite= m_satellites[0];
             var shape:ShapeX= sat.m_shape;
@@ -293,7 +291,7 @@ package  {
          * @return				The sat of this swatch that is hovered or null if there isn't.
          * @throws UnsupportedEncodingException 
          */
-        function getSatAt( applet:WPSApplet, g:Graphics, zone:ActiveZone, pos:Point, isCurZone:Boolean):Satellite {
+        function getSatAt( g:Graphics, zone:ActiveZone, pos:Point, isCurZone:Boolean):Satellite {
             if ( zone.getParent().m_bounds.contains( pos ))      // pos is in the Bounding Box
             {
                 var sat:Satellite= m_satellites[0];
@@ -407,7 +405,7 @@ package  {
          * @return				An array of satellite data.
          * @throws UnsupportedEncodingException 
          */
-        protected function evalSatData(applet:WPSApplet, zone:ActiveZone, isSuper:Boolean):Array
+        protected function evalSatData( zone:ActiveZone, isSuper:Boolean):Array
         {
             var i:int, n        = m_satellites.length;
             var satDatas:Array= new SatData[n];

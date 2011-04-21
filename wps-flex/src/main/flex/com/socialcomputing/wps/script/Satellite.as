@@ -1,12 +1,7 @@
-package  {
-    import java.applet.AudioClip;
-    import java.awt.Graphics;
-    import java.awt.Point;
-    import java.awt.PopupMenu;
-    import java.awt.Rectangle;
-    import java.awt.event.ActionEvent;
-    import java.io.Serializable;
-    import java.io.UnsupportedEncodingException;
+package com.socialcomputing.wps.script  {
+    import flash.display.Graphics;
+    import flash.geom.Point;
+    import flash.geom.Rectangle;
     
     /**
      * <p>Title: Satellite</p>
@@ -188,7 +183,7 @@ package  {
          * @param showTyp		The type of satellite to display.[ALL_TYP,BASE_TYP,TIP_TYP,SEL_TYP]
          * @throws UnsupportedEncodingException 
          */
-        protected function paint( applet:WPSApplet, g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, isLinkOnly:Boolean, satData:SatData, showTyp:int):void {
+        protected function paint(g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, isLinkOnly:Boolean, satData:SatData, showTyp:int):void {
             var flags:int= satData.m_flags;
             var isTip:Boolean= isEnabled( flags, Satellite.TIP_BIT ),
                 isSel       = isEnabled( flags, Satellite.SEL_BIT ),
@@ -260,7 +255,7 @@ package  {
          * @return				True if this contains pos.
          * @throws UnsupportedEncodingException 
          */
-        protected function contains( applet:WPSApplet, g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, transfo:Transfo, pos:Point, isPie:Boolean, isFake:Boolean):Boolean {
+        protected function contains(g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, transfo:Transfo, pos:Point, isPie:Boolean, isFake:Boolean):Boolean {
             var i:int, n    = m_slices.length;
             
             if ( supCtr == null )	supCtr = m_shape.getCenter( zone );
@@ -319,7 +314,7 @@ package  {
          * @param bounds		A Rectangle to merge with this bounds.
          * @throws UnsupportedEncodingException 
          */
-        protected function setBounds( applet:WPSApplet, g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, bounds:Rectangle):void {
+        protected function setBounds(g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, bounds:Rectangle):void {
             var i:int, n    = m_slices.length;
             
             for ( i = 0; i < n; i ++ )
@@ -345,7 +340,7 @@ package  {
          * @param pos			The current cursor position. Used to popup a menu.
          * @param actionId		Type of event that triggers the action.[HOVER_VAL,CLICK_VAL,DBLCLICK_VAL].
          */
-        protected function execute( applet:WPSApplet, zone:ActiveZone, pos:Point, actionId:int):void {
+        protected function execute(zone:ActiveZone, pos:Point, actionId:int):void {
             var firstSat:Satellite= zone.m_curSwh.m_satellites[0];
             var isExe:Boolean= isDefined( actionId );
             

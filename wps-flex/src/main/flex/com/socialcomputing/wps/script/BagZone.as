@@ -1,8 +1,5 @@
-package  {
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.io.Serializable;
+package com.socialcomputing.wps.script  {
+    import flash.display.Graphics;
 
 /**
  * <p>Title: BagZone</p>
@@ -56,7 +53,7 @@ public class BagZone extends ActiveZone implements Activable
 	 * @param isFirst	True if this init is the first one. False if this is a "refresh" init.
 	 */
     
-	protected override function init( applet:WPSApplet, g:Graphics, isFirst:Boolean):void {
+	protected override function init(g:Graphics, isFirst:Boolean):void {
 		var i:int, n = m_subZones != null ? m_subZones.length : 0;
 
 		super.init( applet, g, isFirst );
@@ -146,7 +143,7 @@ public class BagZone extends ActiveZone implements Activable
 	 * @param g         A Graphics on which this must be painted.
 	 */
     [synchronized]
-	public function paintCur( applet:WPSApplet, g:Graphics):void {
+	public function paintCur(g:Graphics):void {
 		var bufGfx:Graphics= applet.m_plan.m_blitBuf.getGraphics();
 
 		//bufGfx.drawImage( applet.m_backImg2, 0, 0, m_bounds.width, m_bounds.height, m_bounds.x, m_bounds.y, m_bounds.x + m_bounds.width, m_bounds.y + m_bounds.height, null );

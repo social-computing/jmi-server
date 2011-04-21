@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" minWidth="955" minHeight="600">
+    <mx:Image source="C:\Documents and Settings\D\Desktop\google.png" alpha="0.5" />
+    <mx:Image source="C:\Documents and Settings\D\Desktop\toto.jpg" alpha="0.5"/>
+</mx:Application>

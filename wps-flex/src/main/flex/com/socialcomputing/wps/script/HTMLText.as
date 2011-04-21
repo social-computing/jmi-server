@@ -1,22 +1,9 @@
-package {
-    import java.awt.AlphaComposite;
-    import java.awt.Color;
-    import java.awt.Composite;
-    import java.awt.Dimension;
-    import java.awt.Font;
-    import java.awt.FontMetrics;
-    import java.awt.GradientPaint;
-    import java.awt.Graphics;
-    import java.awt.Graphics2D;
-    import java.awt.Insets;
-    import java.awt.Point;
-    import java.awt.Rectangle;
-    import java.awt.RenderingHints;
-    import java.io.Serializable;
-    import java.io.UnsupportedEncodingException;
-    import java.util.StringTokenizer;
-    import java.util.Vector;
-    
+package com.socialcomputing.wps.script{
+    import flash.display.Graphics;
+    import flash.geom.ColorTransform;
+    import flash.geom.Point;
+    import flash.geom.Rectangle;
+
     /**
      * <p>Title: HTMLText</p>
      * <p>Description: A piece of text that can be single or multilined and hold basic HTML-like tags.<br>
@@ -109,67 +96,136 @@ package {
         /**
          * This bounding box, stored to avoid CPU overhead.
          */
-        protected   transient   var m_bounds:Rectangle;
+        [transient]
+        protected var m_bounds:Rectangle;
         
+        [transient]
+        private var _m_heap:Vector;
+
         /**
          * Heap of tags to manage the opening and closing of tags.
          */
-        private transient   var m_heap:Vector;
+        public function set m_heap(value:Vector):void
+        {
+            _m_heap = value;
+        }
         
+        [transient]
+        private var _m_tokens:Vector;
+
         /**
          * List of graphical instructions (tokens) to draw this.
          */
-        private transient   var m_tokens:Vector;
-        
+        public function set m_tokens(value:Vector):void
+        {
+            _m_tokens = value;
+        }
+
+        [transient]
+        private var _m_inCol:ColorTransform;
+
         /**
          * Color of the bounding box background.
          */
-        private transient   var m_inCol:Color;
-        
+        public function set m_inCol(value:ColorTransform):void
+        {
+            _m_inCol = value;
+        }
+
+        [transient]
+        private var _m_outCol:ColorTransform;
+
         /**
          * Color of the bounding box border.
          */
-        private transient   var m_outCol:Color;
-        
+        public function set m_outCol(value:ColorTransform):void
+        {
+            _m_outCol = value;
+        }
+
+        [transient]
+        private var _m_color:int;
+
         /**
          * Color of the text.
          */
-        private transient   var m_color:int;
-        
+        public function set m_color(value:int):void
+        {
+            _m_color = value;
+        }
+
+        [transient]
+        private var _m_bkCol:int;
+
         /**
          * Color of the text background.
          */
-        private transient   var m_bkCol:int;
-        
+        public function set m_bkCol(value:int):void
+        {
+            _m_bkCol = value;
+        }
+
+        [transient]
+        private var _m_size:int;
+
         /**
          * Size of the typeface.
          */
-        private transient   var m_size:int;
-        
+        public function set m_size(value:int):void
+        {
+            _m_size = value;
+        }
+
+        [transient]
+        private var _m_style:int;
+
         /**
          * Style of the text (bold, italic,...)
          */
-        private transient   var m_style:int;
-        
+        public function set m_style(value:int):void
+        {
+            _m_style = value;
+        }
+
+        [transient]
+        private var _m_name:String;
+
         /**
          * Name of the font.
          */
-        private transient   var m_name:String;
-        
+        public function set m_name(value:String):void
+        {
+            _m_name = value;
+        }
+
+        [transient]
+        private var _m_wCur:int;
+
         /**
          * Width of the current line of text while processing it.
          */
-        private transient   var m_wCur:int;
-        
+        public function set m_wCur(value:int):void
+        {
+            _m_wCur = value;
+        }
+
+        [transient]
+        private var _m_body:FormatToken;
+
         /**
          * Format of the whole text (HTML body). This is also the default format for new tokens.
          */
-        private transient   var m_body:FormatToken;
+        public function set m_body(value:FormatToken):void
+        {
+            _m_body = value;
+        }
+
         
         /**
          * Format of the current Token.
          */
-        private transient   var m_curTok:FormatToken;
+        [transient]
+        private var m_curTok:FormatToken;
         
         /**
          * Fake default constructor. It's called by Server Swatchs.
@@ -187,7 +243,7 @@ package {
          * @param flags		Default text alignment flags.
          * @param margin	Default margins size.
          */
-        public function HTMLText( inCol:Color, outCol:Color, textCol:int, fontSiz:int, fontStl:int, fontNam:String, flags:int, margin:Insets)
+        /*public function HTMLText( inCol:Color, outCol:Color, textCol:int, fontSiz:int, fontStl:int, fontNam:String, flags:int, margin:Insets)
         {
             m_body          = new FormatToken();
             m_body.m_flags  = flags;
@@ -209,7 +265,7 @@ package {
             
             if (( fontStl & Font.BOLD )!= 0)   m_heap.addElement( "b" );
             if (( fontStl & Font.ITALIC )!= 0) m_heap.addElement( "i" );
-        }
+        }*/
         
         /**
          * Gets a new or existing HTMLText and initialize its bounding box.
@@ -240,7 +296,29 @@ package {
                 {
                     var font:FontX= getFont( FONT_VAL, zone );
                     
-                    htmlTxt = new HTMLText( getColor( IN_COL_VAL, zone ), getColor( OUT_COL_VAL, zone ), (ColorX(getValue( TEXT_COL_VAL, zone ))).m_color, font.getInt( FontX.SIZE_VAL, zone ), font.getFlags( zone ), font.getString( FontX.NAME_VAL, zone ), getFlags( zone ), new Insets( 0, 2, 0, 2));
+                    htmlTxt = new HTMLText();
+                    //TODO set htmlTxt.m_body
+                    //htmlTxt.m_body = new FormatToken();
+                    //htmlTxt.m_body.m_flags  = getFlags( zone );
+                    //htmlTxt.m_body.m_margin = new Insets( 0, 2, 0, 2);
+                    
+                    htmlTxt.m_inCol = getColor( IN_COL_VAL, zone );
+                    htmlTxt.m_outCol = getColor( OUT_COL_VAL, zone );
+                    htmlTxt.m_color = (ColorX(getValue( TEXT_COL_VAL, zone ))).m_color;
+                    htmlTxt.m_bkCol = -1;
+                    htmlTxt.m_style = font.getFlags( zone );
+                    htmlTxt.m_size = font.getInt( FontX.SIZE_VAL, zone );
+                    htmlTxt.m_name = font.getString( FontX.NAME_VAL, zone );
+                    htmlTxt.m_wCur = 0;
+                    htmlTxt.m_tokens = new Vector();
+                    var heapElements:Vector.<String> = new Vector.<String>();
+                    heapElements.push("c#" + (ColorX(getValue( TEXT_COL_VAL, zone ))).m_color.toString(16));
+                    heapElements.push("s=" + font.getInt( FontX.SIZE_VAL, zone ));
+                    heapElements.push("f=" +   font.getString( FontX.NAME_VAL, zone ));
+                    if (( font.getFlags( zone ) & Font.BOLD )!= 0)   heapElements.push( "b" );
+                    if (( font.getFlags( zone ) & Font.ITALIC )!= 0) heapElements.push( "i" );
+                    htmlTxt.m_heap = heapElements;
+                    
                     htmlTxt.parseText( g, lines );
                     htmlTxt.setTextBnds( applet.getSize(), getFlags( zone ), zone.m_flags ,transfo, supCtr, center );
                 }
@@ -669,7 +747,7 @@ package {
             if (( dir & 2)!= 0)         pos.y = yMax;
             else if (( dir & 1)!= 0)    pos.y = yMax >> 1;
             
-            drawText( g, size, pos );
+            drawText3( g, size, pos );
         }
         
         /**
@@ -677,8 +755,8 @@ package {
          * @param g		Graphics to draw in.
          * @param size	Size of the Window to draw in.
          */
-        protected function drawText( g:Graphics, size:Dimension):void {
-            drawText( g, size, new Point( m_bounds.x, m_bounds.y ));
+        protected function drawText2( g:Graphics, size:Rectangle):void {
+            drawText3( g, size, new Point( m_bounds.x, m_bounds.y ));
         }
         
         /**
@@ -687,7 +765,7 @@ package {
          * @param size	Size of the Window to draw in.
          * @param pos	Where to draw this.
          */
-        protected function drawText( gi:Graphics, size:Dimension, pos:Point):void {
+        protected function drawText3( gi:Graphics, size:Rectangle, pos:Point):void {
             var g:Graphics2D= Graphics2D(gi);
             
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
@@ -875,12 +953,12 @@ package {
         }
     }
     
-    import java.awt.FontMetrics;
-    import java.awt.Rectangle;
-    import java.awt.Point;
-    import java.awt.Graphics;
-    import java.awt.Color;
+    /*import java.awt.Color;
     import java.awt.Font;
+    import java.awt.FontMetrics;
+    import java.awt.Graphics;
+    import java.awt.Point;
+    import java.awt.Rectangle;*/
     
     /**
      * <p>Title: TextToken</p>
@@ -891,33 +969,33 @@ package {
      * @author flugue@mapstan.com
      * @version 1.0
      */
-    public class TextToken
-    {
+    /*public class TextToken
+    {*/
         /**
          * Text to write.
          */
-        protected var m_text:String;
+        /*protected var m_text:String;*/
         
         /**
          * Bounding box of this text.
          * This is used to locate the text and to draw it's background color if it has.
          */
-        protected var m_bounds:Rectangle;
+        /*protected var m_bounds:Rectangle;*/
         
         /**
          * A Font object describing the size, style and name of the typeFace or null to use the current one.
          */
-        protected var m_font:Font;
+        /*protected var m_font:Font;*/
         
         /**
          * The color of the text or null to use the current one.
          */
-        protected var m_color:Color;
+        /*protected var m_color:Color;*/
         
         /**
          * The color of the backgroud or null if there is none.
          */
-        protected var m_bkCol:Color;
+        /*protected var m_bkCol:Color;*/
         
         /**
          * Paint this at a specified location.
@@ -925,7 +1003,7 @@ package {
          * @param g		The graphics to draw in.
          * @param pos	The position where this should be drawn before its internal translation is added.
          */
-        protected function paint( g:Graphics, pos:Point):void {
+        /*protected function paint( g:Graphics, pos:Point):void {
             var x:int= m_bounds.x + pos.x,
                 y = m_bounds.y + pos.y;
             
@@ -941,7 +1019,7 @@ package {
         }
     }
     
-    import java.awt.Insets;
+    import java.awt.Insets;*/
     
     /**
      * <p>Title: FormatToken</p>
@@ -952,31 +1030,31 @@ package {
      * @author flugue@mapstan.com
      * @version 1.0
      */
-    public class FormatToken
-    {
+    /*public class FormatToken
+    {*/
         /**
          * Current line margins.
          */
-        protected var m_margin:Insets;
+        /*protected var m_margin:Insets;*/
         
         /**
          * Current line maximum ascent (Top of the highest letter)
          */
-        protected var m_aMax:int;
+        /*protected var m_aMax:int;*/
         
         /**
          * Current line maximum descent (Bottom of the lowest letter)
          */
-        protected var m_dMax:int;
+        /*protected var m_dMax:int;*/
         
         /**
          * Current line text alignment flags.
          */
-        protected var m_flags:int;
+        /*protected var m_flags:int;*/
         
         /**
          * Current line width.
          */
-        protected var m_width:int;
-    }
+        /*protected var m_width:int;*/
+    /*}*/
 }

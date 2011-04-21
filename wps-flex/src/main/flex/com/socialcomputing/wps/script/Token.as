@@ -1,7 +1,4 @@
-package  {
-    import java.io.UnsupportedEncodingException;
-    import java.net.URLEncoder;
-    import java.util.Hashtable;
+package com.socialcomputing.wps.script  {
     
     /**
      * <p>Title: Token</p>

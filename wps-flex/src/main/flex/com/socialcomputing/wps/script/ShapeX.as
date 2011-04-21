@@ -1,21 +1,7 @@
-package  {
-    import java.awt.AlphaComposite;
-    import java.awt.BasicStroke;
-    //import java.awt.Color;
-    import java.awt.Composite;
-    import java.awt.Graphics;
-    import java.awt.Graphics2D;
-    import java.awt.Image;
-    import java.awt.Point;
-    import java.awt.Polygon;
-    import java.awt.Rectangle;
-    import java.awt.RenderingHints;
-    import java.awt.Stroke;
-    import java.awt.geom.QuadCurve2D;
-    import java.awt.image.ImageObserver;
-    import java.io.Serializable;
-    import java.io.UnsupportedEncodingException;
-    import java.util.Hashtable;
+package com.socialcomputing.wps.script  {
+    import flash.display.Graphics;
+    import flash.geom.Point;
+    import flash.geom.Rectangle;
     
     /**
      * <p>Title: ShapeX</p>
@@ -383,7 +369,7 @@ package  {
          * @param transfo		A transformation of this shape to put the image inside.
          * @param center		This shape center before the transformation.
          */
-        protected function drawImage( applet:WPSApplet, g:Graphics, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
+        protected function drawImage( g:Graphics, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
                 var medias:Hashtable= applet.m_env.m_medias;

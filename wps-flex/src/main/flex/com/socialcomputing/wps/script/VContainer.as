@@ -1,4 +1,4 @@
-package  {
+package com.socialcomputing.wps.script  {
     
     /**
      *
