@@ -3,10 +3,24 @@
 				   xmlns:s="library://ns.adobe.com/flex/spark" 
 				   xmlns:mx="library://ns.adobe.com/flex/mx">
 
+	<fx:Script>
+		<![CDATA[
+			[Bindable]
+			private var _dataProvider:Object;
+
+			public function set dataProvider(value:Object):void
+			{
+				_dataProvider = value;
+			}
+		]]>
+	</fx:Script>
 	
 	<fx:Declarations>
 		<!-- Placer ici les éléments non visuels (services et objets de valeur, par exemple). -->
 	</fx:Declarations>
-	
-	<s:Label text="Draw the plan content here" />
+	<s:layout>
+		<s:VerticalLayout />
+	</s:layout>
+	<s:Label text="Duration : {_dataProvider.duration}" />
+	<s:Label text="Name :  {_dataProvider.name}" />
 </s:BorderContainer>

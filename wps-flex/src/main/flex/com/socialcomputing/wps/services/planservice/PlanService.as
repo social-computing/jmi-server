@@ -8,6 +8,7 @@
 package com.socialcomputing.wps.services.planservice
 {
 	import com.socialcomputing.serializers.RESTSerializationFilter;
+	import com.socialcomputing.serializers.json.JSONSerializationFilter;
 	
 	import mx.rpc.AbstractOperation;
 	import mx.rpc.AsyncToken;
@@ -17,13 +18,9 @@ package com.socialcomputing.wps.services.planservice
 		
 	public class PlanService extends HTTPMultiService {
  		
-		// private static var jsonSerializerFilter:JSONSerializationFilter = new JSONSerializationFilter();
-		
-		private static var restSerializationFilter:SerializationFilter = new RESTSerializationFilter();
+		private static var restSerializationFilter:JSONSerializationFilter = new JSONSerializationFilter();
 		private static var engineInstance:String = "0";
 		private static var jsonFormat:String = "json";
-		
-		// private var _serviceControl:HTTPMultiService;
 
 		// Initialize service control
 		// "http://192.168.111.12:8180/wps/services/engine/"
@@ -40,7 +37,7 @@ package com.socialcomputing.wps.services.planservice
 			operation.serializationFilter = restSerializationFilter;
 			operation.properties = new Object();
 			operation.properties[RESTSerializationFilter.URL_PARAMETERS_NAMES] = ["name"];
-			operation.resultType = String;
+			operation.resultType = Object;
 			operations.push(operation);
 			this.operationList = operations;  
 		}

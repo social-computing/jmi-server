@@ -59,24 +59,17 @@
                 getPlanResult.token = planService.getPlan(planName, "5");
             }
 
-			protected function onGetPlanResult(event:ResultEvent):void
-			{
-				var rawData:String = String(event.result);
-				var planContainer:Object = JSON.decode(rawData);
-			}
-
         ]]>
     </fx:Script>
     
     <fx:Declarations>
         <s:CallResponder id="getPlanResult"
-						 fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)"
-						 result="onGetPlanResult(event)" />
+						 fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)" />
     </fx:Declarations>
     
     <s:layout>
         <s:VerticalLayout gap="20" />
     </s:layout>
     <s:Label text="Cartographie WPS :" />	
-    <components:Plan width="{planWidth}" height="{planHeight}"/>
+    <components:Plan width="{planWidth}" height="{planHeight}" dataProvider="{getPlanResult.lastResult}"/>
 </s:Application>
