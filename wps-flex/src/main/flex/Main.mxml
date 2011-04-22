@@ -4,14 +4,16 @@
                xmlns:mx="library://ns.adobe.com/flex/mx" 
                minWidth="955" minHeight="600" 
                xmlns:components="com.socialcomputing.wps.components.*"
-               creationComplete="application1_creationCompleteHandler(event)" xmlns:planservice2="services.planservice2.*">
+               creationComplete="onCreationComplete(event)">
     <fx:Script>
         <![CDATA[
+			import com.adobe.serialization.json.JSON;
 			import com.socialcomputing.wps.services.planservice.PlanService;
 			
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
             
             // TODO replace by parameter values
             [Bindable]
@@ -51,19 +53,25 @@
             var wps:WPSApplet;
             */
 			
-            protected function application1_creationCompleteHandler(event:FlexEvent):void
+            protected function onCreationComplete(event:FlexEvent):void
             {
                 planService.showBusyCursor = true;
-                //planService.addEventListener(FaultEvent.FAULT, 
-                //     function(event:FaultEvent):void {Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)});
                 getPlanResult.token = planService.getPlan(planName, "5");
             }
+
+			protected function onGetPlanResult(event:ResultEvent):void
+			{
+				var rawData:String = String(event.result);
+				var planContainer:Object = JSON.decode(rawData);
+			}
+
         ]]>
     </fx:Script>
     
     <fx:Declarations>
         <s:CallResponder id="getPlanResult"
-						 fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)"/>
+						 fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)"
+						 result="onGetPlanResult(event)" />
     </fx:Declarations>
     
     <s:layout>

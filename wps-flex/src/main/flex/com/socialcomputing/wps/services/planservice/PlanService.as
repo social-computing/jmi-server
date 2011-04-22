@@ -40,7 +40,7 @@ package com.socialcomputing.wps.services.planservice
 			operation.serializationFilter = restSerializationFilter;
 			operation.properties = new Object();
 			operation.properties[RESTSerializationFilter.URL_PARAMETERS_NAMES] = ["name"];
-			operation.resultType = Object;
+			operation.resultType = String;
 			operations.push(operation);
 			this.operationList = operations;  
 		}
