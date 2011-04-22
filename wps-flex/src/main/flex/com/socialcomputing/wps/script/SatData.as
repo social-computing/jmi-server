@@ -1,4 +1,5 @@
-package  {
+package com.socialcomputing.wps.script  {
+ 
     /**
      * <p>Title: SatData</p>
      * <p>Description: Bufferized satellites data of the swatchs.<vr>

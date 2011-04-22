@@ -1,7 +1,4 @@
-package  {
-    import java.awt.Font;
-    import java.io.Serializable;
-    import java.util.Hashtable;
+package com.socialcomputing.wps.script  {
     
     /**
      * <p>Title: FontX</p>

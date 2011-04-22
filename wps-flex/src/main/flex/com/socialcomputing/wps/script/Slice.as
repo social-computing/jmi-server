@@ -1,15 +1,6 @@
-package  {
-    import java.awt.Color;
-    import java.awt.Font;
-    import java.awt.Graphics;
-    import java.awt.Insets;
-    import java.awt.Point;
-    import java.awt.Rectangle;
-    import java.io.BufferedReader;
-    import java.io.InputStream;
-    import java.io.InputStreamReader;
-    import java.io.Serializable;
-    import java.io.UnsupportedEncodingException;
+package com.socialcomputing.wps.script  {
+    import flash.geom.Point;
+    import flash.geom.Rectangle;
     
     /**
      * <p>Title: Slice</p>
@@ -166,7 +157,7 @@ package  {
                     
                     if ( htmlTxt != null )
                     {
-                        htmlTxt.drawText( g, applet.getSize());
+                        htmlTxt.drawText2( g, applet.getSize());
                         zone.m_datas.put( key, htmlTxt );
                     }
                 }
@@ -227,7 +218,7 @@ package  {
          * @param bounds		A Rectangle to merge with this bounds.
          * @throws UnsupportedEncodingException 
          */
-        protected function setBounds( applet:WPSApplet, g:Graphics, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point, bounds:Rectangle):void {
+        protected function setBounds(g:Graphics, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point, bounds:Rectangle):void {
             var transfo:Transfo= getTransfo( TRANSFO_VAL, zone );
             
             if ( supZone == null )  supZone     = zone;
@@ -281,7 +272,7 @@ package  {
          * @param hashcode	A unique ID for the sub part.
          * @return	An ID that is a unique combination of the txo hashcodes.
          */
-        private function getKey( hashcode:Number):Long {
+        private function getKey( hashcode:Number):Number {
             return new Long( hashCode()+( hashcode << 32));
         }
     }

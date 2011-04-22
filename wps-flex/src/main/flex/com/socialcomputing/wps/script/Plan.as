@@ -1,6 +1,10 @@
-package  {
+package com.socialcomputing.wps.script  {
+    import flash.display.Graphics;
     import flash.geom.Point;
-
+    import flash.geom.Rectangle;
+    
+    import mx.controls.Image;
+    
     /**
      * <p>Title: Plan</p>
      * <p>Description: This describe a Plan comming from the Server and manage the interaction with the zones.</p>
@@ -9,7 +13,7 @@ package  {
      * @author flugue@mapstan.com
      * @version 1.0
      */
-    public class Plan implements WaitListener
+    public class Plan
     {
         /**
          * The table of links (streets). This include the fakes one (those who get out of the screen).
@@ -38,50 +42,59 @@ package  {
          * This id is between [0, 31]
          * If there is no current s�lection, this index is -1
          */
-        protected transient   var m_curSel:int;
+        [transient]
+        protected var m_curSel:int;
         
         /**
          * Current Satellite (the one that is active).
          * If there is no current Satellite, it should be null.
          */
-        protected   transient   var m_curSat:Satellite;
+        [transient]
+        protected var m_curSat:Satellite;
         
         /**
          * Bounding box of the Plan before resizing (pixels).
          */
-        protected   transient   var m_prevBox:Rectangle;
+        [transient]
+        protected var m_prevBox:Rectangle;
         
         /**
          * Maximum bounding box of all zones. This is also the m_blitBuf size.
          */
-        protected   transient   var m_maxBox:Dimension;
+        [transient]
+        protected var m_maxBox:Dimension;
         
         /**
          * Temporary buffer for zone blitting operations.Its size is m_maxBox.
          */
-        protected   transient   var m_blitBuf:Image;
+        [transient]
+        protected var m_blitBuf:Image;
         
         /**
          * Current super BagZone (the one that is active).
          * If there is no current ActiveZone, it should be null.
          */
-        protected   transient   var m_curZone:ActiveZone;
+        [transient]
+        protected var m_curZone:ActiveZone;
         
         /**
          * Current ActiveZone (the one that is active). This can be a subZone, different from m_curZone.
          * If there is no current ActiveZone, it should be null.
          */
-        protected   transient   var m_newZone:ActiveZone;
+        [transient]
+        protected var m_newZone:ActiveZone;
         
         /**
          * The Applet holding this Plan.
          */
-        protected   transient   var m_applet:WPSApplet;
+        [transient]
+        protected var m_applet:WPSApplet;
         
         /**
          * Table of waiters to manage tooltips.
          */
-        protected   transient   var m_waiters:Hashtable;
+        [transient]
+        protected var m_waiters:Hashtable;
         
         /**
          * Initialize an array of zones (Nodes or Links).
@@ -91,7 +104,8 @@ package  {
          * @param zones		An array of zones (m_nodes or m_links).
          * @param isFirst	True if this is the first call of the session (optimisation).
          */
-        protected synchronized function initZones( g:Graphics, zones:Array, isFirst:Boolean):void {
+        //protected synchronized function initZones( g:Graphics, zones:Array, isFirst:Boolean):void {
+        protected function initZones( g:Graphics, zones:Array, isFirst:Boolean):void {
             var i:int, n    = zones.length;
             var dim:Dimension= m_applet.getSize();
             
@@ -152,7 +166,8 @@ package  {
         /**
          * Prepare the Plan by initializing zones, allocating and filling the image buffers and repainting the Applet.
          */
-        protected synchronized function init( ):void {
+        //protected synchronized function init( ):void {
+        protected function init( ):void {
             var dim:Dimension= m_applet.getSize();
             var backGfx:Graphics= m_applet.m_backImg.getGraphics(),
                 restGfx = m_applet.m_restImg.getGraphics(),
@@ -332,7 +347,7 @@ package  {
          * Evaluates the new position and size of the Places and Streets, and allocate the buffers accordingly to the new size.
          * @param dim	New size of the Applet.
          */
-        protected function resize( dim:Dimension):void {
+        protected function resize(dim:Rectangle):void {
             if ( m_prevBox != null &&(( m_prevBox.width != dim.width )||( m_prevBox.height != dim.height ))&& dim.width > 100&& dim.height > 100)
             {
                 var margin:int= 10;
@@ -441,7 +456,8 @@ package  {
          * </ul>
          * @param state
          */
-        public synchronized function stateChanged( params:Array, state:int):void {
+        //public synchronized function stateChanged( params:Array, state:int):void {
+        public function stateChanged( params:Array, state:int):void {
             if ( m_applet.m_plan != null )
             {
                 var g:Graphics= m_applet.getGraphics();
@@ -525,7 +541,8 @@ package  {
          * @param image		An Image from which a rectangle is copyed.
          * @param bounds	Bounds of the image part to copy into g.
          */
-        private synchronized function blitImage( g:Graphics, image:Image, bounds:Rectangle):void {
+        //private synchronized function blitImage( g:Graphics, image:Image, bounds:Rectangle):void {
+        private function blitImage(g:Graphics, image:Image, bounds:Rectangle):void {
             var dim:Dimension= m_applet.getSize();
             var x1:int= bounds.x < 0? 0: bounds.x,
                 y1 = bounds.y < 0? 0: bounds.y,

@@ -1,12 +1,6 @@
-package  {
-    import java.awt.Color;
-    import java.awt.Graphics;
-    import java.io.Serializable;
-    import java.io.UnsupportedEncodingException;
-    import java.util.Hashtable;
-    import java.util.NoSuchElementException;
-    import java.util.StringTokenizer;
-    import java.util.Vector;
+package com.socialcomputing.wps.script  {
+    import flash.display.Graphics;
+    import flash.geom.ColorTransform;
     
     /**
      * <p>Title: Base</p>
@@ -75,7 +69,7 @@ package  {
          * @param	props	Props table
          * @return	an int containing the bits of the flag.
          */
-        protected function getFlags( props:Hashtable):int {
+        protected function getFlags( props:Array):int {
             return getInt( FLAGS_VAL, props );
         }
         
@@ -85,7 +79,7 @@ package  {
          * @param	props	If this contains a referenced property, props is the table that hold the property.
          * @return	the Object corresponding to the field whose index is prop or null if the property doesn't exists or is void.
          */
-        protected function getValue( prop:int, props:Hashtable):Object {
+        protected function getValue( prop:int, props:Array):Object {
             var container:VContainer= m_containers[prop];
             
             return container != null ?( container.m_isBound ? props.get( container.m_value ) : container.m_value ): null;
@@ -109,7 +103,7 @@ package  {
          * @param	props	If this contains a referenced property, props is the table that hold the property.
          * @return	the int corresponding to the field whose index is prop or null if the property doesn't exists or is void.
          */
-        protected function getInt( prop:int, props:Hashtable):int {
+        protected function getInt( prop:int, props:Array):int {
             return (Integer(getValue( prop, props ))).intValue();
         }
         
@@ -120,7 +114,7 @@ package  {
          * @param	props	If this contains a referenced property, props is the table that hold the property.
          * @return	the float corresponding to the field whose index is prop or null if the property doesn't exists or is void.
          */
-        protected function getFloat( prop:int, props:Hashtable):Number {
+        protected function getFloat( prop:int, props:Array):Number {
             return (Float(getValue( prop, props ))).floatValue();
         }
         
@@ -131,7 +125,7 @@ package  {
          * @param	props	If this contains a referenced property, props is the table that hold the property.
          * @return	the String corresponding to the field whose index is prop or null if the property doesn't exists or is void.
          */
-        protected function getString( prop:int, props:Hashtable):String {
+        protected function getString( prop:int, props:Array):String {
             return String(getValue( prop, props ));
         }
         
@@ -142,7 +136,7 @@ package  {
          * @param	props	If this contains a referenced property, props is the table that hold the property.
          * @return	the HTMLText corresponding to the field whose index is prop or null if the property doesn't exists or is void.
          */
-        protected function getText( prop:int, props:Hashtable):HTMLText {
+        protected function getText( prop:int, props:Array):HTMLText {
             return HTMLText(getValue( prop, props ));
         }
         
@@ -153,7 +147,7 @@ package  {
          * @param	props	If this contains a referenced property, props is the table that hold the property.
          * @return	the FontX corresponding to the field whose index is prop or null if the property doesn't exists or is void.
          */
-        protected function getFont( prop:int, props:Hashtable):FontX {
+        protected function getFont( prop:int, props:Array):FontX {
             return FontX(getValue( prop, props ));
         }
         
@@ -167,7 +161,7 @@ package  {
          * @return	the Color corresponding to the ColorX field whose index is prop or null if the property doesn't exists or is void.
          * @throws UnsupportedEncodingException 
          */
-        protected function getColor( prop:int, props:Hashtable):Color {
+        protected function getColor( prop:int, props:Array):ColorTransform {
             var color:ColorX= ColorX(getValue( prop, props ));
             var ContainerColor:Color= null;
             
@@ -175,7 +169,7 @@ package  {
                 return null;
             
             try {
-                ContainerColor = color.getColor( props);
+                ContainerColor = color.getColor2( props);
             } catch (e:UnsupportedEncodingException) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -191,7 +185,7 @@ package  {
          * @param	props	If this contains a referenced property, props is the table that hold the property.
          * @return	the Transfo corresponding to the field whose index is prop or null if the property doesn't exists or is void.
          */
-        protected function getTransfo( prop:int, props:Hashtable):Transfo {// What's that strange test?????
+        protected function getTransfo( prop:int, props:Array):Transfo {// What's that strange test?????
             if ( getValue( prop, props ) is String )
             {
                 return null;
@@ -207,7 +201,7 @@ package  {
          * @return			True if the property exist and has a value. False Otherwise.
          * @throws UnsupportedEncodingException 
          */
-        protected function setColor( g:Graphics, prop:int, props:Hashtable):Boolean // throws UnsupportedEncodingException
+        protected function setColor( g:Graphics, prop:int, props:Array):Boolean // throws UnsupportedEncodingException
         {
             var color:Color= getColor( prop, props );
             
@@ -261,7 +255,7 @@ package  {
          * @return			An array of String or null if the property doesn't exists or is void.
          * @throws UnsupportedEncodingException 
          */
-        protected function parseString(prop:int, props:Hashtable):Array
+        protected function parseString(prop:int, props:Array):Array
         {
             var text:String= getString( prop, props );
             
@@ -281,7 +275,7 @@ package  {
          */
         //protected function parseString(prop:int, props:Hashtable, isHtm:Boolean):String // throws UnsupportedEncodingException
         // Renommage nom fonction
-        protected function parseString2(prop:int, props:Hashtable, isHtm:Boolean):String // throws UnsupportedEncodingException
+        protected function parseString2(prop:int, props:Array, isHtm:Boolean):String // throws UnsupportedEncodingException
         {
             var text:String= getString( prop, props );
             var returnstring:String= null;
@@ -306,7 +300,7 @@ package  {
          */
         //protected function parseString(text:String, props:Hashtable):Array
         // Renommage nom fonction
-        protected function parseString3(text:String, props:Hashtable):Array
+        protected function parseString3(text:String, props:Array):Array
         {
             var tokens:Vector = parseTokens( text );
             var token:Token;
@@ -358,7 +352,7 @@ package  {
          * @return			A String containing <br> between each lines.
          * @throws UnsupportedEncodingException 
          */
-        static protected function parseString( text:String, props:Hashtable, isHtm:Boolean):String {
+        static protected function parseString( text:String, props:Array, isHtm:Boolean):String {
             var tokens:Vector= parseTokens( text );
             var token:Token;
             var i:int, j, n, max = 0, len = tokens.size();

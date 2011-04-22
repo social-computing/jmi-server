@@ -1,13 +1,9 @@
-package  {
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.image.ImageObserver;
-import java.io.Serializable;
-import java.util.Enumeration;
-import java.util.Hashtable;
+package com.socialcomputing.wps.script  {
+    import flash.display.Graphics;
+    import flash.geom.ColorTransform;
+    import flash.geom.Rectangle;
+    
+    import mx.controls.Image;
 
 /**
  * <p>Title: Env</p>
@@ -74,29 +70,29 @@ public class Env
 	 * ex : paths of icons, name of user...
 	 * Those props are copied in Zones table during init.
 	 */
-	public      var m_props:Hashtable;
+	public      var m_props:Array;
 
 	/**
 	 * Table of the 32 selection name.
 	 * This is used by swatchs because they only know the selection name, not the ID.
 	 * It should be used by Javascript...but it isn't.
 	 */
-	public      var m_selections:Hashtable;
+	public      var m_selections:Array;
 
 	/**
 	 * Table containing icons and sounds.
 	 * This buffer stores all media object using a unique key to load them asynchronously during init.
 	 */
     [transient]
-	protected var m_medias:Hashtable = null;
+	protected var m_medias:Array = null;
 
 	/**
 	 * A simple reference to the Applet.
 	 * This is necessary because the Thread must know the Applet.
 	 * But it is launch by run() that don't have any arguments.
 	 */
-    [transient]
-	private var m_applet:WPSApplet = null;
+    /*[transient]
+	private var m_applet:WPSApplet = null;*/
 
 	/**
 	 * If a selection has this flag set, it can be displayed by an external UI
@@ -113,12 +109,14 @@ public class Env
 	 * @param applet
 	 * @param needPrint
 	 */
-	function init( applet:WPSApplet, needPrint:Boolean):void {
-		var bkCol:Color= needPrint ? Color.white : m_inCol.getColor();
-		applet.setBackground( bkCol );
+	private function init(needPrint:Boolean):void {
+        var bkWhite:ColorTransform = new ColorTransform();
+        bkWhite.color = 0xFFFFFF;
+		var bkCol:ColorTransform= needPrint ? bkWhite : m_inCol.getColor();
+		//applet.setBackground( bkCol );
 
-		m_applet        = applet;
-		m_medias        = new Hashtable();
+		//m_applet        = applet;
+		m_medias        = new Array();
 	}
 
 	/**
@@ -148,7 +146,7 @@ public class Env
 	 * It is important to displayed images because else they will never be loaded!
 	 */
 	public function run():void {
-		var tracker:MediaTracker= new MediaTracker( m_applet );
+		/*var tracker:MediaTracker= new MediaTracker( m_applet );
 		var enumvar:Enumeration;
 		var image:Image;
 		var media:Object;
@@ -194,7 +192,7 @@ public class Env
 			m_applet.m_plan.init();
 			m_applet.repaint();
 			m_applet.m_isMediaReady	= true;
-		}
+		}*/
 	}
 
 	/**
@@ -202,7 +200,7 @@ public class Env
 	 * This is needed to reload images when the plan is resized.
 	 */
 	protected function clearMedias():void {
-		var enumvar:Enumeration= m_medias.elements();
+		/*var enumvar:Enumeration= m_medias.elements();
 		var media:Object;
 
 		while ( enumvar.hasMoreElements())
@@ -215,7 +213,7 @@ public class Env
 			}
 		}
 
-		m_medias.clear();
+		m_medias.clear();*/
 	}
 
 	/**
@@ -224,11 +222,12 @@ public class Env
 	 * @param image		The image to cover.
 	 * @param dim		size of the image.
 	 */
-	protected function filterImage( image:Image, dim:Dimension):void {
+	protected function filterImage( image:Image, dim:Rectangle):void {
 		if ( m_filterCol != null )
 		{
-			var col:Color= m_filterCol.getColor();
-			var g:Graphics= image.getGraphics();
+			var col:ColorTransform= m_filterCol.getColor();
+            image.alpha = 0.5;
+			/*var g:Graphics= image.getGraphics();
 
 			g.setColor( col );
 
@@ -260,7 +259,7 @@ public class Env
 				{
 					g.drawLine( w, i, 0, min + i );
 				}
-			}
+			}*/
 		}
 	}
 }
