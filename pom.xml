@@ -45,6 +45,20 @@
     </repository>
   </repositories>
   
+  <pluginRepositories>
+    <pluginRepository>
+        <id>flexgroup-repository</id>
+        <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
+        <releases>
+            <enabled>true</enabled>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+  
+  
   <properties>
     <applet.version>${project.version}</applet.version>
     <jetty.version>8.0.0.M2</jetty.version>
