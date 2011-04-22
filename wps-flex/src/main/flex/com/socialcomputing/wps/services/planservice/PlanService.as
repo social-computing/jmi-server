@@ -7,43 +7,42 @@
  
 package com.socialcomputing.wps.services.planservice
 {
-	import com.adobe.fiber.core.model_internal;
-	import com.adobe.fiber.services.wrapper.HTTPServiceWrapper;
-	import com.adobe.serializers.json.JSONSerializationFilter;
+	import com.socialcomputing.serializers.RESTSerializationFilter;
 	
+	import mx.rpc.AbstractOperation;
 	import mx.rpc.AsyncToken;
 	import mx.rpc.http.HTTPMultiService;
-	
-	public class PlanService extends com.adobe.fiber.services.wrapper.HTTPServiceWrapper {
+	import mx.rpc.http.Operation;
+	import mx.rpc.http.SerializationFilter;
+		
+	public class PlanService extends HTTPMultiService {
  		
-		private static var jsonSerializerFilter:JSONSerializationFilter = new JSONSerializationFilter();
+		// private static var jsonSerializerFilter:JSONSerializationFilter = new JSONSerializationFilter();
+		
+		private static var restSerializationFilter:SerializationFilter = new RESTSerializationFilter();
 		private static var engineInstance:String = "0";
 		private static var jsonFormat:String = "json";
+		
+		// private var _serviceControl:HTTPMultiService;
 
 		// Initialize service control
 		// "http://192.168.111.12:8180/wps/services/engine/"
-		public function PlanService(baseURL:String, planName:String) {
-
-			_serviceControl = new mx.rpc.http.HTTPMultiService(baseURL);
+		public function PlanService(baseURL:String) {
+			super(baseURL);
 			var operations:Array = new Array();
 			var operation:mx.rpc.http.Operation;
-			
+
 			operation = new mx.rpc.http.Operation(null, "getPlan");
-			//operation.url = "0/{planName}.json";
-			operation.url = engineInstance + "/" + planName + "." + jsonFormat;
+			operation.url = engineInstance + "/{name}." + jsonFormat;
 			operation.method = "GET";
-			operation.argumentNames = new Array("entityId");
-			//operation.properties = new Object();
-			//operation.properties["urlParamNames"] = ["planName"];
+			operation.argumentNames = new Array("name", "entityId");;     
+
+			operation.serializationFilter = restSerializationFilter;
+			operation.properties = new Object();
+			operation.properties[RESTSerializationFilter.URL_PARAMETERS_NAMES] = ["name"];
 			operation.resultType = Object;
 			operations.push(operation);
-			
-			//operation.serializationFilter = jsonSerializerFilter;
-			//operation.resultType = valueObjects.Plan;
-
-			
-			_serviceControl.operationList = operations;  
-			model_internal::initialize();
+			this.operationList = operations;  
 		}
 		
 		
@@ -58,12 +57,10 @@ package com.socialcomputing.wps.services.planservice
 		 *
 		 * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
 		 */
-		public function getPlan(entityId:int) : mx.rpc.AsyncToken
+		public function getPlan(name:String, entityId:String) : mx.rpc.AsyncToken
 		{
-			var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getPlan");
-			var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(entityId) ;
-			
-			return _internal_token;
+			var _internal_operation:mx.rpc.AbstractOperation = this.getOperation("getPlan");
+			return _internal_operation.send(name, entityId) ;
 		}
 	}
 }
