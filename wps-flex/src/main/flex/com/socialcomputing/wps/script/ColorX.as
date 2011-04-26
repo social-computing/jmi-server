@@ -70,8 +70,8 @@ package com.socialcomputing.wps.script  {
         
         function getColor2(props:Array):ColorTransform {
             if( m_scolor == null) return new ColorTransform( m_color );
-            var str:String= Base.parseString( m_scolor, props, false);
-            return new ColorTransform( ( str == null ? 0: Integer.parseInt( str)));
+            var str:String= Base.parseString4( m_scolor, props, false);
+            return new ColorTransform( ( str == null ? 0: parseInt( str)));
         }
     }
 }

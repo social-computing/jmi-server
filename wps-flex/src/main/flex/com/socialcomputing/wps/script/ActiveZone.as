@@ -1,5 +1,6 @@
 package com.socialcomputing.wps.script  {
     import flash.display.Graphics;
+    import flash.geom.Rectangle;
     
     /**
      * <p>Title: ActiveZone</p>
@@ -110,7 +111,7 @@ package com.socialcomputing.wps.script  {
          * @param g         A graphics compatible with the one that will be used for painting.
          * @param isFirst   True if init called for the first time.
          */
-        protected function init(g:Graphics, isFirst:Boolean):void {
+        protected function init(applet:WPSApplet, g:Graphics, isFirst:Boolean):void {
             if ( isFirst )  // One time init
             {
                 var sel:Object= get( "SELECTION" );
@@ -124,7 +125,7 @@ package com.socialcomputing.wps.script  {
                 put( "ENV", applet.m_env.m_props );
                 
                 // Optimize prop access
-                rehash();
+                // FRV ???? rehash();
                 
                 m_datas = new Hashtable();
             }
@@ -148,7 +149,7 @@ package com.socialcomputing.wps.script  {
          * @param showTyp   The type of Satellite to show (SEL, TIP, BASE, ALL). See Satellite.XXXX_TYP.
          * @param showLinks True if we only wants to paint links.
          */
-        protected function paint(g:Graphics, isCur:Boolean, isFront:Boolean, showTyp:int, showLinks:Boolean):void {
+        protected function paint(applet:WPSApplet, g:Graphics, isCur:Boolean, isFront:Boolean, showTyp:int, showLinks:Boolean):void {
             if( (m_flags & INVISIBLE_BIT) != 0) return;
             var swatch:Swatch= isCur ? m_curSwh : m_restSwh;
             
