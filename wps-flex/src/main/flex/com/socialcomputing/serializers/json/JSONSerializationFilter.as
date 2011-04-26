@@ -1,9 +1,12 @@
 package com.socialcomputing.serializers.json
 {
 	import com.adobe.serialization.json.JSON;
+	import com.adobe.serialization.json.JSONDecoder;
+	import com.socialcomputing.serializers.RESTSerializationFilter;
+	import com.socialcomputing.wps.script.Env;
+	import com.socialcomputing.wps.script.JSONToWPSDecoder;
 	
 	import mx.rpc.http.AbstractOperation;
-	import com.socialcomputing.serializers.RESTSerializationFilter;
 
 	public class JSONSerializationFilter extends RESTSerializationFilter
 	{
@@ -27,8 +30,10 @@ package com.socialcomputing.serializers.json
 			if(operation.resultType != Object) {
 				throw new ArgumentError("The only supported return type is Object");
 			}
-			var jsonDecoded:Object = JSON.decode(result as String);
-			return jsonDecoded;
+			var json:Object = JSON.decode(result as String);
+			
+			var env:Env = JSONToWPSDecoder.toEnv(json.Env);
+			return json;
 		}
 	}
 }

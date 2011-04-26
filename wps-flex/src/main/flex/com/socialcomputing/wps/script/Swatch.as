@@ -64,7 +64,7 @@ package com.socialcomputing.wps.script  {
          * @param showLinks		True if links between satelites should be drawn. False for the opposite.
          * @throws UnsupportedEncodingException 
          */
-        protected function paint(g:Graphics, zone:ActiveZone, isCur:Boolean, isFront:Boolean, showTyp:int, showLinks:Boolean):void {
+        public function paint(applet:WPSApplet, g:Graphics, zone:ActiveZone, isCur:Boolean, isFront:Boolean, showTyp:int, showLinks:Boolean):void {
             var sat:Satellite= m_satellites[0];
             var shape:ShapeX= sat.m_shape;
             //int             curSel  = applet.m_plan.m_curSel,
@@ -405,7 +405,7 @@ package com.socialcomputing.wps.script  {
          * @return				An array of satellite data.
          * @throws UnsupportedEncodingException 
          */
-        protected function evalSatData( zone:ActiveZone, isSuper:Boolean):Array
+        public function evalSatData(applet:WPSApplet, zone:ActiveZone, isSuper:Boolean):Array
         {
             var i:int, n        = m_satellites.length;
             var satDatas:Array= new SatData[n];

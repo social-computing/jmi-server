@@ -358,12 +358,8 @@ package com.socialcomputing.wps.script  {
                 var zone:ActiveZone;
                 var isFakeFrom:Boolean, isFakeTo;
                 
-                try
-                {
-                    m_applet.m_backImg = m_applet.createImage( dim.width, dim.height );
-                    m_applet.m_restImg = m_applet.createImage( dim.width, dim.height );
-                }
-                catch ( e:Exception){}
+                m_applet.m_backImg = m_applet.createImage( dim.width, dim.height );
+                m_applet.m_restImg = m_applet.createImage( dim.width, dim.height );
                 
                 if ( n < 8)	// too few places, lets reduce their size
                 {

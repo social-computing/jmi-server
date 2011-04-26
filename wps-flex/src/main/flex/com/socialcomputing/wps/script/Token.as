@@ -203,7 +203,7 @@ package com.socialcomputing.wps.script  {
                                 prop = "" + (Number(rawProp )).intValue();
                             if ( m_intSize > 0)            // fixed size
                             {
-                                if ( prop.length() < m_intSize ) //
+                                if ( prop.length < m_intSize ) //
                                 {
                                     if ( Base.isEnabled( m_flags, BOUND_BIT ))
                                     {
@@ -211,7 +211,7 @@ package com.socialcomputing.wps.script  {
                                     }
                                     else
                                     {
-                                        tokenStr = extendWS( prop, m_intSize - prop.length());
+                                        tokenStr = extendWS( prop, m_intSize - prop.length);
                                     }
                                 }
                                 else
@@ -229,7 +229,7 @@ package com.socialcomputing.wps.script  {
                     {
                         if ( m_intSize > 0)            // fixed size
                         {
-                            if ( prop.length() < m_intSize ) //
+                            if ( prop.length < m_intSize ) //
                             {
                                 if ( Base.isEnabled( m_flags, BOUND_BIT ))
                                 {
@@ -237,7 +237,7 @@ package com.socialcomputing.wps.script  {
                                 }
                                 else
                                 {
-                                    tokenStr = extendWS( prop, m_intSize - prop.length());
+                                    tokenStr = extendWS( prop, m_intSize - prop.length);
                                 }
                             }
                             else
@@ -265,11 +265,7 @@ package com.socialcomputing.wps.script  {
             
             if ( Base.isEnabled( m_flags, URLCOD_BIT ))       // We must URLEncode this text!
             {
-                try {
-                    tokenStr = URLEncoder.encode( tokenStr , "UTF-8" );
-                } catch (e:UnsupportedEncodingException) {
-                    e.printStackTrace();
-                }
+            	tokenStr = escape( tokenStr);
             }
             
             return tokenStr;
@@ -303,9 +299,9 @@ package com.socialcomputing.wps.script  {
             if ( c == '/' && Base.isEnabled( m_flags, Token.LIST_BIT ))
             {
                 beg = ++ i;
-                while ( Character.isDigit( text.charAt( i )))   i ++;
-                try { m_lineMax = Integer.parseInt( text.substring( beg, i ));}
-                catch ( e:NumberFormatException) {}
+				// Character.isDigit(...)
+                while (text.charAt( i ) >= '0' && text.charAt( i ) <= '9')   i ++;
+                m_lineMax = parseInt( text.substring( beg, i ));
             }
             
             if ( c == '-' )
@@ -321,17 +317,19 @@ package com.socialcomputing.wps.script  {
             
             beg = i;
             
-            while ( Character.isDigit( text.charAt( i )))   i ++;
+			// Character.isDigit(...)
+            while ( text.charAt( i ) >= '0' && text.charAt( i ) <= '9')   i ++;
             
             if ( text.charAt( i ) == '.' )
             {
                 i ++;
-                while ( Character.isDigit( text.charAt( i )))   i ++;
+				// Character.isDigit(...)
+                while ( text.charAt( i ) >= '0' && text.charAt( i ) <= '9')   i ++;
             }
             
             if ( i > beg )
             {
-                var sizes:Number= ( Float.valueOf( text.substring( beg, i ))).floatValue();
+                var sizes:Number= parseFloat( text.substring( beg, i ));
                 
                 m_intSize = int(sizes);
                 m_floatSize = Math.round( 10.*( sizes - m_intSize ));

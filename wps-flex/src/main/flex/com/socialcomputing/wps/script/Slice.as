@@ -1,4 +1,5 @@
 package com.socialcomputing.wps.script  {
+	import flash.display.Graphics;
     import flash.geom.Point;
     import flash.geom.Rectangle;
     

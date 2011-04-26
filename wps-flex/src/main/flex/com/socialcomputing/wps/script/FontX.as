@@ -1,5 +1,6 @@
 package com.socialcomputing.wps.script  {
-    
+    import flash.text.Font;
+		
     /**
      * <p>Title: FontX</p>
      * <p>Description: A wrapper for the java.awt.Font class.<br>

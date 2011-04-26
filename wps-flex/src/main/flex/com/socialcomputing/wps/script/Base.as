@@ -60,7 +60,7 @@ package com.socialcomputing.wps.script  {
          * @param bit	Index of the bit in [0,31]
          * @return		true if the bit is 1, false otherwise.
          */
-        protected static function isEnabled( flags:int, bit:int):Boolean {
+        public static function isEnabled( flags:int, bit:int):Boolean {
             return ( flags & bit )!= 0;
         }
         
@@ -352,7 +352,7 @@ package com.socialcomputing.wps.script  {
          * @return			A String containing <br> between each lines.
          * @throws UnsupportedEncodingException 
          */
-        static protected function parseString( text:String, props:Array, isHtm:Boolean):String {
+        static public function parseString4( text:String, props:Array, isHtm:Boolean):String {
             var tokens:Vector= parseTokens( text );
             var token:Token;
             var i:int, j, n, max = 0, len = tokens.size();
