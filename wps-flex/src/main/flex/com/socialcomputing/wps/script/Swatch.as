@@ -206,7 +206,7 @@ package com.socialcomputing.wps.script  {
          * @return				This swatch bounding box for zone.
          * @throws UnsupportedEncodingException 
          */
-        function getBounds(g:Graphics, zone:ActiveZone, isCurZone:Boolean):Rectangle {
+        function getBounds(applet:WPSApplet, g:Graphics, zone:ActiveZone, isCurZone:Boolean):Rectangle {
             var bounds:Rectangle= new Rectangle();
             var sat:Satellite= m_satellites[0];
             var shape:ShapeX= sat.m_shape;

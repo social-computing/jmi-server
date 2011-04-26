@@ -1,5 +1,6 @@
 package com.socialcomputing.wps.script  {
     import flash.text.Font;
+    import flash.text.TextFormat;
 		
     /**
      * <p>Title: FontX</p>
@@ -23,17 +24,17 @@ package com.socialcomputing.wps.script  {
         /**
          * Index of the Font name prop in VContainer table
          */
-        public const NAME_VAL:int= 1;
+        public static const NAME_VAL:int= 1;
         
         /**
          * Index of the Font size prop in VContainer table
          */
-        public const SIZE_VAL:int= 2;
+        public static const SIZE_VAL:int= 2;
         
         /**
          * A Font Buffer to reduce temporary Font object creation.
          */
-        private const s_fontBuf:Hashtable= new Hashtable();
+        private const s_fontBuf:Array= new Array();
         
         /**
          * Convert this FontX to a java.awt.Font.
@@ -42,16 +43,22 @@ package com.socialcomputing.wps.script  {
          */
         //function getFont( props:Hashtable):Font {
         // Renommage fonction
-        function getFont2( props:Hashtable):Font {
-            var font:Font;
+        function getFont2( props:Array):TextFormat {
+            var font:TextFormat;
             var flags:int= getFlags( props ),
                 size    = getInt( SIZE_VAL, props );
             var name:String= getString( NAME_VAL, props ),
                 key     = name + flags + size;
             
-            if (( font = Font(s_fontBuf.get( key )))== null )
+            if (( font = TextFormat(s_fontBuf.get( key )))== null )
             {
-                font = new Font( name, flags, size );
+                //font = new Font( name, flags, size );
+                font = new TextFormat();
+                font.font = name;
+                font.size = size;
+                if (flags == 1) font.bold = true;
+                else if (flags == 2) font.italic = true;
+                
                 s_fontBuf.put( key, font );
             }
             

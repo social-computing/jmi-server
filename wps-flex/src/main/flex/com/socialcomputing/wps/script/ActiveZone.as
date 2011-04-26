@@ -18,17 +18,17 @@ package com.socialcomputing.wps.script  {
         /**
          * Bit indicating that subnodes of this are located on one side.
          */
-        public const SIDE_BIT:int= 0x04;
+        public static const SIDE_BIT:int= 0x04;
         
         /**
          * Bit indicating that subnodes are located on the left side.
          */
-        public const LEFT_BIT:int= 0x08;
+        public static const LEFT_BIT:int= 0x08;
         
         /**
          * Bit indicating invisibility.
          */
-        public const INVISIBLE_BIT:int= 0x10;
+        public static const INVISIBLE_BIT:int= 0x10;
         
         /**
          * Flags holding the previously defined bits (XXX_BIT).
@@ -38,51 +38,51 @@ package com.socialcomputing.wps.script  {
         /**
          * Swatch used to render this zone at rest.
          */
-        protected var m_restSwh:Swatch;
+        public var m_restSwh:Swatch;
         
         /**
          * Swatch used to render this zone when it is current (hovered).
          */
-        protected var m_curSwh:Swatch;
+        public var m_curSwh:Swatch;
         
         /**
          * Bounding-Box of this zone including its subZones.
          * The BBox is the union of the rest and current swatch BBoxs and a small margin.
          */
         [transient]
-        protected var m_bounds:Rectangle;
+        public var m_bounds:Rectangle;
         
         /**
          * Flag indicating which of the 32 possible selections are active for this zone.
          */
         [transient]
-        protected var m_selection:int;
+        public var m_selection:int;
         
         /**
          * Parent of this zone if it is clusterized or null if this is already a BagZone.
          */
         [transient]
-        protected var m_parent:ActiveZone;
+        public var m_parent:ActiveZone;
         
         /**
          * Fast graphical data lookup for the rest Swatch Satellites.
          * Not used enough, could improve the performance if more was stored here...
          */
         [transient]
-        protected var m_restData:Array;
+        public var m_restData:Array;
         
         /**
          * Fast graphical data lookup for the current Swatch Satellites.
          * Not used enough, could improve the performance if more was stored here...
          */
         [transient]
-        protected var m_curData:Array;
+        public var m_curData:Array;
         
         /**
          * HTMLText Hashtable to avoid unnecessary calcs.
          */
         [transient]
-        protected var m_datas:Hashtable;
+        public var m_datas:Array;
         
         /**
          * Sets the two swatchs of this zone.
@@ -114,20 +114,21 @@ package com.socialcomputing.wps.script  {
         protected function init(applet:WPSApplet, g:Graphics, isFirst:Boolean):void {
             if ( isFirst )  // One time init
             {
-                var sel:Object= get( "SELECTION" );
+                //var sel:Object= get( "SELECTION" );
+                var sel:Object= this["SELECTION"];
                 
                 if ( sel != null )
                 {
-                    m_selection = (Integer(sel )).intValue();
+                    m_selection = int(sel);
                 }
                 
                 // Quick access to Env props
-                put( "ENV", applet.m_env.m_props );
+                this.push( "ENV", applet.m_env.m_props );
                 
                 // Optimize prop access
                 // FRV ???? rehash();
                 
-                m_datas = new Hashtable();
+                m_datas = new Array();
             }
             
             var isSuper:Boolean= this is BagZone;

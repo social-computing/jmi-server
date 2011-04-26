@@ -3,6 +3,9 @@ package com.socialcomputing.wps.script{
     import flash.geom.ColorTransform;
     import flash.geom.Point;
     import flash.geom.Rectangle;
+    import flash.text.TextFormat;
+    
+    import spark.components.BorderContainer;
 
     /**
      * <p>Title: HTMLText</p>
@@ -34,78 +37,78 @@ package com.socialcomputing.wps.script{
         /**
          * Index of the font prop in VContainer table
          */
-        public const FONT_VAL:int= 1;
+        public static const FONT_VAL:int= 1;
         
         /**
          * Index of the text prop in VContainer table
          */
-        public const TEXT_VAL:int= 2;
+        public static const TEXT_VAL:int= 2;
         
         /**
          * Index of the inside Color prop in VContainer table
          */
-        public const IN_COL_VAL:int= 3;
+        public static const IN_COL_VAL:int= 3;
         
         /**
          * Index of the border Color prop in VContainer table
          */
-        public const OUT_COL_VAL:int= 4;
+        public static const OUT_COL_VAL:int= 4;
         
         /**
          * Index of the text Color prop in VContainer table
          */
-        public const TEXT_COL_VAL:int= 5;
+        public static const TEXT_COL_VAL:int= 5;
         
         /**
          * True if this text is anchored by a corner.(like subZones tips).
          */
-        public const CORNER_BIT:int= 0x0100;	// Be carefull with this flags, they must not override Fonts ones (0x1, 0x2)!
+        public static const CORNER_BIT:int= 0x0100;	// Be carefull with this flags, they must not override Fonts ones (0x1, 0x2)!
         
         /**
          * True if this text is right aligned (multiline).
          */
-        public const RIGHT_BIT:int= 0x0200;
+        public static const RIGHT_BIT:int= 0x0200;
         
         /**
          * True if this text is centered (multiline).
          */
-        public const CENTER_BIT:int= 0x0400;
+        public static const CENTER_BIT:int= 0x0400;
         
         /**
          * True if this text is floating inside the window (tooltip).
          */
-        public const FLOAT_BIT:int= 0x0800;
+        public static const FLOAT_BIT:int= 0x0800;
         
         /**
          * True if this text is read from an URL.
          */
-        public const URL_BIT:int= 0x1000;
+        public static const URL_BIT:int= 0x1000;
         
         /**
          * Cardinal orientation of the Tip on the screen        X x Y y
          */
-        public const NORTH:int= 0x4;  // 0 1 0 0;
-        public const NORTH_EAST:int= 0x8;  // 1 0 0 0;
-        public const EAST:int= 0x9;  // 1 0 0 1;
-        public const SOUTH_EAST:int= 0xA;  // 1 0 1 0;
-        public const SOUTH:int= 0x6;  // 0 1 1 0;
-        public const SOUTH_WEST:int= 0x2;  // 0 0 1 0;
-        public const WEST:int= 0x1;  // 0 0 0 1;
-        public const NORTH_WEST:int= 0x0;  // 0 0 0 0;
+        public static const NORTH:int= 0x4;  // 0 1 0 0;
+        public static const NORTH_EAST:int= 0x8;  // 1 0 0 0;
+        public static const EAST:int= 0x9;  // 1 0 0 1;
+        public static const SOUTH_EAST:int= 0xA;  // 1 0 1 0;
+        public static const SOUTH:int= 0x6;  // 0 1 1 0;
+        public static const SOUTH_WEST:int= 0x2;  // 0 0 1 0;
+        public static const WEST:int= 0x1;  // 0 0 0 1;
+        public static const NORTH_WEST:int= 0x0;  // 0 0 0 0;
         
         /**
          * This bounding box, stored to avoid CPU overhead.
          */
         [transient]
-        protected var m_bounds:Rectangle;
+        public var m_bounds:Rectangle;
         
         [transient]
-        private var _m_heap:Vector;
+        private var _m_heap:Vector.<String>;
 
         /**
          * Heap of tags to manage the opening and closing of tags.
          */
-        public function set m_heap(value:Vector):void
+        public function set m_heap(value:Vector.<String>):void
         {
             _m_heap = value;
         }
@@ -281,7 +284,7 @@ package com.socialcomputing.wps.script{
          * @return			A new or existing HTMLText whose bounds are initilized.
          * @throws UnsupportedEncodingException 
          */
-        protected function getHText( applet:WPSApplet, g:Graphics, zone:ActiveZone, transfo:Transfo, center:Point, supCtr:Point, key:Long):HTMLText // throws UnsupportedEncodingException
+        protected function getHText( applet:WPSApplet, g:Graphics, zone:ActiveZone, transfo:Transfo, center:Point, supCtr:Point, key:Number):HTMLText // throws UnsupportedEncodingException
         {
             var htmlTxt:HTMLText= null;
             var data:Object= zone.m_datas.get( key );
@@ -292,7 +295,7 @@ package com.socialcomputing.wps.script{
             {
                 var lines:String= parseString2( TEXT_VAL, zone, true );
                 
-                if ( lines.length()> 0)
+                if ( lines.length> 0)
                 {
                     var font:FontX= getFont( FONT_VAL, zone );
                     
@@ -315,8 +318,10 @@ package com.socialcomputing.wps.script{
                     heapElements.push("c#" + (ColorX(getValue( TEXT_COL_VAL, zone ))).m_color.toString(16));
                     heapElements.push("s=" + font.getInt( FontX.SIZE_VAL, zone ));
                     heapElements.push("f=" +   font.getString( FontX.NAME_VAL, zone ));
-                    if (( font.getFlags( zone ) & Font.BOLD )!= 0)   heapElements.push( "b" );
-                    if (( font.getFlags( zone ) & Font.ITALIC )!= 0) heapElements.push( "i" );
+                    // Font Bold
+                    if (( font.getFlags( zone ) & 1 )!= 0)   heapElements.push( "b" );
+                    //Font Italic
+                    if (( font.getFlags( zone ) & 2 )!= 0) heapElements.push( "i" );
                     htmlTxt.m_heap = heapElements;
                     
                     htmlTxt.parseText( g, lines );
@@ -339,12 +344,18 @@ package com.socialcomputing.wps.script{
          * @param htmlText	A string of text with or without HTML tags to parse.
          */
         protected function parseText( g:Graphics, htmlText:String):void {
-            var tokenizer:StringTokenizer= new StringTokenizer( htmlText, "<>", true );
+            var tokenizer:StringTokenizer= new StringTokenizer( htmlText, "<>" );
             var tokenStr:String, nextStr,
             prevStr     = tokenizer.nextToken();
             var hasMore:Boolean= tokenizer.hasMoreTokens(),
                 isText      = false;
-            var font:Font= new Font( m_name, m_style, m_size );
+            //var font:Font= new Font( m_name, m_style, m_size );
+            var font:TextFormat = new TextFormat();
+            font.font = m_name;
+            font.size = m_size;
+            if (m_style == 1) font.bold = true;
+            else if (m_style == 2) font.italic = true;
+            
             var textTok:TextToken= new TextToken();
             
             textTok.m_color = new Color( m_color );
@@ -422,7 +433,7 @@ package com.socialcomputing.wps.script{
          * Evaluate this bounding box using margins.
          */
         private function updateBounds():void {
-            var margin:Insets= m_body.m_margin;
+            var margin:BorderContainer= m_body.m_margin;
             var i:int, n    = m_tokens.size(),
                 x       = 0,
                 y       = margin.top;
@@ -630,12 +641,18 @@ package com.socialcomputing.wps.script{
         private function updateGfx( g:Graphics, tag:String):TextToken {
             var textTok:TextToken= new TextToken();
             
-            if ( tag.startsWith( "c=" )|| tag.startsWith( "k=" ))
+            if ( startsWith(tag, "c=" )|| startsWith(tag, "k=" ))
             {
-                var color:Color= tag.startsWith( "c=" )? textTok.m_color : textTok.m_bkCol;
+                var color:ColorTransform= startsWith(tag, "c=" )? textTok.m_color : textTok.m_bkCol;
                 var rgb:int= 0;
                 
-                textTok.m_font = new Font( m_name, m_style, m_size );
+                //textTok.m_font = new Font( m_name, m_style, m_size );
+                textTok.m_font = new TextFormat();
+                textTok.m_font.font = m_name;
+                textTok.m_font.size = m_size;
+                if (m_style == 1) textTok.m_font.bold = true;
+                else if (m_style == 2) textTok.m_font.italic = true;
+                
                 g.setFont( textTok.m_font );
                 
                 try
@@ -827,7 +844,7 @@ package com.socialcomputing.wps.script{
          * @param supCtr	Center of the parent satellite (Place center).
          * @param center	Center of this before the transformation.
          */
-        protected function setTextBnds( size:Dimension, flags:int, posFlags:int, transfo:Transfo, supCtr:Point, center:Point):void {
+        protected function setTextBnds( size:Rectangle, flags:int, posFlags:int, transfo:Transfo, supCtr:Point, center:Point):void {
             var isFloat:Boolean= Base.isEnabled( flags, FLOAT_BIT );
             var dx:int= 0,
                 dy	= 0,
@@ -897,7 +914,7 @@ package com.socialcomputing.wps.script{
          * @param tag	A tag holding some margin attributes.
          * @return		An inset of t, l, b, r margins or null if none are defined.
          */
-        private function readMargin( tag:String):Insets {
+        private function readMargin( tag:String):BorderContainer {
             var t:String, l, b, r;
             
             t = readAtt( tag, "t" );
@@ -951,110 +968,14 @@ package com.socialcomputing.wps.script{
         private function isGfx( c:String):Boolean {
             return c == 'c' || c == 'k' || c == 's' || c == 'f' || c == 'b' || c == 'i';
         }
-    }
-    
-    /*import java.awt.Color;
-    import java.awt.Font;
-    import java.awt.FontMetrics;
-    import java.awt.Graphics;
-    import java.awt.Point;
-    import java.awt.Rectangle;*/
-    
-    /**
-     * <p>Title: TextToken</p>
-     * <p>Description: A piece of text that can be changed to simulate HTML rendering.<br>
-     * To achieve this, it can be located, have a foreground and background color and a font.</p>
-     * <p>Copyright: Copyright (c) 2001-2003</p>
-     * <p>Company: MapStan (Voyez Vous)</p>
-     * @author flugue@mapstan.com
-     * @version 1.0
-     */
-    /*public class TextToken
-    {*/
-        /**
-         * Text to write.
-         */
-        /*protected var m_text:String;*/
         
-        /**
-         * Bounding box of this text.
-         * This is used to locate the text and to draw it's background color if it has.
-         */
-        /*protected var m_bounds:Rectangle;*/
-        
-        /**
-         * A Font object describing the size, style and name of the typeFace or null to use the current one.
-         */
-        /*protected var m_font:Font;*/
-        
-        /**
-         * The color of the text or null to use the current one.
-         */
-        /*protected var m_color:Color;*/
-        
-        /**
-         * The color of the backgroud or null if there is none.
-         */
-        /*protected var m_bkCol:Color;*/
-        
-        /**
-         * Paint this at a specified location.
-         * The inner location is used to offset the fonts.
-         * @param g		The graphics to draw in.
-         * @param pos	The position where this should be drawn before its internal translation is added.
-         */
-        /*protected function paint( g:Graphics, pos:Point):void {
-            var x:int= m_bounds.x + pos.x,
-                y = m_bounds.y + pos.y;
+        public static function startsWith( string:String, pattern:String):Boolean
+        {
+            string  = string.toLowerCase();
+            pattern = pattern.toLowerCase();
             
-            if ( m_bkCol != null )
-            {
-                g.setColor( m_bkCol );
-                g.fillRect( x, y - g.getFontMetrics().getAscent(), m_bounds.width, m_bounds.height );
-            }
-            
-            if ( m_color != null )  g.setColor( m_color );
-            if ( m_font != null )   g.setFont( m_font );
-            g.drawString( m_text, x, y );
+            return pattern == string.substr( 0, pattern.length );
         }
     }
     
-    import java.awt.Insets;*/
-    
-    /**
-     * <p>Title: FormatToken</p>
-     * <p>Description: A simple container to hold the current format of the tokens.<br>
-     * It's also used to evaluated the current line min and max text position (ascent and descent)</p>
-     * <p>Copyright: Copyright (c) 2001-2003</p>
-     * <p>Company: MapStan (Voyez Vous)</p>
-     * @author flugue@mapstan.com
-     * @version 1.0
-     */
-    /*public class FormatToken
-    {*/
-        /**
-         * Current line margins.
-         */
-        /*protected var m_margin:Insets;*/
-        
-        /**
-         * Current line maximum ascent (Top of the highest letter)
-         */
-        /*protected var m_aMax:int;*/
-        
-        /**
-         * Current line maximum descent (Bottom of the lowest letter)
-         */
-        /*protected var m_dMax:int;*/
-        
-        /**
-         * Current line text alignment flags.
-         */
-        /*protected var m_flags:int;*/
-        
-        /**
-         * Current line width.
-         */
-        /*protected var m_width:int;*/
-    /*}*/
 }

@@ -1,5 +1,9 @@
 package com.socialcomputing.wps.script  {
+    import flash.events.Event;
     import flash.text.Font;
+    
+    import mx.controls.Menu;
+    import mx.events.EventListenerRequest;
     
     /**
      * <p>Title: MenuX</p>
@@ -61,7 +65,7 @@ package com.socialcomputing.wps.script  {
          * @return			True if this menu is not empty. This is used in the recursive process and is useless for the main call.
          * @throws UnsupportedEncodingException 
          */
-        function parseMenu( dst:Menu, listener:ActionListener, zone:ActiveZone):Boolean {
+        function parseMenu( dst:Menu, listener:EventListenerRequest, zone:ActiveZone):Boolean {
             var i:int, j, k	= -1,
                 n		= 1,
                 iCnt	= m_items.length;
@@ -141,7 +145,7 @@ package com.socialcomputing.wps.script  {
          * @return			True if this item is not empty. This is used in the recursive process and is useless for the main call.
          * @throws UnsupportedEncodingException 
          */
-        private function parseItem( dst:Menu, listener:ActionListener, zone:ActiveZone, j:int):Boolean {
+        private function parseItem( dst:Menu, listener:Event, zone:ActiveZone, j:int):Boolean {
             var parts:Array= getTextParts( getString( TEXT_VAL, zone ), SEP );
             var title:String= parts[0],
                 url     = parts.length > 1? parts[1] : null,
@@ -181,7 +185,7 @@ package com.socialcomputing.wps.script  {
          * @param url		Adress to go (including Javascript) when this is selected.
          * @param font		TypeFace of the label.
          */
-        private function addItem( menu:Menu, listener:ActionListener, title:String, url:String, font:Font):void {
+        private function addItem( menu:Menu, listener:Event, title:String, url:String, font:Font):void {
             var item:MenuItem= new MenuItem( title );
             
             if ( url != null )

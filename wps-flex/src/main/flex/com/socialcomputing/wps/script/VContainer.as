@@ -21,7 +21,7 @@ package com.socialcomputing.wps.script  {
         /**
          * True if this is a reference. So the container hold a property name.
          */
-        protected var m_isBound:Boolean;
+        public var m_isBound:Boolean;
         
         /**
          * Returns XML describing the satellite

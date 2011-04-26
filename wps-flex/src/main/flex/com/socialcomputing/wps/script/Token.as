@@ -16,36 +16,36 @@ package com.socialcomputing.wps.script  {
          * This means the Token value is the name of a property to retrieve in a table.
          * This lookup mecanism is also used in swatchs and find the properties in Zones table.
          */
-        public const PROP_BIT:int= 0x0001;
+        public static const PROP_BIT:int= 0x0001;
         
         /**
          * True if this is a list property.
          * A list property is an Array of Objects used to create multi-lines GUI like menus or tips.
          */
-        public const LIST_BIT:int= 0x0002;
+        public static const LIST_BIT:int= 0x0002;
         
         /**
          * True if this is a numerical property.
          * Sometimes a property is retrieved as a Number (int, float...) so we need to convert it to a String.
          */
-        public const NUM_BIT:int= 0x0004;
+        public static const NUM_BIT:int= 0x0004;
         
         /**
          * True if this is a floating point property.
          */
-        public const FLOAT_BIT:int= 0x0008;
+        public static const FLOAT_BIT:int= 0x0008;
         
         /**
          * True if this is right justificated.
          * Default text alignment in list properties is left.
          */
-        public const RIGHT_BIT:int= 0x0010;
+        public static const RIGHT_BIT:int= 0x0010;
         
         /**
          * True if this length is bound.
          * That means the number of characters of the property is limited.
          */
-        public const BOUND_BIT:int= 0x0020;
+        public static const BOUND_BIT:int= 0x0020;
         
         /**
          * True if this is a SubProp.
@@ -53,32 +53,32 @@ package com.socialcomputing.wps.script  {
          * @deprecated	This has been replaced by an automatic mecanism.
          * @see			RecommendationGroup
          */
-        public const SUB_BIT:int= 0x0040;
+        public static const SUB_BIT:int= 0x0040;
         
         /**
          * True if this must be URLEncoded.
          * Usefull for creating CGI URLs using props.
          */
-        public const URLCOD_BIT:int= 0x0080;
+        public static const URLCOD_BIT:int= 0x0080;
         
         /**
          * True if this property is global for the Plan.
          * This means the property should be retrieved from the Env table.
          */
-        public const GLOBAL_BIT:int= 0x0100;
+        public static const GLOBAL_BIT:int= 0x0100;
         
         /**
          * True if this list property is required.
          * If the list is void then The Token will be null. Else it is just void.
          * This is usefull to avoid displaying empty submenus or tips.
          */
-        public const NEEDED_BIT:int= 0x0200;
+        public static const NEEDED_BIT:int= 0x0200;
         
         /**
          * The label of the Token.
          * It can be a simple text or the name of a property.
          */
-        public var m_buffer:StringBuffer = null;
+        public var m_buffer:String = null;
         
         /**
          * A bit table holding all the XXX_BITs.
@@ -107,8 +107,9 @@ package com.socialcomputing.wps.script  {
          */
         public function Token(length:int, flags:int)
         {
-            m_buffer = new StringBuffer( length );
-            m_buffer.setLength( length );
+            //m_buffer = new StringBuffer( length );
+            //m_buffer.setLength( length );
+            m_buffer = new String();
             m_flags = flags;
         }
         
@@ -152,7 +153,7 @@ package com.socialcomputing.wps.script  {
                 
                 if ( Base.isEnabled( m_flags, GLOBAL_BIT ))    // Global Propertie
                 {
-                    props = Hashtable(props.get( "ENV"));
+                    props = Array(props.get( "ENV"));
                 }
                 
                 if ( Base.isEnabled( m_flags, LIST_BIT ))    // List Propertie
@@ -200,7 +201,7 @@ package com.socialcomputing.wps.script  {
                         else                                // int prop
                         {
                             if ( rawProp is Number )
-                                prop = "" + (Number(rawProp )).intValue();
+                                prop = "" + int(rawProp);
                             if ( m_intSize > 0)            // fixed size
                             {
                                 if ( prop.length < m_intSize ) //
@@ -372,7 +373,8 @@ package com.socialcomputing.wps.script  {
          * @return		A new String begining or ending with ws blank chars depending on the flags of this Token.
          */
         private function extendWS( prop:String, ws:int):String {
-            var spaces:Array= new char[ws];
+            //var spaces:Array= new char[ws];
+            var spaces:Array= new Array();
             
             while ( -- ws >= 0)
             {

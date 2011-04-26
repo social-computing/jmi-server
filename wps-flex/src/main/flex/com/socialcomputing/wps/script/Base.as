@@ -20,23 +20,23 @@ package com.socialcomputing.wps.script  {
          * String representation of a new-line.
          * Separator used by Swatchs to separate URL/Track in "menu, event, item"
          */
-        public  const SEP:String= "" + '\n';
+        public static const SEP:String= "" + '\n';
         
         /**
          * String representation of a tab.
          * Separator used by Swatchs to separate URL/Track in "open page"
          */
-        public  const SUBSEP:String= "" + '\t';
+        public static const SUBSEP:String= "" + '\t';
         
         /**
          * 2 Pi
          */
-        public  const Pi2:Number= 6.2831853;
+        public static const Pi2:Number= 6.2831853;
         
         /**
          * Index of the bit flag prop in VContainer table.
          */
-        public  const FLAGS_VAL:int= 0;
+        public static const FLAGS_VAL:int= 0;
         
         /**
          * Containers table holding the values of all inheriting class fields.
@@ -50,7 +50,7 @@ package com.socialcomputing.wps.script  {
          * @param prop  Index of the property
          * @return True if prop exists.
          */
-        protected function isDefined( prop:int):Boolean {
+        public function isDefined( prop:int):Boolean {
             return m_containers[prop] != null;
         }
         
@@ -69,7 +69,7 @@ package com.socialcomputing.wps.script  {
          * @param	props	Props table
          * @return	an int containing the bits of the flag.
          */
-        protected function getFlags( props:Array):int {
+        public function getFlags( props:Array):int {
             return getInt( FLAGS_VAL, props );
         }
         
@@ -79,7 +79,7 @@ package com.socialcomputing.wps.script  {
          * @param	props	If this contains a referenced property, props is the table that hold the property.
          * @return	the Object corresponding to the field whose index is prop or null if the property doesn't exists or is void.
          */
-        protected function getValue( prop:int, props:Array):Object {
+        public function getValue( prop:int, props:Array):Object {
             var container:VContainer= m_containers[prop];
             
             return container != null ?( container.m_isBound ? props.get( container.m_value ) : container.m_value ): null;
@@ -103,8 +103,8 @@ package com.socialcomputing.wps.script  {
          * @param	props	If this contains a referenced property, props is the table that hold the property.
          * @return	the int corresponding to the field whose index is prop or null if the property doesn't exists or is void.
          */
-        protected function getInt( prop:int, props:Array):int {
-            return (Integer(getValue( prop, props ))).intValue();
+        public function getInt( prop:int, props:Array):int {
+            return int(getValue( prop, props ));
         }
         
         /**
@@ -114,8 +114,8 @@ package com.socialcomputing.wps.script  {
          * @param	props	If this contains a referenced property, props is the table that hold the property.
          * @return	the float corresponding to the field whose index is prop or null if the property doesn't exists or is void.
          */
-        protected function getFloat( prop:int, props:Array):Number {
-            return (Float(getValue( prop, props ))).floatValue();
+        public function getFloat( prop:int, props:Array):Number {
+            return Number(getValue( prop, props ));
         }
         
         /**
@@ -125,7 +125,7 @@ package com.socialcomputing.wps.script  {
          * @param	props	If this contains a referenced property, props is the table that hold the property.
          * @return	the String corresponding to the field whose index is prop or null if the property doesn't exists or is void.
          */
-        protected function getString( prop:int, props:Array):String {
+        public function getString( prop:int, props:Array):String {
             return String(getValue( prop, props ));
         }
         
@@ -136,7 +136,7 @@ package com.socialcomputing.wps.script  {
          * @param	props	If this contains a referenced property, props is the table that hold the property.
          * @return	the HTMLText corresponding to the field whose index is prop or null if the property doesn't exists or is void.
          */
-        protected function getText( prop:int, props:Array):HTMLText {
+        public function getText( prop:int, props:Array):HTMLText {
             return HTMLText(getValue( prop, props ));
         }
         
@@ -147,7 +147,7 @@ package com.socialcomputing.wps.script  {
          * @param	props	If this contains a referenced property, props is the table that hold the property.
          * @return	the FontX corresponding to the field whose index is prop or null if the property doesn't exists or is void.
          */
-        protected function getFont( prop:int, props:Array):FontX {
+        public function getFont( prop:int, props:Array):FontX {
             return FontX(getValue( prop, props ));
         }
         
@@ -161,16 +161,16 @@ package com.socialcomputing.wps.script  {
          * @return	the Color corresponding to the ColorX field whose index is prop or null if the property doesn't exists or is void.
          * @throws UnsupportedEncodingException 
          */
-        protected function getColor( prop:int, props:Array):ColorTransform {
+        public function getColor( prop:int, props:Array):ColorTransform {
             var color:ColorX= ColorX(getValue( prop, props ));
-            var ContainerColor:Color= null;
+            var ContainerColor:ColorTransform= null;
             
             if (color==null)
                 return null;
             
             try {
                 ContainerColor = color.getColor2( props);
-            } catch (e:UnsupportedEncodingException) {
+            } catch (e:Error) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
@@ -185,7 +185,7 @@ package com.socialcomputing.wps.script  {
          * @param	props	If this contains a referenced property, props is the table that hold the property.
          * @return	the Transfo corresponding to the field whose index is prop or null if the property doesn't exists or is void.
          */
-        protected function getTransfo( prop:int, props:Array):Transfo {// What's that strange test?????
+        public function getTransfo( prop:int, props:Array):Transfo {// What's that strange test?????
             if ( getValue( prop, props ) is String )
             {
                 return null;
@@ -201,13 +201,13 @@ package com.socialcomputing.wps.script  {
          * @return			True if the property exist and has a value. False Otherwise.
          * @throws UnsupportedEncodingException 
          */
-        protected function setColor( g:Graphics, prop:int, props:Array):Boolean // throws UnsupportedEncodingException
+        public function setColor( g:Graphics, prop:int, props:Array):Boolean // throws UnsupportedEncodingException
         {
-            var color:Color= getColor( prop, props );
+            var color:ColorTransform = getColor( prop, props );
             
             if ( color != null )
             {
-                g.setColor( color );
+                g.beginFill( color.color );
                 
                 return true;
             }
@@ -240,7 +240,7 @@ package com.socialcomputing.wps.script  {
                         parts[i] = tokenizer.nextToken();
                     }
                 }
-                catch ( e:NoSuchElementException){}
+                catch ( e:Error){}
             }
             
             return parts;
@@ -255,11 +255,11 @@ package com.socialcomputing.wps.script  {
          * @return			An array of String or null if the property doesn't exists or is void.
          * @throws UnsupportedEncodingException 
          */
-        protected function parseString(prop:int, props:Array):Array
+        public function parseString(prop:int, props:Array):Array
         {
             var text:String= getString( prop, props );
             
-            return text != null ? parseString( text, props ) : null;
+            return text != null ? parseString3( text, props ) : null;
         }
         
         /**
@@ -275,14 +275,14 @@ package com.socialcomputing.wps.script  {
          */
         //protected function parseString(prop:int, props:Hashtable, isHtm:Boolean):String // throws UnsupportedEncodingException
         // Renommage nom fonction
-        protected function parseString2(prop:int, props:Array, isHtm:Boolean):String // throws UnsupportedEncodingException
+        public function parseString2(prop:int, props:Array, isHtm:Boolean):String // throws UnsupportedEncodingException
         {
             var text:String= getString( prop, props );
             var returnstring:String= null;
             
             try {
-                returnstring = parseString( text, props, isHtm );
-            } catch (e:UnsupportedEncodingException) {
+                returnstring = parseString4( text, props, isHtm );
+            } catch (e:Error) {
                 e.printStackTrace();
             }
             
@@ -300,7 +300,7 @@ package com.socialcomputing.wps.script  {
          */
         //protected function parseString(text:String, props:Hashtable):Array
         // Renommage nom fonction
-        protected function parseString3(text:String, props:Array):Array
+        public function parseString3(text:String, props:Array):Array
         {
             var tokens:Vector = parseTokens( text );
             var token:Token;
@@ -437,8 +437,8 @@ package com.socialcomputing.wps.script  {
          * @return		a Vector of Tokens matching text.
          */
         public static function parseTokens( text:String):Vector {
-            var i:int, j = 0, len = text.length();
-            var c:String= 0;
+            var i:int, j = 0, len = text.length;
+            var c:String = '0';
             var isAfterBS:Boolean= false;
             var token:Token= null;
             var tokens:Vector= new Vector();
@@ -462,7 +462,9 @@ package com.socialcomputing.wps.script  {
                             token = new Token( len - i, 0);
                             j = 0;
                         }
-                        token.m_buffer.setCharAt( j ++, c );
+                        //token.m_buffer.setCharAt( j ++, c );
+                        //Actionscript
+                        token.m_buffer = setCharAt(token.m_buffer, c, j++);
                         isAfterBS = false;
                     }
                     else
@@ -473,7 +475,7 @@ package com.socialcomputing.wps.script  {
                             if ( token != null )        // there was a text Token previously,
                             {
                                 //							System.out.println( "add Token: " + token.m_buffer );
-                                token.m_buffer.setLength( j );
+                                //token.m_buffer.setLength( j );
                                 tokens.addElement( token );    // store it
                             }
                             // and create a new prop or list Token
@@ -486,7 +488,7 @@ package com.socialcomputing.wps.script  {
                         {
                             //						System.out.println( c );
                             //						System.out.println( "add Token: " + token.m_buffer );
-                            token.m_buffer.setLength( j );
+                            //token.m_buffer.setLength( j );
                             tokens.addElement( token );        // store the previous token
                             token = null;               // a new one must be created
                         }
@@ -499,7 +501,9 @@ package com.socialcomputing.wps.script  {
                                 token = new Token( len - i, 0);
                                 j = 0;
                             }
-                            token.m_buffer.setCharAt( j ++, c ); // copy this char in the current Token
+                            //token.m_buffer.setCharAt( j ++, c ); // copy this char in the current Token
+                            //Actionscript
+                            token.m_buffer = setCharAt(token.m_buffer, c, j++);
                         }
                     }
                 }
@@ -507,11 +511,16 @@ package com.socialcomputing.wps.script  {
             if ( c != '}' && c != ']' ) // don't forget the last one!
             {
                 //			System.out.println( "add Token: " + token.m_buffer );
-                token.m_buffer.setLength( j );
+                //token.m_buffer.setLength( j );
                 tokens.addElement( token );        // store the previous token
             }
             
             return tokens;
         }
+        
+        private static function setCharAt(str:String, char:String,index:int):String {
+            return str.substr(0,index) + char + str.substr(index + 1);
+        }
+
     }
 }

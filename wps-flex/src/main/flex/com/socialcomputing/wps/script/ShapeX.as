@@ -1,5 +1,6 @@
 package com.socialcomputing.wps.script  {
     import flash.display.Graphics;
+    import flash.display.Sprite;
     import flash.geom.Point;
     import flash.geom.Rectangle;
     
@@ -288,7 +289,7 @@ package com.socialcomputing.wps.script  {
          * @param width		The width in pixels of this link.
          * @return			A new 4 Points Polygon.
          */
-        private function getLinkPoly( zone:ActiveZone, A:Point, B:Point, width:int):Polygon {
+        /*private function getLinkPoly( zone:ActiveZone, A:Point, B:Point, width:int):Polygon {
             var flags:int= getFlags( zone );
             var link:LinkZone= LinkZone(zone);
             var from:BagZone= link.m_from,
@@ -340,7 +341,63 @@ package com.socialcomputing.wps.script  {
             }
             
             return poly;
+        }*/
+        
+        // Version sans java.awt.Polygon
+        private function getLinkPoly( zone:ActiveZone, A:Point, B:Point, width:int):Sprite {
+            var flags:int= getFlags( zone );
+            var link:LinkZone= LinkZone(zone);
+            var from:BagZone= link.m_from,
+                to      = link.m_to;
+            var fromOff:int= 0,
+                toOff   = 0;
+            var poly:Sprite = new Sprite();
+            //TODO: mettre le style en parametre
+            poly.graphics.lineStyle(2,0x000000);
+            
+            if ( from != null  && to != null )
+            {
+                if ( isEnabled( flags, TAN_LNK_BIT | SEC_LNK_BIT ))
+                {
+                    fromOff = (Float(from.get( "_SCALE" ))).intValue();
+                    toOff   = (Float(to.get( "_SCALE" ))).intValue();
+                }
+                if ( isEnabled( flags, SEC_LNK_BIT ))
+                {
+                    var w2:int= width * width;
+                    fromOff = int((.9 * Math.sqrt( fromOff * fromOff - w2 )));
+                    toOff   = int((.9 * Math.sqrt( toOff * toOff - w2 )));
+                }
+            }
+            
+            var N:Point= new Point( B.x - A.x, B.y - A.y );
+            var len:int= int(Math.sqrt( N.x * N.x + N.y * N.y ));
+            
+            if ( len != 0)
+            {
+                N.x = ( N.x << 16)/ len;
+                N.y = ( N.y << 16)/ len;
+                len	= ( len - fromOff - toOff )>> 1;
+                
+                var C:Point= scalePnt( N, fromOff + len ),
+                    U       = scalePnt( N, len ),
+                    V       = scalePnt( N, width );
+                
+                C.translate( A.x, A.y );
+                pivotPnt( V );
+                addLinkPoint( poly, -1., -1., C, U, V , true);
+                addLinkPoint( poly, -1., 1., C, U, V , false);
+                addLinkPoint( poly, 1., 1., C, U, V , false);
+                addLinkPoint( poly, 1., -1., C, U, V , false);
+            }
+            else
+            {
+                poly.graphics.moveTo( A.x, A.y );
+            }
+            
+            return poly;
         }
+        
         
         /**
          * Adds a new Point to a polygon using UV bilinear coordinates.
@@ -353,8 +410,14 @@ package com.socialcomputing.wps.script  {
          * @param U			Vector U.
          * @param V			Vector V.
          */
-        private function addLinkPoint( poly:Polygon, u:Number, v:Number, center:Point, U:Point, V:Point):void {
+        /*private function addLinkPoint( poly:Sprite, u:Number, v:Number, center:Point, U:Point, V:Point):void {
             poly.addPoint(int(( center.x + u * U.x + v * V.x )), int(( center.y + u * U.y + v * V.y )));
+        }*/
+        private function addLinkPoint( poly:Sprite, u:Number, v:Number, center:Point, U:Point, V:Point, first:Boolean):void {
+            if (first)
+                poly.graphics.moveTo(Number( center.x + u * U.x + v * V.x ), Number( center.y + u * U.y + v * V.y ));
+            else
+                poly.graphics.lineTo(Number( center.x + u * U.x + v * V.x ), Number( center.y + u * U.y + v * V.y ));
         }
         
         /**

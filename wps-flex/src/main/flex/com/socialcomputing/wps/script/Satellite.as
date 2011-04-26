@@ -20,116 +20,116 @@ package com.socialcomputing.wps.script  {
          * Index of the Transfo prop in VContainer table.
          * If there is no Transfo it is copied from the default one (first Satellite of the swatch).
          */
-        public const TRANSFO_VAL:int= 1;
+        public static const TRANSFO_VAL:int= 1;
         
         /**
          * Index of the hovered event prop in VContainer table
          */
-        public const HOVER_VAL:int= 2;
+        public static const HOVER_VAL:int= 2;
         
         /**
          * Index of the click event prop in VContainer table
          */
-        public const CLICK_VAL:int= 3;
+        public static const CLICK_VAL:int= 3;
         
         /**
          * Index of the double click event prop in VContainer table.
          */
-        public const DBLCLICK_VAL:int= 4;
+        public static const DBLCLICK_VAL:int= 4;
         
         /**
          * Index of the selection prop in VContainer table if this is a selection Satellite.
          */
-        public const SELECTION_VAL:int= 5;
+        public static const SELECTION_VAL:int= 5;
         
         /**
          * Index of the dark link color prop in VContainer table.
          */
-        public const LINK_DRK_COL_VAL:int= 6;
+        public static const LINK_DRK_COL_VAL:int= 6;
         
         /**
          * Index of the link color prop in VContainer table.
          */
-        public const LINK_NRM_COL_VAL:int= 7;
+        public static const LINK_NRM_COL_VAL:int= 7;
         
         /**
          * Index of the bright link color prop in VContainer table.
          */
-        public const LINK_LIT_COL_VAL:int= 8;
+        public static const LINK_LIT_COL_VAL:int= 8;
         
         /**
          * True if this Satellite is visible.
          * It can be interesting to create fake invisible satellite (even if it has never been tested).
          */
-        public const VISIBLE_BIT:int= 0x001;
+        public static const VISIBLE_BIT:int= 0x001;
         
         /**
          * This has a link with its parent.
          * Useful for creating s�lection tips.
          */
-        public const LINK_BIT:int= 0x002;
+        public static const LINK_BIT:int= 0x002;
         
         /**
          * This can only be visible on a SuperZone (a zone that clusterize the others).
          */
-        public const SUPER_BIT:int= 0x004;
+        public static const SUPER_BIT:int= 0x004;
         
         /**
          * This can only be visible on a SubZone (a clusterized zone).
          */
-        public const SUB_BIT:int= 0x008;
+        public static const SUB_BIT:int= 0x008;
         
         /**
          * This can only be visible on a current zone (a hovered zone).
          */
-        public const CUR_BIT:int= 0x010;
+        public static const CUR_BIT:int= 0x010;
         
         /**
          * This can only be visible on a rest zone (a not hovered zone).
          */
-        public const REST_BIT:int= 0x020;
+        public static const REST_BIT:int= 0x020;
         
         /**
          * This is visible under the filter of the current zone.
          */
-        public const BACK_BIT:int= 0x040;
+        public static const BACK_BIT:int= 0x040;
         
         /**
          * This is a Selection sat.
          * To know that this sat should always stay on top of the others.
          */
-        public const SEL_BIT:int= 0x080;
+        public static const SEL_BIT:int= 0x080;
         
         /**
          * This is a Tip sat.
          * To know that this sat should not be tested when bounds are evaluated.
          */
-        public const TIP_BIT:int= 0x100;
+        public static const TIP_BIT:int= 0x100;
         
         /**
          * This is sat can't be right or left sided.
          */
-        public const NOSIDED_BIT:int= 0x200;
+        public static const NOSIDED_BIT:int= 0x200;
         
         /**
          * Draws only Selection sats.
          */
-        public const SEL_TYP:int= 0;
+        public static const SEL_TYP:int= 0;
         
         /**
          * Draws only Tip sats.
          */
-        public const TIP_TYP:int= 1;
+        public static const TIP_TYP:int= 1;
         
         /**
          * Draws all sats but Selection and tips ones.
          */
-        public const BASE_TYP:int= 2;
+        public static const BASE_TYP:int= 2;
         
         /**
          * Draws all sats.
          */
-        public const ALL_TYP:int= 3;
+        public static const ALL_TYP:int= 3;
         
         /**
          * Shape used to draw this.

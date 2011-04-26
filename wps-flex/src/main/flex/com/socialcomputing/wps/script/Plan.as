@@ -56,19 +56,19 @@ package com.socialcomputing.wps.script  {
          * Bounding box of the Plan before resizing (pixels).
          */
         [transient]
-        protected var m_prevBox:Rectangle;
+        public var m_prevBox:Rectangle;
         
         /**
          * Maximum bounding box of all zones. This is also the m_blitBuf size.
          */
         [transient]
-        protected var m_maxBox:Dimension;
+        public var m_maxBox:Dimension;
         
         /**
          * Temporary buffer for zone blitting operations.Its size is m_maxBox.
          */
         [transient]
-        protected var m_blitBuf:Image;
+        public var m_blitBuf:Image;
         
         /**
          * Current super BagZone (the one that is active).

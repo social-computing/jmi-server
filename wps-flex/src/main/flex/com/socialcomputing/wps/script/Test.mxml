@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" minWidth="955" minHeight="600">
-    <mx:Image source="C:\Documents and Settings\D\Desktop\google.png" alpha="0.5" />
-    <mx:Image source="C:\Documents and Settings\D\Desktop\toto.jpg" alpha="0.5"/>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" minWidth="955" minHeight="600" creationComplete="application1_creationCompleteHandler(event)">
+    <mx:Script>
+        <![CDATA[
+            import mx.events.FlexEvent;
+            public function application1_creationCompleteHandler(event:FlexEvent):void
+            {
+                ///var graphics:Graphics = new Graphics();
+                graphics.lineStyle(2,0x000000);
+                graphics.beginFill(0x666699);
+                graphics.moveTo(10,10);
+                graphics.lineTo(10,100);
+                graphics.lineTo(100,100);
+                graphics.lineTo(100,10);
+            }
+        ]]>
+    </mx:Script>
+    
 </mx:Application>

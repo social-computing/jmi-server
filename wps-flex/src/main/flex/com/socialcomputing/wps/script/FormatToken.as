@@ -1,10 +1,12 @@
 package com.socialcomputing.wps.script {
+    import spark.components.BorderContainer;
+
     public class FormatToken
     {
         /**
          * Current line margins.
          */
-        protected var m_margin:Insets;
+        protected var m_margin:BorderContainer;
         
         /**
          * Current line maximum ascent (Top of the highest letter)
