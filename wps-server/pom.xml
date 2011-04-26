@@ -266,14 +266,16 @@
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
-        <version>3.8</version>
+        <version>${flexmojos.version}</version>
         <executions>
           <execution>
             <goals>
               <goal>copy-flex-resources</goal>
             </goals>
             <configuration>
-              <!-- src/main/webapp -->
+              <!-- Hack :  
+                   Move the generated flex client swf so that it also work with in eclipse
+                   with the m2eclipse plugin -->
               <!-- <webappDirectory>${project.build.directory}/${project.build.finalName}/flex</webappDirectory> -->
               <webappDirectory>src/main/webapp/flex</webappDirectory>
             </configuration>
@@ -339,11 +341,4 @@
 
     <finalName>wps</finalName>
   </build>
-
-  <!-- Global properties -->
-  <properties>
-    <applet.version>${project.version}</applet.version>
-    <jetty.version>8.0.0.M2</jetty.version>
-    <jersey.version>1.5</jersey.version>
-  </properties>
 </project>

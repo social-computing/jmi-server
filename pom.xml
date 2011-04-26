@@ -63,5 +63,7 @@
     <applet.version>${project.version}</applet.version>
     <jetty.version>8.0.0.M2</jetty.version>
     <jersey.version>1.5</jersey.version>
+    <flexmojos.version>4.0-SNAPSHOT</flexmojos.version>
+    <flex-framework.version>4.5.0.17689</flex-framework.version>
   </properties>
 </project>
