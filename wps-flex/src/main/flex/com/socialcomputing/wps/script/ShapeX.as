@@ -84,7 +84,7 @@ package com.socialcomputing.wps.script  {
          * @return		The barycentric center of all points.
          */
         protected function getCenter( zone:ActiveZone):Point {
-            var points:Array = getValue( POLYGON_VAL, zone );
+            var points:Array = new Array(getValue( POLYGON_VAL, zone ));
             var p:Point, c    = new Point( points[0] );
             var i:int, n    = points.length;
             
@@ -115,7 +115,7 @@ package com.socialcomputing.wps.script  {
         protected function contains( zone:ActiveZone, transfo:Transfo, center:Point, pos:Point):Boolean {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
-                var points:Array= getValue( POLYGON_VAL, zone );
+                var points:Array= new Array(getValue( POLYGON_VAL, zone ));
                 var p:Point= getCenter( zone ),
                     shapePos    = new Point();
                 var size:int= int(getShapePos( zone, transfo, center, p, shapePos )),
@@ -153,10 +153,10 @@ package com.socialcomputing.wps.script  {
         protected function setBounds( zone:ActiveZone, transfo:Transfo, center:Point, bounds:Rectangle):void {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
-                var points:Array= getValue( POLYGON_VAL, zone );
+                var points:Array= new Array(getValue( POLYGON_VAL, zone ));
                 var p:Point= getCenter( zone ),
                     shapePos    = new Point();
-                var rect:Rectangle= null;
+                var rect:Sprite= null;
                 var n:int= points.length,
                     size        = int(getShapePos( zone, transfo, center, p, shapePos ));
                 
@@ -165,13 +165,11 @@ package com.socialcomputing.wps.script  {
                     case 1:     // disk
                         var width:int= size << 1;
                         
-                        rect    = new Rectangle
-                        (
-                            p.x + shapePos.x - size,
-                            p.y + shapePos.y - size,
-                            width,
-                            width
-                        );
+                        rect    = new Sprite();
+                        rect.x = p.x + shapePos.x - size;
+                        rect.y = p.y + shapePos.y - size;
+                        rect.width = width;
+                        rect.height = width;
                         break;
                     
                     case 2:     // segment
@@ -218,7 +216,7 @@ package com.socialcomputing.wps.script  {
                 
                 //Float alpha = slice.getFloat(prop, props);
                 
-                var points:Array= getValue( POLYGON_VAL, supZone );
+                var points:Array= new Array(getValue( POLYGON_VAL, supZone ));
                 var p:Point= points[0],
                     shapePos    = new Point();
                 var n:int= points.length,
@@ -359,8 +357,8 @@ package com.socialcomputing.wps.script  {
             {
                 if ( isEnabled( flags, TAN_LNK_BIT | SEC_LNK_BIT ))
                 {
-                    fromOff = (Float(from.get( "_SCALE" ))).intValue();
-                    toOff   = (Float(to.get( "_SCALE" ))).intValue();
+                    fromOff = Number(from["_SCALE"]);
+                    toOff   = Number(to["_SCALE"]);
                 }
                 if ( isEnabled( flags, SEC_LNK_BIT ))
                 {
@@ -435,7 +433,7 @@ package com.socialcomputing.wps.script  {
         protected function drawImage( g:Graphics, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
-                var medias:Hashtable= applet.m_env.m_medias;
+                var medias:Array= applet.m_env.m_medias;
                 var image:Image= Image(medias.get( imageNam )),
                     scaledImg;
                 

@@ -6,26 +6,26 @@ package com.socialcomputing.wps.script {
         /**
          * Current line margins.
          */
-        protected var m_margin:BorderContainer;
+        public var m_margin:BorderContainer;
         
         /**
          * Current line maximum ascent (Top of the highest letter)
          */
-        protected var m_aMax:int;
+        public var m_aMax:int;
         
         /**
          * Current line maximum descent (Bottom of the lowest letter)
          */
-        protected var m_dMax:int;
+        public var m_dMax:int;
         
         /**
          * Current line text alignment flags.
          */
-        protected var m_flags:int;
+        public var m_flags:int;
         
         /**
          * Current line width.
          */
-        protected var m_width:int;
+        public var m_width:int;
     }
 }

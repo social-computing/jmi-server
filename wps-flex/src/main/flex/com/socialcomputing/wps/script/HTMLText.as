@@ -149,6 +149,12 @@ package com.socialcomputing.wps.script{
         [transient]
         private var _m_color:int;
 
+        public function get m_color():int
+        {
+            return _m_color;
+        }
+
+
         /**
          * Color of the text.
          */
@@ -171,6 +177,12 @@ package com.socialcomputing.wps.script{
         [transient]
         private var _m_size:int;
 
+        public function get m_size():int
+        {
+            return _m_size;
+        }
+
+
         /**
          * Size of the typeface.
          */
@@ -182,6 +194,12 @@ package com.socialcomputing.wps.script{
         [transient]
         private var _m_style:int;
 
+        public function get m_style():int
+        {
+            return _m_style;
+        }
+
+
         /**
          * Style of the text (bold, italic,...)
          */
@@ -192,6 +210,12 @@ package com.socialcomputing.wps.script{
 
         [transient]
         private var _m_name:String;
+
+        public function get m_name():String
+        {
+            return _m_name;
+        }
+
 
         /**
          * Name of the font.
@@ -358,7 +382,7 @@ package com.socialcomputing.wps.script{
             
             var textTok:TextToken= new TextToken();
             
-            textTok.m_color = new Color( m_color );
+            textTok.m_color = new ColorTransform( m_color );
             textTok.m_font  = font;
             
             m_curTok            = new FormatToken();
@@ -484,7 +508,7 @@ package com.socialcomputing.wps.script{
          */
         private function updateText( g:Graphics, text:String, textTok:TextToken, isText:Boolean):void {
             // The text exists!
-            if ( text.length()> 0)
+            if ( text.length > 0)
             {
                 var fm:FontMetrics= g.getFontMetrics();
                 var a:int= fm.getAscent(),
@@ -528,7 +552,7 @@ package com.socialcomputing.wps.script{
             var textTok:TextToken= null;
             var begChar:String;
             
-            if( tag.length() > 0)
+            if( tag.length > 0)
             {
                 tag     = tag.toLowerCase();
                 begChar = tag.charAt( 0);
@@ -538,7 +562,7 @@ package com.socialcomputing.wps.script{
                 {
                     var nxtChar:String= tag.charAt( 1);
                     
-                    tempTag = String(m_heap.lastElement());
+                    tempTag = String(m_heap.pop());
                     
                     if ( tempTag.charAt( 0)== nxtChar ) // ! very simple verification !
                     {
@@ -547,13 +571,13 @@ package com.socialcomputing.wps.script{
                     }
                     else
                     {
-                        System.out.println( "[updateTag] no corresponding opened Tag : " + tag );
+                        trace( "[updateTag] no corresponding opened Tag : " + tag );
                         return null;
                     }
                 }
                 
                 var prevTok:FormatToken= m_curTok;
-                var prevMrg:Insets= prevTok.m_margin,
+                var prevMrg:BorderContainer= prevTok.m_margin,
                     margin  = m_body.m_margin;
                 var flags:int= m_body.m_flags,
                     width   = m_wCur +( prevMrg != null ? prevMrg.left + prevMrg.right : 0);
@@ -575,22 +599,22 @@ package com.socialcomputing.wps.script{
                         
                         if ( alignStr != null )
                         {
-                            var align:String= Character.toLowerCase( alignStr.charAt( 0));
+                            var align:String= alignStr.charAt(0).toLowerCase();
                             
                             flags   = align == 'r' ? RIGHT_BIT :( align == 'c' ? CENTER_BIT : 0);
                         }
                         
                         margin  = readMargin( tag );
                         
-                        if ( tag.length() > 1&& alignStr == null && margin == null )
+                        if ( tag.length > 1&& alignStr == null && margin == null )
                         {
                             flags   = m_body.m_flags;
-                            System.out.println( "[updateTag] syntax error Tag : " + tag );
+                            trace( "[updateTag] syntax error Tag : " + tag );
                             return null;
                         }
                         else
                         {
-                            m_heap.addElement( tag );
+                            m_heap.push(tag);
                         }
                     }
                     
@@ -624,7 +648,7 @@ package com.socialcomputing.wps.script{
                 }
                 else
                 {
-                    System.out.println( "[updateTag] Unknown Tag : " + tag );
+                    trace( "[updateTag] Unknown Tag : " + tag );
                     textTok = null;
                 }
             }
@@ -657,11 +681,11 @@ package com.socialcomputing.wps.script{
                 
                 try
                 {
-                    rgb = Integer.decode( tag.substring( 2)).intValue();// #RRGGBB
+                    rgb = int(tag.substring(2));// #RRGGBB
                     
                     if ( color == null || color.getRGB()== rgb )
                     {
-                        if ( tag.startsWith( "c=" ))
+                        if ( startsWith( tag, "c=" ))
                         {
                             m_color = rgb;
                             textTok.m_color = new Color( rgb );
@@ -675,9 +699,9 @@ package com.socialcomputing.wps.script{
                         }
                     }
                 }
-                catch ( e:NumberFormatException)
+                catch ( e:Error)
                 {
-                    System.out.println( "[updateTag] Wrong color format : " + tag );
+                    trace( "[updateTag] Wrong color format : " + tag );
                     return null;
                 }
             }
@@ -693,11 +717,11 @@ package com.socialcomputing.wps.script{
                 {
                     m_style |= Font.ITALIC;
                 }
-                else if ( tag.startsWith( "s=" ))
+                else if ( startsWith( tag, "s=" ))
                 {
                     m_size  = Integer.parseInt( tag.substring( 2));
                 }
-                else if ( tag.startsWith( "f=" ))
+                else if ( startsWith( tag, "f=" ))
                 {
                     m_name  = tag.substring( 2);
                 }
@@ -931,13 +955,12 @@ package com.socialcomputing.wps.script{
             }
             else
             {
-                return new Insets
-                (
-                    t == null ? 0: Integer.parseInt( t ),
-                    l == null ? 0: Integer.parseInt( l ),
-                    b == null ? 0: Integer.parseInt( b ),
-                    r == null ? 0: Integer.parseInt( r )
-                );
+                var bc:BorderContainer;
+                bc.top = t == null ? 0: int(t);
+                bc.bottom = b == null ? 0: int(b);
+                bc.left = l == null ? 0: int(l);
+                bc.right = r == null ? 0: int(r);
+                return bc;
             }
         }
         
@@ -952,7 +975,7 @@ package com.socialcomputing.wps.script{
             
             if (( beg = tag.indexOf( att + '=' ))!= -1)
             {
-                beg += att.length() + 1;    // don't forget to skip '='
+                beg += att.length + 1;    // don't forget to skip '='
                 end = tag.indexOf( ' ', beg );
                 return end == -1? tag.substring( beg ) : tag.substring( beg, end );
             }
@@ -976,6 +999,28 @@ package com.socialcomputing.wps.script{
             
             return pattern == string.substr( 0, pattern.length );
         }
+
+        public function get m_body():FormatToken
+        {
+            return _m_body;
+        }
+
+        public function get m_tokens():Vector
+        {
+            return _m_tokens;
+        }
+
+        public function get m_heap():Vector.<String>
+        {
+            return _m_heap;
+        }
+
+        public function get m_wCur():int
+        {
+            return _m_wCur;
+        }
+
+
     }
     
 }
