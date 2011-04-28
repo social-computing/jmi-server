@@ -127,6 +127,12 @@ package com.socialcomputing.wps.script{
         [transient]
         private var _m_inCol:ColorTransform;
 
+        public function get m_inCol():ColorTransform
+        {
+            return _m_inCol;
+        }
+
+
         /**
          * Color of the bounding box background.
          */
@@ -137,6 +143,12 @@ package com.socialcomputing.wps.script{
 
         [transient]
         private var _m_outCol:ColorTransform;
+
+        public function get m_outCol():ColorTransform
+        {
+            return _m_outCol;
+        }
+
 
         /**
          * Color of the bounding box border.
@@ -165,6 +177,12 @@ package com.socialcomputing.wps.script{
 
         [transient]
         private var _m_bkCol:int;
+
+        public function get m_bkCol():int
+        {
+            return _m_bkCol;
+        }
+
 
         /**
          * Color of the text background.
@@ -644,7 +662,7 @@ package com.socialcomputing.wps.script{
                 else if ( isGfx( begChar ))
                 {
                     textTok = updateGfx( g, tag );
-                    m_heap.addElement( tag );
+                    m_heap.push( tag );
                 }
                 else
                 {
@@ -683,7 +701,7 @@ package com.socialcomputing.wps.script{
                 {
                     rgb = int(tag.substring(2));// #RRGGBB
                     
-                    if ( color == null || color.getRGB()== rgb )
+                    if ( color == null || color.color == rgb )
                     {
                         if ( startsWith( tag, "c=" ))
                         {
@@ -727,7 +745,7 @@ package com.socialcomputing.wps.script{
                 }
                 else
                 {
-                    System.out.println( "[updateGfx] Syntax error Tag : " + tag );
+                    trace( "[updateGfx] Syntax error Tag : " + tag );
                     return null;
                 }
                 textTok.m_font = new Font( m_name, m_style, m_size );
@@ -744,7 +762,7 @@ package com.socialcomputing.wps.script{
          */
         private function closeTag( g:Graphics, tag:String):TextToken {
             var textTok:TextToken= new TextToken();
-            var i:int= m_heap.size()- 1;
+            var i:int= m_heap.length - 1;
             var c:String= tag.charAt( 0);
             var prevTag:String;
             

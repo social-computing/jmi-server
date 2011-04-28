@@ -84,7 +84,7 @@ public class Env
 	 * This buffer stores all media object using a unique key to load them asynchronously during init.
 	 */
     [transient]
-	protected var m_medias:Array = null;
+	public var m_medias:Array = null;
 
 	/**
 	 * A simple reference to the Applet.

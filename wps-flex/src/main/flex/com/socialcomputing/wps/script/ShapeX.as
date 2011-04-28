@@ -430,7 +430,7 @@ package com.socialcomputing.wps.script  {
          * @param transfo		A transformation of this shape to put the image inside.
          * @param center		This shape center before the transformation.
          */
-        protected function drawImage( g:Graphics, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
+        protected function drawImage(applet:WPSApplet, g:Graphics, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
                 var medias:Array= applet.m_env.m_medias;

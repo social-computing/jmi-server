@@ -73,7 +73,7 @@ package com.socialcomputing.wps.script  {
             //MenuX       item;
             var subMenu:Menu;
             var menuItm:MenuItem;
-            var font:Font= getFont( zone );
+            var font:Font= this.getFont( zone );
             var labels:Array= null;
             
             dst.setFont( font );
@@ -151,7 +151,7 @@ package com.socialcomputing.wps.script  {
                 url     = parts.length > 1? parts[1] : null,
                 redir   = parts.length > 2? parts[2] : null;
             //itemStr;
-            var font:Font= getFont( zone );
+            var font:Font= this.getFont( zone );
             var items:Array= parseString3( title, zone ),
                 urls    = url != null ? parseString3( url, zone ) : null,
                 redirs  = redir != null ? parseString3( redir, zone ) : urls;
@@ -203,7 +203,7 @@ package com.socialcomputing.wps.script  {
          * @param props		A props table holding this FontX prop if it has one.
          * @return			the matching Font or null if the container is empty or the prop is null.
          */
-        protected override function getFont(props:Array):Font {
+        public override function getFont(props:Array):Font {
             var font:FontX= getFont2( FONT_VAL, props );
             
             return font != null ? font.getFont( props ): null;
