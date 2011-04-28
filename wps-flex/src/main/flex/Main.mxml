@@ -70,6 +70,6 @@
     <s:layout>
         <s:VerticalLayout gap="20" />
     </s:layout>
-    <s:Label text="Cartographie WPS :" />	
-    <components:Plan width="{planWidth}" height="{planHeight}" dataProvider="{getPlanResult.lastResult}"/>
+    <s:Label text="Cartographie WPS :" />
+	<components:PlanComponent width="{planWidth}" height="{planHeight}" dataProvider="{getPlanResult.lastResult}" />
 </s:Application>
