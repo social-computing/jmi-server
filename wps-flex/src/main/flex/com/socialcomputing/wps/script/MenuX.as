@@ -66,12 +66,11 @@ package com.socialcomputing.wps.script  {
          * @throws UnsupportedEncodingException 
          */
         function parseMenu( dst:Menu, listener:EventListenerRequest, zone:ActiveZone):Boolean {
-            var i:int, j, k	= -1,
+            /*var i:int, j, k	= -1,
                 n		= 1,
-                iCnt	= m_items.length;
+                iCnt	= m_items.length;*/
             var isEmpty:Boolean= true;
-            //MenuX       item;
-            var subMenu:Menu;
+            /*var subMenu:Menu;
             var menuItm:MenuItem;
             var font:Font= this.getFont( zone );
             var labels:Array= null;
@@ -131,7 +130,7 @@ package com.socialcomputing.wps.script  {
                     }
                 }
             }
-            
+            */
             return !isEmpty;
         }
         
@@ -145,7 +144,7 @@ package com.socialcomputing.wps.script  {
          * @return			True if this item is not empty. This is used in the recursive process and is useless for the main call.
          * @throws UnsupportedEncodingException 
          */
-        private function parseItem( dst:Menu, listener:Event, zone:ActiveZone, j:int):Boolean {
+        /*private function parseItem( dst:Menu, listener:Event, zone:ActiveZone, j:int):Boolean {
             var parts:Array= getTextParts( getString( TEXT_VAL, zone ), SEP );
             var title:String= parts[0],
                 url     = parts.length > 1? parts[1] : null,
@@ -175,7 +174,7 @@ package com.socialcomputing.wps.script  {
             }
             
             return n > 0;
-        }
+        }*/
         
         /**
          * Creates a new MenuItem, add it to a Menu and store the URL to call inside.
@@ -186,7 +185,7 @@ package com.socialcomputing.wps.script  {
          * @param font		TypeFace of the label.
          */
         private function addItem( menu:Menu, listener:Event, title:String, url:String, font:Font):void {
-            var item:MenuItem= new MenuItem( title );
+            /*var item:MenuItem= new MenuItem( title );
             
             if ( url != null )
             {
@@ -195,7 +194,7 @@ package com.socialcomputing.wps.script  {
             }
             
             item.setFont( font );
-            menu.add( item );
+            menu.add( item );*/
         }
         
         /**
@@ -203,10 +202,10 @@ package com.socialcomputing.wps.script  {
          * @param props		A props table holding this FontX prop if it has one.
          * @return			the matching Font or null if the container is empty or the prop is null.
          */
-        public override function getFont(props:Array):Font {
+        /*public override function getFont(props:Array):Font {
             var font:FontX= getFont2( FONT_VAL, props );
             
             return font != null ? font.getFont( props ): null;
-        }
+        }*/
     }
 }

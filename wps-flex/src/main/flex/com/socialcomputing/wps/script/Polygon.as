@@ -15,10 +15,10 @@ public class Polygon {
     /**
      * Creates an empty polygon.
      */
-    /*public function Polygon() {
+    public function Polygon() {
         xpoints = new int[4];
         ypoints = new int[4];
-    }*/
+    }
 
     /**
      * Constructs and initializes a <code>Polygon</code> from the specified
@@ -35,7 +35,7 @@ public class Polygon {
      * @exception NullPointerException if <code>xpoints</code> or
      * <code>ypoints</code> is <code>null</code>.
      */
-    public function Polygon(xpoints:Array, ypoints:Array, npoints:int) {
+    /*public function Polygon(xpoints:Array, ypoints:Array, npoints:int) {
         if (npoints > xpoints.length || npoints > ypoints.length) {
             throw new IndexOutOfBoundsException("npoints > xpoints.length || npoints > ypoints.length");
         }
@@ -44,7 +44,7 @@ public class Polygon {
         this.ypoints = new int[npoints];
         System.arraycopy(xpoints, 0, this.xpoints, 0, npoints);
         System.arraycopy(ypoints, 0, this.ypoints, 0, npoints);
-    }
+    }*/
 
     /**
      * Resets this <code>Polygon</code> object to an empty polygon.

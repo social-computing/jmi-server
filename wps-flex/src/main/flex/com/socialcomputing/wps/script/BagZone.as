@@ -132,7 +132,10 @@ public class BagZone extends ActiveZone implements Activable
 		if ( w > maxBox.width )     maxBox.width    = w;
 		if ( h > maxBox.height )    maxBox.height   = h;
 
-		m_bounds = m_bounds.intersection(applet.getSize());
+        var rec:Rectangle = new Rectangle();
+        rec.height = applet.getSize().height;
+        rec.width = applet.getSize().width;
+		m_bounds = m_bounds.intersection(rec);
 	}
 
 	/**

@@ -342,14 +342,14 @@ package com.socialcomputing.wps.script  {
         }*/
         
         // Version sans java.awt.Polygon
-        private function getLinkPoly( zone:ActiveZone, A:Point, B:Point, width:int):Sprite {
+        private function getLinkPoly( zone:ActiveZone, A:Point, B:Point, width:int):Polygon {
             var flags:int= getFlags( zone );
             var link:LinkZone= LinkZone(zone);
             var from:BagZone= link.m_from,
                 to      = link.m_to;
             var fromOff:int= 0,
                 toOff   = 0;
-            var poly:Sprite = new Sprite();
+            var poly:Polygon;
             //TODO: mettre le style en parametre
             poly.graphics.lineStyle(2,0x000000);
             
@@ -367,6 +367,8 @@ package com.socialcomputing.wps.script  {
                     toOff   = int((.9 * Math.sqrt( toOff * toOff - w2 )));
                 }
             }
+            
+            poly = new Polygon();
             
             var N:Point= new Point( B.x - A.x, B.y - A.y );
             var len:int= int(Math.sqrt( N.x * N.x + N.y * N.y ));
@@ -411,11 +413,12 @@ package com.socialcomputing.wps.script  {
         /*private function addLinkPoint( poly:Sprite, u:Number, v:Number, center:Point, U:Point, V:Point):void {
             poly.addPoint(int(( center.x + u * U.x + v * V.x )), int(( center.y + u * U.y + v * V.y )));
         }*/
-        private function addLinkPoint( poly:Sprite, u:Number, v:Number, center:Point, U:Point, V:Point, first:Boolean):void {
-            if (first)
+        private function addLinkPoint( poly:Polygon, u:Number, v:Number, center:Point, U:Point, V:Point, first:Boolean):void {
+            poly.addPoint(center.x + u * U.x + v * V.x, center.y + u * U.y + v * V.y);
+            /*if (first)
                 poly.graphics.moveTo(Number( center.x + u * U.x + v * V.x ), Number( center.y + u * U.y + v * V.y ));
             else
-                poly.graphics.lineTo(Number( center.x + u * U.x + v * V.x ), Number( center.y + u * U.y + v * V.y ));
+                poly.graphics.lineTo(Number( center.x + u * U.x + v * V.x ), Number( center.y + u * U.y + v * V.y ));*/
         }
         
         /**
