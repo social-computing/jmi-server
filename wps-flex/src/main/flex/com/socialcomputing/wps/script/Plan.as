@@ -94,7 +94,7 @@ package com.socialcomputing.wps.script  {
          * Table of waiters to manage tooltips.
          */
         [transient]
-        protected var m_waiters:Hashtable;
+        protected var m_waiters:Array;
         
         /**
          * Initialize an array of zones (Nodes or Links).
@@ -282,13 +282,8 @@ package com.socialcomputing.wps.script  {
         private function updateCurrentZone( g:Graphics, curSat:Satellite, p:Point):Boolean {
             if ( m_curZone != m_newZone )           // The current Satellite has changed
             {
-                var waiters:Enumeration= m_waiters.elements();
-                var waiter:Waiter;
-                
-                while ( waiters.hasMoreElements())
+                for ( var waiter:Waiter in m_waiters)
                 {
-                    waiter  = Waiter(waiters.nextElement());
-                    
                     while ( waiter != null && waiter.isAlive())  // hide the tooltip coz the zone changed
                     {
                         waiter.m_isInterrupted = true;
@@ -466,7 +461,7 @@ package com.socialcomputing.wps.script  {
                 {
                     case WaitListener.INIT:
                     {
-                        params[3] = Boolean.FALSE;
+                        params[3] = false;
                         break;
                     }
                         
@@ -474,7 +469,7 @@ package com.socialcomputing.wps.script  {
                     {
                         var pos:Point= m_applet.m_curPos;
                         
-                        params[3] = Boolean.TRUE;
+                        params[3] = true;
                         
                         slice.paint( m_applet, g, zone.getParent(), zone, null, pos, null );
                         slice.setBounds( m_applet, g, zone.getParent(), zone, null, pos, null, bounds );
@@ -485,10 +480,10 @@ package com.socialcomputing.wps.script  {
                         
                     case WaitListener.INTERRUPTED:
                     {
-                        if ((Boolean(params[3])).booleanValue())
+                        if (params[3])
                         {
                             blitImage( g, m_applet.m_restImg, bounds );
-                            params[3] = Boolean.FALSE;
+                            params[3] = false;
                         }
                         bounds.setBounds( 0, 0, 0, 0);
                         m_waiters.remove( key );
@@ -497,14 +492,14 @@ package com.socialcomputing.wps.script  {
                         
                     case WaitListener.END:
                     {
-                        if ((Boolean(params[3])).booleanValue())
+                        if (params[3])
                         {
                             blitImage( g, m_applet.m_restImg, bounds );
                             g.setClip( bounds.x, bounds.y, bounds.width, bounds.height );
                             paintCurZone( g );
                             var dim:Dimension= m_applet.getSize();
                             g.setClip( 0, 0, dim.width, dim.height );
-                            params[3] = Boolean.FALSE;
+                            params[3] = false;
                         }
                         bounds.setBounds( 0, 0, 0, 0);
                         m_waiters.remove( key );

@@ -15,9 +15,9 @@ package com.socialcomputing.wps.script
 		public function WPSApplet()
 		{
 		}
-        
-        public function getSize():Rectangle {
-            return new Rectangle();
+        // TODO à implémenter
+        public function getSize():Dimension {
+            return new Dimension();
         }
 	}
 }
