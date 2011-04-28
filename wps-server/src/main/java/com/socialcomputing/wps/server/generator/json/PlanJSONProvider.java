@@ -124,6 +124,12 @@ public class PlanJSONProvider {
         return root;
     }
 
+    static protected ObjectNode createObjectNode(String className) {
+        ObjectNode node = mapper.createObjectNode();
+        node.put( "cls", className);
+        return node;
+    }
+    
     static private ObjectNode toJSON(Object value) {
         if (value instanceof ObjectNode)
             return ( ObjectNode)value;
@@ -181,7 +187,7 @@ public class PlanJSONProvider {
     }
 
     static private ObjectNode toJSON(Point point) {
-        ObjectNode node = mapper.createObjectNode();
+        ObjectNode node = createObjectNode("Point");
         node.put("x", point.x);
         node.put("y", point.y);
         return node;
@@ -189,7 +195,7 @@ public class PlanJSONProvider {
     
     // TODO à checker
     static private ObjectNode toJSON(ColorX color) {
-        ObjectNode node = mapper.createObjectNode();
+        ObjectNode node = createObjectNode("ColorX");
         node.put("color", color.m_color);
         if (color.m_scolor == null)
             node.putNull("scolor");
@@ -205,13 +211,13 @@ public class PlanJSONProvider {
     static private ObjectNode toJSON(ActiveZone zone) {
         ObjectNode node = null;
         if (zone == null)
-            node = mapper.createObjectNode();
+            node = createObjectNode("ActiveZone");
         else if (zone instanceof BagZone)
             node = toJSON((BagZone) zone);
         else if (zone instanceof LinkZone)
             node = toJSON((LinkZone) zone);
         else 
-            node = mapper.createObjectNode();
+            node = createObjectNode("ActiveZone");
         
         node.put("flags", zone.m_flags);
         node.put("curSwatch", toJSON(zone.getCurSwatch()));
@@ -225,7 +231,7 @@ public class PlanJSONProvider {
 
     // Ok
     static private ObjectNode toJSON(BagZone zone) {
-        ObjectNode node = mapper.createObjectNode();
+        ObjectNode node = createObjectNode("BagZone");
         ArrayNode subzone = node.putArray("subZones");
         if (zone != null&& zone.m_subZones != null) {
             for (ActiveZone az : zone.m_subZones) {
@@ -237,7 +243,7 @@ public class PlanJSONProvider {
 
     // Ok
     static private ObjectNode toJSON(LinkZone zone) {
-        ObjectNode node = mapper.createObjectNode();
+        ObjectNode node = createObjectNode("LinkZone");
         node.put("from", toJSON(zone.m_from));
         node.put("to", toJSON(zone.m_to));
         return node;
@@ -245,7 +251,7 @@ public class PlanJSONProvider {
 
     // Ok
     static private ObjectNode toJSON(Satellite satellite) {
-        ObjectNode node = mapper.createObjectNode();
+        ObjectNode node = createObjectNode("Satellite");
         node.put("shapex", toJSON(satellite.getShape()));
         ArrayNode slices = node.putArray("slices");
         for (Slice slice : satellite.getSlices()) {
@@ -256,7 +262,7 @@ public class PlanJSONProvider {
 
     // Ok
     static private ObjectNode toJSON(Transfo transfo) {
-        ObjectNode node = mapper.createObjectNode();
+        ObjectNode node = createObjectNode("Transfo");
         node.put("dir", transfo.m_dir);
         node.put("pos", transfo.m_pos);
         node.put("scl", transfo.m_scl);
@@ -269,19 +275,19 @@ public class PlanJSONProvider {
      */
     // Ok
     static private ObjectNode toJSON(ShapeX shape) {
-        ObjectNode node = mapper.createObjectNode();
+        ObjectNode node = createObjectNode("ShapeX");
         return toJSON( shape, node);
     }
     
     // Ok
     static private ObjectNode toJSON(Slice slice) {
-        ObjectNode node = mapper.createObjectNode();
+        ObjectNode node = createObjectNode("Slice");
         return toJSON( slice, node);
     }
     
     // Ok
     static private ObjectNode toJSON(Swatch swatch) {
-        ObjectNode node = mapper.createObjectNode();
+        ObjectNode node = createObjectNode("Swatch");
         ObjectNode refs = node.putObject("refs");
         for (String key : (Set<String>) swatch.m_refs.keySet()) {
             putValue(refs, key, swatch.m_refs.get(key));
@@ -295,19 +301,19 @@ public class PlanJSONProvider {
     
     // Ok
     static private ObjectNode toJSON(HTMLText text) {
-        ObjectNode node = mapper.createObjectNode();
+        ObjectNode node = createObjectNode("HtmlText");
         return toJSON( text, node);
     }
     
     // Ok
     static private ObjectNode toJSON(FontX font) {
-        ObjectNode node = mapper.createObjectNode();
+        ObjectNode node = createObjectNode("FontX");
         return toJSON( font, node);
     }
 
     // Ok
     static private ObjectNode toJSON(MenuX menu) {
-        ObjectNode node = mapper.createObjectNode();
+        ObjectNode node = createObjectNode("MenuX");
         ArrayNode sats = node.putArray("menu");
         if( menu != null && menu.m_items != null) {
             for (MenuX submenu : menu.m_items) {
@@ -328,10 +334,9 @@ public class PlanJSONProvider {
         return node;
     }
 
-    // TODO Presque OK !
+    // Ok
     static private ObjectNode toJSON(VContainer container) {
-        ObjectNode node = mapper.createObjectNode();
-        // TODO à checker !!!
+        ObjectNode node = createObjectNode("VContainer");
         if( container.m_value != null) {
             putValue(node, "value", container.m_value);
         }

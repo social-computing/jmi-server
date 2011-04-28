@@ -37,7 +37,7 @@ package com.socialcomputing.wps.script  {
          * Layers of satellites that describes this.
          * Satellites are where the real information of this is.
          */
-        protected var m_satellites:Array;
+        public var m_satellites:Array;
         
         /**
          * Creates a new Swatch by filling its satellite table.

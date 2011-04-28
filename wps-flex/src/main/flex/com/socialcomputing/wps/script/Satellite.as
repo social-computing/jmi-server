@@ -135,13 +135,13 @@ package com.socialcomputing.wps.script  {
          * Shape used to draw this.
          * This can be a simple dot, a disk, a rectangle or a polygon.
          */
-        protected var m_shape:ShapeX;
+        public var m_shape:ShapeX;
         
         /**
          * The elementary slices that are stacked to draw this satellite.
          * They describe how to fill the shape.
          */
-        protected   var m_slices:Array;
+		public   var m_slices:Array;
         
         /**
          * Creates a Satellite with its shape and slices.
