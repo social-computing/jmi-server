@@ -1,5 +1,6 @@
 package com.socialcomputing.wps.script  {
     import flash.display.Graphics;
+	import flash.display.BitmapData;
     import flash.geom.Point;
     import flash.geom.Rectangle;
     
@@ -94,7 +95,7 @@ package com.socialcomputing.wps.script  {
          * Table of waiters to manage tooltips.
          */
         [transient]
-        protected var m_waiters:Hashtable;
+        protected var m_waiters:Array;
         
         /**
          * Initialize an array of zones (Nodes or Links).
@@ -113,7 +114,7 @@ package com.socialcomputing.wps.script  {
             m_prevBox   = new Rectangle( dim.width >> 1, dim.height >> 1, 1, 1);
             
             if ( zones == m_links )
-                m_maxBox    = new Dimension();
+                m_maxBox    = new Dimension(0, 0);
             
             // Reversed order so subZones are initialized before supZones!
             for ( i = n - 1; i >= 0; i -- )
@@ -124,15 +125,7 @@ package com.socialcomputing.wps.script  {
             // Allocate a temporary bitmap to dblBuffer curZone rendering using the biggest Zone BBox
             if ( zones == m_nodes )
             {
-                try
-                {
-                    m_blitBuf   = m_applet.createImage( m_maxBox.width, m_maxBox.height );
-                }
-                catch ( e:Exception)
-                {
-                    m_applet.m_error	= "offscreenInit w=" + m_maxBox.width + " h=" + m_maxBox.height;
-                    throw ( new RuntimeException( e.getMessage()));
-                }
+				m_blitBuf   = m_applet.createImage( m_maxBox.width, m_maxBox.height );
             }
         }
         
@@ -169,12 +162,12 @@ package com.socialcomputing.wps.script  {
         //protected synchronized function init( ):void {
         protected function init( ):void {
             var dim:Dimension= m_applet.getSize();
-            var backGfx:Graphics= m_applet.m_backImg.getGraphics(),
-                restGfx = m_applet.m_restImg.getGraphics(),
-                g       = m_applet.getGraphics();
+            var backGfx:Graphics= m_applet.m_backImg.graphics,
+                restGfx:Graphics = m_applet.m_restImg.graphics,
+                g:Graphics       = m_applet.graphics;
             
-            backGfx.clearRect( 0, 0, dim.width, dim.height );
-            restGfx.clearRect( 0, 0, dim.width, dim.height );
+            backGfx.clear();
+            restGfx.clear();
             
             // If there is any background image, load it
             if (m_applet.m_backImgUrl!=null)
@@ -282,13 +275,8 @@ package com.socialcomputing.wps.script  {
         private function updateCurrentZone( g:Graphics, curSat:Satellite, p:Point):Boolean {
             if ( m_curZone != m_newZone )           // The current Satellite has changed
             {
-                var waiters:Enumeration= m_waiters.elements();
-                var waiter:Waiter;
-                
-                while ( waiters.hasMoreElements())
+                for ( var waiter:Waiter in m_waiters)
                 {
-                    waiter  = Waiter(waiters.nextElement());
-                    
                     while ( waiter != null && waiter.isAlive())  // hide the tooltip coz the zone changed
                     {
                         waiter.m_isInterrupted = true;
@@ -466,7 +454,7 @@ package com.socialcomputing.wps.script  {
                 {
                     case WaitListener.INIT:
                     {
-                        params[3] = Boolean.FALSE;
+                        params[3] = false;
                         break;
                     }
                         
@@ -474,7 +462,7 @@ package com.socialcomputing.wps.script  {
                     {
                         var pos:Point= m_applet.m_curPos;
                         
-                        params[3] = Boolean.TRUE;
+                        params[3] = true;
                         
                         slice.paint( m_applet, g, zone.getParent(), zone, null, pos, null );
                         slice.setBounds( m_applet, g, zone.getParent(), zone, null, pos, null, bounds );
@@ -485,10 +473,10 @@ package com.socialcomputing.wps.script  {
                         
                     case WaitListener.INTERRUPTED:
                     {
-                        if ((Boolean(params[3])).booleanValue())
+                        if (params[3])
                         {
                             blitImage( g, m_applet.m_restImg, bounds );
-                            params[3] = Boolean.FALSE;
+                            params[3] = false;
                         }
                         bounds.setBounds( 0, 0, 0, 0);
                         m_waiters.remove( key );
@@ -497,14 +485,14 @@ package com.socialcomputing.wps.script  {
                         
                     case WaitListener.END:
                     {
-                        if ((Boolean(params[3])).booleanValue())
+                        if (params[3])
                         {
                             blitImage( g, m_applet.m_restImg, bounds );
                             g.setClip( bounds.x, bounds.y, bounds.width, bounds.height );
                             paintCurZone( g );
                             var dim:Dimension= m_applet.getSize();
                             g.setClip( 0, 0, dim.width, dim.height );
-                            params[3] = Boolean.FALSE;
+                            params[3] = false;
                         }
                         bounds.setBounds( 0, 0, 0, 0);
                         m_waiters.remove( key );
@@ -550,5 +538,20 @@ package com.socialcomputing.wps.script  {
             
             g.drawImage( image, x1, y1, x2, y2, x1, y1, x2, y2, null );
         }
+		
+		public function drawImage(g:Graphics, image:BitmapData, x:int, y:int):void {
+			var mtx:Matrix = new Matrix();
+			mtx.translate(x, y);
+			g.beginBitmapFill(image, mtx, false, false);
+			g.drawRect(x, y, image.width, image.height);
+			g.endFill();
+			
+			var ldr:Loader = new Loader();
+			ldr.mask = rect;
+			var url:String = "http://www.unknown.example.com/content.swf";
+			var urlReq:URLRequest = new URLRequest(url);
+			ldr.load(urlReq);
+		
+		}		
     }
 }

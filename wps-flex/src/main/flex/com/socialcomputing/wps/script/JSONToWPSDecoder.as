@@ -12,15 +12,15 @@ package com.socialcomputing.wps.script
 			env.m_outColor = toColorX(json.outColor);
 			env.m_filterColor = toColorX(json.filterColor);
 			env.m_transfo = toTransfo(json.transfo);
-			
-/*			ObjectNode props = node.putObject("props");
-			for (String key : (Set<String>) env.m_props.keySet()) {
-				props.put(key, (String) env.m_props.get(key));
-			}
-			ObjectNode sel = node.putObject("selections");
-			for (String key : (Set<String>) env.m_selections.keySet()) {
-				putValue(sel, key, env.m_selections.get(key));
-			}*/
+
+			env.m_props = new Array( json.props.length);
+			for(var i:String in json.props){
+				env.m_props[i] = json.props[i];
+			}			
+			env.m_selections = new Array( json.props.length);
+			for(var i:String in json.selections){
+				env.m_selections[i] = json.selections[i];
+			}			
 			return env;
 		}
 
@@ -71,11 +71,9 @@ package com.socialcomputing.wps.script
 			zone.m_flags = json.flags;
 			zone.m_curSwh = json.curSwatch;
 			zone.m_restSwh = json.restSwatch;
-			/*
-			ObjectNode propsnode = node.putObject("props");
-			for (String key : (Set<String>)zone.keySet()) {
-			putValue(propsnode, key, zone.get(key));
-			}*/
+			for(var i:String in json.props){
+				zone[i] = json.props[i];
+			}			
 		}
 		
 		private static function toActiveZone(json:Object):ActiveZone {
@@ -136,10 +134,10 @@ package com.socialcomputing.wps.script
 		
 		private static function toSwatch(json:Object):Swatch {
 			var item:Swatch = new Swatch();
-			/*ObjectNode refs = node.putObject("refs");
-			for (String key : (Set<String>) swatch.m_refs.keySet()) {
-				putValue(refs, key, swatch.m_refs.get(key));
-			}*/
+			item.m_refs = new Array( json.refs.length);
+			for(var i:String in json.refs){
+				env.m_refs[i] = json.refs[i];
+			}			
 			item.m_satellites = new Array( json.satellites.length);
 			for each (var z in json.satellites) { 
 				item.m_satellites.push( toSatellite(z));

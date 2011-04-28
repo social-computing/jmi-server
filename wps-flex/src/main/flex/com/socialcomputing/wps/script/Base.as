@@ -304,7 +304,7 @@ package com.socialcomputing.wps.script  {
         {
             var tokens:Vector = parseTokens( text );
             var token:Token;
-            var i:int, j, n, max = 0, len = tokens.size();
+            var i:int, j:int, n:int, max:int = 0, len:int = tokens.size();
             
             for ( i = 0; i < len; i ++ )
             {
