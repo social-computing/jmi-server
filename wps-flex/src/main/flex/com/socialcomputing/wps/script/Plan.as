@@ -1,5 +1,6 @@
 package com.socialcomputing.wps.script  {
     import flash.display.Graphics;
+	import flash.display.BitmapData;
     import flash.geom.Point;
     import flash.geom.Rectangle;
     
@@ -113,7 +114,7 @@ package com.socialcomputing.wps.script  {
             m_prevBox   = new Rectangle( dim.width >> 1, dim.height >> 1, 1, 1);
             
             if ( zones == m_links )
-                m_maxBox    = new Dimension();
+                m_maxBox    = new Dimension(0, 0);
             
             // Reversed order so subZones are initialized before supZones!
             for ( i = n - 1; i >= 0; i -- )
@@ -124,15 +125,7 @@ package com.socialcomputing.wps.script  {
             // Allocate a temporary bitmap to dblBuffer curZone rendering using the biggest Zone BBox
             if ( zones == m_nodes )
             {
-                try
-                {
-                    m_blitBuf   = m_applet.createImage( m_maxBox.width, m_maxBox.height );
-                }
-                catch ( e:Exception)
-                {
-                    m_applet.m_error	= "offscreenInit w=" + m_maxBox.width + " h=" + m_maxBox.height;
-                    throw ( new RuntimeException( e.getMessage()));
-                }
+				m_blitBuf   = m_applet.createImage( m_maxBox.width, m_maxBox.height );
             }
         }
         
@@ -169,12 +162,12 @@ package com.socialcomputing.wps.script  {
         //protected synchronized function init( ):void {
         protected function init( ):void {
             var dim:Dimension= m_applet.getSize();
-            var backGfx:Graphics= m_applet.m_backImg.getGraphics(),
-                restGfx = m_applet.m_restImg.getGraphics(),
-                g       = m_applet.getGraphics();
+            var backGfx:Graphics= m_applet.m_backImg.graphics,
+                restGfx:Graphics = m_applet.m_restImg.graphics,
+                g:Graphics       = m_applet.graphics;
             
-            backGfx.clearRect( 0, 0, dim.width, dim.height );
-            restGfx.clearRect( 0, 0, dim.width, dim.height );
+            backGfx.clear();
+            restGfx.clear();
             
             // If there is any background image, load it
             if (m_applet.m_backImgUrl!=null)
@@ -545,5 +538,20 @@ package com.socialcomputing.wps.script  {
             
             g.drawImage( image, x1, y1, x2, y2, x1, y1, x2, y2, null );
         }
+		
+		public function drawImage(g:Graphics, image:BitmapData, x:int, y:int):void {
+			var mtx:Matrix = new Matrix();
+			mtx.translate(x, y);
+			g.beginBitmapFill(image, mtx, false, false);
+			g.drawRect(x, y, image.width, image.height);
+			g.endFill();
+			
+			var ldr:Loader = new Loader();
+			ldr.mask = rect;
+			var url:String = "http://www.unknown.example.com/content.swf";
+			var urlReq:URLRequest = new URLRequest(url);
+			ldr.load(urlReq);
+		
+		}		
     }
 }
