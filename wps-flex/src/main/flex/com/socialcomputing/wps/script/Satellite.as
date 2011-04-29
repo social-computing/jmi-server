@@ -340,7 +340,7 @@ package com.socialcomputing.wps.script  {
          * @param pos			The current cursor position. Used to popup a menu.
          * @param actionId		Type of event that triggers the action.[HOVER_VAL,CLICK_VAL,DBLCLICK_VAL].
          */
-        protected function execute(zone:ActiveZone, pos:Point, actionId:int):void {
+        public function execute(applet:WPSApplet, zone:ActiveZone, pos:Point, actionId:int):void {
             var firstSat:Satellite= zone.m_curSwh.m_satellites[0];
             var isExe:Boolean= isDefined( actionId );
             

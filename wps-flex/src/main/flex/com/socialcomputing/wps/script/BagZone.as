@@ -151,12 +151,15 @@ public class BagZone extends ActiveZone implements Activable
 		var bufGfx:Graphics= applet.m_plan.m_blitBuf.graphics;
 
 		//bufGfx.drawImage( applet.m_backImg2, 0, 0, m_bounds.width, m_bounds.height, m_bounds.x, m_bounds.y, m_bounds.x + m_bounds.width, m_bounds.y + m_bounds.height, null );
-		bufGfx.drawImage( applet.m_backImg, 0, 0, m_bounds.width, m_bounds.height, m_bounds.x, m_bounds.y, m_bounds.x + m_bounds.width, m_bounds.y + m_bounds.height, null );
+		// TODO
+		trace("BagZone paintCur à implémneter");
+/*		bufGfx.drawImage( applet.m_backImg, 0, 0, m_bounds.width, m_bounds.height, m_bounds.x, m_bounds.y, m_bounds.x + m_bounds.width, m_bounds.y + m_bounds.height, null );
 		bufGfx.translate( -m_bounds.x, -m_bounds.y );
 		m_curSwh.paint( applet, bufGfx, this, true, true, Satellite.ALL_TYP, true );
 		bufGfx.translate( m_bounds.x, m_bounds.y );
 		g.setClip( m_bounds.x, m_bounds.y, m_bounds.width, m_bounds.height );
 		g.drawImage( applet.m_plan.m_blitBuf, m_bounds.x, m_bounds.y, null );
+		*/
 	}
 }
 }

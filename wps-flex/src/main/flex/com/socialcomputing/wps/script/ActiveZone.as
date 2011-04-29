@@ -84,6 +84,15 @@ package com.socialcomputing.wps.script  {
         [transient]
         public var m_datas:Array;
         
+		
+		public function get( key:String):Object {
+			return this[key];	
+		}
+
+		public function put( key:String, value:Object):void {
+			this[key] = value;	
+		}
+		
         /**
          * Sets the two swatchs of this zone.
          * This is used in PlanGenerator to setup this zone's swatchs.

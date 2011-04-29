@@ -1,8 +1,10 @@
 package com.socialcomputing.wps.script  {
     import flash.display.Graphics;
 	import flash.display.BitmapData;
+	import flash.geom.Matrix;
     import flash.geom.Point;
     import flash.geom.Rectangle;
+	import  flash.ui.MouseCursor;
     
     import mx.controls.Image;
     
@@ -171,7 +173,8 @@ package com.socialcomputing.wps.script  {
             
             // If there is any background image, load it
             if (m_applet.m_backImgUrl!=null)
-                restGfx.drawImage( m_applet.m_backImgUrl, 0, 0, null );
+				// TODO
+                //drawImage( restGfx, m_applet.m_backImgUrl, 0, 0, null );
             
             // Init Links, Nodes and subNodes.
             initZones( g, m_links, false );
@@ -182,8 +185,9 @@ package com.socialcomputing.wps.script  {
             paintZones( restGfx, m_nodes, m_nodesCnt, false, Satellite.ALL_TYP, true, true );
             
             // Filters backImg so it looks ghosted
-            backGfx.drawImage( m_applet.m_restImg, 0, 0, null );
-            m_applet.m_env.filterImage( m_applet.m_backImg, dim );
+			// TODO
+            //drawImage( backGfx, m_applet.m_restImg, 0, 0, null);
+            //m_applet.m_env.filterImage( m_applet.m_backImg, dim );
             
             // Finish drawing restImg with places parts that are allways visible (tip, sel...)
             paintZones( restGfx, m_links, m_links.length, true, Satellite.BASE_TYP, true, false );
@@ -193,11 +197,12 @@ package com.socialcomputing.wps.script  {
             paintZones( restGfx, m_nodes, m_nodesCnt, true, Satellite.BASE_TYP, true, true );
             paintZones( restGfx, m_nodes, m_nodesCnt, true, Satellite.TIP_TYP, false, true );
             paintZones( restGfx, m_nodes, m_nodesCnt, true, Satellite.SEL_TYP, false, true );
-            
-            g.setClip( 0, 0, dim.width, dim.height );
-            g.dispose();
-            
-            m_applet.repaint();
+           
+			// TODO à suppriler ?
+            //g.setClip( 0, 0, dim.width, dim.height );
+			// TODO Utile ?
+            //g.dispose();
+            //m_applet.repaint();
         }
         
         /**
@@ -210,7 +215,7 @@ package com.socialcomputing.wps.script  {
             var curSat:Satellite;
             var zone:ActiveZone,
             parent  = m_curZone != null ? m_curZone.getParent() : null;
-            var g:Graphics= m_applet.getGraphics();
+            var g:Graphics= m_applet.graphics;
             var i:int;
             
             if ( m_curSat != null )                        // There is a current Active Zone!
@@ -275,19 +280,20 @@ package com.socialcomputing.wps.script  {
         private function updateCurrentZone( g:Graphics, curSat:Satellite, p:Point):Boolean {
             if ( m_curZone != m_newZone )           // The current Satellite has changed
             {
-                for ( var waiter:Waiter in m_waiters)
+				//TODO
+                /*for ( var waiter:Waiter in m_waiters)
                 {
                     while ( waiter != null && waiter.isAlive())  // hide the tooltip coz the zone changed
                     {
                         waiter.m_isInterrupted = true;
                         try{ Thread.sleep( 10); } catch ( e:Exception){}
                     }
-                }
+                }*/
             }
             
             if ( m_curZone != m_newZone || m_curSat != curSat )           // The current Satellite has changed
             {
-                var cursTyp:int= Cursor.DEFAULT_CURSOR;    // if flying over background reset to default arrow
+                var cursTyp:String= MouseCursor.AUTO;    // if flying over background reset to default arrow
                 
                 if ( m_curZone != null &&( m_newZone == null || m_curZone.getParent() != m_newZone.getParent()))    // Restore its rest image
                 {
@@ -302,7 +308,7 @@ package com.socialcomputing.wps.script  {
                     m_curZone   = m_newZone;
                     paintCurZone( g );              // A new Zone is hovered, let's paint it!
                     m_curSat.execute( m_applet, m_curZone, p, Satellite.HOVER_VAL );
-                    cursTyp = Cursor.HAND_CURSOR;   // Sets the cursor to a hand if the mouse entered a Zone
+                    cursTyp = MouseCursor.HAND;   // Sets the cursor to a hand if the mouse entered a Zone
                 }
                 else
                 {
@@ -310,9 +316,9 @@ package com.socialcomputing.wps.script  {
                     if ( m_curSat == null )
                         m_applet.showStatus( "" );
                 }
-                
-                m_applet.setCursor( Cursor.getPredefinedCursor( cursTyp ));
-                g.dispose();
+                // TODO ???
+                //m_applet.setCursor( Cursor.getPredefinedCursor( cursTyp ));
+                //g.dispose();
                 
                 return true;
             }
@@ -358,8 +364,8 @@ package com.socialcomputing.wps.script  {
                     m_prevBox.height = int(( m_prevBox.height * scale ));
                 }
                 
-                sx  = (float(dim.width )- margin )/ m_prevBox.width;
-                sy  = (float(dim.height )- margin )/ m_prevBox.height;
+                sx  = (dim.width- margin )/ m_prevBox.width;
+                sy  = (dim.height - margin )/ m_prevBox.height;
                 dx  = m_prevBox.x -( margin >> 1);
                 dy  = m_prevBox.y -( margin >> 1);
                 s	= sx > sy ? sy : sx;
@@ -369,8 +375,8 @@ package com.socialcomputing.wps.script  {
                     zone    = m_nodes[i];
                     resizePoint( zone, 0, dx, dy, sx, sy );
                     
-                    scale   = (Float(zone.get( "_SCALE" ))).floatValue();
-                    zone.put( "_SCALE", new Float( s * scale ));
+                    scale   = Number(zone.get( "_SCALE" ));
+                    zone.put( "_SCALE", s * scale );
                     zone.m_datas.clear();
                 }
                 
@@ -386,17 +392,20 @@ package com.socialcomputing.wps.script  {
                 for ( i = 0; i < n; i ++ )
                 {
                     zone        = m_links[i];
+					LinkZone.FAKEFROM_BIT;
                     isFakeFrom  = Base.isEnabled( zone.m_flags, LinkZone.FAKEFROM_BIT );
                     isFakeTo    = Base.isEnabled( zone.m_flags, LinkZone.FAKETO_BIT );
                     
                     if ( isFakeFrom )       resizePoint( zone, 0, dx, dy, sx, sy );
                     else if ( isFakeTo )    resizePoint( zone, 1, dx, dy, sx, sy );
                     
-                    scale   = (Float(zone.get( "_SCALE" ))).floatValue();
-                    zone.put( "_SCALE", new Float( s * scale ));
+                    scale   = Number(zone.get( "_SCALE" ));
+                    zone.put( "_SCALE", s * scale );
                     zone.m_datas.clear();
                 }
-                m_prevBox = new Rectangle( dim );
+                m_prevBox = new Rectangle();
+				m_prevBox.height = dim.height;
+				m_prevBox.width = dim.width; 
             }
         }
         
@@ -410,7 +419,8 @@ package com.socialcomputing.wps.script  {
          * @param key		A unique ID for each slices of the same kind (tooltip != infoTip).
          */
         protected function popSlice( zone:ActiveZone, slice:Slice, delay:int, length:int, key:String):void {
-            var tipWaiter:Waiter= Waiter(m_waiters.get( key ));
+            // TODO
+			/*var tipWaiter:Waiter= Waiter(m_waiters.get( key ));
             
             if ( tipWaiter != null )
             {
@@ -426,6 +436,7 @@ package com.socialcomputing.wps.script  {
             tipWaiter = new Waiter( this, new Array( zone, slice, new Rectangle(), new Boolean( false ), key ), delay, length );
             m_waiters.put( key, tipWaiter );
             tipWaiter.start();
+			*/
         }
         
         /**
@@ -442,9 +453,9 @@ package com.socialcomputing.wps.script  {
          */
         //public synchronized function stateChanged( params:Array, state:int):void {
         public function stateChanged( params:Array, state:int):void {
-            if ( m_applet.m_plan != null )
+            /*if ( m_applet.m_plan != null )
             {
-                var g:Graphics= m_applet.getGraphics();
+                var g:Graphics= m_applet.graphics;
                 var zone:ActiveZone= ActiveZone(params[0]);
                 var slice:Slice= Slice(params[1]);
                 var bounds:Rectangle= Rectangle(params[2]);
@@ -499,8 +510,9 @@ package com.socialcomputing.wps.script  {
                     }
                 }
                 
-                g.dispose();
-            }
+				// TODO ???
+                //g.dispose();
+            }*/
         }
         
         /**
@@ -513,7 +525,7 @@ package com.socialcomputing.wps.script  {
          * @param sx	Horizontal scaling after translation.
          * @param sy	Vertical scaling after translation.
          */
-        private function resizePoint( zone:ActiveZone, i:int, dx:Number, dy:Number, sx:Number, sy:Number):void {
+		private function resizePoint( zone:ActiveZone, i:int, dx:Number, dy:Number, sx:Number, sy:Number):void {
             var p:Point= zone.get("_VERTICES")[i];
             p.x = int(( sx *( p.x - dx )));
             p.y = int(( sy *( p.y - dy )));
@@ -526,7 +538,7 @@ package com.socialcomputing.wps.script  {
          * @param bounds	Bounds of the image part to copy into g.
          */
         //private synchronized function blitImage( g:Graphics, image:Image, bounds:Rectangle):void {
-        private function blitImage(g:Graphics, image:Image, bounds:Rectangle):void {
+        public function blitImage(g:Graphics, image:Image, bounds:Rectangle):void {
             var dim:Dimension= m_applet.getSize();
             var x1:int= bounds.x < 0? 0: bounds.x,
                 y1 = bounds.y < 0? 0: bounds.y,
@@ -536,21 +548,22 @@ package com.socialcomputing.wps.script  {
             if ( x2 > dim.width )   x2 = dim.width;
             if ( y2 > dim.height )  y2 = dim.height;
             
-            g.drawImage( image, x1, y1, x2, y2, x1, y1, x2, y2, null );
+			/// TODO
+            //g.drawImage( image, x1, y1, x2, y2, x1, y1, x2, y2, null );
         }
 		
-		public function drawImage(g:Graphics, image:BitmapData, x:int, y:int):void {
+		private function drawImage(g:Graphics, image:BitmapData, x:int, y:int):void {
 			var mtx:Matrix = new Matrix();
 			mtx.translate(x, y);
 			g.beginBitmapFill(image, mtx, false, false);
 			g.drawRect(x, y, image.width, image.height);
 			g.endFill();
 			
-			var ldr:Loader = new Loader();
+			/*var ldr:Loader = new Loader();
 			ldr.mask = rect;
 			var url:String = "http://www.unknown.example.com/content.swf";
 			var urlReq:URLRequest = new URLRequest(url);
-			ldr.load(urlReq);
+			ldr.load(urlReq);*/
 		
 		}		
     }
