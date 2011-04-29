@@ -16,6 +16,7 @@ package com.socialcomputing.wps.script
         
 		public var m_backImgUrl:String;
         
+        public static var s_hasGfxInc:Boolean;
         public var m_error:String;
 		
 		public function WPSApplet()

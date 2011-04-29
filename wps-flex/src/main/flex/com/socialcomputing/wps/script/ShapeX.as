@@ -382,7 +382,7 @@ package com.socialcomputing.wps.script  {
                 {
                     image   = applet.getImage( applet.getCodeBase(), imageNam );
                     applet.prepareImage( image, applet );
-                    medias.put( imageNam, image );
+                    medias.push( imageNam, image );
                 }
                 
                 if (( applet.checkImage( image, applet )& ImageObserver.ALLBITS )!= 0)  // the image can be drawn now
@@ -408,7 +408,7 @@ package com.socialcomputing.wps.script  {
                         {
                             scaledImg   = image.getScaledInstance( w, w, Image.SCALE_AREA_AVERAGING );
                             applet.prepareImage( scaledImg, applet );
-                            medias.put( imageNam, scaledImg );
+                            medias.push( imageNam, scaledImg );
                         }
                         
                         image   = scaledImg;
@@ -470,7 +470,10 @@ package com.socialcomputing.wps.script  {
                 dst.width   = Math.max( xMax, src.x + src.width )- dst.x;
                 dst.height  = Math.max( yMax, src.y + src.height )- dst.y;
             }
-            else    dst.set.setBounds( src );
+            //else    dst.set.setBounds( src );
+            else {
+                dst.intersection(src);
+            }
         }
         
         /**

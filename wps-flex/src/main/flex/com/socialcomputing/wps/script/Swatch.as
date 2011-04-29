@@ -292,7 +292,7 @@ package com.socialcomputing.wps.script  {
          * @throws UnsupportedEncodingException 
          */
         function getSatAt(applet:WPSApplet, g:Graphics, zone:ActiveZone, pos:Point, isCurZone:Boolean):Satellite {
-            if ( zone.getParent().m_bounds.contains( pos ))      // pos is in the Bounding Box
+            if ( zone.getParent().m_bounds.contains( pos.x, pos.y ))      // pos is in the Bounding Box
             {
                 var sat:Satellite= m_satellites[0];
                 var shape:ShapeX= sat.m_shape;
