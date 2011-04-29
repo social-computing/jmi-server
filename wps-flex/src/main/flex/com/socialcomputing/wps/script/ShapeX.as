@@ -195,7 +195,7 @@ package com.socialcomputing.wps.script  {
          * @param center	The center of the shape before the transformation.
          * @throws UnsupportedEncodingException 
          */
-        public function paint( gi:Graphics, supZone:ActiveZone, zone:ActiveZone, slice:Slice, transfo:Transfo, center:Point):void // throws UnsupportedEncodingException
+        public function paint( g:Graphics, supZone:ActiveZone, zone:ActiveZone, slice:Slice, transfo:Transfo, center:Point):void // throws UnsupportedEncodingException
         {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
@@ -204,10 +204,10 @@ package com.socialcomputing.wps.script  {
                 //if (test!=false) System.out.print("test "+test+"\n");
                 //float alpha = slice.getFloat(slice.ALPHA_VAL, supZone);
                 
-                var g:Graphics2D= Graphics2D(gi);
+                /*var g:Graphics2D= Graphics2D(gi);
                 
                 g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);*/
                 
                 var composite:Composite;
                 
