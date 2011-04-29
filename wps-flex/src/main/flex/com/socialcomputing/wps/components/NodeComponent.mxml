@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:shapes="com.socialcomputing.wps.shapes.*"
+		 mouseDown="dispatchEvent(new NodeEvent(this._node, NodeEvent.NODE_MOUSEDOWN, true))" >
+	
+	<fx:Metadata>
+		[Event(name="mousedownnode", type="com.socialcomputing.wps.components.NodeEvent")]
+	</fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			
+			[Bindable]
+			private var _bcolor:int;
+			[Bindable]
+			private var _color:int;
+			[bindable]
+			private var _node:Node;
+			
+			public function set color(value:int):void
+			{
+				_color = value;
+			}
+
+			public function set bcolor(value:int):void
+			{
+				_bcolor = value;
+			}
+
+			public function get node():Node
+			{
+				return _node;
+			}
+
+			public function set node(value:Node):void
+			{
+				_node = value;
+				this.x = _node.x;
+				this.y = _node.y;
+				this.width = 30;
+				this.height = 30;
+			}
+
+		]]>
+	</fx:Script>
+
+	<shapes:Circle  color="{_color}" bcolor="{_bcolor}" width="{this.width}" height="{this.height}" />
+</s:Group>
