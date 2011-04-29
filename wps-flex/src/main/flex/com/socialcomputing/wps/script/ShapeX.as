@@ -26,31 +26,31 @@ package com.socialcomputing.wps.script  {
          * Index of the Points table prop in VContainer table.
          * It can hold 0,1,2 or more points depending on the shape to display.
          */
-        public const POLYGON_VAL:int= 1;
+        public static const POLYGON_VAL:int= 1;
         
         /**
          * Index of the scale prop in VContainer table.
          * This is the radius, width or scale of the shape, depending on the number of Points in POLYGON_VAL.
          */
-        public const SCALE_VAL:int= 2;
+        public static const SCALE_VAL:int= 2;
         
         /**
          * True if this Shape is a link between exactly its 2 points.
          * This is now useless because it's always true.
          */
-        public const CTR_LNK_BIT:int= 0x001;
+        public static const CTR_LNK_BIT:int= 0x001;
         
         /**
          * True if this Shape is a link whose bounds starts at the intersection with the places.
          * This is useless because the links are drawn under the place now.
          */
-        public const SEC_LNK_BIT:int= 0x002;
+        public static const SEC_LNK_BIT:int= 0x002;
         
         /**
          * True if this Shape is a link AND its anchor points are tangent to the places.
          * This is useless because the links are drawn under the place now.
          */
-        public const TAN_LNK_BIT:int= 0x004;
+        public static const TAN_LNK_BIT:int= 0x004;
         
         /**
          * Eval the position resulting of the transformation of this by transfo.
@@ -112,7 +112,7 @@ package com.socialcomputing.wps.script  {
          * @param pos		A point position to test.
          * @return			True if this contains pos.
          */
-        protected function contains( zone:ActiveZone, transfo:Transfo, center:Point, pos:Point):Boolean {
+        public function contains( zone:ActiveZone, transfo:Transfo, center:Point, pos:Point):Boolean {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
                 var points:Array= new Array(getValue( POLYGON_VAL, zone ));
@@ -150,7 +150,7 @@ package com.socialcomputing.wps.script  {
          * @param center	The center of the shape before the transformation.
          * @param bounds	A Rectangle to merge with this bounds.
          */
-        protected function setBounds( zone:ActiveZone, transfo:Transfo, center:Point, bounds:Rectangle):void {
+        public function setBounds( zone:ActiveZone, transfo:Transfo, center:Point, bounds:Rectangle):void {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
                 var points:Array= new Array(getValue( POLYGON_VAL, zone ));
@@ -195,7 +195,7 @@ package com.socialcomputing.wps.script  {
          * @param center	The center of the shape before the transformation.
          * @throws UnsupportedEncodingException 
          */
-        protected function paint( gi:Graphics, supZone:ActiveZone, zone:ActiveZone, slice:Slice, transfo:Transfo, center:Point):void // throws UnsupportedEncodingException
+        public function paint( gi:Graphics, supZone:ActiveZone, zone:ActiveZone, slice:Slice, transfo:Transfo, center:Point):void // throws UnsupportedEncodingException
         {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
@@ -372,7 +372,7 @@ package com.socialcomputing.wps.script  {
          * @param transfo		A transformation of this shape to put the image inside.
          * @param center		This shape center before the transformation.
          */
-        protected function drawImage(applet:WPSApplet, g:Graphics, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
+        public function drawImage(applet:WPSApplet, g:Graphics, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
                 var medias:Array= applet.m_env.m_medias;

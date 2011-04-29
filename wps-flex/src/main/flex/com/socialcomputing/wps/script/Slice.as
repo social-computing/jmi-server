@@ -1,7 +1,9 @@
 package com.socialcomputing.wps.script  {
 	import flash.display.Graphics;
-    import flash.geom.Point;
-    import flash.geom.Rectangle;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
+	
+	import mx.utils.UIDUtil;
     
     /**
      * <p>Title: Slice</p>
@@ -138,10 +140,12 @@ package com.socialcomputing.wps.script  {
                         
                         if ( hTxt.length()> 0)
                         {
-                            m_htmlTxt = new HTMLText( Color.white, Color.black, 0, 12, Font.PLAIN, "SansSerif", 0, new Insets( 0, 4, 0, 4));
+                            //TODO Utiliser le containeur html flex4
+                            /*m_htmlTxt = new HTMLText( Color.white, Color.black, 0, 12, Font.PLAIN, "SansSerif", 0, new Insets( 0, 4, 0, 4));
                             
                             m_htmlTxt.parseText( g, hTxt );
                             m_htmlTxt.drawText( g, applet.getSize(), text.getFlags( zone )>> 16);//HTMLText.SOUTH_WEST );
+                            */
                             return;
                         }
                     }
@@ -154,13 +158,14 @@ package com.socialcomputing.wps.script  {
                     var key:Number= getKey( text.hashCode());
                     
                     supCtr	= supZone.m_restSwh.m_satellites[0].m_shape.getCenter( supZone );
-                    var htmlTxt:HTMLText= text.getHText( applet, g, zone, transfo, satCtr, supCtr, key );
+                    //TODO Utiliser le containeur html flex4
+                    /*var htmlTxt:HTMLText= text.getHText( applet, g, zone, transfo, satCtr, supCtr, key );
                     
                     if ( htmlTxt != null )
                     {
                         htmlTxt.drawText2( g, applet.getSize());
                         zone.m_datas.put( key, htmlTxt );
-                    }
+                    }*/
                 }
             }
         }
@@ -191,7 +196,8 @@ package com.socialcomputing.wps.script  {
                 return true;
             }
             
-            var text:HTMLText= getText( TEXT_VAL, zone );
+            //TODO Utiliser le containeur html flex4
+            /*var text:HTMLText= getText( TEXT_VAL, zone );
             
             
             if ( text != null )
@@ -199,7 +205,7 @@ package com.socialcomputing.wps.script  {
                 var htmlTxt:HTMLText= text.getHText( applet, g, zone, transfo, satCtr, supCtr, getKey( text.hashCode()));
                 
                 return htmlTxt != null ? htmlTxt.m_bounds.contains( pos ): false;
-            }
+            }*/
             
             return false;
         }
@@ -219,7 +225,7 @@ package com.socialcomputing.wps.script  {
          * @param bounds		A Rectangle to merge with this bounds.
          * @throws UnsupportedEncodingException 
          */
-        protected function setBounds(g:Graphics, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point, bounds:Rectangle):void {
+        protected function setBounds(applet:WPSApplet, g:Graphics, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point, bounds:Rectangle):void {
             var transfo:Transfo= getTransfo( TRANSFO_VAL, zone );
             
             if ( supZone == null )  supZone     = zone;
@@ -236,14 +242,15 @@ package com.socialcomputing.wps.script  {
                 applet.m_error = "getCenter supZone=" + supZone;
                 if ( supZone != null )
                 {
-                    var points:Array= satShp.getValue( ShapeX.POLYGON_VAL, supZone );
+                    var points:Array= new Array(satShp.getValue( ShapeX.POLYGON_VAL, supZone ));
                     applet.m_error += " zName=" + supZone.get( "NAME" ) + " pKey=" + satShp.m_containers[ShapeX.POLYGON_VAL].m_value + " pnts=" + points + " p[0]=" + points[0];
                 }
                 
-                throw(new RuntimeException( e.getMessage()));
+                throw(new Error());
             }
             
-            var text:HTMLText= getText( TEXT_VAL, zone );
+            //TODO Utiliser le containeur html flex4
+            /*var text:HTMLText= getText( TEXT_VAL, zone );
             
             if ( text != null )
             {
@@ -264,7 +271,7 @@ package com.socialcomputing.wps.script  {
                     }
                     
                 }
-            }
+            }*/
         }
         
         /**
@@ -274,7 +281,9 @@ package com.socialcomputing.wps.script  {
          * @return	An ID that is a unique combination of the txo hashcodes.
          */
         private function getKey( hashcode:Number):Number {
-            return new Long( hashCode()+( hashcode << 32));
+            //return new Number( hashCode()+( hashcode << 32));
+            // no hashCode() in actionscript
+            return new Number(hashcode << 32);
         }
     }
 }

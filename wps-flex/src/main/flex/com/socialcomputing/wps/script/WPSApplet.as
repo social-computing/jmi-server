@@ -15,6 +15,8 @@ package com.socialcomputing.wps.script
 		public var m_restImg:Image;
         
 		public var m_backImgUrl:String;
+        
+        public var m_error:String;
 		
 		public function WPSApplet()
 		{
