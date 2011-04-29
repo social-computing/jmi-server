@@ -326,7 +326,7 @@ package com.socialcomputing.wps.script{
          * @return			A new or existing HTMLText whose bounds are initilized.
          * @throws UnsupportedEncodingException 
          */
-        protected function getHText( applet:WPSApplet, g:Graphics, zone:ActiveZone, transfo:Transfo, center:Point, supCtr:Point, key:Number):HTMLText // throws UnsupportedEncodingException
+        /*protected function getHText( applet:WPSApplet, g:Graphics, zone:ActiveZone, transfo:Transfo, center:Point, supCtr:Point, key:Number):HTMLText // throws UnsupportedEncodingException
         {
             var htmlTxt:HTMLText= null;
             var data:Object= zone.m_datas.get( key );
@@ -377,7 +377,7 @@ package com.socialcomputing.wps.script{
             }
             
             return htmlTxt;
-        }
+        }*/
         
         /**
          * Parses this to extract the Tokens using a line of text.
@@ -409,7 +409,7 @@ package com.socialcomputing.wps.script{
             
             m_tokens.addElement( m_curTok );
             
-            g.setFont( font );
+            //g.setFont( font );
             
             while ( hasMore )
             {
@@ -424,7 +424,7 @@ package com.socialcomputing.wps.script{
                     // A closed Tag
                     if ( hasMore && nextStr == ( ">" )) // tag
                     {
-                        textTok = updateTag( g, tokenStr );
+                        //textTok = updateTag( g, tokenStr );
                         
                         // An real Tag
                         if ( textTok != null )
@@ -466,7 +466,7 @@ package com.socialcomputing.wps.script{
                 updateText( g, prevStr, textTok, isText );
             }
             
-            updateTag( g, "br" );  // to set last line position
+            //updateTag( g, "br" );  // to set last line position
             
             updateBounds();
         }
@@ -526,7 +526,7 @@ package com.socialcomputing.wps.script{
          */
         private function updateText( g:Graphics, text:String, textTok:TextToken, isText:Boolean):void {
             // The text exists!
-            if ( text.length > 0)
+            /*if ( text.length > 0)
             {
                 var fm:FontMetrics= g.getFontMetrics();
                 var a:int= fm.getAscent(),
@@ -556,7 +556,7 @@ package com.socialcomputing.wps.script{
                 if ( d > m_body.m_dMax )   m_body.m_dMax  = d;
                 
                 m_wCur             += w;
-            }
+            }*/
         }
         
         /**
@@ -565,7 +565,7 @@ package com.socialcomputing.wps.script{
          * @param tag	A pseudo HTML tag without '<' and '>'.
          * @return		a new TextToken initialized according to the tag.
          */
-        private function updateTag( g:Graphics, tag:String):TextToken {
+        /*private function updateTag( g:Graphics, tag:String):TextToken {
             var tempTag:String;
             var textTok:TextToken= null;
             var begChar:String;
@@ -671,7 +671,7 @@ package com.socialcomputing.wps.script{
                 }
             }
             return textTok;
-        }
+        }*/
         
         /**
          * Creates a TextToken using a graphical tag.
@@ -695,7 +695,7 @@ package com.socialcomputing.wps.script{
                 if (m_style == 1) textTok.m_font.bold = true;
                 else if (m_style == 2) textTok.m_font.italic = true;
                 
-                g.setFont( textTok.m_font );
+                //g.setFont( textTok.m_font );
                 
                 try
                 {
@@ -706,14 +706,14 @@ package com.socialcomputing.wps.script{
                         if ( startsWith( tag, "c=" ))
                         {
                             m_color = rgb;
-                            textTok.m_color = new Color( rgb );
-                            textTok.m_bkCol = m_bkCol != -1? new Color( m_bkCol ) : null;
+                            //textTok.m_color = new Color( rgb );
+                            //textTok.m_bkCol = m_bkCol != -1? new Color( m_bkCol ) : null;
                         }
                         else
                         {
                             m_bkCol = rgb;
-                            textTok.m_bkCol = new Color( rgb );
-                            textTok.m_color = new Color( m_color );
+                            //textTok.m_bkCol = new Color( rgb );
+                            //textTok.m_color = new Color( m_color );
                         }
                     }
                 }
@@ -725,9 +725,9 @@ package com.socialcomputing.wps.script{
             }
             else
             {
-                textTok.m_color = new Color( m_color );
+                //textTok.m_color = new Color( m_color );
                 
-                if ( tag == ( "b" ))
+                /*if ( tag == ( "b" ))
                 {
                     m_style |= Font.BOLD;
                 }
@@ -749,7 +749,7 @@ package com.socialcomputing.wps.script{
                     return null;
                 }
                 textTok.m_font = new Font( m_name, m_style, m_size );
-                g.setFont( textTok.m_font );
+                g.setFont( textTok.m_font );*/
             }
             return textTok;
         }
@@ -766,7 +766,7 @@ package com.socialcomputing.wps.script{
             var c:String= tag.charAt( 0);
             var prevTag:String;
             
-            m_heap.removeElement( tag );
+            /*m_heap.removeElement( tag );
             
             if ( c == 'b' )         m_style &= ~Font.BOLD;
             else if ( c == 'i' )    m_style &= ~Font.ITALIC;
@@ -784,7 +784,7 @@ package com.socialcomputing.wps.script{
                 }
             }
             textTok.m_font = new Font( m_name, m_style, m_size );
-            g.setFont( textTok.m_font );
+            g.setFont( textTok.m_font );*/
             
             return textTok;
         }
@@ -806,7 +806,7 @@ package com.socialcomputing.wps.script{
             if (( dir & 2)!= 0)         pos.y = yMax;
             else if (( dir & 1)!= 0)    pos.y = yMax >> 1;
             
-            drawText3( g, size, pos );
+            //drawText3( g, size, pos );
         }
         
         /**
@@ -814,9 +814,9 @@ package com.socialcomputing.wps.script{
          * @param g		Graphics to draw in.
          * @param size	Size of the Window to draw in.
          */
-        protected function drawText2( g:Graphics, size:Rectangle):void {
+        /*protected function drawText2( g:Graphics, size:Rectangle):void {
             drawText3( g, size, new Point( m_bounds.x, m_bounds.y ));
-        }
+        }*/
         
         /**
          * Draws this at a position.
@@ -824,7 +824,7 @@ package com.socialcomputing.wps.script{
          * @param size	Size of the Window to draw in.
          * @param pos	Where to draw this.
          */
-        protected function drawText3( gi:Graphics, size:Rectangle, pos:Point):void {
+        /*protected function drawText3( gi:Graphics, size:Rectangle, pos:Point):void {
             var g:Graphics2D= Graphics2D(gi);
             
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
@@ -874,7 +874,7 @@ package com.socialcomputing.wps.script{
             
             m_bounds.x  = pos.x;
             m_bounds.y  = pos.y;
-        }
+        }*/
         
         /**
          * Evaluate this bounds.

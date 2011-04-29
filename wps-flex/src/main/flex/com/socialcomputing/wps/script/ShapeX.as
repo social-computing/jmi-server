@@ -135,7 +135,7 @@ package com.socialcomputing.wps.script  {
                             B       = addPnts( points[1], shapePos );
                         var poly:Polygon= getLinkPoly( zone, A, B, size );
                         
-                        return poly.contains( pos );
+                        return poly.contains2( pos );
                     }
                 }
             }
@@ -156,7 +156,7 @@ package com.socialcomputing.wps.script  {
                 var points:Array= new Array(getValue( POLYGON_VAL, zone ));
                 var p:Point= getCenter( zone ),
                     shapePos    = new Point();
-                var rect:Sprite= null;
+                var rect:Rectangle= null;
                 var n:int= points.length,
                     size        = int(getShapePos( zone, transfo, center, p, shapePos ));
                 
@@ -165,7 +165,7 @@ package com.socialcomputing.wps.script  {
                     case 1:     // disk
                         var width:int= size << 1;
                         
-                        rect    = new Sprite();
+                        rect    = new Rectangle();
                         rect.x = p.x + shapePos.x - size;
                         rect.y = p.y + shapePos.y - size;
                         rect.width = width;
@@ -199,7 +199,6 @@ package com.socialcomputing.wps.script  {
         {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
-                ;
                 //ON recup alpha val ? 
                 //boolean test = slice.isDefined(slice.ALPHA_VAL);
                 //if (test!=false) System.out.print("test "+test+"\n");
@@ -207,10 +206,8 @@ package com.socialcomputing.wps.script  {
                 
                 var g:Graphics2D= Graphics2D(gi);
                 
-                g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_ON);
-                g.setRenderingHint(RenderingHints.KEY_RENDERING,
-                    RenderingHints.VALUE_RENDER_QUALITY);
+                g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
                 
                 var composite:Composite;
                 
@@ -287,7 +284,7 @@ package com.socialcomputing.wps.script  {
          * @param width		The width in pixels of this link.
          * @return			A new 4 Points Polygon.
          */
-        /*private function getLinkPoly( zone:ActiveZone, A:Point, B:Point, width:int):Polygon {
+        private function getLinkPoly( zone:ActiveZone, A:Point, B:Point, width:int):Polygon {
             var flags:int= getFlags( zone );
             var link:LinkZone= LinkZone(zone);
             var from:BagZone= link.m_from,
@@ -300,8 +297,8 @@ package com.socialcomputing.wps.script  {
             {
                 if ( isEnabled( flags, TAN_LNK_BIT | SEC_LNK_BIT ))
                 {
-                    fromOff = (Float(from.get( "_SCALE" ))).intValue();
-                    toOff   = (Float(to.get( "_SCALE" ))).intValue();
+                    fromOff = Number(from.get( "_SCALE" ));
+                    toOff   = Number(to.get( "_SCALE" ));
                 }
                 if ( isEnabled( flags, SEC_LNK_BIT ))
                 {
@@ -326,7 +323,7 @@ package com.socialcomputing.wps.script  {
                     U       = scalePnt( N, len ),
                     V       = scalePnt( N, width );
                 
-                C.translate( A.x, A.y );
+                C.offset( A.x, A.y );
                 pivotPnt( V );
                 addLinkPoint( poly, -1., -1., C, U, V );
                 addLinkPoint( poly, -1., 1., C, U, V );
@@ -339,63 +336,7 @@ package com.socialcomputing.wps.script  {
             }
             
             return poly;
-        }*/
-        
-        // Version sans java.awt.Polygon
-        private function getLinkPoly( zone:ActiveZone, A:Point, B:Point, width:int):Sprite {
-            var flags:int= getFlags( zone );
-            var link:LinkZone= LinkZone(zone);
-            var from:BagZone= link.m_from,
-                to      = link.m_to;
-            var fromOff:int= 0,
-                toOff   = 0;
-            var poly:Sprite = new Sprite();
-            //TODO: mettre le style en parametre
-            poly.graphics.lineStyle(2,0x000000);
-            
-            if ( from != null  && to != null )
-            {
-                if ( isEnabled( flags, TAN_LNK_BIT | SEC_LNK_BIT ))
-                {
-                    fromOff = Number(from["_SCALE"]);
-                    toOff   = Number(to["_SCALE"]);
-                }
-                if ( isEnabled( flags, SEC_LNK_BIT ))
-                {
-                    var w2:int= width * width;
-                    fromOff = int((.9 * Math.sqrt( fromOff * fromOff - w2 )));
-                    toOff   = int((.9 * Math.sqrt( toOff * toOff - w2 )));
-                }
-            }
-            
-            var N:Point= new Point( B.x - A.x, B.y - A.y );
-            var len:int= int(Math.sqrt( N.x * N.x + N.y * N.y ));
-            
-            if ( len != 0)
-            {
-                N.x = ( N.x << 16)/ len;
-                N.y = ( N.y << 16)/ len;
-                len	= ( len - fromOff - toOff )>> 1;
-                
-                var C:Point= scalePnt( N, fromOff + len ),
-                    U       = scalePnt( N, len ),
-                    V       = scalePnt( N, width );
-                
-                C.translate( A.x, A.y );
-                pivotPnt( V );
-                addLinkPoint( poly, -1., -1., C, U, V , true);
-                addLinkPoint( poly, -1., 1., C, U, V , false);
-                addLinkPoint( poly, 1., 1., C, U, V , false);
-                addLinkPoint( poly, 1., -1., C, U, V , false);
-            }
-            else
-            {
-                poly.graphics.moveTo( A.x, A.y );
-            }
-            
-            return poly;
         }
-        
         
         /**
          * Adds a new Point to a polygon using UV bilinear coordinates.
@@ -411,11 +352,12 @@ package com.socialcomputing.wps.script  {
         /*private function addLinkPoint( poly:Sprite, u:Number, v:Number, center:Point, U:Point, V:Point):void {
             poly.addPoint(int(( center.x + u * U.x + v * V.x )), int(( center.y + u * U.y + v * V.y )));
         }*/
-        private function addLinkPoint( poly:Sprite, u:Number, v:Number, center:Point, U:Point, V:Point, first:Boolean):void {
-            if (first)
+        private function addLinkPoint( poly:Polygon, u:Number, v:Number, center:Point, U:Point, V:Point):void {
+            poly.addPoint(center.x + u * U.x + v * V.x, center.y + u * U.y + v * V.y);
+            /*if (first)
                 poly.graphics.moveTo(Number( center.x + u * U.x + v * V.x ), Number( center.y + u * U.y + v * V.y ));
             else
-                poly.graphics.lineTo(Number( center.x + u * U.x + v * V.x ), Number( center.y + u * U.y + v * V.y ));
+                poly.graphics.lineTo(Number( center.x + u * U.x + v * V.x ), Number( center.y + u * U.y + v * V.y ));*/
         }
         
         /**
@@ -434,8 +376,7 @@ package com.socialcomputing.wps.script  {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
                 var medias:Array= applet.m_env.m_medias;
-                var image:Image= Image(medias.get( imageNam )),
-                    scaledImg;
+                var image:Image= Image(medias.get( imageNam )), scaledImg;
                 
                 if ( image == null )
                 {
@@ -529,7 +470,7 @@ package com.socialcomputing.wps.script  {
                 dst.width   = Math.max( xMax, src.x + src.width )- dst.x;
                 dst.height  = Math.max( yMax, src.y + src.height )- dst.y;
             }
-            else    dst.setBounds( src );
+            else    dst.set.setBounds( src );
         }
         
         /**

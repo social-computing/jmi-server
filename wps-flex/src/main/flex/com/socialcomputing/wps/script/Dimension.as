@@ -5,8 +5,10 @@ package com.socialcomputing.wps.script
 		public var width:int;
 		public var height:int;
 		
-		public function Dimension()
+		public function Dimension(w:int, h:int)
 		{
+			width = w;
+			height = h;
 		}
 	}
 }

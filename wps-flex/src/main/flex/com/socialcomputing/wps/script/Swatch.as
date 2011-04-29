@@ -103,13 +103,13 @@ package com.socialcomputing.wps.script  {
          * @param showTyp		Flags indicating what type of satellite to draw.(Satellite.XXX_TYP)
          * @throws UnsupportedEncodingException 
          */
-        protected function drawSats(g:Graphics, zone:ActiveZone, shape:ShapeX, transfo:Transfo, isLinkOnly:Boolean, isCur:Boolean, isFront:Boolean, showTyp:int):void // throws UnsupportedEncodingException
+        protected function drawSats(applet:WPSApplet, g:Graphics, zone:ActiveZone, shape:ShapeX, transfo:Transfo, isLinkOnly:Boolean, isCur:Boolean, isFront:Boolean, showTyp:int):void // throws UnsupportedEncodingException
         {
             var isBag:Boolean= zone is BagZone;
             var supZone:BagZone= isBag ? BagZone(zone ): null;
             var zones:Array= isBag ? supZone.m_subZones : null;
             var curZone:ActiveZone= applet.m_plan.m_curZone,
-                subZone;
+				subZone:ActiveZone;
             var sat:Satellite= m_satellites[0];
             var satData:SatData= isCur ? zone.m_curData[0] : zone.m_restData[0];
             var satRelTrf:Transfo, satTrf;
@@ -291,7 +291,7 @@ package com.socialcomputing.wps.script  {
          * @return				The sat of this swatch that is hovered or null if there isn't.
          * @throws UnsupportedEncodingException 
          */
-        function getSatAt( g:Graphics, zone:ActiveZone, pos:Point, isCurZone:Boolean):Satellite {
+        function getSatAt(applet:WPSApplet, g:Graphics, zone:ActiveZone, pos:Point, isCurZone:Boolean):Satellite {
             if ( zone.getParent().m_bounds.contains( pos ))      // pos is in the Bounding Box
             {
                 var sat:Satellite= m_satellites[0];

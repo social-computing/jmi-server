@@ -15,12 +15,12 @@ package com.socialcomputing.wps.script  {
         /**
          * Bit indicating that this is a Link whose 'From' node is a fake one (out of the window).
          */
-        public const FAKEFROM_BIT:int= 0x01;
+        public static const FAKEFROM_BIT:int= 0x01;
         
         /**
          * Bit indicating that this is a Link whose 'To' node is a fake one (out of the window).
          */
-        public const FAKETO_BIT:int= 0x02;
+        public static const FAKETO_BIT:int= 0x02;
         
         /**
          * The Place from which the link start.
@@ -71,7 +71,7 @@ package com.socialcomputing.wps.script  {
                 if ( w > maxBox.width )     maxBox.width    = w;
                 if ( h > maxBox.height )    maxBox.height   = h;
                 
-                m_bounds = m_bounds.intersection(applet.getSize());
+                m_bounds = m_bounds.intersection(applet.getSizeR());
             }
         }
         
@@ -90,7 +90,9 @@ package com.socialcomputing.wps.script  {
             var bufGfx:Graphics= applet.m_plan.m_blitBuf.graphics;
             
             //bufGfx.drawImage( applet.m_backImg2, 0, 0, m_bounds.width, m_bounds.height, m_bounds.x, m_bounds.y, m_bounds.x + m_bounds.width, m_bounds.y + m_bounds.height, null );
-            bufGfx.drawImage( applet.m_restImg, 0, 0, m_bounds.width, m_bounds.height, m_bounds.x, m_bounds.y, m_bounds.x + m_bounds.width, m_bounds.y + m_bounds.height, null );
+			// TODO
+			trace("LinkZone paintCur à implémneter");
+/*            bufGfx.drawImage( applet.m_restImg, 0, 0, m_bounds.width, m_bounds.height, m_bounds.x, m_bounds.y, m_bounds.x + m_bounds.width, m_bounds.y + m_bounds.height, null );
             bufGfx.translate( -m_bounds.x, -m_bounds.y );
             m_curSwh.paint( applet, bufGfx, this, true, true, Satellite.BASE_TYP, true );
             m_from.paint( applet, bufGfx, false, true, Satellite.ALL_TYP, true );
@@ -99,7 +101,8 @@ package com.socialcomputing.wps.script  {
             m_curSwh.paint( applet, bufGfx, this, true, true, Satellite.SEL_TYP, true );
             bufGfx.translate( m_bounds.x, m_bounds.y );
             g.setClip( m_bounds.x, m_bounds.y, m_bounds.width, m_bounds.height );
-            g.drawImage( applet.m_plan.m_blitBuf, m_bounds.x, m_bounds.y, null );
+            g.drawImage( applet.m_plan.m_blitBuf, m_bounds.x, m_bounds.y, null );*
+			*/
         }
     }
 }
