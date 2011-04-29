@@ -76,7 +76,7 @@ package com.socialcomputing.wps.script  {
          * @return				A new Transfo resulting of the compositiong with this.
          * 						Or this if t is null or not compatible.
          */
-        protected function transform( transfo:Transfo, isForward:Boolean):Transfo {
+        public function transform( transfo:Transfo, isForward:Boolean):Transfo {
             if ( transfo == null || m_flags != transfo.m_flags)
             {
                 return new Transfo( m_dir, m_pos, m_scl, m_flags );

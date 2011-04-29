@@ -31,7 +31,7 @@ package com.socialcomputing.wps.script  {
          * Objects references (MenuX, Slice...) created by the server side.
          * This is used by the events to find menu or slices to pop.
          */
-        public var m_refs:Hashtable;
+        public var m_refs:Array;
         
         /**
          * Layers of satellites that describes this.
@@ -432,9 +432,9 @@ package com.socialcomputing.wps.script  {
                     
                     if ( sels != null )
                     {
-                        var selId:int= Integer(applet.m_env.m_selections.get( sels[0] ));
+                        var selId:int= int(applet.m_env.m_selections.get( sels[0] ));
                         
-                        sel = selId != null ? selId.intValue() : -1;
+                        sel = isNaN(selId) ? selId : -1;
                     }
                     
                     satData.m_isVisible = sat.isVisible( zone,  isTip, applet.m_plan.m_curSel, sel );

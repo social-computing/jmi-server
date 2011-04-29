@@ -46,7 +46,7 @@ package com.socialcomputing.wps.script  {
          * If there is no current s�lection, this index is -1
          */
         [transient]
-        protected var m_curSel:int;
+        private var _m_curSel:int;
         
         /**
          * Current Satellite (the one that is active).
@@ -78,7 +78,7 @@ package com.socialcomputing.wps.script  {
          * If there is no current ActiveZone, it should be null.
          */
         [transient]
-        protected var m_curZone:ActiveZone;
+        private var _m_curZone:ActiveZone;
         
         /**
          * Current ActiveZone (the one that is active). This can be a subZone, different from m_curZone.
@@ -566,5 +566,27 @@ package com.socialcomputing.wps.script  {
 			ldr.load(urlReq);*/
 		
 		}		
+
+        public function get m_curSel():int
+        {
+            return _m_curSel;
+        }
+
+        public function set m_curSel(value:int):void
+        {
+            _m_curSel = value;
+        }
+
+        public function get m_curZone():ActiveZone
+        {
+            return _m_curZone;
+        }
+
+        public function set m_curZone(value:ActiveZone):void
+        {
+            _m_curZone = value;
+        }
+
+
     }
 }

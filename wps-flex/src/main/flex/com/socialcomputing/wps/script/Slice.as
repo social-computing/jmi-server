@@ -18,48 +18,48 @@ package com.socialcomputing.wps.script  {
          * Index of the Transfo prop in VContainer table.
          * If it doesn't exists this Slice will have the same shape as its satellite.
          */
-        public const TRANSFO_VAL:int= 1;
+        public static const TRANSFO_VAL:int= 1;
         
         /**
          * Index of the inside Color prop in VContainer table.
          */
-        public const IN_COL_VAL:int= 2;
+        public static const IN_COL_VAL:int= 2;
         
         /**
          * Index of the border Color prop in VContainer table.
          */
-        public const OUT_COL_VAL:int= 3;
+        public static const OUT_COL_VAL:int= 3;
         
         /**
          * Index of the image URL prop in VContainer table.
          */
-        public const IMAGE_VAL:int= 4;
+        public static const IMAGE_VAL:int= 4;
         
         /**
          * Index of the text (HTML or not) prop in VContainer table.
          */
-        public const TEXT_VAL:int= 5;
+        public static const TEXT_VAL:int= 5;
         
         /**
          * Index of the text (HTML or not) prop in VContainer table.
          */
-        public const ALPHA_VAL:int= 6;
+        public static const ALPHA_VAL:int= 6;
         
         /**
          * Index of the delay (ms) prop for a tooltip Slice.
          */
-        public const DELAY_VAL:int= 7;
+        public static const DELAY_VAL:int= 7;
         
         /**
          * Index of the length (ms) prop for a tooltip Slice.
          */
-        public const LENGTH_VAL:int= 8;
+        public static const LENGTH_VAL:int= 8;
         
         /**
          * True if this Slice is visible.
          * Probably a useless bit...
          */
-        public const VISIBLE_BIT:int= 0x01;
+        public static const VISIBLE_BIT:int= 0x01;
         
         /**
          * A buffer to store the HTMLText associated with this if it has one.
@@ -145,13 +145,13 @@ package com.socialcomputing.wps.script  {
                             return;
                         }
                     }
-                    catch ( e:Exception){}
+                    catch ( e:Error){}
                     
                     m_htmlTxt = null;
                 }
                 else
                 {
-                    var key:Long= getKey( text.hashCode());
+                    var key:Number= getKey( text.hashCode());
                     
                     supCtr	= supZone.m_restSwh.m_satellites[0].m_shape.getCenter( supZone );
                     var htmlTxt:HTMLText= text.getHText( applet, g, zone, transfo, satCtr, supCtr, key );
@@ -231,7 +231,7 @@ package com.socialcomputing.wps.script  {
                     satShp.setBounds( supZone, transfo, satCtr, bounds );
                 }
             }
-            catch ( e:NullPointerException)
+            catch ( e:Error)
             {
                 applet.m_error = "getCenter supZone=" + supZone;
                 if ( supZone != null )
@@ -240,7 +240,7 @@ package com.socialcomputing.wps.script  {
                     applet.m_error += " zName=" + supZone.get( "NAME" ) + " pKey=" + satShp.m_containers[ShapeX.POLYGON_VAL].m_value + " pnts=" + points + " p[0]=" + points[0];
                 }
                 
-                throw ( new RuntimeException( e.getMessage()));
+                throw(new RuntimeException( e.getMessage()));
             }
             
             var text:HTMLText= getText( TEXT_VAL, zone );

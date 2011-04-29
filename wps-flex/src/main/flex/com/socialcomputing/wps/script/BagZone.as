@@ -24,7 +24,7 @@ public class BagZone extends ActiveZone implements Activable
 	 * The main zone will start at this angle. Evaluated during init.
 	 */
     [transient]
-	protected var m_dir:Number;
+	private var _m_dir:Number;
 
 	/**
 	 * Angular step between two subZones.
@@ -32,7 +32,7 @@ public class BagZone extends ActiveZone implements Activable
 	 * Evaluated during init.
 	 */
     [transient]
-	protected var m_stp:Number;
+	private var _m_stp:Number;
 
 	/**
 	 * Creates a BagZone with its subZones.
@@ -161,5 +161,27 @@ public class BagZone extends ActiveZone implements Activable
 		g.drawImage( applet.m_plan.m_blitBuf, m_bounds.x, m_bounds.y, null );
 		*/
 	}
+
+    public function get m_dir():Number
+    {
+        return _m_dir;
+    }
+
+    public function set m_dir(value:Number):void
+    {
+        _m_dir = value;
+    }
+
+    public function get m_stp():Number
+    {
+        return _m_stp;
+    }
+
+    public function set m_stp(value:Number):void
+    {
+        _m_stp = value;
+    }
+
+
 }
 }

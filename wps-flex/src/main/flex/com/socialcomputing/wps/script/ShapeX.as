@@ -59,7 +59,7 @@ package com.socialcomputing.wps.script  {
          * @param transfo	A polar transformation.
          * @return			The Point translation produced by the transfo on this.
          */
-        protected function transformOut( zone:ActiveZone, transfo:Transfo):Point {
+        public function transformOut( zone:ActiveZone, transfo:Transfo):Point {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
                 var p:Point;
@@ -83,7 +83,7 @@ package com.socialcomputing.wps.script  {
          * @param zone	BagZone holding the Points table.
          * @return		The barycentric center of all points.
          */
-        protected function getCenter( zone:ActiveZone):Point {
+        public function getCenter( zone:ActiveZone):Point {
             var points:Array = new Array(getValue( POLYGON_VAL, zone ));
             var p:Point, c    = new Point( points[0] );
             var i:int, n    = points.length;

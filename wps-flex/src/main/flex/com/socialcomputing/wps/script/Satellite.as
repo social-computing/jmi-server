@@ -162,7 +162,7 @@ package com.socialcomputing.wps.script  {
          * @param sel		Identifier of this satellite selection or -1 if there is none.
          * @return			True if this satellite is visible, false otherwise.
          */
-        protected function isVisible( zone:ActiveZone, isTip:Boolean, curSel:int, sel:int):Boolean {
+        public function isVisible( zone:ActiveZone, isTip:Boolean, curSel:int, sel:int):Boolean {
             var hasSel:Boolean= curSel >= 0,
                 isSel   = isEnabled( zone.m_selection, 1<< curSel );
             
@@ -183,7 +183,7 @@ package com.socialcomputing.wps.script  {
          * @param showTyp		The type of satellite to display.[ALL_TYP,BASE_TYP,TIP_TYP,SEL_TYP]
          * @throws UnsupportedEncodingException 
          */
-        protected function paint(g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, isLinkOnly:Boolean, satData:SatData, showTyp:int):void {
+        public function paint(applet:WPSApplet, g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, isLinkOnly:Boolean, satData:SatData, showTyp:int):void {
             var flags:int= satData.m_flags;
             var isTip:Boolean= isEnabled( flags, Satellite.TIP_BIT ),
                 isSel       = isEnabled( flags, Satellite.SEL_BIT ),
@@ -255,7 +255,7 @@ package com.socialcomputing.wps.script  {
          * @return				True if this contains pos.
          * @throws UnsupportedEncodingException 
          */
-        protected function contains(g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, transfo:Transfo, pos:Point, isPie:Boolean, isFake:Boolean):Boolean {
+        public function contains(applet:WPSApplet, g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, transfo:Transfo, pos:Point, isPie:Boolean, isFake:Boolean):Boolean {
             var i:int, n    = m_slices.length;
             
             if ( supCtr == null )	supCtr = m_shape.getCenter( zone );
@@ -314,7 +314,7 @@ package com.socialcomputing.wps.script  {
          * @param bounds		A Rectangle to merge with this bounds.
          * @throws UnsupportedEncodingException 
          */
-        protected function setBounds(g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, bounds:Rectangle):void {
+        public function setBounds(applet:WPSApplet, g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, bounds:Rectangle):void {
             var i:int, n    = m_slices.length;
             
             for ( i = 0; i < n; i ++ )

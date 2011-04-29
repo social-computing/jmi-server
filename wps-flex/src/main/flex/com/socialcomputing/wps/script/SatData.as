@@ -15,15 +15,9 @@ package com.socialcomputing.wps.script  {
      */
     public class SatData
     {
-        /**
-         * Flags of the Satellite after they were retieved using properties.
-         */
-        protected var m_flags:int;
+        private var _m_flags:int;
         
-        /**
-         * True if this Satellite is visible.
-         */
-        protected var m_isVisible:Boolean;
+        private var _m_isVisible:Boolean;
         
         /*public String getXML()
         {
@@ -35,5 +29,39 @@ package com.socialcomputing.wps.script  {
         
         return result;
         }	*/
+
+        /**
+         * Flags of the Satellite after they were retieved using properties.
+         */
+        public function get m_flags():int
+        {
+            return _m_flags;
+        }
+
+        /**
+         * @private
+         */
+        public function set m_flags(value:int):void
+        {
+            _m_flags = value;
+        }
+
+        /**
+         * True if this Satellite is visible.
+         */
+        public function get m_isVisible():Boolean
+        {
+            return _m_isVisible;
+        }
+
+        /**
+         * @private
+         */
+        public function set m_isVisible(value:Boolean):void
+        {
+            _m_isVisible = value;
+        }
+
+
     }
 }
