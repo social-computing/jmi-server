@@ -1,5 +1,6 @@
 package com.socialcomputing.wps.script  {
     import flash.display.Graphics;
+    import flash.display.GraphicsStroke;
     import flash.display.Sprite;
     import flash.geom.Point;
     import flash.geom.Rectangle;
@@ -207,9 +208,9 @@ package com.socialcomputing.wps.script  {
                 /*var g:Graphics2D= Graphics2D(gi);
                 
                 g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);*/
+                g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);                
                 
-                var composite:Composite;
+                var composite:Composite;*/
                 
                 //Float alpha = slice.getFloat(prop, props);
                 
@@ -223,17 +224,19 @@ package com.socialcomputing.wps.script  {
                 {
                     case 1:     // dot      => Place
                     {
-                        composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0);					
-                        g.setComposite(composite);
+                        //composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0);					
+                        //g.setComposite(composite);
                         
                         var x:int=     p.x + shapePos.x - size,
                             y =     p.y + shapePos.y - size;
                         
                         size <<= 1;
                         
-                        if ( slice.setColor( g, Slice.IN_COL_VAL, zone ))   g.fillOval( x, y, size, size );
+                        //if ( slice.setColor( g, Slice.IN_COL_VAL, zone ))   g.fillOval( x, y, size, size );
+                        if ( slice.setColor( g, Slice.IN_COL_VAL, zone ))   g.drawEllipse( x, y, size, size );
                         if ( WPSApplet.s_hasGfxInc )                        size --;
-                        if ( slice.setColor( g, Slice.OUT_COL_VAL, zone ))  g.drawOval( x, y, size, size );
+                        //if ( slice.setColor( g, Slice.OUT_COL_VAL, zone ))  g.drawOval( x, y, size, size );
+                        if ( slice.setColor( g, Slice.OUT_COL_VAL, zone ))  g.drawEllipse( x, y, size, size );
                         break;
                     }
                         
@@ -241,10 +244,11 @@ package com.socialcomputing.wps.script  {
                     {
                         /*composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f;					
                         g.setComposite(composite);*/
-                        var stroke:Stroke= g.getStroke();
-                        g.setStroke(new BasicStroke(size+3));
+                        //var stroke:Stroke= g.getStroke();
+                        //g.setStroke(new BasicStroke(size+3));
                         
-                        var q:QuadCurve2D= new QuadCurve2D.Float();
+                        //var q:QuadCurve2D= new QuadCurve2D.Float();
+                        var q:Sprite = new Sprite();
                         
                         if ( slice.setColor( g, Slice.OUT_COL_VAL, supZone ))     //g.fillPolygon( poly );
                         {
@@ -253,18 +257,20 @@ package com.socialcomputing.wps.script  {
                             //Polygon poly    = getLinkPoly( supZone, A, B, size );
                             
                             
-                            q.setCurve(A.x, A.y, (A.x+B.x)/2, (A.y+B.y)/2, B.x, B.y);
-                            g.draw(q);					
+                            /*q.setCurve(A.x, A.y, (A.x+B.x)/2, (A.y+B.y)/2, B.x, B.y);
+                            g.draw(q);*/					
+                            q.graphics.moveTo(A.x, A.y);
+                            q.graphics.curveTo((A.x+B.x)/2, (A.y+B.y)/2, B.x, B.y);
                         }
                         
-                        g.setStroke(new BasicStroke(size));
+                        //g.setStroke(new BasicStroke(size));
                         
                         if (slice.setColor( g, Slice.IN_COL_VAL, supZone ))
                         {
-                            g.draw(q);	
+                            //g.draw(q);	
                         }
                         
-                        g.setStroke(stroke);
+                        //g.setStroke(stroke);
                         
                         //if ( slice.setColor( g, Slice.OUT_COL_VAL, supZone ))    g.drawPolygon( poly );
                         break;
