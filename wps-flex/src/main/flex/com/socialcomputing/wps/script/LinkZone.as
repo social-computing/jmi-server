@@ -1,4 +1,7 @@
 package com.socialcomputing.wps.script  {
+    import com.socialcomputing.wps.components.PlanComponent;
+    import com.socialcomputing.wps.plan.PlanContainer;
+    
     import flash.display.Graphics;
     
     /**
@@ -51,7 +54,7 @@ package com.socialcomputing.wps.script  {
          * @param g         A graphics compatible with the one that will be used for painting.
          * @param isFirst   True if init called for the first time.
          */
-        protected override function init(applet:WPSApplet, g:Graphics, isFirst:Boolean):void {
+        protected override function init(applet:PlanComponent, g:Graphics, isFirst:Boolean):void {
             super.init( applet, g, isFirst );
             
             m_parent	= null;
@@ -66,14 +69,14 @@ package com.socialcomputing.wps.script  {
                 
                 // var w:int= m_bounds.width,
                 //     h       = m_bounds.height;
-                var maxBox:Dimension= applet.m_plan.m_maxBox;
+                var maxBox:Dimension= applet.plan.m_maxBox;
                 
-				applet.m_plan.m_maxBox = 
-					applet.m_plan.m_maxBox.resize(Dimension.fromRectangle(m_bounds));
+				applet.plan.m_maxBox = 
+					applet.plan.m_maxBox.resize(Dimension.fromRectangle(m_bounds));
                 // if ( w > maxBox.width )     maxBox.width    = w;
                 //if ( h > maxBox.height )    maxBox.height   = h;
                 
-                m_bounds = m_bounds.intersection(applet.getSizeR());
+                m_bounds = m_bounds.intersection(applet.getSize().toRectangle());
             }
         }
         
@@ -86,10 +89,10 @@ package com.socialcomputing.wps.script  {
          * @param applet    WPSApplet owning this zone.
          * @param g         A Graphics on which this must be painted.
          */
-        public function paintCur(applet:WPSApplet, g:Graphics):void {
+        public function paintCur(applet:PlanComponent, g:Graphics):void {
             if( (m_flags & INVISIBLE_BIT) != 0) return;
             
-            var bufGfx:Graphics= applet.m_plan.m_blitBuf.graphics;
+            var bufGfx:Graphics = applet.plan.m_blitBuf.graphics;
             
             //bufGfx.drawImage( applet.m_backImg2, 0, 0, m_bounds.width, m_bounds.height, m_bounds.x, m_bounds.y, m_bounds.x + m_bounds.width, m_bounds.y + m_bounds.height, null );
 			// TODO

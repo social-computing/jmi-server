@@ -32,6 +32,13 @@ package com.socialcomputing.wps.script
 							     Math.max(this.height, d.height));
 		}
 		
+		/**
+		 * Create a <code>Rectangle</code> instance with height and width of the current Dimension
+		 */
+		public function toRectangle():Rectangle {
+			return new Rectangle(0, 0, this._width, this._height);
+		}
+		
 		public function get width():uint
 		{
 			return _width;

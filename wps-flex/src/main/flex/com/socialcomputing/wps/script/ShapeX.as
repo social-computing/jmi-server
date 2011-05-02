@@ -1,4 +1,6 @@
 package com.socialcomputing.wps.script  {
+	import com.socialcomputing.wps.components.PlanComponent;
+	
 	import flash.display.Graphics;
 	import flash.display.GraphicsStroke;
 	import flash.display.Loader;
@@ -238,7 +240,7 @@ package com.socialcomputing.wps.script  {
                         
                         //if ( slice.setColor( g, Slice.IN_COL_VAL, zone ))   g.fillOval( x, y, size, size );
                         if ( slice.setColor( g, Slice.IN_COL_VAL, zone.m_props ))   g.drawEllipse( x, y, size, size );
-                        if ( WPSApplet.s_hasGfxInc )                        size --;
+                        if (PlanComponent.s_hasGfxInc ) size --;
                         //if ( slice.setColor( g, Slice.OUT_COL_VAL, zone ))  g.drawOval( x, y, size, size );
                         if ( slice.setColor( g, Slice.OUT_COL_VAL, zone.m_props ))  g.drawEllipse( x, y, size, size );
                         break;
@@ -382,10 +384,10 @@ package com.socialcomputing.wps.script  {
          * @param transfo		A transformation of this shape to put the image inside.
          * @param center		This shape center before the transformation.
          */
-        public function drawImage(applet:WPSApplet, g:Graphics, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
+        public function drawImage(applet:PlanComponent, g:Graphics, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
-                var medias:Array= applet.m_env.m_medias;
+                var medias:Array= applet.env.m_medias;
                 var image:Image= medias.get( imageNam ), scaledImg:Image;
                 
                 if ( image == null )

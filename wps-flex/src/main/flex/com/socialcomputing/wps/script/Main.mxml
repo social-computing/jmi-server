@@ -47,7 +47,6 @@
             var vc:VContainer;
             var w:Waiter;
             var wa:WaitListener;
-            var wps:WPSApplet;
             
             protected function application1_creationCompleteHandler(event:FlexEvent):void
             {

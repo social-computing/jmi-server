@@ -1,4 +1,6 @@
 package com.socialcomputing.wps.script  {
+    import com.socialcomputing.wps.components.PlanComponent;
+    
     import flash.display.Graphics;
     import flash.geom.Rectangle;
 
@@ -54,7 +56,7 @@ public class BagZone extends ActiveZone implements Activable
 	 * @param isFirst	True if this init is the first one. False if this is a "refresh" init.
 	 */
     
-	protected override function init(applet:WPSApplet, g:Graphics, isFirst:Boolean):void {
+	protected override function init(applet:PlanComponent, g:Graphics, isFirst:Boolean):void {
 		var i:int, n = m_subZones != null ? m_subZones.length : 0;
 
 		super.init( applet, g, isFirst );
@@ -72,8 +74,8 @@ public class BagZone extends ActiveZone implements Activable
 				m_subZones[i].m_parent = this;
 			}
 
-			m_bounds    = m_restSwh.getBounds( applet, g, this, false );
-			m_bounds    = m_bounds.union( m_curSwh.getBounds( applet, g, this, true ));
+			m_bounds = m_restSwh.getBounds( applet, g, this, false );
+			m_bounds = m_bounds.union( m_curSwh.getBounds( applet, g, this, true ));
 
 			var isLeft:Boolean= m_bounds.x < 0;
 
@@ -107,7 +109,7 @@ public class BagZone extends ActiveZone implements Activable
 
 		m_bounds    = m_restSwh.getBounds( applet, g, this, false );
 
-		var win:Rectangle= applet.m_plan.m_prevBox.union( m_bounds );
+		var win:Rectangle= applet.plan.m_prevBox.union( m_bounds );
 
 		m_bounds    = m_bounds.union( m_curSwh.getBounds( applet, g, this, true ));
 
@@ -121,7 +123,7 @@ public class BagZone extends ActiveZone implements Activable
 			win.height	= m_bounds.y  + m_bounds.height - win.y;
 		}
 
-		applet.m_plan.m_prevBox = win;
+		applet.plan.m_prevBox = win;
 
 		m_bounds.inflate(2, 2);
 
@@ -133,8 +135,8 @@ public class BagZone extends ActiveZone implements Activable
 
 		// if ( w > maxBox.width )     maxBox.width    = w;
 		//if ( h > maxBox.height )    maxBox.height   = h;
-		applet.m_plan.m_maxBox = 
-			applet.m_plan.m_maxBox.resize(Dimension.fromRectangle(m_bounds));
+		applet.plan.m_maxBox = 
+			applet.plan.m_maxBox.resize(Dimension.fromRectangle(m_bounds));
 
         var rec:Rectangle = new Rectangle();
         rec.height = applet.getSize().height;
@@ -151,8 +153,8 @@ public class BagZone extends ActiveZone implements Activable
 	 * @param g         A Graphics on which this must be painted.
 	 */
     [synchronized]
-	public function paintCur(applet:WPSApplet, g:Graphics):void {
-		var bufGfx:Graphics= applet.m_plan.m_blitBuf.graphics;
+	public function paintCur(applet:PlanComponent, g:Graphics):void {
+		var bufGfx:Graphics= applet.plan.m_blitBuf.graphics;
 
 		//bufGfx.drawImage( applet.m_backImg2, 0, 0, m_bounds.width, m_bounds.height, m_bounds.x, m_bounds.y, m_bounds.x + m_bounds.width, m_bounds.y + m_bounds.height, null );
 		// TODO

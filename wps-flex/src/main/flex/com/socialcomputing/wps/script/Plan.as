@@ -1,4 +1,5 @@
 package com.socialcomputing.wps.script  {
+    import com.socialcomputing.wps.components.PlanComponent;
     import com.socialcomputing.wps.util.controls.ImageUtil;
     
     import flash.display.BitmapData;
@@ -93,7 +94,7 @@ package com.socialcomputing.wps.script  {
          * The Applet holding this Plan.
          */
         [transient]
-        protected var m_applet:WPSApplet;
+        protected var m_applet:PlanComponent;
         
         /**
          * Table of waiters to manage tooltips.
@@ -166,15 +167,15 @@ package com.socialcomputing.wps.script  {
         //protected synchronized function init( ):void {
         protected function init( ):void {
             var dim:Dimension= m_applet.getSize();
-            var backGfx:Graphics= m_applet.m_backImg.graphics,
-                restGfx:Graphics = m_applet.m_restImg.graphics,
+            var backGfx:Graphics= m_applet.backImg.graphics,
+                restGfx:Graphics = m_applet.restImg.graphics,
                 g:Graphics       = m_applet.graphics;
             
             backGfx.clear();
             restGfx.clear();
             
             // If there is any background image, load it
-            if (m_applet.m_backImgUrl!=null)
+            if (m_applet.backImgUrl != null)
 				// TODO
                 //drawImage( restGfx, m_applet.m_backImgUrl, 0, 0, null );
             
@@ -216,7 +217,7 @@ package com.socialcomputing.wps.script  {
         protected function updateZoneAt( p:Point):Boolean {
             var curSat:Satellite;
             var zone:ActiveZone,
-            parent  = m_curZone != null ? m_curZone.getParent() : null;
+              parent:ActiveZone = m_curZone != null ? m_curZone.getParent() : null;
             var g:Graphics= m_applet.graphics;
             var i:int;
             
@@ -300,7 +301,8 @@ package com.socialcomputing.wps.script  {
                 if ( m_curZone != null &&( m_newZone == null || m_curZone.getParent() != m_newZone.getParent()))    // Restore its rest image
                 {
                     //ON rollover non active zone => redraw
-                    blitImage( g, m_applet.m_restImg, m_curZone.getParent().m_bounds );
+                    //blitImage(g, m_applet.m_restImg, m_curZone.getParent().m_bounds );
+					blitImage(g, m_applet.restImg, m_curZone.getParent().m_bounds );
                 }
                 
                 m_curSat    = curSat;
@@ -351,10 +353,10 @@ package com.socialcomputing.wps.script  {
                 //Point       p;
                 var scale:Number,sx:Number, sy:Number, dx:Number, dy:Number, s:Number;
                 var zone:ActiveZone;
-                var isFakeFrom:Boolean, isFakeTo;
+                var isFakeFrom:Boolean, isFakeTo:Boolean;
                 
-                m_applet.m_backImg = ImageUtil.fromRectangle(dim);
-                m_applet.m_restImg = ImageUtil.fromRectangle(dim);
+                m_applet.backImg = ImageUtil.fromRectangle(dim);
+                m_applet.restImg = ImageUtil.fromRectangle(dim);
                 
                 if ( n < 8)	// too few places, lets reduce their size
                 {

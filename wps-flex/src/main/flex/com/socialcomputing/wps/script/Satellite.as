@@ -1,4 +1,6 @@
 package com.socialcomputing.wps.script  {
+    import com.socialcomputing.wps.components.PlanComponent;
+    
     import flash.display.Graphics;
     import flash.geom.Point;
     import flash.geom.Rectangle;
@@ -183,7 +185,7 @@ package com.socialcomputing.wps.script  {
          * @param showTyp		The type of satellite to display.[ALL_TYP,BASE_TYP,TIP_TYP,SEL_TYP]
          * @throws UnsupportedEncodingException 
          */
-        public function paint(applet:WPSApplet, g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, isLinkOnly:Boolean, satData:SatData, showTyp:int):void {
+        public function paint(applet:PlanComponent, g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, isLinkOnly:Boolean, satData:SatData, showTyp:int):void {
             var flags:int= satData.m_flags;
             var isTip:Boolean= isEnabled( flags, Satellite.TIP_BIT ),
                 isSel       = isEnabled( flags, Satellite.SEL_BIT ),
@@ -264,7 +266,7 @@ package com.socialcomputing.wps.script  {
          * @return				True if this contains pos.
          * @throws UnsupportedEncodingException 
          */
-        public function contains(applet:WPSApplet, g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, transfo:Transfo, pos:Point, isPie:Boolean, isFake:Boolean):Boolean {
+        public function contains(applet:PlanComponent, g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, transfo:Transfo, pos:Point, isPie:Boolean, isFake:Boolean):Boolean {
             var i:int, n:int    = m_slices.length;
             
             if ( supCtr == null )	supCtr = m_shape.getCenter( zone );
@@ -273,7 +275,7 @@ package com.socialcomputing.wps.script  {
             
             if ( i < n )    // point is in one of this slices
             {
-                applet.m_plan.m_newZone = zone;
+                applet.plan.m_newZone = zone;
                 
                 if ( isPie )
                 {
@@ -298,11 +300,11 @@ package com.socialcomputing.wps.script  {
                     {
                         if ( i < n )
                         {
-                            applet.m_plan.m_newZone = zones[i-1];
+                            applet.plan.m_newZone = zones[i-1];
                         }
                         else if ( a - n < m )
                         {
-                            applet.m_plan.m_newZone = zones[n-2];
+                            applet.plan.m_newZone = zones[n-2];
                         }
                     }
                 }
@@ -323,7 +325,7 @@ package com.socialcomputing.wps.script  {
          * @param bounds		A Rectangle to merge with this bounds.
          * @throws UnsupportedEncodingException 
          */
-        public function setBounds(applet:WPSApplet, g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, bounds:Rectangle):void {
+        public function setBounds(applet:PlanComponent, g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, bounds:Rectangle):void {
             var i:int, n    = m_slices.length;
             
             for ( i = 0; i < n; i ++ )
@@ -349,7 +351,7 @@ package com.socialcomputing.wps.script  {
          * @param pos			The current cursor position. Used to popup a menu.
          * @param actionId		Type of event that triggers the action.[HOVER_VAL,CLICK_VAL,DBLCLICK_VAL].
          */
-        public function execute(applet:WPSApplet, zone:ActiveZone, pos:Point, actionId:int):void {
+        public function execute(applet:PlanComponent, zone:ActiveZone, pos:Point, actionId:int):void {
             var firstSat:Satellite= zone.m_curSwh.m_satellites[0];
             var isExe:Boolean= isDefined( actionId );
             

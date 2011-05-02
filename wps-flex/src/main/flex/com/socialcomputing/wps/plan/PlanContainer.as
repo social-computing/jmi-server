@@ -63,5 +63,17 @@ package com.socialcomputing.wps.plan
 				jsonObject.type,
 				jsonObject.mime);
 		}
+
+		public function get plan():Plan
+		{
+			return _plan;
+		}
+
+		public function get env():Env
+		{
+			return _env;
+		}
+
+
 	}
 }

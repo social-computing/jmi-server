@@ -1,4 +1,6 @@
 package com.socialcomputing.wps.script  {
+    import com.socialcomputing.wps.components.PlanComponent;
+    
     import flash.display.Graphics;
     import flash.geom.Point;
     import flash.geom.Rectangle;
@@ -64,7 +66,7 @@ package com.socialcomputing.wps.script  {
          * @param showLinks		True if links between satelites should be drawn. False for the opposite.
          * @throws UnsupportedEncodingException 
          */
-        public function paint(applet:WPSApplet, g:Graphics, zone:ActiveZone, isCur:Boolean, isFront:Boolean, showTyp:int, showLinks:Boolean):void {
+        public function paint(applet:PlanComponent, g:Graphics, zone:ActiveZone, isCur:Boolean, isFront:Boolean, showTyp:int, showLinks:Boolean):void {
             var sat:Satellite= m_satellites[0];
             var shape:ShapeX= sat.m_shape;
             //int             curSel  = applet.m_plan.m_curSel,
@@ -103,12 +105,12 @@ package com.socialcomputing.wps.script  {
          * @param showTyp		Flags indicating what type of satellite to draw.(Satellite.XXX_TYP)
          * @throws UnsupportedEncodingException 
          */
-        protected function drawSats(applet:WPSApplet, g:Graphics, zone:ActiveZone, shape:ShapeX, transfo:Transfo, isLinkOnly:Boolean, isCur:Boolean, isFront:Boolean, showTyp:int):void // throws UnsupportedEncodingException
+        protected function drawSats(applet:PlanComponent, g:Graphics, zone:ActiveZone, shape:ShapeX, transfo:Transfo, isLinkOnly:Boolean, isCur:Boolean, isFront:Boolean, showTyp:int):void // throws UnsupportedEncodingException
         {
             var isBag:Boolean= zone is BagZone;
             var supZone:BagZone= isBag ? BagZone(zone ): null;
             var zones:Array= isBag ? supZone.m_subZones : null;
-            var curZone:ActiveZone= applet.m_plan.m_curZone,
+            var curZone:ActiveZone= applet.plan.m_curZone,
 				subZone:ActiveZone;
             var sat:Satellite= m_satellites[0];
             var satData:SatData= isCur ? zone.m_curData[0] : zone.m_restData[0];
@@ -122,7 +124,7 @@ package com.socialcomputing.wps.script  {
             if ( !isLinkOnly )
             {
                 // Draws the place itself using the first Satellite
-                sat.paint( applet, g, zone, null, null, false, satData, showTyp);
+                sat.paint(applet, g, zone, null, null, false, satData, showTyp);
             }
             
             for ( i = 1; i < n; i ++ )
@@ -206,7 +208,7 @@ package com.socialcomputing.wps.script  {
          * @return				This swatch bounding box for zone.
          * @throws UnsupportedEncodingException 
          */
-        function getBounds(applet:WPSApplet, g:Graphics, zone:ActiveZone, isCurZone:Boolean):Rectangle {
+        function getBounds(applet:PlanComponent, g:Graphics, zone:ActiveZone, isCurZone:Boolean):Rectangle {
             var bounds:Rectangle= new Rectangle();
             var sat:Satellite= m_satellites[0];
             var shape:ShapeX= sat.m_shape;
@@ -291,7 +293,7 @@ package com.socialcomputing.wps.script  {
          * @return				The sat of this swatch that is hovered or null if there isn't.
          * @throws UnsupportedEncodingException 
          */
-        function getSatAt(applet:WPSApplet, g:Graphics, zone:ActiveZone, pos:Point, isCurZone:Boolean):Satellite {
+        function getSatAt(applet:PlanComponent, g:Graphics, zone:ActiveZone, pos:Point, isCurZone:Boolean):Satellite {
             if ( zone.getParent().m_bounds.contains( pos.x, pos.y ))      // pos is in the Bounding Box
             {
                 var sat:Satellite= m_satellites[0];
@@ -299,10 +301,10 @@ package com.socialcomputing.wps.script  {
                 var isBag:Boolean= zone is BagZone;
                 var supZone:BagZone= isBag ? BagZone(zone ): null;
                 var zones:Array= isBag ? supZone.m_subZones : null;
-                var curZone:ActiveZone= applet.m_plan.m_curZone,
+                var curZone:ActiveZone= applet.plan.m_curZone,
                     subZone;
-                var satRelTrf:Transfo, satTrf,
-                transfo     = sat.getTransfo( Satellite.TRANSFO_VAL, zone.m_props );
+                var satRelTrf:Transfo, satTrf:Transfo,
+                      transfo:Transfo     = sat.getTransfo( Satellite.TRANSFO_VAL, zone.m_props );
                 var i:int, n        = m_satellites.length,
                     flags:int;
                 var hasRestBit:Boolean, hasCurBit, hasSubBit,  isCur, isVisible;
@@ -405,7 +407,7 @@ package com.socialcomputing.wps.script  {
          * @return				An array of satellite data.
          * @throws UnsupportedEncodingException 
          */
-        public function evalSatData(applet:WPSApplet, zone:ActiveZone, isSuper:Boolean):Array
+        public function evalSatData(applet:PlanComponent, zone:ActiveZone, isSuper:Boolean):Array
         {
             var i:int, n        = m_satellites.length;
             var satDatas:Array= new SatData[n];
@@ -432,12 +434,12 @@ package com.socialcomputing.wps.script  {
                     
                     if ( sels != null )
                     {
-                        var selId:int= int(applet.m_env.m_selections.get( sels[0] ));
+                        var selId:int= int(applet.env.m_selections.get( sels[0] ));
                         
                         sel = isNaN(selId) ? selId : -1;
                     }
                     
-                    satData.m_isVisible = sat.isVisible( zone,  isTip, applet.m_plan.m_curSel, sel );
+                    satData.m_isVisible = sat.isVisible( zone,  isTip, applet.plan.m_curSel, sel );
                 }
                 else
                 {
