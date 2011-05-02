@@ -138,11 +138,7 @@ public class BagZone extends ActiveZone implements Activable
 		trace( "init à finir")		
 		applet.plan.m_maxBox = 
 			applet.plan.m_maxBox.resize(Dimension.fromRectangle(m_bounds));
-
-        var rec:Rectangle = new Rectangle();
-        rec.height = applet.getSize().height;
-        rec.width = applet.getSize().width;
-		m_bounds = m_bounds.intersection(rec);
+		m_bounds = m_bounds.intersection(applet.getSize().toRectangle());
 	}
 
 	/**
