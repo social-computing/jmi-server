@@ -1,10 +1,10 @@
 package com.socialcomputing.wps.script  {
+    import flash.display.BitmapData;
     import flash.display.Graphics;
-	import flash.display.BitmapData;
-	import flash.geom.Matrix;
+    import flash.geom.Matrix;
     import flash.geom.Point;
     import flash.geom.Rectangle;
-	import  flash.ui.MouseCursor;
+    import flash.ui.MouseCursor;
     
     import mx.controls.Image;
     
@@ -85,7 +85,7 @@ package com.socialcomputing.wps.script  {
          * If there is no current ActiveZone, it should be null.
          */
         [transient]
-        protected var m_newZone:ActiveZone;
+        public var m_newZone:ActiveZone;
         
         /**
          * The Applet holding this Plan.
@@ -345,10 +345,9 @@ package com.socialcomputing.wps.script  {
             if ( m_prevBox != null &&(( m_prevBox.width != dim.width )||( m_prevBox.height != dim.height ))&& dim.width > 100&& dim.height > 100)
             {
                 var margin:int= 10;
-                var i:int, n = m_nodesCnt;
+                var i:int, n:int = m_nodesCnt;
                 //Point       p;
-                var scale:Number,
-                sx, sy, dx, dy, s;
+                var scale:Number,sx:Number, sy:Number, dx:Number, dy:Number, s:Number;
                 var zone:ActiveZone;
                 var isFakeFrom:Boolean, isFakeTo;
                 
@@ -558,13 +557,6 @@ package com.socialcomputing.wps.script  {
 			g.beginBitmapFill(image, mtx, false, false);
 			g.drawRect(x, y, image.width, image.height);
 			g.endFill();
-			
-			/*var ldr:Loader = new Loader();
-			ldr.mask = rect;
-			var url:String = "http://www.unknown.example.com/content.swf";
-			var urlReq:URLRequest = new URLRequest(url);
-			ldr.load(urlReq);*/
-		
 		}		
 
         public function get m_curSel():int

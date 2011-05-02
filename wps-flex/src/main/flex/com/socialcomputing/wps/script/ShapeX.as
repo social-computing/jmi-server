@@ -1,9 +1,13 @@
 package com.socialcomputing.wps.script  {
-    import flash.display.Graphics;
-    import flash.display.GraphicsStroke;
-    import flash.display.Sprite;
-    import flash.geom.Point;
-    import flash.geom.Rectangle;
+	import flash.display.Graphics;
+	import flash.display.GraphicsStroke;
+	import flash.display.Loader;
+	import flash.display.Sprite;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
+	import flash.net.URLRequest;
+	
+	import mx.controls.Image;
     
     /**
      * <p>Title: ShapeX</p>
@@ -86,8 +90,8 @@ package com.socialcomputing.wps.script  {
          */
         public function getCenter( zone:ActiveZone):Point {
             var points:Array = new Array(getValue( POLYGON_VAL, zone ));
-            var p:Point, c    = new Point( points[0] );
-            var i:int, n    = points.length;
+            var p:Point, c:Point    = new Point( points[0] );
+            var i:int, n:int    = points.length;
             
             if ( n > 1)
             {
@@ -126,14 +130,14 @@ package com.socialcomputing.wps.script  {
                 {
                     case 1:     // dot      => Place
                         var dx2:int= p.x + shapePos.x - pos.x,
-                        dy2     = p.y + shapePos.y - pos.y;
+                        dy2:int     = p.y + shapePos.y - pos.y;
                         
                         return ( dx2 * dx2 )+( dy2 * dy2 )< size * size;
                         
                     case 2:     // segment  => Street
                     {
                         var A:Point= addPnts( points[0], shapePos ),
-                            B       = addPnts( points[1], shapePos );
+                            B:Point= addPnts( points[1], shapePos );
                         var poly:Polygon= getLinkPoly( zone, A, B, size );
                         
                         return poly.contains2( pos );
@@ -175,7 +179,7 @@ package com.socialcomputing.wps.script  {
                     
                     case 2:     // segment
                         var A:Point= addPnts( points[0], shapePos ),
-                        B       = addPnts( points[1], shapePos );
+                        B:Point= addPnts( points[1], shapePos );
                         
                         rect    = getLinkPoly( zone, A, B, size ).getBounds();
                         break;
@@ -253,7 +257,7 @@ package com.socialcomputing.wps.script  {
                         if ( slice.setColor( g, Slice.OUT_COL_VAL, supZone ))     //g.fillPolygon( poly );
                         {
                             var A:Point= addPnts( p, shapePos ),
-                                B       = addPnts( points[1], shapePos );
+                                B:Point= addPnts( points[1], shapePos );
                             //Polygon poly    = getLinkPoly( supZone, A, B, size );
                             
                             
@@ -382,16 +386,22 @@ package com.socialcomputing.wps.script  {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
                 var medias:Array= applet.m_env.m_medias;
-                var image:Image= Image(medias.get( imageNam )), scaledImg;
+                var image:Image= medias.get( imageNam ), scaledImg:Image;
                 
                 if ( image == null )
                 {
-                    image   = applet.getImage( applet.getCodeBase(), imageNam );
+					var ldr:Loader = new Loader();
+					// TODO applet.getCodeBase() ?????
+					var urlReq:URLRequest = new URLRequest(imageNam);
+					ldr.load(urlReq);
+/*                    image   = applet.getImage( applet.getCodeBase(), imageNam );
                     applet.prepareImage( image, applet );
-                    medias.push( imageNam, image );
+*/                  medias.push( imageNam, image);
                 }
                 
-                if (( applet.checkImage( image, applet )& ImageObserver.ALLBITS )!= 0)  // the image can be drawn now
+                if (false) 
+					// TODO 
+					//( applet.checkImage( image, applet )& ImageObserver.ALLBITS )!= 0)  // the image can be drawn now
                 {
                     var p:Point= getCenter( zone ),
                         shapePos    = new Point();

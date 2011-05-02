@@ -112,12 +112,12 @@ package com.socialcomputing.wps.script  {
 				subZone:ActiveZone;
             var sat:Satellite= m_satellites[0];
             var satData:SatData= isCur ? zone.m_curData[0] : zone.m_restData[0];
-            var satRelTrf:Transfo, satTrf;
-            var i:int, n        = m_satellites.length,
-                flags;
-            var hasRestBit:Boolean, hasCurBit, isCurSub;
+            var satRelTrf:Transfo, satTrf:Transfo;
+            var i:int, n:int        = m_satellites.length,
+                flags:int;
+            var hasRestBit:Boolean, hasCurBit:Boolean, isCurSub:Boolean;
             var satCtr:Point,
-            supCtr      = shape.getCenter( zone );
+            supCtr:Point      = shape.getCenter( zone );
             
             if ( !isLinkOnly )
             {
@@ -217,7 +217,7 @@ package com.socialcomputing.wps.script  {
             var satRelTrf:Transfo, satTrf,
             transfo     = sat.getTransfo( Satellite.TRANSFO_VAL, zone );
             var i:int, n        = m_satellites.length,
-                flags;
+                flags:int;
             //boolean         hasRestBit, hasCurBit, hasLinkBit, isCur;
             var satData:SatData;
             var satCtr:Point,
@@ -304,7 +304,7 @@ package com.socialcomputing.wps.script  {
                 var satRelTrf:Transfo, satTrf,
                 transfo     = sat.getTransfo( Satellite.TRANSFO_VAL, zone );
                 var i:int, n        = m_satellites.length,
-                    flags;
+                    flags:int;
                 var hasRestBit:Boolean, hasCurBit, hasSubBit,  isCur, isVisible;
                 var satData:SatData;
                 var supCtr:Point= shape.getCenter( zone );

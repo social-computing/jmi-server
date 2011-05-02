@@ -1,6 +1,6 @@
 package com.socialcomputing.wps.script {
     import flash.geom.Point;
-	import flash.geom.Rectangle;
+    import flash.geom.Rectangle;
 
 public class Polygon {
 
@@ -216,7 +216,7 @@ public class Polygon {
 
         var lastx:int= xpoints[npoints - 1];
         var lasty:int= ypoints[npoints - 1];
-        var curx:int, cury;
+        var curx:int, cury:int;
 
         // Walk the edges of the polygon
         for (var i:int= 0; i < npoints; lastx = curx, lasty = cury, i++) {

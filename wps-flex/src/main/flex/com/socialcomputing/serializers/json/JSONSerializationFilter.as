@@ -4,6 +4,7 @@ package com.socialcomputing.serializers.json
 	import com.adobe.serialization.json.JSONDecoder;
 	import com.socialcomputing.serializers.RESTSerializationFilter;
 	import com.socialcomputing.wps.script.Env;
+	import com.socialcomputing.wps.script.Plan;
 	import com.socialcomputing.wps.script.JSONToWPSDecoder;
 	
 	import mx.rpc.http.AbstractOperation;
@@ -32,7 +33,8 @@ package com.socialcomputing.serializers.json
 			}
 			var json:Object = JSON.decode(result as String);
 			
-			var env:Env = JSONToWPSDecoder.toEnv(json.Env);
+			var env:Env = JSONToWPSDecoder.toEnv(json.map.env);
+			var plan:Plan = JSONToWPSDecoder.toPlan(json.map.plan);
 			return json;
 		}
 	}
