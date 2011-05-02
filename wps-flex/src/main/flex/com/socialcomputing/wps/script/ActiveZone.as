@@ -93,11 +93,11 @@ package com.socialcomputing.wps.script  {
         
 		
 		public function get( key:String):Object {
-			return this[key];	
+			return m_props[key];	
 		}
 
 		public function put( key:String, value:Object):void {
-			this[key] = value;	
+			m_props[key] = value;	
 		}
 		
         /**
@@ -127,11 +127,11 @@ package com.socialcomputing.wps.script  {
          * @param g         A graphics compatible with the one that will be used for painting.
          * @param isFirst   True if init called for the first time.
          */
-        protected function init(applet:PlanComponent, g:Graphics, isFirst:Boolean):void {
+		public function init(applet:PlanComponent, g:Graphics, isFirst:Boolean):void {
             if ( isFirst )  // One time init
             {
                 //var sel:Object= get( "SELECTION" );
-                var sel:Object= this["SELECTION"];
+                var sel:Object= m_props["SELECTION"];
                 
                 if ( sel != null )
                 {

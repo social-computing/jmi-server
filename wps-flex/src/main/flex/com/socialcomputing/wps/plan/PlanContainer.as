@@ -47,6 +47,16 @@ package com.socialcomputing.wps.plan
 			return _mime;
 		}
 
+		public function get plan():Plan
+		{
+			return _plan;
+		}
+		
+		public function get env():Env
+		{
+			return _env;
+		}
+		
 		public static function fromJSON(jsonObject:Object): PlanContainer {
 			if(jsonObject == null) {
 				throw new ArgumentError("the json object can't be null");
@@ -63,17 +73,6 @@ package com.socialcomputing.wps.plan
 				jsonObject.type,
 				jsonObject.mime);
 		}
-
-		public function get plan():Plan
-		{
-			return _plan;
-		}
-
-		public function get env():Env
-		{
-			return _env;
-		}
-
 
 	}
 }

@@ -54,7 +54,7 @@ package com.socialcomputing.wps.script  {
          * @param g         A graphics compatible with the one that will be used for painting.
          * @param isFirst   True if init called for the first time.
          */
-        protected override function init(applet:PlanComponent, g:Graphics, isFirst:Boolean):void {
+        public override function init(applet:PlanComponent, g:Graphics, isFirst:Boolean):void {
             super.init( applet, g, isFirst );
             
             m_parent	= null;
@@ -75,7 +75,7 @@ package com.socialcomputing.wps.script  {
 				applet.plan.m_maxBox = 
 					applet.plan.m_maxBox.resize(Dimension.fromRectangle(m_bounds));
 				
-				m_bounds = m_bounds.intersection(applet.getSize().toRectangle());
+				m_bounds = m_bounds.intersection(applet.size.toRectangle());
             }
         }
         

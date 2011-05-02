@@ -56,7 +56,7 @@ public class BagZone extends ActiveZone implements Activable
 	 * @param isFirst	True if this init is the first one. False if this is a "refresh" init.
 	 */
     
-	protected override function init(applet:PlanComponent, g:Graphics, isFirst:Boolean):void {
+	public override function init(applet:PlanComponent, g:Graphics, isFirst:Boolean):void {
 		var i:int, n:int = m_subZones != null ? m_subZones.length : 0;
 
 		super.init( applet, g, isFirst );
@@ -84,7 +84,7 @@ public class BagZone extends ActiveZone implements Activable
 				//float   dir     = 0.f,
 				var stp:Number= .25* Base.Pi2;
 				//   isLeft || isRight
-				if ( isLeft ||( m_bounds.x + m_bounds.width > applet.getSize().width ))
+				if ( isLeft ||( m_bounds.x + m_bounds.width > applet.width ))
 				{
 					m_stp = Base.Pi2 /( n << 1);
 
@@ -101,7 +101,7 @@ public class BagZone extends ActiveZone implements Activable
 				}
 			}
 			//   isLeft || isRight
-			if ( isLeft ||( m_bounds.x + m_bounds.width > applet.getSize().width ))
+			if ( isLeft ||( m_bounds.x + m_bounds.width > applet.width ))
 			{
 				m_flags |= isLeft ? SIDE_BIT | LEFT_BIT : SIDE_BIT;
 			}
@@ -138,7 +138,7 @@ public class BagZone extends ActiveZone implements Activable
 		trace( "init à finir")		
 		applet.plan.m_maxBox = 
 			applet.plan.m_maxBox.resize(Dimension.fromRectangle(m_bounds));
-		m_bounds = m_bounds.intersection(applet.getSize().toRectangle());
+		m_bounds = m_bounds.intersection(applet.size.toRectangle());
 	}
 
 	/**

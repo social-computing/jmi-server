@@ -5,8 +5,14 @@ package com.socialcomputing.wps.components
 	import com.socialcomputing.wps.script.Env;
 	import com.socialcomputing.wps.script.Plan;
 	
+	import flash.display.Graphics;
+	import flash.display.InteractiveObject;
+	import flash.events.MouseEvent;
+	import flash.geom.Point;
+	
 	import mx.controls.Alert;
 	import mx.controls.Image;
+	import mx.managers.CursorManager;
 	
 	import spark.components.Group;
 	import spark.core.SpriteVisualElement;
@@ -18,18 +24,16 @@ package com.socialcomputing.wps.components
 		private var _dataProvider:PlanContainer = null;
 		private var _nodes:Array = null;
 		private var _drawingSurface: SpriteVisualElement;
-		
-		// Background Image
-		private var _backImg:Image;
+		private var _curPos:Point= new Point();
+		private var _ready:Boolean = false;
+
 		private var _backImgUrl:String;
-		
-		// ?
+		private var _backImg:Image;
 		private var _restImg:Image;
 		
 		public function PlanComponent()
 		{
 			super();
-			this.addEventListener(NodeEvent.NODE_MOUSEDOWN,  onNodeMouseDown, true);
 			// TODO : See how to draw links ...
 			// Might be on a separate drawing surface ?
 			/* 
@@ -38,6 +42,10 @@ package com.socialcomputing.wps.components
 			*/
 		}
 		
+		public function get ready():Boolean {
+			return plan != null && _ready;
+		}			
+		
 		public function get plan():Plan
 		{
 			if(this._dataProvider == null) {
@@ -45,13 +53,42 @@ package com.socialcomputing.wps.components
 			}
 			return _dataProvider.plan;
 		}
-
+		
 		public function get env():Env
 		{
 			if(this._dataProvider == null) {
 				return null
 			}
 			return _dataProvider.env;
+		}
+		
+		public function get size():Dimension {
+			return new Dimension(this.width, this.height);
+		}
+		
+		public function get backImg():Image
+		{
+			return _backImg;
+		}
+		
+		public function get restImg():Image
+		{
+			return _restImg;
+		}
+		
+		public function get backImgUrl():String
+		{
+			return _backImgUrl;
+		}
+		
+		public function set backImg(value:Image):void
+		{
+			_backImg = value;
+		}
+		
+		public function set restImg(value:Image):void
+		{
+			_restImg = value;
 		}
 		
 		public function set dataProvider(value:Object):void
@@ -62,23 +99,30 @@ package com.socialcomputing.wps.components
 				return;
 			}
 			
+			CursorManager.setBusyCursor();
 			if(value is PlanContainer) {
 				this._dataProvider = value as PlanContainer;
 			}
 			else {
 				this._dataProvider = PlanContainer.fromJSON(value);
 			}
-			
-			// Fake elements here
-			this._nodes = new Array(new Node(1, 30, 30), new Node(2, 70, 80));
-			for each (var n:Node in this._nodes) {
-				var nc:NodeComponent = new NodeComponent();
-				
-				nc.bcolor = 0xFFFFFF;
-				nc.color = 0x555555;
-				nc.node = n;
-				this.addElement(nc);
-			}
+
+			var needPrint:Boolean = false; // Later
+			_dataProvider.env.init( this, needPrint);
+/*			m_backImg	= createImage( m_size.width, m_size.height );
+			m_restImg	= createImage( m_size.width, m_size.height );
+*/
+
+			plan.m_applet     = this;
+			plan.m_curSel     = -1;
+			plan.initZones( this.graphics, plan.m_links, true );
+			plan.initZones( this.graphics, plan.m_nodes, true );
+			plan.resize( size);
+			plan.init();
+			plan.resize( size);
+			_ready = true;
+
+			showStatus( "" );
 			
 			/*
 			 * Don't redraw immediately, because maybe the code that's calling us is
@@ -88,16 +132,49 @@ package com.socialcomputing.wps.components
 			 * is invoked after all scripts have finished executing.
 			 */
 			this.invalidateDisplayList();
+			
+			addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
+			addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+			addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
+/*			addEventListener(MouseEvent.MOUSE_CLICK, mouseClickHandler);
+			addEventListener(MouseEvent.MOUSE_DOUBLE_CLICK, mouseDoubleClickHandler);
+*/			
+			CursorManager.removeBusyCursor();
 		}
 		
-		
-		protected function onNodeMouseDown(event:NodeEvent):void
-		{
-			Alert.show("Selected node : " + event.node.id);
-		}
 		
 		public function showStatus(message:String):void {
 			trace( message);
+		}
+		
+		public function get curPos():Point {
+			return _curPos;
+		}
+		
+		public function set curPos(pos:Point):void {
+			_curPos = pos;
+		}
+		
+		public function mouseOverHandler(event:MouseEvent):void {
+			trace("mouseOverHandler");
+		}
+		
+		public function mouseMoveHandler(event:MouseEvent):void {
+			curPos.x    = event.stageX;
+			curPos.y    = event.stageY;
+			_dataProvider.plan.updateZoneAt( curPos ); // The Zone, SubZone or Satellite can have changed
+		}
+		
+		public function mouseOutHandler(event:MouseEvent):void {
+			trace("mouseOutHandler");
+		}
+		
+		public function mouseClickHandler(event:MouseEvent):void {
+			trace("mouseClickHandler");
+		}
+		
+		public function mouseDoucleClickHandler(event:MouseEvent):void {
+			trace("mouseDoucleClickHandler");
 		}
 		
 		
@@ -107,33 +184,12 @@ package com.socialcomputing.wps.components
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			trace("Update graphic display");
-			// graphics.clear();
-			// Draw a rectange in the graphic area
-			// For test purposes only
-			/* 
-			
-			graphics.beginFill( 0xffffff, 0.0 );
-			graphics.drawRect( 0, 0, unscaledWidth, unscaledHeight );
-			graphics.endFill();
-			*/
-			/*
-			if(_dataProvider != null){
-				drawComponents();
-			}
-			*/
-		}
-		
-		// The drawing of all plan components here
-		/*
-		private function drawComponents():void {
-			trace("draw components");
-			
-			graphics.lineStyle(1, 0x000000, 1.0);
-			for each (var i:Node in this.node) {
-				graphics.drawEllipse(i.x, i.y, i.width, i.width);
+			if ( ready)
+			{
+				//graphics.drawImage( _restImg, 0, 0, null );
+				plan.paintCurZone( graphics );  // A new Zone is hovered, let's paint it!
 			}
 		}
-		*/
 		
 		/**
 		 * Wrapper for a menu item that call performAction with the ActionCommand String as argument.
@@ -215,40 +271,5 @@ package com.socialcomputing.wps.components
 			getAppletContext().showDocument( convertURL( actionStr ), target );
 			*/
 		}
-		
-		/**
-		 * Get this component size as an <code>Dimension</code> object 
-		 */
-		public function getSize():Dimension {
-			return new Dimension(this.width, this.height);
-		}
-
-		public function get backImg():Image
-		{
-			return _backImg;
-		}
-
-		public function get restImg():Image
-		{
-			return _restImg;
-		}
-
-		public function get backImgUrl():String
-		{
-			return _backImgUrl;
-		}
-
-		public function set backImg(value:Image):void
-		{
-			_backImg = value;
-		}
-
-		public function set restImg(value:Image):void
-		{
-			_restImg = value;
-		}
-
-
-
 	}
 }

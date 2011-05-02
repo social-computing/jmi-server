@@ -5,6 +5,8 @@ package com.socialcomputing.wps.script  {
     import flash.geom.Rectangle;
     
     import mx.controls.Image;
+	
+	import com.socialcomputing.wps.components.PlanComponent;
 
 /**
  * <p>Title: Env</p>
@@ -110,11 +112,11 @@ public class Env
 	 * @param applet
 	 * @param needPrint
 	 */
-	private function init(needPrint:Boolean):void {
+	public function init(component:PlanComponent, needPrint:Boolean):void {
         var bkWhite:ColorTransform = new ColorTransform();
         bkWhite.color = 0xFFFFFF;
 		var bkCol:ColorTransform= needPrint ? bkWhite : m_inCol.getColor();
-		//applet.setBackground( bkCol );
+		//component.setBackground( bkCol );
 
 		//m_applet        = applet;
 		m_medias        = new Array();

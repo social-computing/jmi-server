@@ -10,6 +10,7 @@ package com.socialcomputing.wps.script  {
     import flash.ui.MouseCursor;
     
     import mx.controls.Image;
+	import com.socialcomputing.wps.components.PlanComponent;
     
     /**
      * <p>Title: Plan</p>
@@ -94,7 +95,7 @@ package com.socialcomputing.wps.script  {
          * The Applet holding this Plan.
          */
         [transient]
-        protected var m_applet:PlanComponent;
+        public var m_applet:PlanComponent;
         
         /**
          * Table of waiters to manage tooltips.
@@ -111,9 +112,9 @@ package com.socialcomputing.wps.script  {
          * @param isFirst	True if this is the first call of the session (optimisation).
          */
         //protected synchronized function initZones( g:Graphics, zones:Array, isFirst:Boolean):void {
-        protected function initZones( g:Graphics, zones:Array, isFirst:Boolean):void {
+        public function initZones( g:Graphics, zones:Array, isFirst:Boolean):void {
             var i:int, n:int    = zones.length;
-            var dim:Dimension= m_applet.getSize();
+            var dim:Dimension= m_applet.size;
             
             // Reset the BBOX of the biggest zone
             m_prevBox   = new Rectangle( dim.width >> 1, dim.height >> 1, 1, 1);
@@ -165,8 +166,8 @@ package com.socialcomputing.wps.script  {
          * Prepare the Plan by initializing zones, allocating and filling the image buffers and repainting the Applet.
          */
         //protected synchronized function init( ):void {
-        protected function init( ):void {
-            var dim:Dimension= m_applet.getSize();
+        public function init( ):void {
+            var dim:Dimension= m_applet.size;
             var backGfx:Graphics= m_applet.backImg.graphics,
                 restGfx:Graphics = m_applet.restImg.graphics,
                 g:Graphics       = m_applet.graphics;
@@ -214,7 +215,7 @@ package com.socialcomputing.wps.script  {
          * @return	True if the current satellite has changed.
          * @throws UnsupportedEncodingException 
          */
-        protected function updateZoneAt( p:Point):Boolean {
+        public function updateZoneAt( p:Point):Boolean {
             var curSat:Satellite;
             var zone:ActiveZone,
             	parent:ActiveZone = m_curZone != null ? m_curZone.getParent() : null;
@@ -334,7 +335,7 @@ package com.socialcomputing.wps.script  {
          * Draws the current zone (Link or Node).
          * @param g		Graphics to paint in.
          */
-        protected function paintCurZone( g:Graphics):void {
+        public function paintCurZone( g:Graphics):void {
             if ( m_curZone != null )      // A new Zone is hovered, let's paint it!
             {
                 (Activable(m_curZone.getParent())).paintCur( m_applet, g );
@@ -345,7 +346,7 @@ package com.socialcomputing.wps.script  {
          * Evaluates the new position and size of the Places and Streets, and allocate the buffers accordingly to the new size.
          * @param dim	New size of the Applet.
          */
-        protected function resize(dim:Rectangle):void {
+        public function resize(dim:Dimension):void {
             if ( m_prevBox != null &&(( m_prevBox.width != dim.width )||( m_prevBox.height != dim.height ))&& dim.width > 100&& dim.height > 100)
             {
                 var margin:int= 10;
@@ -355,8 +356,9 @@ package com.socialcomputing.wps.script  {
                 var zone:ActiveZone;
                 var isFakeFrom:Boolean, isFakeTo:Boolean;
                 
-                m_applet.backImg = ImageUtil.fromRectangle(dim);
-                m_applet.restImg = ImageUtil.fromRectangle(dim);
+				trace( "Plan resize à terminer");
+                //m_applet.backImg = ImageUtil.fromRectangle(dim);
+                //m_applet.restImg = ImageUtil.fromRectangle(dim);
                 
                 if ( n < 8)	// too few places, lets reduce their size
                 {
@@ -542,7 +544,7 @@ package com.socialcomputing.wps.script  {
          */
         //private synchronized function blitImage( g:Graphics, image:Image, bounds:Rectangle):void {
         public function blitImage(g:Graphics, image:Image, bounds:Rectangle):void {
-            var dim:Dimension= m_applet.getSize();
+            var dim:Dimension= m_applet.size;
             var x1:int= bounds.x < 0? 0: bounds.x,
                 y1:int = bounds.y < 0? 0: bounds.y,
                 x2:int = bounds.x + bounds.width + 1,
