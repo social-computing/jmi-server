@@ -197,22 +197,31 @@ package com.socialcomputing.wps.script  {
                 {
                     if ( isEnabled( flags, LINK_BIT ))    // This has a Link
                     {
-                        var x1:int= supCtr.x,
-                            y1  = supCtr.y,
-                            x2  = satCtr.x,
-                            y2  = satCtr.y;
+                        var x1:int  = supCtr.x,
+                            y1:int  = supCtr.y,
+                            x2:int  = satCtr.x,
+                            y2:int  = satCtr.y;
                         
-                        setColor( g, LINK_DRK_COL_VAL, zone );
-                        g.drawLine( x1, y1 + 1, x2, y2 + 1);
-                        
-                        if ( setColor( g, LINK_LIT_COL_VAL, zone ))
+                        setColor( g, LINK_DRK_COL_VAL, zone.m_props );
+                        //g.drawLine( x1, y1 + 1, x2, y2 + 1);
+                        g.moveTo(x1, y1 + 1);
+						g.lineTo(x2, y2 + 1);
+                        if ( setColor( g, LINK_LIT_COL_VAL, zone.m_props ))
                         {
-                            g.drawLine( x1 - 1, y1, x2 - 1, y2 );
-                            g.drawLine( x1, y1, x2, y2 );
-                            g.drawLine( x1 + 1, y1, x2 + 1, y2 );
+                            //g.drawLine( x1 - 1, y1, x2 - 1, y2 );
+							g.moveTo(x1 - 1, y1);
+							g.lineTo(x2 - 1, y2);
+                            //g.drawLine( x1, y1, x2, y2 );
+							g.moveTo(x1, y1);
+							g.lineTo(x2, y2);
+                            //g.drawLine( x1 + 1, y1, x2 + 1, y2 );
+							g.moveTo(x1 + 1, y1 );
+							g.lineTo(x2 + 1, y2);
                             
-                            setColor( g, LINK_NRM_COL_VAL, zone );
-                            g.drawLine( x1, y1 - 1, x2, y2 - 1);
+                            setColor( g, LINK_NRM_COL_VAL, zone.m_props );
+                            //g.drawLine( x1, y1 - 1, x2, y2 - 1);
+							g.moveTo(x1, y1 - 1);
+							g.lineTo(x2, y2 - 1);
                         }
                     }
                 }
@@ -256,7 +265,7 @@ package com.socialcomputing.wps.script  {
          * @throws UnsupportedEncodingException 
          */
         public function contains(applet:WPSApplet, g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, transfo:Transfo, pos:Point, isPie:Boolean, isFake:Boolean):Boolean {
-            var i:int, n    = m_slices.length;
+            var i:int, n:int    = m_slices.length;
             
             if ( supCtr == null )	supCtr = m_shape.getCenter( zone );
             
@@ -274,9 +283,9 @@ package com.socialcomputing.wps.script  {
                     
                     var center:Point= isFake ? m_shape.getCenter( supZone ) : supCtr;
                     var dir:Number= supZone.m_dir != 10.? supZone.m_dir : transfo.m_dir,
-                        step    = supZone.m_stp,
-                        m       = .5*( Pi2 / step - n ),
-                        a       = float(Math.atan2( pos.y - center.y, pos.x - center.x ));
+                        step:Number    = supZone.m_stp,
+                        m:Number       = .5*( Pi2 / step - n ),
+                        a:Number       = Math.atan2( pos.y - center.y, pos.x - center.x );
                     
                     if ( dir < 0)  dir += Pi2;
                     if ( a < 0)    a += Pi2;
@@ -346,83 +355,78 @@ package com.socialcomputing.wps.script  {
             
             if ( isExe )
             {
-                var actionStr:String= getString( actionId, zone );
+                var actionStr:String= getString( actionId, zone.m_props );
                 
                 if ( actionStr != null )
                 {
-                    var actions:Array= Base.getTextParts( getString( actionId, zone ), "\n" );
-                    var action:String, func, args;
-                    var i:int, j, n = actions.length;
+                    var actions:Array= Base.getTextParts( getString( actionId, zone.m_props ), "\n" );
+                    var action:String, func:String, args:String;
+                    var i:int, j:int, n:int = actions.length;
                     
-                    try
+                    for ( i = 0; i < n; i ++ )
                     {
-                        for ( i = 0; i < n; i ++ )
+                        action  = actions[i];
+                        j       = action.indexOf( ' ' );
+                        func    = action.substring( 0, j );
+                        args    = parseString3( action.substring( j + 1, action.length), zone.m_props )[0];
+                        
+                        if ( func == ( "show" ))         // Shows a message in the StatusBar
                         {
-                            action  = actions[i];
-                            j       = action.indexOf( ' ' );
-                            func    = action.substring( 0, j );
-                            args    = parseString3( action.substring( j + 1, action.length()), zone )[0];
+                            applet.showStatus( args );
+                        }
+                        else if ( func == ( "open" ))      // Go to a page, opening a new browser window
+                        {
+                            j   = args.indexOf( SUBSEP );
                             
-                            if ( func == ( "show" ))         // Shows a message in the StatusBar
+                            if ( j != -1)  // tracking
                             {
-                                applet.showStatus( args );
+                                args    = args.substring( j, args.length);
                             }
-                            else if ( func == ( "open" ))      // Go to a page, opening a new browser window
+                            
+                            applet.actionPerformed( args );
+                        }
+                        else if ( func == ( "popup" ))    // Popup a menu
+                        {
+                            var menu:MenuX= MenuX(zone.m_curSwh.m_refs.get( args ));
+                            
+                            if ( menu != null )
                             {
-                                j   = args.indexOf( SUBSEP );
-                                
-                                if ( j != -1)  // tracking
-                                {
-                                    args    = args.substring( j, args.length());
-                                }
-                                
-                                applet.actionPerformed( new ActionEvent( this, 0, args ));
-                            }
-                            else if ( func == ( "popup" ))    // Popup a menu
+								// TODO create menu
+/*                                var popup:PopupMenu= new PopupMenu();
+                                menu.parseMenu( popup, applet, zone );
+                                applet.add( popup );
+                                popup.show( applet, pos.x, pos.y );
+*/                            }
+                        }
+                        else if ( func == ( "pop" ))    // Pop a tooltip
+                        {
+                            var slice:Slice= Slice(zone.m_curSwh.m_refs.get( args ));
+                            
+                            if ( slice != null )
                             {
-                                var menu:MenuX= MenuX(zone.m_curSwh.m_refs.get( args ));
+                                var delay:int= slice.getInt( Slice.DELAY_VAL, zone.m_props ),
+                                    length  = slice.getInt( Slice.LENGTH_VAL, zone.m_props );
                                 
-                                if ( menu != null )
-                                {
-                                    var popup:PopupMenu= new PopupMenu();
-                                    
-                                    menu.parseMenu( popup, applet, zone );
-                                    applet.add( popup );
-                                    popup.show( applet, pos.x, pos.y );
-                                }
-                            }
-                            else if ( func == ( "pop" ))    // Pop a tooltip
-                            {
-                                var slice:Slice= Slice(zone.m_curSwh.m_refs.get( args ));
-                                
-                                if ( slice != null )
-                                {
-                                    var delay:int= slice.getInt( Slice.DELAY_VAL, zone ),
-                                        length  = slice.getInt( Slice.LENGTH_VAL, zone );
-                                    
-                                    applet.m_plan.popSlice( zone, slice, delay, length, args );
-                                }
-                            }
-                            else if ( func == ( "play" ))    // Plays a sound in .au Sun audio format
-                            {
-                                var clip:AudioClip= AudioClip(applet.m_env.m_medias.get( args ));
-                                
-                                if ( clip == null )
-                                {
-                                    clip = applet.getAudioClip( applet.getCodeBase(), args );
-                                    clip.play();
-                                    applet.m_env.m_medias.put( args, clip );
-                                }
-                            }
-                            else if ( func == ( "dump" ))   // Print a string in the console
-                            {
-                                System.out.println( args );
+								// TODO
+                                //applet.m_plan.popSlice( zone, slice, delay, length, args );
                             }
                         }
-                    }
-                    catch( e:Exception)
-                    {
-                        e.printStackTrace();
+                        else if ( func == ( "play" ))    // Plays a sound in .au Sun audio format
+                        {
+							// TODO
+/*                            var clip:AudioClip= AudioClip(applet.m_env.m_medias.get( args ));
+                            
+                            if ( clip == null )
+                            {
+                                clip = applet.getAudioClip( applet.getCodeBase(), args );
+                                clip.play();
+                                applet.m_env.m_medias.put( args, clip );
+                            }*/
+                        }
+                        else if ( func == ( "dump" ))   // Print a string in the console
+                        {
+                            trace( args );
+                        }
                     }
                 }
             }

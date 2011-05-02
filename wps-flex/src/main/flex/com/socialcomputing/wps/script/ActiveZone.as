@@ -13,7 +13,7 @@ package com.socialcomputing.wps.script  {
      * @author flugue@mapstan.com
      * @version 1.0
      */
-    public class ActiveZone extends Array
+    public class ActiveZone
     {
         /**
          * Bit indicating that subnodes of this are located on one side.
@@ -45,6 +45,11 @@ package com.socialcomputing.wps.script  {
          */
         public var m_curSwh:Swatch;
         
+		/**
+		 * Remplace l'héritage de la classe Array
+		 */
+		public var m_props:Array;
+		
         /**
          * Bounding-Box of this zone including its subZones.
          * The BBox is the union of the rest and current swatch BBoxs and a small margin.
@@ -132,7 +137,7 @@ package com.socialcomputing.wps.script  {
                 }
                 
                 // Quick access to Env props
-                this.push( "ENV", applet.m_env.m_props );
+				m_props.push( "ENV", applet.m_env.m_props );
                 
                 // Optimize prop access
                 // FRV ???? rehash();

@@ -1,8 +1,13 @@
 package com.socialcomputing.wps.script  {
-    import flash.display.Graphics;
-    import flash.display.Sprite;
-    import flash.geom.Point;
-    import flash.geom.Rectangle;
+	import flash.display.Graphics;
+	import flash.display.GraphicsStroke;
+	import flash.display.Loader;
+	import flash.display.Sprite;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
+	import flash.net.URLRequest;
+	
+	import mx.controls.Image;
     
     /**
      * <p>Title: ShapeX</p>
@@ -63,7 +68,7 @@ package com.socialcomputing.wps.script  {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
                 var p:Point;
-                var scale:Number= getFloat( SCALE_VAL, zone );
+                var scale:Number= getFloat( SCALE_VAL, zone.m_props );
                 var x:int, y;
                 
                 scale   *= transfo.m_pos;
@@ -84,9 +89,9 @@ package com.socialcomputing.wps.script  {
          * @return		The barycentric center of all points.
          */
         public function getCenter( zone:ActiveZone):Point {
-            var points:Array = new Array(getValue( POLYGON_VAL, zone ));
-            var p:Point, c    = new Point( points[0] );
-            var i:int, n    = points.length;
+            var points:Array = new Array(getValue( POLYGON_VAL, zone.m_props ));
+            var p:Point, c:Point    = new Point( points[0] );
+            var i:int, n:int    = points.length;
             
             if ( n > 1)
             {
@@ -115,7 +120,7 @@ package com.socialcomputing.wps.script  {
         public function contains( zone:ActiveZone, transfo:Transfo, center:Point, pos:Point):Boolean {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
-                var points:Array= new Array(getValue( POLYGON_VAL, zone ));
+                var points:Array= new Array(getValue( POLYGON_VAL, zone.m_props ));
                 var p:Point= getCenter( zone ),
                     shapePos    = new Point();
                 var size:int= int(getShapePos( zone, transfo, center, p, shapePos )),
@@ -125,14 +130,14 @@ package com.socialcomputing.wps.script  {
                 {
                     case 1:     // dot      => Place
                         var dx2:int= p.x + shapePos.x - pos.x,
-                        dy2     = p.y + shapePos.y - pos.y;
+                        dy2:int     = p.y + shapePos.y - pos.y;
                         
                         return ( dx2 * dx2 )+( dy2 * dy2 )< size * size;
                         
                     case 2:     // segment  => Street
                     {
                         var A:Point= addPnts( points[0], shapePos ),
-                            B       = addPnts( points[1], shapePos );
+                            B:Point= addPnts( points[1], shapePos );
                         var poly:Polygon= getLinkPoly( zone, A, B, size );
                         
                         return poly.contains2( pos );
@@ -153,7 +158,7 @@ package com.socialcomputing.wps.script  {
         public function setBounds( zone:ActiveZone, transfo:Transfo, center:Point, bounds:Rectangle):void {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
-                var points:Array= new Array(getValue( POLYGON_VAL, zone ));
+                var points:Array= new Array(getValue( POLYGON_VAL, zone.m_props ));
                 var p:Point= getCenter( zone ),
                     shapePos    = new Point();
                 var rect:Rectangle= null;
@@ -174,7 +179,7 @@ package com.socialcomputing.wps.script  {
                     
                     case 2:     // segment
                         var A:Point= addPnts( points[0], shapePos ),
-                        B       = addPnts( points[1], shapePos );
+                        B:Point= addPnts( points[1], shapePos );
                         
                         rect    = getLinkPoly( zone, A, B, size ).getBounds();
                         break;
@@ -195,7 +200,7 @@ package com.socialcomputing.wps.script  {
          * @param center	The center of the shape before the transformation.
          * @throws UnsupportedEncodingException 
          */
-        public function paint( gi:Graphics, supZone:ActiveZone, zone:ActiveZone, slice:Slice, transfo:Transfo, center:Point):void // throws UnsupportedEncodingException
+        public function paint( g:Graphics, supZone:ActiveZone, zone:ActiveZone, slice:Slice, transfo:Transfo, center:Point):void // throws UnsupportedEncodingException
         {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
@@ -204,16 +209,16 @@ package com.socialcomputing.wps.script  {
                 //if (test!=false) System.out.print("test "+test+"\n");
                 //float alpha = slice.getFloat(slice.ALPHA_VAL, supZone);
                 
-                var g:Graphics2D= Graphics2D(gi);
+                /*var g:Graphics2D= Graphics2D(gi);
                 
                 g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);                
                 
-                var composite:Composite;
+                var composite:Composite;*/
                 
                 //Float alpha = slice.getFloat(prop, props);
                 
-                var points:Array= new Array(getValue( POLYGON_VAL, supZone ));
+                var points:Array= new Array(getValue( POLYGON_VAL, supZone.m_props ));
                 var p:Point= points[0],
                     shapePos    = new Point();
                 var n:int= points.length,
@@ -223,17 +228,19 @@ package com.socialcomputing.wps.script  {
                 {
                     case 1:     // dot      => Place
                     {
-                        composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0);					
-                        g.setComposite(composite);
+                        //composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0);					
+                        //g.setComposite(composite);
                         
                         var x:int=     p.x + shapePos.x - size,
                             y =     p.y + shapePos.y - size;
                         
                         size <<= 1;
                         
-                        if ( slice.setColor( g, Slice.IN_COL_VAL, zone ))   g.fillOval( x, y, size, size );
+                        //if ( slice.setColor( g, Slice.IN_COL_VAL, zone ))   g.fillOval( x, y, size, size );
+                        if ( slice.setColor( g, Slice.IN_COL_VAL, zone.m_props ))   g.drawEllipse( x, y, size, size );
                         if ( WPSApplet.s_hasGfxInc )                        size --;
-                        if ( slice.setColor( g, Slice.OUT_COL_VAL, zone ))  g.drawOval( x, y, size, size );
+                        //if ( slice.setColor( g, Slice.OUT_COL_VAL, zone ))  g.drawOval( x, y, size, size );
+                        if ( slice.setColor( g, Slice.OUT_COL_VAL, zone.m_props ))  g.drawEllipse( x, y, size, size );
                         break;
                     }
                         
@@ -241,30 +248,33 @@ package com.socialcomputing.wps.script  {
                     {
                         /*composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f;					
                         g.setComposite(composite);*/
-                        var stroke:Stroke= g.getStroke();
-                        g.setStroke(new BasicStroke(size+3));
+                        //var stroke:Stroke= g.getStroke();
+                        //g.setStroke(new BasicStroke(size+3));
                         
-                        var q:QuadCurve2D= new QuadCurve2D.Float();
+                        //var q:QuadCurve2D= new QuadCurve2D.Float();
+                        var q:Sprite = new Sprite();
                         
-                        if ( slice.setColor( g, Slice.OUT_COL_VAL, supZone ))     //g.fillPolygon( poly );
+                        if ( slice.setColor( g, Slice.OUT_COL_VAL, supZone.m_props ))     //g.fillPolygon( poly );
                         {
                             var A:Point= addPnts( p, shapePos ),
-                                B       = addPnts( points[1], shapePos );
+                                B:Point= addPnts( points[1], shapePos );
                             //Polygon poly    = getLinkPoly( supZone, A, B, size );
                             
                             
-                            q.setCurve(A.x, A.y, (A.x+B.x)/2, (A.y+B.y)/2, B.x, B.y);
-                            g.draw(q);					
+                            /*q.setCurve(A.x, A.y, (A.x+B.x)/2, (A.y+B.y)/2, B.x, B.y);
+                            g.draw(q);*/					
+                            q.graphics.moveTo(A.x, A.y);
+                            q.graphics.curveTo((A.x+B.x)/2, (A.y+B.y)/2, B.x, B.y);
                         }
                         
-                        g.setStroke(new BasicStroke(size));
+                        //g.setStroke(new BasicStroke(size));
                         
-                        if (slice.setColor( g, Slice.IN_COL_VAL, supZone ))
+                        if (slice.setColor( g, Slice.IN_COL_VAL, supZone.m_props ))
                         {
-                            g.draw(q);	
+                            //g.draw(q);	
                         }
                         
-                        g.setStroke(stroke);
+                        //g.setStroke(stroke);
                         
                         //if ( slice.setColor( g, Slice.OUT_COL_VAL, supZone ))    g.drawPolygon( poly );
                         break;
@@ -285,7 +295,7 @@ package com.socialcomputing.wps.script  {
          * @return			A new 4 Points Polygon.
          */
         private function getLinkPoly( zone:ActiveZone, A:Point, B:Point, width:int):Polygon {
-            var flags:int= getFlags( zone );
+            var flags:int= getFlags( zone.m_props.m_props.m_props.m_props );
             var link:LinkZone= LinkZone(zone);
             var from:BagZone= link.m_from,
                 to      = link.m_to;
@@ -376,16 +386,22 @@ package com.socialcomputing.wps.script  {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
                 var medias:Array= applet.m_env.m_medias;
-                var image:Image= Image(medias.get( imageNam )), scaledImg;
+                var image:Image= medias.get( imageNam ), scaledImg:Image;
                 
                 if ( image == null )
                 {
-                    image   = applet.getImage( applet.getCodeBase(), imageNam );
+					var ldr:Loader = new Loader();
+					// TODO applet.getCodeBase() ?????
+					var urlReq:URLRequest = new URLRequest(imageNam);
+					ldr.load(urlReq);
+/*                    image   = applet.getImage( applet.getCodeBase(), imageNam );
                     applet.prepareImage( image, applet );
-                    medias.push( imageNam, image );
+*/                  medias.push( imageNam, image);
                 }
                 
-                if (( applet.checkImage( image, applet )& ImageObserver.ALLBITS )!= 0)  // the image can be drawn now
+                if (false) 
+					// TODO 
+					//( applet.checkImage( image, applet )& ImageObserver.ALLBITS )!= 0)  // the image can be drawn now
                 {
                     var p:Point= getCenter( zone ),
                         shapePos    = new Point();
@@ -433,7 +449,7 @@ package com.socialcomputing.wps.script  {
          * @return			The scale of this shape after transformation.
          */
         private function getShapePos( zone:ActiveZone, transfo:Transfo, center:Point, p0:Point, pos:Point):Number {
-            var scale:Number= getFloat( SCALE_VAL, zone );
+            var scale:Number= getFloat( SCALE_VAL, zone.m_props );
             
             if ( center != null )   // we are drawing a real Sat!
             {

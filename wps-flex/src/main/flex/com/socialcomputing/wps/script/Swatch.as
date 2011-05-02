@@ -68,8 +68,8 @@ package com.socialcomputing.wps.script  {
             var sat:Satellite= m_satellites[0];
             var shape:ShapeX= sat.m_shape;
             //int             curSel  = applet.m_plan.m_curSel,
-            var flags:int= getFlags( zone );
-            var transfo:Transfo= sat.getTransfo( Satellite.TRANSFO_VAL, zone );
+            var flags:int= getFlags( zone.m_props );
+            var transfo:Transfo= sat.getTransfo( Satellite.TRANSFO_VAL, zone.m_props.m_propss );
             
             
             //try {
@@ -112,12 +112,12 @@ package com.socialcomputing.wps.script  {
 				subZone:ActiveZone;
             var sat:Satellite= m_satellites[0];
             var satData:SatData= isCur ? zone.m_curData[0] : zone.m_restData[0];
-            var satRelTrf:Transfo, satTrf;
-            var i:int, n        = m_satellites.length,
-                flags;
-            var hasRestBit:Boolean, hasCurBit, isCurSub;
+            var satRelTrf:Transfo, satTrf:Transfo;
+            var i:int, n:int        = m_satellites.length,
+                flags:int;
+            var hasRestBit:Boolean, hasCurBit:Boolean, isCurSub:Boolean;
             var satCtr:Point,
-            supCtr      = shape.getCenter( zone );
+            supCtr:Point      = shape.getCenter( zone );
             
             if ( !isLinkOnly )
             {
@@ -139,7 +139,7 @@ package com.socialcomputing.wps.script  {
                     {
                         hasRestBit  = isEnabled( flags, Satellite.REST_BIT );
                         hasCurBit   = isEnabled( flags, Satellite.CUR_BIT );
-                        satRelTrf   = sat.getTransfo( Satellite.TRANSFO_VAL, zone );
+                        satRelTrf   = sat.getTransfo( Satellite.TRANSFO_VAL, zone.m_props );
                         satTrf      = transfo != null ? transfo.transform( satRelTrf, true ) : null;
                         
                         if( supZone.m_dir != 10.)
@@ -215,9 +215,9 @@ package com.socialcomputing.wps.script  {
             var zones:Array= isBag ? supZone.m_subZones : null;
             var subZone:ActiveZone;
             var satRelTrf:Transfo, satTrf,
-            transfo     = sat.getTransfo( Satellite.TRANSFO_VAL, zone );
+            transfo     = sat.getTransfo( Satellite.TRANSFO_VAL, zone.m_props );
             var i:int, n        = m_satellites.length,
-                flags;
+                flags:int;
             //boolean         hasRestBit, hasCurBit, hasLinkBit, isCur;
             var satData:SatData;
             var satCtr:Point,
@@ -239,7 +239,7 @@ package com.socialcomputing.wps.script  {
                     {
                         //hasRestBit  = Base.isEnabled( flags, Satellite.REST_BIT );
                         //hasCurBit   = Base.isEnabled( flags, Satellite.CUR_BIT );
-                        satRelTrf   = sat.getTransfo( Satellite.TRANSFO_VAL, zone );
+                        satRelTrf   = sat.getTransfo( Satellite.TRANSFO_VAL, zone.m_props );
                         satTrf      = transfo.transform( satRelTrf, true );
                         
                         if ( supZone.m_dir != 10.)  satTrf.m_dir = supZone.m_dir;
@@ -302,9 +302,9 @@ package com.socialcomputing.wps.script  {
                 var curZone:ActiveZone= applet.m_plan.m_curZone,
                     subZone;
                 var satRelTrf:Transfo, satTrf,
-                transfo     = sat.getTransfo( Satellite.TRANSFO_VAL, zone );
+                transfo     = sat.getTransfo( Satellite.TRANSFO_VAL, zone.m_props );
                 var i:int, n        = m_satellites.length,
-                    flags;
+                    flags:int;
                 var hasRestBit:Boolean, hasCurBit, hasSubBit,  isCur, isVisible;
                 var satData:SatData;
                 var supCtr:Point= shape.getCenter( zone );
@@ -323,7 +323,7 @@ package com.socialcomputing.wps.script  {
                         {
                             hasCurBit   = isEnabled( flags, Satellite.CUR_BIT );
                             hasSubBit   = isEnabled( flags, Satellite.SUB_BIT );
-                            satRelTrf   = sat.getTransfo( Satellite.TRANSFO_VAL, zone );
+                            satRelTrf   = sat.getTransfo( Satellite.TRANSFO_VAL, zone.m_props );
                             
                             if ( zones != null && hasSubBit && hasCurBit && satRelTrf != null && satRelTrf.m_pos == 0.)
                             {
@@ -419,7 +419,7 @@ package com.socialcomputing.wps.script  {
             {
                 sat     = m_satellites[i];
                 satData = new SatData();
-                flags   = sat.getFlags( zone );
+                flags   = sat.getFlags( zone.m_props );
                 satData.m_flags     = flags;
                 
                 isTip   = isEnabled( flags, Satellite.TIP_BIT );
@@ -427,7 +427,7 @@ package com.socialcomputing.wps.script  {
                 
                 if ( isTip || isSel )
                 {
-                    var sels:Array= sat.parseString( Satellite.SELECTION_VAL, zone );
+                    var sels:Array= sat.parseString( Satellite.SELECTION_VAL, zone.m_props );
                     var sel:int= -1;
                     
                     if ( sels != null )

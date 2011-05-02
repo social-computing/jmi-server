@@ -89,7 +89,7 @@ package com.socialcomputing.wps.script  {
          * @throws UnsupportedEncodingException 
          */
         protected function paint( applet:WPSApplet, g:Graphics, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point):void {
-            var text:HTMLText= getText( TEXT_VAL, zone );
+            var text:HTMLText= getText( TEXT_VAL, zone.m_props );
             
             // Patch for IE old JVM JIT bug (build < 3000).
             /*ON if ( satShp == null )
@@ -97,7 +97,7 @@ package com.socialcomputing.wps.script  {
             try{ Thread.sleep( 0 );} catch ( InterruptedException e ){}
             }*/
             
-            var transfo:Transfo= getTransfo( TRANSFO_VAL, zone );
+            var transfo:Transfo= getTransfo( TRANSFO_VAL, zone.m_props );
             
             if ( isDefined( IN_COL_VAL ) || isDefined( OUT_COL_VAL ))
             {
@@ -106,7 +106,7 @@ package com.socialcomputing.wps.script  {
             
             if ( isDefined( IMAGE_VAL ))
             {
-                var imageNam:String= parseString( IMAGE_VAL, zone )[0];
+                var imageNam:String= parseString( IMAGE_VAL, zone.m_props )[0];
                 
                 if ( imageNam != null )
                 {
@@ -116,7 +116,8 @@ package com.socialcomputing.wps.script  {
             
             if ( text != null )
             {
-                if ( HTMLText.isEnabled( text.getFlags( zone ), HTMLText.URL_BIT ))
+                //TODO Utiliser le containeur html flex4
+                /*if ( HTMLText.isEnabled( text.getFlags( zone ), HTMLText.URL_BIT ))
                 {
                     var textUrls:Array= text.parseString( HTMLText.TEXT_VAL, zone );
                     var hLine:String, hTxt	= "";
@@ -140,12 +141,12 @@ package com.socialcomputing.wps.script  {
                         
                         if ( hTxt.length()> 0)
                         {
-                            //TODO Utiliser le containeur html flex4
-                            /*m_htmlTxt = new HTMLText( Color.white, Color.black, 0, 12, Font.PLAIN, "SansSerif", 0, new Insets( 0, 4, 0, 4));
+                            
+                            m_htmlTxt = new HTMLText( Color.white, Color.black, 0, 12, Font.PLAIN, "SansSerif", 0, new Insets( 0, 4, 0, 4));
                             
                             m_htmlTxt.parseText( g, hTxt );
                             m_htmlTxt.drawText( g, applet.getSize(), text.getFlags( zone )>> 16);//HTMLText.SOUTH_WEST );
-                            */
+                            
                             return;
                         }
                     }
@@ -158,15 +159,14 @@ package com.socialcomputing.wps.script  {
                     var key:Number= getKey( text.hashCode());
                     
                     supCtr	= supZone.m_restSwh.m_satellites[0].m_shape.getCenter( supZone );
-                    //TODO Utiliser le containeur html flex4
-                    /*var htmlTxt:HTMLText= text.getHText( applet, g, zone, transfo, satCtr, supCtr, key );
+                    var htmlTxt:HTMLText= text.getHText( applet, g, zone, transfo, satCtr, supCtr, key );
                     
                     if ( htmlTxt != null )
                     {
                         htmlTxt.drawText2( g, applet.getSize());
                         zone.m_datas.put( key, htmlTxt );
-                    }*/
-                }
+                    }
+                }*/
             }
         }
         
@@ -187,7 +187,7 @@ package com.socialcomputing.wps.script  {
          * @throws UnsupportedEncodingException 
          */
         protected function contains( applet:WPSApplet, g:Graphics, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point, pos:Point):Boolean {
-            var transfo:Transfo= getTransfo( TRANSFO_VAL, zone );
+            var transfo:Transfo= getTransfo( TRANSFO_VAL, zone.m_props );
             
             if ( supZone == null )  supZone = zone;
             
@@ -226,7 +226,7 @@ package com.socialcomputing.wps.script  {
          * @throws UnsupportedEncodingException 
          */
         protected function setBounds(applet:WPSApplet, g:Graphics, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point, bounds:Rectangle):void {
-            var transfo:Transfo= getTransfo( TRANSFO_VAL, zone );
+            var transfo:Transfo= getTransfo( TRANSFO_VAL, zone.m_props );
             
             if ( supZone == null )  supZone     = zone;
             
@@ -242,7 +242,7 @@ package com.socialcomputing.wps.script  {
                 applet.m_error = "getCenter supZone=" + supZone;
                 if ( supZone != null )
                 {
-                    var points:Array= new Array(satShp.getValue( ShapeX.POLYGON_VAL, supZone ));
+                    var points:Array= new Array(satShp.getValue( ShapeX.POLYGON_VAL, supZone.m_props ));
                     applet.m_error += " zName=" + supZone.get( "NAME" ) + " pKey=" + satShp.m_containers[ShapeX.POLYGON_VAL].m_value + " pnts=" + points + " p[0]=" + points[0];
                 }
                 

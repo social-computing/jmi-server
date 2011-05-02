@@ -889,13 +889,13 @@ package com.socialcomputing.wps.script{
         protected function setTextBnds( size:Rectangle, flags:int, posFlags:int, transfo:Transfo, supCtr:Point, center:Point):void {
             var isFloat:Boolean= Base.isEnabled( flags, FLOAT_BIT );
             var dx:int= 0,
-                dy	= 0,
-                x   = center.x,
-                y   = center.y,
-                w   = m_bounds.width,
-                h   = m_bounds.height,
-                w2  = w >> 1,
-                h2  = h >> 1;
+                dy:int	= 0,
+                x:int   = center.x,
+                y:int   = center.y,
+                w:int   = m_bounds.width,
+                h:int   = m_bounds.height,
+                w2:int  = w >> 1,
+                h2:int  = h >> 1;
             
             if ( supCtr != null )
             {
@@ -957,7 +957,7 @@ package com.socialcomputing.wps.script{
          * @return		An inset of t, l, b, r margins or null if none are defined.
          */
         private function readMargin( tag:String):BorderContainer {
-            var t:String, l, b, r;
+            var t:String, l:String, b:String, r:String;
             
             t = readAtt( tag, "t" );
             l = readAtt( tag, "l" );
@@ -989,7 +989,7 @@ package com.socialcomputing.wps.script{
          * @return		The value of the attribute or null if none where defined in this tag.
          */
         private function readAtt( tag:String, att:String):String {
-            var beg:int, end;
+            var beg:int, end:int;
             
             if (( beg = tag.indexOf( att + '=' ))!= -1)
             {
