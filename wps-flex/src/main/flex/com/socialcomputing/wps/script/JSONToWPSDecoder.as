@@ -33,7 +33,7 @@ package com.socialcomputing.wps.script
 			} 
 			plan.m_nodes = new Array( json.nodes.length);
 			for each (var item:Object in json.nodes) { 
-				plan.m_nodes.push( toBagZone(item));
+				plan.m_nodes.push( toZone(item));
 			} 
 			return plan;
 		}
@@ -73,16 +73,16 @@ package com.socialcomputing.wps.script
 			zone.m_flags = json.flags;
 			zone.m_curSwh = toSwatch(json.curSwatch);
 			zone.m_restSwh = toSwatch(json.restSwatch);
+			zone.m_props = new Array();
 			for(var i:String in json.props){
 				if( json.props[i] is Array) {
-					zone[i] = new Array(json.props[i].length);
+					zone.m_props[i] = new Array(json.props[i].length);
 					for each (var z:Object in json.props[i]) { 
-						zone[i].push( z);
+						zone.m_props[i].push( z);
 					} 
 				}
 				else {
-					if( i != "ID")
-					zone[i] = json.props[i];
+					zone.m_props[i] = json.props[i];
 				}
 			}			
 		}

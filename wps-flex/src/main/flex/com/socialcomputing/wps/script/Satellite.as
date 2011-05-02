@@ -202,11 +202,11 @@ package com.socialcomputing.wps.script  {
                             x2:int  = satCtr.x,
                             y2:int  = satCtr.y;
                         
-                        setColor( g, LINK_DRK_COL_VAL, zone );
+                        setColor( g, LINK_DRK_COL_VAL, zone.m_props );
                         //g.drawLine( x1, y1 + 1, x2, y2 + 1);
                         g.moveTo(x1, y1 + 1);
 						g.lineTo(x2, y2 + 1);
-                        if ( setColor( g, LINK_LIT_COL_VAL, zone ))
+                        if ( setColor( g, LINK_LIT_COL_VAL, zone.m_props ))
                         {
                             //g.drawLine( x1 - 1, y1, x2 - 1, y2 );
 							g.moveTo(x1 - 1, y1);
@@ -218,7 +218,7 @@ package com.socialcomputing.wps.script  {
 							g.moveTo(x1 + 1, y1 );
 							g.lineTo(x2 + 1, y2);
                             
-                            setColor( g, LINK_NRM_COL_VAL, zone );
+                            setColor( g, LINK_NRM_COL_VAL, zone.m_props );
                             //g.drawLine( x1, y1 - 1, x2, y2 - 1);
 							g.moveTo(x1, y1 - 1);
 							g.lineTo(x2, y2 - 1);
@@ -355,11 +355,11 @@ package com.socialcomputing.wps.script  {
             
             if ( isExe )
             {
-                var actionStr:String= getString( actionId, zone );
+                var actionStr:String= getString( actionId, zone.m_props );
                 
                 if ( actionStr != null )
                 {
-                    var actions:Array= Base.getTextParts( getString( actionId, zone ), "\n" );
+                    var actions:Array= Base.getTextParts( getString( actionId, zone.m_props ), "\n" );
                     var action:String, func:String, args:String;
                     var i:int, j:int, n:int = actions.length;
                     
@@ -368,7 +368,7 @@ package com.socialcomputing.wps.script  {
                         action  = actions[i];
                         j       = action.indexOf( ' ' );
                         func    = action.substring( 0, j );
-                        args    = parseString3( action.substring( j + 1, action.length), zone )[0];
+                        args    = parseString3( action.substring( j + 1, action.length), zone.m_props )[0];
                         
                         if ( func == ( "show" ))         // Shows a message in the StatusBar
                         {
@@ -404,8 +404,8 @@ package com.socialcomputing.wps.script  {
                             
                             if ( slice != null )
                             {
-                                var delay:int= slice.getInt( Slice.DELAY_VAL, zone ),
-                                    length  = slice.getInt( Slice.LENGTH_VAL, zone );
+                                var delay:int= slice.getInt( Slice.DELAY_VAL, zone.m_props ),
+                                    length  = slice.getInt( Slice.LENGTH_VAL, zone.m_props );
                                 
 								// TODO
                                 //applet.m_plan.popSlice( zone, slice, delay, length, args );

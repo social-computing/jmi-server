@@ -27,7 +27,7 @@ package com.socialcomputing.wps.script  {
         /**
          * Number of real Links (the ones that are linked to nodes at both sides).
          */
-        public var m_linksCnt:int;
+        //public var m_linksCnt:int;
         
         /**
          * The table of nodes (places). This include the clusterized ones (those who only apears when a zone is hovered).
@@ -38,7 +38,7 @@ package com.socialcomputing.wps.script  {
         /**
          * Number of cluster Nodes (the ones that are always visible).
          */
-        public var m_nodesCnt:int;
+        //public var m_nodesCnt:int;
         
         /**
          * Id of the current active selection (only one at a time).
@@ -182,7 +182,7 @@ package com.socialcomputing.wps.script  {
             
             // Init backImg and restImg with background, links and places parts that are "ghostable"
             paintZones( restGfx, m_links, m_links.length, false, Satellite.ALL_TYP, true, false );
-            paintZones( restGfx, m_nodes, m_nodesCnt, false, Satellite.ALL_TYP, true, true );
+            paintZones( restGfx, m_nodes, m_nodes.length, false, Satellite.ALL_TYP, true, true );
             
             // Filters backImg so it looks ghosted
 			// TODO
@@ -194,9 +194,9 @@ package com.socialcomputing.wps.script  {
             paintZones( restGfx, m_links, m_links.length, true, Satellite.TIP_TYP, false, false );
             paintZones( restGfx, m_links, m_links.length, true, Satellite.SEL_TYP, false, false );
             
-            paintZones( restGfx, m_nodes, m_nodesCnt, true, Satellite.BASE_TYP, true, true );
-            paintZones( restGfx, m_nodes, m_nodesCnt, true, Satellite.TIP_TYP, false, true );
-            paintZones( restGfx, m_nodes, m_nodesCnt, true, Satellite.SEL_TYP, false, true );
+            paintZones( restGfx, m_nodes, m_nodes.length, true, Satellite.BASE_TYP, true, true );
+            paintZones( restGfx, m_nodes, m_nodes.length, true, Satellite.TIP_TYP, false, true );
+            paintZones( restGfx, m_nodes, m_nodes.length, true, Satellite.SEL_TYP, false, true );
            
 			// TODO à suppriler ?
             //g.setClip( 0, 0, dim.width, dim.height );
@@ -229,7 +229,7 @@ package com.socialcomputing.wps.script  {
             }
             
             // p is in not in the current Zone, it can be in another one...
-            for ( i = 0; i < m_nodesCnt; i ++ )
+            for ( i = 0; i < m_nodes.length; i ++ )
             {
                 zone    = m_nodes[i];
                 
@@ -245,7 +245,7 @@ package com.socialcomputing.wps.script  {
             }
             
             // p is in not in a Node, it can be in a Link...
-            for ( i = m_linksCnt - 1; i >= 0; i -- )
+            for ( i = m_links.length - 1; i >= 0; i -- )
             {
                 zone    = LinkZone(m_links[i]);
                 
@@ -345,7 +345,7 @@ package com.socialcomputing.wps.script  {
             if ( m_prevBox != null &&(( m_prevBox.width != dim.width )||( m_prevBox.height != dim.height ))&& dim.width > 100&& dim.height > 100)
             {
                 var margin:int= 10;
-                var i:int, n:int = m_nodesCnt;
+                var i:int, n:int = m_nodes.length;
                 //Point       p;
                 var scale:Number,sx:Number, sy:Number, dx:Number, dy:Number, s:Number;
                 var zone:ActiveZone;
