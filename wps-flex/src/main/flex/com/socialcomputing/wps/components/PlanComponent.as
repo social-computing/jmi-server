@@ -1,8 +1,6 @@
 package com.socialcomputing.wps.components
 {
 	import com.socialcomputing.wps.plan.PlanContainer;
-	import com.socialcomputing.wps.script.Swatch;
-	import com.socialcomputing.wps.shapes.Circle;
 	
 	import mx.controls.Alert;
 	
@@ -39,9 +37,7 @@ package com.socialcomputing.wps.components
 				this._dataProvider = value as PlanContainer;
 			}
 			else {
-				// TODO : convert from a json formatted result here
 				this._dataProvider = PlanContainer.fromJSON(value);
-
 			}
 			
 			// Fake elements here

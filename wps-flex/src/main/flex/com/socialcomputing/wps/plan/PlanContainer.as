@@ -1,20 +1,27 @@
 package com.socialcomputing.wps.plan
 {
+	import com.socialcomputing.wps.script.Env;
+	import com.socialcomputing.wps.script.JSONToWPSDecoder;
+	import com.socialcomputing.wps.script.Plan;
+
 	public class PlanContainer
 	{
 		private var _duration:int;
-		private var _map:Object;
+		private var _env:Env;
+		private var _plan:Plan;
 		private var _name:String;
 		private var _type:String;
 		private var _mime:String;
 		
 		public function PlanContainer(duration:int,
-									  map:Object,
+									  env:Env,
+									  plan:Plan,
 									  name:String,
 		                              type:String,
 									  mime:String){
 			this._duration = duration;
-			this._map = map;
+			this._env = env;
+			this._plan = plan;
 			this._name = name;
 			this._type = type;
 			this._mime = mime;
@@ -23,11 +30,6 @@ package com.socialcomputing.wps.plan
 		public function get duration():int
 		{
 			return _duration;
-		}
-
-		public function get map():Object
-		{
-			return _map;
 		}
 
 		public function get name():String
@@ -50,12 +52,13 @@ package com.socialcomputing.wps.plan
 				throw new ArgumentError("the json object can't be null");
 			}
 			
-			// TODO : Add checks here
-			// The given object should have all the necessary properties			
 			
+			// TODO : Add checks here
+			// The given object should have all the necessary properties
 			return new PlanContainer(
 				jsonObject.duration,
-				jsonObject.map,
+				JSONToWPSDecoder.toEnv(jsonObject.map.env),
+				JSONToWPSDecoder.toPlan(jsonObject.map.plan),
 				jsonObject.name,
 				jsonObject.type,
 				jsonObject.mime);
