@@ -28,12 +28,7 @@ package com.socialcomputing.wps.script
 		public function getSizeR():Rectangle {
 			return new Rectangle( 0, 0, width, height);
 		}
-		public function createImage(width:int, height:int):Image {
-			var image:Image  = new Image();
-			image.width = width;
-			image.height = height;
-			return image;
-		}
+
 		public function showStatus(message:String):void {
 			trace( message);
 		}

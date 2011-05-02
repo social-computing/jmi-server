@@ -1,4 +1,6 @@
 package com.socialcomputing.wps.script  {
+    import com.socialcomputing.wps.util.controls.ImageUtil;
+    
     import flash.display.BitmapData;
     import flash.display.Graphics;
     import flash.geom.Matrix;
@@ -127,7 +129,7 @@ package com.socialcomputing.wps.script  {
             // Allocate a temporary bitmap to dblBuffer curZone rendering using the biggest Zone BBox
             if ( zones == m_nodes )
             {
-				m_blitBuf   = m_applet.createImage( m_maxBox.width, m_maxBox.height );
+				m_blitBuf  = ImageUtil.fromDimension(m_maxBox);
             }
         }
         
@@ -351,8 +353,8 @@ package com.socialcomputing.wps.script  {
                 var zone:ActiveZone;
                 var isFakeFrom:Boolean, isFakeTo;
                 
-                m_applet.m_backImg = m_applet.createImage( dim.width, dim.height );
-                m_applet.m_restImg = m_applet.createImage( dim.width, dim.height );
+                m_applet.m_backImg = ImageUtil.fromRectangle(dim);
+                m_applet.m_restImg = ImageUtil.fromRectangle(dim);
                 
                 if ( n < 8)	// too few places, lets reduce their size
                 {

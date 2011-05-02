@@ -64,12 +64,14 @@ package com.socialcomputing.wps.script  {
                 
                 m_bounds.inflate( 2, 2);
                 
-                var w:int= m_bounds.width,
-                    h       = m_bounds.height;
+                // var w:int= m_bounds.width,
+                //     h       = m_bounds.height;
                 var maxBox:Dimension= applet.m_plan.m_maxBox;
                 
-                if ( w > maxBox.width )     maxBox.width    = w;
-                if ( h > maxBox.height )    maxBox.height   = h;
+				applet.m_plan.m_maxBox = 
+					applet.m_plan.m_maxBox.resize(Dimension.fromRectangle(m_bounds));
+                // if ( w > maxBox.width )     maxBox.width    = w;
+                //if ( h > maxBox.height )    maxBox.height   = h;
                 
                 m_bounds = m_bounds.intersection(applet.getSizeR());
             }

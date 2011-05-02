@@ -125,12 +125,16 @@ public class BagZone extends ActiveZone implements Activable
 
 		m_bounds.inflate(2, 2);
 
-		var w:int= m_bounds.width,
-					h       = m_bounds.height;
-		var maxBox:Dimension= applet.m_plan.m_maxBox;
+		//var w:int= m_bounds.width,
+		//	h=m_bounds.height;
+		
+		
+		//var maxBox:Dimension= applet.m_plan.m_maxBox;
 
-		if ( w > maxBox.width )     maxBox.width    = w;
-		if ( h > maxBox.height )    maxBox.height   = h;
+		// if ( w > maxBox.width )     maxBox.width    = w;
+		//if ( h > maxBox.height )    maxBox.height   = h;
+		applet.m_plan.m_maxBox = 
+			applet.m_plan.m_maxBox.resize(Dimension.fromRectangle(m_bounds));
 
         var rec:Rectangle = new Rectangle();
         rec.height = applet.getSize().height;
