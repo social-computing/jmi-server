@@ -107,8 +107,6 @@ package com.socialcomputing.wps.script  {
          */
         public function Token(length:int, flags:int)
         {
-            //m_buffer = new StringBuffer( length );
-            //m_buffer.setLength( length );
             m_buffer = new String();
             m_flags = flags;
         }
@@ -120,12 +118,12 @@ package com.socialcomputing.wps.script  {
          * @param props		Table that holds this property (if it is one).
          * @return			The size of the property list array or the maximum line number.
          */
-        function getListSize( props:Array):int {
+        public function getListSize( props:Array):int {
             var size:int= 1;
             
             if ( Base.isEnabled( m_flags, LIST_BIT ))
             {
-                var list:Array = props.get( m_buffer.toString());
+                var list:Array = props.get( m_buffer);
                 
                 size = list != null ? list.length : 0;
                 if ( m_lineMax > 0&& size > m_lineMax )    size = m_lineMax;
@@ -144,7 +142,7 @@ package com.socialcomputing.wps.script  {
          * @return			A String representation of this Token after parsing.
          * @throws UnsupportedEncodingException 
          */
-        function toString(i:int, props:Array):String {
+		public function toString(i:int, props:Array):String {
             var tokenStr:String= null;
             
             if ( Base.isEnabled( m_flags, PROP_BIT ))       // Propertie
@@ -153,16 +151,16 @@ package com.socialcomputing.wps.script  {
                 
                 if ( Base.isEnabled( m_flags, GLOBAL_BIT ))    // Global Propertie
                 {
-                    props = Array(props.get( "ENV"));
+                    props = props.get( "ENV") as Array;
                 }
                 
                 if ( Base.isEnabled( m_flags, LIST_BIT ))    // List Propertie
                 {
-                    rawProp = props.get( m_buffer.toString());
+                    rawProp = props.get( m_buffer);
                     
                     if ( rawProp != null )
                     {
-                        rawProp = (props.get( m_buffer.toString()))[i];
+                        rawProp = (props.get( m_buffer))[i];
                     }
                     else
                     {
@@ -171,7 +169,7 @@ package com.socialcomputing.wps.script  {
                 }
                 else                                // simple Propertie
                 {
-                    rawProp = props.get( m_buffer.toString());
+                    rawProp = props.get( m_buffer);
                 }
                 
                 if ( rawProp != null )                 // prop exists!
@@ -261,7 +259,7 @@ package com.socialcomputing.wps.script  {
             }
             else                                            // simple text
             {
-                tokenStr = m_buffer.toString();
+                tokenStr = m_buffer;
             }
             
             if ( Base.isEnabled( m_flags, URLCOD_BIT ))       // We must URLEncode this text!
@@ -280,7 +278,7 @@ package com.socialcomputing.wps.script  {
          * @param i		The index to start from in the text String.
          * @return		The number of character read.
          */
-        function findFlags( text:String, i:int):int {
+		public function findFlags( text:String, i:int):int {
             //String  num = "";
             var c:String= text.charAt( i );
             var beg:int;

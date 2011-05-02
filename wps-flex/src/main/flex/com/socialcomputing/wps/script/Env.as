@@ -1,5 +1,6 @@
 package com.socialcomputing.wps.script  {
     import flash.display.Graphics;
+    import flash.display.Loader;
     import flash.geom.ColorTransform;
     import flash.geom.Rectangle;
     
@@ -120,21 +121,6 @@ public class Env
 	}
 
 	/**
-	 * Returns this object as a xml format
-	 * ON
-	 * @return
-	 */
-	/*public String getXML()
-	{
-		String result = new String();
-		
-		result = "<env>";
-		result += "</env>";
-		
-		return result;
-	}*/
-	
-	/**
 	 * This try to load asynchronously the known medias (icons) during the Applet initialisation.
 	 * As java 1.1 API is a bit simple, they didn't thought we want to load media without displaying them.
 	 * And MS JVM forgot to totaly implement MediaTracker class so we can't know when a media is fully loaded!
@@ -200,20 +186,13 @@ public class Env
 	 * This is needed to reload images when the plan is resized.
 	 */
 	protected function clearMedias():void {
-		/*var enumvar:Enumeration= m_medias.elements();
-		var media:Object;
-
-		while ( enumvar.hasMoreElements())
-		{
-			media   = enumvar.nextElement();
-
-			if ( media is Image )
+		for(var media:Object in m_medias){
+			if ( media is Loader )
 			{
-				(Image(media )).flush();
+				(media as Loader).unload();
 			}
 		}
-
-		m_medias.clear();*/
+		m_medias.length = 0;
 	}
 
 	/**

@@ -92,7 +92,7 @@ public class Polygon {
      * @param ypoints[] array of <i>y</i> coordinates
      * @param npoints the total number of points
      */
-    function calculateBounds(xpoints:Array, ypoints:Array, npoints:int):void {
+    public function calculateBounds(xpoints:Array, ypoints:Array, npoints:int):void {
         var boundsMinX:int= uint.MAX_VALUE;
         var boundsMinY:int= uint.MAX_VALUE;
         var boundsMaxX:int= uint.MIN_VALUE;
@@ -115,7 +115,7 @@ public class Polygon {
      * Resizes the bounding box to accomodate the specified coordinates.
      * @param x,&nbsp;y the specified coordinates
      */
-    function updateBounds(x:int, y:int):void {
+    public function updateBounds(x:int, y:int):void {
         if (x < bounds.x) {
             bounds.width = bounds.width + (bounds.x - x);
             bounds.x = x;
@@ -240,7 +240,7 @@ public class Polygon {
                 leftx = lastx;
             }
 
-            var test1:Number, test2;
+            var test1:Number, test2:Number;
             if (cury < lasty) {
                 if (y < cury || y >= lasty) {
                     continue;

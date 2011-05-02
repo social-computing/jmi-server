@@ -23,20 +23,6 @@ package com.socialcomputing.wps.script  {
          */
         public var m_isBound:Boolean;
         
-        /**
-         * Returns XML describing the satellite
-         */
-        /*public String getXML()
-        {
-        String result = new String();
-        
-        result = "<value isbound='"+((m_isBound==true)?"true":"false")+"'>\n";
-        result += m_value.toString()+"\n";
-        result += "</value>\n";
-        
-        return result;
-        }*/
-        
         public function isBound():Boolean {
             return m_isBound;
         }

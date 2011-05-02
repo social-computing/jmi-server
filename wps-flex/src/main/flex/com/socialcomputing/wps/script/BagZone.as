@@ -57,7 +57,7 @@ public class BagZone extends ActiveZone implements Activable
 	 */
     
 	protected override function init(applet:PlanComponent, g:Graphics, isFirst:Boolean):void {
-		var i:int, n = m_subZones != null ? m_subZones.length : 0;
+		var i:int, n:int = m_subZones != null ? m_subZones.length : 0;
 
 		super.init( applet, g, isFirst );
 
@@ -135,6 +135,7 @@ public class BagZone extends ActiveZone implements Activable
 
 		// if ( w > maxBox.width )     maxBox.width    = w;
 		//if ( h > maxBox.height )    maxBox.height   = h;
+		trace( "init à finir")		
 		applet.plan.m_maxBox = 
 			applet.plan.m_maxBox.resize(Dimension.fromRectangle(m_bounds));
 

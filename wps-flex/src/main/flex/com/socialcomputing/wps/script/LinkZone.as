@@ -4,7 +4,7 @@ package com.socialcomputing.wps.script  {
     
     import flash.display.Graphics;
     
-    /**
+/**
      * <p>Title: LinkZone</p>
      * <p>Description: A graphical Link holding properties.<br>
      * The link is tied to 2 Nodes (BagZones) or just one if it's a fake one.</p>
@@ -68,7 +68,7 @@ package com.socialcomputing.wps.script  {
                 m_bounds.inflate( 2, 2);
                 
                 // var w:int= m_bounds.width,
-                //     h       = m_bounds.height;
+                //h:int= m_bounds.height;
                 var maxBox:Dimension= applet.plan.m_maxBox;
                 
 				applet.plan.m_maxBox = 
@@ -76,7 +76,7 @@ package com.socialcomputing.wps.script  {
                 // if ( w > maxBox.width )     maxBox.width    = w;
                 //if ( h > maxBox.height )    maxBox.height   = h;
                 
-                m_bounds = m_bounds.intersection(applet.getSize().toRectangle());
+                m_bounds = m_bounds.intersection(applet.getSizeR());
             }
         }
         

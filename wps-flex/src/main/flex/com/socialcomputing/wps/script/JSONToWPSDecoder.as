@@ -18,7 +18,7 @@ package com.socialcomputing.wps.script
 				env.m_props[i] = json.props[i];
 			}			
 			env.m_selections = new Array( json.props.length);
-			for(var i:String in json.selections){
+			for(i in json.selections){
 				env.m_selections[i] = json.selections[i];
 			}			
 			return env;
@@ -32,7 +32,7 @@ package com.socialcomputing.wps.script
 				plan.m_links.push( toLinkZone(item));
 			} 
 			plan.m_nodes = new Array( json.nodes.length);
-			for each (var item:Object in json.nodes) { 
+			for each (item in json.nodes) { 
 				plan.m_nodes.push( toZone(item));
 			} 
 			return plan;

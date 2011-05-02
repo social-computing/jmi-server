@@ -5,8 +5,6 @@ package com.socialcomputing.wps.script{
     import flash.geom.Rectangle;
     import flash.text.TextFormat;
     
-    import spark.components.BorderContainer;
-
     /**
      * <p>Title: HTMLText</p>
      * <p>Description: A piece of text that can be single or multilined and hold basic HTML-like tags.<br>
@@ -387,10 +385,10 @@ package com.socialcomputing.wps.script{
          */
         protected function parseText( g:Graphics, htmlText:String):void {
             var tokenizer:StringTokenizer= new StringTokenizer( htmlText, "<>" );
-            var tokenStr:String, nextStr,
-            prevStr     = tokenizer.nextToken();
+            var tokenStr:String, nextStr:String,
+            prevStr:String     = tokenizer.nextToken();
             var hasMore:Boolean= tokenizer.hasMoreTokens(),
-                isText      = false;
+                isText:Boolean      = false;
             //var font:Font= new Font( m_name, m_style, m_size );
             var font:TextFormat = new TextFormat();
             font.font = m_name;
@@ -475,10 +473,10 @@ package com.socialcomputing.wps.script{
          * Evaluate this bounding box using margins.
          */
         private function updateBounds():void {
-            var margin:BorderContainer= m_body.m_margin;
-            var i:int, n    = m_tokens.size(),
-                x       = 0,
-                y       = margin.top;
+            var margin:Rectangle= m_body.m_margin;
+            var i:int, n:int    = m_tokens.size(),
+                x:int       = 0,
+                y:int       = margin.top;
             var token:Object;
             var tTok:TextToken= null;
             var fTok:FormatToken= null;
@@ -595,7 +593,7 @@ package com.socialcomputing.wps.script{
                 }
                 
                 var prevTok:FormatToken= m_curTok;
-                var prevMrg:BorderContainer= prevTok.m_margin,
+                var prevMrg:Rectangle= prevTok.m_margin,
                     margin  = m_body.m_margin;
                 var flags:int= m_body.m_flags,
                     width   = m_wCur +( prevMrg != null ? prevMrg.left + prevMrg.right : 0);
@@ -799,7 +797,7 @@ package com.socialcomputing.wps.script{
         protected function drawText( g:Graphics, size:Dimension, dir:int):void {
             var pos:Point= new Point();
             var xMax:int= size.width - m_bounds.width - 1,
-                yMax    = size.height - m_bounds.height - 1;
+                yMax:int= size.height - m_bounds.height - 1;
             
             if (( dir & 8)!= 0)         pos.x = xMax;
             else if (( dir & 4)!= 0)    pos.x = xMax >> 1;
@@ -956,7 +954,7 @@ package com.socialcomputing.wps.script{
          * @param tag	A tag holding some margin attributes.
          * @return		An inset of t, l, b, r margins or null if none are defined.
          */
-        private function readMargin( tag:String):BorderContainer {
+        private function readMargin( tag:String):Rectangle {
             var t:String, l:String, b:String, r:String;
             
             t = readAtt( tag, "t" );
@@ -973,7 +971,7 @@ package com.socialcomputing.wps.script{
             }
             else
             {
-                var bc:BorderContainer;
+                var bc:Rectangle;
                 bc.top = t == null ? 0: int(t);
                 bc.bottom = b == null ? 0: int(b);
                 bc.left = l == null ? 0: int(l);

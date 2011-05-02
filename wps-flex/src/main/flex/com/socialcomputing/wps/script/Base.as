@@ -171,8 +171,7 @@ package com.socialcomputing.wps.script  {
             try {
                 ContainerColor = color.getColor2( props);
             } catch (e:Error) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+				trace( e.message);
             }
             
             return ContainerColor;
@@ -214,38 +213,7 @@ package com.socialcomputing.wps.script  {
             
             return false;
         }
-        
-        /**
-         * Gets the texts parts s�parated by a delimitor.
-         * The resulting parts are put in a table.
-         * @param text		the original text including the parts.
-         * @param delim		A String delimitor.
-         * @return			An array containing the text parts without the delimitors or null if text is null.
-         */
-        static function getTextParts(text:String, delim:String):Array
-        {
-            var parts:Array= null;
-            
-            if ( text != null )
-            {
-                var tokenizer:StringTokenizer= new StringTokenizer( text, delim );
-                var i:int, pCnt     = tokenizer.countTokens();
                 
-                parts = new String[pCnt];
-                
-                try
-                {
-                    for ( i = 0; i < pCnt; i ++ )
-                    {
-                        parts[i] = tokenizer.nextToken();
-                    }
-                }
-                catch ( e:Error){}
-            }
-            
-            return parts;
-        }
-        
         /**
          * Parses a String containing bound properties and replace them by their String representation.
          * If some properties are lists, returns a String for each member of the smalest list.
@@ -283,7 +251,7 @@ package com.socialcomputing.wps.script  {
             try {
                 returnstring = parseString4( text, props, isHtm );
             } catch (e:Error) {
-                e.printStackTrace();
+				trace( e.message);
             }
             
             return text != null ? returnstring : null;
@@ -302,13 +270,10 @@ package com.socialcomputing.wps.script  {
         // Renommage nom fonction
         public function parseString3(text:String, props:Array):Array
         {
-            var tokens:Vector = parseTokens( text );
-            var token:Token;
-            var i:int, j:int, n:int, max:int = 0, len:int = tokens.size();
-            
-            for ( i = 0; i < len; i ++ )
+            var tokens:Vector.<Token> = parseTokens( text );
+            var j:int, n:int, max:int = 0;
+			for each( var token:Token in tokens)
             {
-                token   = Token(tokens.elementAt( i ));
                 n       = token.getListSize( props );
                 if ( n == 0)
                 {
@@ -324,9 +289,9 @@ package com.socialcomputing.wps.script  {
             {
                 dst[j] = "";
                 
-                for ( i = 0; i < len; i ++ )
-                {
-                    prop    = (Token(tokens.elementAt( i ))).toString( j, props );
+				for each( token in tokens)
+				{
+                    prop    = token.toString( j, props );
                     
                     if ( prop == null )
                     {
@@ -353,13 +318,11 @@ package com.socialcomputing.wps.script  {
          * @throws UnsupportedEncodingException 
          */
         static public function parseString4( text:String, props:Array, isHtm:Boolean):String {
-            var tokens:Vector= parseTokens( text );
-            var token:Token;
-            var i:int, j, n, max = 0, len = tokens.size();
+            var tokens:Vector.<Token>= parseTokens( text );
+            var j:int, n:int, max:int = 0;
             
-            for ( i = 0; i < len; i ++ )
+			for each( var token:Token in tokens)
             {
-                token   = Token(tokens.elementAt( i ));
                 n       = token.getListSize( props );
                 if ( n == 0)
                 {
@@ -373,9 +336,9 @@ package com.socialcomputing.wps.script  {
             
             for ( j = 0; j < max; j ++ )
             {
-                for ( i = 0; i < len; i ++ )
+				for each( token in tokens)
                 {
-                    prop    = (Token(tokens.elementAt( i ))).toString( j, props );
+                    prop    = token.toString( j, props );
                     
                     dst += prop == null ? " ? " : prop;
                 }
@@ -406,20 +369,13 @@ package com.socialcomputing.wps.script  {
          * @return				A String representation of the next matching Token.
          */
         public static function getNextTokenProp( tokens:Vector, includeBit:int, excludeBit:int):String {
-            var i:int, len = tokens.size();
-            //String  prop;
-            var token:Token;
-            
-            for ( i = 0; i < len; i ++ )
+			while( tokens.length > 0)
             {
-                token = Token(tokens.elementAt( i ));
-                tokens.removeElementAt( i );
-                len --;
-                i --;
+                var token:Token = tokens.shift();
                 
                 if (( token.m_flags & includeBit )!= 0&& ( token.m_flags & excludeBit )== 0)
                 {
-                    return token.m_buffer.toString();
+                    return token.m_buffer;
                 }
             }
             return null;
@@ -436,12 +392,12 @@ package com.socialcomputing.wps.script  {
          * @param text	a text String containing or not properties.
          * @return		a Vector of Tokens matching text.
          */
-        public static function parseTokens( text:String):Vector {
-            var i:int, j = 0, len = text.length;
+        public static function parseTokens( text:String):Vector.<Token> {
+            var i:int, j:int = 0, len:int = text.length;
             var c:String = '0';
             var isAfterBS:Boolean= false;
             var token:Token= null;
-            var tokens:Vector= new Vector();
+            var tokens:Vector.<Token>= new Vector().<Token>;
             
             for ( i = 0; i < len; i ++ )
             {
@@ -476,7 +432,7 @@ package com.socialcomputing.wps.script  {
                             {
                                 //							System.out.println( "add Token: " + token.m_buffer );
                                 //token.m_buffer.setLength( j );
-                                tokens.addElement( token );    // store it
+                                tokens.push( token );    // store it
                             }
                             // and create a new prop or list Token
                             //						System.out.println( "new Token[" +(len - i)+ ']' );
@@ -489,7 +445,7 @@ package com.socialcomputing.wps.script  {
                             //						System.out.println( c );
                             //						System.out.println( "add Token: " + token.m_buffer );
                             //token.m_buffer.setLength( j );
-                            tokens.addElement( token );        // store the previous token
+                            tokens.push( token );        // store the previous token
                             token = null;               // a new one must be created
                         }
                         else
@@ -512,7 +468,7 @@ package com.socialcomputing.wps.script  {
             {
                 //			System.out.println( "add Token: " + token.m_buffer );
                 //token.m_buffer.setLength( j );
-                tokens.addElement( token );        // store the previous token
+                tokens.push( token );        // store the previous token
             }
             
             return tokens;
