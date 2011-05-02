@@ -111,7 +111,7 @@ package com.socialcomputing.wps.script  {
          */
         //protected synchronized function initZones( g:Graphics, zones:Array, isFirst:Boolean):void {
         protected function initZones( g:Graphics, zones:Array, isFirst:Boolean):void {
-            var i:int, n    = zones.length;
+            var i:int, n:int    = zones.length;
             var dim:Dimension= m_applet.getSize();
             
             // Reset the BBOX of the biggest zone
@@ -153,7 +153,7 @@ package com.socialcomputing.wps.script  {
             }
             else
             {
-                for ( var i:int= 0; i < n; i ++ )
+                for ( i; i < n; i ++ )
                 {
                     zones[i].paint( m_applet, g, false, isFront, showTyp, showLinks );
                 }
@@ -216,7 +216,7 @@ package com.socialcomputing.wps.script  {
         protected function updateZoneAt( p:Point):Boolean {
             var curSat:Satellite;
             var zone:ActiveZone,
-            parent  = m_curZone != null ? m_curZone.getParent() : null;
+            	parent:ActiveZone = m_curZone != null ? m_curZone.getParent() : null;
             var g:Graphics= m_applet.graphics;
             var i:int;
             
@@ -351,7 +351,7 @@ package com.socialcomputing.wps.script  {
                 //Point       p;
                 var scale:Number,sx:Number, sy:Number, dx:Number, dy:Number, s:Number;
                 var zone:ActiveZone;
-                var isFakeFrom:Boolean, isFakeTo;
+                var isFakeFrom:Boolean, isFakeTo:Boolean;
                 
                 m_applet.m_backImg = ImageUtil.fromRectangle(dim);
                 m_applet.m_restImg = ImageUtil.fromRectangle(dim);
@@ -419,7 +419,7 @@ package com.socialcomputing.wps.script  {
          * @param length	Time to keep the slice visible before hiding it. -1 means stay visible until another tip with the same key is poped.
          * @param key		A unique ID for each slices of the same kind (tooltip != infoTip).
          */
-        protected function popSlice( zone:ActiveZone, slice:Slice, delay:int, length:int, key:String):void {
+        public function popSlice( zone:ActiveZone, slice:Slice, delay:int, length:int, key:String):void {
             // TODO
 			/*var tipWaiter:Waiter= Waiter(m_waiters.get( key ));
             
@@ -542,14 +542,15 @@ package com.socialcomputing.wps.script  {
         public function blitImage(g:Graphics, image:Image, bounds:Rectangle):void {
             var dim:Dimension= m_applet.getSize();
             var x1:int= bounds.x < 0? 0: bounds.x,
-                y1 = bounds.y < 0? 0: bounds.y,
-                x2 = bounds.x + bounds.width + 1,
-                y2 = bounds.y + bounds.height + 1;
+                y1:int = bounds.y < 0? 0: bounds.y,
+                x2:int = bounds.x + bounds.width + 1,
+                y2:int = bounds.y + bounds.height + 1;
             
             if ( x2 > dim.width )   x2 = dim.width;
             if ( y2 > dim.height )  y2 = dim.height;
             
 			/// TODO
+			trace( "Plan blitImage à terminer");
             //g.drawImage( image, x1, y1, x2, y2, x1, y1, x2, y2, null );
         }
 		

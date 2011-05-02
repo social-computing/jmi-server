@@ -55,7 +55,7 @@ public class BagZone extends ActiveZone implements Activable
 	 */
     
 	protected override function init(applet:WPSApplet, g:Graphics, isFirst:Boolean):void {
-		var i:int, n = m_subZones != null ? m_subZones.length : 0;
+		var i:int, n:int = m_subZones != null ? m_subZones.length : 0;
 
 		super.init( applet, g, isFirst );
 
@@ -125,12 +125,10 @@ public class BagZone extends ActiveZone implements Activable
 
 		m_bounds.inflate(2, 2);
 
-		//var w:int= m_bounds.width,
-		//	h=m_bounds.height;
-		
-		
+		var w:int= m_bounds.width,
+			h:int= m_bounds.height;
 		//var maxBox:Dimension= applet.m_plan.m_maxBox;
-
+		
 		// if ( w > maxBox.width )     maxBox.width    = w;
 		//if ( h > maxBox.height )    maxBox.height   = h;
 		applet.m_plan.m_maxBox = 

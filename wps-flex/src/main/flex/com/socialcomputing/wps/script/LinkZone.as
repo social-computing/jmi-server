@@ -65,7 +65,7 @@ package com.socialcomputing.wps.script  {
                 m_bounds.inflate( 2, 2);
                 
                 // var w:int= m_bounds.width,
-                //     h       = m_bounds.height;
+                    h:int= m_bounds.height;
                 var maxBox:Dimension= applet.m_plan.m_maxBox;
                 
 				applet.m_plan.m_maxBox = 

@@ -74,14 +74,14 @@ package com.socialcomputing.wps.script  {
          * Not used enough, could improve the performance if more was stored here...
          */
         [transient]
-        public var m_restData:Array;
+        public var m_restData:Vector.<SatData>;
         
         /**
          * Fast graphical data lookup for the current Swatch Satellites.
          * Not used enough, could improve the performance if more was stored here...
          */
         [transient]
-        public var m_curData:Array;
+        public var m_curData:Vector.<SatData>;
         
         /**
          * HTMLText Hashtable to avoid unnecessary calcs.

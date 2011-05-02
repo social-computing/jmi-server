@@ -158,11 +158,8 @@ package com.socialcomputing.wps.script  {
                         
                         if ( zones != null && Base.isEnabled( flags, Satellite.SUB_BIT ))   // draws SubZones
                         {
-                            var j:int, m    = zones.length;
-                            
-                            for ( j = 0; j < m; j ++ )
+							for each( subZone in zones)
                             {
-                                subZone         = zones[j];
                                 satTrf.m_dir   += supZone.m_stp;
                                 isCurSub        = subZone == curZone;
                                 satData         = isCur ? subZone.m_curData[i] : subZone.m_restData[i];
@@ -206,7 +203,7 @@ package com.socialcomputing.wps.script  {
          * @return				This swatch bounding box for zone.
          * @throws UnsupportedEncodingException 
          */
-        function getBounds(applet:WPSApplet, g:Graphics, zone:ActiveZone, isCurZone:Boolean):Rectangle {
+        public function getBounds(applet:WPSApplet, g:Graphics, zone:ActiveZone, isCurZone:Boolean):Rectangle {
             var bounds:Rectangle= new Rectangle();
             var sat:Satellite= m_satellites[0];
             var shape:ShapeX= sat.m_shape;
@@ -214,14 +211,14 @@ package com.socialcomputing.wps.script  {
             var supZone:BagZone= isBag ? BagZone(zone ): null;
             var zones:Array= isBag ? supZone.m_subZones : null;
             var subZone:ActiveZone;
-            var satRelTrf:Transfo, satTrf,
-            transfo     = sat.getTransfo( Satellite.TRANSFO_VAL, zone.m_props );
-            var i:int, n        = m_satellites.length,
+            var satRelTrf:Transfo, satTrf:Transfo,
+            	transfo:Transfo     = sat.getTransfo( Satellite.TRANSFO_VAL, zone.m_props );
+            var i:int, n:int        = m_satellites.length,
                 flags:int;
             //boolean         hasRestBit, hasCurBit, hasLinkBit, isCur;
             var satData:SatData;
             var satCtr:Point,
-            supCtr      = shape.getCenter( zone );
+            	supCtr:Point = shape.getCenter( zone );
             
             // Gets the bounds of the place itself using the first Satellite
             sat.setBounds( applet, g, zone, null, null, bounds );
@@ -253,12 +250,8 @@ package com.socialcomputing.wps.script  {
                         
                         if ( zones != null && Base.isEnabled( flags, Satellite.SUB_BIT ))   // gets SubZones bounds
                         {
-                            var j:int, m    = zones.length;
-                            
-                            for ( j = 0; j < m; j ++ )
+							for each( subZone in zones)
                             {
-                                subZone         = zones[j];
-                                
                                 satTrf.m_dir   += supZone.m_stp;
                                 satData         = isCurZone ? subZone.m_curData[i] : subZone.m_restData[i];
                                 flags           = satData.m_flags;
@@ -291,7 +284,7 @@ package com.socialcomputing.wps.script  {
          * @return				The sat of this swatch that is hovered or null if there isn't.
          * @throws UnsupportedEncodingException 
          */
-        function getSatAt(applet:WPSApplet, g:Graphics, zone:ActiveZone, pos:Point, isCurZone:Boolean):Satellite {
+        public function getSatAt(applet:WPSApplet, g:Graphics, zone:ActiveZone, pos:Point, isCurZone:Boolean):Satellite {
             if ( zone.getParent().m_bounds.contains( pos.x, pos.y ))      // pos is in the Bounding Box
             {
                 var sat:Satellite= m_satellites[0];
@@ -300,12 +293,12 @@ package com.socialcomputing.wps.script  {
                 var supZone:BagZone= isBag ? BagZone(zone ): null;
                 var zones:Array= isBag ? supZone.m_subZones : null;
                 var curZone:ActiveZone= applet.m_plan.m_curZone,
-                    subZone;
-                var satRelTrf:Transfo, satTrf,
-                transfo     = sat.getTransfo( Satellite.TRANSFO_VAL, zone.m_props );
-                var i:int, n        = m_satellites.length,
+                    subZone:ActiveZone;
+                var satRelTrf:Transfo, satTrf:Transfo,
+                	transfo:Transfo     = sat.getTransfo( Satellite.TRANSFO_VAL, zone.m_props );
+                var i:int, n:int        = m_satellites.length,
                     flags:int;
-                var hasRestBit:Boolean, hasCurBit, hasSubBit,  isCur, isVisible;
+                var hasRestBit:Boolean, hasCurBit:Boolean, hasSubBit:Boolean,  isCur:Boolean, isVisible:Boolean;
                 var satData:SatData;
                 var supCtr:Point= shape.getCenter( zone );
                 
@@ -355,7 +348,7 @@ package com.socialcomputing.wps.script  {
                             
                             if ( zones != null && hasSubBit )   // Test if SubZones contains pos
                             {
-                                var j:int, m    = zones.length;
+                                var j:int, m:int    = zones.length;
                                 
                                 satTrf.m_dir +=( zones.length + 1)* supZone.m_stp;
                                 
@@ -405,19 +398,15 @@ package com.socialcomputing.wps.script  {
          * @return				An array of satellite data.
          * @throws UnsupportedEncodingException 
          */
-        public function evalSatData(applet:WPSApplet, zone:ActiveZone, isSuper:Boolean):Array
+        public function evalSatData(applet:WPSApplet, zone:ActiveZone, isSuper:Boolean):Vector.<SatData>
         {
-            var i:int, n        = m_satellites.length;
-            var satDatas:Array= new SatData[n];
+            var satDatas:Vector.<SatData>= new Vector.<SatData>(m_satellites.length);
             var satData:SatData;
-            var sat:Satellite;
             var flags:int;
-            var isTip:Boolean, isSel;
+            var isTip:Boolean, isSel:Boolean;
             
-            
-            for ( i = 0; i < n; i ++ )
+            for each( var sat:Satellite in m_satellites)
             {
-                sat     = m_satellites[i];
                 satData = new SatData();
                 flags   = sat.getFlags( zone.m_props );
                 satData.m_flags     = flags;
@@ -444,7 +433,7 @@ package com.socialcomputing.wps.script  {
                     satData.m_isVisible = true;
                 }
                 
-                satDatas[i] = satData;
+                satDatas.push(satData);
             }
             
             return satDatas;

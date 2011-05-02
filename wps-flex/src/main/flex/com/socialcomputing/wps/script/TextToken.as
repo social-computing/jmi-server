@@ -54,7 +54,7 @@ package com.socialcomputing.wps.script {
          */
         protected function paint( s:Sprite, pos:Point):void {
             var x:int= m_bounds.x + pos.x,
-                y = m_bounds.y + pos.y;
+                y:int = m_bounds.y + pos.y;
             
             if ( m_bkCol != null )
             {

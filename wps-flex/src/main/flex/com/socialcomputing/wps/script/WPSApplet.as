@@ -83,7 +83,7 @@ package com.socialcomputing.wps.script
 						{
 							String  	func        = actionStr.substring( 0, pos ),
 								paramStr    = actionStr.substring( pos + 1, actionStr.length()- 1 );
-							String[]    params      = Base.getTextParts( paramStr, "," );
+							String[]    params      = paramStr.split( "," );
 							
 							m_planWindow.call( func, params );
 						}

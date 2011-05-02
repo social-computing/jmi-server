@@ -43,12 +43,12 @@ package com.socialcomputing.wps.script  {
          */
         //function getFont( props:Hashtable):Font {
         // Renommage fonction
-        function getFont2( props:Array):TextFormat {
+        public function getFont2( props:Array):TextFormat {
             var font:TextFormat;
             var flags:int= getFlags( props ),
-                size    = getInt( SIZE_VAL, props );
+                size:int= getInt( SIZE_VAL, props );
             var name:String= getString( NAME_VAL, props ),
-                key     = name + flags + size;
+                key:String= name + flags + size;
             
             if (( font = TextFormat(s_fontBuf.get( key )))== null )
             {

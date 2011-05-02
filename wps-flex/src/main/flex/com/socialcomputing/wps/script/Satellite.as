@@ -164,7 +164,7 @@ package com.socialcomputing.wps.script  {
          */
         public function isVisible( zone:ActiveZone, isTip:Boolean, curSel:int, sel:int):Boolean {
             var hasSel:Boolean= curSel >= 0,
-                isSel   = isEnabled( zone.m_selection, 1<< curSel );
+                isSel:Boolean= isEnabled( zone.m_selection, 1<< curSel );
             
             return isTip ? !hasSel || !isSel : hasSel && sel == curSel && isSel;
         }
@@ -185,9 +185,9 @@ package com.socialcomputing.wps.script  {
          */
         public function paint(applet:WPSApplet, g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, isLinkOnly:Boolean, satData:SatData, showTyp:int):void {
             var flags:int= satData.m_flags;
-            var isTip:Boolean= isEnabled( flags, Satellite.TIP_BIT ),
-                isSel       = isEnabled( flags, Satellite.SEL_BIT ),
-                isVisible   = isTip || isSel ? satData.m_isVisible : true;
+            var isTip:Boolean		= isEnabled( flags, Satellite.TIP_BIT ),
+                isSel:Boolean       = isEnabled( flags, Satellite.SEL_BIT ),
+                isVisible:Boolean   = isTip || isSel ? satData.m_isVisible : true;
             
             var supZone:ActiveZone= zone.getParent();
             
@@ -239,11 +239,9 @@ package com.socialcomputing.wps.script  {
                     
                     if ( isShowable )
                     {
-                        var i:int, n    = m_slices.length;
-                        
-                        for ( i = 0; i < n; i ++ )
+						for each( var slice:Slice in m_slices)
                         {
-                            m_slices[i].paint( applet, g, supZone, zone, m_shape, satCtr, supCtr );
+                            slice.paint( applet, g, supZone, zone, m_shape, satCtr, supCtr );
                         }
                     }
                 }
@@ -324,11 +322,9 @@ package com.socialcomputing.wps.script  {
          * @throws UnsupportedEncodingException 
          */
         public function setBounds(applet:WPSApplet, g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, bounds:Rectangle):void {
-            var i:int, n    = m_slices.length;
-            
-            for ( i = 0; i < n; i ++ )
+			for each( var slice:Slice in m_slices)
             {
-                m_slices[i].setBounds( applet, g, zone.getParent(), zone, m_shape, satCtr, supCtr, bounds );
+                slice.setBounds( applet, g, zone.getParent(), zone, m_shape, satCtr, supCtr, bounds );
             }
         }
         
@@ -359,7 +355,7 @@ package com.socialcomputing.wps.script  {
                 
                 if ( actionStr != null )
                 {
-                    var actions:Array= Base.getTextParts( getString( actionId, zone.m_props ), "\n" );
+                    var actions:Array= getString( actionId, zone.m_props ).split("\n");
                     var action:String, func:String, args:String;
                     var i:int, j:int, n:int = actions.length;
                     
@@ -405,10 +401,8 @@ package com.socialcomputing.wps.script  {
                             if ( slice != null )
                             {
                                 var delay:int= slice.getInt( Slice.DELAY_VAL, zone.m_props ),
-                                    length  = slice.getInt( Slice.LENGTH_VAL, zone.m_props );
-                                
-								// TODO
-                                //applet.m_plan.popSlice( zone, slice, delay, length, args );
+                                    length:int  = slice.getInt( Slice.LENGTH_VAL, zone.m_props );
+                                applet.m_plan.popSlice( zone, slice, delay, length, args );
                             }
                         }
                         else if ( func == ( "play" ))    // Plays a sound in .au Sun audio format

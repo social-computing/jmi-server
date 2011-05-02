@@ -88,7 +88,7 @@ package com.socialcomputing.wps.script  {
          * @param supCtr		This parent satellite center.
          * @throws UnsupportedEncodingException 
          */
-        protected function paint( applet:WPSApplet, g:Graphics, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point):void {
+        public function paint( applet:WPSApplet, g:Graphics, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point):void {
             var text:HTMLText= getText( TEXT_VAL, zone.m_props );
             
             // Patch for IE old JVM JIT bug (build < 3000).
@@ -225,7 +225,7 @@ package com.socialcomputing.wps.script  {
          * @param bounds		A Rectangle to merge with this bounds.
          * @throws UnsupportedEncodingException 
          */
-        protected function setBounds(applet:WPSApplet, g:Graphics, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point, bounds:Rectangle):void {
+        public function setBounds(applet:WPSApplet, g:Graphics, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point, bounds:Rectangle):void {
             var transfo:Transfo= getTransfo( TRANSFO_VAL, zone.m_props );
             
             if ( supZone == null )  supZone     = zone;

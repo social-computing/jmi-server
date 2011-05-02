@@ -64,11 +64,11 @@ package com.socialcomputing.wps.script  {
          * Convert this ColorX to a java.awt.Color.
          * @return	a new Color equivalent to this.
          */
-        function getColor():ColorTransform {
+        public function getColor():ColorTransform {
             return new ColorTransform( m_color );
         }
         
-        function getColor2(props:Array):ColorTransform {
+		public function getColor2(props:Array):ColorTransform {
             if( m_scolor == null) return new ColorTransform( m_color );
             var str:String= Base.parseString4( m_scolor, props, false);
             return new ColorTransform( ( str == null ? 0: parseInt( str)));

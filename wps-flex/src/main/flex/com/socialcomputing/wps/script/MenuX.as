@@ -65,7 +65,7 @@ package com.socialcomputing.wps.script  {
          * @return			True if this menu is not empty. This is used in the recursive process and is useless for the main call.
          * @throws UnsupportedEncodingException 
          */
-        function parseMenu( dst:Menu, listener:EventListenerRequest, zone:ActiveZone):Boolean {
+        public function parseMenu( dst:Menu, listener:EventListenerRequest, zone:ActiveZone):Boolean {
             /*var i:int, j, k	= -1,
                 n		= 1,
                 iCnt	= m_items.length;*/
@@ -145,7 +145,7 @@ package com.socialcomputing.wps.script  {
          * @throws UnsupportedEncodingException 
          */
         /*private function parseItem( dst:Menu, listener:Event, zone:ActiveZone, j:int):Boolean {
-            var parts:Array= getTextParts( getString( TEXT_VAL, zone ), SEP );
+            var parts:Array= getString( TEXT_VAL, zone ).split( SEP);
             var title:String= parts[0],
                 url     = parts.length > 1? parts[1] : null,
                 redir   = parts.length > 2? parts[2] : null;

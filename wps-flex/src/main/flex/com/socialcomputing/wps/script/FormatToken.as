@@ -1,12 +1,12 @@
 package com.socialcomputing.wps.script {
-    import spark.components.BorderContainer;
+    import flash.geom.Rectangle;
 
     public class FormatToken
     {
         /**
          * Current line margins.
          */
-        public var m_margin:BorderContainer;
+        public var m_margin:Rectangle;
         
         /**
          * Current line maximum ascent (Top of the highest letter)

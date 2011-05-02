@@ -69,7 +69,7 @@ package com.socialcomputing.wps.script  {
             {
                 var p:Point;
                 var scale:Number= getFloat( SCALE_VAL, zone.m_props );
-                var x:int, y;
+                var x:int, y:int;
                 
                 scale   *= transfo.m_pos;
                 p       = getCenter( zone );
@@ -122,9 +122,9 @@ package com.socialcomputing.wps.script  {
             {
                 var points:Array= new Array(getValue( POLYGON_VAL, zone.m_props ));
                 var p:Point= getCenter( zone ),
-                    shapePos    = new Point();
+                    shapePos:Point    = new Point();
                 var size:int= int(getShapePos( zone, transfo, center, p, shapePos )),
-                    n           = points.length;
+                    n:int           = points.length;
                 
                 switch ( n )
                 {
@@ -160,10 +160,10 @@ package com.socialcomputing.wps.script  {
             {
                 var points:Array= new Array(getValue( POLYGON_VAL, zone.m_props ));
                 var p:Point= getCenter( zone ),
-                    shapePos    = new Point();
+                    shapePos:Point    = new Point();
                 var rect:Rectangle= null;
                 var n:int= points.length,
-                    size        = int(getShapePos( zone, transfo, center, p, shapePos ));
+                    size:int= int(getShapePos( zone, transfo, center, p, shapePos ));
                 
                 switch ( n )
                 {
@@ -220,9 +220,9 @@ package com.socialcomputing.wps.script  {
                 
                 var points:Array= new Array(getValue( POLYGON_VAL, supZone.m_props ));
                 var p:Point= points[0],
-                    shapePos    = new Point();
+                    shapePos:Point    = new Point();
                 var n:int= points.length,
-                    size        = int(getShapePos( supZone, transfo, center, p, shapePos ));
+                    size:int        = int(getShapePos( supZone, transfo, center, p, shapePos ));
                 
                 switch ( n )
                 {
@@ -232,7 +232,7 @@ package com.socialcomputing.wps.script  {
                         //g.setComposite(composite);
                         
                         var x:int=     p.x + shapePos.x - size,
-                            y =     p.y + shapePos.y - size;
+                            y:int =     p.y + shapePos.y - size;
                         
                         size <<= 1;
                         
@@ -298,9 +298,9 @@ package com.socialcomputing.wps.script  {
             var flags:int= getFlags( zone.m_props.m_props.m_props.m_props );
             var link:LinkZone= LinkZone(zone);
             var from:BagZone= link.m_from,
-                to      = link.m_to;
+                to:BagZone      = link.m_to;
             var fromOff:int= 0,
-                toOff   = 0;
+                toOff:int   = 0;
             var poly:Polygon;
             
             if ( from != null  && to != null )
@@ -329,9 +329,9 @@ package com.socialcomputing.wps.script  {
                 N.y = ( N.y << 16)/ len;
                 len	= ( len - fromOff - toOff )>> 1;
                 
-                var C:Point= scalePnt( N, fromOff + len ),
-                    U       = scalePnt( N, len ),
-                    V       = scalePnt( N, width );
+                var C:Point		= scalePnt( N, fromOff + len ),
+                    U:Point     = scalePnt( N, len ),
+                    V:Point     = scalePnt( N, width );
                 
                 C.offset( A.x, A.y );
                 pivotPnt( V );
@@ -479,7 +479,7 @@ package com.socialcomputing.wps.script  {
             if ( dst.width * dst.height != 0)
             {
                 var xMax:int= dst.x + dst.width,
-                    yMax    = dst.y + dst.height;
+                    yMax:int    = dst.y + dst.height;
                 
                 dst.x = Math.min( dst.x, src.x );
                 dst.y = Math.min( dst.y, src.y );
