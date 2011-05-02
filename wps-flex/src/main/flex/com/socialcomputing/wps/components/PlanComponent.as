@@ -40,6 +40,13 @@ package com.socialcomputing.wps.components
 			_drawingSurface = new SpriteVisualElement();
 			this.addElement(_drawingSurface);
 			*/
+			addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
+			addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+			addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
+			/*			
+				addEventListener(MouseEvent.MOUSE_CLICK, mouseClickHandler);
+				addEventListener(MouseEvent.MOUSE_DOUBLE_CLICK, mouseDoubleClickHandler);
+			*/	
 		}
 		
 		public function get ready():Boolean {
@@ -131,14 +138,7 @@ package com.socialcomputing.wps.components
 			 * we need to be redrawn; the framework will ensure that updateDisplayList
 			 * is invoked after all scripts have finished executing.
 			 */
-			this.invalidateDisplayList();
-			
-			addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
-			addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
-			addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
-/*			addEventListener(MouseEvent.MOUSE_CLICK, mouseClickHandler);
-			addEventListener(MouseEvent.MOUSE_DOUBLE_CLICK, mouseDoubleClickHandler);
-*/			
+			this.invalidateDisplayList();		
 			CursorManager.removeBusyCursor();
 		}
 		
@@ -162,7 +162,12 @@ package com.socialcomputing.wps.components
 		public function mouseMoveHandler(event:MouseEvent):void {
 			curPos.x    = event.stageX;
 			curPos.y    = event.stageY;
-			_dataProvider.plan.updateZoneAt( curPos ); // The Zone, SubZone or Satellite can have changed
+			/*
+			A parent element has null m_bounds property for now, and this doesn't work yet
+			if(_dataProvider.plan != null) {
+				_dataProvider.plan.updateZoneAt( curPos ); // The Zone, SubZone or Satellite can have changed
+			}
+			*/
 		}
 		
 		public function mouseOutHandler(event:MouseEvent):void {
