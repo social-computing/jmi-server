@@ -174,11 +174,14 @@ public class PlanJSONProvider {
     static private ObjectNode toJSON(Plan plan) {
         ObjectNode node = mapper.createObjectNode();
         // Add the array of nodes
+        node.put("nodesCnt", plan.m_nodesCnt);
         ArrayNode nodes = node.putArray("nodes");
-        for (ActiveZone zone : plan.m_nodes) {
-            nodes.add(toJSON(zone));
+        for( int i = 0; i < plan.m_nodesCnt; ++i) {
+            // Only BagZone
+            nodes.add(toJSON(plan.m_nodes[i]));
         }
         // Add the array of links
+        node.put("linksCnt", plan.m_linksCnt);
         ArrayNode links = node.putArray("links");
         for (ActiveZone zone : plan.m_links) {
             links.add(toJSON(zone));

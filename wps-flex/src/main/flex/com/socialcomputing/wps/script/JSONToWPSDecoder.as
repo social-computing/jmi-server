@@ -29,14 +29,23 @@ package com.socialcomputing.wps.script
 		public static function toPlan(json:Object):Plan
 		{
 			var plan:Plan = new Plan();
+			plan.m_linksCnt = json.linksCnt;
 			plan.m_links = new Array();
 			for each (var item:Object in json.links) { 
 				plan.m_links.push( toLinkZone(item));
 			} 
+			plan.m_nodesCnt = json.nodesCnt;
 			plan.m_nodes = new Array();
 			for each (item in json.nodes) { 
 				plan.m_nodes.push( toZone(item));
 			} 
+			var n:int = json.nodes.length; 
+			for( var i:int=0; i < n; ++i) {
+				// BagZone : append ActiveZone
+				for each (var az:ActiveZone in plan.m_nodes[i].m_subZones) { 
+					plan.m_nodes.push( az);
+				}			
+			}
 			return plan;
 		}
 		
@@ -80,11 +89,11 @@ package com.socialcomputing.wps.script
 				if( json.props[i] is Array) {
 					zone.m_props[i] = new Array();
 					for each (var z:Object in json.props[i]) { 
-						zone.m_props[i].push( z);
+						zone.m_props[i].push( toObject(z));
 					} 
 				}
 				else {
-					zone.m_props[i] = json.props[i];
+					zone.m_props[i] = toObject(json.props[i]);
 				}
 			}			
 		}
@@ -207,6 +216,9 @@ package com.socialcomputing.wps.script
 			}
 			else if( json.cls == "FontX") {
 				return toFontX(json);				
+			}
+			else if( json.cls == "Point") {
+				return toPoint(json);				
 			}
 			trace( "Error toZone: " + json.cls);
 			return null;

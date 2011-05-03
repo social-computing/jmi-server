@@ -204,14 +204,11 @@ package com.socialcomputing.wps.script  {
         public function setColor( g:Graphics, prop:int, props:Array):Boolean // throws UnsupportedEncodingException
         {
             var color:ColorTransform = getColor( prop, props );
-            
             if ( color != null )
             {
                 g.beginFill( color.color );
-                
                 return true;
             }
-            
             return false;
         }
                 

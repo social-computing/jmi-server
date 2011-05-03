@@ -152,7 +152,7 @@ package com.socialcomputing.wps.script  {
          * @param showTyp   The type of Satellite to show (SEL, TIP, BASE, ALL). See Satellite.XXXX_TYP.
          * @param showLinks True if we only wants to paint links.
          */
-        protected function paint(applet:PlanComponent, g:Graphics, isCur:Boolean, isFront:Boolean, showTyp:int, showLinks:Boolean):void {
+        public function paint(applet:PlanComponent, g:Graphics, isCur:Boolean, isFront:Boolean, showTyp:int, showLinks:Boolean):void {
             if( (m_flags & INVISIBLE_BIT) != 0) return;
             var swatch:Swatch= isCur ? m_curSwh : m_restSwh;
             

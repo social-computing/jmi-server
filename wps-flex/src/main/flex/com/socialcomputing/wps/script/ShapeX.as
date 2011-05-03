@@ -220,7 +220,7 @@ package com.socialcomputing.wps.script  {
                 
                 //Float alpha = slice.getFloat(prop, props);
                 
-                var points:Array= new Array(getValue( POLYGON_VAL, supZone.m_props ));
+                var points:Array= getValue( POLYGON_VAL, supZone.m_props ) as Array;
                 var p:Point= points[0],
                     shapePos:Point    = new Point();
                 var n:int= points.length,

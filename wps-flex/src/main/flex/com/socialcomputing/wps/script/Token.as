@@ -164,7 +164,7 @@ package com.socialcomputing.wps.script  {
                 }
                 else                                // simple Propertie
                 {
-                    rawProp = props.get( m_buffer);
+                    rawProp = props[m_buffer];
                 }
                 
                 if ( rawProp != null )                 // prop exists!
