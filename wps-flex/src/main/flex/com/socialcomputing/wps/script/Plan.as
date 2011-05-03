@@ -404,8 +404,8 @@ package com.socialcomputing.wps.script  {
                     if ( isFakeFrom )       resizePoint( zone, 0, dx, dy, sx, sy );
                     else if ( isFakeTo )    resizePoint( zone, 1, dx, dy, sx, sy );
                     
-                    scale   = Number(zone.get( "_SCALE" ));
-                    zone.put( "_SCALE", s * scale );
+                    scale   = Number(zone.m_props["_SCALE"]);
+                    zone.m_props["_SCALE"] = s * scale;
                     zone.m_datas.clear();
                 }
                 m_prevBox = new Rectangle();

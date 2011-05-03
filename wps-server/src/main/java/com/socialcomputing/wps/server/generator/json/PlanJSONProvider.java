@@ -339,7 +339,7 @@ public class PlanJSONProvider {
     static private ObjectNode toJSON(VContainer container) {
         ObjectNode node = createObjectNode("VContainer");
         if( container.m_value != null) {
-            putValue(node, "value", container.m_value);
+            fillNode( node, "value", container.m_value);
         }
         node.put("bound", container.isBound());
         return node;

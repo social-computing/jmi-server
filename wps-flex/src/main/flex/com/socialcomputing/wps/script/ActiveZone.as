@@ -92,14 +92,6 @@ package com.socialcomputing.wps.script  {
         public var m_datas:Array;
         
 		
-		public function get( key:String):Object {
-			return m_props[key];	
-		}
-
-		public function put( key:String, value:Object):void {
-			m_props[key] = value;	
-		}
-		
         /**
          * Sets the two swatchs of this zone.
          * This is used in PlanGenerator to setup this zone's swatchs.
@@ -130,9 +122,7 @@ package com.socialcomputing.wps.script  {
 		public function init(applet:PlanComponent, g:Graphics, isFirst:Boolean):void {
             if ( isFirst )  // One time init
             {
-                //var sel:Object= get( "SELECTION" );
                 var sel:Object= m_props["SELECTION"];
-                
                 if ( sel != null )
                 {
                     m_selection = int(sel);
@@ -140,16 +130,12 @@ package com.socialcomputing.wps.script  {
                 
                 // Quick access to Env props
 				m_props["ENV"] = applet.env.m_props;
-                
-                // Optimize prop access
-                // FRV ???? rehash();
-                
                 m_datas = new Array();
             }
             
             var isSuper:Boolean= this is BagZone;
             
-            m_restData  = m_restSwh.evalSatData( applet, this, isSuper );
+            m_restData = m_restSwh.evalSatData( applet, this, isSuper );
             
             if ( m_curSwh != null )
             {

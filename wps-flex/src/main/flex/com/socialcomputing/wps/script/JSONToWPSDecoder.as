@@ -2,6 +2,8 @@ package com.socialcomputing.wps.script
 {
 	import flash.geom.Point;
 	
+	import mx.charts.chartClasses.InstanceCache;
+	
 	public class JSONToWPSDecoder
 	{
 		public static function toEnv(json:Object):Env
@@ -186,8 +188,28 @@ package com.socialcomputing.wps.script
 		private static function toVContainer(json:Object):VContainer {
 			if( json == "null")
 				return null;
-			var item:VContainer = new VContainer(json.value, json.bound);
+			var item:VContainer = new VContainer( toObject( json.value), json.bound);
 			return item;
+		}
+
+		private static function toObject(json:Object):Object {
+			if( !json.hasOwnProperty("cls")) {
+				return json;
+			}
+			else if( json.cls == "Transfo") {
+				return toTransfo(json);				
+			}
+			else if( json.cls == "ColorX") {
+				return toColorX(json);				
+			}
+			else if( json.cls == "HtmlText") {
+				return toHTMLText(json);				
+			}
+			else if( json.cls == "FontX") {
+				return toFontX(json);				
+			}
+			trace( "Error toZone: " + json.cls);
+			return null;
 		}
 		
 	}
