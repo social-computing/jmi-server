@@ -327,7 +327,7 @@ package com.socialcomputing.wps.script{
         /*protected function getHText( applet:WPSApplet, g:Graphics, zone:ActiveZone, transfo:Transfo, center:Point, supCtr:Point, key:Number):HTMLText // throws UnsupportedEncodingException
         {
             var htmlTxt:HTMLText= null;
-            var data:Object= zone.m_datas.get( key );
+            var data:Object= zone.m_datas[ key ];
             
             if ( center == null )	center = supCtr;
             

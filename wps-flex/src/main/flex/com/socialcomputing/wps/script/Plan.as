@@ -380,8 +380,8 @@ package com.socialcomputing.wps.script  {
                     zone    = m_nodes[i];
                     resizePoint( zone, 0, dx, dy, sx, sy );
                     
-                    scale   = Number(zone.get( "_SCALE" ));
-                    zone.put( "_SCALE", s * scale );
+                    scale   = Number(zone.m_props[ "_SCALE" ]);
+                    zone.m_props["_SCALE"] = s * scale;
                     zone.m_datas.clear();
                 }
                 
@@ -531,7 +531,7 @@ package com.socialcomputing.wps.script  {
          * @param sy	Vertical scaling after translation.
          */
 		private function resizePoint( zone:ActiveZone, i:int, dx:Number, dy:Number, sx:Number, sy:Number):void {
-            var p:Point= zone.get("_VERTICES")[i];
+            var p:Point= zone.m_props["_VERTICES"][i];
             p.x = int(( sx *( p.x - dx )));
             p.y = int(( sy *( p.y - dy )));
         }

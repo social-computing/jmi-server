@@ -327,9 +327,10 @@ public class PlanJSONProvider {
     static private ObjectNode toJSON(Base base, ObjectNode node) {
         ArrayNode containers = node.putArray("containers");
         for (VContainer container : base.m_containers) {
-            if( container != null) {
+            if( container == null)
+                containers.add( "null");
+            else
                 containers.add(toJSON(container));
-            }
         }
         return node;
     }

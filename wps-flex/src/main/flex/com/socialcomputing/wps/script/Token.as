@@ -146,16 +146,16 @@ package com.socialcomputing.wps.script  {
                 
                 if ( Base.isEnabled( m_flags, GLOBAL_BIT ))    // Global Propertie
                 {
-                    props = props.get( "ENV") as Array;
+                    props = props[ "ENV"] as Array;
                 }
                 
                 if ( Base.isEnabled( m_flags, LIST_BIT ))    // List Propertie
                 {
-                    rawProp = props.get( m_buffer);
+                    rawProp = props[ m_buffer];
                     
                     if ( rawProp != null )
                     {
-                        rawProp = (props.get( m_buffer))[i];
+                        rawProp = (props[ m_buffer])[i];
                     }
                     else
                     {

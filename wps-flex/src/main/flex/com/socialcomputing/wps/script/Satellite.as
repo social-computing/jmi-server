@@ -385,7 +385,7 @@ package com.socialcomputing.wps.script  {
                         }
                         else if ( func == ( "popup" ))    // Popup a menu
                         {
-                            var menu:MenuX= MenuX(zone.m_curSwh.m_refs.get( args ));
+                            var menu:MenuX= MenuX(zone.m_curSwh.m_refs.m_props[args]);
                             
                             if ( menu != null )
                             {
@@ -398,7 +398,7 @@ package com.socialcomputing.wps.script  {
                         }
                         else if ( func == ( "pop" ))    // Pop a tooltip
                         {
-                            var slice:Slice= Slice(zone.m_curSwh.m_refs.get( args ));
+                            var slice:Slice= Slice(zone.m_curSwh.m_refs.m_props[args]);
                             
                             if ( slice != null )
                             {
@@ -410,7 +410,7 @@ package com.socialcomputing.wps.script  {
                         else if ( func == ( "play" ))    // Plays a sound in .au Sun audio format
                         {
 							// TODO
-/*                            var clip:AudioClip= AudioClip(applet.m_env.m_medias.get( args ));
+/*                            var clip:AudioClip= AudioClip(applet.m_env.m_medias[ args ]);
                             
                             if ( clip == null )
                             {

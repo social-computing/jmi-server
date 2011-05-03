@@ -82,7 +82,7 @@ package com.socialcomputing.wps.script  {
         public function getValue( prop:int, props:Array):Object {
             var container:VContainer= m_containers[prop];
             
-            return container != null ?( container.m_isBound ? props.get( container.m_value ) : container.m_value ): null;
+            return container != null ?( container.m_isBound ? props[ container.m_value] : container.m_value ): null;
         }
         
         /**
@@ -185,11 +185,12 @@ package com.socialcomputing.wps.script  {
          * @return	the Transfo corresponding to the field whose index is prop or null if the property doesn't exists or is void.
          */
         public function getTransfo( prop:int, props:Array):Transfo {// What's that strange test?????
-            if ( getValue( prop, props ) is String )
+			var res:Object = getValue( prop, props );
+            if ( res is Transfo )
             {
-                return null;
+				return res as Transfo;
             }
-            return Transfo(getValue( prop, props ));
+			return null;
         }
         
         /**

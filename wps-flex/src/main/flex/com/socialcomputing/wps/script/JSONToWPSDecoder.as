@@ -184,6 +184,8 @@ package com.socialcomputing.wps.script
 		}
 		
 		private static function toVContainer(json:Object):VContainer {
+			if( json == "null")
+				return null;
 			var item:VContainer = new VContainer(json.value, json.bound);
 			return item;
 		}

@@ -246,7 +246,7 @@ package com.socialcomputing.wps.script  {
                 if ( supZone != null )
                 {
                     var points:Array= new Array(satShp.getValue( ShapeX.POLYGON_VAL, supZone.m_props ));
-					errorMessage += " zName=" + supZone.get( "NAME" ) + " pKey=" + satShp.m_containers[ShapeX.POLYGON_VAL].m_value + " pnts=" + points + " p[0]=" + points[0];
+					errorMessage += " zName=" + supZone.m_props[ "NAME" ] + " pKey=" + satShp.m_containers[ShapeX.POLYGON_VAL].m_value + " pnts=" + points + " p[0]=" + points[0];
                 }
                 
                 throw(new Error(errorMessage));

@@ -402,7 +402,7 @@ package com.socialcomputing.wps.script  {
          */
         public function evalSatData(applet:PlanComponent, zone:ActiveZone, isSuper:Boolean):Vector.<SatData>
         {
-            var satDatas:Vector.<SatData>= new Vector.<SatData>(m_satellites.length);
+            var satDatas:Vector.<SatData>= new Vector.<SatData>();
             var satData:SatData;
             var flags:int;
             var isTip:Boolean, isSel:Boolean;
@@ -423,7 +423,7 @@ package com.socialcomputing.wps.script  {
                     
                     if ( sels != null )
                     {
-                        var selId:int= int(applet.env.m_selections.get( sels[0] ));
+                        var selId:int= int(applet.env.m_selections[sels[0]]);
                         
                         sel = isNaN(selId) ? selId : -1;
                     }

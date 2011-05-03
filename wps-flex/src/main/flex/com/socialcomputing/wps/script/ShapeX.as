@@ -309,8 +309,8 @@ package com.socialcomputing.wps.script  {
             {
                 if ( isEnabled( flags, TAN_LNK_BIT | SEC_LNK_BIT ))
                 {
-                    fromOff = Number(from.get( "_SCALE" ));
-                    toOff   = Number(to.get( "_SCALE" ));
+                    fromOff = Number(from.m_props["_SCALE" ]);
+                    toOff   = Number(to.m_props["_SCALE" ]);
                 }
                 if ( isEnabled( flags, SEC_LNK_BIT ))
                 {
@@ -388,7 +388,7 @@ package com.socialcomputing.wps.script  {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
                 var medias:Array= applet.env.m_medias;
-                var image:Image= medias.get( imageNam ), scaledImg:Image;
+                var image:Image= medias[ imageNam ], scaledImg:Image;
                 
                 if ( image == null )
                 {
@@ -420,7 +420,7 @@ package com.socialcomputing.wps.script  {
                     if ( imgWid != w )
                     {
                         imageNam    += w;
-                        scaledImg   = Image(medias.get( imageNam ));
+                        scaledImg   = Image(medias[ imageNam ]);
                         
                         if ( scaledImg == null )
                         {
