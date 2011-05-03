@@ -13,11 +13,11 @@ package com.socialcomputing.wps.script
 			env.m_filterCol = toColorX(json.filterColor);
 			env.m_transfo = toTransfo(json.transfo);
 
-			env.m_props = new Array( json.props.length);
+			env.m_props = new Array();
 			for(var i:String in json.props){
 				env.m_props[i] = json.props[i];
 			}			
-			env.m_selections = new Array( json.props.length);
+			env.m_selections = new Array();
 			for(i in json.selections){
 				env.m_selections[i] = json.selections[i];
 			}			
@@ -27,11 +27,11 @@ package com.socialcomputing.wps.script
 		public static function toPlan(json:Object):Plan
 		{
 			var plan:Plan = new Plan();
-			plan.m_links = new Array( json.links.length);
+			plan.m_links = new Array();
 			for each (var item:Object in json.links) { 
 				plan.m_links.push( toLinkZone(item));
 			} 
-			plan.m_nodes = new Array( json.nodes.length);
+			plan.m_nodes = new Array();
 			for each (item in json.nodes) { 
 				plan.m_nodes.push( toZone(item));
 			} 
@@ -76,7 +76,7 @@ package com.socialcomputing.wps.script
 			zone.m_props = new Array();
 			for(var i:String in json.props){
 				if( json.props[i] is Array) {
-					zone.m_props[i] = new Array(json.props[i].length);
+					zone.m_props[i] = new Array();
 					for each (var z:Object in json.props[i]) { 
 						zone.m_props[i].push( z);
 					} 
@@ -94,7 +94,7 @@ package com.socialcomputing.wps.script
 		}
 		
 		private static function toBagZone(json:Object):BagZone {
-			var zone:BagZone = new BagZone( new Array( json.subZones.length));
+			var zone:BagZone = new BagZone( new Array());
 			_toActiveZone( zone, json);
 			for each (var z:Object in json.subZones) { 
 				zone.m_subZones.push( toZone(z));
@@ -108,14 +108,6 @@ package com.socialcomputing.wps.script
 			return zone;
 		}
 		
-		private static function toSatellite(json:Object):Satellite {
-			var satellite:Satellite = new Satellite(toShapeX( json.shapex), new Array( json.slices.length));
-			for each (var slice:Object in json.slices) { 
-				satellite.m_slices.push( toSlice(slice));
-			} 
-			return satellite;
-		}
-		
 		private static function toTransfo(json:Object):Transfo {
 			var transfo:Transfo = new Transfo(0,0,0,0);
 			transfo.m_dir = json.dir;
@@ -126,8 +118,17 @@ package com.socialcomputing.wps.script
 		}
 		
 		/*
-		* ShapeX / Slice / Swatch / HTMLText / FontX / MenuX : Base subclasses
+		* Satellite / ShapeX / Slice / Swatch / HTMLText / FontX / MenuX : Base subclasses
 		*/
+		private static function toSatellite(json:Object):Satellite {
+			var satellite:Satellite = new Satellite(toShapeX( json.shapex), new Vector.<Slice>());
+			for each (var slice:Object in json.slices) { 
+				satellite.m_slices.push( toSlice(slice));
+			} 
+			toBase( satellite, json);
+			return satellite;
+		}
+		
 		private static function toShapeX(json:Object):ShapeX {
 			var item:ShapeX = new ShapeX();
 			toBase( item, json);
@@ -142,11 +143,11 @@ package com.socialcomputing.wps.script
 		
 		private static function toSwatch(json:Object):Swatch {
 			if( json == null) return null;
-			var item:Swatch = new Swatch( new Array( json.satellites.length));
+			var item:Swatch = new Swatch( new Vector.<Satellite>());
 			for each (var z:Object in json.satellites) { 
 				item.m_satellites.push( toSatellite(z));
 			} 
-			item.m_refs = new Array( json.refs.length);
+			item.m_refs = new Array();
 			for(var i:String in json.refs){
 				item.m_refs[i] = json.refs[i];
 			}			
@@ -167,7 +168,7 @@ package com.socialcomputing.wps.script
 		}
 		
 		private static function toMenuX(json:Object):MenuX {
-			var item:MenuX = new MenuX( new Array( json.menu.length));
+			var item:MenuX = new MenuX( new Array());
 			for each (var z:Object in json.menu) { 
 				item.m_items.push( toMenuX(z));
 			} 
@@ -176,7 +177,7 @@ package com.socialcomputing.wps.script
 		}
 		
 		private static function toBase(base:Base, json:Object):void {
-			base.m_containers = new Array( json.containers.length);
+			base.m_containers = new Array();
 			for each (var z:Object in json.containers) { 
 				base.m_containers.push( toVContainer(z));
 			} 

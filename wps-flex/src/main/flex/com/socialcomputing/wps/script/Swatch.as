@@ -39,19 +39,19 @@ package com.socialcomputing.wps.script  {
          * Layers of satellites that describes this.
          * Satellites are where the real information of this is.
          */
-        public var m_satellites:Array;
+        public var m_satellites:Vector.<Satellite>;
         
         /**
          * Creates a new Swatch by filling its satellite table.
          * The first one (index 0) hold default values (tranformation and events).
          * @param satellites	Satellites describing this Swatch.
          */
-        public function Swatch( satellites:Array)
+        public function Swatch( satellites:Vector.<Satellite>)
         {
             m_satellites    = satellites;
         }
         
-        public function getSatellites():Array {
+        public function getSatellites():Vector.<Satellite> {
             return m_satellites;
         }
         
@@ -418,7 +418,7 @@ package com.socialcomputing.wps.script  {
                 
                 if ( isTip || isSel )
                 {
-                    var sels:Array= sat.parseString( Satellite.SELECTION_VAL, zone.m_props );
+                    var sels:Vector.<String> = sat.parseString( Satellite.SELECTION_VAL, zone.m_props );
                     var sel:int= -1;
                     
                     if ( sels != null )

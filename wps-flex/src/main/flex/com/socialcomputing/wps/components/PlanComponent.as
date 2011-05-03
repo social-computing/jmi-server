@@ -119,16 +119,20 @@ package com.socialcomputing.wps.components
 /*			m_backImg	= createImage( m_size.width, m_size.height );
 			m_restImg	= createImage( m_size.width, m_size.height );
 */
-
-			plan.m_applet     = this;
-			plan.m_curSel     = -1;
-			plan.initZones( this.graphics, plan.m_links, true );
-			plan.initZones( this.graphics, plan.m_nodes, true );
-			plan.resize( size);
-			plan.init();
-			plan.resize( size);
-			_ready = true;
-
+			try {
+				plan.m_applet     = this;
+				plan.m_curSel     = -1;
+				plan.initZones( this.graphics, plan.m_links, true );
+				plan.initZones( this.graphics, plan.m_nodes, true );
+				plan.resize( size);
+				plan.init();
+				plan.resize( size);
+				_ready = true;
+			}
+			catch(error:Error) {
+				trace( error.getStackTrace());	
+			}
+				
 			showStatus( "" );
 			
 			/*
@@ -162,12 +166,9 @@ package com.socialcomputing.wps.components
 		public function mouseMoveHandler(event:MouseEvent):void {
 			curPos.x    = event.stageX;
 			curPos.y    = event.stageY;
-			/*
-			A parent element has null m_bounds property for now, and this doesn't work yet
-			if(_dataProvider.plan != null) {
+			if( ready) {
 				_dataProvider.plan.updateZoneAt( curPos ); // The Zone, SubZone or Satellite can have changed
 			}
-			*/
 		}
 		
 		public function mouseOutHandler(event:MouseEvent):void {

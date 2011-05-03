@@ -188,7 +188,7 @@ package com.socialcomputing.wps.script  {
          * @return				True if this contains pos.
          * @throws UnsupportedEncodingException 
          */
-        protected function contains( applet:PlanComponent, g:Graphics, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point, pos:Point):Boolean {
+        public function contains( applet:PlanComponent, g:Graphics, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point, pos:Point):Boolean {
             var transfo:Transfo= getTransfo( TRANSFO_VAL, zone.m_props );
             
             if ( supZone == null )  supZone = zone;

@@ -143,14 +143,14 @@ package com.socialcomputing.wps.script  {
          * The elementary slices that are stacked to draw this satellite.
          * They describe how to fill the shape.
          */
-		public   var m_slices:Array;
+		public   var m_slices:Vector.<Slice>;
         
         /**
          * Creates a Satellite with its shape and slices.
          * @param shape		A shape that is filled by the slices.
          * @param slices	A table of slices used to render this.
          */
-        public function Satellite( shape:ShapeX, slices:Array)
+        public function Satellite( shape:ShapeX, slices:Vector.<Slice>)
         {
             m_shape     = shape;
             m_slices    = slices;
@@ -436,7 +436,7 @@ package com.socialcomputing.wps.script  {
             return m_shape;
         }
         
-        public function getSlices():Array {
+        public function getSlices():Vector.<Slice> {
             return m_slices;
         }
     }

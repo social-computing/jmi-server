@@ -426,7 +426,7 @@ package com.socialcomputing.wps.script  {
                         {
                             scaledImg   = image.getScaledInstance( w, w, Image.SCALE_AREA_AVERAGING );
                             applet.prepareImage( scaledImg, applet );
-                            medias.push( imageNam, scaledImg );
+                            medias[imageNam] = scaledImg;
                         }
                         
                         image   = scaledImg;

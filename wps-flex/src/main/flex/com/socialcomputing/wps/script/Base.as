@@ -223,7 +223,7 @@ package com.socialcomputing.wps.script  {
          * @return			An array of String or null if the property doesn't exists or is void.
          * @throws UnsupportedEncodingException 
          */
-        public function parseString(prop:int, props:Array):Array
+        public function parseString(prop:int, props:Array):Vector.<String>
         {
             var text:String= getString( prop, props );
             
@@ -268,7 +268,7 @@ package com.socialcomputing.wps.script  {
          */
         //protected function parseString(text:String, props:Hashtable):Array
         // Renommage nom fonction
-        public function parseString3(text:String, props:Array):Array
+        public function parseString3(text:String, props:Array):Vector.<String>
         {
             var tokens:Vector.<Token> = parseTokens( text );
             var j:int, n:int, max:int = 0;
@@ -282,7 +282,7 @@ package com.socialcomputing.wps.script  {
                 }
                 max     = Math.max( n, max );
             }
-            var dst:Array= new String[max];
+            var dst:Vector.<String> = new Vector.<String>();
             var prop:String;
             
             for ( j = 0; j < max; j ++ )
@@ -299,7 +299,7 @@ package com.socialcomputing.wps.script  {
                         break;
                     }
                     
-                    dst[j] += prop;
+                    dst[j].concat( prop);
                 }
             }
             
@@ -397,7 +397,7 @@ package com.socialcomputing.wps.script  {
             var c:String = '0';
             var isAfterBS:Boolean= false;
             var token:Token= null;
-            var tokens:Vector.<Token>= new Vector().<Token>;
+            var tokens:Vector.<Token>= new Vector.<Token>();
             
             for ( i = 0; i < len; i ++ )
             {
@@ -415,7 +415,7 @@ package com.socialcomputing.wps.script  {
                         if ( token == null )
                         {
                             //						System.out.println( "new Token[" +(len - i)+ ']' );
-                            token = new Token( len - i, 0);
+                            token = new Token();
                             j = 0;
                         }
                         //token.m_buffer.setCharAt( j ++, c );
@@ -436,7 +436,8 @@ package com.socialcomputing.wps.script  {
                             }
                             // and create a new prop or list Token
                             //						System.out.println( "new Token[" +(len - i)+ ']' );
-                            token = new Token( len - i, c == '{' ? Token.PROP_BIT : Token.PROP_BIT | Token.LIST_BIT );
+                            token = new Token();
+							token.m_flags = c == '{' ? Token.PROP_BIT : Token.PROP_BIT | Token.LIST_BIT;
                             i = token.findFlags( text, i + 1);
                             j = 0;
                         }
@@ -454,7 +455,7 @@ package com.socialcomputing.wps.script  {
                             if ( token == null )        // a new text Token begins
                             {                           // create it
                                 //							System.out.println( "new Token[" +(len - i)+ ']' );
-                                token = new Token( len - i, 0);
+                                token = new Token();
                                 j = 0;
                             }
                             //token.m_buffer.setCharAt( j ++, c ); // copy this char in the current Token

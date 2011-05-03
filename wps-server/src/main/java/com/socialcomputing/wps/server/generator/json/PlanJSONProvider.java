@@ -250,17 +250,6 @@ public class PlanJSONProvider {
     }
 
     // Ok
-    static private ObjectNode toJSON(Satellite satellite) {
-        ObjectNode node = createObjectNode("Satellite");
-        node.put("shapex", toJSON(satellite.getShape()));
-        ArrayNode slices = node.putArray("slices");
-        for (Slice slice : satellite.getSlices()) {
-            slices.add(toJSON(slice));
-        }
-        return node;
-    }
-
-    // Ok
     static private ObjectNode toJSON(Transfo transfo) {
         ObjectNode node = createObjectNode("Transfo");
         node.put("dir", transfo.m_dir);
@@ -271,8 +260,19 @@ public class PlanJSONProvider {
     }
     
     /*
-     * ShapeX / Slice / Swatch / HTMLText / FontX / MenuX : Base subclasses
+     * Satellite / ShapeX / Slice / Swatch / HTMLText / FontX / MenuX : Base subclasses
      */
+    // Ok
+    static private ObjectNode toJSON(Satellite satellite) {
+        ObjectNode node = createObjectNode("Satellite");
+        node.put("shapex", toJSON(satellite.getShape()));
+        ArrayNode slices = node.putArray("slices");
+        for (Slice slice : satellite.getSlices()) {
+            slices.add(toJSON(slice));
+        }
+        return toJSON( satellite, node);
+    }
+    
     // Ok
     static private ObjectNode toJSON(ShapeX shape) {
         ObjectNode node = createObjectNode("ShapeX");

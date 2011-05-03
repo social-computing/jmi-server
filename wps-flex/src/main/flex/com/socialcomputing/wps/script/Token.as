@@ -100,17 +100,12 @@ package com.socialcomputing.wps.script  {
          */
         private var m_lineMax:int = 0;
         
-        /**
-         * Creates a new Token knowing the length of its textual part and its flags.
-         * @param length	The number of characters in the label (text or property name).
-         * @param flags		An integer to hold the bits of this.
-         */
-        public function Token(length:int, flags:int)
-        {
-            m_buffer = new String();
-            m_flags = flags;
-        }
-        
+		public function Token()
+		{
+			m_buffer = new String();
+			m_flags = 0;
+		}
+		
         /**
          * Gets the number of line of a list property.
          * If this is not a list property returns 1.
@@ -123,7 +118,7 @@ package com.socialcomputing.wps.script  {
             
             if ( Base.isEnabled( m_flags, LIST_BIT ))
             {
-                var list:Array = props.get( m_buffer);
+                var list:Array = props[ m_buffer];
                 
                 size = list != null ? list.length : 0;
                 if ( m_lineMax > 0&& size > m_lineMax )    size = m_lineMax;
