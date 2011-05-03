@@ -297,7 +297,7 @@ package com.socialcomputing.wps.script  {
                         break;
                     }
                     
-                    dst[j].concat( prop);
+					dst[j] = dst[j].concat( prop);
                 }
             }
             
