@@ -67,13 +67,12 @@ package com.socialcomputing.wps.script  {
                 
                 m_bounds.inflate( 2, 2);
                 
-                // var w:int= m_bounds.width,
-                // h:int= m_bounds.height;
-                // var maxBox:Dimension= applet.plan.m_maxBox;
-                // if ( w > maxBox.width )     maxBox.width    = w;
-                // if ( h > maxBox.height )    maxBox.height   = h;
-				applet.plan.m_maxBox = 
-					applet.plan.m_maxBox.resize(Dimension.fromRectangle(m_bounds));
+                var w:int= m_bounds.width,
+                	h:int= m_bounds.height;
+                var maxBox:Dimension= applet.plan.m_maxBox;
+				
+                if ( w > maxBox.width )     maxBox.width    = w;
+                if ( h > maxBox.height )    maxBox.height   = h;
 				
 				m_bounds = m_bounds.intersection(applet.size.toRectangle());
             }

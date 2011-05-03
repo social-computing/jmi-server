@@ -43,10 +43,18 @@ package com.socialcomputing.wps.script
 		{
 			return _width;
 		}
+		public function set width(w:uint):void
+		{
+			_width = w;
+		}
 
 		public function get height():uint
 		{
 			return _height;
+		}
+		public function set height(h:uint):void
+		{
+			_height = h;
 		}
 	}
 }

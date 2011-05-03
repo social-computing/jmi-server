@@ -168,13 +168,12 @@ package com.socialcomputing.wps.script  {
         //protected synchronized function init( ):void {
         public function init( ):void {
             var dim:Dimension= m_applet.size;
-            var backGfx:Graphics= m_applet.backImg.graphics,
-                restGfx:Graphics = m_applet.restImg.graphics,
-                g:Graphics       = m_applet.graphics;
-            
-            backGfx.clear();
+            var backGfx:Graphics= null, //m_applet.backImg.graphics,
+                restGfx:Graphics = null, //m_applet.restImg.graphics,
+            	g:Graphics       = m_applet.graphics;
+ /*           backGfx.clear();
             restGfx.clear();
-            
+ */           
             // If there is any background image, load it
             if (m_applet.backImgUrl != null)
 				// TODO
