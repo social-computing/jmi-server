@@ -43,8 +43,8 @@ package com.socialcomputing.wps.components
 		private var _ready:Boolean = false;
 
 		private var _backImgUrl:String;
-		private var _backImg:Image;
-		private var _restImg:Image;
+		//private var _backImg:Image;
+		//private var _restImg:Image;
 
 		/*
 		 *  Specific display elements
@@ -52,6 +52,7 @@ package com.socialcomputing.wps.components
 		private var _onScreen:BitmapData;
 		private var _drawingSurface:SpriteVisualElement;
 		private var _backDrawingSurface:Shape;
+		private var _restDrawingSurface:Shape;
 		
 		public function PlanComponent()
 		{
@@ -93,31 +94,40 @@ package com.socialcomputing.wps.components
 			return new Dimension(this.width, this.height);
 		}
 		
-		public function get backImg():Image
+		public function get backDrawingSurface():Shape
+		{
+			return _backDrawingSurface;
+		}
+		public function get restDrawingSurface():Shape
+		{
+			return _restDrawingSurface;
+		}
+		
+/*		public function get backImg():Image
 		{
 			return _backImg;
 		}
-		
-		public function get restImg():Image
+*/		
+/*		public function get restImg():Image
 		{
 			return _restImg;
 		}
-		
+*/		
 		public function get backImgUrl():String
 		{
 			return _backImgUrl;
 		}
 		
-		public function set backImg(value:Image):void
+/*		public function set backImg(value:Image):void
 		{
 			_backImg = value;
 		}
-		
-		public function set restImg(value:Image):void
+*/		
+/*		public function set restImg(value:Image):void
 		{
 			_restImg = value;
 		}
-		
+*/		
 		public function set dataProvider(value:Object):void
 		{
 			// If the given value is null return for now
@@ -145,7 +155,8 @@ package com.socialcomputing.wps.components
 				this._onScreen = new BitmapData(this.width, this.height);
 				this._drawingSurface.addChild(new Bitmap(this._onScreen));
 				this._backDrawingSurface = new Shape();
-		
+				this._restDrawingSurface = new Shape();
+				
 				plan.m_applet = this;
 				plan.m_curSel = -1;
 				plan.initZones(this.graphics, plan.m_links, true);
@@ -226,7 +237,9 @@ package com.socialcomputing.wps.components
 			trace("Update graphic display");
 			if(ready) {
 				//graphics.drawImage( _restImg, 0, 0, null );
+				_restDrawingSurface
 				plan.paintCurZone(this._backDrawingSurface.graphics);  // A new Zone is hovered, let's paint it!
+			   // ??
 				this.render();
 			}
 		}
@@ -298,18 +311,24 @@ package com.socialcomputing.wps.components
 			*/
 		}
 		
+		public function renderShape(shape:Shape, x:int, y:int):void {
+			trace("renderShape method called");
+			
+			// Transforming the offscreen back display to a BitmapData
+			var backBuffer:BitmapData = new BitmapData(x, y);
+			backBuffer.draw( shape, new Matrix());
+			
+			// Copying the content of the back buffer on screen
+			_onScreen.copyPixels(backBuffer, backBuffer.rect, new Point(0,0));
+			
+			// Clear the offscreen back display
+			shape.graphics.clear();
+		}
+		
 		private function render():void {
 			trace("Render method called");
 			
-			// Transforming the offscreen back display to a BitmapData
-			var backBuffer:BitmapData = new BitmapData(this.width, this.height);
-			backBuffer.draw(this._backDrawingSurface, new Matrix());
-			
-			// Copying the content of the back buffer on screen
-			this._onScreen.copyPixels(backBuffer, backBuffer.rect, new Point(0,0));
-			
-			// Clear the offscreen back display
-			this._backDrawingSurface.graphics.clear();
+			renderShape( this._backDrawingSurface, this.width, this.height);
 		}
 	}
 }

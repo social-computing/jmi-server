@@ -4,6 +4,7 @@ package com.socialcomputing.wps.script  {
     
     import flash.display.BitmapData;
     import flash.display.Graphics;
+	import flash.display.Shape;
     import flash.geom.Matrix;
     import flash.geom.Point;
     import flash.geom.Rectangle;
@@ -167,16 +168,17 @@ package com.socialcomputing.wps.script  {
         //protected synchronized function init( ):void {
         public function init( ):void {
             var dim:Dimension= m_applet.size;
-            var backGfx:Graphics= null, //m_applet.backImg.graphics,
-                restGfx:Graphics = null, //m_applet.restImg.graphics,
+            var backGfx:Graphics = m_applet.backDrawingSurface.graphics,
+                restGfx:Graphics = m_applet.restDrawingSurface.graphics,
             	g:Graphics       = m_applet.graphics;
- /*           backGfx.clear();
+
+			backGfx.clear();
             restGfx.clear();
- */           
+            
             // If there is any background image, load it
             if (m_applet.backImgUrl != null)
 				// TODO
-                //drawImage( restGfx, m_applet.m_backImgUrl, 0, 0, null );
+                //renderBitmap( restGfx, m_applet.m_backImgUrl, 0, 0, null );
             
             // Init Links, Nodes and subNodes.
             initZones( g, m_links, false );
@@ -190,8 +192,8 @@ package com.socialcomputing.wps.script  {
             
             // Filters backImg so it looks ghosted
 			// TODO
-            //drawImage( backGfx, m_applet.m_restImg, 0, 0, null);
-            //m_applet.m_env.filterImage( m_applet.m_backImg, dim );
+			m_applet.renderShape( m_applet.restDrawingSurface, 0, 0); // ??? size
+			m_applet.env.filterImage( m_applet.backDrawingSurface, dim );
             
             // Finish drawing restImg with places parts that are allways visible (tip, sel...)
             paintZones( restGfx, m_links, m_links.length, true, Satellite.BASE_TYP, true, false );
@@ -206,7 +208,7 @@ package com.socialcomputing.wps.script  {
             //g.setClip( 0, 0, dim.width, dim.height );
 			// TODO Utile ?
             //g.dispose();
-            //m_applet.repaint();
+            //m_applet.render();
         }
         
         /**
@@ -303,7 +305,7 @@ package com.socialcomputing.wps.script  {
                 {
                     //ON rollover non active zone => redraw
                     //blitImage(g, m_applet.m_restImg, m_curZone.getParent().m_bounds );
-					blitImage(g, m_applet.restImg, m_curZone.getParent().m_bounds );
+					//blitImage(g, m_applet.restImg, m_curZone.getParent().m_bounds );
                 }
                 
                 m_curSat    = curSat;
@@ -539,7 +541,7 @@ package com.socialcomputing.wps.script  {
          * @param bounds	Bounds of the image part to copy into g.
          */
         //private synchronized function blitImage( g:Graphics, image:Image, bounds:Rectangle):void {
-        public function blitImage(g:Graphics, image:Image, bounds:Rectangle):void {
+        public function blitImage(g:Graphics, shape:Shape, bounds:Rectangle):void {
             var dim:Dimension= m_applet.size;
             var x1:int= bounds.x < 0? 0: bounds.x,
                 y1:int = bounds.y < 0? 0: bounds.y,
@@ -551,18 +553,10 @@ package com.socialcomputing.wps.script  {
             
 			/// TODO
 			trace( "Plan blitImage à terminer");
-            //g.drawImage( image, x1, y1, x2, y2, x1, y1, x2, y2, null );
+            //g.renderBitmap( g, shape, x1, y1, x2, y2, x1, y1, x2, y2);
         }
-		
-		private function drawImage(g:Graphics, image:BitmapData, x:int, y:int):void {
-			var mtx:Matrix = new Matrix();
-			mtx.translate(x, y);
-			g.beginBitmapFill(image, mtx, false, false);
-			g.drawRect(x, y, image.width, image.height);
-			g.endFill();
-		}		
-
-        public function get m_curSel():int
+				
+       public function get m_curSel():int
         {
             return _m_curSel;
         }
