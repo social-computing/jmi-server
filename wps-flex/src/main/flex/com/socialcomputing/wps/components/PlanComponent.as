@@ -39,14 +39,19 @@ package com.socialcomputing.wps.components
 		
 		private var _dataProvider:PlanContainer = null;
 		private var _nodes:Array = null;
-		private var _drawingSurface: SpriteVisualElement;
 		private var _curPos:Point= new Point();
 		private var _ready:Boolean = false;
 
 		private var _backImgUrl:String;
 		private var _backImg:Image;
 		private var _restImg:Image;
-		private var onScreen:BitmapData;
+
+		/*
+		 *  Specific display elements
+		 */
+		private var _onScreen:BitmapData;
+		private var _drawingSurface:SpriteVisualElement;
+		private var _backDrawingSurface:Shape;
 		
 		public function PlanComponent()
 		{
@@ -137,30 +142,17 @@ package com.socialcomputing.wps.components
 			try {
 				// TODO : Handle this properly
 			    // Should manage the onScreen object each time the service is called
-				this.onScreen = new BitmapData(this.width, this.height);
-				this.addChild(new Bitmap(this.onScreen));
-				this._drawingSurface.addChild(new Bitmap(this.onScreen));
-				
-				// Drawing in the offscreen back buffer
-			    var backBuffer:BitmapData = new BitmapData(this.width, this.height);
-				var drawCanvas:Shape = new Shape();
-				drawCanvas.graphics.lineStyle(1,0xFF00FF);
-				drawCanvas.graphics.lineTo(20,0);
-				drawCanvas.graphics.lineTo(20,20);
-				drawCanvas.graphics.lineTo(0,20);
-				drawCanvas.graphics.lineTo(0,0);
-				backBuffer.draw(drawCanvas, new Matrix());
-				
-				// Copying the content of the back buffer on screen
-				onScreen.copyPixels(backBuffer, backBuffer.rect, new Point(0,0));
-				
-				plan.m_applet     = this;
-				plan.m_curSel     = -1;
-				plan.initZones( this.graphics, plan.m_links, true );
-				plan.initZones( this.graphics, plan.m_nodes, true );
-				plan.resize( size);
+				this._onScreen = new BitmapData(this.width, this.height);
+				this._drawingSurface.addChild(new Bitmap(this._onScreen));
+				this._backDrawingSurface = new Shape();
+		
+				plan.m_applet = this;
+				plan.m_curSel = -1;
+				plan.initZones(this.graphics, plan.m_links, true);
+				plan.initZones(this.graphics, plan.m_nodes, true);
+				plan.resize(size);
 				plan.init();
-				plan.resize( size);
+				plan.resize(size);
 				_ready = true;
 				
 			}
@@ -188,7 +180,7 @@ package com.socialcomputing.wps.components
 		
 		
 		public function showStatus(message:String):void {
-			trace( message);
+			trace(message);
 		}
 		
 		public function get curPos():Point {
@@ -232,11 +224,11 @@ package com.socialcomputing.wps.components
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			trace("Update graphic display");
-			//if ( ready)
-			//{
+			if(ready) {
 				//graphics.drawImage( _restImg, 0, 0, null );
-			//	plan.paintCurZone( graphics );  // A new Zone is hovered, let's paint it!
-			//}
+				plan.paintCurZone(this._backDrawingSurface.graphics);  // A new Zone is hovered, let's paint it!
+				this.render();
+			}
 		}
 		
 		/**
@@ -304,6 +296,20 @@ package com.socialcomputing.wps.components
 			// TODO FireEvent
 /*			getAppletContext().showDocument( convertURL( actionStr ), target );
 			*/
+		}
+		
+		private function render():void {
+			trace("Render method called");
+			
+			// Transforming the offscreen back display to a BitmapData
+			var backBuffer:BitmapData = new BitmapData(this.width, this.height);
+			backBuffer.draw(this._backDrawingSurface, new Matrix());
+			
+			// Copying the content of the back buffer on screen
+			this._onScreen.copyPixels(backBuffer, backBuffer.rect, new Point(0,0));
+			
+			// Clear the offscreen back display
+			this._backDrawingSurface.graphics.clear();
 		}
 	}
 }

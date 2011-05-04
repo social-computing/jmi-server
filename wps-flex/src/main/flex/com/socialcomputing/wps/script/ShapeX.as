@@ -387,9 +387,12 @@ package com.socialcomputing.wps.script  {
         public function drawImage(applet:PlanComponent, g:Graphics, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
-                var medias:Array= applet.env.m_medias;
-                var image:Image= medias[ imageNam ], scaledImg:Image;
-                
+                var medias:Array = applet.env.m_medias;
+				var scaledImg:Image;
+				// TODO : Fix this : for now applet.env.m_medias is null, not empty
+                //var image:Image = medias[imageNam];
+				var image:Image = null;
+				
                 if ( image == null )
                 {
 					var ldr:Loader = new Loader();
