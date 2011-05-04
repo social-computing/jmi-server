@@ -474,7 +474,7 @@ package com.socialcomputing.wps.script  {
         }
         
         private static function setCharAt(str:String, char:String,index:int):String {
-            return str.substr(0,index) + char + str.substr(index + 1);
+            return str.substr(0,index).concat(char, str.substr(index + 1));
         }
 
     }

@@ -69,12 +69,8 @@ package com.socialcomputing.wps.script  {
         public function paint(applet:PlanComponent, g:Graphics, zone:ActiveZone, isCur:Boolean, isFront:Boolean, showTyp:int, showLinks:Boolean):void {
             var sat:Satellite= m_satellites[0];
             var shape:ShapeX= sat.m_shape;
-            //int             curSel  = applet.m_plan.m_curSel,
             var flags:int= getFlags( zone.m_props );
             var transfo:Transfo= sat.getTransfo( Satellite.TRANSFO_VAL, zone.m_props.m_propss );
-            
-            
-            //try {
             
             // Draws Satellites links first (if they exists)
             // so they can be partly covered by other sats
@@ -85,10 +81,6 @@ package com.socialcomputing.wps.script  {
             
             // Draws Satellites without links
             drawSats( applet, g, zone, shape, transfo, false, isCur, isFront, showTyp );
-            /*} catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            }*/
-            
         }
         
         /**

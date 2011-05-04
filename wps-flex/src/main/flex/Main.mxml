@@ -26,40 +26,19 @@
             private var entityId:int = 5;
             
             private var planService:PlanService = new PlanService(planUrl);
-            
-			/*
-            var a:Activable;
-            var az:ActiveZone;
-            var av:AppletVersion;
-            var bz:BagZone;
-            var b:Base;
-            var cx:ColorX;
-            var e:Env;
-            var fx:FontX;
-            var h:HTMLText;
-            var lz:LinkZone;
-            var mx:MenuX;
-            var p:Plan;
-            var sd:SatData;
-            var s:Satellite;
-            var sx:ShapeX;
-            var sl:Slice;
-            var sw:Swatch;
-            var t:Token;
-            var tr:Transfo;
-            var vc:VContainer;
-            var w:Waiter;
-            var wa:WaitListener;
-            var wps:WPSApplet;
-            */
 			
             protected function onCreationComplete(event:FlexEvent):void
             {
                 planService.showBusyCursor = true;
                 getPlanResult.token = planService.getPlan(planName, "5");
+				planService.showBusyCursor = false;
             }
 
-        ]]>
+			function onReady(eventObj:Event)
+			{
+				Alert.show( "Ready");
+			}
+	]]>
     </fx:Script>
     
     <fx:Declarations>

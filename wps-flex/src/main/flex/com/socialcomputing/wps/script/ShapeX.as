@@ -394,12 +394,12 @@ package com.socialcomputing.wps.script  {
                 {
 					var ldr:Loader = new Loader();
 					// TODO applet.getCodeBase() ?????
-					var urlReq:URLRequest = new URLRequest(imageNam);
+/*					var urlReq:URLRequest = new URLRequest(imageNam);
 					ldr.load(urlReq);
-/*                    image   = applet.getImage( applet.getCodeBase(), imageNam );
+                    image   = applet.getImage( applet.getCodeBase(), imageNam );
                     applet.prepareImage( image, applet );
-*/                  medias.push( imageNam, image);
-                }
+                   medias.push( imageNam, image);
+*/                }
                 
                 if (false) 
 					// TODO 

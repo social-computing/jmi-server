@@ -7,6 +7,7 @@ package com.socialcomputing.wps.components
 	
 	import flash.display.Graphics;
 	import flash.display.InteractiveObject;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
@@ -15,15 +16,19 @@ package com.socialcomputing.wps.components
 	import mx.managers.CursorManager;
 	
 	import spark.components.Group;
-	import spark.core.SpriteVisualElement;
 	
+	[DefaultBindingProperty(destination="dataProvider")]
+	
+	[IconFile("Plan.png")]
+
 	public class PlanComponent extends Group
 	{
+		include "../script/Version.as"
+		
 		public static var s_hasGfxInc:Boolean;
 		
 		private var _dataProvider:PlanContainer = null;
 		private var _nodes:Array = null;
-		private var _drawingSurface: SpriteVisualElement;
 		private var _curPos:Point= new Point();
 		private var _ready:Boolean = false;
 
@@ -34,12 +39,7 @@ package com.socialcomputing.wps.components
 		public function PlanComponent()
 		{
 			super();
-			// TODO : See how to draw links ...
-			// Might be on a separate drawing surface ?
-			/* 
-			_drawingSurface = new SpriteVisualElement();
-			this.addElement(_drawingSurface);
-			*/
+
 			addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
 			addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 			addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
@@ -47,6 +47,14 @@ package com.socialcomputing.wps.components
 				addEventListener(MouseEvent.MOUSE_CLICK, mouseClickHandler);
 				addEventListener(MouseEvent.MOUSE_DOUBLE_CLICK, mouseDoubleClickHandler);
 			*/	
+		}
+		
+		override protected function measure():void {
+			super.measure();
+			measuredWidth = 500;
+			measuredMinWidth = 20;
+			measuredHeight = 500;
+			measuredMinHeight = 20;
 		}
 		
 		public function get ready():Boolean {
@@ -142,8 +150,11 @@ package com.socialcomputing.wps.components
 			 * we need to be redrawn; the framework will ensure that updateDisplayList
 			 * is invoked after all scripts have finished executing.
 			 */
-			this.invalidateDisplayList();		
+			this.invalidateProperties();
+			this.invalidateDisplayList();
 			CursorManager.removeBusyCursor();
+
+			dispatchEvent(new Event( "ready"));
 		}
 		
 		
