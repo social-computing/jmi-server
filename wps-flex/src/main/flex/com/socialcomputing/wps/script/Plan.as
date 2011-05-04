@@ -192,7 +192,7 @@ package com.socialcomputing.wps.script  {
             
             // Filters backImg so it looks ghosted
 			// TODO
-			m_applet.renderShape( m_applet.restDrawingSurface, 0, 0); // ??? size
+			// m_applet.renderShape( m_applet.restDrawingSurface, 0, 0); // ??? size
 			m_applet.env.filterImage( m_applet.backDrawingSurface, dim );
             
             // Finish drawing restImg with places parts that are allways visible (tip, sel...)
