@@ -11,6 +11,7 @@ package com.socialcomputing.wps.components
 	import flash.display.InteractiveObject;
 	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
@@ -22,8 +23,18 @@ package com.socialcomputing.wps.components
 	import spark.components.Group;
 	import spark.core.SpriteVisualElement;
 	
+	[DefaultBindingProperty(destination="dataProvider")]
+	
+	[IconFile("Plan.png")]
+	
+	[Event(name="onReady", type="flash.events.Event")]
+	[Event(name="onError", type="flash.events.Event")]
+	[Event(name="onAction", type="flash.events.Event")]
+	
 	public class PlanComponent extends Group
 	{
+		include "../script/Version.as"
+		
 		public static var s_hasGfxInc:Boolean;
 		
 		private var _dataProvider:PlanContainer = null;
@@ -45,7 +56,7 @@ package com.socialcomputing.wps.components
 			this.addElement(_drawingSurface);
 			
 			addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
-			addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+			//addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 			addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
 			/*			
 				addEventListener(MouseEvent.MOUSE_CLICK, mouseClickHandler);
@@ -126,7 +137,8 @@ package com.socialcomputing.wps.components
 			try {
 				// TODO : Handle this properly
 			    // Should manage the onScreen object each time the service is called
-				this.onScreen = new BitmapData(this.width, this.height);					
+				this.onScreen = new BitmapData(this.width, this.height);
+				this.addChild(new Bitmap(this.onScreen));
 				this._drawingSurface.addChild(new Bitmap(this.onScreen));
 				
 				// Drawing in the offscreen back buffer
@@ -166,7 +178,12 @@ package com.socialcomputing.wps.components
 			 * we need to be redrawn; the framework will ensure that updateDisplayList
 			 * is invoked after all scripts have finished executing.
 			 */
+			this.invalidateProperties();
 			this.invalidateDisplayList();		
+			if( ready)
+				dispatchEvent(new Event( "onReady"));
+			else
+				dispatchEvent(new Event( "onError"));
 		}
 		
 		
@@ -244,62 +261,48 @@ package com.socialcomputing.wps.components
 		 */
 		public function performAction( actionStr:String):void {
 			var jsStr:String  = "javascript";
-			// TODO ACYTYIONS			
-			/*
-			String  target      = "_blank";
-			int     sep         = actionStr.indexOf( ':' );
+			var target:String = "_blank";
+			var sep:int       = actionStr.indexOf( ':' ),
+				pos:int;
 			
 			if ( sep != -1 )
 			{
-			target  = actionStr.substring( 0, sep );
+				target  = actionStr.substring( 0, sep );
+				if( target.toLowerCase() == jsStr )   // Call javascript function
+				{
+					actionStr   = actionStr.substring( jsStr.length+ 1 );
+					if( actionStr.charAt( 0 )== '_' )
+					{	// javascript:_target:function()
+						pos = actionStr.indexOf( ':' );
+						if( pos <= 0) return;
+						target      = actionStr.substring( 1, pos );
+						actionStr   = actionStr.substring( pos + 1 );
+					}
 			
-			if( target.equalsIgnoreCase( jsStr ))   // Call javascript function
-			{
-			actionStr   = actionStr.substring( jsStr.length()+ 1 );
-			if( actionStr.charAt( 0 )== '_' )
-			{	// javascript:_target:function()
-			int pos = actionStr.indexOf( ':' );
-			if( pos <= 0) return;
-			target      = actionStr.substring( 1, pos );
-			actionStr   = actionStr.substring( pos + 1 );
+					pos     = actionStr.indexOf( '(' );
+					if( pos > 0)
+					{
+						var func:String     = actionStr.substring( 0, pos ),
+							paramStr:String = actionStr.substring( pos + 1, actionStr.length- 1 );
+						var params:Array    = paramStr.split( ",");
+						
+						// TODO FireEvent
+						//m_planWindow.call( func, params );
+					}
+					return;
+				}
+				else if( target.charAt( 0 )== '_' )   // open a frame window
+				{
+					target      = actionStr.substring( 1, sep );
+					actionStr   = actionStr.substring( sep + 1 );
+				}
+				else
+				{
+					target  = "_blank";
+				}
 			}
-			
-			// LiveConnect!
-			if( m_planWindow != null)
-			{
-			int pos     = actionStr.indexOf( '(' );
-			
-			if( pos > 0)
-			{
-			String  	func        = actionStr.substring( 0, pos ),
-			paramStr    = actionStr.substring( pos + 1, actionStr.length()- 1 );
-			String[]    params      = Base.getTextParts( paramStr, "," );
-			
-			m_planWindow.call( func, params );
-			}
-			return;
-			}
-			else    // Javascript not supported try to emulate it, if possible
-			{
-			String	noScriptUrl	= getParameter( "NoScriptUrl" );
-			
-			if( target.equalsIgnoreCase( "null" )|| noScriptUrl == null )	return;
-			
-			actionStr = addCGIParam( noScriptUrl, "func=" + URLEncoder.encode( actionStr , "UTF-8" ), true );
-			}
-			}
-			else if( target.charAt( 0 )== '_' )   // open a frame window
-			{
-			target      = actionStr.substring( 1, sep );
-			actionStr   = actionStr.substring( sep + 1 );
-			}
-			else
-			{
-			target  = "_blank";
-			}
-			}
-			//System.out.println( actionStr + " in " + target);
-			getAppletContext().showDocument( convertURL( actionStr ), target );
+			// TODO FireEvent
+/*			getAppletContext().showDocument( convertURL( actionStr ), target );
 			*/
 		}
 	}

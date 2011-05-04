@@ -34,9 +34,9 @@
 				planService.showBusyCursor = false;
             }
 
-			function onReady(eventObj:Event)
+			protected function onReady(eventObj:Event):void
 			{
-				Alert.show( "Ready");
+				//Alert.show( "Ready");
 			}
 	]]>
     </fx:Script>
@@ -50,5 +50,5 @@
         <s:VerticalLayout gap="20" />
     </s:layout>
     <s:Label text="Cartographie WPS :" />
-	<components:PlanComponent width="{planWidth}" height="{planHeight}" dataProvider="{getPlanResult.lastResult}" />
+	<components:PlanComponent width="{planWidth}" height="{planHeight}" dataProvider="{getPlanResult.lastResult}" onReady="onReady(event);" />
 </s:Application>
