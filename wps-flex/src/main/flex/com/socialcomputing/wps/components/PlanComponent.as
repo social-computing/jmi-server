@@ -5,10 +5,14 @@ package com.socialcomputing.wps.components
 	import com.socialcomputing.wps.script.Env;
 	import com.socialcomputing.wps.script.Plan;
 	
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.Graphics;
 	import flash.display.InteractiveObject;
-	import flash.events.Event;
+	import flash.display.Shape;
+	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
 	
 	import mx.controls.Alert;
@@ -16,30 +20,30 @@ package com.socialcomputing.wps.components
 	import mx.managers.CursorManager;
 	
 	import spark.components.Group;
+	import spark.core.SpriteVisualElement;
 	
-	[DefaultBindingProperty(destination="dataProvider")]
-	
-	[IconFile("Plan.png")]
-
 	public class PlanComponent extends Group
 	{
-		include "../script/Version.as"
-		
 		public static var s_hasGfxInc:Boolean;
 		
 		private var _dataProvider:PlanContainer = null;
 		private var _nodes:Array = null;
+		private var _drawingSurface: SpriteVisualElement;
 		private var _curPos:Point= new Point();
 		private var _ready:Boolean = false;
 
 		private var _backImgUrl:String;
 		private var _backImg:Image;
 		private var _restImg:Image;
+		private var onScreen:BitmapData;
 		
 		public function PlanComponent()
 		{
 			super();
-
+			// Drawing surface of the component
+			_drawingSurface = new SpriteVisualElement();
+			this.addElement(_drawingSurface);
+			
 			addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
 			addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 			addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
@@ -47,14 +51,6 @@ package com.socialcomputing.wps.components
 				addEventListener(MouseEvent.MOUSE_CLICK, mouseClickHandler);
 				addEventListener(MouseEvent.MOUSE_DOUBLE_CLICK, mouseDoubleClickHandler);
 			*/	
-		}
-		
-		override protected function measure():void {
-			super.measure();
-			measuredWidth = 500;
-			measuredMinWidth = 20;
-			measuredHeight = 500;
-			measuredMinHeight = 20;
 		}
 		
 		public function get ready():Boolean {
@@ -114,7 +110,7 @@ package com.socialcomputing.wps.components
 				return;
 			}
 			
-			CursorManager.setBusyCursor();
+			// CursorManager.setBusyCursor();
 			if(value is PlanContainer) {
 				this._dataProvider = value as PlanContainer;
 			}
@@ -122,12 +118,30 @@ package com.socialcomputing.wps.components
 				this._dataProvider = PlanContainer.fromJSON(value);
 			}
 
-			var needPrint:Boolean = false; // Later
-			_dataProvider.env.init( this, needPrint);
+			// var needPrint:Boolean = false; // Later
+			//_dataProvider.env.init( this, needPrint);
 /*			m_backImg	= createImage( m_size.width, m_size.height );
 			m_restImg	= createImage( m_size.width, m_size.height );
 */
 			try {
+				// TODO : Handle this properly
+			    // Should manage the onScreen object each time the service is called
+				this.onScreen = new BitmapData(this.width, this.height);					
+				this._drawingSurface.addChild(new Bitmap(this.onScreen));
+				
+				// Drawing in the offscreen back buffer
+			    var backBuffer:BitmapData = new BitmapData(this.width, this.height);
+				var drawCanvas:Shape = new Shape();
+				drawCanvas.graphics.lineStyle(1,0xFF00FF);
+				drawCanvas.graphics.lineTo(20,0);
+				drawCanvas.graphics.lineTo(20,20);
+				drawCanvas.graphics.lineTo(0,20);
+				drawCanvas.graphics.lineTo(0,0);
+				backBuffer.draw(drawCanvas, new Matrix());
+				
+				// Copying the content of the back buffer on screen
+				onScreen.copyPixels(backBuffer, backBuffer.rect, new Point(0,0));
+				
 				plan.m_applet     = this;
 				plan.m_curSel     = -1;
 				plan.initZones( this.graphics, plan.m_links, true );
@@ -136,12 +150,14 @@ package com.socialcomputing.wps.components
 				plan.init();
 				plan.resize( size);
 				_ready = true;
+				
 			}
 			catch(error:Error) {
 				trace( error.getStackTrace());	
 			}
 				
-			showStatus( "" );
+			// showStatus( "" );
+			//CursorManager.removeBusyCursor();
 			
 			/*
 			 * Don't redraw immediately, because maybe the code that's calling us is
@@ -150,11 +166,7 @@ package com.socialcomputing.wps.components
 			 * we need to be redrawn; the framework will ensure that updateDisplayList
 			 * is invoked after all scripts have finished executing.
 			 */
-			this.invalidateProperties();
-			this.invalidateDisplayList();
-			CursorManager.removeBusyCursor();
-
-			dispatchEvent(new Event( "ready"));
+			this.invalidateDisplayList();		
 		}
 		
 		
@@ -175,11 +187,13 @@ package com.socialcomputing.wps.components
 		}
 		
 		public function mouseMoveHandler(event:MouseEvent):void {
+			/*
 			curPos.x    = event.stageX;
 			curPos.y    = event.stageY;
 			if( ready) {
 				_dataProvider.plan.updateZoneAt( curPos ); // The Zone, SubZone or Satellite can have changed
 			}
+			*/
 		}
 		
 		public function mouseOutHandler(event:MouseEvent):void {
@@ -201,11 +215,11 @@ package com.socialcomputing.wps.components
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			trace("Update graphic display");
-			if ( ready)
-			{
+			//if ( ready)
+			//{
 				//graphics.drawImage( _restImg, 0, 0, null );
-				plan.paintCurZone( graphics );  // A new Zone is hovered, let's paint it!
-			}
+			//	plan.paintCurZone( graphics );  // A new Zone is hovered, let's paint it!
+			//}
 		}
 		
 		/**
