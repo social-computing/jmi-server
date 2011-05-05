@@ -252,22 +252,12 @@ package com.socialcomputing.wps.script  {
                         size <<= 1;
 						
 						if(inColorTransformer != null) {
-							trace("drawing with size: " + size + ", and color: " + inColorTransformer.color);
 							g.beginFill(inColorTransformer.color);
 							g.drawEllipse(x, y, size, size );
 							g.endFill();
 						}
-                        //if ( slice.setColor( g, Slice.IN_COL_VAL, zone ))   g.fillOval( x, y, size, size );
-                        //if (slice.setColor( g, Slice.IN_COL_VAL, zone.m_props )) {
-							// Need to set color for this to be visible !
-					 		//g.drawEllipse( x, y, size, size );
-						//}
-
-							
                         if (PlanComponent.s_hasGfxInc ) size --;
-						
 						if(outColorTransformer != null) {
-							trace("drawing with size: " + size + ", and color: " + outColorTransformer.color);
 							g.beginFill(outColorTransformer.color);
 							g.drawEllipse(x, y, size, size );
 							g.endFill();
@@ -295,7 +285,7 @@ package com.socialcomputing.wps.script  {
                                   toPoint:Point = (points[1] as Point).add(shapePos);
 							trace("  - from coordinates (x: " + fromPoint.x + ", y: " + fromPoint.y + ")");
 							trace("  - to coordinates (x: " + toPoint.x + ", y: " + toPoint.y + ")");
-                            //Polygon poly    = getLinkPoly( supZone, A, B, size );
+                            //var poly:Polygon = getLinkPoly( supZone, fromPoint, toPoint, size );
                             
                             
                             /*q.setCurve(A.x, A.y, (A.x+B.x)/2, (A.y+B.y)/2, B.x, B.y);
@@ -335,7 +325,7 @@ package com.socialcomputing.wps.script  {
          * @return			A new 4 Points Polygon.
          */
         private function getLinkPoly( zone:ActiveZone, A:Point, B:Point, width:int):Polygon {
-            var flags:int= getFlags( zone.m_props.m_props.m_props.m_props );
+            var flags:int= getFlags( zone.m_props);
             var link:LinkZone= LinkZone(zone);
             var from:BagZone= link.m_from,
                 to:BagZone      = link.m_to;

@@ -7,9 +7,9 @@ public class Polygon {
     public var npoints:int;
 
 
-    public var xpoints:Array;
+    public var xpoints:Vector.<int>;
 
-    public var ypoints:Array;
+    public var ypoints:Vector.<int>;
 
     protected var bounds:Rectangle;
 
@@ -17,8 +17,8 @@ public class Polygon {
      * Creates an empty polygon.
      */
     public function Polygon() {
-        xpoints = new int[4];
-        ypoints = new int[4];
+        xpoints = new Vector.<int>();
+        ypoints = new Vector.<int>();
     }
 
     /**
@@ -92,7 +92,7 @@ public class Polygon {
      * @param ypoints[] array of <i>y</i> coordinates
      * @param npoints the total number of points
      */
-    public function calculateBounds(xpoints:Array, ypoints:Array, npoints:int):void {
+    public function calculateBounds(xpoints:Vector.<int>, ypoints:Vector.<int>, npoints:int):void {
         var boundsMinX:int= uint.MAX_VALUE;
         var boundsMinY:int= uint.MAX_VALUE;
         var boundsMaxX:int= uint.MIN_VALUE;
