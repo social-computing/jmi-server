@@ -56,7 +56,6 @@ package com.socialcomputing.wps.script  {
          * Bounding-Box of this zone including its subZones.
          * The BBox is the union of the rest and current swatch BBoxs and a small margin.
          */
-        [transient]
         public var m_bounds:Rectangle;
         
         /**

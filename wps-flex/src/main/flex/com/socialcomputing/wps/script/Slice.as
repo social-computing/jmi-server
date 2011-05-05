@@ -90,8 +90,10 @@ package com.socialcomputing.wps.script  {
          * @param supCtr		This parent satellite center.
          * @throws UnsupportedEncodingException 
          */
-        public function paint( applet:PlanComponent, g:Graphics, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point):void {
-            var text:HTMLText= getText( TEXT_VAL, zone.m_props );
+        public function paint(applet:PlanComponent, g:Graphics, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point):void {
+            trace("Slice paint call");
+			
+			var text:HTMLText= getText( TEXT_VAL, zone.m_props );
             
             // Patch for IE old JVM JIT bug (build < 3000).
             /*ON if ( satShp == null )
@@ -101,23 +103,24 @@ package com.socialcomputing.wps.script  {
             
             var transfo:Transfo= getTransfo( TRANSFO_VAL, zone.m_props );
             
-            if ( isDefined( IN_COL_VAL ) || isDefined( OUT_COL_VAL ))
-            {
+			// Draw a satellite with primitives
+            if(isDefined(IN_COL_VAL) || isDefined(OUT_COL_VAL)) {
                 satShp.paint( g, supZone, zone, this, transfo, satCtr );
             }
             
-            if ( isDefined( IMAGE_VAL ))
-            {
-                var imageNam:String= parseString( IMAGE_VAL, zone.m_props )[0];
-                
-                if ( imageNam != null )
-                {
-                    satShp.drawImage( applet, g, supZone, imageNam, transfo, satCtr );
+			// Draw a satellite's image it is set
+			
+            if(isDefined(IMAGE_VAL)) {
+				throw new Error("not yet implemented");
+                /* 
+				var imageNam:String= parseString(IMAGE_VAL, zone.m_props )[0];
+                if (imageNam != null) {
+                    satShp.drawImage(applet, g, supZone, imageNam, transfo, satCtr);
                 }
+				*/
             }
             
-            if ( text != null )
-            {
+            if(text != null) {
                 //TODO Utiliser le containeur html flex4
                 /*if ( HTMLText.isEnabled( text.getFlags( zone ), HTMLText.URL_BIT ))
                 {

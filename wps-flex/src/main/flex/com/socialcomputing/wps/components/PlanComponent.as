@@ -1,9 +1,14 @@
 package com.socialcomputing.wps.components
 {
 	import com.socialcomputing.wps.plan.PlanContainer;
+	import com.socialcomputing.wps.script.BagZone;
 	import com.socialcomputing.wps.script.Dimension;
 	import com.socialcomputing.wps.script.Env;
 	import com.socialcomputing.wps.script.Plan;
+	import com.socialcomputing.wps.script.Satellite;
+	import com.socialcomputing.wps.script.ShapeX;
+	import com.socialcomputing.wps.script.Slice;
+	import com.socialcomputing.wps.script.VContainer;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -157,6 +162,50 @@ package com.socialcomputing.wps.components
 				this._backDrawingSurface = new Shape();
 				this._restDrawingSurface = new Shape();
 				
+				
+				// Creating a fake BagZone as a parent zone for the following slice
+				var bagZone:BagZone = new BagZone(null);
+				bagZone.m_props = new Array();
+				bagZone.m_props[2] = 1;
+					
+					
+				// Creating a fake Shape to render in the following slice
+				var points:Array = new Array();
+				
+				// Test with 1 point
+				//points[0] = new Point(15, 15);
+				
+				// Test with 2 points
+				points[0] = new Point(15, 15);
+				points[1] = new Point(30, 30);
+				
+				var shape:ShapeX = new ShapeX();
+				shape.m_containers = new Array();
+				shape.m_containers[ShapeX.SCALE_VAL] = new VContainer(1, false);
+				shape.m_containers[ShapeX.POLYGON_VAL] = new VContainer(points, false);
+
+				// Creating the slice to display
+				var slice:Slice = new Slice();
+				slice.m_containers = new Array();
+				slice.m_containers[Slice.IN_COL_VAL] = new VContainer(0x000000, false);
+				/*
+				slice.paint(this,                               // Le plan component courant
+						    this._backDrawingSurface.graphics,  // La zone graphique dans laquelle dessiner
+							bagZone, 							// Zone parente du slice
+							bagZone,                            // Zone ?????
+							shape,                              // Shape à dessiner : pq, elle ne fait pas directement partie du SLICE ???
+							new Point(10, 10),                  // Centre d'un satellite .... ????
+							new Point(10, 10));                  // Centre de la sone parente ?????????
+				*/
+
+				
+				var slices:Vector.<Slice> = new Vector.<Slice>();
+				slices.push(slice);
+				var satellite:Satellite = new Satellite(shape, slices); 
+				satellite.paint(this, this._backDrawingSurface.graphics, bagZone, new Point(10, 10), new Point(10, 10), false, null, Satellite.BASE_TYP);
+				
+				this._ready = true;
+				/*
 				plan.m_applet = this;
 				plan.m_curSel = -1;
 				plan.initZones(this.graphics, plan.m_links, true);
@@ -165,6 +214,7 @@ package com.socialcomputing.wps.components
 				plan.init();
 				plan.resize(size);
 				_ready = true;
+				*/
 				
 			}
 			catch(error:Error) {
@@ -237,9 +287,8 @@ package com.socialcomputing.wps.components
 			trace("Update graphic display");
 			if(ready) {
 				//graphics.drawImage( _restImg, 0, 0, null );
-				_restDrawingSurface
-				plan.paintCurZone(this._backDrawingSurface.graphics);  // A new Zone is hovered, let's paint it!
-			   // ??
+				// _restDrawingSurface
+				// plan.paintCurZone(this._backDrawingSurface.graphics);  // A new Zone is hovered, let's paint it!
 				this.render();
 			}
 		}
@@ -311,11 +360,11 @@ package com.socialcomputing.wps.components
 			*/
 		}
 		
-		public function renderShape(shape:Shape, x:int, y:int):void {
+		public function renderShape(shape:Shape, width:int, height:int):void {
 			trace("renderShape method called");
 			
 			// Transforming the offscreen back display to a BitmapData
-			var backBuffer:BitmapData = new BitmapData(x, y);
+			var backBuffer:BitmapData = new BitmapData(width, height);
 			backBuffer.draw( shape, new Matrix());
 			
 			// Copying the content of the back buffer on screen

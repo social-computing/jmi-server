@@ -162,7 +162,8 @@ package com.socialcomputing.wps.script  {
          * @throws UnsupportedEncodingException 
          */
         public function getColor( prop:int, props:Array):ColorTransform {
-            var color:ColorX= ColorX(getValue( prop, props ));
+            /*
+			var color:ColorX= ColorX(getValue( prop, props ));
             var ContainerColor:ColorTransform= null;
             
             if (color==null)
@@ -172,9 +173,11 @@ package com.socialcomputing.wps.script  {
                 ContainerColor = color.getColor2( props);
             } catch (e:Error) {
 				trace( e.message);
-            }
-            
-            return ContainerColor;
+            }*/
+			
+			var colorX:ColorX  = new ColorX();
+			colorX.m_color = getValue(prop, props) as int;
+            return  colorX.getColor();
         }
         
         /**
@@ -206,6 +209,7 @@ package com.socialcomputing.wps.script  {
             var color:ColorTransform = getColor( prop, props );
             if ( color != null )
             {
+				trace("setting color fill");
                 g.beginFill( color.color );
                 return true;
             }

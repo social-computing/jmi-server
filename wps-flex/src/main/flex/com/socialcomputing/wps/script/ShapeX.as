@@ -5,11 +5,14 @@ package com.socialcomputing.wps.script  {
 	import flash.display.GraphicsStroke;
 	import flash.display.Loader;
 	import flash.display.Sprite;
+	import flash.geom.ColorTransform;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.net.URLRequest;
 	
 	import mx.controls.Image;
+	
+	import org.osmf.layout.PaddingLayoutFacet;
     
     /**
      * <p>Title: ShapeX</p>
@@ -138,10 +141,12 @@ package com.socialcomputing.wps.script  {
                         
                     case 2:     // segment  => Street
                     {
-                        var A:Point= addPnts( points[0], shapePos ),
-                            B:Point= addPnts( points[1], shapePos );
-                        var poly:Polygon= getLinkPoly( zone, A, B, size );
-                        
+						var fromPoint:Point = (points[0] as Point).add(shapePos);
+                        var toPoint:Point = (points[1] as Point).add(shapePos);
+						
+						// var A:Point= addPnts( points[0], shapePos ),
+                        //     B:Point= addPnts( points[1], shapePos );
+                        var poly:Polygon= getLinkPoly(zone, fromPoint, toPoint, size);
                         return poly.contains2( pos );
                     }
                 }
@@ -202,10 +207,12 @@ package com.socialcomputing.wps.script  {
          * @param center	The center of the shape before the transformation.
          * @throws UnsupportedEncodingException 
          */
-        public function paint( g:Graphics, supZone:ActiveZone, zone:ActiveZone, slice:Slice, transfo:Transfo, center:Point):void // throws UnsupportedEncodingException
-        {
-            if ( isDefined( SCALE_VAL ))    // else it is just a void frame
+        public function paint(g:Graphics, supZone:ActiveZone, zone:ActiveZone, slice:Slice, transfo:Transfo, center:Point):void {
+            trace("ShapeX paint call");
+			
+			if(isDefined(SCALE_VAL))    // else it is just a void frame
             {
+				trace("SCALE_VAL is defined, something to draw");
                 //ON recup alpha val ? 
                 //boolean test = slice.isDefined(slice.ALPHA_VAL);
                 //if (test!=false) System.out.print("test "+test+"\n");
@@ -220,53 +227,83 @@ package com.socialcomputing.wps.script  {
                 
                 //Float alpha = slice.getFloat(prop, props);
                 
-                var points:Array= getValue( POLYGON_VAL, supZone.m_props ) as Array;
-                var p:Point= points[0],
-                    shapePos:Point    = new Point();
-                var n:int= points.length,
-                    size:int        = int(getShapePos( supZone, transfo, center, p, shapePos ));
+                var points:Array = getValue(POLYGON_VAL, supZone.m_props ) as Array;
+                var p:Point = points[0] as Point,
+                    shapePos:Point = new Point();
+                var n:int = points.length,
+                    size:int = int(getShapePos( supZone, transfo, center, p, shapePos ));
                 
-                switch ( n )
-                {
-                    case 1:     // dot      => Place
+				var inColorTransformer:ColorTransform = getColor(Slice.IN_COL_VAL, zone.m_props);
+				var outColorTransformer:ColorTransform = getColor(Slice.OUT_COL_VAL, zone.m_props);
+				
+				// Manage each case of number of points to draw for this shape
+                switch(n) {
+                    case 1:     // dot => Place ??
                     {
+						trace("Dot shape detected: ");
                         //composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0);					
                         //g.setComposite(composite);
+                        var x:int = p.x + shapePos.x - size,
+                            y:int = p.y + shapePos.y - size;
                         
-                        var x:int=     p.x + shapePos.x - size,
-                            y:int =     p.y + shapePos.y - size;
-                        
+						trace("  - coordinates (x: " + x + ", y: " + y + ")");
+						
+						// Doubling size value .... need to find why ... 
                         size <<= 1;
-                        
+						
+						if(inColorTransformer != null) {
+							trace("drawing with size: " + size + ", and color: " + inColorTransformer.color);
+							g.beginFill(inColorTransformer.color);
+							g.drawEllipse(x, y, size, size );
+							g.endFill();
+						}
                         //if ( slice.setColor( g, Slice.IN_COL_VAL, zone ))   g.fillOval( x, y, size, size );
-                        if ( slice.setColor( g, Slice.IN_COL_VAL, zone.m_props ))   g.drawEllipse( x, y, size, size );
+                        //if (slice.setColor( g, Slice.IN_COL_VAL, zone.m_props )) {
+							// Need to set color for this to be visible !
+					 		//g.drawEllipse( x, y, size, size );
+						//}
+
+							
                         if (PlanComponent.s_hasGfxInc ) size --;
+						
+						if(outColorTransformer != null) {
+							trace("drawing with size: " + size + ", and color: " + outColorTransformer.color);
+							g.beginFill(outColorTransformer.color);
+							g.drawEllipse(x, y, size, size );
+							g.endFill();
+						}
                         //if ( slice.setColor( g, Slice.OUT_COL_VAL, zone ))  g.drawOval( x, y, size, size );
-                        if ( slice.setColor( g, Slice.OUT_COL_VAL, zone.m_props ))  g.drawEllipse( x, y, size, size );
+                        // if ( slice.setColor( g, Slice.OUT_COL_VAL, zone.m_props ))  g.drawEllipse( x, y, size, size );
                         break;
                     }
                         
                     case 2:     // segment  => Street
                     {
+						trace("Segment shape detected: ");
                         /*composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f;					
                         g.setComposite(composite);*/
                         //var stroke:Stroke= g.getStroke();
                         //g.setStroke(new BasicStroke(size+3));
                         
                         //var q:QuadCurve2D= new QuadCurve2D.Float();
-                        var q:Sprite = new Sprite();
-                        
-                        if ( slice.setColor( g, Slice.OUT_COL_VAL, supZone.m_props ))     //g.fillPolygon( poly );
+                       //  var q:Sprite = new Sprite();
+						
+                        //if ( slice.setColor( g, Slice.OUT_COL_VAL, supZone.m_props ))     //g.fillPolygon( poly );
+						if(outColorTransformer != null) 
                         {
-                            var A:Point= addPnts( p, shapePos ),
-                                B:Point= addPnts( points[1], shapePos );
+                            var fromPoint:Point = (points[0] as Point).add(shapePos),
+                                  toPoint:Point = (points[1] as Point).add(shapePos);
+							trace("  - from coordinates (x: " + fromPoint.x + ", y: " + fromPoint.y + ")");
+							trace("  - to coordinates (x: " + toPoint.x + ", y: " + toPoint.y + ")");
                             //Polygon poly    = getLinkPoly( supZone, A, B, size );
                             
                             
                             /*q.setCurve(A.x, A.y, (A.x+B.x)/2, (A.y+B.y)/2, B.x, B.y);
-                            g.draw(q);*/					
-                            q.graphics.moveTo(A.x, A.y);
-                            q.graphics.curveTo((A.x+B.x)/2, (A.y+B.y)/2, B.x, B.y);
+                            g.draw(q);*/
+							g.lineStyle(1, outColorTransformer.color);
+                            g.moveTo(fromPoint.x, fromPoint.y);
+							g.curveTo((fromPoint.x + toPoint.x /2), (fromPoint.y + toPoint.y/2),
+								       toPoint.x, toPoint.y);
                         }
                         
                         //g.setStroke(new BasicStroke(size));
