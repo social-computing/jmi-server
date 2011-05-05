@@ -166,7 +166,8 @@ package com.socialcomputing.wps.components
 				// Creating a fake BagZone as a parent zone for the following slice
 				var bagZone:BagZone = new BagZone(null);
 				bagZone.m_props = new Array();
-				bagZone.m_props[2] = 1;
+				// bagZone.m_props[2] = 1;
+				// bagZone.m_props[Slice.IN_COL_VAL] = new VContainer(0xFF0000, false);
 					
 					
 				// Creating a fake Shape to render in the following slice
@@ -187,8 +188,8 @@ package com.socialcomputing.wps.components
 				// Creating the slice to display
 				var slice:Slice = new Slice();
 				slice.m_containers = new Array();
-				slice.m_containers[Slice.IN_COL_VAL] = new VContainer(0x000000, false);
-				/*
+				slice.m_containers[Slice.IN_COL_VAL] = new VContainer(0xFF0000, false);
+				
 				slice.paint(this,                               // Le plan component courant
 						    this._backDrawingSurface.graphics,  // La zone graphique dans laquelle dessiner
 							bagZone, 							// Zone parente du slice
@@ -196,14 +197,16 @@ package com.socialcomputing.wps.components
 							shape,                              // Shape à dessiner : pq, elle ne fait pas directement partie du SLICE ???
 							new Point(10, 10),                  // Centre d'un satellite .... ????
 							new Point(10, 10));                  // Centre de la sone parente ?????????
-				*/
-
 				
+
+				/*
 				var slices:Vector.<Slice> = new Vector.<Slice>();
 				slices.push(slice);
 				var satellite:Satellite = new Satellite(shape, slices); 
-				satellite.paint(this, this._backDrawingSurface.graphics, bagZone, new Point(10, 10), new Point(10, 10), false, null, Satellite.BASE_TYP);
-				
+				satellite.paint(this, this._backDrawingSurface.graphics, bagZone, 
+								new Point(10, 10), new Point(10, 10), 
+								false, null, Satellite.BASE_TYP);
+				*/
 				this._ready = true;
 				/*
 				plan.m_applet = this;

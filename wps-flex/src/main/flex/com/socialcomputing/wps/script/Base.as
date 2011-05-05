@@ -51,6 +51,7 @@ package com.socialcomputing.wps.script  {
          * @return True if prop exists.
          */
         public function isDefined( prop:int):Boolean {
+			trace("is defined: " + this.m_containers[prop]);
             return m_containers[prop] != null;
         }
         
@@ -81,7 +82,6 @@ package com.socialcomputing.wps.script  {
          */
         public function getValue( prop:int, props:Array):Object {
             var container:VContainer= m_containers[prop];
-            
             return container != null ?( container.m_isBound ? props[ container.m_value] : container.m_value ): null;
         }
         
@@ -161,23 +161,15 @@ package com.socialcomputing.wps.script  {
          * @return	the Color corresponding to the ColorX field whose index is prop or null if the property doesn't exists or is void.
          * @throws UnsupportedEncodingException 
          */
-        public function getColor( prop:int, props:Array):ColorTransform {
-            /*
-			var color:ColorX= ColorX(getValue( prop, props ));
-            var ContainerColor:ColorTransform= null;
-            
-            if (color==null)
-                return null;
-            
-            try {
-                ContainerColor = color.getColor2( props);
-            } catch (e:Error) {
-				trace( e.message);
-            }*/
-			
-			var colorX:ColorX  = new ColorX();
-			colorX.m_color = getValue(prop, props) as int;
-            return  colorX.getColor();
+        public function getColor(prop:int, props:Array):ColorTransform {
+
+			var value:Object = getValue(prop, props);
+			trace("get color, value: " + value);
+			if(value == null) return null;	
+		
+		    var ct:ColorTransform = new ColorTransform();
+			ct.color = value as uint;
+            return ct;
         }
         
         /**

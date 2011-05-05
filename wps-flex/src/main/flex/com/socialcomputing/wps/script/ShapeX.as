@@ -233,8 +233,8 @@ package com.socialcomputing.wps.script  {
                 var n:int = points.length,
                     size:int = int(getShapePos( supZone, transfo, center, p, shapePos ));
                 
-				var inColorTransformer:ColorTransform = getColor(Slice.IN_COL_VAL, zone.m_props);
-				var outColorTransformer:ColorTransform = getColor(Slice.OUT_COL_VAL, zone.m_props);
+				var inColorTransformer:ColorTransform = slice.getColor(Slice.IN_COL_VAL, zone.m_props);
+				var outColorTransformer:ColorTransform = slice.getColor(Slice.OUT_COL_VAL, zone.m_props);
 				
 				// Manage each case of number of points to draw for this shape
                 switch(n) {
@@ -289,7 +289,7 @@ package com.socialcomputing.wps.script  {
                        //  var q:Sprite = new Sprite();
 						
                         //if ( slice.setColor( g, Slice.OUT_COL_VAL, supZone.m_props ))     //g.fillPolygon( poly );
-						if(outColorTransformer != null) 
+						if(inColorTransformer != null) 
                         {
                             var fromPoint:Point = (points[0] as Point).add(shapePos),
                                   toPoint:Point = (points[1] as Point).add(shapePos);
@@ -300,7 +300,8 @@ package com.socialcomputing.wps.script  {
                             
                             /*q.setCurve(A.x, A.y, (A.x+B.x)/2, (A.y+B.y)/2, B.x, B.y);
                             g.draw(q);*/
-							g.lineStyle(1, outColorTransformer.color);
+							g.lineStyle(1, inColorTransformer.color);
+							trace("  - line style (color: " + inColorTransformer.color + ", thickness: 1)");
                             g.moveTo(fromPoint.x, fromPoint.y);
 							g.curveTo((fromPoint.x + toPoint.x /2), (fromPoint.y + toPoint.y/2),
 								       toPoint.x, toPoint.y);
