@@ -69,9 +69,15 @@ package com.socialcomputing.wps.script  {
         }
         
 		public function getColor2(props:Array):ColorTransform {
-            if( m_scolor == null) return new ColorTransform( m_color );
-            var str:String= Base.parseString4( m_scolor, props, false);
-            return new ColorTransform( ( str == null ? 0: parseInt( str)));
+			var color:ColorTransform = new ColorTransform();
+            if( m_scolor == null) { 
+				color.color = m_color;
+			}
+			else {
+	            var str:String= Base.parseString4( m_scolor, props, false);
+	            color.color = str == null ? 0 : parseInt( str);
+			}
+			return color;
         }
     }
 }

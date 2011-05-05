@@ -179,7 +179,7 @@ package com.socialcomputing.wps.script
 		}
 		
 		private static function toMenuX(json:Object):MenuX {
-			var item:MenuX = new MenuX( new Array());
+			var item:MenuX = new MenuX( new Vector.<MenuX>());
 			for each (var z:Object in json.menu) { 
 				item.m_items.push( toMenuX(z));
 			} 

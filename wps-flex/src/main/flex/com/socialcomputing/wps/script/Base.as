@@ -51,7 +51,7 @@ package com.socialcomputing.wps.script  {
          * @return True if prop exists.
          */
         public function isDefined( prop:int):Boolean {
-			trace("is defined: " + this.m_containers[prop]);
+			//trace("is defined: " + this.m_containers[prop]);
             return m_containers[prop] != null;
         }
         
@@ -162,14 +162,12 @@ package com.socialcomputing.wps.script  {
          * @throws UnsupportedEncodingException 
          */
         public function getColor(prop:int, props:Array):ColorTransform {
-
 			var value:Object = getValue(prop, props);
-			trace("get color, value: " + value);
-			if(value == null) return null;	
-		
-		    var ct:ColorTransform = new ColorTransform();
-			ct.color = value as uint;
-            return ct;
+			if( value is ColorX) {
+				return (value as ColorX).getColor2(props);
+			}
+			trace("Base get color is not set");
+			return new ColorTransform();	
         }
         
         /**

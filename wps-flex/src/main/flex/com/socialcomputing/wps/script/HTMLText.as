@@ -1,10 +1,16 @@
 package com.socialcomputing.wps.script{
+    import com.socialcomputing.wps.components.PlanComponent;
+    
     import flash.display.Graphics;
     import flash.geom.ColorTransform;
     import flash.geom.Point;
     import flash.geom.Rectangle;
+	import flash.text.Font;
     import flash.text.TextFormat;
-    
+	import flash.text.engine.FontDescription;
+	import flash.text.engine.FontMetrics;
+	import flash.text.engine.ElementFormat;
+	
     /**
      * <p>Title: HTMLText</p>
      * <p>Description: A piece of text that can be single or multilined and hold basic HTML-like tags.<br>
@@ -93,7 +99,10 @@ package com.socialcomputing.wps.script{
         public static const SOUTH_WEST:int= 0x2;  // 0 0 1 0;
         public static const WEST:int= 0x1;  // 0 0 0 1;
         public static const NORTH_WEST:int= 0x0;  // 0 0 0 0;
-        
+
+		public static const BOLD:int= 0x1;  // 0 1 0 0;
+		public static const ITALIC:int= 0x2;  // 0 1 0 0;
+	
         /**
          * This bounding box, stored to avoid CPU overhead.
          */
@@ -286,7 +295,7 @@ package com.socialcomputing.wps.script{
          * @param flags		Default text alignment flags.
          * @param margin	Default margins size.
          */
-        /*public function HTMLText( inCol:Color, outCol:Color, textCol:int, fontSiz:int, fontStl:int, fontNam:String, flags:int, margin:Insets)
+        public function initValues( inCol:ColorTransform, outCol:ColorTransform, textCol:int, fontSiz:int, fontStl:int, fontNam:String, flags:int, margin:Insets):void
         {
             m_body          = new FormatToken();
             m_body.m_flags  = flags;
@@ -301,14 +310,14 @@ package com.socialcomputing.wps.script{
             m_name      = fontNam;
             m_wCur      = 0;
             m_tokens    = new Vector();
-            m_heap      = new Vector();
-            m_heap.addElement( "c=#" + Integer.toHexString( textCol ));
-            m_heap.addElement( "s=" + fontSiz );
-            m_heap.addElement( "f=" + fontNam );
+            m_heap      = new Vector.<String>();
+            m_heap.push( "c=#" + uint2hex( textCol ));
+            m_heap.push( "s=" + fontSiz );
+            m_heap.push( "f=" + fontNam );
             
-            if (( fontStl & Font.BOLD )!= 0)   m_heap.addElement( "b" );
-            if (( fontStl & Font.ITALIC )!= 0) m_heap.addElement( "i" );
-        }*/
+            if (( fontStl & BOLD )!= 0)   m_heap.push( "b" );
+            if (( fontStl & ITALIC )!= 0) m_heap.push( "i" );
+        }
         
         /**
          * Gets a new or existing HTMLText and initialize its bounding box.
@@ -324,7 +333,7 @@ package com.socialcomputing.wps.script{
          * @return			A new or existing HTMLText whose bounds are initilized.
          * @throws UnsupportedEncodingException 
          */
-        /*protected function getHText( applet:WPSApplet, g:Graphics, zone:ActiveZone, transfo:Transfo, center:Point, supCtr:Point, key:Number):HTMLText // throws UnsupportedEncodingException
+        protected function getHText( applet:PlanComponent, g:Graphics, zone:ActiveZone, transfo:Transfo, center:Point, supCtr:Point, key:Number):HTMLText // throws UnsupportedEncodingException
         {
             var htmlTxt:HTMLText= null;
             var data:Object= zone.m_datas[ key ];
@@ -333,11 +342,11 @@ package com.socialcomputing.wps.script{
             
             if ( data == null )
             {
-                var lines:String= parseString2( TEXT_VAL, zone, true );
+                var lines:String= parseString2( TEXT_VAL, zone.m_props, true );
                 
                 if ( lines.length> 0)
                 {
-                    var font:FontX= getFont( FONT_VAL, zone );
+                    var font:FontX= getFont( FONT_VAL, zone.m_props);
                     
                     htmlTxt = new HTMLText();
                     //TODO set htmlTxt.m_body
@@ -345,37 +354,37 @@ package com.socialcomputing.wps.script{
                     //htmlTxt.m_body.m_flags  = getFlags( zone );
                     //htmlTxt.m_body.m_margin = new Insets( 0, 2, 0, 2);
                     
-                    htmlTxt.m_inCol = getColor( IN_COL_VAL, zone );
-                    htmlTxt.m_outCol = getColor( OUT_COL_VAL, zone );
-                    htmlTxt.m_color = (ColorX(getValue( TEXT_COL_VAL, zone ))).m_color;
+                    htmlTxt.m_inCol = getColor( IN_COL_VAL, zone.m_props);
+                    htmlTxt.m_outCol = getColor( OUT_COL_VAL, zone.m_props);
+                    htmlTxt.m_color = (ColorX(getValue( TEXT_COL_VAL, zone.m_props))).m_color;
                     htmlTxt.m_bkCol = -1;
-                    htmlTxt.m_style = font.getFlags( zone );
-                    htmlTxt.m_size = font.getInt( FontX.SIZE_VAL, zone );
-                    htmlTxt.m_name = font.getString( FontX.NAME_VAL, zone );
+                    htmlTxt.m_style = font.getFlags( zone.m_props);
+                    htmlTxt.m_size = font.getInt( FontX.SIZE_VAL, zone.m_props);
+                    htmlTxt.m_name = font.getString( FontX.NAME_VAL, zone.m_props);
                     htmlTxt.m_wCur = 0;
                     htmlTxt.m_tokens = new Vector();
                     var heapElements:Vector.<String> = new Vector.<String>();
-                    heapElements.push("c#" + (ColorX(getValue( TEXT_COL_VAL, zone ))).m_color.toString(16));
-                    heapElements.push("s=" + font.getInt( FontX.SIZE_VAL, zone ));
-                    heapElements.push("f=" +   font.getString( FontX.NAME_VAL, zone ));
+                    heapElements.push("c#" + (ColorX(getValue( TEXT_COL_VAL, zone.m_props))).m_color.toString(16));
+                    heapElements.push("s=" + font.getInt( FontX.SIZE_VAL, zone.m_props));
+                    heapElements.push("f=" +   font.getString( FontX.NAME_VAL, zone.m_props));
                     // Font Bold
-                    if (( font.getFlags( zone ) & 1 )!= 0)   heapElements.push( "b" );
+                    if (( font.getFlags( zone.m_props) & 1 )!= 0)   heapElements.push( "b" );
                     //Font Italic
-                    if (( font.getFlags( zone ) & 2 )!= 0) heapElements.push( "i" );
+                    if (( font.getFlags( zone.m_props) & 2 )!= 0) heapElements.push( "i" );
                     htmlTxt.m_heap = heapElements;
                     
                     htmlTxt.parseText( g, lines );
-                    htmlTxt.setTextBnds( applet.getSize(), getFlags( zone ), zone.m_flags ,transfo, supCtr, center );
+                    htmlTxt.setTextBnds( applet.size, getFlags( zone.m_props), zone.m_flags ,transfo, supCtr, center );
                 }
             }
             else
             {
                 htmlTxt = HTMLText(data);
-                htmlTxt.setTextBnds( applet.getSize(), getFlags( zone ), zone.m_flags, transfo, supCtr, center );
+                htmlTxt.setTextBnds( applet.size, getFlags( zone.m_props), zone.m_flags, transfo, supCtr, center );
             }
             
             return htmlTxt;
-        }*/
+        }
         
         /**
          * Parses this to extract the Tokens using a line of text.
@@ -473,7 +482,7 @@ package com.socialcomputing.wps.script{
          * Evaluate this bounding box using margins.
          */
         private function updateBounds():void {
-            var margin:Rectangle= m_body.m_margin;
+            var margin:Insets= m_body.m_margin;
             var i:int, n:int    = m_tokens.size(),
                 x:int       = 0,
                 y:int       = margin.top;
@@ -524,13 +533,18 @@ package com.socialcomputing.wps.script{
          */
         private function updateText( g:Graphics, text:String, textTok:TextToken, isText:Boolean):void {
             // The text exists!
-            /*if ( text.length > 0)
+            if ( text.length > 0)
             {
-                var fm:FontMetrics= g.getFontMetrics();
-                var a:int= fm.getAscent(),
-                    d       = fm.getDescent(),
-                    w       = fm.stringWidth( text ),
-                    h       = fm.getHeight();
+				trace( "HTMLText updateText à finir");
+/*				var fd:FontDescription = new FontDescription();
+				fd.fontName = "Garamond";
+				fd.fontWeight = flash.text.engine.FontWeight.BOLD;
+				var ef1:ElementFormat = new ElementFormat(fd);
+                var fm:FontMetrics= ef1.getFontMetrics();
+*/                var a:int	= 0,//fm.getAscent(),
+                    d:int   = 0,//fm.getDescent(),
+                    w:int   = 0,//fm.stringWidth( text ),
+                    h:int   = 0;//fm.getHeight();
                 
                 // The previous token was a text too so we must merge it with this new one.
                 if ( isText )
@@ -554,7 +568,7 @@ package com.socialcomputing.wps.script{
                 if ( d > m_body.m_dMax )   m_body.m_dMax  = d;
                 
                 m_wCur             += w;
-            }*/
+            }
         }
         
         /**
@@ -563,7 +577,7 @@ package com.socialcomputing.wps.script{
          * @param tag	A pseudo HTML tag without '<' and '>'.
          * @return		a new TextToken initialized according to the tag.
          */
-        /*private function updateTag( g:Graphics, tag:String):TextToken {
+        private function updateTag( g:Graphics, tag:String):TextToken {
             var tempTag:String;
             var textTok:TextToken= null;
             var begChar:String;
@@ -593,7 +607,7 @@ package com.socialcomputing.wps.script{
                 }
                 
                 var prevTok:FormatToken= m_curTok;
-                var prevMrg:Rectangle= prevTok.m_margin,
+                var prevMrg:Insets= prevTok.m_margin,
                     margin  = m_body.m_margin;
                 var flags:int= m_body.m_flags,
                     width   = m_wCur +( prevMrg != null ? prevMrg.left + prevMrg.right : 0);
@@ -654,8 +668,14 @@ package com.socialcomputing.wps.script{
                     m_tokens.addElement( m_curTok );
                     
                     textTok = new TextToken();
-                    textTok.m_color = new Color( m_color );
-                    textTok.m_font  = new Font( m_name, m_style, m_size );
+                    textTok.m_color = new ColorTransform( m_color );
+                    textTok.m_font  = new TextFormat();
+					textTok.m_font.font = m_name;
+					textTok.m_font.size = m_size;
+					if( m_style & BOLD)
+						textTok.m_font.bold = true;
+					else if( m_style & ITALIC)
+						textTok.m_font.italic = true;
                 }
                 else if ( isGfx( begChar ))
                 {
@@ -669,7 +689,7 @@ package com.socialcomputing.wps.script{
                 }
             }
             return textTok;
-        }*/
+        }
         
         /**
          * Creates a TextToken using a graphical tag.
@@ -822,44 +842,45 @@ package com.socialcomputing.wps.script{
          * @param size	Size of the Window to draw in.
          * @param pos	Where to draw this.
          */
-        /*protected function drawText3( gi:Graphics, size:Rectangle, pos:Point):void {
-            var g:Graphics2D= Graphics2D(gi);
+        protected function drawText3( g:Graphics, size:Rectangle, pos:Point):void {
+            //var g:Graphics2D= Graphics2D(gi);
             
-            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+			trace( "HTMLText drawText3 à fnir");
+/*            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
             g.setRenderingHint(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_QUALITY);
             
             var composite:Composite= AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8);
             var cb:Composite= g.getComposite();
             g.setComposite(composite);
-            
+*/            
             var textTok:TextToken;
             var i:int, n    = m_tokens.size();
             
             if ( m_inCol != null )
             {
-                var gradient:GradientPaint= new GradientPaint(pos.x, pos.y, m_inCol , pos.x, pos.y + m_bounds.height*2, Color.black );
+/*                var gradient:GradientPaint= new GradientPaint(pos.x, pos.y, m_inCol , pos.x, pos.y + m_bounds.height*2, Color.black );
                 
                 g.setPaint( gradient );
                 g.fillRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height,10,10);
-                //ON g.fillRect( pos.x, pos.y, m_bounds.width, m_bounds.height );
+*/                //ON g.fillRect( pos.x, pos.y, m_bounds.width, m_bounds.height );
             }
             
             if ( m_outCol != null )
             {
                 //GradientPaint gradient = new GradientPaint(0, 0, m_inCol, 0, m_bounds.height, Color.black );
                 //g.setPaint( gradient );
-                g.setColor(m_inCol);
+/*                g.setColor(m_inCol);
                 g.fillRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height,5,5);
-                //ON g.drawRect( pos.x, pos.y, m_bounds.width, m_bounds.height );
+*/                //ON g.drawRect( pos.x, pos.y, m_bounds.width, m_bounds.height );
             }
             
             for ( i = 0; i < n; i ++ )
             {
                 textTok = TextToken(m_tokens.elementAt( i ));
-                textTok.paint( g, pos );
+// /               textTok.paint( g, pos );
             }
             
-            composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2);					
+ /*           composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2);					
             g.setComposite(composite);
             
             if ( n==1) // draw reflection only for one line boxes
@@ -869,10 +890,10 @@ package com.socialcomputing.wps.script{
             }
             
             g.setComposite(cb);
-            
+*/            
             m_bounds.x  = pos.x;
             m_bounds.y  = pos.y;
-        }*/
+        }
         
         /**
          * Evaluate this bounds.
@@ -884,7 +905,7 @@ package com.socialcomputing.wps.script{
          * @param supCtr	Center of the parent satellite (Place center).
          * @param center	Center of this before the transformation.
          */
-        protected function setTextBnds( size:Rectangle, flags:int, posFlags:int, transfo:Transfo, supCtr:Point, center:Point):void {
+        protected function setTextBnds( size:Dimension, flags:int, posFlags:int, transfo:Transfo, supCtr:Point, center:Point):void {
             var isFloat:Boolean= Base.isEnabled( flags, FLOAT_BIT );
             var dx:int= 0,
                 dy:int	= 0,
@@ -1036,7 +1057,17 @@ package com.socialcomputing.wps.script{
             return _m_wCur;
         }
 
-
+		private function uint2hex(dec:uint):String {
+			var digits:String = "0123456789ABCDEF";
+			var hex:String = '';
+			while (dec > 0) {
+				var next:uint = dec & 0xF;
+				dec >>= 4;
+				hex = digits.charAt(next) + hex;
+			}
+			if (hex.length == 0) hex = '0';
+			return hex;
+		}
     }
     
 }

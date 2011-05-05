@@ -1,12 +1,11 @@
 package com.socialcomputing.wps.script {
-    import flash.geom.Rectangle;
 
     public class FormatToken
     {
         /**
          * Current line margins.
          */
-        public var m_margin:Rectangle;
+        public var m_margin:Insets;
         
         /**
          * Current line maximum ascent (Top of the highest letter)

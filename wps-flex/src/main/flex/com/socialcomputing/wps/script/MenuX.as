@@ -39,13 +39,13 @@ package com.socialcomputing.wps.script  {
         /**
          * Items or subMenus
          */
-        public  var m_items:Array= null;
+        public  var m_items:Vector.<MenuX> = null;
         
         /**
          * Creates a new Menu filled with items.
          * @param items	A MenuX table that holds items or submenus.
          */
-        public function MenuX( items:Array)
+        public function MenuX( items:Vector.<MenuX>)
         {
             m_items = items;
         }
