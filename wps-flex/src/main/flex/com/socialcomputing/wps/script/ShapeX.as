@@ -241,7 +241,7 @@ package com.socialcomputing.wps.script  {
                     case 1:     // dot => Place ??
                     {
 						trace("Dot shape detected: ");
-                        //composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0);					
+                        //composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0);
                         //g.setComposite(composite);
                         var x:int = p.x + shapePos.x - size,
                             y:int = p.y + shapePos.y - size;

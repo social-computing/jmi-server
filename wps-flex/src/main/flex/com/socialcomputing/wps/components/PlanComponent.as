@@ -2,9 +2,11 @@ package com.socialcomputing.wps.components
 {
 	import com.socialcomputing.wps.plan.PlanContainer;
 	import com.socialcomputing.wps.script.BagZone;
+	import com.socialcomputing.wps.script.ColorX;
 	import com.socialcomputing.wps.script.Dimension;
 	import com.socialcomputing.wps.script.Env;
 	import com.socialcomputing.wps.script.Plan;
+	import com.socialcomputing.wps.script.SatData;
 	import com.socialcomputing.wps.script.Satellite;
 	import com.socialcomputing.wps.script.ShapeX;
 	import com.socialcomputing.wps.script.Slice;
@@ -166,10 +168,14 @@ package com.socialcomputing.wps.components
 				// Creating a fake BagZone as a parent zone for the following slice
 				var bagZone:BagZone = new BagZone(null);
 				bagZone.m_props = new Array();
-				// bagZone.m_props[2] = 1;
-				// bagZone.m_props[Slice.IN_COL_VAL] = new VContainer(0xFF0000, false);
+				bagZone.m_props[2] = 1;
 					
 					
+                // Definition de couleurs
+                var red:ColorX= new ColorX();
+                red.m_color = 0xFF0000;
+                var black:ColorX = new ColorX();
+                black.m_color = 0x000000;
 				// Creating a fake Shape to render in the following slice
 				var points:Array = new Array();
 				
@@ -187,8 +193,8 @@ package com.socialcomputing.wps.components
 
 				// Creating the slice to display
 				var slice:Slice = new Slice();
-				slice.m_containers = new Array();
-				slice.m_containers[Slice.IN_COL_VAL] = new VContainer(0xFF0000, false);
+				slice.m_containers = new Array();			
+                slice.m_containers[Slice.IN_COL_VAL] = new VContainer(red, false);
 				
 				slice.paint(this,                               // Le plan component courant
 						    this._backDrawingSurface.graphics,  // La zone graphique dans laquelle dessiner
@@ -199,25 +205,31 @@ package com.socialcomputing.wps.components
 							new Point(10, 10));                  // Centre de la sone parente ?????????
 				
 
-				/*
+				
 				var slices:Vector.<Slice> = new Vector.<Slice>();
 				slices.push(slice);
-				var satellite:Satellite = new Satellite(shape, slices); 
-				satellite.paint(this, this._backDrawingSurface.graphics, bagZone, 
-								new Point(10, 10), new Point(10, 10), 
-								false, null, Satellite.BASE_TYP);
-				*/
+				var satellite:Satellite = new Satellite(shape, slices);
+                var satData:SatData = new SatData();
+                satData.m_flags = Satellite.LINK_BIT;
+                satellite.m_containers = new Array();
+                satellite.m_containers[Satellite.LINK_DRK_COL_VAL] = new VContainer(red, false);
+                satellite.m_containers[Satellite.LINK_LIT_COL_VAL] = new VContainer(black, false);
+				satellite.paint(this, this._backDrawingSurface.graphics, bagZone, new Point(20, 20), new Point(40, 50), true, satData, Satellite.BASE_TYP);
+				
+                
+                
+                
 				this._ready = true;
-				/*
-				plan.m_applet = this;
+				
+				/*plan.m_applet = this;
 				plan.m_curSel = -1;
 				plan.initZones(this.graphics, plan.m_links, true);
 				plan.initZones(this.graphics, plan.m_nodes, true);
 				plan.resize(size);
 				plan.init();
 				plan.resize(size);
-				_ready = true;
-				*/
+				_ready = true;*/
+				
 				
 			}
 			catch(error:Error) {

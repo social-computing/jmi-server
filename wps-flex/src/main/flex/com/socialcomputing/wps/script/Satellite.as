@@ -203,7 +203,7 @@ package com.socialcomputing.wps.script  {
                             y1:int  = supCtr.y,
                             x2:int  = satCtr.x,
                             y2:int  = satCtr.y;
-                        
+                        trace("****satellite link x1=" + x1 + ", y1=" + y1 + ", x2=" + x2 + ", y2=" + y2);
                         setColor( g, LINK_DRK_COL_VAL, zone.m_props );
                         //g.drawLine( x1, y1 + 1, x2, y2 + 1);
                         g.moveTo(x1, y1 + 1);

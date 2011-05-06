@@ -76,9 +76,10 @@ package com.socialcomputing.wps.script  {
             // so they can be partly covered by other sats
             if ( isEnabled( flags, LINK_BIT )&& showLinks )
             {
+                trace("*****swatchs tracer links");
                 drawSats( applet, g, zone, shape, transfo, true, isCur, isFront, showTyp );
             }
-            
+          
             // Draws Satellites without links
             drawSats( applet, g, zone, shape, transfo, false, isCur, isFront, showTyp );
         }
