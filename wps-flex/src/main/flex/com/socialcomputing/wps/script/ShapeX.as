@@ -94,8 +94,8 @@ package com.socialcomputing.wps.script  {
          * @return		The barycentric center of all points.
          */
         public function getCenter( zone:ActiveZone):Point {
-            var points:Array = new Array(getValue( POLYGON_VAL, zone.m_props ));
-            var p:Point, c:Point    = new Point( points[0] );
+            var points:Array = getValue( POLYGON_VAL, zone.m_props ) as Array;
+            var p:Point, c:Point    = new Point( points[0].x,  points[0].y);
             var i:int, n:int    = points.length;
             
             if ( n > 1)
@@ -125,7 +125,7 @@ package com.socialcomputing.wps.script  {
         public function contains( zone:ActiveZone, transfo:Transfo, center:Point, pos:Point):Boolean {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
-                var points:Array= new Array(getValue( POLYGON_VAL, zone.m_props ));
+                var points:Array= getValue( POLYGON_VAL, zone.m_props ) as Array;
                 var p:Point= getCenter( zone ),
                     shapePos:Point    = new Point();
                 var size:int= int(getShapePos( zone, transfo, center, p, shapePos )),
@@ -165,7 +165,7 @@ package com.socialcomputing.wps.script  {
         public function setBounds( zone:ActiveZone, transfo:Transfo, center:Point, bounds:Rectangle):void {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
-                var points:Array= new Array(getValue( POLYGON_VAL, zone.m_props ));
+                var points:Array= getValue( POLYGON_VAL, zone.m_props ) as Array;
                 var p:Point= getCenter( zone ),
                     shapePos:Point    = new Point();
                 var rect:Rectangle= null;
@@ -521,7 +521,10 @@ package com.socialcomputing.wps.script  {
             }
             //else    dst.set.setBounds( src );
             else {
-                dst.intersection(src);
+				dst.x = src.x;
+				dst.y = src.y;
+				dst.width = src.width;
+				dst.height = src.height;
             }
         }
         

@@ -202,10 +202,10 @@ package com.socialcomputing.wps.script  {
          * @param props		A props table holding this FontX prop if it has one.
          * @return			the matching Font or null if the container is empty or the prop is null.
          */
-        /*public override function getFont(props:Array):Font {
-            var font:FontX= getFont2( FONT_VAL, props );
+        /*public override function getFont(props:Array):TextFormat {
+            var font:FontX= getFont( FONT_VAL, props );
             
-            return font != null ? font.getFont( props ): null;
+            return font != null ? font.getFont2( props ): null;
         }*/
     }
 }

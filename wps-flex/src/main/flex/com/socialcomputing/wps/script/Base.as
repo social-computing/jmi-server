@@ -104,7 +104,7 @@ package com.socialcomputing.wps.script  {
          * @return	the int corresponding to the field whose index is prop or null if the property doesn't exists or is void.
          */
         public function getInt( prop:int, props:Array):int {
-            return int(getValue( prop, props ));
+            return getValue( prop, props ) as int;
         }
         
         /**
@@ -115,7 +115,7 @@ package com.socialcomputing.wps.script  {
          * @return	the float corresponding to the field whose index is prop or null if the property doesn't exists or is void.
          */
         public function getFloat( prop:int, props:Array):Number {
-            return Number(getValue( prop, props ));
+            return getValue( prop, props ) as Number;
         }
         
         /**
@@ -126,7 +126,7 @@ package com.socialcomputing.wps.script  {
          * @return	the String corresponding to the field whose index is prop or null if the property doesn't exists or is void.
          */
         public function getString( prop:int, props:Array):String {
-            return String(getValue( prop, props ));
+            return getValue( prop, props ) as String;
         }
         
         /**
@@ -137,7 +137,7 @@ package com.socialcomputing.wps.script  {
          * @return	the HTMLText corresponding to the field whose index is prop or null if the property doesn't exists or is void.
          */
         public function getText( prop:int, props:Array):HTMLText {
-            return HTMLText(getValue( prop, props ));
+            return getValue( prop, props ) as HTMLText;
         }
         
         /**
@@ -148,7 +148,7 @@ package com.socialcomputing.wps.script  {
          * @return	the FontX corresponding to the field whose index is prop or null if the property doesn't exists or is void.
          */
         public function getFont( prop:int, props:Array):FontX {
-            return FontX(getValue( prop, props ));
+            return getValue( prop, props ) as FontX;
         }
         
         /**
