@@ -40,14 +40,20 @@ public final class BagZone extends ActiveZone implements Serializable, Activable
 	 */
 	protected   transient float         m_stp;
 
+    /**
+     * Index in plan.m_nodes.
+     */
+    public   transient int        m_index;
+	
 	/**
 	 * Creates a BagZone with its subZones.
 	 * Its size and position should be initialized by setting the "_SCALE" (float) and "_VERTICES" (Point[1]) properties;
 	 * @param subs	A subZone table whose parent is this.
 	 */
-	public BagZone( ActiveZone[] subs )
+	public BagZone( ActiveZone[] subs, int index)
 	{
 		m_subZones  = subs;
+		m_index = index;
 	}
 
 	/**

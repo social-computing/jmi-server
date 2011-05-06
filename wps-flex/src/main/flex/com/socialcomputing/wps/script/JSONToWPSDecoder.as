@@ -46,6 +46,14 @@ package com.socialcomputing.wps.script
 					plan.m_nodes.push( az);
 				}			
 			}
+			// Convert from et to index to Bagzone reference
+			for each (item in plan.m_links) { 
+				var link:LinkZone = item as LinkZone;
+				if( link.m_fromIndex != -1)
+					link.m_from = plan.m_nodes[ link.m_fromIndex];
+				if( link.m_toIndex != -1)
+					link.m_to = plan.m_nodes[ link.m_toIndex];
+			} 
 			return plan;
 		}
 		
@@ -114,7 +122,7 @@ package com.socialcomputing.wps.script
 		}
 		
 		private static function toLinkZone(json:Object):LinkZone {
-			var zone:LinkZone = new LinkZone(toBagZone(json.from), toBagZone(json.to));
+			var zone:LinkZone = new LinkZone(json.from, json.to);
 			_toActiveZone( zone, json);
 			return zone;
 		}

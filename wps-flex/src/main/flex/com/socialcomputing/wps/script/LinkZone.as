@@ -38,15 +38,21 @@ package com.socialcomputing.wps.script  {
          */
         public  var m_to:BagZone;
         
+		
+		/**
+		 * Index of Bagzone (temporary during JSON desrialization).
+		 */
+		public var m_fromIndex:int, m_toIndex:int;
+		
         /**
          * Creates a Link between two Places.
          * @param from	The Place to start from.
          * @param to	The Place to end to.
          */
-        public function LinkZone( from:BagZone, to:BagZone)
+        public function LinkZone( from:int, to:int)
         {
-            m_from  = from;
-            m_to    = to;
+			m_fromIndex  = from;
+			m_toIndex    = to;
         }
         
         /**

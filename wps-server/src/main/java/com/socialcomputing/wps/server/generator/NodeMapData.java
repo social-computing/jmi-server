@@ -242,7 +242,7 @@ public final class NodeMapData extends Node
 	 * @param mapper
 	 * @return	a new BagZone matching this.
 	 */
-	public ActiveZone toZone( Mapper mapper )
+	public ActiveZone toZone( Mapper mapper, int index)
 	{
 		m_clientPos	= m_pos.toPoint();
 
@@ -269,7 +269,7 @@ public final class NodeMapData extends Node
 				}
 			}
 		}
-		m_zone = new BagZone( subZones );
+		m_zone = new BagZone( subZones, index);
 
 		m_zone.put( "_SCALE", size );
 		m_zone.put( "_VERTICES", points );
