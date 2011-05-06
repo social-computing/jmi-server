@@ -75,7 +75,7 @@ package com.socialcomputing.wps.script  {
          * Temporary buffer for zone blitting operations.Its size is m_maxBox.
          */
         [transient]
-        public var m_blitBuf:Image;
+        public var m_blitBuf:Shape;
         
         /**
          * Current super BagZone (the one that is active).
@@ -131,7 +131,7 @@ package com.socialcomputing.wps.script  {
             // Allocate a temporary bitmap to dblBuffer curZone rendering using the biggest Zone BBox
             if ( zones == m_nodes )
             {
-				m_blitBuf  = ImageUtil.fromDimension(m_maxBox);
+				m_blitBuf  = new Shape(); //size  m_maxBox);
             }
         }
         
@@ -193,6 +193,7 @@ package com.socialcomputing.wps.script  {
             // Filters backImg so it looks ghosted
 			// TODO
 			// m_applet.renderShape( m_applet.restDrawingSurface, 0, 0); // ??? size
+			//backGfx = restGfx.; 
 			m_applet.env.filterImage( m_applet.backDrawingSurface, dim );
             
             // Finish drawing restImg with places parts that are allways visible (tip, sel...)
