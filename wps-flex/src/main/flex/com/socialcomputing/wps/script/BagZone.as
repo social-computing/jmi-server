@@ -147,10 +147,10 @@ public class BagZone extends ActiveZone implements Activable
 	 */
     [synchronized]
 	public function paintCur(applet:PlanComponent, g:Graphics):void {
-		var bufGfx:Graphics= applet.plan.m_blitBuf.graphics;
-
+		// var bufGfx:Graphics= applet.plan.m_blitBuf.graphics;
+		
 		// TODO
-		trace("BagZone paintCur à implémneter");
+		trace("BagZone paintCur begin");
 /*		bufGfx.drawImage( applet.backDrawingSurface, 0, 0, m_bounds.width, m_bounds.height, m_bounds.x, m_bounds.y, m_bounds.x + m_bounds.width, m_bounds.y + m_bounds.height, null );
 		bufGfx.translate( -m_bounds.x, -m_bounds.y );
 		m_curSwh.paint( applet, bufGfx, this, true, true, Satellite.ALL_TYP, true );
@@ -158,7 +158,12 @@ public class BagZone extends ActiveZone implements Activable
 */
 		//g.setClip( m_bounds.x, m_bounds.y, m_bounds.width, m_bounds.height );
 		//g.drawImage( applet.m_plan.m_blitBuf, m_bounds.x, m_bounds.y, null );
-		applet.renderShape( applet.plan.m_blitBuf, m_bounds.width, m_bounds.height);
+		
+		// applet.renderShape( applet.plan.m_blitBuf, m_bounds.width, m_bounds.height);
+		
+		// Should not be called here, right ?
+		// applet.renderShape(applet.backDrawingSurface, m_bounds.width, m_bounds.height);
+		trace("BagZone paintCur end");
 	}
 
     public function get m_dir():Number

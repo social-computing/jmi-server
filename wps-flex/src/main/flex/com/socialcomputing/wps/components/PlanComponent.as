@@ -10,6 +10,7 @@ package com.socialcomputing.wps.components
 	import com.socialcomputing.wps.script.Satellite;
 	import com.socialcomputing.wps.script.ShapeX;
 	import com.socialcomputing.wps.script.Slice;
+	import com.socialcomputing.wps.script.Swatch;
 	import com.socialcomputing.wps.script.VContainer;
 	
 	import flash.display.Bitmap;
@@ -159,7 +160,7 @@ package com.socialcomputing.wps.components
 			try {
 				// TODO : Handle this properly
 			    // Should manage the onScreen object each time the service is called
-				this._onScreen = new BitmapData(this.width, this.height);
+				this._onScreen = new BitmapData(this.width, this.height, false, 0XFFFFFF);
 				this._drawingSurface.addChild(new Bitmap(this._onScreen));
 				this._backDrawingSurface = new Shape();
 				this._restDrawingSurface = new Shape();
@@ -169,7 +170,7 @@ package com.socialcomputing.wps.components
 				var bagZone:BagZone = new BagZone(null);
 				bagZone.m_props = new Array();
 				bagZone.m_props[2] = 1;
-					
+				bagZone.m_curData = new Vector.<SatData>();
 					
                 // Definition de couleurs
                 var red:ColorX= new ColorX();
@@ -196,6 +197,8 @@ package com.socialcomputing.wps.components
 				slice.m_containers = new Array();			
                 slice.m_containers[Slice.IN_COL_VAL] = new VContainer(red, false);
 				
+				
+				/*
 				slice.paint(this,                               // Le plan component courant
 						    this._backDrawingSurface.graphics,  // La zone graphique dans laquelle dessiner
 							bagZone, 							// Zone parente du slice
@@ -203,7 +206,7 @@ package com.socialcomputing.wps.components
 							shape,                              // Shape à dessiner : pq, elle ne fait pas directement partie du SLICE ???
 							new Point(10, 10),                  // Centre d'un satellite .... ????
 							new Point(10, 10));                  // Centre de la sone parente ?????????
-				
+				*/
 
 				
 				var slices:Vector.<Slice> = new Vector.<Slice>();
@@ -214,22 +217,35 @@ package com.socialcomputing.wps.components
                 satellite.m_containers = new Array();
                 satellite.m_containers[Satellite.LINK_DRK_COL_VAL] = new VContainer(red, false);
                 satellite.m_containers[Satellite.LINK_LIT_COL_VAL] = new VContainer(black, false);
-				satellite.paint(this, this._backDrawingSurface.graphics, bagZone, new Point(20, 20), new Point(40, 50), true, satData, Satellite.BASE_TYP);
 				
-                
-                
-                
+				
+				// Paint a link only satellite
+				// satellite.paint(this, this._backDrawingSurface.graphics, bagZone, new Point(20, 20), new Point(40, 50), true, satData, Satellite.BASE_TYP);
+				
+				// Not link only satellite
+				// satellite.paint(this, this._backDrawingSurface.graphics, bagZone, new Point(30, 60), new Point(100, 160), false, satData, Satellite.BASE_TYP);
+				bagZone.m_curData[0] = satData;               
+				var satellites:Vector.<Satellite> = new Vector.<Satellite>();
+				satellites.push(satellite);
+                var swatch:Swatch = new Swatch(satellites);
+				// bagZone.m_props[0] = new VContainer(swatch.LINK_BIT, false);
+				swatch.m_containers = new Array();
+				swatch.m_containers[0] = new VContainer(swatch.LINK_BIT, false);
+                swatch.paint(this, this._backDrawingSurface.graphics, bagZone, true, false, Satellite.BASE_TYP, true);
 				this._ready = true;
 				
-				/*plan.m_applet = this;
+				/*
+				plan.m_applet = this;
 				plan.m_curSel = -1;
-				plan.initZones(this.graphics, plan.m_links, true);
-				plan.initZones(this.graphics, plan.m_nodes, true);
+				plan.initZones(this._backDrawingSurface.graphics, plan.m_links, true);
+				plan.initZones(this._backDrawingSurface.graphics, plan.m_nodes, true);
 				plan.resize(size);
 				plan.init();
-				plan.resize(size);
-				_ready = true;*/
 				
+				// Why is this second call needed ?
+				//plan.resize(size);
+				_ready = true;
+				*/
 				
 			}
 			catch(error:Error) {
@@ -303,7 +319,7 @@ package com.socialcomputing.wps.components
 			if(ready) {
 				//graphics.drawImage( _restImg, 0, 0, null );
 				// _restDrawingSurface
-				// plan.paintCurZone(this._backDrawingSurface.graphics);  // A new Zone is hovered, let's paint it!
+				//plan.paintCurZone(this._backDrawingSurface.graphics);  // A new Zone is hovered, let's paint it!
 				this.render();
 			}
 		}
@@ -376,10 +392,10 @@ package com.socialcomputing.wps.components
 		}
 		
 		public function renderShape(shape:Shape, width:int, height:int):void {
-			trace("renderShape method called");
+			trace("RenderShape method called");
 			
 			// Transforming the offscreen back display to a BitmapData
-			var backBuffer:BitmapData = new BitmapData(width, height);
+			var backBuffer:BitmapData = new BitmapData(width, height, false, 0XFFFFFF);
 			backBuffer.draw( shape, new Matrix());
 			
 			// Copying the content of the back buffer on screen
@@ -387,12 +403,13 @@ package com.socialcomputing.wps.components
 			
 			// Clear the offscreen back display
 			shape.graphics.clear();
+			trace("RenderShape method end");
 		}
 		
 		private function render():void {
 			trace("Render method called");
-			
 			renderShape( this._backDrawingSurface, this.width, this.height);
+			trace("Render method end");
 		}
 	}
 }

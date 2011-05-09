@@ -74,8 +74,8 @@ package com.socialcomputing.wps.script  {
         /**
          * Temporary buffer for zone blitting operations.Its size is m_maxBox.
          */
-        [transient]
-        public var m_blitBuf:Shape;
+        // [transient]
+        //public var m_blitBuf:Shape;
         
         /**
          * Current super BagZone (the one that is active).
@@ -112,9 +112,9 @@ package com.socialcomputing.wps.script  {
          * @param isFirst	True if this is the first call of the session (optimisation).
          */
         //protected synchronized function initZones( g:Graphics, zones:Array, isFirst:Boolean):void {
-        public function initZones( g:Graphics, zones:Array, isFirst:Boolean):void {
-            var i:int, n:int    = zones.length;
-            var dim:Dimension= m_applet.size;
+        public function initZones(g:Graphics, zones:Array, isFirst:Boolean):void {
+            var i:int, n:int  = zones.length;
+            var dim:Dimension = m_applet.size;
             
             // Reset the BBOX of the biggest zone
             m_prevBox   = new Rectangle( dim.width >> 1, dim.height >> 1, 1, 1);
@@ -129,10 +129,10 @@ package com.socialcomputing.wps.script  {
             }
             
             // Allocate a temporary bitmap to dblBuffer curZone rendering using the biggest Zone BBox
-            if ( zones == m_nodes )
-            {
-				m_blitBuf  = new Shape(); //size  m_maxBox);
-            }
+            // if ( zones == m_nodes )
+            // {
+			//    m_blitBuf  = new Shape(); //size  m_maxBox);
+            // }
         }
         
         /**
@@ -168,12 +168,12 @@ package com.socialcomputing.wps.script  {
         //protected synchronized function init( ):void {
         public function init( ):void {
             var dim:Dimension= m_applet.size;
-            var backGfx:Graphics = m_applet.backDrawingSurface.graphics,
-                restGfx:Graphics = m_applet.restDrawingSurface.graphics,
-            	g:Graphics       = m_applet.graphics;
+            var backGfx:Graphics = m_applet.backDrawingSurface.graphics;
+                //restGfx:Graphics = m_applet.restDrawingSurface.graphics,
+            	// g:Graphics       = m_applet.graphics;
 
 			backGfx.clear();
-            restGfx.clear();
+            //restGfx.clear();
             
             // If there is any background image, load it
             if (m_applet.backImgUrl != null)
@@ -181,22 +181,37 @@ package com.socialcomputing.wps.script  {
                 //renderBitmap( restGfx, m_applet.m_backImgUrl, 0, 0, null );
             
             // Init Links, Nodes and subNodes.
+			// Commented by jonathan dray, 09/05
+			/*
             initZones( g, m_links, false );
             initZones( g, m_nodes, false );
-            
+            */
+			initZones(backGfx, m_links, false);
+			initZones(backGfx, m_nodes, false);	
+				
 			// TODO : hack à supprimer
-			restGfx = g;
+			// Commented by jonathan dray, 09/05
+			// restGfx = g;
+			
             // Init backImg and restImg with background, links and places parts that are "ghostable"
+			// Commented by jonathan dray, 09/05
+			/*
             paintZones( restGfx, m_links, m_links.length, false, Satellite.ALL_TYP, true, false );
             paintZones( restGfx, m_nodes, m_nodesCnt, false, Satellite.ALL_TYP, true, true );
+			*/
+			
+			paintZones(backGfx, m_links, m_links.length, false, Satellite.ALL_TYP, true, false );
+			paintZones(backGfx, m_nodes, m_nodesCnt, false, Satellite.ALL_TYP, true, true );
             
             // Filters backImg so it looks ghosted
 			// TODO
 			// m_applet.renderShape( m_applet.restDrawingSurface, 0, 0); // ??? size
 			//backGfx = restGfx.; 
-			m_applet.env.filterImage( m_applet.backDrawingSurface, dim );
+			m_applet.env.filterImage(m_applet.backDrawingSurface, dim);
             
             // Finish drawing restImg with places parts that are allways visible (tip, sel...)
+			// Commented by jonathan dray, 09/05
+			/*
             paintZones( restGfx, m_links, m_links.length, true, Satellite.BASE_TYP, true, false );
             paintZones( restGfx, m_links, m_links.length, true, Satellite.TIP_TYP, false, false );
             paintZones( restGfx, m_links, m_links.length, true, Satellite.SEL_TYP, false, false );
@@ -204,7 +219,15 @@ package com.socialcomputing.wps.script  {
             paintZones( restGfx, m_nodes, m_nodesCnt, true, Satellite.BASE_TYP, true, true );
             paintZones( restGfx, m_nodes, m_nodesCnt, true, Satellite.TIP_TYP, false, true );
             paintZones( restGfx, m_nodes, m_nodesCnt, true, Satellite.SEL_TYP, false, true );
-           
+           	*/
+			paintZones(backGfx, m_links, m_links.length, true, Satellite.BASE_TYP, true, false );
+			paintZones(backGfx, m_links, m_links.length, true, Satellite.TIP_TYP, false, false );
+			paintZones(backGfx, m_links, m_links.length, true, Satellite.SEL_TYP, false, false );
+			
+			paintZones(backGfx, m_nodes, m_nodesCnt, true, Satellite.BASE_TYP, true, true );
+			paintZones(backGfx, m_nodes, m_nodesCnt, true, Satellite.TIP_TYP, false, true );
+			paintZones(backGfx, m_nodes, m_nodesCnt, true, Satellite.SEL_TYP, false, true );
+			
 			// TODO à suppriler ?
             //g.setClip( 0, 0, dim.width, dim.height );
 			// TODO Utile ?
@@ -359,7 +382,8 @@ package com.socialcomputing.wps.script  {
                 var zone:ActiveZone;
                 var isFakeFrom:Boolean, isFakeTo:Boolean;
                 
-				trace( "Plan resize à terminer");
+				trace("Plan resize à terminer");
+				// TODO 
                 //m_applet.backImg = ImageUtil.fromRectangle(dim);
                 //m_applet.restImg = ImageUtil.fromRectangle(dim);
                 

@@ -208,7 +208,7 @@ package com.socialcomputing.wps.script  {
          * @throws UnsupportedEncodingException 
          */
         public function paint(g:Graphics, supZone:ActiveZone, zone:ActiveZone, slice:Slice, transfo:Transfo, center:Point):void {
-            trace("ShapeX paint call");
+            trace("[ShapeX paint method called]");
 			
 			if(isDefined(SCALE_VAL))    // else it is just a void frame
             {
@@ -293,8 +293,9 @@ package com.socialcomputing.wps.script  {
 							g.lineStyle(1, inColorTransformer.color);
 							trace("  - line style (color: " + inColorTransformer.color + ", thickness: 1)");
                             g.moveTo(fromPoint.x, fromPoint.y);
-							g.curveTo((fromPoint.x + toPoint.x /2), (fromPoint.y + toPoint.y/2),
-								       toPoint.x, toPoint.y);
+							//g.curveTo((fromPoint.x + toPoint.x /2), (fromPoint.y + toPoint.y/2),
+							//	       toPoint.x, toPoint.y);
+							g.lineTo(toPoint.x, toPoint.y);
                         }
                         
                         //g.setStroke(new BasicStroke(size));
@@ -311,6 +312,7 @@ package com.socialcomputing.wps.script  {
                     }
                 }
             }
+			trace("[ShapeX paint end]");
         }
         
         /**

@@ -91,7 +91,7 @@ package com.socialcomputing.wps.script  {
          * @throws UnsupportedEncodingException 
          */
         public function paint(applet:PlanComponent, g:Graphics, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point):void {
-            trace("Slice paint call");
+            trace("[Slice paint method called]");
 			
 			var text:HTMLText= getText( TEXT_VAL, zone.m_props );
             
@@ -173,6 +173,7 @@ package com.socialcomputing.wps.script  {
                     }
                 }*/
             }
+			trace("[Slice paint end]");
         }
         
         /**

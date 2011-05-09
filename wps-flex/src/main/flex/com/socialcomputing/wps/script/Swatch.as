@@ -67,7 +67,8 @@ package com.socialcomputing.wps.script  {
          * @throws UnsupportedEncodingException 
          */
         public function paint(applet:PlanComponent, g:Graphics, zone:ActiveZone, isCur:Boolean, isFront:Boolean, showTyp:int, showLinks:Boolean):void {
-            var sat:Satellite = m_satellites[0];
+            trace("[Swatch paint method called]");
+			var sat:Satellite = m_satellites[0];
             var shape:ShapeX = sat.m_shape;
             var flags:int = getFlags(zone.m_props);
             var transfo:Transfo = sat.getTransfo(Satellite.TRANSFO_VAL, zone.m_props.m_propss);
@@ -76,12 +77,13 @@ package com.socialcomputing.wps.script  {
             // so they can be partly covered by other sats
             if ( isEnabled( flags, LINK_BIT )&& showLinks )
             {
-                trace("*****swatchs tracer links");
+                trace("Drawing satellites links");
                 drawSats( applet, g, zone, shape, transfo, true, isCur, isFront, showTyp );
             }
           
             // Draws Satellites without links
             drawSats( applet, g, zone, shape, transfo, false, isCur, isFront, showTyp );
+			trace("[Swatch paint end]");
         }
         
         /**

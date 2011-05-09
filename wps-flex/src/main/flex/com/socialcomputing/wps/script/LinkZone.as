@@ -99,7 +99,7 @@ package com.socialcomputing.wps.script  {
          */
         public function paintCur(applet:PlanComponent, g:Graphics):void {
             //if( (m_flags & INVISIBLE_BIT) != 0) return;
-			trace("LinkZone paintCur, en cours d'implémentation");
+			trace("[LinkZone paintCur start]");
             
 			// Get the image buffer used as blit buffer 
 			// Do not draw directly on the component graphic area ....
@@ -184,6 +184,8 @@ package com.socialcomputing.wps.script  {
 			the process that loads the image notifies the specified image observer. 
             g.drawImage( applet.m_plan.m_blitBuf, m_bounds.x, m_bounds.y, null );*
 			*/
+			
+			trace("[LinkZone paintCur end]");
         }
     }
 }
