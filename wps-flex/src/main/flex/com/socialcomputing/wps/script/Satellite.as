@@ -414,7 +414,7 @@ package com.socialcomputing.wps.script  {
                         }
                         else if ( func == ( "pop" ))    // Pop a tooltip
                         {
-                            var slice:Slice= Slice(zone.m_curSwh.m_refs.m_props[args]);
+                            var slice:Slice = zone.m_curSwh.m_refs[args] as Slice;
                             
                             if ( slice != null )
                             {
