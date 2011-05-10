@@ -316,7 +316,6 @@ package com.socialcomputing.wps.script  {
         private function updateCurrentZone( g:Graphics, curSat:Satellite, p:Point):Boolean {
             // TODO : comment this
 			trace("[Update current zone : not implemented yet]");
-			return false
 			
 			if ( m_curZone != m_newZone )           // The current Satellite has changed
             {

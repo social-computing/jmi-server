@@ -287,17 +287,12 @@ package com.socialcomputing.wps.script  {
                                   toPoint:Point = (points[1] as Point).add(shapePos);
 							trace("  - from coordinates (x: " + fromPoint.x + ", y: " + fromPoint.y + ")");
 							trace("  - to coordinates (x: " + toPoint.x + ", y: " + toPoint.y + ")");
-                            //var poly:Polygon = getLinkPoly( supZone, fromPoint, toPoint, size );
-                            
-                            
-                            /*q.setCurve(A.x, A.y, (A.x+B.x)/2, (A.y+B.y)/2, B.x, B.y);
-                            g.draw(q);*/
-							g.lineStyle(1, inColorTransformer.color);
-							trace("  - line style (color: " + inColorTransformer.color + ", thickness: 1)");
-                            g.moveTo(fromPoint.x, fromPoint.y);
-							//g.curveTo((fromPoint.x + toPoint.x /2), (fromPoint.y + toPoint.y/2),
-							//	       toPoint.x, toPoint.y);
-							g.lineTo(toPoint.x, toPoint.y);
+							var poly:Polygon = getLinkPoly( supZone, fromPoint, toPoint, size );
+							g.lineStyle( 1, inColorTransformer.color);
+							g.moveTo( poly.xpoints[poly.npoints-1], poly.ypoints[poly.npoints-1]);
+                            for( var i:int = 0 ; i < poly.npoints; ++i) {
+								g.lineTo( poly.xpoints[i], poly.ypoints[i]);
+							}
                         }
                         
                         //g.setStroke(new BasicStroke(size));

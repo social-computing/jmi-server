@@ -382,6 +382,7 @@ package com.socialcomputing.wps.components
 						
 						// TODO FireEvent
 						//m_planWindow.call( func, params );
+						trace("Perform " + func + " " + params);
 					}
 					return;
 				}
@@ -398,6 +399,7 @@ package com.socialcomputing.wps.components
 			// TODO FireEvent
 /*			getAppletContext().showDocument( convertURL( actionStr ), target );
 			*/
+			trace("Perform " + actionStr + " " + target);
 		}
 		
 		public function renderShape(shape:Shape, width:int, height:int):void {
