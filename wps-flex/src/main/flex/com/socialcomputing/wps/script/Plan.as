@@ -57,7 +57,7 @@ package com.socialcomputing.wps.script  {
          * If there is no current Satellite, it should be null.
          */
         [transient]
-        protected var m_curSat:Satellite;
+        protected var _m_curSat:Satellite;
         
         /**
          * Bounding box of the Plan before resizing (pixels).
@@ -248,7 +248,7 @@ package com.socialcomputing.wps.script  {
             var g:Graphics= m_applet.graphics;
             var i:int;
             
-            if ( m_curSat != null )                        // There is a current Active Zone!
+            if ( curSat != null )                        // There is a current Active Zone!
             {
                 curSat  = m_curZone.m_curSwh.getSatAt( m_applet, g, parent, p, true );
                 
@@ -588,9 +588,19 @@ package com.socialcomputing.wps.script  {
 
         public function set m_curSel(value:int):void
         {
-            _m_curSel = value;
+			_m_curSel = value;
         }
 
+		public function get m_curSat():Satellite
+		{
+			return _m_curSat;
+		}
+		
+		public function set m_curSat(value:Satellite):void
+		{
+			_m_curSat = value;
+		}
+		
         public function get m_curZone():ActiveZone
         {
             return _m_curZone;

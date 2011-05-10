@@ -857,7 +857,7 @@ package com.socialcomputing.wps.script{
             g.setComposite(composite);
 */            
             var textTok:TextToken;
-            var i:int, n    = m_tokens.size();
+            var i:int, n:int    = m_tokens.size();
             
             if ( m_inCol != null )
             {

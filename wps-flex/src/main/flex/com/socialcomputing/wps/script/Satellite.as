@@ -5,6 +5,10 @@ package com.socialcomputing.wps.script  {
     import flash.geom.Point;
     import flash.geom.Rectangle;
     
+	import mx.controls.Menu;
+	import mx.events.MenuEvent;
+    import mx.collections.ArrayCollection;
+    
     /**
      * <p>Title: Satellite</p>
      * <p>Description: An elementary part of a swatch that can be stacked.<br>
@@ -389,16 +393,23 @@ package com.socialcomputing.wps.script  {
                         }
                         else if ( func == ( "popup" ))    // Popup a menu
                         {
-                            var menu:MenuX= MenuX(zone.m_curSwh.m_refs.m_props[args]);
+                            var menux:MenuX= zone.m_curSwh.m_refs.m_props[args] as MenuX;
                             
-                            if ( menu != null )
+                            if ( menux != null )
                             {
 								// TODO create menu
-/*                                var popup:PopupMenu= new PopupMenu();
+/*                                var popup:PopupMenu = new PopupMenu();
                                 menu.parseMenu( popup, applet, zone );
                                 applet.add( popup );
                                 popup.show( applet, pos.x, pos.y );
-*/                            }
+*/								
+								var menuData:ArrayCollection = new ArrayCollection();
+								menux.parseMenu( menuData, null, zone );// TODO listener
+								var menu:Menu = Menu.createMenu( applet, menuData, false);
+								menu.labelField = "@label";
+								menu.addEventListener(MenuEvent.ITEM_CLICK, applet.menuHandler);								
+								menu.show( pos.x, pos.y );
+							}
                         }
                         else if ( func == ( "pop" ))    // Pop a tooltip
                         {

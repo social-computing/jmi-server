@@ -1,7 +1,9 @@
 package com.socialcomputing.wps.script  {
     import flash.events.Event;
     import flash.text.Font;
+    import flash.text.TextFormat;
     
+    import mx.collections.ArrayCollection;
     import mx.controls.Menu;
     import mx.events.EventListenerRequest;
     
@@ -65,32 +67,33 @@ package com.socialcomputing.wps.script  {
          * @return			True if this menu is not empty. This is used in the recursive process and is useless for the main call.
          * @throws UnsupportedEncodingException 
          */
-        public function parseMenu( dst:Menu, listener:EventListenerRequest, zone:ActiveZone):Boolean {
-            /*var i:int, j, k	= -1,
-                n		= 1,
-                iCnt	= m_items.length;*/
+        public function parseMenu( dst:ArrayCollection, listener:EventListenerRequest, zone:ActiveZone):Boolean {
+            var i:int, j:int, k:int	= -1,
+                n:int		= 1,
+                iCnt:int	= m_items.length;
             var isEmpty:Boolean= true;
-            /*var subMenu:Menu;
-            var menuItm:MenuItem;
-            var font:Font= this.getFont( zone );
-            var labels:Array= null;
+            var subMenu:ArrayCollection;
+            var menuItm:Object;
+            var font:TextFormat= this.getTextFormat( zone.m_props);
+            var labels:Vector.<String> = null;
             
-            dst.setFont( font );
+            // TODO dst.setFont( font );
             
             if ( isDefined( TEXT_VAL ))
             {
-                labels	= parseString( TEXT_VAL, zone );
+                labels	= parseString( TEXT_VAL, zone.m_props);
                 n		= labels.length;
-                if ( n == 1)	dst.setLabel( labels[0] );
+                if ( n == 1)	
+					; // TODO dst.label = labels[0];
             }
             
             for ( j = 0; j < n; j ++ )
             {
                 if ( n > 1|| (n == 1&& labels != null))
                 {
-                    subMenu	= new Menu();
-                    subMenu.setLabel( labels[j] );
-                    dst.add( subMenu );
+					menuItm	= new Object();
+					menuItm.label = labels[j];
+                    dst.addItem( menuItm );
                     if( n > 1)
                         k = j;
                 }
@@ -101,10 +104,10 @@ package com.socialcomputing.wps.script  {
                 
                 for ( i = 0; i < iCnt; i ++ )
                 {
-                    var menu:MenuX= MenuX(m_items[i]);
-                    var flags:int= menu.getFlags( zone );
+                    var menu:MenuX = m_items[i];
+                    var flags:int = menu.getFlags( zone.m_props);
                     
-                    if ( MenuX.isEnabled( flags, ITEM_BIT ))
+                    if ( isEnabled( flags, ITEM_BIT ))
                     {
                         if ( menu.parseItem( subMenu, listener, zone, k ))
                         {
@@ -117,20 +120,20 @@ package com.socialcomputing.wps.script  {
                             isEmpty = false;
                         else
                         {
-                            subMenu.remove( subMenu.getItemCount()-1);
-                            var subitems:Array= menu.parseString( TEXT_VAL, zone );
+                            subMenu.removeItemAt( subMenu.length - 1);
+                            var subitems:Vector.<String> = menu.parseString( TEXT_VAL, zone.m_props);
                             if( subitems != null && subitems.length > 0)
                             {
-                                menuItm = new MenuItem( subitems[0]);
-                                menuItm.setFont( menu.getFont( zone ));
-                                menuItm.setEnabled( false );
-                                subMenu.add( menuItm );
+                                menuItm = new Object;
+								menuItm.label = subitems[0];
+                                // TODO menuItm.setFont( menu.getFont( zone ));
+                                menuItm.enabled = false;
+                                subMenu.addItem( menuItm );
                             }
                         }
                     }
                 }
             }
-            */
             return !isEmpty;
         }
         
@@ -144,19 +147,19 @@ package com.socialcomputing.wps.script  {
          * @return			True if this item is not empty. This is used in the recursive process and is useless for the main call.
          * @throws UnsupportedEncodingException 
          */
-        /*private function parseItem( dst:Menu, listener:Event, zone:ActiveZone, j:int):Boolean {
-            var parts:Array= getString( TEXT_VAL, zone ).split( SEP);
-            var title:String= parts[0],
-                url     = parts.length > 1? parts[1] : null,
-                redir   = parts.length > 2? parts[2] : null;
+        private function parseItem( dst:ArrayCollection, listener:Event, zone:ActiveZone, j:int):Boolean {
+            var parts:Array 	= getString( TEXT_VAL, zone.m_props ).split( SEP);
+            var title:String	= parts[0],
+                url:String      = parts.length > 1? parts[1] : null,
+                redir:String    = parts.length > 2? parts[2] : null;
             //itemStr;
-            var font:Font= this.getFont( zone );
-            var items:Array= parseString3( title, zone ),
-                urls    = url != null ? parseString3( url, zone ) : null,
-                redirs  = redir != null ? parseString3( redir, zone ) : urls;
+            var font:TextFormat= this.getTextFormat( zone.m_props);
+            var items:Vector.<String>	= parseString3( title, zone.m_props),
+                urls:Vector.<String>   	= url != null ? parseString3( url, zone .m_props) : null,
+                redirs:Vector.<String>  = redir != null ? parseString3( redir, zone.m_props) : urls;
             //MenuItem    item;
-            var i:int, n	= items.length,
-                m		= redirs != null ? redirs.length : 0;
+            var i:int, n:int	= items.length,
+                m:int		= redirs != null ? redirs.length : 0;
             
             if ( j == -1)
             {
@@ -174,7 +177,7 @@ package com.socialcomputing.wps.script  {
             }
             
             return n > 0;
-        }*/
+        }
         
         /**
          * Creates a new MenuItem, add it to a Menu and store the URL to call inside.
@@ -184,17 +187,18 @@ package com.socialcomputing.wps.script  {
          * @param url		Adress to go (including Javascript) when this is selected.
          * @param font		TypeFace of the label.
          */
-        private function addItem( menu:Menu, listener:Event, title:String, url:String, font:Font):void {
-            /*var item:MenuItem= new MenuItem( title );
-            
+        private function addItem( menu:ArrayCollection, listener:Event, title:String, url:String, font:TextFormat):void {
+            var item:Object = new Object();
+			item.label = title;
             if ( url != null )
             {
-                item.setActionCommand( url );
+                item.action = url;
+				//TODO
                 item.addActionListener( listener );
             }
             
-            item.setFont( font );
-            menu.add( item );*/
+//    TODO        item.setFont( font );
+            menu.addItem( item );
         }
         
         /**
@@ -202,10 +206,10 @@ package com.socialcomputing.wps.script  {
          * @param props		A props table holding this FontX prop if it has one.
          * @return			the matching Font or null if the container is empty or the prop is null.
          */
-        /*public override function getFont(props:Array):TextFormat {
-            var font:FontX= getFont( FONT_VAL, props );
+        public function getTextFormat(props:Array):TextFormat {
+            var font:FontX= getFont( FONT_VAL, props);
             
             return font != null ? font.getFont2( props ): null;
-        }*/
+        }
     }
 }

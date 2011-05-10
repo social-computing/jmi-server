@@ -23,8 +23,12 @@ package com.socialcomputing.wps.components
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	
+	import mx.collections.ArrayCollection;
 	import mx.controls.Alert;
 	import mx.controls.Image;
+	import mx.controls.Menu;
+	import mx.events.MenuEvent;
+	import mx.controls.treeClasses.DefaultDataDescriptor;
 	import mx.managers.CursorManager;
 	
 	import spark.components.Group;
@@ -71,10 +75,8 @@ package com.socialcomputing.wps.components
 			addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
 			//addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 			addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
-			/*			
-				addEventListener(MouseEvent.MOUSE_CLICK, mouseClickHandler);
-				addEventListener(MouseEvent.MOUSE_DOUBLE_CLICK, mouseDoubleClickHandler);
-			*/	
+			addEventListener(MouseEvent.CLICK, mouseClickHandler);
+			addEventListener(MouseEvent.DOUBLE_CLICK, mouseDoubleClickHandler);
 		}
 		
 		public function get ready():Boolean {
@@ -164,7 +166,7 @@ package com.socialcomputing.wps.components
 				this._backDrawingSurface = new Shape();
 				this._restDrawingSurface = new Shape();
 				
-				
+				/*
                 /* DEBUT TEST */
 				// Creating a fake BagZone as a parent zone for the following slice
 				/*var bagZone:BagZone = new BagZone(null);
@@ -196,17 +198,17 @@ package com.socialcomputing.wps.components
 				var slice:Slice = new Slice();
 				slice.m_containers = new Array();			
                 slice.m_containers[Slice.IN_COL_VAL] = new VContainer(red, false);
-				
-				slice.paint(this,                               // Le plan component courant
+				*/
+/*				slice.paint(this,                               // Le plan component courant
 						    this._backDrawingSurface.graphics,  // La zone graphique dans laquelle dessiner
 							bagZone, 							// Zone parente du slice
 							bagZone,                            // Zone ?????
 							shape,                              // Shape à dessiner : pq, elle ne fait pas directement partie du SLICE ???
 							new Point(10, 10),                  // Centre d'un satellite .... ????
 							new Point(10, 10));                  // Centre de la sone parente ?????????
-				
+	*/			
 
-				
+				/*
 				var slices:Vector.<Slice> = new Vector.<Slice>();
 				slices.push(slice);
 				var satellite:Satellite = new Satellite(shape, slices);
@@ -220,9 +222,6 @@ package com.socialcomputing.wps.components
                 this._ready = true;*/
                 /* FIN TEST */
                 
-                
-				
-				
 				plan.m_applet = this;
 				plan.m_curSel = -1;
 				plan.initZones(this.graphics, plan.m_links, true);
@@ -231,8 +230,7 @@ package com.socialcomputing.wps.components
 				plan.init();
 				plan.resize(size);
 				_ready = true;
-				
-				
+		
 			}
 			catch(error:Error) {
 				trace( error.getStackTrace());	
@@ -288,11 +286,27 @@ package com.socialcomputing.wps.components
 		}
 		
 		public function mouseClickHandler(event:MouseEvent):void {
-			trace("mouseClickHandler");
+			if ( ready && plan.m_curSat != null )
+			{
+				var point:Point = new Point();
+				point.x = event.localX;
+				point.y = event.localY;
+				point = this.localToGlobal(point);
+				plan.updateZoneAt( point);
+				plan.m_curSat.execute( this, plan.m_curZone, point, Satellite.CLICK_VAL);
+			}
 		}
 		
-		public function mouseDoucleClickHandler(event:MouseEvent):void {
-			trace("mouseDoucleClickHandler");
+		public function mouseDoubleClickHandler(event:MouseEvent):void {
+			if ( ready && plan.m_curSat != null )
+			{
+				var point:Point = new Point();
+				point.x = event.localX;
+				point.y = event.localY;
+				point = this.localToGlobal(point);
+				plan.updateZoneAt( point);
+				plan.m_curSat.execute( this, plan.m_curZone, point, Satellite.DBLCLICK_VAL);
+			}
 		}
 		
 		
@@ -308,6 +322,14 @@ package com.socialcomputing.wps.components
 				// plan.paintCurZone(this._backDrawingSurface.graphics);  // A new Zone is hovered, let's paint it!
 				this.render();
 			}
+		}
+		
+		/**
+		 * Wrapper for a menu item
+		 **/
+		public function menuHandler( evt:MenuEvent):void {
+			trace( evt.label);
+			//performAction( evt.label);
 		}
 		
 		/**
