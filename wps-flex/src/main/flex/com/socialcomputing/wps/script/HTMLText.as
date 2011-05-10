@@ -744,7 +744,9 @@ package com.socialcomputing.wps.script{
             }
             else
             {
-                //textTok.m_color = new Color( m_color );
+                var col:ColorTransform = new ColorTransform();
+                col.color = m_color;
+                textTok.m_color = col;
                 
                 /*if ( tag == ( "b" ))
                 {
@@ -833,9 +835,9 @@ package com.socialcomputing.wps.script{
          * @param g		Graphics to draw in.
          * @param size	Size of the Window to draw in.
          */
-        /*protected function drawText2( g:Graphics, size:Rectangle):void {
+        protected function drawText2( g:Graphics, size:Rectangle):void {
             drawText3( g, size, new Point( m_bounds.x, m_bounds.y ));
-        }*/
+        }
         
         /**
          * Draws this at a position.
