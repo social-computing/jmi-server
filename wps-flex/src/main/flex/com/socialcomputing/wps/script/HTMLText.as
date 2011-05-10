@@ -1,15 +1,16 @@
 package com.socialcomputing.wps.script{
     import com.socialcomputing.wps.components.PlanComponent;
     
+    import flash.display.GradientType;
     import flash.display.Graphics;
     import flash.geom.ColorTransform;
     import flash.geom.Point;
     import flash.geom.Rectangle;
-	import flash.text.Font;
+    import flash.text.Font;
     import flash.text.TextFormat;
-	import flash.text.engine.FontDescription;
-	import flash.text.engine.FontMetrics;
-	import flash.text.engine.ElementFormat;
+    import flash.text.engine.ElementFormat;
+    import flash.text.engine.FontDescription;
+    import flash.text.engine.FontMetrics;
 	
     /**
      * <p>Title: HTMLText</p>
@@ -431,7 +432,7 @@ package com.socialcomputing.wps.script{
                     // A closed Tag
                     if ( hasMore && nextStr == ( ">" )) // tag
                     {
-                        //textTok = updateTag( g, tokenStr );
+                        textTok = updateTag( g, tokenStr );
                         
                         // An real Tag
                         if ( textTok != null )
@@ -473,7 +474,7 @@ package com.socialcomputing.wps.script{
                 updateText( g, prevStr, textTok, isText );
             }
             
-            //updateTag( g, "br" );  // to set last line position
+            updateTag( g, "br" );  // to set last line position
             
             updateBounds();
         }
@@ -858,37 +859,42 @@ package com.socialcomputing.wps.script{
             
             if ( m_inCol != null )
             {
-/*                var gradient:GradientPaint= new GradientPaint(pos.x, pos.y, m_inCol , pos.x, pos.y + m_bounds.height*2, Color.black );
-                
-                g.setPaint( gradient );
-                g.fillRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height,10,10);
-*/                //ON g.fillRect( pos.x, pos.y, m_bounds.width, m_bounds.height );
+                var black:ColorTransform = new ColorTransform();
+                black.color = 0x000000;
+                var colors:Array = [m_inCol.color, black.color];
+                var alphas:Array = [1, 1];
+                var ratios:Array = [0, 255];
+                g.beginGradientFill(GradientType.LINEAR, colors, alphas, ratios);
+                g.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 10, 10);
+                g.endFill();
+              
             }
             
             if ( m_outCol != null )
             {
-                //GradientPaint gradient = new GradientPaint(0, 0, m_inCol, 0, m_bounds.height, Color.black );
-                //g.setPaint( gradient );
-/*                g.setColor(m_inCol);
-                g.fillRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height,5,5);
-*/                //ON g.drawRect( pos.x, pos.y, m_bounds.width, m_bounds.height );
+                g.beginFill(m_inCol.color);
+                g.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 5, 5);
+                g.endFill();
             }
             
             for ( i = 0; i < n; i ++ )
             {
                 textTok = TextToken(m_tokens.elementAt( i ));
-// /               textTok.paint( g, pos );
+                textTok.paint( g, pos );
             }
             
  /*           composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2);					
             g.setComposite(composite);
-            
+*/
             if ( n==1) // draw reflection only for one line boxes
             {
-                g.setColor( Color.white );
-                g.fillRoundRect(pos.x+2, pos.y+2, m_bounds.width-4, m_bounds.height/3,5,5);
+                var white:ColorTransform = new ColorTransform();
+                white.color = 0xFFFFFF;
+                g.beginFill(white.color);
+                g.drawRoundRect(pos.x+2, pos.y+2, m_bounds.width-4, m_bounds.height/3, 5, 5);
+                g.endFill();
             }
-            
+/*            
             g.setComposite(cb);
 */            
             m_bounds.x  = pos.x;

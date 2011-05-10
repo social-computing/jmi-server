@@ -1,4 +1,5 @@
 package com.socialcomputing.wps.script {
+    import flash.display.BitmapData;
     import flash.display.Graphics;
     import flash.display.Sprite;
     import flash.geom.ColorTransform;
@@ -52,7 +53,7 @@ package com.socialcomputing.wps.script {
          * @param g		The graphics to draw in.
          * @param pos	The position where this should be drawn before its internal translation is added.
          */
-        protected function paint( s:Sprite, pos:Point):void {
+        public function paint( g:Graphics, pos:Point):void {
             var x:int= m_bounds.x + pos.x,
                 y:int = m_bounds.y + pos.y;
             
@@ -60,8 +61,8 @@ package com.socialcomputing.wps.script {
             {
                 //g.setColor( m_bkCol );
                 //g.fillRect( x, y - g.getFontMetrics().getAscent(), m_bounds.width, m_bounds.height );
-                s.graphics.beginFill( m_bkCol.color );
-                s.graphics.drawRect(x, y , m_bounds.width, m_bounds.height);
+                g.beginFill( m_bkCol.color );
+                g.drawRect(x, y , m_bounds.width, m_bounds.height);
                 
             }
             
@@ -74,7 +75,12 @@ package com.socialcomputing.wps.script {
             var formatter:TextFormat = new TextFormat();
             formatter.font = m_font.font;
             text.defaultTextFormat = formatter;
-            s.addChild(text);
+            
+            var bitmapdata:BitmapData = new BitmapData(m_bounds.width, m_bounds.height);
+            bitmapdata.draw(text);
+           
+            g.beginBitmapFill(bitmapdata);
+            g.endFill();
         }
     }
 }
