@@ -255,69 +255,70 @@ package com.socialcomputing.wps.script  {
         }
         
         /**
-         * Return wether a point is inside this.
-         * @param applet		The Applet that owns this.
-         * @param g				A graphics to get the FontMetrics used by this.
-         * @param zone			The zone that holds the properties used by this satellite.
-         * @param satCtr		This satellite center.
-         * @param supCtr		This parent satellite center.
-         * @param transfo		The transformation that give the position and scale of this using its parent.
-         * @param pos			A point position to test.
-         * @param isPie			True if this is in the 'pie' part of this satellite.
-         * @param isFake		True if this is the first (main) Satellite.
-         * @return				True if this contains pos.
-         * @throws UnsupportedEncodingException 
+         * Return wether a point is inside this Satellite
+		 * 
+         * @param planComponent		The PlanComponent that owns this.
+         * @param g					A graphics to get the FontMetrics used by this.
+         * @param zone				The zone that holds the properties used by this satellite.
+         * @param satCtr			This satellite center.
+         * @param supCtr			This parent satellite center.
+         * @param transfo			The transformation that give the position and scale of this using its parent.
+         * @param pos				A point position to test.
+         * @param isPie				True if this is in the 'pie' part of this satellite.
+         * @param isFake			True if this is the first (main) Satellite.
+		 * 
+         * @return					True if the cursor's position is inside this satellite, false otherwise.
          */
-        public function contains(applet:PlanComponent, g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, transfo:Transfo, pos:Point, isPie:Boolean, isFake:Boolean):Boolean {
-            var i:int, n:int    = m_slices.length;
+        public function contains(planComponent:PlanComponent, g:Graphics, zone:ActiveZone, satCtr:Point, 
+								 supCtr:Point, transfo:Transfo, pos:Point, isPie:Boolean, isFake:Boolean):Boolean {
+            trace("[Satellite contains method called]");
+			var i:int, n:int = m_slices.length;
+            // If the parent satellite center is not set, take this satellite's shape center as center
+            if(supCtr == null) supCtr = m_shape.getCenter(zone);
             
-            if ( supCtr == null )	supCtr = m_shape.getCenter( zone );
+			// Iterate throw all this satellite's slices and check if one of them contains the cursor's position
+			// Stop if it's the case 
+            for(i = 0 ; (i < n && !m_slices[i].contains(planComponent, g, zone.getParent(), zone, m_shape, satCtr, supCtr, pos)) ; i++);
             
-            for ( i = 0; i < n && !m_slices[i].contains( applet, g, zone.getParent(), zone, m_shape, satCtr, supCtr, pos ); i ++ );
-            
-            if ( i < n )    // point is in one of this slices
-            {
-                applet.plan.m_newZone = zone;
-                
-                if ( isPie )
-                {
-                    var supZone:BagZone= BagZone(zone);
-                    var zones:Array= supZone.m_subZones;
-                    n = zones.length + 1;
+			// if the cursor's position is in one of the slices
+            if(i < n) {
+				planComponent.plan.m_newZone = zone;
+                if (isPie) {
+                    var supZone:BagZone = BagZone(zone);
+                    var zones:Array     = supZone.m_subZones;
+                    var nbZones:int     = zones.length + 1;
                     
-                    var center:Point= isFake ? m_shape.getCenter( supZone ) : supCtr;
-                    var dir:Number= supZone.m_dir != 10.? supZone.m_dir : transfo.m_dir,
-                        step:Number    = supZone.m_stp,
-                        m:Number       = .5*( Pi2 / step - n ),
-                        a:Number       = Math.atan2( pos.y - center.y, pos.x - center.x );
+                    var center:Point = isFake ? m_shape.getCenter(supZone) : supCtr;
+                    var dir:Number   = (supZone.m_dir != 10.) ? supZone.m_dir : transfo.m_dir,
+                        step:Number  = supZone.m_stp,
+                        m:Number     = .5 * (Pi2 / step - nbZones),
+                        a:Number     = Math.atan2(pos.y - center.y, pos.x - center.x);
                     
-                    if ( dir < 0)  dir += Pi2;
-                    if ( a < 0)    a += Pi2;
-                    if ( a < dir )  a += Pi2;
+                    if (dir < 0)  dir += Pi2;
+                    if (a < 0)    a   += Pi2;
+                    if (a < dir)  a   += Pi2;
                     
-                    a = .5+( a - dir )/ step;
-                    i = int(a);
+                    a = .5+(a - dir) / step;
+                    i = a as int;
                     
-                    if ( i > 0)
-                    {
-                        if ( i < n )
-                        {
-                            applet.plan.m_newZone = zones[i-1];
+                    if (i > 0) {
+                        if (i < nbZones) {
+							planComponent.plan.m_newZone = zones[i-1];
                         }
-                        else if ( a - n < m )
-                        {
-                            applet.plan.m_newZone = zones[n-2];
+                        else if (a - nbZones < m) {
+							planComponent.plan.m_newZone = zones[nbZones-2];
                         }
                     }
                 }
-                
+				trace("[Satellite contains method end, return value = true]");
                 return true;
             }
-            
+			trace("[Satellite contains method end, return value = false]");
             return false;
         }
         
-        /**
+
+		/**
          * Sets this bounds by updating an already created Rectangle.
          * @param applet		The Applet that owns this.
          * @param g				A graphics to get the FontMetrics used by this.

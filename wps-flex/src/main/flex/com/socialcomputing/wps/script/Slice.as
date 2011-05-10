@@ -177,11 +177,13 @@ package com.socialcomputing.wps.script  {
         }
         
         /**
-         * Return wether a point is inside this.
+         * Return wether a point is inside this slice
+		 * 
          * If there is a border or a background, tests if the point is inside the shape.
-         * Else, if there is a Text or HTMLText, tests if the point is inside the text bounds.
-         * The image are not considered because of the complexity (retrieving size), but should...
-         * @param applet		The Applet that owns this.
+         * TODO : Else, if there is a Text or HTMLText, tests if the point is inside the text bounds. 
+         * TODO : The image are not considered because of the complexity (retrieving size), but should...
+		 * 
+         * @param applet		The PlanComponent that owns this.
          * @param g				A graphics to get the FontMetrics used by this.
          * @param supZone		The parent of zone or null if it have none.
          * @param zone			The zone that holds the properties used by this slice.
@@ -189,16 +191,19 @@ package com.socialcomputing.wps.script  {
          * @param satCtr		This slice center, get from its satellite.
          * @param supCtr		This parent satellite center.
          * @param pos			A point position to test.
-         * @return				True if this contains pos.
-         * @throws UnsupportedEncodingException 
+		 * 
+         * @return				True if the cursor's position is inside this slice, false otherwise
          */
-        public function contains( applet:PlanComponent, g:Graphics, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point, pos:Point):Boolean {
-            var transfo:Transfo= getTransfo( TRANSFO_VAL, zone.m_props );
+        public function contains(planComponent:PlanComponent, g:Graphics, supZone:ActiveZone, zone:ActiveZone, 
+								 satShp:ShapeX, satCtr:Point, supCtr:Point, pos:Point):Boolean {
+            trace("[Slice contains method called]");
+			var transfo:Transfo = getTransfo(TRANSFO_VAL, zone.m_props);
             
-            if ( supZone == null )  supZone = zone;
+            if(supZone == null)	supZone = zone;
             
-            if (( isDefined( IN_COL_VAL ) || isDefined( OUT_COL_VAL ))&& satShp.contains( supZone, transfo, satCtr, pos ))
-            {
+            if((isDefined(IN_COL_VAL ) || isDefined(OUT_COL_VAL)) &&
+				satShp.contains(supZone, transfo, satCtr, pos)) {
+				trace("[Slice contains method, return value = true]");
                 return true;
             }
             
@@ -212,10 +217,11 @@ package com.socialcomputing.wps.script  {
                 
                 return htmlTxt != null ? htmlTxt.m_bounds.contains( pos ): false;
             }*/
-            
+			trace("[Slice contains method, return value = false]");
             return false;
         }
         
+		
         /**
          * Sets this bounds by updating an already created Rectangle.
          * If there is a border or a background, the bounds of the shape are considered.

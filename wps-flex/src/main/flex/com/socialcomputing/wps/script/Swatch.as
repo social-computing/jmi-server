@@ -238,6 +238,7 @@ package com.socialcomputing.wps.script  {
                         
                         if ( supZone.m_dir != 10.)  satTrf.m_dir = supZone.m_dir;
                         
+						
                         if (( !isEnabled( flags, Satellite.SEL_BIT )|| satData.m_isVisible )
                             && Base.isEnabled( flags, Satellite.SUPER_BIT ))    // Gets SuperZone bounds
                         {
@@ -273,7 +274,8 @@ package com.socialcomputing.wps.script  {
         
         /**
          * Gets the satellite under the cursor if it is in this zone swatch or null if it isn't.
-         * @param applet		The Applet that owns this.
+		 * 
+         * @param planComponent		The Applet that owns this.
          * @param g				A graphics to get the FontMetrics used by this.
          * @param zone			Zone to check the satellites.
          * @param pos			Location of the cursor.
@@ -281,35 +283,47 @@ package com.socialcomputing.wps.script  {
          * @return				The sat of this swatch that is hovered or null if there isn't.
          * @throws UnsupportedEncodingException 
          */
-        public function getSatAt(applet:PlanComponent, g:Graphics, zone:ActiveZone, pos:Point, isCurZone:Boolean):Satellite {
-            if ( zone.getParent().m_bounds.contains( pos.x, pos.y ))      // pos is in the Bounding Box
+        public function getSatAt(planComponent:PlanComponent, g:Graphics, zone:ActiveZone, pos:Point, isCurZone:Boolean):Satellite {
+			trace("[Swatch getSatAt method called]");
+			
+			// The cursor position is in the Bounding Box
+			var parentzone:ActiveZone = zone.getParent();		
+			
+			if(parentzone.m_bounds.contains(pos.x, pos.y))      
             {
-                var sat:Satellite= m_satellites[0];
-                var shape:ShapeX= sat.m_shape;
-                var isBag:Boolean= zone is BagZone;
-                var supZone:BagZone= isBag ? BagZone(zone ): null;
-                var zones:Array= isBag ? supZone.m_subZones : null;
-                var curZone:ActiveZone= applet.plan.m_curZone,
+                var sat:Satellite = m_satellites[0];
+                var shape:ShapeX = sat.m_shape;
+                var isBag:Boolean = zone is BagZone;
+                var supZone:BagZone = isBag ? BagZone(zone ): null;
+                var zones:Array = isBag ? supZone.m_subZones : null;
+                var curZone:ActiveZone = planComponent.plan.m_curZone,
                     subZone:ActiveZone;
                 var satRelTrf:Transfo, satTrf:Transfo,
-                	transfo:Transfo     = sat.getTransfo( Satellite.TRANSFO_VAL, zone.m_props );
-                var i:int, n:int        = m_satellites.length,
+                	transfo:Transfo = sat.getTransfo( Satellite.TRANSFO_VAL, zone.m_props );
+                var i:int, 
+				    n:int = m_satellites.length,
                     flags:int;
-                var hasRestBit:Boolean, hasCurBit:Boolean, hasSubBit:Boolean,  isCur:Boolean, isVisible:Boolean;
+                var hasRestBit:Boolean,
+				    hasCurBit:Boolean,
+					hasSubBit:Boolean,
+					isCur:Boolean,
+					isVisible:Boolean;
                 var satData:SatData;
-                var supCtr:Point= shape.getCenter( zone );
+                var supCtr:Point = shape.getCenter( zone );
                 
-                for ( i = n - 1; i > 0; i -- )
-                {
+				// Iterate throw all this swatch's satellites to test if the cursor is positionned in one of them
+                for(i = n - 1 ; i > 0; i --) {
                     sat     = m_satellites[i];
                     satData = isCurZone ? zone.m_curData[i] : zone.m_restData[i];
                     flags   = satData.m_flags;
                     
-                    if ( isEnabled( flags, Satellite.VISIBLE_BIT )&&( isCurZone || !isEnabled( flags, Satellite.TIP_BIT )))    // This Sat is visible and it's not a tip (avoid anoying place popup!)
+					// This Sat is visible and it's not a tip (avoid anoying place popup!)
+                    if ( isEnabled( flags, Satellite.VISIBLE_BIT )&&( isCurZone || !isEnabled( flags, Satellite.TIP_BIT )))    
                     {
-                        isVisible   = !isEnabled( flags, Satellite.SEL_BIT )|| satData.m_isVisible;
+                        isVisible   = !isEnabled( flags, Satellite.SEL_BIT ) || satData.m_isVisible;
                         
-                        if ( isBag )
+						// If it's a BagZone
+                        if(isBag)
                         {
                             hasCurBit   = isEnabled( flags, Satellite.CUR_BIT );
                             hasSubBit   = isEnabled( flags, Satellite.SUB_BIT );
@@ -317,12 +331,10 @@ package com.socialcomputing.wps.script  {
                             
                             if ( zones != null && hasSubBit && hasCurBit && satRelTrf != null && satRelTrf.m_pos == 0.)
                             {
-                                if ( isVisible && sat.contains( applet, g, zone, null, null, transfo, pos, true, true ))
-                                {
+                                if (isVisible && sat.contains(planComponent, g, zone, null, null, transfo, pos, true, true)) {
                                     return sat;
                                 }
-                                else
-                                {
+                                else {
                                     continue;
                                 }
                             }
@@ -333,54 +345,54 @@ package com.socialcomputing.wps.script  {
                             
                             if ( isBag && supZone.m_dir != 10.)  satTrf.m_dir = supZone.m_dir;
                             
-                            if ( Base.isEnabled( flags, Satellite.SUPER_BIT ))  // Test if SuperZone contains pos
+							// Test if the cursor is the super zone
+                            if ( Base.isEnabled( flags, Satellite.SUPER_BIT ))  
                             {
-                                isCur   = supZone == curZone;
-                                
-                                if ( isVisible &&(( hasRestBit && !isCur )||( hasCurBit && isCur ))&& sat.contains( applet, g, zone, shape.transformOut( zone, satTrf ), supCtr, satTrf, pos, false, false ))
-                                {
+                                isCur = supZone == curZone;
+                                if (isVisible &&
+									((hasRestBit && !isCur) || (hasCurBit && isCur)) &&
+									sat.contains(planComponent, g, zone, shape.transformOut( zone, satTrf ), supCtr, satTrf, pos, false, false )) {
                                     return sat;
                                 }
                             }
                             
-                            if ( zones != null && hasSubBit )   // Test if SubZones contains pos
-                            {
-                                var j:int, m:int    = zones.length;
+							// Or if the cursor is in one of the sub zones 
+                            if (zones != null && hasSubBit) {
+                                var j:int, m:int = zones.length;
+                                satTrf.m_dir += (zones.length + 1) * supZone.m_stp;
                                 
-                                satTrf.m_dir +=( zones.length + 1)* supZone.m_stp;
-                                
-                                for ( j = m - 1; j >= 0; j -- )
-                                {
-                                    subZone         = zones[j];
-                                    satTrf.m_dir   -= supZone.m_stp;
-                                    isCur           = subZone == curZone;
+                                for(j = m - 1 ; j >= 0 ; j --) {
+                                    subZone        = zones[j];
+                                    satTrf.m_dir  -= supZone.m_stp;
+                                    isCur          = subZone == curZone;
                                     
                                     satData     = isCurZone ? subZone.m_curData[i] : subZone.m_restData[i];
                                     flags       = satData.m_flags;
-                                    isVisible   = !isEnabled( flags, Satellite.SEL_BIT )|| satData.m_isVisible;
+                                    isVisible   = !isEnabled(flags, Satellite.SEL_BIT)|| satData.m_isVisible;
                                     
-                                    if ( isVisible &&(( hasRestBit && !isCur )||( hasCurBit && isCur ))&& sat.contains( applet, g, subZone, shape.transformOut( zone, satTrf ), supCtr, satTrf, pos, false, false ))
-                                    {
-                                        return sat;
+                                    if(isVisible &&
+									   ((hasRestBit && !isCur) || (hasCurBit && isCur)) &&
+									   sat.contains(planComponent, g, subZone, shape.transformOut(zone, satTrf), supCtr, satTrf, pos, false, false)) {
+                                       return sat;
                                     }
                                 }
                             }
                         }
-                        else // links
-                        {
-                            if ( isVisible && sat.contains( applet, g, zone, null, null, transfo, pos, false, true ))
-                            {
-                                return sat;
+						
+						// Else, if it's a link zone
+                        else {
+                            if(isVisible &&
+							   sat.contains(planComponent, g, zone, null, null, transfo, pos, false, true)) {
+                            	return sat;
                             }
                         }
                     }
                 }
-                // Tests if the place itself contains pos
+				
+                // Tests if the cursor is located in the place itself
                 sat = m_satellites[0];
-                
-                if ( sat.contains( applet, g, zone, null, null, transfo, pos, zones != null, true )||
-                    ( isCurZone && !( zone is LinkZone )))
-                {
+                if(sat.contains(planComponent, g, zone, null, null, transfo, pos, zones != null, true ) ||
+                   (isCurZone && !(zone is LinkZone))) {
                     return sat;
                 }
             }

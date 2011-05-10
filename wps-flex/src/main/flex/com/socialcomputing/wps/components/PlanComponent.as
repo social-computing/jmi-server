@@ -46,7 +46,7 @@ package com.socialcomputing.wps.components
 		
 		private var _dataProvider:PlanContainer = null;
 		private var _nodes:Array = null;
-		private var _curPos:Point= new Point();
+		// private var _curPos:Point= new Point();
 		private var _ready:Boolean = false;
 
 		private var _backImgUrl:String;
@@ -69,7 +69,7 @@ package com.socialcomputing.wps.components
 			this.addElement(_drawingSurface);
 			
 			addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
-			//addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+			addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 			addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
 			/*			
 				addEventListener(MouseEvent.MOUSE_CLICK, mouseClickHandler);
@@ -229,7 +229,7 @@ package com.socialcomputing.wps.components
 				plan.initZones(this.graphics, plan.m_nodes, true);
 				plan.resize(size);
 				plan.init();
-				plan.resize(size);
+				//plan.resize(size);
 				_ready = true;
 				
 				
@@ -261,6 +261,7 @@ package com.socialcomputing.wps.components
 			trace(message);
 		}
 		
+		/*
 		public function get curPos():Point {
 			return _curPos;
 		}
@@ -268,19 +269,19 @@ package com.socialcomputing.wps.components
 		public function set curPos(pos:Point):void {
 			_curPos = pos;
 		}
+		*/
 		
 		public function mouseOverHandler(event:MouseEvent):void {
 			trace("mouseOverHandler");
 		}
 		
 		public function mouseMoveHandler(event:MouseEvent):void {
-			/*
-			curPos.x    = event.stageX;
-			curPos.y    = event.stageY;
-			if( ready) {
-				_dataProvider.plan.updateZoneAt( curPos ); // The Zone, SubZone or Satellite can have changed
+			//curPos.x = event.stageX;
+			//curPos.y = event.stageY;
+			if(ready) {
+				// The Zone, SubZone or Satellite can have changed
+				_dataProvider.plan.updateZoneAt(new Point(event.stageX, event.stageY)); 
 			}
-			*/
 		}
 		
 		public function mouseOutHandler(event:MouseEvent):void {

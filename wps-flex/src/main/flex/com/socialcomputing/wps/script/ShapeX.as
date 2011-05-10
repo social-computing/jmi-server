@@ -115,44 +115,47 @@ package com.socialcomputing.wps.script  {
         }
         
         /**
-         * Return wether a point is inside this shape after it has been transformed.
-         * @param zone		BagZone holding the Points table.
+         * Return wether a point is inside this shape after it has been transformed
+		 * 
+         * @param zone		BagZone holding the Points table. ???? 
          * @param transfo	A transformation to scale or translate this shape.
          * @param center	The center of the shape before the transformation.
          * @param pos		A point position to test.
-         * @return			True if this contains pos.
+		 * 
+         * @return			True if this contains pos, false otherwise
          */
-        public function contains( zone:ActiveZone, transfo:Transfo, center:Point, pos:Point):Boolean {
-            if ( isDefined( SCALE_VAL ))    // else it is just a void frame
-            {
-                var points:Array= getValue( POLYGON_VAL, zone.m_props ) as Array;
-                var p:Point= getCenter( zone ),
-                    shapePos:Point    = new Point();
-                var size:int= int(getShapePos( zone, transfo, center, p, shapePos )),
-                    n:int           = points.length;
-                
-                switch ( n )
-                {
-                    case 1:     // dot      => Place
-                        var dx2:int= p.x + shapePos.x - pos.x,
-                        dy2:int     = p.y + shapePos.y - pos.y;
-                        
-                        return ( dx2 * dx2 )+( dy2 * dy2 )< size * size;
-                        
-                    case 2:     // segment  => Street
-                    {
-						var fromPoint:Point = (points[0] as Point).add(shapePos);
-                        var toPoint:Point = (points[1] as Point).add(shapePos);
-						
-						// var A:Point= addPnts( points[0], shapePos ),
-                        //     B:Point= addPnts( points[1], shapePos );
-                        var poly:Polygon= getLinkPoly(zone, fromPoint, toPoint, size);
-                        return poly.contains2( pos );
-                    }
-                }
-            }
+        public function contains(zone:ActiveZone, transfo:Transfo, center:Point, pos:Point):Boolean {
+			trace("[Shape contains method begin]");
+			if(!isDefined(SCALE_VAL)) return false; // it is just a void frame
+			
+            var points:Array = getValue(POLYGON_VAL, zone.m_props) as Array;
+            var shapeCenter:Point   = getCenter(zone),
+                shapePosition:Point = new Point();
+            var size:int    = this.getShapePos(zone, transfo, center, shapeCenter, shapePosition) as int,
+                nbPoint:int = points.length;
             
-            return false;
+            switch(nbPoint) {
+				// 1 point = circle => Place
+				case 1: 
+					trace("  - 1 point situation : circle");
+					var d:Point = shapeCenter.add(shapePosition).subtract(pos);
+					// We check if the position is located inside the circle
+					// Another way to express it : is the distance between the circle center and the position < circle (rayon)
+					trace("[Shape contains end]");
+                    return (d.x * d.x) + (d.y * d.y) < (size * size);
+                    
+				// 2 points = segment => Street
+                case 2:     
+					trace("  - 2 points situation : polygon");
+					var fromPoint:Point = (points[0] as Point).add(shapePosition);
+                    var toPoint:Point = (points[1] as Point).add(shapePosition);
+
+					var poly:Polygon = getLinkPoly(zone, fromPoint, toPoint, size);
+					trace("[Shape contains end]");
+                    return poly.contains2(pos);
+				default:
+					throw new Error("Should never happen, a shape can only have 1 or 2 points");
+            }
         }
         
         /**
@@ -185,10 +188,9 @@ package com.socialcomputing.wps.script  {
                         break;
                     
                     case 2:     // segment
-                        var A:Point= addPnts( points[0], shapePos ),
-                        B:Point= addPnts( points[1], shapePos );
-                        
-                        rect    = getLinkPoly( zone, A, B, size ).getBounds();
+                        var A:Point = (points[0] as Point).add(shapePos),
+                            B:Point = (points[1] as Point).add(shapePos);
+                        rect = getLinkPoly(zone, A, B, size).getBounds();
                         break;
                 }
                 
@@ -476,6 +478,7 @@ package com.socialcomputing.wps.script  {
         
         /**
          * Evaluate the transformation of a point using a transformation on this shape and return its scale.
+		 * 
          * @param zone		BagZone holding this props.
          * @param transfo	A transformation to scale or translate this shape.
          * @param center	The center of this shape(satellite) before the tranformation.
@@ -483,27 +486,27 @@ package com.socialcomputing.wps.script  {
          * @param pos		The location to transform.
          * @return			The scale of this shape after transformation.
          */
-        private function getShapePos( zone:ActiveZone, transfo:Transfo, center:Point, p0:Point, pos:Point):Number {
-            var scale:Number= getFloat( SCALE_VAL, zone.m_props );
-            
-            if ( center != null )   // we are drawing a real Sat!
-            {
-                pos.x = center.x - p0.x;
-                pos.y = center.y - p0.y;
+        private function getShapePos(zone:ActiveZone, transfo:Transfo, center:Point, p0:Point, pos:Point):Number {
+            var scale:Number = getFloat(SCALE_VAL, zone.m_props);
+			var p:Point;
+			
+			// We are drawing a real Sat!
+            if(center != null) {
+				p = center.subtract(p0); 
+				pos.x = p.x;
+				pos.y = p.y;
             }
             
-            if ( transfo != null )
-            {
-                var p:Point= transfo.getCart();
-                
-                pos.x   += p.x;
-                pos.y   += p.y;
-                scale   *= transfo.m_scl;
+            if(transfo != null){
+				p =  pos.add(transfo.getCart());
+				pos.x = p.x;
+				pos.y = p.y;
+                scale *= transfo.m_scl;
             }
-            
             return scale;
         }
         
+		
         /**
          * Merge 2 Rectangles.
          * If the dest Rectangle has one null dimension then copy the source on it.
@@ -530,15 +533,6 @@ package com.socialcomputing.wps.script  {
             }
         }
         
-        /**
-         * Sum two vectors.
-         * @param A		A vector.
-         * @param B		Another Vector.
-         * @return		A new Point : A + B
-         */
-        protected static function addPnts( A:Point, B:Point):Point {
-            return new Point( A.x + B.x, A.y + B.y );
-        }
         
         /**
          * Scales a Point previously normalized to 2^16.

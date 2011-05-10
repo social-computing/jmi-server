@@ -114,6 +114,8 @@ package com.socialcomputing.wps.script  {
          * This include transforming selection prop to an int flag,
          * copying Env props reference in this prop table and
          * initializing satellite data for both swatchs.
+		 * TODO : Remove graphics parameter : unused
+		 * 
          * @param applet    WPSApplet owning this.
          * @param g         A graphics compatible with the one that will be used for painting.
          * @param isFirst   True if init called for the first time.

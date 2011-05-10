@@ -4,7 +4,7 @@ package com.socialcomputing.wps.script  {
     
     import flash.display.BitmapData;
     import flash.display.Graphics;
-	import flash.display.Shape;
+    import flash.display.Shape;
     import flash.geom.Matrix;
     import flash.geom.Point;
     import flash.geom.Rectangle;
@@ -234,68 +234,74 @@ package com.socialcomputing.wps.script  {
             //g.dispose();
             //m_applet.render();
         }
-        
+
+		
         /**
-         * Check if the satellite at a location has changed and sets the current zone accordingly.
-         * @param p	Position of the cursor.
-         * @return	True if the current satellite has changed.
-         * @throws UnsupportedEncodingException 
+		 * When the mouse move, the mouse cursor can hover some specific zones on the plan that need to be refreshed
+		 * IE : A node / link is hovered
+		 * Check if the satellite at a location has changed and sets the current zone accordingly.
+		 * 
+         * @param  p	Position of the cursor.
+         * @return True if the current satellite has changed. 
          */
-        public function updateZoneAt( p:Point):Boolean {
-            var curSat:Satellite;
+        public function updateZoneAt(p:Point):Boolean {
+			trace("[Plan : updateZoneAt method called]"); 
+			var curSat:Satellite;
             var zone:ActiveZone,
             	parent:ActiveZone = m_curZone != null ? m_curZone.getParent() : null;
-            var g:Graphics= m_applet.graphics;
+            
+			// TODO : See how to set that graphics item
+			var g:Graphics = m_applet.backDrawingSurface.graphics;
             var i:int;
             
-            if ( m_curSat != null )                        // There is a current Active Zone!
-            {
-                curSat  = m_curZone.m_curSwh.getSatAt( m_applet, g, parent, p, true );
+			// Check if there is a current Active Zone (Satellite ?) and if the cursor is located in that zone
+            if(m_curSat != null) {
+                curSat = m_curZone.m_curSwh.getSatAt(m_applet, g, parent, p, true);
                 
-                if ( curSat != null ) // p is in the current Zone
-                {
-                    return updateCurrentZone( g, curSat, p );
+				// the cursor is in the current Zone
+                if (curSat != null) {
+                    return updateCurrentZone(g, curSat, p);
                 }
             }
             
-            // p is in not in the current Zone, it can be in another one...
-            for ( i = 0; i < m_nodesCnt; i ++ )
-            {
-                zone    = m_nodes[i];
+            // The cursor is in not in the current Zone, it can be in another one...
+            for(i = 0 ; i < m_nodesCnt ; i++) {
+                zone = m_nodes[i];
                 
-                if ( zone != parent )   // We know p is not in curZone so don't test it!
-                {
-                    curSat  = zone.m_restSwh.getSatAt( m_applet, g, zone, p, false );
+				// We know p is not in curZone so don't test it!
+                if (zone != parent) {
+                    curSat = zone.m_restSwh.getSatAt(m_applet, g, zone, p, false);
                     
-                    if ( curSat != null ) // p is in this Node
-                    {
-                        return updateCurrentZone( g, curSat, p );
+					// The cursor is on this node
+                    if(curSat != null) {
+                        return updateCurrentZone(g, curSat, p);
                     }
                 }
             }
             
-            // p is in not in a Node, it can be in a Link...
-            for ( i = m_links.length - 1; i >= 0; i -- )
-            {
-                zone    = LinkZone(m_links[i]);
-                
-                if ( zone != parent && zone.m_curSwh != null )   // We know p is not in curZone so don't test it!
-                {                                                // If this zone has no current Swatch, it can't be current.
-                    curSat  = zone.m_restSwh.getSatAt( m_applet, g, zone, p, false );
+            // The cursor is not in a Node, it can be in a Link...
+            for(i = m_linksCnt - 1 ; i >= 0 ; i --) {
+                zone = m_links[i] as LinkZone;
+				
+				// We know p is not in curZone so don't test it!
+                if (zone != parent && zone.m_curSwh != null) {                                                
+					
+					// If this zone has no current Swatch, it can't be current.
+                    curSat = zone.m_restSwh.getSatAt(m_applet, g, zone, p, false );
                     
-                    if ( curSat != null ) // p is in this Link
-                    {
-                        return updateCurrentZone( g, curSat, p );
+					// The cursor is on this link
+                    if (curSat != null) {
+                        return updateCurrentZone(g, curSat, p);
                     }
                 }
             }
             
-            // p is not in a Zone
-            m_newZone = null;
-            
-            return updateCurrentZone( g, null, p );
+            // Last case, the cursor is not in a Zone
+            this.m_newZone = null;
+            return updateCurrentZone(g, null, p);
         }
         
+		
         /**
          * Compare the old and new state of curSat.
          * Returns wether it has changed and update display if necessary.
@@ -308,7 +314,11 @@ package com.socialcomputing.wps.script  {
          * @return			True if the current satellite has changed.
          */
         private function updateCurrentZone( g:Graphics, curSat:Satellite, p:Point):Boolean {
-            if ( m_curZone != m_newZone )           // The current Satellite has changed
+            // TODO : comment this
+			trace("[Update current zone : not implemented yet]");
+			return false
+			
+			if ( m_curZone != m_newZone )           // The current Satellite has changed
             {
 				//TODO
                 /*for ( var waiter:Waiter in m_waiters)
