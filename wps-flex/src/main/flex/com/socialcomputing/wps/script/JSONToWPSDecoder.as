@@ -168,7 +168,7 @@ package com.socialcomputing.wps.script
 			} 
 			item.m_refs = new Array();
 			for(var i:String in json.refs){
-				item.m_refs[i] = json.refs[i];
+				item.m_refs[i] = toObject( json.refs[i]);
 			}			
 			toBase( item, json);
 			return item;
@@ -216,8 +216,14 @@ package com.socialcomputing.wps.script
 			else if( json.cls == "Transfo") {
 				return toTransfo(json);				
 			}
+			else if( json.cls == "Slice") {
+				return toSlice(json);				
+			}
 			else if( json.cls == "ColorX") {
 				return toColorX(json);				
+			}
+			else if( json.cls == "MenuX") {
+				return toMenuX(json);				
 			}
 			else if( json.cls == "HtmlText") {
 				return toHTMLText(json);				
