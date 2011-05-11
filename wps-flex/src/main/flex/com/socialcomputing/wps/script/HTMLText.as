@@ -351,10 +351,9 @@ package com.socialcomputing.wps.script{
                     var font:FontX= getFont( FONT_VAL, zone.m_props);
                     
                     htmlTxt = new HTMLText();
-                    //TODO set htmlTxt.m_body
-                    //htmlTxt.m_body = new FormatToken();
-                    //htmlTxt.m_body.m_flags  = getFlags( zone );
-                    //htmlTxt.m_body.m_margin = new Insets( 0, 2, 0, 2);
+                    htmlTxt.m_body = new FormatToken();
+                    htmlTxt.m_body.m_flags = getFlags( zone );
+                    htmlTxt.m_body.m_margin = new Insets( 0, 2, 0, 2);
                     
                     htmlTxt.m_inCol = getColor( IN_COL_VAL, zone.m_props);
                     htmlTxt.m_outCol = getColor( OUT_COL_VAL, zone.m_props);
@@ -539,6 +538,7 @@ package com.socialcomputing.wps.script{
             {
 				trace( "HTMLText updateText à finir");
                 
+                
 /*				var fd:FontDescription = new FontDescription();
 				fd.fontName = "Garamond";
 				fd.fontWeight = flash.text.engine.FontWeight.BOLD;
@@ -706,7 +706,7 @@ package com.socialcomputing.wps.script{
             
             if ( startsWith(tag, "c=" )|| startsWith(tag, "k=" ))
             {
-                var color:ColorTransform= startsWith(tag, "c=" )? textTok.m_color : textTok.m_bkCol;
+                var color:ColorTransform = startsWith(tag, "c=" )? textTok.m_color : textTok.m_bkCol;
                 var rgb:int= 0;
                 
                 //textTok.m_font = new Font( m_name, m_style, m_size );
@@ -781,7 +781,7 @@ package com.socialcomputing.wps.script{
                     textTok.m_font.italic =  true;
                 textTok.m_font.size = m_size;
                 
-                g.setFont( textTok.m_font );
+                //g.setFont( textTok.m_font );
             }
             return textTok;
         }
@@ -825,7 +825,7 @@ package com.socialcomputing.wps.script{
                 textTok.m_font.italic =  true;
             textTok.m_font.size = m_size;
             
-            g.setFont( textTok.m_font );
+            //g.setFont( textTok.m_font );
             
             return textTok;
         }

@@ -55,8 +55,11 @@ package com.socialcomputing.wps.script
 		 */
 		public var right:int;
 				
-		public function Insets()
-		{
+		public function Insets(top:int, left:int, bottom:int, right:int):void {
+            this.top = top;
+            this.left = left;
+            this.bottom = bottom;
+            this.right = right;
 		}
 		
 		/**
