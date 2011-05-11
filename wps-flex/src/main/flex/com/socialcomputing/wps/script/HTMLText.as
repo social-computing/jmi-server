@@ -7,6 +7,7 @@ package com.socialcomputing.wps.script{
     import flash.geom.Point;
     import flash.geom.Rectangle;
     import flash.text.Font;
+    import flash.text.FontStyle;
     import flash.text.TextFormat;
     import flash.text.engine.ElementFormat;
     import flash.text.engine.FontDescription;
@@ -537,6 +538,7 @@ package com.socialcomputing.wps.script{
             if ( text.length > 0)
             {
 				trace( "HTMLText updateText à finir");
+                
 /*				var fd:FontDescription = new FontDescription();
 				fd.fontName = "Garamond";
 				fd.fontWeight = flash.text.engine.FontWeight.BOLD;
@@ -748,17 +750,19 @@ package com.socialcomputing.wps.script{
                 col.color = m_color;
                 textTok.m_color = col;
                 
-                /*if ( tag == ( "b" ))
+                if ( tag == ( "b" ))
                 {
-                    m_style |= Font.BOLD;
+                    //m_style |= Font.BOLD;
+                    m_style |= 0x1;
                 }
                 else if ( tag == ( "i" ))
                 {
-                    m_style |= Font.ITALIC;
+                    //m_style |= Font.ITALIC;
+                    m_style |= 0x2;
                 }
                 else if ( startsWith( tag, "s=" ))
                 {
-                    m_size  = Integer.parseInt( tag.substring( 2));
+                    m_size  = Number(tag.substring(2));
                 }
                 else if ( startsWith( tag, "f=" ))
                 {
@@ -769,8 +773,15 @@ package com.socialcomputing.wps.script{
                     trace( "[updateGfx] Syntax error Tag : " + tag );
                     return null;
                 }
-                textTok.m_font = new Font( m_name, m_style, m_size );
-                g.setFont( textTok.m_font );*/
+                //textTok.m_font = new Font( m_name, m_style, m_size );
+                textTok.m_font.font = m_name;
+                if (m_style == 0x1)
+                    textTok.m_font.bold =  true;
+                else if (m_style == 0x2)
+                    textTok.m_font.italic =  true;
+                textTok.m_font.size = m_size;
+                
+                g.setFont( textTok.m_font );
             }
             return textTok;
         }
@@ -787,16 +798,18 @@ package com.socialcomputing.wps.script{
             var c:String= tag.charAt( 0);
             var prevTag:String;
             
-            /*m_heap.removeElement( tag );
+            //m_heap.removeElement( tag );
+            var tag_index:int = m_heap.indexOf(tag);
+            m_heap.splice( tag_index , 1 );
             
-            if ( c == 'b' )         m_style &= ~Font.BOLD;
-            else if ( c == 'i' )    m_style &= ~Font.ITALIC;
+            if ( c == 'b' )         m_style &= ~0x1;
+            else if ( c == 'i' )    m_style &= ~0x2;
             
             if ( isGfx( c ))
             {
-                while ( i -- > 0)
+                while (i-- > 0)
                 {   // find previous Tag of the same type in the heap
-                    prevTag = String(m_heap.elementAt( i ));
+                    prevTag = String(m_heap[i]);
                     
                     if ( prevTag.charAt( 0)== c )
                     {
@@ -804,8 +817,15 @@ package com.socialcomputing.wps.script{
                     }
                 }
             }
-            textTok.m_font = new Font( m_name, m_style, m_size );
-            g.setFont( textTok.m_font );*/
+            //textTok.m_font = new Font( m_name, m_style, m_size );
+            textTok.m_font.font = m_name;
+            if (m_style == 0x1)
+                textTok.m_font.bold =  true;
+            else if (m_style == 0x2)
+                textTok.m_font.italic =  true;
+            textTok.m_font.size = m_size;
+            
+            g.setFont( textTok.m_font );
             
             return textTok;
         }
@@ -827,7 +847,7 @@ package com.socialcomputing.wps.script{
             if (( dir & 2)!= 0)         pos.y = yMax;
             else if (( dir & 1)!= 0)    pos.y = yMax >> 1;
             
-            //drawText3( g, size, pos );
+            drawText3( g, size, pos );
         }
         
         /**
@@ -835,7 +855,7 @@ package com.socialcomputing.wps.script{
          * @param g		Graphics to draw in.
          * @param size	Size of the Window to draw in.
          */
-        protected function drawText2( g:Graphics, size:Rectangle):void {
+        protected function drawText2( g:Graphics, size:Dimension):void {
             drawText3( g, size, new Point( m_bounds.x, m_bounds.y ));
         }
         
@@ -845,7 +865,7 @@ package com.socialcomputing.wps.script{
          * @param size	Size of the Window to draw in.
          * @param pos	Where to draw this.
          */
-        protected function drawText3( g:Graphics, size:Rectangle, pos:Point):void {
+        protected function drawText3( g:Graphics, size:Dimension, pos:Point):void {
             //var g:Graphics2D= Graphics2D(gi);
             
 			trace( "HTMLText drawText3 à fnir");
