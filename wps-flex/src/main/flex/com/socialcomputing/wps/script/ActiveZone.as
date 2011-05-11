@@ -15,7 +15,7 @@ package com.socialcomputing.wps.script  {
      * @author flugue@mapstan.com
      * @version 1.0
      */
-    public class ActiveZone extends Array
+    public class ActiveZone
     {
         /**
          * Bit indicating that subnodes of this are located on one side.

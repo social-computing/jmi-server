@@ -352,7 +352,7 @@ package com.socialcomputing.wps.script{
                     
                     htmlTxt = new HTMLText();
                     htmlTxt.m_body = new FormatToken();
-                    htmlTxt.m_body.m_flags = getFlags( zone );
+                    htmlTxt.m_body.m_flags = getFlags( zone.m_props );
                     htmlTxt.m_body.m_margin = new Insets( 0, 2, 0, 2);
                     
                     htmlTxt.m_inCol = getColor( IN_COL_VAL, zone.m_props);
@@ -611,9 +611,9 @@ package com.socialcomputing.wps.script{
                 
                 var prevTok:FormatToken= m_curTok;
                 var prevMrg:Insets= prevTok.m_margin,
-                    margin  = m_body.m_margin;
+                    margin:Insets = m_body.m_margin;
                 var flags:int= m_body.m_flags,
-                    width   = m_wCur +( prevMrg != null ? prevMrg.left + prevMrg.right : 0);
+                    width:int= m_wCur +( prevMrg != null ? prevMrg.left + prevMrg.right : 0);
                 
                 // Start of Tag	+ </p>
                 if ( tag == ( "br" )|| begChar == 'p' || tag == ( "/p" ))
@@ -1003,7 +1003,7 @@ package com.socialcomputing.wps.script{
          * @param tag	A tag holding some margin attributes.
          * @return		An inset of t, l, b, r margins or null if none are defined.
          */
-        private function readMargin( tag:String):Rectangle {
+        private function readMargin( tag:String):Insets {
             var t:String, l:String, b:String, r:String;
             
             t = readAtt( tag, "t" );
@@ -1020,7 +1020,7 @@ package com.socialcomputing.wps.script{
             }
             else
             {
-                var bc:Rectangle;
+                var bc:Insets;
                 bc.top = t == null ? 0: int(t);
                 bc.bottom = b == null ? 0: int(b);
                 bc.left = l == null ? 0: int(l);
