@@ -3,6 +3,7 @@ package com.socialcomputing.wps.script{
     
     import flash.display.GradientType;
     import flash.display.Graphics;
+    import flash.display.Sprite;
     import flash.geom.ColorTransform;
     import flash.geom.Point;
     import flash.geom.Rectangle;
@@ -837,7 +838,7 @@ package com.socialcomputing.wps.script{
          * @param dir	One of the following directions:<br>
          * NORTH, NORTH_EAST, EAST, SOUTH_EAST, SOUTH, SOUTH_WEST, WEST, NORTH_WEST.
          */
-        protected function drawText( g:Graphics, size:Dimension, dir:int):void {
+        protected function drawText( s:Sprite, size:Dimension, dir:int):void {
             var pos:Point= new Point();
             var xMax:int= size.width - m_bounds.width - 1,
                 yMax:int= size.height - m_bounds.height - 1;
@@ -847,7 +848,7 @@ package com.socialcomputing.wps.script{
             if (( dir & 2)!= 0)         pos.y = yMax;
             else if (( dir & 1)!= 0)    pos.y = yMax >> 1;
             
-            drawText3( g, size, pos );
+            drawText3( s, size, pos );
         }
         
         /**
@@ -855,8 +856,8 @@ package com.socialcomputing.wps.script{
          * @param g		Graphics to draw in.
          * @param size	Size of the Window to draw in.
          */
-        protected function drawText2( g:Graphics, size:Dimension):void {
-            drawText3( g, size, new Point( m_bounds.x, m_bounds.y ));
+        protected function drawText2( s:Sprite, size:Dimension):void {
+            drawText3( s, size, new Point( m_bounds.x, m_bounds.y ));
         }
         
         /**
@@ -865,7 +866,7 @@ package com.socialcomputing.wps.script{
          * @param size	Size of the Window to draw in.
          * @param pos	Where to draw this.
          */
-        protected function drawText3( g:Graphics, size:Dimension, pos:Point):void {
+        protected function drawText3( s:Sprite, size:Dimension, pos:Point):void {
             //var g:Graphics2D= Graphics2D(gi);
             
 			trace( "HTMLText drawText3 à fnir");
@@ -886,23 +887,23 @@ package com.socialcomputing.wps.script{
                 var colors:Array = [m_inCol.color, black.color];
                 var alphas:Array = [1, 1];
                 var ratios:Array = [0, 255];
-                g.beginGradientFill(GradientType.LINEAR, colors, alphas, ratios);
-                g.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 10, 10);
-                g.endFill();
+                s.graphics.beginGradientFill(GradientType.LINEAR, colors, alphas, ratios);
+                s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 10, 10);
+                s.graphics.endFill();
               
             }
             
             if ( m_outCol != null )
             {
-                g.beginFill(m_inCol.color);
-                g.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 5, 5);
-                g.endFill();
+                s.graphics.beginFill(m_inCol.color);
+                s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 5, 5);
+                s.graphics.endFill();
             }
             
             for ( i = 0; i < n; i ++ )
             {
                 textTok = TextToken(m_tokens.elementAt( i ));
-                textTok.paint( g, pos );
+                textTok.paint( s, pos );
             }
             
  /*           composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2);					
@@ -912,9 +913,9 @@ package com.socialcomputing.wps.script{
             {
                 var white:ColorTransform = new ColorTransform();
                 white.color = 0xFFFFFF;
-                g.beginFill(white.color);
-                g.drawRoundRect(pos.x+2, pos.y+2, m_bounds.width-4, m_bounds.height/3, 5, 5);
-                g.endFill();
+                s.graphics.beginFill(white.color);
+                s.graphics.drawRoundRect(pos.x+2, pos.y+2, m_bounds.width-4, m_bounds.height/3, 5, 5);
+                s.graphics.endFill();
             }
 /*            
             g.setComposite(cb);
