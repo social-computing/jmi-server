@@ -128,7 +128,8 @@ package com.socialcomputing.wps.script  {
                     var textUrls:Vector.<String> = text.parseString( HTMLText.TEXT_VAL, zone.m_props );
                     var hLine:String = "";
                     var hTxt:String = "";
-                    var i:int, n        = textUrls.length;
+                    var i:int;
+                    var n:int = textUrls.length;
                     
                     try
                     {

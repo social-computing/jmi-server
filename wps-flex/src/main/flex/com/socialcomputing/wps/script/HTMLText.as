@@ -907,9 +907,11 @@ package com.socialcomputing.wps.script{
             
             for ( i = 0; i < n; i ++ )
             {
-                textTok = m_tokens[i] as TextToken;
-                // TODO DAK 20110512 : A DECOMMENTER
-                //textTok.paint( s, pos );
+                trace("****" + this.m_tokens[i]);
+                if (this.m_tokens[i] is TextToken) {
+                    textTok = this.m_tokens[i] as TextToken;
+                    textTok.paint( s, pos );
+                }
             }
             
             /*           composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2);					
@@ -923,7 +925,7 @@ package com.socialcomputing.wps.script{
                 s.graphics.drawRoundRect(pos.x+2, pos.y+2, m_bounds.width-4, m_bounds.height/3, 5, 5);
                 s.graphics.endFill();
             }
-            /*            
+            /*
             g.setComposite(cb);
             */            
             m_bounds.x  = pos.x;
