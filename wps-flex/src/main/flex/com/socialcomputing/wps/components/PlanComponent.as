@@ -48,7 +48,7 @@ package com.socialcomputing.wps.components
 		
 		private var _dataProvider:PlanContainer = null;
 		private var _nodes:Array = null;
-		// private var _curPos:Point= new Point();
+		private var _curPos:Point= new Point();
 		private var _ready:Boolean = false;
 
 		private var _backImgUrl:String;
@@ -135,6 +135,14 @@ package com.socialcomputing.wps.components
 			_restImg = value;
 		}
 */		
+		public function get curPos():Point {
+			return _curPos;
+		}
+		
+		public function set curPos(pos:Point):void {
+			_curPos = pos;
+		}
+		
 		public function set dataProvider(value:Object):void
 		{
 			// If the given value is null return for now
@@ -257,26 +265,16 @@ package com.socialcomputing.wps.components
 			trace(message);
 		}
 		
-		/*
-		public function get curPos():Point {
-			return _curPos;
-		}
-		
-		public function set curPos(pos:Point):void {
-			_curPos = pos;
-		}
-		*/
-		
 		public function mouseOverHandler(event:MouseEvent):void {
 			trace("mouseOverHandler");
 		}
 		
 		public function mouseMoveHandler(event:MouseEvent):void {
-			//curPos.x = event.stageX;
-			//curPos.y = event.stageY;
+			curPos.x = event.stageX;
+			curPos.y = event.stageY;
 			if(ready) {
 				// The Zone, SubZone or Satellite can have changed
-				_dataProvider.plan.updateZoneAt(new Point(event.stageX, event.stageY)); 
+				_dataProvider.plan.updateZoneAt( curPos); 
 				// DEBUG
 				// Uncomment to see sensitive zone on the map after mouse move
 				// END DEBUG 

@@ -10,7 +10,6 @@ package com.socialcomputing.wps.script  {
     import flash.geom.Rectangle;
     import flash.ui.MouseCursor;
     
-    import mx.controls.Alert;
     import mx.controls.Image;
     
     /**
@@ -255,13 +254,12 @@ package com.socialcomputing.wps.script  {
 			var g:Graphics = m_applet.backDrawingSurface.graphics;
             var i:int;
             
-			// Check if there is a current Active Zone (Satellite ?)
+			// Check if there is a current Active Zone (Satellite ?) and if the cursor is located in that zone
             if(m_curSat != null) {
                 curSat = m_curZone.m_curSwh.getSatAt(m_applet, g, parent, p, true);
                 
 				// the cursor is in the current Zone
                 if (curSat != null) {
-					Alert.show("a current zone is hovered");
                     return updateCurrentZone(g, curSat, p);
                 }
             }
@@ -276,7 +274,6 @@ package com.socialcomputing.wps.script  {
                     
 					// The cursor is on this node
                     if(curSat != null) {
-						Alert.show("an inactive zone is hovered")
                         return updateCurrentZone(g, curSat, p);
                     }
                 }
@@ -294,7 +291,6 @@ package com.socialcomputing.wps.script  {
                     
 					// The cursor is on this link
                     if (curSat != null) {
-						Alert.show("a link is hovered")
                         return updateCurrentZone(g, curSat, p);
                     }
                 }
