@@ -330,8 +330,8 @@ package com.socialcomputing.wps.components
 		 * Wrapper for a menu item
 		 **/
 		public function menuHandler( evt:MenuEvent):void {
-			trace( evt.label);
-			//performAction( evt.label);
+			trace( "Item Menu selected: " + evt.label);
+			performAction( evt.item.action);
 		}
 		
 		/**

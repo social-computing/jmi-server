@@ -50,7 +50,7 @@ package com.socialcomputing.wps.script  {
             var name:String= getString( NAME_VAL, props ),
                 key:String= name + flags + size;
             
-            if (( font = TextFormat(s_fontBuf.get( key )))== null )
+            if (( font = TextFormat(s_fontBuf[ key ]))== null )
             {
                 //font = new Font( name, flags, size );
                 font = new TextFormat();
@@ -59,7 +59,7 @@ package com.socialcomputing.wps.script  {
                 if (flags == 1) font.bold = true;
                 else if (flags == 2) font.italic = true;
                 
-                s_fontBuf.put( key, font );
+                s_fontBuf[key] = font;
             }
             
             return font;

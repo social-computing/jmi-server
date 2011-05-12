@@ -5,9 +5,9 @@ package com.socialcomputing.wps.script  {
     import flash.geom.Point;
     import flash.geom.Rectangle;
     
-	import mx.controls.Menu;
-	import mx.events.MenuEvent;
     import mx.collections.ArrayCollection;
+    import mx.controls.Menu;
+    import mx.events.MenuEvent;
     
     /**
      * <p>Title: Satellite</p>
@@ -394,20 +394,17 @@ package com.socialcomputing.wps.script  {
                         }
                         else if ( func == ( "popup" ))    // Popup a menu
                         {
-                            var menux:MenuX= zone.m_curSwh.m_refs.m_props[args] as MenuX;
+                            var menux:MenuX= zone.m_curSwh.m_refs[args] as MenuX;
                             
                             if ( menux != null )
                             {
-								// TODO create menu
-/*                                var popup:PopupMenu = new PopupMenu();
-                                menu.parseMenu( popup, applet, zone );
-                                applet.add( popup );
-                                popup.show( applet, pos.x, pos.y );
-*/								
 								var menuData:ArrayCollection = new ArrayCollection();
-								menux.parseMenu( menuData, null, zone );// TODO listener
+								var root:Object = new Object();
+								root.label = "root";
+								root.children = new ArrayCollection();
+								menuData.addItem( root);
+								menux.parseMenu( root.children, zone );
 								var menu:Menu = Menu.createMenu( applet, menuData, false);
-								menu.labelField = "@label";
 								menu.addEventListener(MenuEvent.ITEM_CLICK, applet.menuHandler);								
 								menu.show( pos.x, pos.y );
 							}
