@@ -4,6 +4,7 @@ package com.socialcomputing.wps.script  {
     
     import flash.display.Graphics;
     import flash.display.Shape;
+    import flash.display.Sprite;
     import flash.geom.Matrix;
     import flash.geom.Rectangle;
     
@@ -63,16 +64,16 @@ package com.socialcomputing.wps.script  {
          * @param g         A graphics compatible with the one that will be used for painting.
          * @param isFirst   True if init called for the first time.
          */
-        public override function init(applet:PlanComponent, g:Graphics, isFirst:Boolean):void {
-            super.init( applet, g, isFirst );
+        public override function init(applet:PlanComponent, s:Sprite, isFirst:Boolean):void {
+            super.init( applet, s, isFirst );
             
             m_parent	= null;
             
             if ( !Base.isEnabled( m_flags, FAKEFROM_BIT | FAKETO_BIT ))
             {
-                m_bounds    = m_restSwh.getBounds( applet, g, this, false );
+                m_bounds    = m_restSwh.getBounds( applet, s.graphics, this, false );
                 if ( m_curSwh != null )
-                    m_bounds    = m_bounds.union( m_curSwh.getBounds( applet, g, this, true ));
+                    m_bounds    = m_bounds.union( m_curSwh.getBounds( applet, s.graphics, this, true ));
                 
                 m_bounds.inflate( 2, 2);
                 
@@ -97,7 +98,7 @@ package com.socialcomputing.wps.script  {
          * @param applet    WPSApplet owning this zone.
          * @param g         A Graphics on which this must be painted.
          */
-        public function paintCur(applet:PlanComponent, g:Graphics):void {
+        public function paintCur(applet:PlanComponent, s:Sprite):void {
             //if( (m_flags & INVISIBLE_BIT) != 0) return;
 			trace("[LinkZone paintCur start]");
             
@@ -141,18 +142,18 @@ package com.socialcomputing.wps.script  {
 			// g.translate( -m_bounds.x, -m_bounds.y );
 			
 			// Supposition : ca appèle la méthode de dessin du swatch du lien courant ?
-			m_curSwh.paint(applet, g, this, true, true, Satellite.BASE_TYP, true);
+			m_curSwh.paint(applet, s, this, true, true, Satellite.BASE_TYP, true);
 			
 			/*
 			 * Protected methods, could not be accessed directy by this sub class
 			 * ActionScript inheritence limitations ?
 			*/
-			m_from.paint(applet, g, false, true, Satellite.ALL_TYP, true);
-			m_to.paint(applet, g, false, true, Satellite.ALL_TYP, true);
+			m_from.paint(applet, s, false, true, Satellite.ALL_TYP, true);
+			m_to.paint(applet, s, false, true, Satellite.ALL_TYP, true);
 			
 			// Supposition : ca appèle la méthode de dessin du swatch du lien courant ?
-			m_curSwh.paint(applet, g, this, true, true, Satellite.TIP_TYP, true);
-			m_curSwh.paint(applet, g, this, true, true, Satellite.SEL_TYP, true);
+			m_curSwh.paint(applet, s, this, true, true, Satellite.TIP_TYP, true);
+			m_curSwh.paint(applet, s, this, true, true, Satellite.SEL_TYP, true);
 			
 			
 			/*

@@ -2,12 +2,13 @@ package com.socialcomputing.wps.script  {
     import com.socialcomputing.wps.components.PlanComponent;
     
     import flash.display.Graphics;
+    import flash.display.Sprite;
     import flash.geom.Point;
     import flash.geom.Rectangle;
     
-	import mx.controls.Menu;
-	import mx.events.MenuEvent;
     import mx.collections.ArrayCollection;
+    import mx.controls.Menu;
+    import mx.events.MenuEvent;
     
     /**
      * <p>Title: Satellite</p>
@@ -189,7 +190,7 @@ package com.socialcomputing.wps.script  {
          * @param showTyp		The type of satellite to display.[ALL_TYP,BASE_TYP,TIP_TYP,SEL_TYP]
          * @throws UnsupportedEncodingException 
          */
-        public function paint(applet:PlanComponent, g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, isLinkOnly:Boolean, satData:SatData, showTyp:int):void {
+        public function paint(applet:PlanComponent, s:Sprite, zone:ActiveZone, satCtr:Point, supCtr:Point, isLinkOnly:Boolean, satData:SatData, showTyp:int):void {
             trace("[Satellite paint method called]");
 			var flags:int= satData.m_flags;
             var isTip:Boolean		= isEnabled( flags, Satellite.TIP_BIT ),
@@ -210,26 +211,26 @@ package com.socialcomputing.wps.script  {
                             x2:int = satCtr.x,
                             y2:int = satCtr.y;
                         trace("  - Satellite link x1 = " + x1 + ", y1 = " + y1 + ", x2 = " + x2 + ", y2 = " + y2);
-                        setColor( g, LINK_DRK_COL_VAL, zone.m_props );
+                        setColor( s, LINK_DRK_COL_VAL, zone.m_props );
                         //g.drawLine( x1, y1 + 1, x2, y2 + 1);
-                        g.moveTo(x1, y1 + 1);
-						g.lineTo(x2, y2 + 1);
-                        if ( setColor( g, LINK_LIT_COL_VAL, zone.m_props ))
+                        s.graphics.moveTo(x1, y1 + 1);
+                        s.graphics.lineTo(x2, y2 + 1);
+                        if ( setColor( s, LINK_LIT_COL_VAL, zone.m_props ))
                         {
                             //g.drawLine( x1 - 1, y1, x2 - 1, y2 );
-							g.moveTo(x1 - 1, y1);
-							g.lineTo(x2 - 1, y2);
+                            s.graphics.moveTo(x1 - 1, y1);
+                            s.graphics.lineTo(x2 - 1, y2);
                             //g.drawLine( x1, y1, x2, y2 );
-							g.moveTo(x1, y1);
-							g.lineTo(x2, y2);
+                            s.graphics.moveTo(x1, y1);
+                            s.graphics.lineTo(x2, y2);
                             //g.drawLine( x1 + 1, y1, x2 + 1, y2 );
-							g.moveTo(x1 + 1, y1 );
-							g.lineTo(x2 + 1, y2);
+                            s.graphics.moveTo(x1 + 1, y1 );
+                            s.graphics.lineTo(x2 + 1, y2);
                             
-                            setColor( g, LINK_NRM_COL_VAL, zone.m_props );
+                            setColor( s, LINK_NRM_COL_VAL, zone.m_props );
                             //g.drawLine( x1, y1 - 1, x2, y2 - 1);
-							g.moveTo(x1, y1 - 1);
-							g.lineTo(x2, y2 - 1);
+                            s.graphics.moveTo(x1, y1 - 1);
+                            s.graphics.lineTo(x2, y2 - 1);
                         }
                     }
                 }
@@ -250,7 +251,7 @@ package com.socialcomputing.wps.script  {
                     {
 						for each( var slice:Slice in m_slices)
                         {
-                            slice.paint( applet, g, supZone, zone, m_shape, satCtr, supCtr );
+                            slice.paint( applet, s, supZone, zone, m_shape, satCtr, supCtr );
                         }
                     }
                 }

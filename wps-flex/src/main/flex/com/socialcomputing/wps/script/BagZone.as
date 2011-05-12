@@ -2,6 +2,7 @@ package com.socialcomputing.wps.script  {
     import com.socialcomputing.wps.components.PlanComponent;
     
     import flash.display.Graphics;
+    import flash.display.Sprite;
     import flash.geom.Rectangle;
 
 /**
@@ -56,10 +57,10 @@ public class BagZone extends ActiveZone implements Activable
 	 * @param isFirst	True if this init is the first one. False if this is a "refresh" init.
 	 */
     
-	public override function init(applet:PlanComponent, g:Graphics, isFirst:Boolean):void {
+	public override function init(applet:PlanComponent, s:Sprite, isFirst:Boolean):void {
 		var i:int, n:int = m_subZones != null ? m_subZones.length : 0;
 
-		super.init( applet, g, isFirst );
+		super.init( applet, s, isFirst );
 
 		if ( isFirst )      // One time init
 		{
@@ -74,8 +75,8 @@ public class BagZone extends ActiveZone implements Activable
 				m_subZones[i].m_parent = this;
 			}
 
-			m_bounds = m_restSwh.getBounds( applet, g, this, false );
-			m_bounds = m_bounds.union( m_curSwh.getBounds( applet, g, this, true ));
+			m_bounds = m_restSwh.getBounds( applet, s.graphics, this, false );
+			m_bounds = m_bounds.union( m_curSwh.getBounds( applet, s.graphics, this, true ));
 
 			var isLeft:Boolean= m_bounds.x < 0;
 
@@ -107,11 +108,11 @@ public class BagZone extends ActiveZone implements Activable
 			}
 		}
 
-		m_bounds    = m_restSwh.getBounds( applet, g, this, false );
+		m_bounds    = m_restSwh.getBounds( applet, s.graphics, this, false );
 
 		var win:Rectangle= applet.plan.m_prevBox.union( m_bounds );
 
-		m_bounds    = m_bounds.union( m_curSwh.getBounds( applet, g, this, true ));
+		m_bounds    = m_bounds.union( m_curSwh.getBounds( applet, s.graphics, this, true ));
 
 		if ( win.y > m_bounds.y )
 		{
@@ -146,7 +147,7 @@ public class BagZone extends ActiveZone implements Activable
 	 * @param g         A Graphics on which this must be painted.
 	 */
     [synchronized]
-	public function paintCur(applet:PlanComponent, g:Graphics):void {
+	public function paintCur(applet:PlanComponent, s:Sprite):void {
 		// var bufGfx:Graphics= applet.plan.m_blitBuf.graphics;
 		
 		// TODO

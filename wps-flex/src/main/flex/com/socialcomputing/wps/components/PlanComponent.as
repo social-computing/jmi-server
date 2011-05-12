@@ -236,8 +236,8 @@ package com.socialcomputing.wps.components
                 
 				plan.m_applet = this;
 				plan.m_curSel = -1;
-				plan.initZones(this.graphics, plan.m_links, true);
-				plan.initZones(this.graphics, plan.m_nodes, true);
+				plan.initZones(this, plan.m_links, true);
+				plan.initZones(this, plan.m_nodes, true);
 				plan.resize(size);
 				plan.init();
 				//plan.resize(size);

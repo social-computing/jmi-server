@@ -249,7 +249,7 @@ package com.socialcomputing.wps.script  {
          * @param center	The center of the shape before the transformation.
          * @throws UnsupportedEncodingException 
          */
-        public function paint(g:Graphics, supZone:ActiveZone, zone:ActiveZone, slice:Slice, transfo:Transfo, center:Point):void {
+        public function paint(s:Sprite, supZone:ActiveZone, zone:ActiveZone, slice:Slice, transfo:Transfo, center:Point):void {
             trace("[ShapeX paint method called]");
 			
 			if(isDefined(SCALE_VAL))    // else it is just a void frame
@@ -290,14 +290,14 @@ package com.socialcomputing.wps.script  {
 
 						color = slice.getColor( Slice.IN_COL_VAL, zone.m_props);
 						if(color != null) {
-							g.lineStyle( size, color.color);
+							s.graphics.lineStyle( size, color.color);
 						}
 						color = slice.getColor( Slice.OUT_COL_VAL, zone.m_props);
 						if(color != null) {
-							g.beginFill(color.color);
+                            s.graphics.beginFill(color.color);
 						}
-						g.drawEllipse(x, y, size, size );
-						g.endFill();
+                        s.graphics.drawEllipse(x, y, size, size );
+                        s.graphics.endFill();
                         break;
                     }
                         
@@ -317,25 +317,25 @@ package com.socialcomputing.wps.script  {
 						color = slice.getColor( Slice.OUT_COL_VAL, supZone.m_props);
                         if ( color != null)     
                         {
-							g.lineStyle( size + 3, color.color);
-							g.beginFill( color.color);
-							g.moveTo( poly.xpoints[poly.npoints-1], poly.ypoints[poly.npoints-1]);
+                            s.graphics.lineStyle( size + 3, color.color);
+                            s.graphics.beginFill( color.color);
+                            s.graphics.moveTo( poly.xpoints[poly.npoints-1], poly.ypoints[poly.npoints-1]);
                             for( i = 0 ; i < poly.npoints; ++i) {
-								g.lineTo( poly.xpoints[i], poly.ypoints[i]);
+                                s.graphics.lineTo( poly.xpoints[i], poly.ypoints[i]);
 							}
-							g.endFill();
+                            s.graphics.endFill();
                         }
                         
 						color = slice.getColor( Slice.IN_COL_VAL, supZone.m_props);
                         if ( color != null)
                         {
-							g.lineStyle( size, color.color);
-							g.beginFill( color.color);
-							g.moveTo( poly.xpoints[poly.npoints-1], poly.ypoints[poly.npoints-1]);
+                            s.graphics.lineStyle( size, color.color);
+                            s.graphics.beginFill( color.color);
+                            s.graphics.moveTo( poly.xpoints[poly.npoints-1], poly.ypoints[poly.npoints-1]);
 							for( i = 0 ; i < poly.npoints; ++i) {
-								g.lineTo( poly.xpoints[i], poly.ypoints[i]);
+                                s.graphics.lineTo( poly.xpoints[i], poly.ypoints[i]);
 							}
-							g.endFill();
+                            s.graphics.endFill();
                         }
                         break;
                     }

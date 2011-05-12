@@ -1,5 +1,6 @@
 package com.socialcomputing.wps.script  {
     import flash.display.Graphics;
+    import flash.display.Sprite;
     import flash.geom.ColorTransform;
     
     /**
@@ -194,13 +195,13 @@ package com.socialcomputing.wps.script  {
          * @return			True if the property exist and has a value. False Otherwise.
          * @throws UnsupportedEncodingException 
          */
-        public function setColor( g:Graphics, prop:int, props:Array):Boolean // throws UnsupportedEncodingException
+        public function setColor( s:Sprite, prop:int, props:Array):Boolean // throws UnsupportedEncodingException
         {
             var color:ColorTransform = getColor( prop, props );
             if ( color != null )
             {
 				trace("setting color fill");
-                g.beginFill( color.color );
+                s.graphics.beginFill( color.color );
                 return true;
             }
             return false;
