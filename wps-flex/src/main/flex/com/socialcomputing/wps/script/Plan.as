@@ -208,7 +208,7 @@ package com.socialcomputing.wps.script  {
 			// TODO
 			// m_applet.renderShape( m_applet.restDrawingSurface, 0, 0); // ??? size
 			//backGfx = restGfx.; 
-			m_applet.env.filterImage(m_applet.backDrawingSurface, dim);
+			//m_applet.env.filterImage(m_applet.backDrawingSurface, dim);
             
             // Finish drawing restImg with places parts that are allways visible (tip, sel...)
 			// Commented by jonathan dray, 09/05
