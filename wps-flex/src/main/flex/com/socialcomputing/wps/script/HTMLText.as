@@ -13,7 +13,7 @@ package com.socialcomputing.wps.script{
     import flash.text.engine.ElementFormat;
     import flash.text.engine.FontDescription;
     import flash.text.engine.FontMetrics;
-	
+    
     /**
      * <p>Title: HTMLText</p>
      * <p>Description: A piece of text that can be single or multilined and hold basic HTML-like tags.<br>
@@ -102,10 +102,10 @@ package com.socialcomputing.wps.script{
         public static const SOUTH_WEST:int= 0x2;  // 0 0 1 0;
         public static const WEST:int= 0x1;  // 0 0 0 1;
         public static const NORTH_WEST:int= 0x0;  // 0 0 0 0;
-
-		public static const BOLD:int= 0x1;  // 0 1 0 0;
-		public static const ITALIC:int= 0x2;  // 0 1 0 0;
-	
+        
+        public static const BOLD:int= 0x1;  // 0 1 0 0;
+        public static const ITALIC:int= 0x2;  // 0 1 0 0;
+        
         /**
          * This bounding box, stored to avoid CPU overhead.
          */
@@ -114,7 +114,7 @@ package com.socialcomputing.wps.script{
         
         [transient]
         private var _m_heap:Vector.<String>;
-
+        
         /**
          * Heap of tags to manage the opening and closing of tags.
          */
@@ -125,7 +125,7 @@ package com.socialcomputing.wps.script{
         
         [transient]
         private var _m_tokens:Vector;
-
+        
         /**
          * List of graphical instructions (tokens) to draw this.
          */
@@ -133,16 +133,16 @@ package com.socialcomputing.wps.script{
         {
             _m_tokens = value;
         }
-
+        
         [transient]
         private var _m_inCol:ColorTransform;
-
+        
         public function get m_inCol():ColorTransform
         {
             return _m_inCol;
         }
-
-
+        
+        
         /**
          * Color of the bounding box background.
          */
@@ -150,16 +150,16 @@ package com.socialcomputing.wps.script{
         {
             _m_inCol = value;
         }
-
+        
         [transient]
         private var _m_outCol:ColorTransform;
-
+        
         public function get m_outCol():ColorTransform
         {
             return _m_outCol;
         }
-
-
+        
+        
         /**
          * Color of the bounding box border.
          */
@@ -167,16 +167,16 @@ package com.socialcomputing.wps.script{
         {
             _m_outCol = value;
         }
-
+        
         [transient]
         private var _m_color:int;
-
+        
         public function get m_color():int
         {
             return _m_color;
         }
-
-
+        
+        
         /**
          * Color of the text.
          */
@@ -184,16 +184,16 @@ package com.socialcomputing.wps.script{
         {
             _m_color = value;
         }
-
+        
         [transient]
         private var _m_bkCol:int;
-
+        
         public function get m_bkCol():int
         {
             return _m_bkCol;
         }
-
-
+        
+        
         /**
          * Color of the text background.
          */
@@ -201,16 +201,16 @@ package com.socialcomputing.wps.script{
         {
             _m_bkCol = value;
         }
-
+        
         [transient]
         private var _m_size:int;
-
+        
         public function get m_size():int
         {
             return _m_size;
         }
-
-
+        
+        
         /**
          * Size of the typeface.
          */
@@ -218,16 +218,16 @@ package com.socialcomputing.wps.script{
         {
             _m_size = value;
         }
-
+        
         [transient]
         private var _m_style:int;
-
+        
         public function get m_style():int
         {
             return _m_style;
         }
-
-
+        
+        
         /**
          * Style of the text (bold, italic,...)
          */
@@ -235,16 +235,16 @@ package com.socialcomputing.wps.script{
         {
             _m_style = value;
         }
-
+        
         [transient]
         private var _m_name:String;
-
+        
         public function get m_name():String
         {
             return _m_name;
         }
-
-
+        
+        
         /**
          * Name of the font.
          */
@@ -252,10 +252,10 @@ package com.socialcomputing.wps.script{
         {
             _m_name = value;
         }
-
+        
         [transient]
         private var _m_wCur:int;
-
+        
         /**
          * Width of the current line of text while processing it.
          */
@@ -263,10 +263,10 @@ package com.socialcomputing.wps.script{
         {
             _m_wCur = value;
         }
-
+        
         [transient]
         private var _m_body:FormatToken;
-
+        
         /**
          * Format of the whole text (HTML body). This is also the default format for new tokens.
          */
@@ -274,7 +274,7 @@ package com.socialcomputing.wps.script{
         {
             _m_body = value;
         }
-
+        
         
         /**
          * Format of the current Token.
@@ -298,7 +298,7 @@ package com.socialcomputing.wps.script{
          * @param flags		Default text alignment flags.
          * @param margin	Default margins size.
          */
-        public function initValues( inCol:ColorTransform, outCol:ColorTransform, textCol:int, fontSiz:int, fontStl:int, fontNam:String, flags:int, margin:Insets):void
+        public function initValues(inCol:ColorTransform, outCol:ColorTransform, textCol:int, fontSiz:int, fontStl:int, fontNam:String, flags:int, margin:Insets):void
         {
             m_body          = new FormatToken();
             m_body.m_flags  = flags;
@@ -537,15 +537,15 @@ package com.socialcomputing.wps.script{
             // The text exists!
             if ( text.length > 0)
             {
-				trace( "HTMLText updateText à finir");
+                trace( "HTMLText updateText à finir");
                 
                 
-/*				var fd:FontDescription = new FontDescription();
-				fd.fontName = "Garamond";
-				fd.fontWeight = flash.text.engine.FontWeight.BOLD;
-				var ef1:ElementFormat = new ElementFormat(fd);
+                /*				var fd:FontDescription = new FontDescription();
+                fd.fontName = "Garamond";
+                fd.fontWeight = flash.text.engine.FontWeight.BOLD;
+                var ef1:ElementFormat = new ElementFormat(fd);
                 var fm:FontMetrics= ef1.getFontMetrics();
-*/                var a:int	= 0,//fm.getAscent(),
+                */                var a:int	= 0,//fm.getAscent(),
                     d:int   = 0,//fm.getDescent(),
                     w:int   = 0,//fm.stringWidth( text ),
                     h:int   = 0;//fm.getHeight();
@@ -674,12 +674,12 @@ package com.socialcomputing.wps.script{
                     textTok = new TextToken();
                     textTok.m_color = new ColorTransform( m_color );
                     textTok.m_font  = new TextFormat();
-					textTok.m_font.font = m_name;
-					textTok.m_font.size = m_size;
-					if( m_style & BOLD)
-						textTok.m_font.bold = true;
-					else if( m_style & ITALIC)
-						textTok.m_font.italic = true;
+                    textTok.m_font.font = m_name;
+                    textTok.m_font.size = m_size;
+                    if( m_style & BOLD)
+                        textTok.m_font.bold = true;
+                    else if( m_style & ITALIC)
+                        textTok.m_font.italic = true;
                 }
                 else if ( isGfx( begChar ))
                 {
@@ -869,14 +869,14 @@ package com.socialcomputing.wps.script{
         protected function drawText3( s:Sprite, size:Dimension, pos:Point):void {
             //var g:Graphics2D= Graphics2D(gi);
             
-			trace( "HTMLText drawText3 à fnir");
-/*            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+            trace( "HTMLText drawText3 à fnir");
+            /*            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
             g.setRenderingHint(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_QUALITY);
             
             var composite:Composite= AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8);
             var cb:Composite= g.getComposite();
             g.setComposite(composite);
-*/            
+            */            
             var textTok:TextToken;
             var i:int, n:int    = m_tokens.size();
             
@@ -890,7 +890,7 @@ package com.socialcomputing.wps.script{
                 s.graphics.beginGradientFill(GradientType.LINEAR, colors, alphas, ratios);
                 s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 10, 10);
                 s.graphics.endFill();
-              
+                
             }
             
             if ( m_outCol != null )
@@ -906,9 +906,9 @@ package com.socialcomputing.wps.script{
                 textTok.paint( s, pos );
             }
             
- /*           composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2);					
+            /*           composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2);					
             g.setComposite(composite);
-*/
+            */
             if ( n==1) // draw reflection only for one line boxes
             {
                 var white:ColorTransform = new ColorTransform();
@@ -917,9 +917,9 @@ package com.socialcomputing.wps.script{
                 s.graphics.drawRoundRect(pos.x+2, pos.y+2, m_bounds.width-4, m_bounds.height/3, 5, 5);
                 s.graphics.endFill();
             }
-/*            
+            /*            
             g.setComposite(cb);
-*/            
+            */            
             m_bounds.x  = pos.x;
             m_bounds.y  = pos.y;
         }
@@ -1065,38 +1065,38 @@ package com.socialcomputing.wps.script{
             
             return pattern == string.substr( 0, pattern.length );
         }
-
+        
         public function get m_body():FormatToken
         {
             return _m_body;
         }
-
+        
         public function get m_tokens():Vector
         {
             return _m_tokens;
         }
-
+        
         public function get m_heap():Vector.<String>
         {
             return _m_heap;
         }
-
+        
         public function get m_wCur():int
         {
             return _m_wCur;
         }
-
-		private function uint2hex(dec:uint):String {
-			var digits:String = "0123456789ABCDEF";
-			var hex:String = '';
-			while (dec > 0) {
-				var next:uint = dec & 0xF;
-				dec >>= 4;
-				hex = digits.charAt(next) + hex;
-			}
-			if (hex.length == 0) hex = '0';
-			return hex;
-		}
+        
+        private function uint2hex(dec:uint):String {
+            var digits:String = "0123456789ABCDEF";
+            var hex:String = '';
+            while (dec > 0) {
+                var next:uint = dec & 0xF;
+                dec >>= 4;
+                hex = digits.charAt(next) + hex;
+            }
+            if (hex.length == 0) hex = '0';
+            return hex;
+        }
     }
     
 }

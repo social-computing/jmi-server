@@ -63,7 +63,7 @@ package com.socialcomputing.wps.script {
                 //g.fillRect( x, y - g.getFontMetrics().getAscent(), m_bounds.width, m_bounds.height );
                 s.graphics.beginFill( m_bkCol.color );
                 s.graphics.drawRect(x, y , m_bounds.width, m_bounds.height);
-                
+                s.graphics.endFill();    
             }
             
             /*if ( m_color != null )  g.beginFill( m_color );
@@ -71,16 +71,13 @@ package com.socialcomputing.wps.script {
             g.drawString( m_text, x, y );*/
             var text:TextField = new TextField();
             text.text = m_text;
-            text.textColor = m_color.color;
+            text.x = x;
+            text.y = y;
             var formatter:TextFormat = new TextFormat();
-            formatter.font = m_font.font;
-            text.defaultTextFormat = formatter;
-            
-            var bitmapdata:BitmapData = new BitmapData(m_bounds.width, m_bounds.height);
-            bitmapdata.draw(text);
-           
-            s.graphics.beginBitmapFill(bitmapdata);
-            s.graphics.endFill();
+            if ( m_color != null ) formatter.color = m_color.color; 
+            if ( m_font != null ) formatter.font = m_font.font;
+            text.setTextFormat(formatter);
+            s.addChild(text);
         }
     }
 }

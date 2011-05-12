@@ -1,5 +1,13 @@
 package com.socialcomputing.wps.script {
-
+    /**
+     * <p>Title: FormatToken</p>
+     * <p>Description: A simple container to hold the current format of the tokens.<br>
+     * It's also used to evaluated the current line min and max text position (ascent and descent)</p>
+     * <p>Copyright: Copyright (c) 2001-2003</p>
+     * <p>Company: MapStan (Voyez Vous)</p>
+     * @author flugue@mapstan.com
+     * @version 1.0
+     */
     public class FormatToken
     {
         /**
