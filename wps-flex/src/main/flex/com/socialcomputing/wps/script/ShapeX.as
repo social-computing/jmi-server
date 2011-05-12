@@ -214,7 +214,6 @@ package com.socialcomputing.wps.script  {
 			
 			if(isDefined(SCALE_VAL))    // else it is just a void frame
             {
-				trace("SCALE_VAL is defined, something to draw");
                 //ON recup alpha val ? 
                 //boolean test = slice.isDefined(slice.ALPHA_VAL);
                 //if (test!=false) System.out.print("test "+test+"\n");
@@ -232,11 +231,9 @@ package com.socialcomputing.wps.script  {
                 var points:Array = getValue(POLYGON_VAL, supZone.m_props ) as Array;
                 var p:Point = points[0] as Point,
                     shapePos:Point = new Point();
-                var n:int = points.length,
+                var n:int = points.length, i:int,
                     size:int = int(getShapePos( supZone, transfo, center, p, shapePos ));
-                
-				var inColorTransformer:ColorTransform = slice.getColor(Slice.IN_COL_VAL, zone.m_props);
-				var outColorTransformer:ColorTransform = slice.getColor(Slice.OUT_COL_VAL, zone.m_props);
+				var color:ColorTransform;
 				
 				// Manage each case of number of points to draw for this shape
                 switch(n) {
@@ -245,27 +242,22 @@ package com.socialcomputing.wps.script  {
 						trace("Dot shape detected: ");
                         //composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0);
                         //g.setComposite(composite);
-                        var x:int = p.x + shapePos.x - size,
-                            y:int = p.y + shapePos.y - size;
+                        var x:int = p.x + shapePos.x - size/2,
+                            y:int = p.y + shapePos.y - size/2;
                         
-						trace("  - coordinates (x: " + x + ", y: " + y + ")");
-						
 						// Doubling size value .... need to find why ... 
-                        size <<= 1;
-						
-						if(inColorTransformer != null) {
-							g.beginFill(inColorTransformer.color);
-							g.drawEllipse(x, y, size, size );
-							g.endFill();
+                        //size <<= 1;
+
+						color = slice.getColor( Slice.IN_COL_VAL, zone.m_props);
+						if(color != null) {
+							g.lineStyle( size, color.color);
 						}
-                        if (PlanComponent.s_hasGfxInc ) size --;
-						if(outColorTransformer != null) {
-							g.beginFill(outColorTransformer.color);
-							g.drawEllipse(x, y, size, size );
-							g.endFill();
+						color = slice.getColor( Slice.OUT_COL_VAL, zone.m_props);
+						if(color != null) {
+							g.beginFill(color.color);
 						}
-                        //if ( slice.setColor( g, Slice.OUT_COL_VAL, zone ))  g.drawOval( x, y, size, size );
-                        // if ( slice.setColor( g, Slice.OUT_COL_VAL, zone.m_props ))  g.drawEllipse( x, y, size, size );
+						g.drawEllipse(x, y, size, size );
+						g.endFill();
                         break;
                     }
                         
@@ -274,37 +266,37 @@ package com.socialcomputing.wps.script  {
 						trace("Segment shape detected: ");
                         /*composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f;					
                         g.setComposite(composite);*/
-                        //var stroke:Stroke= g.getStroke();
-                        //g.setStroke(new BasicStroke(size+3));
-                        
-                        //var q:QuadCurve2D= new QuadCurve2D.Float();
-                       //  var q:Sprite = new Sprite();
 						
-                        //if ( slice.setColor( g, Slice.OUT_COL_VAL, supZone.m_props ))     //g.fillPolygon( poly );
-						if(inColorTransformer != null) 
+						// Half size value .... need to find why ... 
+						size >>= 1;
+						
+						var fromPoint:Point = (points[0] as Point).add(shapePos),
+							toPoint:Point = (points[1] as Point).add(shapePos);
+						var poly:Polygon = getLinkPoly( supZone, fromPoint, toPoint, size/2 );
+						
+						color = slice.getColor( Slice.OUT_COL_VAL, supZone.m_props);
+                        if ( color != null)     
                         {
-                            var fromPoint:Point = (points[0] as Point).add(shapePos),
-                                  toPoint:Point = (points[1] as Point).add(shapePos);
-							trace("  - from coordinates (x: " + fromPoint.x + ", y: " + fromPoint.y + ")");
-							trace("  - to coordinates (x: " + toPoint.x + ", y: " + toPoint.y + ")");
-							var poly:Polygon = getLinkPoly( supZone, fromPoint, toPoint, size );
-							g.lineStyle( 1, inColorTransformer.color);
+							g.lineStyle( size + 3, color.color);
+							g.beginFill( color.color);
 							g.moveTo( poly.xpoints[poly.npoints-1], poly.ypoints[poly.npoints-1]);
-                            for( var i:int = 0 ; i < poly.npoints; ++i) {
+                            for( i = 0 ; i < poly.npoints; ++i) {
 								g.lineTo( poly.xpoints[i], poly.ypoints[i]);
 							}
+							g.endFill();
                         }
                         
-                        //g.setStroke(new BasicStroke(size));
-                        
-                        if (slice.setColor( g, Slice.IN_COL_VAL, supZone.m_props ))
+						color = slice.getColor( Slice.IN_COL_VAL, supZone.m_props);
+                        if ( color != null)
                         {
-                            //g.draw(q);	
+							g.lineStyle( size, color.color);
+							g.beginFill( color.color);
+							g.moveTo( poly.xpoints[poly.npoints-1], poly.ypoints[poly.npoints-1]);
+							for( i = 0 ; i < poly.npoints; ++i) {
+								g.lineTo( poly.xpoints[i], poly.ypoints[i]);
+							}
+							g.endFill();
                         }
-                        
-                        //g.setStroke(stroke);
-                        
-                        //if ( slice.setColor( g, Slice.OUT_COL_VAL, supZone ))    g.drawPolygon( poly );
                         break;
                     }
                 }

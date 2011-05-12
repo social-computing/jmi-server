@@ -46,8 +46,6 @@ package com.socialcomputing.wps.components
 	{
 		include "../script/Version.as"
 		
-		public static var s_hasGfxInc:Boolean;
-		
 		private var _dataProvider:PlanContainer = null;
 		private var _nodes:Array = null;
 		// private var _curPos:Point= new Point();
