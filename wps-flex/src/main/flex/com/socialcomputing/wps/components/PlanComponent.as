@@ -277,6 +277,11 @@ package com.socialcomputing.wps.components
 			if(ready) {
 				// The Zone, SubZone or Satellite can have changed
 				_dataProvider.plan.updateZoneAt(new Point(event.stageX, event.stageY)); 
+				// DEBUG
+				// Uncomment to see sensitive zone on the map after mouse move
+				// END DEBUG 
+				// this.invalidateProperties();
+				// this.invalidateDisplayList();
 			}
 		}
 		
@@ -411,7 +416,11 @@ package com.socialcomputing.wps.components
 			_onScreen.copyPixels(backBuffer, backBuffer.rect, new Point(0,0));
 			
 			// Clear the offscreen back display
+			// DEBUG
+			// Comment to see sensitive zone on the map without complete redraw
+			// END DEBUG 
 			shape.graphics.clear();
+			 
 		}
 		
 		private function render():void {

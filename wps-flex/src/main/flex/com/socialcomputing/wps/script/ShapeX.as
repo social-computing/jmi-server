@@ -124,33 +124,73 @@ package com.socialcomputing.wps.script  {
 		 * 
          * @return			True if this contains pos, false otherwise
          */
-        public function contains(zone:ActiveZone, transfo:Transfo, center:Point, pos:Point):Boolean {
+        public function contains(g:Graphics, zone:ActiveZone, transfo:Transfo, center:Point, pos:Point):Boolean {
 			trace("[Shape contains method begin]");
 			if(!isDefined(SCALE_VAL)) return false; // it is just a void frame
 			
             var points:Array = getValue(POLYGON_VAL, zone.m_props) as Array;
             var shapeCenter:Point   = getCenter(zone),
                 shapePosition:Point = new Point();
-            var size:int    = this.getShapePos(zone, transfo, center, shapeCenter, shapePosition) as int,
+            var size:Number = this.getShapePos(zone, transfo, center, shapeCenter, shapePosition),
                 nbPoint:int = points.length;
             
             switch(nbPoint) {
 				// 1 point = circle => Place
 				case 1: 
+					// Dirty hack : see why this is needed
+					size = size * 2;
 					trace("  - 1 point situation : circle");
-					var d:Point = shapeCenter.add(shapePosition).subtract(pos);
+					var distance:Point = shapeCenter.add(shapePosition).subtract(pos);
+					trace("  - size = " + size);
+					trace("  - (dx = " + distance.x + ", dy = " + distance.y  + ")"); 
+					
+					// DEBUG
+					// Drawing sensitive zone
+					/*
+					var t:Point = shapeCenter.add(shapePosition);
+					g.beginFill(0xFF0000);
+					g.drawRect(t.x, t.y, 3, 3);
+					g.drawEllipse(t.x - (size/2), t.y - (size/2), size, size );
+					g.endFill();
+					
+					g.lineStyle(1, 0x000000);
+					g.beginFill(0x0000FF);
+					g.drawRect(shapeCenter.x, shapeCenter.y, 3, 3);
+					g.endFill();
+					*/
+					// DEBUG END
+					
 					// We check if the position is located inside the circle
 					// Another way to express it : is the distance between the circle center and the position < circle (rayon)
 					trace("[Shape contains end]");
-                    return (d.x * d.x) + (d.y * d.y) < (size * size);
+                    return (distance.x * distance.x) + (distance.y * distance.y) < (size * size);
                     
 				// 2 points = segment => Street
                 case 2:     
 					trace("  - 2 points situation : polygon");
 					var fromPoint:Point = (points[0] as Point).add(shapePosition);
                     var toPoint:Point = (points[1] as Point).add(shapePosition);
-
 					var poly:Polygon = getLinkPoly(zone, fromPoint, toPoint, size);
+					
+					// DEBUG
+					// Drawing sensitive zone
+					/*
+					g.lineStyle(1, 0x000000);
+					g.beginFill(0x0000FF);
+					g.drawRect(fromPoint.x, fromPoint.y, 3, 3);
+					g.drawRect(toPoint.x, toPoint.y, 3, 3);
+					g.endFill();
+					
+					
+					g.moveTo(poly.xpoints[0], poly.ypoints[0]);
+					g.beginFill(0xFF0000);
+					for(var ip:int = 1 ; ip < poly.npoints ; ip++) {
+						g.lineTo(poly.xpoints[ip], poly.ypoints[ip]);
+					}
+					g.endFill();
+					*/
+					// DEBUG END
+					
 					trace("[Shape contains end]");
                     return poly.contains2(pos);
 				default:
@@ -232,7 +272,7 @@ package com.socialcomputing.wps.script  {
                 var p:Point = points[0] as Point,
                     shapePos:Point = new Point();
                 var n:int = points.length, i:int,
-                    size:int = int(getShapePos( supZone, transfo, center, p, shapePos ));
+                    size:Number = getShapePos( supZone, transfo, center, p, shapePos );
 				var color:ColorTransform;
 				
 				// Manage each case of number of points to draw for this shape
@@ -475,6 +515,8 @@ package com.socialcomputing.wps.script  {
          */
         private function getShapePos(zone:ActiveZone, transfo:Transfo, center:Point, p0:Point, pos:Point):Number {
             var scale:Number = getFloat(SCALE_VAL, zone.m_props);
+			trace("[GetShapePos, scale = " + scale + "]");
+			
 			var p:Point;
 			
 			// We are drawing a real Sat!
@@ -484,12 +526,16 @@ package com.socialcomputing.wps.script  {
 				pos.y = p.y;
             }
             
+			
             if(transfo != null){
 				p =  pos.add(transfo.getCart());
 				pos.x = p.x;
 				pos.y = p.y;
                 scale *= transfo.m_scl;
+				trace("  - transformation scale: " + transfo.m_scl); 
             }
+			
+			trace("[GetShapePos end, scale = " + scale + "]");
             return scale;
         }
         

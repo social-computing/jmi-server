@@ -202,7 +202,7 @@ package com.socialcomputing.wps.script  {
             if(supZone == null)	supZone = zone;
             
             if((isDefined(IN_COL_VAL ) || isDefined(OUT_COL_VAL)) &&
-				satShp.contains(supZone, transfo, satCtr, pos)) {
+				satShp.contains(g, supZone, transfo, satCtr, pos)) {
 				trace("[Slice contains method, return value = true]");
                 return true;
             }

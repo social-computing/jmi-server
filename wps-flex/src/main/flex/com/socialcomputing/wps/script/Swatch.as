@@ -289,12 +289,22 @@ package com.socialcomputing.wps.script  {
 			// The cursor position is in the Bounding Box
 			var parentzone:ActiveZone = zone.getParent();		
 			
+			// DEBUG
+			// Drawing sensitive zone
+			/*
+			g.lineStyle(1, 0x000000);
+			
+			g.drawRect(parentzone.m_bounds.x, parentzone.m_bounds.y,
+				       parentzone.m_bounds.x + parentzone.m_bounds.width, parentzone.m_bounds.y + parentzone.m_bounds.height);
+			*/
+			// END DEBUG
+			
 			if(parentzone.m_bounds.contains(pos.x, pos.y))      
             {
                 var sat:Satellite = m_satellites[0];
                 var shape:ShapeX = sat.m_shape;
                 var isBag:Boolean = zone is BagZone;
-                var supZone:BagZone = isBag ? BagZone(zone ): null;
+                var supZone:BagZone = isBag ? zone as BagZone : null;
                 var zones:Array = isBag ? supZone.m_subZones : null;
                 var curZone:ActiveZone = planComponent.plan.m_curZone,
                     subZone:ActiveZone;
@@ -318,8 +328,9 @@ package com.socialcomputing.wps.script  {
                     flags   = satData.m_flags;
                     
 					// This Sat is visible and it's not a tip (avoid anoying place popup!)
-                    if ( isEnabled( flags, Satellite.VISIBLE_BIT )&&( isCurZone || !isEnabled( flags, Satellite.TIP_BIT )))    
-                    {
+                    if (isEnabled(flags, Satellite.VISIBLE_BIT) && 
+					   (isCurZone || !isEnabled(flags, Satellite.TIP_BIT))) {
+						
                         isVisible   = !isEnabled( flags, Satellite.SEL_BIT ) || satData.m_isVisible;
                         
 						// If it's a BagZone
