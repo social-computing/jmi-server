@@ -21,7 +21,7 @@
             [Bindable]
             private var planHeight:int = 480;
 
-			private var planUrl:String = "http://10.0.2.2:8080/wps-server/services/engine/";
+			private var planUrl:String = "http://localhost:8080/wps/services/engine/";
             private var planName:String = "Xml_sample";
             private var entityId:int = 5;
             
