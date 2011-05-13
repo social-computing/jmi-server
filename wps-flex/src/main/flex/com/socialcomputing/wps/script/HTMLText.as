@@ -383,7 +383,7 @@ package com.socialcomputing.wps.script{
             }
             else
             {
-                htmlTxt = HTMLText(data);
+                htmlTxt = data as HTMLText;
                 htmlTxt.setTextBnds( applet.size, getFlags( zone.m_props), zone.m_flags, transfo, supCtr, center );
             }
             

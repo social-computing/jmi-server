@@ -423,7 +423,7 @@ package com.socialcomputing.wps.script  {
                     
                     scale   = Number(zone.m_props[ "_SCALE" ]);
                     zone.m_props["_SCALE"] = s * scale;
-                    zone.m_datas.length=0;;
+                    zone.m_datas.length=0;
                 }
                 
 /*                n = m_nodes.length;
