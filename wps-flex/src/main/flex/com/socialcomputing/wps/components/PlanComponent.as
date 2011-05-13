@@ -60,7 +60,7 @@ package com.socialcomputing.wps.components
 		 */
 		private var _onScreen:BitmapData;
 		private var _drawingSurface:SpriteVisualElement;
-		private var _backDrawingSurface:Shape;
+		private var _backDrawingSurface:Sprite;
 		private var _restDrawingSurface:Shape;
 		
 		public function PlanComponent()
@@ -101,7 +101,7 @@ package com.socialcomputing.wps.components
 			return new Dimension(this.width, this.height);
 		}
 		
-		public function get backDrawingSurface():Shape
+		public function get backDrawingSurface():Sprite
 		{
 			return _backDrawingSurface;
 		}
@@ -169,11 +169,20 @@ package com.socialcomputing.wps.components
 			    // Should manage the onScreen object each time the service is called
 				this._onScreen = new BitmapData(this.width, this.height);
 				this._drawingSurface.addChild(new Bitmap(this._onScreen));
-				this._backDrawingSurface = new Shape();
+				this._backDrawingSurface = new Sprite();
 				this._restDrawingSurface = new Shape();
 				
 				/*
                 /* DEBUT TEST */
+                //this._backTextSurface = new Sprite();
+                
+                /* var textfield:TextField = new TextField();
+                textfield.text = "text";
+
+                textfield.x = 20;
+                textfield.y = 20;
+                _backDrawingSurface.addChild(textfield);*/
+                
 				// Creating a fake BagZone as a parent zone for the following slice
 				/*var bagZone:BagZone = new BagZone(null);
 				bagZone.m_props = new Array();
@@ -230,8 +239,8 @@ package com.socialcomputing.wps.components
                 
 				plan.m_applet = this;
 				plan.m_curSel = -1;
-				plan.initZones(this.graphics, plan.m_links, true);
-				plan.initZones(this.graphics, plan.m_nodes, true);
+				plan.initZones(this, plan.m_links, true);
+				plan.initZones(this, plan.m_nodes, true);
 				plan.resize(size);
 				plan.init();
 				//plan.resize(size);
@@ -264,6 +273,16 @@ package com.socialcomputing.wps.components
 		public function showStatus(message:String):void {
 			trace(message);
 		}
+		
+		/*
+		public function get curPos():Point {
+			return _curPos;
+		}
+		
+		public function set curPos(pos:Point):void {
+			_curPos = pos;
+		}
+		*/
 		
 		public function mouseOverHandler(event:MouseEvent):void {
 			trace("mouseOverHandler");
@@ -403,22 +422,19 @@ package com.socialcomputing.wps.components
 			trace("Perform " + actionStr + " " + target);
 		}
 		
-		public function renderShape(shape:Shape, width:int, height:int):void {
+		public function renderShape(sprite:Sprite, width:int, height:int):void {
 			trace("renderShape method called");
 			
 			// Transforming the offscreen back display to a BitmapData
 			var backBuffer:BitmapData = new BitmapData(width, height);
-			backBuffer.draw( shape, new Matrix());
+			backBuffer.draw( sprite, new Matrix());
 			
+            //backBuffer.draw(this._backTextSurface, new Matrix());
 			// Copying the content of the back buffer on screen
 			_onScreen.copyPixels(backBuffer, backBuffer.rect, new Point(0,0));
 			
 			// Clear the offscreen back display
-			// DEBUG
-			// Comment to see sensitive zone on the map without complete redraw
-			// END DEBUG 
-			shape.graphics.clear();
-			 
+            sprite.graphics.clear();
 		}
 		
 		private function render():void {

@@ -53,7 +53,7 @@ package com.socialcomputing.wps.script {
          * @param g		The graphics to draw in.
          * @param pos	The position where this should be drawn before its internal translation is added.
          */
-        public function paint( g:Graphics, pos:Point):void {
+        public function paint( s:Sprite, pos:Point):void {
             var x:int= m_bounds.x + pos.x,
                 y:int = m_bounds.y + pos.y;
             
@@ -61,9 +61,9 @@ package com.socialcomputing.wps.script {
             {
                 //g.setColor( m_bkCol );
                 //g.fillRect( x, y - g.getFontMetrics().getAscent(), m_bounds.width, m_bounds.height );
-                g.beginFill( m_bkCol.color );
-                g.drawRect(x, y , m_bounds.width, m_bounds.height);
-                
+                s.graphics.beginFill( m_bkCol.color );
+                s.graphics.drawRect(x, y , m_bounds.width, m_bounds.height);
+                s.graphics.endFill();    
             }
             
             /*if ( m_color != null )  g.beginFill( m_color );
@@ -71,16 +71,13 @@ package com.socialcomputing.wps.script {
             g.drawString( m_text, x, y );*/
             var text:TextField = new TextField();
             text.text = m_text;
-            text.textColor = m_color.color;
+            text.x = x;
+            text.y = y;
             var formatter:TextFormat = new TextFormat();
-            formatter.font = m_font.font;
-            text.defaultTextFormat = formatter;
-            
-            var bitmapdata:BitmapData = new BitmapData(m_bounds.width, m_bounds.height);
-            bitmapdata.draw(text);
-           
-            g.beginBitmapFill(bitmapdata);
-            g.endFill();
+            if ( m_color != null ) formatter.color = m_color.color; 
+            if ( m_font != null ) formatter.font = m_font.font;
+            text.setTextFormat(formatter);
+            s.addChild(text);
         }
     }
 }

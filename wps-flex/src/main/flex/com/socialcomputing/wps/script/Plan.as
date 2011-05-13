@@ -5,11 +5,13 @@ package com.socialcomputing.wps.script  {
     import flash.display.BitmapData;
     import flash.display.Graphics;
     import flash.display.Shape;
+    import flash.display.Sprite;
     import flash.geom.Matrix;
     import flash.geom.Point;
     import flash.geom.Rectangle;
     import flash.ui.MouseCursor;
     
+    import mx.controls.Alert;
     import mx.controls.Image;
     
     /**
@@ -112,7 +114,7 @@ package com.socialcomputing.wps.script  {
          * @param isFirst	True if this is the first call of the session (optimisation).
          */
         //protected synchronized function initZones( g:Graphics, zones:Array, isFirst:Boolean):void {
-        public function initZones(g:Graphics, zones:Array, isFirst:Boolean):void {
+        public function initZones(s:Sprite, zones:Array, isFirst:Boolean):void {
             var i:int, n:int  = zones.length;
             var dim:Dimension = m_applet.size;
             
@@ -125,7 +127,7 @@ package com.socialcomputing.wps.script  {
             // Reversed order so subZones are initialized before supZones!
             for ( i = n - 1; i >= 0; i -- )
             {
-                zones[i].init( m_applet, g, isFirst );
+                zones[i].init( m_applet, s, isFirst );
             }
             
             // Allocate a temporary bitmap to dblBuffer curZone rendering using the biggest Zone BBox
@@ -145,19 +147,19 @@ package com.socialcomputing.wps.script  {
          * @param showLinks	True if this paint only satellite links (selection).
          * @param isRev		True if the array is drawn from in reversed order. That means from n-1 to 0.
          */
-        private function paintZones( g:Graphics, zones:Array, n:int, isFront:Boolean, showTyp:int, showLinks:Boolean, isRev:Boolean):void {
+        private function paintZones( s:Sprite, zones:Array, n:int, isFront:Boolean, showTyp:int, showLinks:Boolean, isRev:Boolean):void {
             if ( isRev )
             {
                 for ( var i:int= n - 1; i >= 0; i -- )
                 {
-                    zones[i].paint( m_applet, g, false, isFront, showTyp, showLinks );
+                    zones[i].paint( m_applet, s, false, isFront, showTyp, showLinks );
                 }
             }
             else
             {
                 for ( i; i < n; i ++ )
                 {
-                    zones[i].paint( m_applet, g, false, isFront, showTyp, showLinks );
+                    zones[i].paint( m_applet, s, false, isFront, showTyp, showLinks );
                 }
             }
         }
@@ -168,11 +170,11 @@ package com.socialcomputing.wps.script  {
         //protected synchronized function init( ):void {
         public function init( ):void {
             var dim:Dimension= m_applet.size;
-            var backGfx:Graphics = m_applet.backDrawingSurface.graphics;
+            var backGfx:Sprite = m_applet.backDrawingSurface;
                 //restGfx:Graphics = m_applet.restDrawingSurface.graphics,
             	// g:Graphics       = m_applet.graphics;
 
-			backGfx.clear();
+			backGfx.graphics.clear();
             //restGfx.clear();
             
             // If there is any background image, load it
@@ -207,7 +209,7 @@ package com.socialcomputing.wps.script  {
 			// TODO
 			// m_applet.renderShape( m_applet.restDrawingSurface, 0, 0); // ??? size
 			//backGfx = restGfx.; 
-			m_applet.env.filterImage(m_applet.backDrawingSurface, dim);
+			//m_applet.env.filterImage(m_applet.backDrawingSurface, dim);
             
             // Finish drawing restImg with places parts that are allways visible (tip, sel...)
 			// Commented by jonathan dray, 09/05
@@ -251,16 +253,17 @@ package com.socialcomputing.wps.script  {
             	parent:ActiveZone = m_curZone != null ? m_curZone.getParent() : null;
             
 			// TODO : See how to set that graphics item
-			var g:Graphics = m_applet.backDrawingSurface.graphics;
+			var s:Sprite = m_applet.backDrawingSurface;
             var i:int;
             
-			// Check if there is a current Active Zone (Satellite ?) and if the cursor is located in that zone
+			// Check if there is a current Active Zone (Satellite ?)
             if(m_curSat != null) {
-                curSat = m_curZone.m_curSwh.getSatAt(m_applet, g, parent, p, true);
+                curSat = m_curZone.m_curSwh.getSatAt(m_applet, s.graphics, parent, p, true);
                 
 				// the cursor is in the current Zone
                 if (curSat != null) {
-                    return updateCurrentZone(g, curSat, p);
+					Alert.show("a current zone is hovered");
+                    return updateCurrentZone(s, curSat, p);
                 }
             }
             
@@ -270,11 +273,12 @@ package com.socialcomputing.wps.script  {
                 
 				// We know p is not in curZone so don't test it!
                 if (zone != parent) {
-                    curSat = zone.m_restSwh.getSatAt(m_applet, g, zone, p, false);
+                    curSat = zone.m_restSwh.getSatAt(m_applet, s.graphics, zone, p, false);
                     
 					// The cursor is on this node
                     if(curSat != null) {
-                        return updateCurrentZone(g, curSat, p);
+						Alert.show("an inactive zone is hovered")
+                        return updateCurrentZone(s, curSat, p);
                     }
                 }
             }
@@ -287,18 +291,19 @@ package com.socialcomputing.wps.script  {
                 if (zone != parent && zone.m_curSwh != null) {                                                
 					
 					// If this zone has no current Swatch, it can't be current.
-                    curSat = zone.m_restSwh.getSatAt(m_applet, g, zone, p, false );
+                    curSat = zone.m_restSwh.getSatAt(m_applet, s.graphics, zone, p, false );
                     
 					// The cursor is on this link
                     if (curSat != null) {
-                        return updateCurrentZone(g, curSat, p);
+						Alert.show("a link is hovered")
+                        return updateCurrentZone(s, curSat, p);
                     }
                 }
             }
             
             // Last case, the cursor is not in a Zone
             this.m_newZone = null;
-            return updateCurrentZone(g, null, p);
+            return updateCurrentZone(s, null, p);
         }
         
 		
@@ -313,7 +318,7 @@ package com.socialcomputing.wps.script  {
          * @param p			Location of the cursor.	Used for the 'hover' event.
          * @return			True if the current satellite has changed.
          */
-        private function updateCurrentZone( g:Graphics, curSat:Satellite, p:Point):Boolean {
+        private function updateCurrentZone( s:Sprite, curSat:Satellite, p:Point):Boolean {
             // TODO : comment this
 			trace("[Update current zone : not implemented yet]");
 			
@@ -346,7 +351,7 @@ package com.socialcomputing.wps.script  {
                 if ( m_curSat != null &&( m_curZone != m_newZone ))
                 {
                     m_curZone   = m_newZone;
-                    paintCurZone( g );              // A new Zone is hovered, let's paint it!
+                    paintCurZone( s );              // A new Zone is hovered, let's paint it!
                     m_curSat.execute( m_applet, m_curZone, p, Satellite.HOVER_VAL );
                     cursTyp = MouseCursor.HAND;   // Sets the cursor to a hand if the mouse entered a Zone
                 }
@@ -370,10 +375,10 @@ package com.socialcomputing.wps.script  {
          * Draws the current zone (Link or Node).
          * @param g		Graphics to paint in.
          */
-        public function paintCurZone( g:Graphics):void {
+        public function paintCurZone( s:Sprite):void {
             if ( m_curZone != null )      // A new Zone is hovered, let's paint it!
             {
-                (Activable(m_curZone.getParent())).paintCur( m_applet, g );
+                (Activable(m_curZone.getParent())).paintCur( m_applet, s );
             }
         }
         

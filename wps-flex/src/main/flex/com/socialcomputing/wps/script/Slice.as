@@ -2,6 +2,8 @@ package com.socialcomputing.wps.script  {
 	import com.socialcomputing.wps.components.PlanComponent;
 	
 	import flash.display.Graphics;
+	import flash.display.Sprite;
+	import flash.geom.ColorTransform;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
@@ -90,7 +92,7 @@ package com.socialcomputing.wps.script  {
          * @param supCtr		This parent satellite center.
          * @throws UnsupportedEncodingException 
          */
-        public function paint(applet:PlanComponent, g:Graphics, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point):void {
+        public function paint(applet:PlanComponent, s:Sprite, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point):void {
             trace("[Slice paint method called]");
 			
 			var text:HTMLText= getText( TEXT_VAL, zone.m_props );
@@ -105,7 +107,7 @@ package com.socialcomputing.wps.script  {
             
 			// Draw a satellite with primitives
             if(isDefined(IN_COL_VAL) || isDefined(OUT_COL_VAL)) {
-                satShp.paint( g, supZone, zone, this, transfo, satCtr );
+                satShp.paint( s, supZone, zone, this, transfo, satCtr );
             }
             
 			// Draw a satellite's image it is set
@@ -121,18 +123,19 @@ package com.socialcomputing.wps.script  {
             }
             
             if(text != null) {
-                //TODO Utiliser le containeur html flex4
-                /*if ( HTMLText.isEnabled( text.getFlags( zone ), HTMLText.URL_BIT ))
+                if ( HTMLText.isEnabled( text.getFlags( zone.m_props ), HTMLText.URL_BIT ))
                 {
-                    var textUrls:Array= text.parseString( HTMLText.TEXT_VAL, zone );
-                    var hLine:String, hTxt	= "";
-                    var i:int, n        = textUrls.length;
+                    var textUrls:Vector.<String> = text.parseString( HTMLText.TEXT_VAL, zone.m_props );
+                    var hLine:String = "";
+                    var hTxt:String = "";
+                    var i:int;
+                    var n:int = textUrls.length;
                     
                     try
                     {
                         for ( i = 0; i < n; i ++ )
                         {
-                            var istream:InputStream= WPSApplet.getBinaryStream( applet, textUrls[i], true);
+                            /*var istream:InputStream= WPSApplet.getBinaryStream( applet, textUrls[i], true);
                             
                             if ( istream != null )
                             {
@@ -141,16 +144,21 @@ package com.socialcomputing.wps.script  {
                                 if ( i < n - 1)    hTxt += "<br>";
                             }
                             
-                            istream.close();
+                            istream.close();*/
                         }
                         
-                        if ( hTxt.length()> 0)
+                        if ( hTxt.length > 0)
                         {
                             
-                            m_htmlTxt = new HTMLText( Color.white, Color.black, 0, 12, Font.PLAIN, "SansSerif", 0, new Insets( 0, 4, 0, 4));
+                            m_htmlTxt = new HTMLText();
+                            var white:ColorTransform = new ColorTransform();
+                            white.color = 0xFFFFFF;
+                            var black:ColorTransform = new ColorTransform();
+                            black.color = 0x000000;
+                            m_htmlTxt.initValues(white, black, 0, 12, 0, "SansSerif", 0, new Insets( 0, 4, 0, 4));
                             
-                            m_htmlTxt.parseText( g, hTxt );
-                            m_htmlTxt.drawText( g, applet.getSize(), text.getFlags( zone )>> 16);//HTMLText.SOUTH_WEST );
+                            m_htmlTxt.parseText( s, hTxt );
+                            m_htmlTxt.drawText( s, applet.size, text.getFlags( zone.m_props )>> 16);//HTMLText.SOUTH_WEST );
                             
                             return;
                         }
@@ -161,17 +169,18 @@ package com.socialcomputing.wps.script  {
                 }
                 else
                 {
-                    var key:Number= getKey( text.hashCode());
+                    //var key:Number= getKey( text.hashCode());
+                    var key:Number= getKey( Math.random());
                     
                     supCtr	= supZone.m_restSwh.m_satellites[0].m_shape.getCenter( supZone );
-                    var htmlTxt:HTMLText= text.getHText( applet, g, zone, transfo, satCtr, supCtr, key );
+                    var htmlTxt:HTMLText= text.getHText( applet, s, zone, transfo, satCtr, supCtr, key );
                     
                     if ( htmlTxt != null )
                     {
-                        htmlTxt.drawText2( g, applet.getSize());
-                        zone.m_datas.put( key, htmlTxt );
+                        htmlTxt.drawText2( s, applet.size);
+                        zone.m_datas.push( key, htmlTxt );
                     }
-                }*/
+                }
             }
 			trace("[Slice paint end]");
         }

@@ -3,6 +3,7 @@ package com.socialcomputing.wps.script{
     
     import flash.display.GradientType;
     import flash.display.Graphics;
+    import flash.display.Sprite;
     import flash.geom.ColorTransform;
     import flash.geom.Point;
     import flash.geom.Rectangle;
@@ -12,7 +13,7 @@ package com.socialcomputing.wps.script{
     import flash.text.engine.ElementFormat;
     import flash.text.engine.FontDescription;
     import flash.text.engine.FontMetrics;
-	
+    
     /**
      * <p>Title: HTMLText</p>
      * <p>Description: A piece of text that can be single or multilined and hold basic HTML-like tags.<br>
@@ -101,10 +102,10 @@ package com.socialcomputing.wps.script{
         public static const SOUTH_WEST:int= 0x2;  // 0 0 1 0;
         public static const WEST:int= 0x1;  // 0 0 0 1;
         public static const NORTH_WEST:int= 0x0;  // 0 0 0 0;
-
-		public static const BOLD:int= 0x1;  // 0 1 0 0;
-		public static const ITALIC:int= 0x2;  // 0 1 0 0;
-	
+        
+        public static const BOLD:int= 0x1;  // 0 1 0 0;
+        public static const ITALIC:int= 0x2;  // 0 1 0 0;
+        
         /**
          * This bounding box, stored to avoid CPU overhead.
          */
@@ -113,7 +114,7 @@ package com.socialcomputing.wps.script{
         
         [transient]
         private var _m_heap:Vector.<String>;
-
+        
         /**
          * Heap of tags to manage the opening and closing of tags.
          */
@@ -123,25 +124,25 @@ package com.socialcomputing.wps.script{
         }
         
         [transient]
-        private var _m_tokens:Vector;
-
+        private var _m_tokens:Vector.<Object>;
+        
         /**
          * List of graphical instructions (tokens) to draw this.
          */
-        public function set m_tokens(value:Vector):void
+        public function set m_tokens(value:Vector.<Object>):void
         {
             _m_tokens = value;
         }
-
+        
         [transient]
         private var _m_inCol:ColorTransform;
-
+        
         public function get m_inCol():ColorTransform
         {
             return _m_inCol;
         }
-
-
+        
+        
         /**
          * Color of the bounding box background.
          */
@@ -149,16 +150,16 @@ package com.socialcomputing.wps.script{
         {
             _m_inCol = value;
         }
-
+        
         [transient]
         private var _m_outCol:ColorTransform;
-
+        
         public function get m_outCol():ColorTransform
         {
             return _m_outCol;
         }
-
-
+        
+        
         /**
          * Color of the bounding box border.
          */
@@ -166,16 +167,16 @@ package com.socialcomputing.wps.script{
         {
             _m_outCol = value;
         }
-
+        
         [transient]
         private var _m_color:int;
-
+        
         public function get m_color():int
         {
             return _m_color;
         }
-
-
+        
+        
         /**
          * Color of the text.
          */
@@ -183,16 +184,16 @@ package com.socialcomputing.wps.script{
         {
             _m_color = value;
         }
-
+        
         [transient]
         private var _m_bkCol:int;
-
+        
         public function get m_bkCol():int
         {
             return _m_bkCol;
         }
-
-
+        
+        
         /**
          * Color of the text background.
          */
@@ -200,16 +201,16 @@ package com.socialcomputing.wps.script{
         {
             _m_bkCol = value;
         }
-
+        
         [transient]
         private var _m_size:int;
-
+        
         public function get m_size():int
         {
             return _m_size;
         }
-
-
+        
+        
         /**
          * Size of the typeface.
          */
@@ -217,16 +218,16 @@ package com.socialcomputing.wps.script{
         {
             _m_size = value;
         }
-
+        
         [transient]
         private var _m_style:int;
-
+        
         public function get m_style():int
         {
             return _m_style;
         }
-
-
+        
+        
         /**
          * Style of the text (bold, italic,...)
          */
@@ -234,16 +235,16 @@ package com.socialcomputing.wps.script{
         {
             _m_style = value;
         }
-
+        
         [transient]
         private var _m_name:String;
-
+        
         public function get m_name():String
         {
             return _m_name;
         }
-
-
+        
+        
         /**
          * Name of the font.
          */
@@ -251,10 +252,10 @@ package com.socialcomputing.wps.script{
         {
             _m_name = value;
         }
-
+        
         [transient]
         private var _m_wCur:int;
-
+        
         /**
          * Width of the current line of text while processing it.
          */
@@ -262,10 +263,10 @@ package com.socialcomputing.wps.script{
         {
             _m_wCur = value;
         }
-
+        
         [transient]
         private var _m_body:FormatToken;
-
+        
         /**
          * Format of the whole text (HTML body). This is also the default format for new tokens.
          */
@@ -273,7 +274,7 @@ package com.socialcomputing.wps.script{
         {
             _m_body = value;
         }
-
+        
         
         /**
          * Format of the current Token.
@@ -297,7 +298,7 @@ package com.socialcomputing.wps.script{
          * @param flags		Default text alignment flags.
          * @param margin	Default margins size.
          */
-        public function initValues( inCol:ColorTransform, outCol:ColorTransform, textCol:int, fontSiz:int, fontStl:int, fontNam:String, flags:int, margin:Insets):void
+        public function initValues(inCol:ColorTransform, outCol:ColorTransform, textCol:int, fontSiz:int, fontStl:int, fontNam:String, flags:int, margin:Insets):void
         {
             m_body          = new FormatToken();
             m_body.m_flags  = flags;
@@ -311,7 +312,7 @@ package com.socialcomputing.wps.script{
             m_size      = fontSiz;
             m_name      = fontNam;
             m_wCur      = 0;
-            m_tokens    = new Vector();
+            m_tokens    = new Vector.<Object>();
             m_heap      = new Vector.<String>();
             m_heap.push( "c=#" + uint2hex( textCol ));
             m_heap.push( "s=" + fontSiz );
@@ -335,7 +336,7 @@ package com.socialcomputing.wps.script{
          * @return			A new or existing HTMLText whose bounds are initilized.
          * @throws UnsupportedEncodingException 
          */
-        protected function getHText( applet:PlanComponent, g:Graphics, zone:ActiveZone, transfo:Transfo, center:Point, supCtr:Point, key:Number):HTMLText // throws UnsupportedEncodingException
+        public function getHText( applet:PlanComponent, s:Sprite, zone:ActiveZone, transfo:Transfo, center:Point, supCtr:Point, key:Number):HTMLText // throws UnsupportedEncodingException
         {
             var htmlTxt:HTMLText= null;
             var data:Object= zone.m_datas[ key ];
@@ -363,7 +364,7 @@ package com.socialcomputing.wps.script{
                     htmlTxt.m_size = font.getInt( FontX.SIZE_VAL, zone.m_props);
                     htmlTxt.m_name = font.getString( FontX.NAME_VAL, zone.m_props);
                     htmlTxt.m_wCur = 0;
-                    htmlTxt.m_tokens = new Vector();
+                    htmlTxt.m_tokens = new Vector.<Object>();
                     var heapElements:Vector.<String> = new Vector.<String>();
                     heapElements.push("c#" + (ColorX(getValue( TEXT_COL_VAL, zone.m_props))).m_color.toString(16));
                     heapElements.push("s=" + font.getInt( FontX.SIZE_VAL, zone.m_props));
@@ -374,7 +375,7 @@ package com.socialcomputing.wps.script{
                     if (( font.getFlags( zone.m_props) & 2 )!= 0) heapElements.push( "i" );
                     htmlTxt.m_heap = heapElements;
                     
-                    htmlTxt.parseText( g, lines );
+                    htmlTxt.parseText( s, lines );
                     htmlTxt.setTextBnds( applet.size, getFlags( zone.m_props), zone.m_flags ,transfo, supCtr, center );
                 }
             }
@@ -393,7 +394,7 @@ package com.socialcomputing.wps.script{
          * @param g			The graphics used to retrieve the font metrics.
          * @param htmlText	A string of text with or without HTML tags to parse.
          */
-        protected function parseText( g:Graphics, htmlText:String):void {
+        public function parseText( s:Sprite, htmlText:String):void {
             var tokenizer:StringTokenizer= new StringTokenizer( htmlText, "<>" );
             var tokenStr:String, nextStr:String,
             prevStr:String     = tokenizer.nextToken();
@@ -415,7 +416,7 @@ package com.socialcomputing.wps.script{
             m_curTok.m_flags    = m_body.m_flags;
             m_curTok.m_margin   = m_body.m_margin;
             
-            m_tokens.addElement( m_curTok );
+            m_tokens.push( m_curTok );
             
             //g.setFont( font );
             
@@ -432,7 +433,7 @@ package com.socialcomputing.wps.script{
                     // A closed Tag
                     if ( hasMore && nextStr == ( ">" )) // tag
                     {
-                        textTok = updateTag( g, tokenStr );
+                        textTok = updateTag( s.graphics, tokenStr );
                         
                         // An real Tag
                         if ( textTok != null )
@@ -443,7 +444,7 @@ package com.socialcomputing.wps.script{
                         else
                         {
                             textTok = new TextToken();
-                            updateText( g, "<" + tokenStr + ">", textTok, isText );
+                            updateText( s.graphics, "<" + tokenStr + ">", textTok, isText );
                             isText  = true;
                         }
                         
@@ -452,7 +453,7 @@ package com.socialcomputing.wps.script{
                         // An unclosed Tag. Handle it as normal text.
                     else
                     {
-                        updateText( g, "<" + tokenStr, textTok, isText );
+                        updateText( s.graphics, "<" + tokenStr, textTok, isText );
                         prevStr = nextStr;
                         isText  = true;
                     }
@@ -460,7 +461,7 @@ package com.socialcomputing.wps.script{
                     // Normal text
                 else
                 {
-                    updateText( g, prevStr, textTok, isText );
+                    updateText( s.graphics, prevStr, textTok, isText );
                     prevStr = tokenStr;
                     isText  = true;
                 }
@@ -471,10 +472,10 @@ package com.socialcomputing.wps.script{
             // Don't forget the last or only piece of text
             if ( prevStr != null )
             {
-                updateText( g, prevStr, textTok, isText );
+                updateText( s.graphics, prevStr, textTok, isText );
             }
             
-            updateTag( g, "br" );  // to set last line position
+            updateTag( s.graphics, "br" );  // to set last line position
             
             updateBounds();
         }
@@ -484,16 +485,17 @@ package com.socialcomputing.wps.script{
          */
         private function updateBounds():void {
             var margin:Insets= m_body.m_margin;
-            var i:int, n:int    = m_tokens.size(),
-                x:int       = 0,
-                y:int       = margin.top;
+            var i:int;
+            var n:int    = m_tokens.length;
+            var x:int       = 0;
+            var y:int       = margin.top;
             var token:Object;
             var tTok:TextToken= null;
             var fTok:FormatToken= null;
             
             for ( i = 0; i < n; i ++ )
             {
-                token   = m_tokens.elementAt( i );
+                token   = m_tokens[i];
                 
                 if ( token is FormatToken ) // a <br> or <p> or </p>
                 {
@@ -509,7 +511,9 @@ package com.socialcomputing.wps.script{
                     x   = ( fTok.m_flags & CENTER_BIT )!= 0? leftLen >> 1:(( fTok.m_flags & RIGHT_BIT )!= 0? leftLen : 0);
                     x  += margin.left +( fTok.m_margin != null ? fTok.m_margin.left : 0);
                     y  += fTok.m_aMax +( fTok.m_margin != null ? fTok.m_margin.top : 0);
-                    m_tokens.removeElement( token );
+                    //m_tokens.removeElement( token );
+                    delete this.m_tokens[this.m_tokens.indexOf(token)];
+                    
                     i --;
                     n --;
                 }
@@ -536,15 +540,15 @@ package com.socialcomputing.wps.script{
             // The text exists!
             if ( text.length > 0)
             {
-				trace( "HTMLText updateText à finir");
+                trace( "HTMLText updateText à finir");
                 
                 
-/*				var fd:FontDescription = new FontDescription();
-				fd.fontName = "Garamond";
-				fd.fontWeight = flash.text.engine.FontWeight.BOLD;
-				var ef1:ElementFormat = new ElementFormat(fd);
+                /*				var fd:FontDescription = new FontDescription();
+                fd.fontName = "Garamond";
+                fd.fontWeight = flash.text.engine.FontWeight.BOLD;
+                var ef1:ElementFormat = new ElementFormat(fd);
                 var fm:FontMetrics= ef1.getFontMetrics();
-*/                var a:int	= 0,//fm.getAscent(),
+                */                var a:int	= 0,//fm.getAscent(),
                     d:int   = 0,//fm.getDescent(),
                     w:int   = 0,//fm.stringWidth( text ),
                     h:int   = 0;//fm.getHeight();
@@ -552,7 +556,8 @@ package com.socialcomputing.wps.script{
                 // The previous token was a text too so we must merge it with this new one.
                 if ( isText )
                 {
-                    textTok = TextToken(m_tokens.lastElement());
+                    //textTok = TextToken(m_tokens.lastElement());
+                    textTok = this.m_tokens[this.m_tokens.length - 1] as TextToken;
                     
                     textTok.m_text     += text;
                     textTok.m_bounds.width += w;
@@ -561,7 +566,7 @@ package com.socialcomputing.wps.script{
                     // The previous token was a formating one.
                 else
                 {
-                    m_tokens.addElement( textTok );
+                    m_tokens.push( textTok );
                     
                     textTok.m_text      = text;
                     textTok.m_bounds    = new Rectangle ( 0, 0, w, h );
@@ -668,17 +673,17 @@ package com.socialcomputing.wps.script{
                     m_curTok.m_flags    = flags;
                     m_curTok.m_margin   = margin == null ? m_body.m_margin : margin;
                     
-                    m_tokens.addElement( m_curTok );
+                    m_tokens.push( m_curTok );
                     
                     textTok = new TextToken();
                     textTok.m_color = new ColorTransform( m_color );
                     textTok.m_font  = new TextFormat();
-					textTok.m_font.font = m_name;
-					textTok.m_font.size = m_size;
-					if( m_style & BOLD)
-						textTok.m_font.bold = true;
-					else if( m_style & ITALIC)
-						textTok.m_font.italic = true;
+                    textTok.m_font.font = m_name;
+                    textTok.m_font.size = m_size;
+                    if( m_style & BOLD)
+                        textTok.m_font.bold = true;
+                    else if( m_style & ITALIC)
+                        textTok.m_font.italic = true;
                 }
                 else if ( isGfx( begChar ))
                 {
@@ -837,7 +842,7 @@ package com.socialcomputing.wps.script{
          * @param dir	One of the following directions:<br>
          * NORTH, NORTH_EAST, EAST, SOUTH_EAST, SOUTH, SOUTH_WEST, WEST, NORTH_WEST.
          */
-        protected function drawText( g:Graphics, size:Dimension, dir:int):void {
+        public function drawText( s:Sprite, size:Dimension, dir:int):void {
             var pos:Point= new Point();
             var xMax:int= size.width - m_bounds.width - 1,
                 yMax:int= size.height - m_bounds.height - 1;
@@ -847,7 +852,7 @@ package com.socialcomputing.wps.script{
             if (( dir & 2)!= 0)         pos.y = yMax;
             else if (( dir & 1)!= 0)    pos.y = yMax >> 1;
             
-            drawText3( g, size, pos );
+            drawText3( s, size, pos );
         }
         
         /**
@@ -855,8 +860,8 @@ package com.socialcomputing.wps.script{
          * @param g		Graphics to draw in.
          * @param size	Size of the Window to draw in.
          */
-        protected function drawText2( g:Graphics, size:Dimension):void {
-            drawText3( g, size, new Point( m_bounds.x, m_bounds.y ));
+        public function drawText2( s:Sprite, size:Dimension):void {
+            drawText3( s, size, new Point( m_bounds.x, m_bounds.y ));
         }
         
         /**
@@ -865,19 +870,20 @@ package com.socialcomputing.wps.script{
          * @param size	Size of the Window to draw in.
          * @param pos	Where to draw this.
          */
-        protected function drawText3( g:Graphics, size:Dimension, pos:Point):void {
+        protected function drawText3( s:Sprite, size:Dimension, pos:Point):void {
             //var g:Graphics2D= Graphics2D(gi);
             
-			trace( "HTMLText drawText3 à fnir");
-/*            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+            trace( "HTMLText drawText3 à fnir");
+            /*            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
             g.setRenderingHint(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_QUALITY);
             
             var composite:Composite= AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8);
             var cb:Composite= g.getComposite();
             g.setComposite(composite);
-*/            
+            */            
             var textTok:TextToken;
-            var i:int, n:int    = m_tokens.size();
+            var i:int;
+            var n:int    = m_tokens.length;
             
             if ( m_inCol != null )
             {
@@ -886,39 +892,42 @@ package com.socialcomputing.wps.script{
                 var colors:Array = [m_inCol.color, black.color];
                 var alphas:Array = [1, 1];
                 var ratios:Array = [0, 255];
-                g.beginGradientFill(GradientType.LINEAR, colors, alphas, ratios);
-                g.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 10, 10);
-                g.endFill();
-              
+                s.graphics.beginGradientFill(GradientType.LINEAR, colors, alphas, ratios);
+                s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 10, 10);
+                s.graphics.endFill();
+                
             }
             
             if ( m_outCol != null )
             {
-                g.beginFill(m_inCol.color);
-                g.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 5, 5);
-                g.endFill();
+                s.graphics.beginFill(m_inCol.color);
+                s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 5, 5);
+                s.graphics.endFill();
             }
             
             for ( i = 0; i < n; i ++ )
             {
-                textTok = TextToken(m_tokens.elementAt( i ));
-                textTok.paint( g, pos );
+                trace("****" + this.m_tokens[i]);
+                if (this.m_tokens[i] is TextToken) {
+                    textTok = this.m_tokens[i] as TextToken;
+                    textTok.paint( s, pos );
+                }
             }
             
- /*           composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2);					
+            /*           composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2);					
             g.setComposite(composite);
-*/
+            */
             if ( n==1) // draw reflection only for one line boxes
             {
                 var white:ColorTransform = new ColorTransform();
                 white.color = 0xFFFFFF;
-                g.beginFill(white.color);
-                g.drawRoundRect(pos.x+2, pos.y+2, m_bounds.width-4, m_bounds.height/3, 5, 5);
-                g.endFill();
+                s.graphics.beginFill(white.color);
+                s.graphics.drawRoundRect(pos.x+2, pos.y+2, m_bounds.width-4, m_bounds.height/3, 5, 5);
+                s.graphics.endFill();
             }
-/*            
+            /*
             g.setComposite(cb);
-*/            
+            */            
             m_bounds.x  = pos.x;
             m_bounds.y  = pos.y;
         }
@@ -1064,38 +1073,46 @@ package com.socialcomputing.wps.script{
             
             return pattern == string.substr( 0, pattern.length );
         }
-
+        
         public function get m_body():FormatToken
         {
             return _m_body;
         }
-
-        public function get m_tokens():Vector
+        
+        public function get m_tokens():Vector.<Object>
         {
             return _m_tokens;
         }
-
+        
         public function get m_heap():Vector.<String>
         {
             return _m_heap;
         }
-
+        
         public function get m_wCur():int
         {
             return _m_wCur;
         }
-
-		private function uint2hex(dec:uint):String {
-			var digits:String = "0123456789ABCDEF";
-			var hex:String = '';
-			while (dec > 0) {
-				var next:uint = dec & 0xF;
-				dec >>= 4;
-				hex = digits.charAt(next) + hex;
-			}
-			if (hex.length == 0) hex = '0';
-			return hex;
-		}
+        
+        private function uint2hex(dec:uint):String {
+            var digits:String = "0123456789ABCDEF";
+            var hex:String = '';
+            while (dec > 0) {
+                var next:uint = dec & 0xF;
+                dec >>= 4;
+                hex = digits.charAt(next) + hex;
+            }
+            if (hex.length == 0) hex = '0';
+            return hex;
+        }
+        
+        // static properties/methods aren't inherited in AS3
+        // http://help.adobe.com/en_US/ActionScript/3.0_ProgrammingAS3/WS5b3ccc516d4fbf351e63e3d118a9b90204-7fcd.html
+        // http://www.davidarno.org/2009/09/25/actionscript-3-inheritance-developers-beware/
+        public static function isEnabled( flags:int, bit:int):Boolean {
+            return Base.isEnabled(flags, bit);
+        }
+            
     }
     
 }

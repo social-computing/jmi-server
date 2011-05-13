@@ -2,6 +2,7 @@ package com.socialcomputing.wps.script  {
     import com.socialcomputing.wps.components.PlanComponent;
     
     import flash.display.Graphics;
+    import flash.display.Sprite;
     import flash.geom.Point;
     import flash.geom.Rectangle;
 
@@ -66,7 +67,7 @@ package com.socialcomputing.wps.script  {
          * @param showLinks		True if links between satelites should be drawn. False for the opposite.
          * @throws UnsupportedEncodingException 
          */
-        public function paint(applet:PlanComponent, g:Graphics, zone:ActiveZone, isCur:Boolean, isFront:Boolean, showTyp:int, showLinks:Boolean):void {
+        public function paint(applet:PlanComponent, s:Sprite, zone:ActiveZone, isCur:Boolean, isFront:Boolean, showTyp:int, showLinks:Boolean):void {
             trace("[Swatch paint method called]");
 			var sat:Satellite = m_satellites[0];
             var shape:ShapeX = sat.m_shape;
@@ -78,11 +79,11 @@ package com.socialcomputing.wps.script  {
             if ( isEnabled( flags, LINK_BIT )&& showLinks )
             {
                 trace("Drawing satellites links");
-                drawSats( applet, g, zone, shape, transfo, true, isCur, isFront, showTyp );
+                drawSats( applet, s, zone, shape, transfo, true, isCur, isFront, showTyp );
             }
           
             // Draws Satellites without links
-            drawSats( applet, g, zone, shape, transfo, false, isCur, isFront, showTyp );
+            drawSats( applet, s, zone, shape, transfo, false, isCur, isFront, showTyp );
 			trace("[Swatch paint end]");
         }
         
@@ -100,7 +101,7 @@ package com.socialcomputing.wps.script  {
          * @param showTyp		Flags indicating what type of satellite to draw.(Satellite.XXX_TYP)
          * @throws UnsupportedEncodingException 
          */
-        protected function drawSats(applet:PlanComponent, g:Graphics, zone:ActiveZone, shape:ShapeX, transfo:Transfo, isLinkOnly:Boolean, isCur:Boolean, isFront:Boolean, showTyp:int):void // throws UnsupportedEncodingException
+        protected function drawSats(applet:PlanComponent, s:Sprite, zone:ActiveZone, shape:ShapeX, transfo:Transfo, isLinkOnly:Boolean, isCur:Boolean, isFront:Boolean, showTyp:int):void // throws UnsupportedEncodingException
         {
             var isBag:Boolean= zone is BagZone;
             var supZone:BagZone= isBag ? BagZone(zone ): null;
@@ -119,7 +120,7 @@ package com.socialcomputing.wps.script  {
             if ( !isLinkOnly )
             {
                 // Draws the place itself using the first Satellite
-                sat.paint(applet, g, zone, null, null, false, satData, showTyp);
+                sat.paint(applet, s, zone, null, null, false, satData, showTyp);
             }
             
             for ( i = 1; i < n; i ++ )
@@ -164,7 +165,7 @@ package com.socialcomputing.wps.script  {
                                 if (( !isCur ||(( hasRestBit && !isCurSub )||( hasCurBit && isCurSub ))))
                                 {
                                     satCtr  = shape.transformOut( zone, satTrf );
-                                    sat.paint( applet, g, subZone, satCtr, supCtr, isLinkOnly, satData, showTyp  );
+                                    sat.paint( applet, s, subZone, satCtr, supCtr, isLinkOnly, satData, showTyp  );
                                 }
                             }
                         }
@@ -179,13 +180,13 @@ package com.socialcomputing.wps.script  {
                             if (( !isCur ||(( hasRestBit && !isCurSub )||( hasCurBit && isCurSub ))))
                             {
                                 satCtr  = shape.transformOut( zone, satTrf );
-                                sat.paint( applet, g, supZone, satCtr, supCtr, isLinkOnly, satData, showTyp  );
+                                sat.paint( applet, s, supZone, satCtr, supCtr, isLinkOnly, satData, showTyp  );
                             }
                         }
                     }
                     else	// links
                     {
-                        sat.paint( applet, g, zone, null, null, false, satData, showTyp );
+                        sat.paint( applet, s, zone, null, null, false, satData, showTyp );
                     }
                 }
             }
