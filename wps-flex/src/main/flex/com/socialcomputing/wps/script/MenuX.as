@@ -208,7 +208,7 @@ package com.socialcomputing.wps.script  {
         public function getTextFormat(props:Array):TextFormat {
             var font:FontX= getFont( FONT_VAL, props);
             
-            return font != null ? font.getFont2( props ): null;
+            return font != null ? font.getTextFormat( props ): null;
         }
     }
 }

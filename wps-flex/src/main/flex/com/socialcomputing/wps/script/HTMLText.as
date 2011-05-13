@@ -9,7 +9,9 @@ package com.socialcomputing.wps.script{
     import flash.geom.Rectangle;
     import flash.text.Font;
     import flash.text.FontStyle;
+    import flash.text.TextField;
     import flash.text.TextFormat;
+    import flash.text.TextLineMetrics;
     import flash.text.engine.ElementFormat;
     import flash.text.engine.FontDescription;
     import flash.text.engine.FontMetrics;
@@ -375,7 +377,7 @@ package com.socialcomputing.wps.script{
                     if (( font.getFlags( zone.m_props) & 2 )!= 0) heapElements.push( "i" );
                     htmlTxt.m_heap = heapElements;
                     
-                    htmlTxt.parseText( s, lines );
+                    htmlTxt.parseText( font.getTextFormat( zone.m_props), lines );
                     htmlTxt.setTextBnds( applet.size, getFlags( zone.m_props), zone.m_flags ,transfo, supCtr, center );
                 }
             }
@@ -394,7 +396,7 @@ package com.socialcomputing.wps.script{
          * @param g			The graphics used to retrieve the font metrics.
          * @param htmlText	A string of text with or without HTML tags to parse.
          */
-        public function parseText( s:Sprite, htmlText:String):void {
+        public function parseText( format:TextFormat, htmlText:String):void {
             var tokenizer:StringTokenizer= new StringTokenizer( htmlText, "<>" );
             var tokenStr:String, nextStr:String,
             prevStr:String     = tokenizer.nextToken();
@@ -433,7 +435,7 @@ package com.socialcomputing.wps.script{
                     // A closed Tag
                     if ( hasMore && nextStr == ( ">" )) // tag
                     {
-                        textTok = updateTag( s.graphics, tokenStr );
+                        textTok = updateTag( format, tokenStr );
                         
                         // An real Tag
                         if ( textTok != null )
@@ -444,7 +446,7 @@ package com.socialcomputing.wps.script{
                         else
                         {
                             textTok = new TextToken();
-                            updateText( s.graphics, "<" + tokenStr + ">", textTok, isText );
+                            updateText( format, "<" + tokenStr + ">", textTok, isText );
                             isText  = true;
                         }
                         
@@ -453,7 +455,7 @@ package com.socialcomputing.wps.script{
                         // An unclosed Tag. Handle it as normal text.
                     else
                     {
-                        updateText( s.graphics, "<" + tokenStr, textTok, isText );
+                        updateText( format, "<" + tokenStr, textTok, isText );
                         prevStr = nextStr;
                         isText  = true;
                     }
@@ -461,7 +463,7 @@ package com.socialcomputing.wps.script{
                     // Normal text
                 else
                 {
-                    updateText( s.graphics, prevStr, textTok, isText );
+                    updateText( format, prevStr, textTok, isText );
                     prevStr = tokenStr;
                     isText  = true;
                 }
@@ -472,10 +474,10 @@ package com.socialcomputing.wps.script{
             // Don't forget the last or only piece of text
             if ( prevStr != null )
             {
-                updateText( s.graphics, prevStr, textTok, isText );
+                updateText( format, prevStr, textTok, isText );
             }
             
-            updateTag( s.graphics, "br" );  // to set last line position
+            updateTag( format, "br" );  // to set last line position
             
             updateBounds();
         }
@@ -536,22 +538,26 @@ package com.socialcomputing.wps.script{
          * @param textTok	Current TextToken.
          * @param isText	True if the previous textToken was a Text Token so we can merge it with this.
          */
-        private function updateText( g:Graphics, text:String, textTok:TextToken, isText:Boolean):void {
+        private function updateText( format:TextFormat, text:String, textTok:TextToken, isText:Boolean):void {
             // The text exists!
             if ( text.length > 0)
             {
                 trace( "HTMLText updateText à finir");
-                
-                
+				var field:TextField = new TextField();
+				field.setTextFormat( format);
+				field.text = text;
+				var metric:TextLineMetrics = field.getLineMetrics(0);
+				;
                 /*				var fd:FontDescription = new FontDescription();
                 fd.fontName = "Garamond";
                 fd.fontWeight = flash.text.engine.FontWeight.BOLD;
                 var ef1:ElementFormat = new ElementFormat(fd);
                 var fm:FontMetrics= ef1.getFontMetrics();
-                */                var a:int	= 0,//fm.getAscent(),
-                    d:int   = 0,//fm.getDescent(),
-                    w:int   = 0,//fm.stringWidth( text ),
-                    h:int   = 0;//fm.getHeight();
+                */                
+				var a:int	= metric.ascent,//fm.getAscent(),
+                    d:int   = metric.descent,//fm.getDescent(),
+                    w:int   = metric.width,//fm.stringWidth( text ),
+                    h:int   = metric.height;//fm.getHeight();
                 
                 // The previous token was a text too so we must merge it with this new one.
                 if ( isText )
@@ -585,7 +591,7 @@ package com.socialcomputing.wps.script{
          * @param tag	A pseudo HTML tag without '<' and '>'.
          * @return		a new TextToken initialized according to the tag.
          */
-        private function updateTag( g:Graphics, tag:String):TextToken {
+        private function updateTag( format:TextFormat, tag:String):TextToken {
             var tempTag:String;
             var textTok:TextToken= null;
             var begChar:String;
@@ -604,7 +610,7 @@ package com.socialcomputing.wps.script{
                     
                     if ( tempTag.charAt( 0)== nxtChar ) // ! very simple verification !
                     {
-                        textTok = closeTag( g, tempTag );
+                        textTok = closeTag( format, tempTag );
                         if ( nxtChar != 'p' )   return textTok;
                     }
                     else
@@ -687,7 +693,7 @@ package com.socialcomputing.wps.script{
                 }
                 else if ( isGfx( begChar ))
                 {
-                    textTok = updateGfx( g, tag );
+                    textTok = updateGfx( format, tag );
                     m_heap.push( tag );
                 }
                 else
@@ -706,7 +712,7 @@ package com.socialcomputing.wps.script{
          * @param tag	A pseudo HTML tag without '<', '</' and '>'.
          * @return		a new TextToken initialized according to the tag.
          */
-        private function updateGfx( g:Graphics, tag:String):TextToken {
+        private function updateGfx( format:TextFormat, tag:String):TextToken {
             var textTok:TextToken= new TextToken();
             
             if ( startsWith(tag, "c=" )|| startsWith(tag, "k=" ))
@@ -797,7 +803,7 @@ package com.socialcomputing.wps.script{
          * @param tag	The closing tag without '</' and '>'.
          * @return		A new TextToken corresponding to the new state.
          */
-        private function closeTag( g:Graphics, tag:String):TextToken {
+        private function closeTag( format:TextFormat, tag:String):TextToken {
             var textTok:TextToken= new TextToken();
             var i:int= m_heap.length - 1;
             var c:String= tag.charAt( 0);
@@ -818,7 +824,7 @@ package com.socialcomputing.wps.script{
                     
                     if ( prevTag.charAt( 0)== c )
                     {
-                        return updateGfx( g, prevTag );
+                        return updateGfx( format, prevTag );
                     }
                 }
             }

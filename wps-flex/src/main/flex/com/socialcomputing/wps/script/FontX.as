@@ -34,7 +34,7 @@ package com.socialcomputing.wps.script  {
         /**
          * A Font Buffer to reduce temporary Font object creation.
          */
-        private const s_fontBuf:Array= new Array();
+        private const s_fontBuf:Object= new Object();
         
         /**
          * Convert this FontX to a java.awt.Font.
@@ -42,15 +42,14 @@ package com.socialcomputing.wps.script  {
          * @return			a new Font equivalent to this.
          */
         //function getFont( props:Hashtable):Font {
-        // Renommage fonction
-		public function getFont2( props:Array):TextFormat {
-            var font:TextFormat;
+ 		public function getTextFormat( props:Array):TextFormat {
             var flags:int= getFlags( props ),
                 size:int= getInt( SIZE_VAL, props );
             var name:String= getString( NAME_VAL, props ),
                 key:String= name + flags + size;
             
-            if (( font = TextFormat(s_fontBuf[ key ]))== null )
+			var font:TextFormat = s_fontBuf[ key ] as TextFormat;
+            if ( font == null )
             {
                 //font = new Font( name, flags, size );
                 font = new TextFormat();

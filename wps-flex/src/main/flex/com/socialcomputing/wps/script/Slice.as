@@ -6,6 +6,7 @@ package com.socialcomputing.wps.script  {
 	import flash.geom.ColorTransform;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.text.TextFormat;
 	
 	import mx.utils.UIDUtil;
     
@@ -157,7 +158,7 @@ package com.socialcomputing.wps.script  {
                             black.color = 0x000000;
                             m_htmlTxt.initValues(white, black, 0, 12, 0, "SansSerif", 0, new Insets( 0, 4, 0, 4));
                             
-                            m_htmlTxt.parseText( s, hTxt );
+                            m_htmlTxt.parseText( new TextFormat(), hTxt );
                             m_htmlTxt.drawText( s, applet.size, text.getFlags( zone.m_props )>> 16);//HTMLText.SOUTH_WEST );
                             
                             return;
