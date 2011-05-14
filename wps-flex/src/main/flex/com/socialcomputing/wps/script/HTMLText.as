@@ -877,19 +877,11 @@ package com.socialcomputing.wps.script{
          * @param pos	Where to draw this.
          */
         protected function drawText3( s:Sprite, size:Dimension, pos:Point):void {
-            //var g:Graphics2D= Graphics2D(gi);
-            
-            trace( "HTMLText drawText3 à fnir");
-            /*            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-            g.setRenderingHint(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_QUALITY);
-            
-            var composite:Composite= AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8);
-            var cb:Composite= g.getComposite();
-            g.setComposite(composite);
-            */            
+            var alpha_orig:Number = s.alpha;
+            s.alpha = 0.8;
             var textTok:TextToken;
             var i:int;
-            var n:int    = m_tokens.length;
+            var n:int    = m_tokens.length; 
             
             if ( m_inCol != null )
             {
@@ -920,9 +912,7 @@ package com.socialcomputing.wps.script{
                 }
             }
             
-            /*           composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2);					
-            g.setComposite(composite);
-            */
+            s.alpha = 0.2;
             if ( n==1) // draw reflection only for one line boxes
             {
                 var white:ColorTransform = new ColorTransform();
@@ -931,9 +921,7 @@ package com.socialcomputing.wps.script{
                 s.graphics.drawRoundRect(pos.x+2, pos.y+2, m_bounds.width-4, m_bounds.height/3, 5, 5);
                 s.graphics.endFill();
             }
-            /*
-            g.setComposite(cb);
-            */            
+            s.alpha = alpha_orig;
             m_bounds.x  = pos.x;
             m_bounds.y  = pos.y;
         }

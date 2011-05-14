@@ -5,6 +5,7 @@ package com.socialcomputing.wps.script {
     import flash.geom.ColorTransform;
     import flash.geom.Point;
     import flash.geom.Rectangle;
+    import flash.text.AntiAliasType;
     import flash.text.Font;
     import flash.text.TextField;
     import flash.text.TextFormat;
@@ -73,6 +74,7 @@ package com.socialcomputing.wps.script {
             text.text = m_text;
             text.x = x;
             text.y = y;
+            text.antiAliasType = AntiAliasType.ADVANCED;
             var formatter:TextFormat = new TextFormat();
             if ( m_color != null ) formatter.color = m_color.color; 
             if ( m_font != null ) formatter.font = m_font.font;

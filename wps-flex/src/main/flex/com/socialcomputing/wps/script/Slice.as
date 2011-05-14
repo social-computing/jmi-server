@@ -171,7 +171,9 @@ package com.socialcomputing.wps.script  {
                 else
                 {
                     //var key:Number= getKey( text.hashCode());
+                    // TODO Pas de hashcode en AS3: Remplacer Math.random() par un equivalent hashcode
                     var key:Number= getKey( Math.random());
+                    
                     
                     supCtr	= supZone.m_restSwh.m_satellites[0].m_shape.getCenter( supZone );
                     var htmlTxt:HTMLText= text.getHText( applet, s, zone, transfo, satCtr, supCtr, key );
@@ -306,7 +308,8 @@ package com.socialcomputing.wps.script  {
         private function getKey( hashcode:Number):Number {
             //return new Number( hashCode()+( hashcode << 32));
             // no hashCode() in actionscript
-            return new Number(hashcode << 32);
+            // TODO Recuperer le bon hashcode
+            return new Number(hashcode + (hashcode << 32));
         }
     }
 }
