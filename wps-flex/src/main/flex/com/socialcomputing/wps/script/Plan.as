@@ -174,11 +174,12 @@ package com.socialcomputing.wps.script  {
                 //restGfx:Graphics = m_applet.restDrawingSurface.graphics,
             	// g:Graphics       = m_applet.graphics;
 
-			backGfx.graphics.clear();
+			// Temporary commented, jonathan 12/05			
+			// backGfx.graphics.clear();
             //restGfx.clear();
             
             // If there is any background image, load it
-            if (m_applet.backImgUrl != null)
+            //if (m_applet.backImgUrl != null)
 				// TODO
                 //renderBitmap( restGfx, m_applet.m_backImgUrl, 0, 0, null );
             
@@ -222,9 +223,12 @@ package com.socialcomputing.wps.script  {
             paintZones( restGfx, m_nodes, m_nodesCnt, true, Satellite.TIP_TYP, false, true );
             paintZones( restGfx, m_nodes, m_nodesCnt, true, Satellite.SEL_TYP, false, true );
            	*/
+			
+			
 			paintZones(backGfx, m_links, m_links.length, true, Satellite.BASE_TYP, true, false );
 			paintZones(backGfx, m_links, m_links.length, true, Satellite.TIP_TYP, false, false );
 			paintZones(backGfx, m_links, m_links.length, true, Satellite.SEL_TYP, false, false );
+			
 			
 			paintZones(backGfx, m_nodes, m_nodesCnt, true, Satellite.BASE_TYP, true, true );
 			paintZones(backGfx, m_nodes, m_nodesCnt, true, Satellite.TIP_TYP, false, true );

@@ -434,7 +434,11 @@ package com.socialcomputing.wps.components
 			_onScreen.copyPixels(backBuffer, backBuffer.rect, new Point(0,0));
 			
 			// Clear the offscreen back display
-            sprite.graphics.clear();
+			// DEBUG
+			// Comment to see sensitive zone on the map without complete redraw
+			// END DEBUG 
+            
+sprite.graphics.clear();
 		}
 		
 		private function render():void {

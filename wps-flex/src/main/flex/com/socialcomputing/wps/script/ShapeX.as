@@ -1,5 +1,6 @@
 package com.socialcomputing.wps.script  {
 	import com.socialcomputing.wps.components.PlanComponent;
+	import com.socialcomputing.wps.util.shapes.RectangleUtil;
 	
 	import flash.display.Graphics;
 	import flash.display.GraphicsStroke;
@@ -129,7 +130,7 @@ package com.socialcomputing.wps.script  {
 			if(!isDefined(SCALE_VAL)) return false; // it is just a void frame
 			
             var points:Array = getValue(POLYGON_VAL, zone.m_props) as Array;
-            var shapeCenter:Point   = getCenter(zone),
+            var shapeCenter:Point   = this.getCenter(zone),
                 shapePosition:Point = new Point();
             var size:Number = this.getShapePos(zone, transfo, center, shapeCenter, shapePosition),
                 nbPoint:int = points.length;
@@ -144,22 +145,6 @@ package com.socialcomputing.wps.script  {
 					trace("  - size = " + size);
 					trace("  - (dx = " + distance.x + ", dy = " + distance.y  + ")"); 
 					
-					// DEBUG
-					// Drawing sensitive zone
-					/*
-					var t:Point = shapeCenter.add(shapePosition);
-					g.beginFill(0xFF0000);
-					g.drawRect(t.x, t.y, 3, 3);
-					g.drawEllipse(t.x - (size/2), t.y - (size/2), size, size );
-					g.endFill();
-					
-					g.lineStyle(1, 0x000000);
-					g.beginFill(0x0000FF);
-					g.drawRect(shapeCenter.x, shapeCenter.y, 3, 3);
-					g.endFill();
-					*/
-					// DEBUG END
-					
 					// We check if the position is located inside the circle
 					// Another way to express it : is the distance between the circle center and the position < circle (rayon)
 					trace("[Shape contains end]");
@@ -171,25 +156,6 @@ package com.socialcomputing.wps.script  {
 					var fromPoint:Point = (points[0] as Point).add(shapePosition);
                     var toPoint:Point = (points[1] as Point).add(shapePosition);
 					var poly:Polygon = getLinkPoly(zone, fromPoint, toPoint, size);
-					
-					// DEBUG
-					// Drawing sensitive zone
-					/*
-					g.lineStyle(1, 0x000000);
-					g.beginFill(0x0000FF);
-					g.drawRect(fromPoint.x, fromPoint.y, 3, 3);
-					g.drawRect(toPoint.x, toPoint.y, 3, 3);
-					g.endFill();
-					
-					
-					g.moveTo(poly.xpoints[0], poly.ypoints[0]);
-					g.beginFill(0xFF0000);
-					for(var ip:int = 1 ; ip < poly.npoints ; ip++) {
-						g.lineTo(poly.xpoints[ip], poly.ypoints[ip]);
-					}
-					g.endFill();
-					*/
-					// DEBUG END
 					
 					trace("[Shape contains end]");
                     return poly.contains2(pos);
@@ -205,36 +171,53 @@ package com.socialcomputing.wps.script  {
          * @param center	The center of the shape before the transformation.
          * @param bounds	A Rectangle to merge with this bounds.
          */
-        public function setBounds( zone:ActiveZone, transfo:Transfo, center:Point, bounds:Rectangle):void {
-            if ( isDefined( SCALE_VAL ))    // else it is just a void frame
-            {
-                var points:Array= getValue( POLYGON_VAL, zone.m_props ) as Array;
-                var p:Point= getCenter( zone ),
-                    shapePos:Point    = new Point();
-                var rect:Rectangle= null;
-                var n:int= points.length,
-                    size:int= int(getShapePos( zone, transfo, center, p, shapePos ));
+        public function setBounds(g:Graphics, zone:ActiveZone, transfo:Transfo, center:Point, bounds:Rectangle):void {
+			// else it is just a void frame
+			if (isDefined(SCALE_VAL)) {
+                var points:Array = getValue(POLYGON_VAL, zone.m_props) as Array;
+                var shapeCenter:Point = getCenter(zone),
+                    shapePos:Point = new Point();
+                var rect:Rectangle = null;
+                var n:int          = points.length,
+                    size:Number    = getShapePos(zone, transfo, center, shapeCenter, shapePos);
                 
-                switch ( n )
-                {
-                    case 1:     // disk
-                        var width:int= size << 1;
-                        
-                        rect    = new Rectangle();
-                        rect.x = p.x + shapePos.x - size;
-                        rect.y = p.y + shapePos.y - size;
-                        rect.width = width;
-                        rect.height = width;
+                switch (n) {
+					// 1 point = circle => Place
+                    case 1:     
+                        // var width:int = size << 1;
+						size = size * 2;
+                        rect = new Rectangle(shapeCenter.x + shapePos.x - size / 2 ,
+											 shapeCenter.y + shapePos.y - size / 2 ,
+											 size,
+											 size);
+						// DEBUG 
+						/*
+						g.lineStyle(1, 0x0000FF);
+						g.drawRect(rect.x, rect.y,
+							       rect.width, rect.height);
+						*/
+						// END DEBUG
                         break;
                     
-                    case 2:     // segment
+					// 2 points = segment => Street
+                    case 2:     
                         var A:Point = (points[0] as Point).add(shapePos),
                             B:Point = (points[1] as Point).add(shapePos);
-                        rect = getLinkPoly(zone, A, B, size).getBounds();
+                            rect = getLinkPoly(zone, A, B, size).getBounds();
+							
+							// DEBUG
+							/*
+							g.lineStyle(1, 0xFF0000);
+							g.drawRect(rect.x, rect.y,
+								       rect.width, rect.height);
+							*/
+							// END DEBUG
                         break;
                 }
-                
-                merge( bounds, rect );
+
+				RectangleUtil.merge(bounds, rect);
+
+                // merge( bounds, rect );
             }
         }
         
@@ -540,31 +523,7 @@ package com.socialcomputing.wps.script  {
         }
         
 		
-        /**
-         * Merge 2 Rectangles.
-         * If the dest Rectangle has one null dimension then copy the source on it.
-         * @param dst	Destination Rectangle that will hold its union with src.
-         * @param src	Source Rectangle.
-         */
-        protected static function merge( dst:Rectangle, src:Rectangle):void {
-            if ( dst.width * dst.height != 0)
-            {
-                var xMax:int= dst.x + dst.width,
-                    yMax:int    = dst.y + dst.height;
-                
-                dst.x = Math.min( dst.x, src.x );
-                dst.y = Math.min( dst.y, src.y );
-                dst.width   = Math.max( xMax, src.x + src.width )- dst.x;
-                dst.height  = Math.max( yMax, src.y + src.height )- dst.y;
-            }
-            //else    dst.set.setBounds( src );
-            else {
-				dst.x = src.x;
-				dst.y = src.y;
-				dst.width = src.width;
-				dst.height = src.height;
-            }
-        }
+
         
         
         /**
@@ -579,7 +538,7 @@ package com.socialcomputing.wps.script  {
         }
         
         /**
-         * Rotates a Vector 90� CCW.
+         * Rotates a Vector 90°C CCW.
          * Useful to create a 2D ortho basis of vectors.
          * @param P		A Point to rotate in-place.
          */

@@ -67,11 +67,18 @@ package com.socialcomputing.wps.script  {
         public override function init(applet:PlanComponent, s:Sprite, isFirst:Boolean):void {
             super.init( applet, s, isFirst );
             
-            m_parent	= null;
-            
-            if ( !Base.isEnabled( m_flags, FAKEFROM_BIT | FAKETO_BIT ))
-            {
-                m_bounds    = m_restSwh.getBounds( applet, s.graphics, this, false );
+            this.m_parent = null;
+            if (!Base.isEnabled(m_flags, FAKEFROM_BIT | FAKETO_BIT)) {
+                m_bounds = m_restSwh.getBounds( applet, s.graphics, this, false );
+				// DEBUG
+				// Drawing sensitive zone
+				
+				g.lineStyle(1, 0xFF0000);
+				g.drawRect(this.m_bounds.x, this.m_bounds.y,
+					       this.m_bounds.width, this.m_bounds.height);
+				
+				// END DEBUG				
+				
                 if ( m_curSwh != null )
                     m_bounds    = m_bounds.union( m_curSwh.getBounds( applet, s.graphics, this, true ));
                 
@@ -83,6 +90,8 @@ package com.socialcomputing.wps.script  {
 				
                 if ( w > maxBox.width )     maxBox.width    = w;
                 if ( h > maxBox.height )    maxBox.height   = h;
+				
+
 				
 				m_bounds = m_bounds.intersection(applet.size.toRectangle());
             }

@@ -247,30 +247,25 @@ package com.socialcomputing.wps.script  {
          * @param satCtr		This slice center, get from its satellite.
          * @param supCtr		This parent satellite center.
          * @param bounds		A Rectangle to merge with this bounds.
-         * @throws UnsupportedEncodingException 
          */
-        public function setBounds(applet:PlanComponent, g:Graphics, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point, bounds:Rectangle):void {
-            var transfo:Transfo= getTransfo( TRANSFO_VAL, zone.m_props );
+        public function setBounds(applet:PlanComponent, g:Graphics, supZone:ActiveZone, zone:ActiveZone,
+								  satShp:ShapeX, satCtr:Point, supCtr:Point, bounds:Rectangle):void {
+            var transfo:Transfo = getTransfo(TRANSFO_VAL, zone.m_props);
             
-            if ( supZone == null )  supZone     = zone;
+            if (supZone == null) supZone = zone;
             
-            try
-            {
-                if ( isDefined( IN_COL_VAL ) || isDefined( OUT_COL_VAL ))
-                {
-                    satShp.setBounds( supZone, transfo, satCtr, bounds );
+            try {
+                if (isDefined(IN_COL_VAL) || isDefined(OUT_COL_VAL)) {
+                    satShp.setBounds(g, supZone, transfo, satCtr, bounds);
                 }
             }
-            catch ( e:Error)
-            {
-				// The message should be encapsulated in the Error and not set in the PlanComponent object
+            catch (e:Error) {
                 var errorMessage:String = "getCenter supZone=" + supZone;
                 if ( supZone != null )
                 {
                     var points:Array= satShp.getValue( ShapeX.POLYGON_VAL, supZone.m_props ) as Array;
 					errorMessage += " zName=" + supZone.m_props[ "NAME" ] + " pKey=" + satShp.m_containers[ShapeX.POLYGON_VAL].m_value + " pnts=" + points + " p[0]=" + points[0];
                 }
-                
                 throw(new Error(errorMessage));
             }
             
