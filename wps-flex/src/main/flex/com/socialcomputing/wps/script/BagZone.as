@@ -83,7 +83,7 @@ public class BagZone extends ActiveZone implements Activable
 			// END DEBUG
 			
 			// var tempRectangle:Rectangle = m_curSwh.getBounds(applet, s.graphics, this, true);
-			this.m_bounds = m_curSwh.getBounds(applet, g, this, true);
+			this.m_bounds = m_curSwh.getBounds(applet, s.graphics, this, true);
 			
 			// DEBUG
 			//g.lineStyle(1, 0x0000FF);

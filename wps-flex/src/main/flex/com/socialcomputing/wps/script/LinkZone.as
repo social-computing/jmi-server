@@ -73,8 +73,8 @@ package com.socialcomputing.wps.script  {
 				// DEBUG
 				// Drawing sensitive zone
 				
-				g.lineStyle(1, 0xFF0000);
-				g.drawRect(this.m_bounds.x, this.m_bounds.y,
+				s.graphics.lineStyle(1, 0xFF0000);
+				s.graphics.drawRect(this.m_bounds.x, this.m_bounds.y,
 					       this.m_bounds.width, this.m_bounds.height);
 				
 				// END DEBUG				
