@@ -93,12 +93,29 @@ public class Polygon {
      * @param npoints the total number of points
      */
     public function calculateBounds(xpoints:Vector.<int>, ypoints:Vector.<int>, npoints:int):void {
-        var boundsMinX:int= uint.MAX_VALUE;
-        var boundsMinY:int= uint.MAX_VALUE;
-        var boundsMaxX:int= uint.MIN_VALUE;
-        var boundsMaxY:int= uint.MIN_VALUE;
+		
+		var minPoint:Point = new Point(xpoints[0], ypoints[0]);
+		var maxPoint:Point = new Point(xpoints[0], ypoints[0]);
+		
 
-        for (var i:int= 0; i < npoints; i++) {
+		for (var i:int = 1 ; i < npoints ; i++) {
+			minPoint.x = Math.min(minPoint.x, xpoints[i]);
+			minPoint.y = Math.min(minPoint.y, xpoints[i]);
+			maxPoint.x = Math.max(maxPoint.x, xpoints[i]);
+			maxPoint.y = Math.max(maxPoint.y, xpoints[i]);
+		}
+		
+		this.bounds = new Rectangle(minPoint.x,
+			                        minPoint.y,
+									maxPoint.x - minPoint.x,
+									maxPoint.y - minPoint.y);
+		/*
+        var boundsMinX:uint= uint.MAX_VALUE;
+        var boundsMinY:uint= uint.MAX_VALUE;
+        var boundsMaxX:uint= uint.MIN_VALUE;
+        var boundsMaxY:uint= uint.MIN_VALUE;
+
+        for (var i:int = 0 ; i < npoints ; i++) {
             var x:int= xpoints[i];
             boundsMinX = Math.min(boundsMinX, x);
             boundsMaxX = Math.max(boundsMaxX, x);
@@ -109,6 +126,7 @@ public class Polygon {
         bounds = new Rectangle(boundsMinX, boundsMinY,
                 boundsMaxX - boundsMinX,
                 boundsMaxY - boundsMinY);
+		*/
     }
 
     /*
