@@ -3,6 +3,8 @@ package com.socialcomputing.wps.script  {
     
     import flash.display.Graphics;
     import flash.geom.Rectangle;
+    
+    import spark.primitives.Rect;
 
 /**
  * <p>Title: BagZone</p>
@@ -58,10 +60,9 @@ public class BagZone extends ActiveZone implements Activable
     
 	public override function init(applet:PlanComponent, g:Graphics, isFirst:Boolean):void {
 		var i:int, n:int = m_subZones != null ? m_subZones.length : 0;
-
-		super.init( applet, g, isFirst );
-
-		if ( isFirst )      // One time init
+		super.init(applet, g, isFirst);
+		
+		if (isFirst)      // One time init
 		{
 			m_parent = null;
 
@@ -74,9 +75,24 @@ public class BagZone extends ActiveZone implements Activable
 				m_subZones[i].m_parent = this;
 			}
 
-			m_bounds = m_restSwh.getBounds( applet, g, this, false );
-			m_bounds = m_bounds.union( m_curSwh.getBounds( applet, g, this, true ));
-
+			
+			//m_bounds = m_restSwh.getBounds(applet, g, this, false);
+			// DEBUG
+			//g.lineStyle(1, 0xFF0000);
+			//g.drawRect(m_bounds.x, m_bounds.y, m_bounds.width, m_bounds.height);
+			// END DEBUG
+			
+			// var tempRectangle:Rectangle = m_curSwh.getBounds(applet, g, this, true);
+			this.m_bounds = m_curSwh.getBounds(applet, g, this, true);
+			
+			// DEBUG
+			//g.lineStyle(1, 0x0000FF);
+			// g.drawRect(tempRectangle.x, tempRectangle.y, tempRectangle.width, tempRectangle.height);
+			// END DEBUG
+			
+			//this.m_bounds = this.m_bounds.union(tempRectangle);
+			
+			
 			var isLeft:Boolean= m_bounds.x < 0;
 
 			if ( n > 0)
@@ -107,12 +123,14 @@ public class BagZone extends ActiveZone implements Activable
 			}
 		}
 
-		m_bounds    = m_restSwh.getBounds( applet, g, this, false );
+		
+		//m_bounds    = m_restSwh.getBounds( applet, g, this, false );
 
 		var win:Rectangle= applet.plan.m_prevBox.union( m_bounds );
 
-		m_bounds    = m_bounds.union( m_curSwh.getBounds( applet, g, this, true ));
+		//m_bounds    = m_bounds.union( m_curSwh.getBounds( applet, g, this, true ));
 
+		
 		if ( win.y > m_bounds.y )
 		{
 			win.height	+= win.y - m_bounds.y;

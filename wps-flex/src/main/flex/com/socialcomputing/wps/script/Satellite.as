@@ -332,13 +332,22 @@ package com.socialcomputing.wps.script  {
          * @param bounds		A Rectangle to merge with this bounds.
          * @throws UnsupportedEncodingException 
          */
-        public function setBounds(applet:PlanComponent, g:Graphics, zone:ActiveZone, satCtr:Point, supCtr:Point, bounds:Rectangle):void {
-			for each( var slice:Slice in m_slices)
-            {
-                slice.setBounds( applet, g, zone.getParent(), zone, m_shape, satCtr, supCtr, bounds );
+        public function setBounds(applet:PlanComponent, g:Graphics, zone:ActiveZone,
+								  satCtr:Point, supCtr:Point, bounds:Rectangle):void {
+			for each(var slice:Slice in m_slices) {
+                slice.setBounds(applet, g, zone.getParent(), zone, m_shape, satCtr, supCtr, bounds);
+				
             }
+			// DEBUG
+			/*
+			g.lineStyle(1, 0x0000FF);
+			g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
+			*/
+			// END DEBUG
+
         }
         
+		
         /**
          * Execute one or more actions matching an event.
          * The actions are stored in this satellite, one list for each of the 3 possible events.

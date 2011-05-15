@@ -198,39 +198,43 @@ package com.socialcomputing.wps.script  {
          * @param zone			The zone that holds the properties used by this swatch.
          * @param isCurZone		True if zone is hovered.
          * @return				This swatch bounding box for zone.
-         * @throws UnsupportedEncodingException 
          */
          public function getBounds(applet:PlanComponent, g:Graphics, zone:ActiveZone, isCurZone:Boolean):Rectangle {
-            var bounds:Rectangle= new Rectangle();
-            var sat:Satellite= m_satellites[0];
-            var shape:ShapeX= sat.m_shape;
-            var isBag:Boolean= zone is BagZone;
-            var supZone:BagZone= isBag ? BagZone(zone ): null;
-            var zones:Array= isBag ? supZone.m_subZones : null;
+            var bounds:Rectangle = new Rectangle();
+            var sat:Satellite    = m_satellites[0];
+            var shape:ShapeX     = sat.m_shape;
+            var isBag:Boolean    = zone is BagZone;
+            var supZone:BagZone  = isBag ? BagZone(zone) : null;
+            var zones:Array      = isBag ? supZone.m_subZones : null;
             var subZone:ActiveZone;
             var satRelTrf:Transfo, satTrf:Transfo,
-            	transfo:Transfo     = sat.getTransfo( Satellite.TRANSFO_VAL, zone.m_props );
-            var i:int, n:int        = m_satellites.length,
+            	transfo:Transfo  = sat.getTransfo(Satellite.TRANSFO_VAL, zone.m_props);
+            var i:int, n:int     = m_satellites.length,
                 flags:int;
             //boolean         hasRestBit, hasCurBit, hasLinkBit, isCur;
             var satData:SatData;
             var satCtr:Point,
-            	supCtr:Point = shape.getCenter( zone );
+            	supCtr:Point     = shape.getCenter(zone);
             
             // Gets the bounds of the place itself using the first Satellite
-            sat.setBounds( applet, g, zone, null, null, bounds );
+            sat.setBounds(applet, g, zone, null, null, bounds);
+			
+			// DEBUG
+			if (isBag) {
+				g.lineStyle(1, 0xFF0000);
+				g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
+			}
+			// END DEBUG
             
-            for ( i = 1; i < n; i ++ )
-            {
+            for (i = 1 ; i < n ; i ++) {
                 sat         = m_satellites[i];
                 
                 satData     = isCurZone ? zone.m_curData[i] : zone.m_restData[i];
                 flags       = satData.m_flags;
                 
-                if ( Base.isEnabled( flags, Satellite.VISIBLE_BIT ))        // This Sat is visible
-                {
-                    if ( isBag )
-                    {
+				// This Sat is visible
+                if (Base.isEnabled(flags, Satellite.VISIBLE_BIT)) {
+                    if (isBag) {
                         //hasRestBit  = Base.isEnabled( flags, Satellite.REST_BIT );
                         //hasCurBit   = Base.isEnabled( flags, Satellite.CUR_BIT );
                         satRelTrf   = sat.getTransfo( Satellite.TRANSFO_VAL, zone.m_props );
@@ -238,12 +242,11 @@ package com.socialcomputing.wps.script  {
                         
                         if ( supZone.m_dir != 10.)  satTrf.m_dir = supZone.m_dir;
                         
-						
-                        if (( !isEnabled( flags, Satellite.SEL_BIT )|| satData.m_isVisible )
-                            && Base.isEnabled( flags, Satellite.SUPER_BIT ))    // Gets SuperZone bounds
-                        {
-                            satCtr  = shape.transformOut( zone, satTrf );
-                            sat.setBounds( applet, g, zone, satCtr, supCtr, bounds );
+						// Gets SuperZone bounds
+                        if ((!isEnabled(flags, Satellite.SEL_BIT) || satData.m_isVisible)
+                            && Base.isEnabled(flags, Satellite.SUPER_BIT)) {
+                            satCtr  = shape.transformOut(zone, satTrf);
+                            sat.setBounds(applet, g, zone, satCtr, supCtr, bounds);
                         }
                         
                         if ( zones != null && Base.isEnabled( flags, Satellite.SUB_BIT ))   // gets SubZones bounds
@@ -265,10 +268,10 @@ package com.socialcomputing.wps.script  {
                     else	// links
                     {
                         sat.setBounds( applet, g, zone, null, null, bounds );
+
                     }
                 }
             }
-            
             return bounds;
         }
         

@@ -63,14 +63,22 @@ package com.socialcomputing.wps.script  {
          * @param g         A graphics compatible with the one that will be used for painting.
          * @param isFirst   True if init called for the first time.
          */
+		/*
         public override function init(applet:PlanComponent, g:Graphics, isFirst:Boolean):void {
-            super.init( applet, g, isFirst );
+			super.init(applet, g, isFirst);
             
-            m_parent	= null;
-            
-            if ( !Base.isEnabled( m_flags, FAKEFROM_BIT | FAKETO_BIT ))
-            {
-                m_bounds    = m_restSwh.getBounds( applet, g, this, false );
+            this.m_parent = null;
+            if (!Base.isEnabled(m_flags, FAKEFROM_BIT | FAKETO_BIT)) {
+                m_bounds = m_restSwh.getBounds(applet, g, this, false);
+				// DEBUG
+				// Drawing sensitive zone
+				
+				g.lineStyle(1, 0xFF0000);
+				g.drawRect(this.m_bounds.x, this.m_bounds.y,
+					       this.m_bounds.width, this.m_bounds.height);
+				
+				// END DEBUG				
+				
                 if ( m_curSwh != null )
                     m_bounds    = m_bounds.union( m_curSwh.getBounds( applet, g, this, true ));
                 
@@ -83,10 +91,13 @@ package com.socialcomputing.wps.script  {
                 if ( w > maxBox.width )     maxBox.width    = w;
                 if ( h > maxBox.height )    maxBox.height   = h;
 				
+
+				
 				m_bounds = m_bounds.intersection(applet.size.toRectangle());
             }
         }
-        
+        */
+		
         /**
          * Paint this Link when the cursor hover it.
          * This is achieved by blitting the basic background, drawing the cur swatch base satellites and the two places over it.
