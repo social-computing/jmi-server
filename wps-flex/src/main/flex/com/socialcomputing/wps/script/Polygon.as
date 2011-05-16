@@ -200,8 +200,6 @@ public class Polygon {
             if (bounds == null) {
                 calculateBounds(xpoints, ypoints, npoints);
             }
-			// TODO ???
-            //return bounds.getBounds();
 			return bounds;
         }
 

@@ -338,10 +338,10 @@ package com.socialcomputing.wps.script{
          * @return			A new or existing HTMLText whose bounds are initilized.
          * @throws UnsupportedEncodingException 
          */
-        public function getHText( applet:PlanComponent, s:Sprite, zone:ActiveZone, transfo:Transfo, center:Point, supCtr:Point, key:Number):HTMLText // throws UnsupportedEncodingException
+        public function getHText( applet:PlanComponent, s:Sprite, zone:ActiveZone, transfo:Transfo, center:Point, supCtr:Point, textKey:HTMLText):HTMLText // throws UnsupportedEncodingException
         {
             var htmlTxt:HTMLText= null;
-            var data:Object= zone.m_datas[ key ];
+            var data:Object= zone.m_datas[ textKey ];
             
             if ( center == null )	center = supCtr;
             
@@ -360,7 +360,7 @@ package com.socialcomputing.wps.script{
                     
                     htmlTxt.m_inCol = getColor( IN_COL_VAL, zone.m_props);
                     htmlTxt.m_outCol = getColor( OUT_COL_VAL, zone.m_props);
-                    htmlTxt.m_color = (ColorX(getValue( TEXT_COL_VAL, zone.m_props))).m_color;
+                    htmlTxt.m_color = (getValue( TEXT_COL_VAL, zone.m_props) as ColorX).m_color;
                     htmlTxt.m_bkCol = -1;
                     htmlTxt.m_style = font.getFlags( zone.m_props);
                     htmlTxt.m_size = font.getInt( FontX.SIZE_VAL, zone.m_props);
