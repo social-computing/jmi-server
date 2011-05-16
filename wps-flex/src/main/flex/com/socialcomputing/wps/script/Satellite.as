@@ -276,7 +276,7 @@ package com.socialcomputing.wps.script  {
          */
         public function contains(planComponent:PlanComponent, g:Graphics, zone:ActiveZone, satCtr:Point, 
 								 supCtr:Point, transfo:Transfo, pos:Point, isPie:Boolean, isFake:Boolean):Boolean {
-            trace("[Satellite contains method called]");
+            //trace("[Satellite contains method called]");
 			var i:int, n:int = m_slices.length;
             // If the parent satellite center is not set, take this satellite's shape center as center
             if(supCtr == null) supCtr = m_shape.getCenter(zone);
@@ -315,10 +315,10 @@ package com.socialcomputing.wps.script  {
                         }
                     }
                 }
-				trace("[Satellite contains method end, return value = true]");
+				//trace("[Satellite contains method end, return value = true]");
                 return true;
             }
-			trace("[Satellite contains method end, return value = false]");
+			//trace("[Satellite contains method end, return value = false]");
             return false;
         }
         
@@ -340,12 +340,15 @@ package com.socialcomputing.wps.script  {
 				
             }
 			// DEBUG
+			// var fSlice:Slice = m_slices[0];
+			// fSlice.setBounds(applet, g, zone.getParent(), zone, m_shape, satCtr, supCtr, bounds);
 			/*
-			g.lineStyle(1, 0x0000FF);
-			g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
+			if(zone is LinkZone) {
+				g.lineStyle(1, 0x00FF00);
+				g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
+			}
 			*/
 			// END DEBUG
-
         }
         
 		

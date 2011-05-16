@@ -188,6 +188,7 @@ package com.socialcomputing.wps.script  {
 			trace("[Slice paint end]");
         }
         
+		
         /**
          * Return wether a point is inside this slice
 		 * 
@@ -208,14 +209,12 @@ package com.socialcomputing.wps.script  {
          */
         public function contains(planComponent:PlanComponent, g:Graphics, supZone:ActiveZone, zone:ActiveZone, 
 								 satShp:ShapeX, satCtr:Point, supCtr:Point, pos:Point):Boolean {
-            trace("[Slice contains method called]");
 			var transfo:Transfo = getTransfo(TRANSFO_VAL, zone.m_props);
             
             if(supZone == null)	supZone = zone;
             
             if((isDefined(IN_COL_VAL ) || isDefined(OUT_COL_VAL)) &&
 				satShp.contains(g, supZone, transfo, satCtr, pos)) {
-				trace("[Slice contains method, return value = true]");
                 return true;
             }
             
@@ -229,7 +228,6 @@ package com.socialcomputing.wps.script  {
                 
                 return htmlTxt != null ? htmlTxt.m_bounds.contains( pos ): false;
             }*/
-			trace("[Slice contains method, return value = false]");
             return false;
         }
         

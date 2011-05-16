@@ -90,6 +90,7 @@ package com.socialcomputing.wps.script  {
         /**
          * Draws satellites that have the required flags enabled.
          * Those without transfo use a default transformation.
+		 * 
          * @param applet		Applet holding this.
          * @param g				Graphics to paint in.
          * @param zone			Zone to draw the sats.
@@ -99,10 +100,9 @@ package com.socialcomputing.wps.script  {
          * @param isCur			True if zone is hovered.
          * @param isFront		True to paint only satellites over the transparent filter. False to only paint those below.
          * @param showTyp		Flags indicating what type of satellite to draw.(Satellite.XXX_TYP)
-         * @throws UnsupportedEncodingException 
          */
-        protected function drawSats(applet:PlanComponent, s:Sprite, zone:ActiveZone, shape:ShapeX, transfo:Transfo, isLinkOnly:Boolean, isCur:Boolean, isFront:Boolean, showTyp:int):void // throws UnsupportedEncodingException
-        {
+        protected function drawSats(applet:PlanComponent, s:Sprite, zone:ActiveZone, shape:ShapeX, 
+									transfo:Transfo, isLinkOnly:Boolean, isCur:Boolean, isFront:Boolean, showTyp:int):void {
             var isBag:Boolean= zone is BagZone;
             var supZone:BagZone= isBag ? BagZone(zone ): null;
             var zones:Array= isBag ? supZone.m_subZones : null;
@@ -194,10 +194,12 @@ package com.socialcomputing.wps.script  {
         
         /**
          * Gets this bounds by merging the satellites bounds.
+		 * 
          * @param applet		The Applet that owns this.
          * @param g				A graphics to get the FontMetrics used by this.
          * @param zone			The zone that holds the properties used by this swatch.
          * @param isCurZone		True if zone is hovered.
+		 * 
          * @return				This swatch bounding box for zone.
          */
          public function getBounds(applet:PlanComponent, g:Graphics, zone:ActiveZone, isCurZone:Boolean):Rectangle {
@@ -220,22 +222,19 @@ package com.socialcomputing.wps.script  {
             // Gets the bounds of the place itself using the first Satellite
             sat.setBounds(applet, g, zone, null, null, bounds);
 			
-			// DEBUG
-			if (isBag) {
-				g.lineStyle(1, 0xFF0000);
-				g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
-			}
-			// END DEBUG
-            
-            for (i = 1 ; i < n ; i ++) {
-                sat         = m_satellites[i];
-                
+			//			}
+			//          for (i = 1 ; i < n ; i ++) {
+			//            sat         = m_satellites[i];
+			
+			// Iterate through the swatch satellite list
+			for each(sat in m_satellites) {
                 satData     = isCurZone ? zone.m_curData[i] : zone.m_restData[i];
                 flags       = satData.m_flags;
                 
 				// This Sat is visible
                 if (Base.isEnabled(flags, Satellite.VISIBLE_BIT)) {
-                    if (isBag) {
+					// If this is a BagZone                    
+					if (isBag) {
                         //hasRestBit  = Base.isEnabled( flags, Satellite.REST_BIT );
                         //hasCurBit   = Base.isEnabled( flags, Satellite.CUR_BIT );
                         satRelTrf   = sat.getTransfo( Satellite.TRANSFO_VAL, zone.m_props );
@@ -250,7 +249,8 @@ package com.socialcomputing.wps.script  {
                             sat.setBounds(applet, g, zone, satCtr, supCtr, bounds);
                         }
                         
-                        if ( zones != null && Base.isEnabled( flags, Satellite.SUB_BIT ))   // gets SubZones bounds
+						// gets SubZones bounds
+                        if ( zones != null && Base.isEnabled( flags, Satellite.SUB_BIT ))   
                         {
 							for each( subZone in zones)
                             {
@@ -266,13 +266,21 @@ package com.socialcomputing.wps.script  {
                             }
                         }
                     }
-                    else	// links
-                    {
-                        sat.setBounds( applet, g, zone, null, null, bounds );
 
+					// This is a LinkZone 
+                    else {
+                        sat.setBounds( applet, g, zone, null, null, bounds );
                     }
                 }
             }
+			// DEBUG
+			/*
+			if (!isBag) {
+				g.lineStyle(1, 0xFF0000);
+				g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
+			}
+			*/
+			// END DEBUG
             return bounds;
         }
         
@@ -288,7 +296,7 @@ package com.socialcomputing.wps.script  {
          * @throws UnsupportedEncodingException 
          */
         public function getSatAt(planComponent:PlanComponent, g:Graphics, zone:ActiveZone, pos:Point, isCurZone:Boolean):Satellite {
-			trace("[Swatch getSatAt method called]");
+			//trace("[Swatch getSatAt method called]");
 			
 			// The cursor position is in the Bounding Box
 			var parentzone:ActiveZone = zone.getParent();		
@@ -297,7 +305,6 @@ package com.socialcomputing.wps.script  {
 			// Drawing sensitive zone
 			/*
 			g.lineStyle(1, 0x000000);
-			
 			g.drawRect(parentzone.m_bounds.x, parentzone.m_bounds.y,
 				       parentzone.m_bounds.x + parentzone.m_bounds.width, parentzone.m_bounds.y + parentzone.m_bounds.height);
 			*/

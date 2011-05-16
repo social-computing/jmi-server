@@ -11,6 +11,7 @@ package com.socialcomputing.wps.components
 	import com.socialcomputing.wps.script.ShapeX;
 	import com.socialcomputing.wps.script.Slice;
 	import com.socialcomputing.wps.script.VContainer;
+	import com.socialcomputing.wps.util.shapes.RectangleUtil;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -22,13 +23,14 @@ package com.socialcomputing.wps.components
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	
 	import mx.collections.ArrayCollection;
 	import mx.controls.Alert;
 	import mx.controls.Image;
 	import mx.controls.Menu;
-	import mx.events.MenuEvent;
 	import mx.controls.treeClasses.DefaultDataDescriptor;
+	import mx.events.MenuEvent;
 	import mx.managers.CursorManager;
 	
 	import spark.components.Group;
@@ -239,11 +241,12 @@ package com.socialcomputing.wps.components
                 
 				plan.m_applet = this;
 				plan.m_curSel = -1;
-				plan.initZones(this, plan.m_links, true);
-				plan.initZones(this, plan.m_nodes, true);
+				plan.initZones(this.backDrawingSurface, plan.m_links, true);
+				plan.initZones(this.backDrawingSurface, plan.m_nodes, true);
 				plan.resize(size);
 				plan.init();
 				//plan.resize(size);
+
 				_ready = true;
 		
 			}
@@ -274,31 +277,20 @@ package com.socialcomputing.wps.components
 			trace(message);
 		}
 		
-		/*
-		public function get curPos():Point {
-			return _curPos;
-		}
-		
-		public function set curPos(pos:Point):void {
-			_curPos = pos;
-		}
-		*/
-		
 		public function mouseOverHandler(event:MouseEvent):void {
 			trace("mouseOverHandler");
 		}
 		
 		public function mouseMoveHandler(event:MouseEvent):void {
-			curPos.x = event.stageX;
-			curPos.y = event.stageY;
+			this.curPos = new Point(event.localX, event.localY);
 			if(ready) {
 				// The Zone, SubZone or Satellite can have changed
-				_dataProvider.plan.updateZoneAt( curPos); 
+				_dataProvider.plan.updateZoneAt(this.curPos); 
 				// DEBUG
 				// Uncomment to see sensitive zone on the map after mouse move
-				// END DEBUG 
 				// this.invalidateProperties();
 				// this.invalidateDisplayList();
+				// END DEBUG 
 			}
 		}
 		
@@ -336,7 +328,7 @@ package com.socialcomputing.wps.components
 		 */
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			trace("Update graphic display");
+			//trace("Update graphic display");
 			if(ready) {
 				//graphics.drawImage( _restImg, 0, 0, null );
 				// _restDrawingSurface
@@ -427,7 +419,7 @@ package com.socialcomputing.wps.components
 			
 			// Transforming the offscreen back display to a BitmapData
 			var backBuffer:BitmapData = new BitmapData(width, height);
-			backBuffer.draw( sprite, new Matrix());
+			backBuffer.draw(sprite, new Matrix());
 			
             //backBuffer.draw(this._backTextSurface, new Matrix());
 			// Copying the content of the back buffer on screen
@@ -437,13 +429,12 @@ package com.socialcomputing.wps.components
 			// DEBUG
 			// Comment to see sensitive zone on the map without complete redraw
 			// END DEBUG 
-            
-sprite.graphics.clear();
+            //sprite.graphics.clear();
+			trace("renderShape method end");
 		}
 		
 		private function render():void {
-			trace("Render method called");
-			
+			//trace("Render method called");
 			renderShape( this._backDrawingSurface, this.width, this.height);
 		}
 	}

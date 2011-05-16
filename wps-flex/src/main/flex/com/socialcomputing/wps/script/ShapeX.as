@@ -157,8 +157,20 @@ package com.socialcomputing.wps.script  {
                     var toPoint:Point = (points[1] as Point).add(shapePosition);
 					var poly:Polygon = getLinkPoly(zone, fromPoint, toPoint, size);
 					
-					trace("[Shape contains end]");
-                    return poly.contains2(pos);
+					// DEBUG
+					/*
+					g.lineStyle(1, 0x0000FF);
+					g.moveTo(poly.xpoints[0], poly.ypoints[0]);
+					for(var p:int = 1; p < poly.npoints ; p++) {
+						g.lineTo(poly.xpoints[p], poly.ypoints[p]);
+					} 
+					g.lineTo(poly.xpoints[0], poly.ypoints[0]);
+					*/
+					// EN DEBUG
+					
+					var ret:Boolean = poly.contains(pos); 
+					trace("[Shape contains end, value = " + ret + "]");
+                    return ret;
 				default:
 					throw new Error("Should never happen, a shape can only have 1 or 2 points");
             }
@@ -166,6 +178,7 @@ package com.socialcomputing.wps.script  {
         
         /**
          * Sets this bounds by updating an already created Rectangle.
+		 * 
          * @param zone		BagZone holding the Points table.
          * @param transfo	A transformation to scale or translate this shape.
          * @param center	The center of the shape before the transformation.
@@ -191,11 +204,9 @@ package com.socialcomputing.wps.script  {
 											 size,
 											 size);
 						// DEBUG 
-						/*
-						g.lineStyle(1, 0x0000FF);
-						g.drawRect(rect.x, rect.y,
-							       rect.width, rect.height);
-						*/
+						// g.lineStyle(1, 0x0000FF);
+						// g.drawRect(rect.x, rect.y,
+						//	       rect.width, rect.height);
 						// END DEBUG
                         break;
                     
@@ -206,18 +217,14 @@ package com.socialcomputing.wps.script  {
                             rect = getLinkPoly(zone, A, B, size).getBounds();
 							
 							// DEBUG
-							/*
-							g.lineStyle(1, 0xFF0000);
-							g.drawRect(rect.x, rect.y,
-								       rect.width, rect.height);
-							*/
+							// g.lineStyle(1, 0x0000FF);
+							// g.drawRect(rect.x, rect.y,
+							//	       rect.width, rect.height);
 							// END DEBUG
                         break;
                 }
 
 				RectangleUtil.merge(bounds, rect);
-
-                // merge( bounds, rect );
             }
         }
         

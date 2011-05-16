@@ -63,35 +63,34 @@ public class BagZone extends ActiveZone implements Activable
 		var i:int, n:int = m_subZones != null ? m_subZones.length : 0;
 		super.init(applet, s, isFirst);
 		
-		if (isFirst)      // One time init
+		// One time init
+		if (isFirst)      
 		{
 			m_parent = null;
 
-			if ( n > 0)    m_stp = Base.Pi2 /( n + 1);
-
-			m_dir       = 10.;
+			if (n > 0) m_stp = Base.Pi2 / (n + 1);
+			m_dir = 10.;
 
 			for ( i = 0; i < n; i ++ )
 			{
 				m_subZones[i].m_parent = this;
 			}
 
-			// m_bounds = m_restSwh.getBounds( applet, s.graphics, this, false );
+			m_bounds = m_restSwh.getBounds( applet, s.graphics, this, false );
 			// DEBUG
-			//g.lineStyle(1, 0xFF0000);
-			//g.drawRect(m_bounds.x, m_bounds.y, m_bounds.width, m_bounds.height);
+			//s.graphics.lineStyle(1, 0xFF0000);
+			//s.graphics.drawRect(m_bounds.x, m_bounds.y, m_bounds.width, m_bounds.height);
 			// END DEBUG
 			
-			// var tempRectangle:Rectangle = m_curSwh.getBounds(applet, s.graphics, this, true);
-			this.m_bounds = m_curSwh.getBounds(applet, s.graphics, this, true);
+			var tempRectangle:Rectangle = m_curSwh.getBounds(applet, s.graphics, this, true);
+			//this.m_bounds = m_curSwh.getBounds(applet, s.graphics, this, true);
 			
 			// DEBUG
 			//g.lineStyle(1, 0x0000FF);
 			// g.drawRect(tempRectangle.x, tempRectangle.y, tempRectangle.width, tempRectangle.height);
 			// END DEBUG
 			
-			//this.m_bounds = this.m_bounds.union(tempRectangle);
-			
+			this.m_bounds = this.m_bounds.union(tempRectangle);
 			
 			var isLeft:Boolean= m_bounds.x < 0;
 

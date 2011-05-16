@@ -125,11 +125,11 @@ package com.socialcomputing.wps.script  {
                 m_maxBox    = new Dimension(0, 0);
             
             // Reversed order so subZones are initialized before supZones!
-            for ( i = n - 1; i >= 0; i -- )
-            {
+			//zones[0].init(m_applet, s, isFirst);
+			for(i = n - 1 ; i >= 0 ; i --) {
                 zones[i].init( m_applet, s, isFirst );
             }
-            
+			
             // Allocate a temporary bitmap to dblBuffer curZone rendering using the biggest Zone BBox
             // if ( zones == m_nodes )
             // {
@@ -139,6 +139,7 @@ package com.socialcomputing.wps.script  {
         
         /**
          * Draws an array of zones at rest with specified satellites.
+		 * 
          * @param g			Graphics to paint on.
          * @param zones		An array of zones to paint.
          * @param n			Zone count. In normal order, zones are drawn from index 0 to n-1.
@@ -148,27 +149,25 @@ package com.socialcomputing.wps.script  {
          * @param isRev		True if the array is drawn from in reversed order. That means from n-1 to 0.
          */
         private function paintZones( s:Sprite, zones:Array, n:int, isFront:Boolean, showTyp:int, showLinks:Boolean, isRev:Boolean):void {
-            if ( isRev )
-            {
-                for ( var i:int= n - 1; i >= 0; i -- )
-                {
-                    zones[i].paint( m_applet, s, false, isFront, showTyp, showLinks );
+			//zones[0].paint(m_applet, s, false, isFront, showTyp, showLinks);
+            if (isRev) {
+                for (var i:int = n - 1 ; i >= 0 ; i --) {
+                    zones[i].paint(m_applet, s, false, isFront, showTyp, showLinks);
                 }
             }
-            else
-            {
-                for ( i; i < n; i ++ )
-                {
-                    zones[i].paint( m_applet, s, false, isFront, showTyp, showLinks );
+            else {
+                for (i = 0 ; i < n ; i++) {
+                    zones[i].paint(m_applet, s, false, isFront, showTyp, showLinks);
                 }
             }
         }
         
+		
         /**
          * Prepare the Plan by initializing zones, allocating and filling the image buffers and repainting the Applet.
          */
         //protected synchronized function init( ):void {
-        public function init( ):void {
+        public function init():void {
             var dim:Dimension= m_applet.size;
             var backGfx:Sprite = m_applet.backDrawingSurface;
                 //restGfx:Graphics = m_applet.restDrawingSurface.graphics,
@@ -229,7 +228,6 @@ package com.socialcomputing.wps.script  {
 			paintZones(backGfx, m_links, m_links.length, true, Satellite.TIP_TYP, false, false );
 			paintZones(backGfx, m_links, m_links.length, true, Satellite.SEL_TYP, false, false );
 			
-			
 			paintZones(backGfx, m_nodes, m_nodesCnt, true, Satellite.BASE_TYP, true, true );
 			paintZones(backGfx, m_nodes, m_nodesCnt, true, Satellite.TIP_TYP, false, true );
 			paintZones(backGfx, m_nodes, m_nodesCnt, true, Satellite.SEL_TYP, false, true );
@@ -286,8 +284,9 @@ package com.socialcomputing.wps.script  {
                     }
                 }
             }
-            
+			
             // The cursor is not in a Node, it can be in a Link...
+			//i = 0;
             for(i = m_linksCnt - 1 ; i >= 0 ; i --) {
                 zone = m_links[i] as LinkZone;
 				

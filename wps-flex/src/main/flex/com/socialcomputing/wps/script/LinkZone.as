@@ -72,16 +72,14 @@ package com.socialcomputing.wps.script  {
                 m_bounds = m_restSwh.getBounds( applet, s.graphics, this, false );
 				// DEBUG
 				// Drawing sensitive zone
-				
+				/*
 				s.graphics.lineStyle(1, 0xFF0000);
 				s.graphics.drawRect(this.m_bounds.x, this.m_bounds.y,
 					       this.m_bounds.width, this.m_bounds.height);
-				
+				*/
 				// END DEBUG				
-				
                 if ( m_curSwh != null )
-                    m_bounds    = m_bounds.union( m_curSwh.getBounds( applet, s.graphics, this, true ));
-                
+                    m_bounds = m_bounds.union( m_curSwh.getBounds( applet, s.graphics, this, true ));
                 m_bounds.inflate( 2, 2);
                 
                 var w:int= m_bounds.width,
@@ -90,8 +88,6 @@ package com.socialcomputing.wps.script  {
 				
                 if ( w > maxBox.width )     maxBox.width    = w;
                 if ( h > maxBox.height )    maxBox.height   = h;
-				
-
 				
 				m_bounds = m_bounds.intersection(applet.size.toRectangle());
             }
