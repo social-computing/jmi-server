@@ -1,5 +1,6 @@
 package com.socialcomputing.wps.script  {
 	import com.socialcomputing.wps.components.PlanComponent;
+	import com.socialcomputing.wps.util.shapes.RectangleUtil;
 	
 	import flash.display.Graphics;
 	import flash.display.Sprite;
@@ -170,18 +171,13 @@ package com.socialcomputing.wps.script  {
                 }
                 else
                 {
-                    //var key:Number= getKey( text.hashCode());
-                    // TODO Pas de hashcode en AS3: Remplacer Math.random() par un equivalent hashcode
-                    var key:Number= getKey( Math.random());
-                    
-                    
                     supCtr	= supZone.m_restSwh.m_satellites[0].m_shape.getCenter( supZone );
-                    var htmlTxt:HTMLText= text.getHText( applet, s, zone, transfo, satCtr, supCtr, key );
+                    var htmlTxt:HTMLText= text.getHText( applet, s, zone, transfo, satCtr, supCtr, text );
                     
                     if ( htmlTxt != null )
                     {
                         htmlTxt.drawText2( s, applet.size);
-                        zone.m_datas.push( key, htmlTxt );
+                        zone.m_datas[text] = htmlTxt;
                     }
                 }
             }
@@ -218,16 +214,13 @@ package com.socialcomputing.wps.script  {
                 return true;
             }
             
-            //TODO Utiliser le containeur html flex4
-            /*var text:HTMLText= getText( TEXT_VAL, zone );
-            
-            
+            var text:HTMLText= getText( TEXT_VAL, zone.m_props);
             if ( text != null )
             {
-                var htmlTxt:HTMLText= text.getHText( applet, g, zone, transfo, satCtr, supCtr, getKey( text.hashCode()));
-                
-                return htmlTxt != null ? htmlTxt.m_bounds.contains( pos ): false;
-            }*/
+				// TODIO null à remplacer
+                var htmlTxt:HTMLText= text.getHText( planComponent, null, zone, transfo, satCtr, supCtr, text);
+                return htmlTxt != null ? htmlTxt.m_bounds.contains( pos.x, pos.y ): false;
+            }
             return false;
         }
         
@@ -267,42 +260,28 @@ package com.socialcomputing.wps.script  {
                 throw(new Error(errorMessage));
             }
             
-            //TODO Utiliser le containeur html flex4
-            /*var text:HTMLText= getText( TEXT_VAL, zone );
-            
+            var text:HTMLText= getText( TEXT_VAL, zone.m_props);
             if ( text != null )
             {
-                if ( HTMLText.isEnabled( text.getFlags( zone ), HTMLText.URL_BIT ))
+                if ( HTMLText.isEnabled( text.getFlags( zone.m_props), HTMLText.URL_BIT ))
                 {
                     if ( m_htmlTxt != null )
-                        bounds.setBounds( m_htmlTxt.m_bounds );
+						RectangleUtil.setBounds( bounds, m_htmlTxt.m_bounds );
                 }
                 else
                 {
                     supCtr	= supZone.m_restSwh.m_satellites[0].m_shape.getCenter( supZone );
                     var htmlTxt:HTMLText;
                     
-                    htmlTxt = text.getHText( applet, g, zone, transfo, satCtr, supCtr, getKey( text.hashCode()));
+					// TODO null à remplacer par Sprite
+                    htmlTxt = text.getHText( applet, null, zone, transfo, satCtr, supCtr, text);
                     if ( htmlTxt != null )
                     {
-                        ShapeX.merge( bounds, htmlTxt.m_bounds );
+                        RectangleUtil.merge( bounds, htmlTxt.m_bounds );
                     }
                     
                 }
-            }*/
-        }
-        
-        /**
-         * Return a unique identifier for a sub part of a Slice.
-         * Use a combined hashcode of this Slice and the sub part.
-         * @param hashcode	A unique ID for the sub part.
-         * @return	An ID that is a unique combination of the txo hashcodes.
-         */
-        private function getKey( hashcode:Number):Number {
-            //return new Number( hashCode()+( hashcode << 32));
-            // no hashCode() in actionscript
-            // TODO Recuperer le bon hashcode
-            return new Number(hashcode + (hashcode << 32));
+            }
         }
     }
 }

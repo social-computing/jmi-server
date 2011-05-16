@@ -4,6 +4,7 @@ package com.socialcomputing.wps.script  {
     import flash.display.Graphics;
     import flash.display.Sprite;
     import flash.geom.Rectangle;
+    import flash.utils.Dictionary;
     
     /**
      * <p>Title: ActiveZone</p>
@@ -89,7 +90,7 @@ package com.socialcomputing.wps.script  {
          * HTMLText Hashtable to avoid unnecessary calcs.
          */
         [transient]
-        public var m_datas:Array;
+        public var m_datas:Dictionary;
         
 		
         /**
@@ -132,7 +133,7 @@ package com.socialcomputing.wps.script  {
                 
                 // Quick access to Env props
 				m_props["ENV"] = applet.env.m_props;
-                m_datas = new Array();
+                m_datas = new Dictionary();
             }
             
             var isSuper:Boolean= this is BagZone;

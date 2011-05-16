@@ -26,12 +26,7 @@ package com.socialcomputing.wps.util.shapes
 				rect = src;
 			}
 			
-			
-			dst.x = rect.x;
-			dst.y = rect.y
-			dst.width = rect.width;
-			dst.height = rect.height;
-			
+			setBounds( dst, rect);
 			
 			/*
 			if(dst.width * dst.height != 0) {
@@ -54,6 +49,13 @@ package com.socialcomputing.wps.util.shapes
 				dst.height = src.height;
 			}
 			*/
+		}
+		
+		public static function setBounds(dst:Rectangle, src:Rectangle):void {
+			dst.x = src.x;
+			dst.y = src.y
+			dst.width = src.width;
+			dst.height = src.height;
 		}
 	}
 }
