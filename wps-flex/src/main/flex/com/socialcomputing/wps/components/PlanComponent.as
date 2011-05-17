@@ -282,7 +282,8 @@ package com.socialcomputing.wps.components
 		}
 		
 		public function mouseMoveHandler(event:MouseEvent):void {
-			this.curPos = new Point(event.localX, event.localY);
+			this.curPos.x = event.localX;
+			this.curPos.y = event.localY;
 			if(ready) {
 				// The Zone, SubZone or Satellite can have changed
 				_dataProvider.plan.updateZoneAt(this.curPos); 

@@ -8,9 +8,7 @@ package com.socialcomputing.wps.script  {
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.text.TextFormat;
-	
-	import mx.utils.UIDUtil;
-    
+	    
     /**
      * <p>Title: Slice</p>
      * <p>Description: An elementary slice to fill with graphics.<br>

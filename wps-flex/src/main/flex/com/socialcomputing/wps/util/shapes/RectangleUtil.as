@@ -17,38 +17,12 @@ package com.socialcomputing.wps.util.shapes
 		 * @param src	Source Rectangle.
 		 */
 		public static function merge(dst:Rectangle, src:Rectangle):void {
-			var rect:Rectangle;
-			
 			if(dst.width * dst.height != 0) {
-				rect = dst.union(src);
+				setBounds(dst, dst.union( src));
 			}
 			else {
-				rect = src;
+				setBounds(dst, src);
 			}
-			
-			setBounds( dst, rect);
-			
-			/*
-			if(dst.width * dst.height != 0) {
-				
-				var xMax:Number = dst.x + dst.width,
-					yMax:Number = dst.y + dst.height;
-				
-				dst.x = Math.min( dst.x, src.x );
-				dst.y = Math.min( dst.y, src.y );
-				dst.width   = Math.max( xMax, src.x + src.width )- dst.x;
-				dst.height  = Math.max( yMax, src.y + src.height )- dst.y;
-				
-
-			}
-				//else    dst.set.setBounds( src );
-			else {
-				dst.x = src.x;
-				dst.y = src.y;
-				dst.width = src.width;
-				dst.height = src.height;
-			}
-			*/
 		}
 		
 		public static function setBounds(dst:Rectangle, src:Rectangle):void {
