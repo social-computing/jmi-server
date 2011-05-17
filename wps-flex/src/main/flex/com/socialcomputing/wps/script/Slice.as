@@ -257,14 +257,14 @@ package com.socialcomputing.wps.script  {
                 }
                 throw(new Error(errorMessage));
             }
-            
-            var text:HTMLText= getText( TEXT_VAL, zone.m_props);
+
+			var text:HTMLText= getText( TEXT_VAL, zone.m_props);
             if ( text != null )
             {
                 if ( HTMLText.isEnabled( text.getFlags( zone.m_props), HTMLText.URL_BIT ))
                 {
                     if ( m_htmlTxt != null )
-						RectangleUtil.setBounds( bounds, m_htmlTxt.m_bounds );
+						RectangleUtil.copy( bounds, m_htmlTxt.m_bounds );
                 }
                 else
                 {

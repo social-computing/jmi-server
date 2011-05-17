@@ -222,12 +222,9 @@ package com.socialcomputing.wps.script  {
             // Gets the bounds of the place itself using the first Satellite
             sat.setBounds(applet, g, zone, null, null, bounds);
 			
-			//			}
-			//          for (i = 1 ; i < n ; i ++) {
-			//            sat         = m_satellites[i];
-			
 			// Iterate through the swatch satellite list
-			for each(sat in m_satellites) {
+			for (i = 1 ; i < n ; i ++) {
+			    sat         = m_satellites[i];
                 satData     = isCurZone ? zone.m_curData[i] : zone.m_restData[i];
                 flags       = satData.m_flags;
                 

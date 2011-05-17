@@ -242,34 +242,36 @@ package com.socialcomputing.wps.script  {
         public function paint(s:Sprite, supZone:ActiveZone, zone:ActiveZone, slice:Slice, transfo:Transfo, center:Point):void {
             trace("[ShapeX paint method called]");
 			
-			if(isDefined(SCALE_VAL))    // else it is just a void frame
-            {
-                //ON recup alpha val ? 
+			// else it is just a void frame
+			if(isDefined(SCALE_VAL)) {
+                
+				// Old Applet instructions
+				/*
+				//ON recup alpha val ? 
                 //boolean test = slice.isDefined(slice.ALPHA_VAL);
                 //if (test!=false) System.out.print("test "+test+"\n");
                 //float alpha = slice.getFloat(slice.ALPHA_VAL, supZone);
                 
-                /*var g:Graphics2D= Graphics2D(gi);
-                
+                var g:Graphics2D= Graphics2D(gi);
                 g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);                
-                
-                var composite:Composite;*/
-                
+                var composite:Composite;
                 //Float alpha = slice.getFloat(prop, props);
-                
+                */
+				
                 var points:Array = getValue(POLYGON_VAL, supZone.m_props ) as Array;
                 var p:Point = points[0] as Point,
                     shapePos:Point = new Point();
                 var n:int = points.length, i:int,
-                    size:Number = getShapePos( supZone, transfo, center, p, shapePos );
+                    size:Number = getShapePos(supZone, transfo, center, p, shapePos);
 				var color:ColorTransform;
 				
 				// Manage each case of number of points to draw for this shape
                 switch(n) {
-                    case 1:     // dot => Place ??
+					// dot => Place ??
+					case 1:     
                     {
-						trace("Dot shape detected: ");
+						trace("Circle shape detected: ");
                         //composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0);
                         //g.setComposite(composite);
                         var x:int = p.x + shapePos.x - size/2,
@@ -290,8 +292,9 @@ package com.socialcomputing.wps.script  {
                         s.graphics.endFill();
                         break;
                     }
-                        
-                    case 2:     // segment  => Street
+                    
+					// segment  => Street
+                    case 2:     
                     {
 						trace("Segment shape detected: ");
                         /*composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f;					

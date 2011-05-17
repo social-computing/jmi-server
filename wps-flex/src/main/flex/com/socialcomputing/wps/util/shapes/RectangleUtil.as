@@ -18,14 +18,22 @@ package com.socialcomputing.wps.util.shapes
 		 */
 		public static function merge(dst:Rectangle, src:Rectangle):void {
 			if(dst.width * dst.height != 0) {
-				setBounds(dst, dst.union( src));
+				copy(dst, dst.union( src));
 			}
 			else {
-				setBounds(dst, src);
+				copy(dst, src);
 			}
 		}
 		
-		public static function setBounds(dst:Rectangle, src:Rectangle):void {
+		
+		/**
+		 * Copy the source <code>Rectangle</code> properties to the destination <code>Rectangle</code>
+		 * 
+		 * @param dst Destination Rectangle to copy the values to 
+		 * @param src Source Rectangle to copy the values from
+		 * 
+		 */
+		public static function copy(dst:Rectangle, src:Rectangle):void {
 			dst.x = src.x;
 			dst.y = src.y
 			dst.width = src.width;
