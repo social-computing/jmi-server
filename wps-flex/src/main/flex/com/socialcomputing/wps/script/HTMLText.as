@@ -506,22 +506,24 @@ package com.socialcomputing.wps.script{
                         y += fTok.m_dMax + ( fTok.m_margin != null ? fTok.m_margin.bottom : 0);
                     }
                     
-                    fTok    = FormatToken(token);
+                    fTok    = token as FormatToken;
                     
                     var leftLen:int= m_body.m_width - fTok.m_width;
                     
                     x   = ( fTok.m_flags & CENTER_BIT )!= 0? leftLen >> 1:(( fTok.m_flags & RIGHT_BIT )!= 0? leftLen : 0);
                     x  += margin.left +( fTok.m_margin != null ? fTok.m_margin.left : 0);
                     y  += fTok.m_aMax +( fTok.m_margin != null ? fTok.m_margin.top : 0);
-                    //m_tokens.removeElement( token );
-                    delete this.m_tokens[this.m_tokens.indexOf(token)];
-                    
+					//m_tokens.removeElement( token );
+					for( var j:int = i; j < n-1; ++j) {
+						this.m_tokens[j] = this.m_tokens[j+1];
+					}
                     i --;
                     n --;
+					this.m_tokens.length --;
                 }
                 else
                 {
-                    tTok    = TextToken(token);
+                    tTok    = token as TextToken;
                     tTok.m_bounds.x = x;
                     tTok.m_bounds.y = y;
                     x += tTok.m_bounds.width;
@@ -542,22 +544,14 @@ package com.socialcomputing.wps.script{
             // The text exists!
             if ( text.length > 0)
             {
-                trace( "HTMLText updateText à finir");
 				var field:TextField = new TextField();
 				field.setTextFormat( format);
 				field.text = text;
 				var metric:TextLineMetrics = field.getLineMetrics(0);
-				;
-                /*				var fd:FontDescription = new FontDescription();
-                fd.fontName = "Garamond";
-                fd.fontWeight = flash.text.engine.FontWeight.BOLD;
-                var ef1:ElementFormat = new ElementFormat(fd);
-                var fm:FontMetrics= ef1.getFontMetrics();
-                */                
-				var a:int	= metric.ascent,//fm.getAscent(),
-                    d:int   = metric.descent,//fm.getDescent(),
-                    w:int   = metric.width,//fm.stringWidth( text ),
-                    h:int   = metric.height;//fm.getHeight();
+				var a:int	= metric.ascent,
+                    d:int   = metric.descent,
+                    w:int   = metric.width,
+                    h:int   = metric.height;
                 
                 // The previous token was a text too so we must merge it with this new one.
                 if ( isText )
