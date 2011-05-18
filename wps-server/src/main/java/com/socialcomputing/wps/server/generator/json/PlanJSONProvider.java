@@ -247,8 +247,8 @@ public class PlanJSONProvider {
     // Ok
     static private ObjectNode toJSON(LinkZone zone) {
         ObjectNode node = createObjectNode("LinkZone");
-        node.put("from", zone.m_from == null ? -1 : zone.m_from.m_index);
-        node.put("to", zone.m_to == null ? -1 : zone.m_to.m_index);
+        node.put("from", zone.m_from == null ? -1 : (Integer)zone.m_from.get("_INDEX"));
+        node.put("to", zone.m_to == null ? -1 : (Integer)zone.m_to.get("_INDEX"));
         return node;
     }
 

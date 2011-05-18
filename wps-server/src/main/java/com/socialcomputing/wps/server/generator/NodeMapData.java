@@ -269,7 +269,7 @@ public final class NodeMapData extends Node
 				}
 			}
 		}
-		m_zone = new BagZone( subZones, index);
+		m_zone = new BagZone( subZones);
 
 		m_zone.put( "_SCALE", size );
 		m_zone.put( "_VERTICES", points );
