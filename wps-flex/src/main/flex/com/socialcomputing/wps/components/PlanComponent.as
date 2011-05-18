@@ -61,9 +61,10 @@ package com.socialcomputing.wps.components
 		 *  Specific display elements
 		 */
 		private var _onScreen:BitmapData;
+		private var _offScreen:BitmapData;
 		private var _drawingSurface:SpriteVisualElement;
-		private var _backDrawingSurface:Sprite;
-		private var _restDrawingSurface:Shape;
+		private var _curDrawingSurface:Sprite;
+		private var _restDrawingSurface:Sprite; // Holds the initial state of the map 
 		
 		public function PlanComponent()
 		{
@@ -103,11 +104,11 @@ package com.socialcomputing.wps.components
 			return new Dimension(this.width, this.height);
 		}
 		
-		public function get backDrawingSurface():Sprite
+		public function get curDrawingSurface():Sprite
 		{
-			return _backDrawingSurface;
+			return _curDrawingSurface;
 		}
-		public function get restDrawingSurface():Shape
+		public function get restDrawingSurface():Sprite
 		{
 			return _restDrawingSurface;
 		}
@@ -170,9 +171,10 @@ package com.socialcomputing.wps.components
 				// TODO : Handle this properly
 			    // Should manage the onScreen object each time the service is called
 				this._onScreen = new BitmapData(this.width, this.height);
+				this._offScreen = new BitmapData(this.width, this.height);
 				this._drawingSurface.addChild(new Bitmap(this._onScreen));
-				this._backDrawingSurface = new Sprite();
-				this._restDrawingSurface = new Shape();
+				this._curDrawingSurface = new Sprite();
+				this._restDrawingSurface = new Sprite();
 				
 				/*
                 /* DEBUT TEST */
@@ -241,8 +243,8 @@ package com.socialcomputing.wps.components
                 
 				plan.m_applet = this;
 				plan.m_curSel = -1;
-				plan.initZones(this.backDrawingSurface, plan.m_links, true);
-				plan.initZones(this.backDrawingSurface, plan.m_nodes, true);
+				plan.initZones(this.restDrawingSurface, plan.m_links, true);
+				plan.initZones(this.restDrawingSurface, plan.m_nodes, true);
 				plan.resize(size);
 				plan.init();
 				//plan.resize(size);
@@ -285,13 +287,7 @@ package com.socialcomputing.wps.components
 			this.curPos.x = event.localX;
 			this.curPos.y = event.localY;
 			if(ready) {
-				// The Zone, SubZone or Satellite can have changed
-				_dataProvider.plan.updateZoneAt(this.curPos); 
-				// DEBUG
-				// Uncomment to see sensitive zone on the map after mouse move
-				// this.invalidateProperties();
-				// this.invalidateDisplayList();
-				// END DEBUG 
+				_dataProvider.plan.updateZoneAt(this.curPos);
 			}
 		}
 		
@@ -329,12 +325,9 @@ package com.socialcomputing.wps.components
 		 */
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			//trace("Update graphic display");
+			trace("Update graphic display");
 			if(ready) {
-				//graphics.drawImage( _restImg, 0, 0, null );
-				// _restDrawingSurface
-				// plan.paintCurZone(this._backDrawingSurface.graphics);  // A new Zone is hovered, let's paint it!
-				this.render();
+				this.renderShape(this._restDrawingSurface, this.width, this.height);
 			}
 		}
 		
@@ -415,28 +408,31 @@ package com.socialcomputing.wps.components
 			trace("Perform " + actionStr + " " + target);
 		}
 		
-		public function renderShape(sprite:Sprite, width:int, height:int):void {
+		
+		public function renderShape(sprite:Sprite, width:uint, height:uint, position:Point = null):void {
 			trace("renderShape method called");
 			
+			// If no position is specified, take (0,0)
+			if(position == null) {
+				position = new Point(0, 0);
+			}
+			
 			// Transforming the offscreen back display to a BitmapData
-			var backBuffer:BitmapData = new BitmapData(width, height);
-			backBuffer.draw(sprite, new Matrix());
+			this._offScreen.draw(sprite, new Matrix());
 			
-            //backBuffer.draw(this._backTextSurface, new Matrix());
 			// Copying the content of the back buffer on screen
-			_onScreen.copyPixels(backBuffer, backBuffer.rect, new Point(0,0));
-			
-			// Clear the offscreen back display
-			// DEBUG
-			// Comment to see sensitive zone on the map without complete redraw
-			// END DEBUG 
-            //sprite.graphics.clear();
+			var sourceZone:Rectangle = new Rectangle(position.x, position.y, width, height);
+			_onScreen.copyPixels(this._offScreen, sourceZone, position);
+
 			trace("renderShape method end");
 		}
+
 		
-		private function render():void {
-			//trace("Render method called");
-			renderShape( this._backDrawingSurface, this.width, this.height);
+		public function clearDrawingSurface(s:Sprite):void {
+			s.graphics.clear();
+			while(s.numChildren != 0) {
+				s.removeChildAt(0);
+			}
 		}
 	}
 }
