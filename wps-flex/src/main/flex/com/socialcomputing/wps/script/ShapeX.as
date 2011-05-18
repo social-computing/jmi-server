@@ -350,11 +350,11 @@ package com.socialcomputing.wps.script  {
          */
         private function getLinkPoly( zone:ActiveZone, A:Point, B:Point, width:int):Polygon {
             var flags:int= getFlags( zone.m_props);
-            var link:LinkZone= LinkZone(zone);
-            var from:BagZone= link.m_from,
-                to:BagZone      = link.m_to;
-            var fromOff:int= 0,
-                toOff:int   = 0;
+            var link:LinkZone = zone as LinkZone;
+            var from:BagZone  = link.m_from,
+                to:BagZone    = link.m_to;
+            var fromOff:int   = 0,
+                toOff:int     = 0;
             var poly:Polygon;
             
             if ( from != null  && to != null )

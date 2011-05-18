@@ -179,6 +179,7 @@ public class BagZone extends ActiveZone implements Activable
 		
 		// Should not be called here, right ?
 		// applet.renderShape(applet.backDrawingSurface, m_bounds.width, m_bounds.height);
+		m_curSwh.paint(applet, s, this, true, true, Satellite.ALL_TYP, true);
 		trace("BagZone paintCur end");
 	}
 
