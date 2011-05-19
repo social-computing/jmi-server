@@ -196,13 +196,11 @@ public class PlanJSONProvider {
         return node;
     }
     
-    // TODO à checker
+    // Ok
     static private ObjectNode toJSON(ColorX color) {
         ObjectNode node = createObjectNode("ColorX");
         node.put("color", color.m_color);
-        if (color.m_scolor == null)
-            node.putNull("scolor");
-        else
+        if (color.m_scolor != null)
             node.put("scolor", color.m_scolor);
         return node;
     }
