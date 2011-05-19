@@ -419,7 +419,8 @@ package com.socialcomputing.wps.script  {
 								menux.parseMenu( root.children, zone );
 								var menu:Menu = Menu.createMenu( applet, menuData, false);
 								menu.addEventListener(MenuEvent.ITEM_CLICK, applet.menuHandler);								
-								menu.show( pos.x, pos.y );
+								var point:Point = applet.localToGlobal(pos);
+								menu.show( point.x, point.y );
 							}
                         }
                         else if ( func == ( "pop" ))    // Pop a tooltip

@@ -301,7 +301,6 @@ package com.socialcomputing.wps.components
 				var point:Point = new Point();
 				point.x = event.localX;
 				point.y = event.localY;
-				point = this.localToGlobal(point);
 				plan.updateZoneAt( point);
 				plan.m_curSat.execute( this, plan.m_curZone, point, Satellite.CLICK_VAL);
 			}
@@ -313,7 +312,6 @@ package com.socialcomputing.wps.components
 				var point:Point = new Point();
 				point.x = event.localX;
 				point.y = event.localY;
-				point = this.localToGlobal(point);
 				plan.updateZoneAt( point);
 				plan.m_curSat.execute( this, plan.m_curZone, point, Satellite.DBLCLICK_VAL);
 			}
