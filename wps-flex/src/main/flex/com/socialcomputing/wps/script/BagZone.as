@@ -122,11 +122,11 @@ public class BagZone extends ActiveZone implements Activable
 			}
 		}
 
-		//m_bounds    = m_restSwh.getBounds( applet, s.graphics, this, false );
+		m_bounds    = m_restSwh.getBounds( applet, s.graphics, this, false );
 
 		var win:Rectangle= applet.plan.m_prevBox.union( m_bounds );
 
-		// m_bounds    = m_bounds.union( m_curSwh.getBounds( applet, s.graphics, this, true ));
+		m_bounds    = m_bounds.union( m_curSwh.getBounds( applet, s.graphics, this, true ));
 
 		
 		if ( win.y > m_bounds.y )
