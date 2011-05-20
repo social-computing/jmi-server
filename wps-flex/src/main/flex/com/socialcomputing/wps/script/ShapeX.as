@@ -94,10 +94,10 @@ package com.socialcomputing.wps.script  {
          * @param zone	BagZone holding the Points table.
          * @return		The barycentric center of all points.
          */
-        public function getCenter( zone:ActiveZone):Point {
-            var points:Array = getValue( POLYGON_VAL, zone.m_props ) as Array;
-            var p:Point, c:Point    = new Point( points[0].x,  points[0].y);
-            var i:int, n:int    = points.length;
+        public function getCenter(zone:ActiveZone):Point {
+            var points:Array     = getValue(POLYGON_VAL, zone.m_props) as Array;
+            var p:Point, c:Point = new Point(points[0].x,  points[0].y);
+            var i:int, n:int     = points.length;
             
             if ( n > 1)
             {
@@ -192,7 +192,7 @@ package com.socialcomputing.wps.script  {
                     shapePos:Point = new Point();
                 var rect:Rectangle = null;
                 var n:int          = points.length,
-                    size:Number    = getShapePos(zone, transfo, center, shapeCenter, shapePos);
+                    size:Number    = Math.floor(getShapePos(zone, transfo, center, shapeCenter, shapePos));
                 
                 switch (n) {
 					// 1 point = circle => Place
@@ -204,9 +204,8 @@ package com.socialcomputing.wps.script  {
 											 size,
 											 size);
 						// DEBUG 
-						// g.lineStyle(1, 0x0000FF);
-						// g.drawRect(rect.x, rect.y,
-						//	       rect.width, rect.height);
+						// g.lineStyle(1, 0xFF00000);
+						// g.drawRect(rect.x, rect.y, rect.width, rect.height);
 						// END DEBUG
                         break;
                     
@@ -224,6 +223,14 @@ package com.socialcomputing.wps.script  {
                         break;
                 }
 
+				if(center != null) {
+					g.lineStyle(1, 0xFF0000);
+					g.drawRect(center.x, center.y, 1, 1);
+				}
+				if(shapeCenter != null) {
+					g.lineStyle(1, 0xFF0000);
+					g.drawRect(shapeCenter.x, shapeCenter.y, 1, 1);
+				}
 				RectangleUtil.merge(bounds, rect);
             }
         }
@@ -241,7 +248,7 @@ package com.socialcomputing.wps.script  {
          */
         public function paint(s:Sprite, supZone:ActiveZone, zone:ActiveZone, slice:Slice, transfo:Transfo, center:Point):void {
             trace("[ShapeX paint method called]");
-			
+
 			// else it is just a void frame
 			if(isDefined(SCALE_VAL)) {
                 
@@ -263,7 +270,7 @@ package com.socialcomputing.wps.script  {
                 var p:Point = points[0] as Point,
                     shapePos:Point = new Point();
                 var n:int = points.length, i:int,
-                    size:Number = getShapePos(supZone, transfo, center, p, shapePos);
+                    size:Number = Math.floor(getShapePos(supZone, transfo, center, p, shapePos));
 				var color:ColorTransform;
 				
 				// Manage each case of number of points to draw for this shape
@@ -272,24 +279,39 @@ package com.socialcomputing.wps.script  {
 					case 1:     
                     {
 						trace("Circle shape detected: ");
-                        //composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0);
+						
+						
+						//composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0);
                         //g.setComposite(composite);
-                        var x:int = p.x + shapePos.x - size/2,
-                            y:int = p.y + shapePos.y - size/2;
-                        
+                        var x:int = p.x + shapePos.x - size / 2,
+                            y:int = p.y + shapePos.y - size / 2;
+						
 						// Doubling size value .... need to find why ... 
-                        //size <<= 1;
-
+						//size = size * 2;
+						
 						color = slice.getColor( Slice.IN_COL_VAL, zone.m_props);
 						if(color != null) {
-							s.graphics.lineStyle( size, color.color);
+							s.graphics.lineStyle(size, color.color);
 						}
 						color = slice.getColor( Slice.OUT_COL_VAL, zone.m_props);
 						if(color != null) {
                             s.graphics.beginFill(color.color);
 						}
                         s.graphics.drawEllipse(x, y, size, size );
+						//s.graphics.drawCircle(x, y, size / 2);
                         s.graphics.endFill();
+						
+						if(center != null) {
+							s.graphics.lineStyle(1, 0x000000);
+							s.graphics.drawRect(center.x, center.y, 1, 1);
+						}
+						
+						
+						if(p != null) {
+							s.graphics.lineStyle(1, 0xFF0000);
+							s.graphics.drawRect(p.x, p.y, 2, 2);
+						}
+						
                         break;
                     }
                     
