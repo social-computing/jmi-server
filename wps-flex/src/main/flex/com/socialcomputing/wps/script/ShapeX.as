@@ -223,14 +223,6 @@ package com.socialcomputing.wps.script  {
                         break;
                 }
 
-				if(center != null) {
-					g.lineStyle(1, 0xFF0000);
-					g.drawRect(center.x, center.y, 1, 1);
-				}
-				if(shapeCenter != null) {
-					g.lineStyle(1, 0xFF0000);
-					g.drawRect(shapeCenter.x, shapeCenter.y, 1, 1);
-				}
 				RectangleUtil.merge(bounds, rect);
             }
         }
@@ -279,39 +271,31 @@ package com.socialcomputing.wps.script  {
 					case 1:     
                     {
 						trace("Circle shape detected: ");
-						
-						
 						//composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0);
                         //g.setComposite(composite);
-                        var x:int = p.x + shapePos.x - size / 2,
-                            y:int = p.y + shapePos.y - size / 2;
+                        var x:int = p.x + shapePos.x - size,
+                            y:int = p.y + shapePos.y - size;
 						
-						// Doubling size value .... need to find why ... 
-						//size = size * 2;
+						// Doubling size value : needed because we are using the  
+						// drawEllipse method that needs a height and width from the top,left starting point
+						// which means we have to double the radius value.
+						size = size * 2;
 						
-						color = slice.getColor( Slice.IN_COL_VAL, zone.m_props);
-						if(color != null) {
-							s.graphics.lineStyle(size, color.color);
-						}
 						color = slice.getColor( Slice.OUT_COL_VAL, zone.m_props);
+						if(color != null) {
+							s.graphics.lineStyle(1, color.color);
+						}
+						else {
+							// Set an empty line style
+							s.graphics.lineStyle();
+						}
+						
+						color = slice.getColor(Slice.IN_COL_VAL, zone.m_props);
 						if(color != null) {
                             s.graphics.beginFill(color.color);
 						}
                         s.graphics.drawEllipse(x, y, size, size );
-						//s.graphics.drawCircle(x, y, size / 2);
                         s.graphics.endFill();
-						
-						if(center != null) {
-							s.graphics.lineStyle(1, 0x000000);
-							s.graphics.drawRect(center.x, center.y, 1, 1);
-						}
-						
-						
-						if(p != null) {
-							s.graphics.lineStyle(1, 0xFF0000);
-							s.graphics.drawRect(p.x, p.y, 2, 2);
-						}
-						
                         break;
                     }
                     
