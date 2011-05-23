@@ -104,14 +104,14 @@ public class DictionaryImpl implements Serializable, Dictionary {
 
     public WPSDictionary getDictionary() {
         try {
-            if (m_Dico == null) {
+            //if (m_Dico == null) {
                 SAXBuilder builder = new SAXBuilder(false);
                 Document doc = builder.build(new StringReader(dictionary));
                 Element root = doc.getRootElement();
                 LOG.debug("Getting XML configuration from database");
                 LOG.debug("Root element of the JDOM Tree : {}", root.toString());
                 m_Dico = WPSDictionary.readObject(root);
-            }
+            //}
         }
         catch (Exception e) {
             e.printStackTrace();

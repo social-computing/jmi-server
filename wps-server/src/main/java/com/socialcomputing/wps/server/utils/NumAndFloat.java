@@ -25,17 +25,19 @@ package com.socialcomputing.wps.server.utils;
   *
   * ********************************************************** */
 
-public class NumAndFloat extends AndFloat {
+public class NumAndFloat implements Comparable<NumAndFloat> {
     
     public int m_num = 0;
+    public float m_value = 0;
 
     public NumAndFloat(int num, float value) {
-        super(value);
+        m_value = value;
         m_num = num;
     }
 
+    @Override
     public int compareTo(NumAndFloat anotherNumAndFloat) {
-        float val2 = anotherNumAndFloat.m_num;
+        int val2 = anotherNumAndFloat.m_num;
         return (val2 < m_num ? -1: (val2 == m_num ? 0: 1));
     }
     
