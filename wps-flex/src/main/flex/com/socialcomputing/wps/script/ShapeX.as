@@ -75,7 +75,8 @@ package com.socialcomputing.wps.script  {
             {
                 var p:Point;
                 var scale:Number= getFloat( SCALE_VAL, zone.m_props );
-                var x:int, y:int;
+                var x:int;
+                var y:int;
                 
                 scale   *= transfo.m_pos;
                 p       = getCenter( zone );
@@ -96,8 +97,10 @@ package com.socialcomputing.wps.script  {
          */
         public function getCenter(zone:ActiveZone):Point {
             var points:Array     = getValue(POLYGON_VAL, zone.m_props) as Array;
-            var p:Point, c:Point = new Point(points[0].x,  points[0].y);
-            var i:int, n:int     = points.length;
+            var p:Point;
+            var c:Point = new Point(points[0].x,  points[0].y);
+            var i:int;
+            var n:int     = points.length;
             
             if ( n > 1)
             {
@@ -130,11 +133,11 @@ package com.socialcomputing.wps.script  {
 			if(!isDefined(SCALE_VAL)) return false; // it is just a void frame
 			
             var points:Array = getValue(POLYGON_VAL, zone.m_props) as Array;
-            var shapeCenter:Point   = this.getCenter(zone),
-                shapePosition:Point = new Point();
-            var size:Number = Math.floor(this.getShapePos(zone, transfo, center, shapeCenter, shapePosition)),
-                nbPoint:int = points.length;
-			var ret:Boolean;
+            var shapeCenter:Point   = this.getCenter(zone);
+            var shapePosition:Point = new Point();
+            var size:Number = Math.floor(this.getShapePos(zone, transfo, center, shapeCenter, shapePosition));
+            var nbPoint:int = points.length;
+		var ret:Boolean;
             
             switch(nbPoint) {
 				// 1 point = circle => Place
@@ -188,11 +191,11 @@ package com.socialcomputing.wps.script  {
 			// else it is just a void frame
 			if (isDefined(SCALE_VAL)) {
                 var points:Array = getValue(POLYGON_VAL, zone.m_props) as Array;
-                var shapeCenter:Point = getCenter(zone),
-                    shapePos:Point = new Point();
+                var shapeCenter:Point = getCenter(zone);
+                var shapePos:Point = new Point();
                 var rect:Rectangle = null;
-                var n:int          = points.length,
-                    size:Number    = Math.floor(getShapePos(zone, transfo, center, shapeCenter, shapePos));
+                var n:int          = points.length;
+                var size:Number    = Math.floor(getShapePos(zone, transfo, center, shapeCenter, shapePos));
                 
                 switch (n) {
 					// 1 point = circle => Place
@@ -211,9 +214,9 @@ package com.socialcomputing.wps.script  {
                     
 					// 2 points = segment => Street
                     case 2:     
-                        var A:Point = (points[0] as Point).add(shapePos),
-                            B:Point = (points[1] as Point).add(shapePos);
-                            rect = getLinkPoly(zone, A, B, size).getBounds();
+                        var A:Point = (points[0] as Point).add(shapePos);
+                        var B:Point = (points[1] as Point).add(shapePos);
+                        rect = getLinkPoly(zone, A, B, size).getBounds();
 							
 							// DEBUG
 							// g.lineStyle(1, 0x0000FF);
@@ -259,10 +262,11 @@ package com.socialcomputing.wps.script  {
                 */
 				
                 var points:Array = getValue(POLYGON_VAL, supZone.m_props ) as Array;
-                var p:Point = points[0] as Point,
-                    shapePos:Point = new Point();
-                var n:int = points.length, i:int,
-                    size:Number = Math.floor(getShapePos(supZone, transfo, center, p, shapePos));
+                var p:Point = points[0] as Point;
+                var shapePos:Point = new Point();
+                var n:int = points.length;
+                var i:int;
+                var size:Number = Math.floor(getShapePos(supZone, transfo, center, p, shapePos));
 				var color:ColorTransform;
 				
 				// Manage each case of number of points to draw for this shape
@@ -273,8 +277,8 @@ package com.socialcomputing.wps.script  {
 						trace("Circle shape detected: ");
 						//composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0);
                         //g.setComposite(composite);
-                        var x:int = p.x + shapePos.x - size,
-                            y:int = p.y + shapePos.y - size;
+                        var x:int = p.x + shapePos.x - size;
+                        var y:int = p.y + shapePos.y - size;
 						
 						// Doubling size value : needed because we are using the  
 						// drawEllipse method that needs a height and width from the top,left starting point
@@ -309,8 +313,8 @@ package com.socialcomputing.wps.script  {
 						// Half size value .... need to find why ... 
 						size >>= 1;
 						
-						var fromPoint:Point = (points[0] as Point).add(shapePos),
-							toPoint:Point = (points[1] as Point).add(shapePos);
+						var fromPoint:Point = (points[0] as Point).add(shapePos);
+					    var toPoint:Point = (points[1] as Point).add(shapePos);
 						var poly:Polygon = getLinkPoly( supZone, fromPoint, toPoint, size/2 );
 						
 						color = slice.getColor( Slice.OUT_COL_VAL, supZone.m_props);
@@ -357,10 +361,10 @@ package com.socialcomputing.wps.script  {
         private function getLinkPoly( zone:ActiveZone, A:Point, B:Point, width:int):Polygon {
             var flags:int= getFlags( zone.m_props);
             var link:LinkZone = zone as LinkZone;
-            var from:BagZone  = link.m_from,
-                to:BagZone    = link.m_to;
-            var fromOff:int   = 0,
-                toOff:int     = 0;
+            var from:BagZone  = link.m_from;
+            var to:BagZone    = link.m_to;
+            var fromOff:int   = 0;
+            var toOff:int     = 0;
             var poly:Polygon;
             
             if ( from != null  && to != null )
@@ -389,9 +393,9 @@ package com.socialcomputing.wps.script  {
                 N.y = ( N.y << 16)/ len;
                 len	= ( len - fromOff - toOff )>> 1;
                 
-                var C:Point		= scalePnt( N, fromOff + len ),
-                    U:Point     = scalePnt( N, len ),
-                    V:Point     = scalePnt( N, width );
+                var C:Point		= scalePnt( N, fromOff + len );
+                var U:Point     = scalePnt( N, len );
+                var V:Point     = scalePnt( N, width );
                 
                 C.offset( A.x, A.y );
                 pivotPnt( V );
@@ -442,36 +446,35 @@ package com.socialcomputing.wps.script  {
          * @param transfo		A transformation of this shape to put the image inside.
          * @param center		This shape center before the transformation.
          */
-        public function drawImage(applet:PlanComponent, g:Graphics, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
+        public function drawImage(applet:PlanComponent, s:Sprite, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
                 var medias:Array = applet.env.m_medias;
 				var scaledImg:Image;
-				// TODO : Fix this : for now applet.env.m_medias is null, not empty
-                //var image:Image = medias[imageNam];
-				var image:Image = null;
+                var image:Image = medias[imageNam];
 				
                 if ( image == null )
                 {
 					var ldr:Loader = new Loader();
-					// TODO applet.getCodeBase() ?????
-/*					var urlReq:URLRequest = new URLRequest(imageNam);
-					ldr.load(urlReq);
-                    image   = applet.getImage( applet.getCodeBase(), imageNam );
-                    applet.prepareImage( image, applet );
-                   medias.push( imageNam, image);
-*/                }
+                    //TODO DAK: workaround (en cours de correction)
+					var urlReq:URLRequest = new URLRequest(imageNam.replace("/wps", "http://10.0.2.2:8080/wps-server"));
+					//ldr.load(urlReq);
+                    /*image   = applet.getImage( applet.getCodeBase(), imageNam );
+                    applet.prepareImage( image, applet );*/
+                    medias.push( imageNam, image);
+              
+                }
                 
-                if (false) 
-					// TODO 
-					//( applet.checkImage( image, applet )& ImageObserver.ALLBITS )!= 0)  // the image can be drawn now
+                // TODO DAK: if ( applet.checkImage( image, applet )& ImageObserver.ALLBITS )!= 0)  // the image can be drawn now 
+                if (true) 
                 {
-                    var p:Point= getCenter( zone ),
-                        shapePos    = new Point();
+                    var p:Point= getCenter( zone );
+                    var shapePos    = new Point();
                     var scale:Number= getShapePos( zone, transfo, center, p, shapePos );
-                    var x:int, y,
-                    imgWid      = image.getWidth( null ),
-                        w           = imgWid;
+                    var x:int;
+                    var y:int;
+                    /*var imgWid:int = image.getWidth( null );
+                    var w:int = imgWid;
                     
                     if ( scale > 0.)    // disk
                     {
@@ -495,9 +498,11 @@ package com.socialcomputing.wps.script  {
                     
                     w >>= 1;
                     x = p.x + shapePos.x - w;
-                    y = p.y + shapePos.y - w;
+                    y = p.y + shapePos.y - w;*/
                     
-                    g.drawImage( image, x, y, applet );
+                    //g.drawImage( image, x, y, applet );
+                    
+                    s.addChild(ldr);
                 }
             }
         }

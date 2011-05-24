@@ -163,8 +163,8 @@ package com.socialcomputing.wps.components
 				this._dataProvider = PlanContainer.fromJSON(value);
 			}
 
-			// var needPrint:Boolean = false; // Later
-			//_dataProvider.env.init( this, needPrint);
+			var needPrint:Boolean = false; // Later
+			_dataProvider.env.init( this, needPrint);
 /*			m_backImg	= createImage( m_size.width, m_size.height );
 			m_restImg	= createImage( m_size.width, m_size.height );
 */
