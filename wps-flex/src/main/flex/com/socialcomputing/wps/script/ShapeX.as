@@ -1,19 +1,24 @@
 package com.socialcomputing.wps.script  {
-	import com.socialcomputing.wps.components.PlanComponent;
-	import com.socialcomputing.wps.util.shapes.RectangleUtil;
-	
-	import flash.display.Graphics;
-	import flash.display.GraphicsStroke;
-	import flash.display.Loader;
-	import flash.display.Sprite;
-	import flash.geom.ColorTransform;
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
-	import flash.net.URLRequest;
-	
-	import mx.controls.Image;
-	
-	import org.osmf.layout.PaddingLayoutFacet;
+    import com.socialcomputing.wps.components.PlanComponent;
+    import com.socialcomputing.wps.util.shapes.RectangleUtil;
+    
+    import flash.display.Bitmap;
+    import flash.display.Graphics;
+    import flash.display.GraphicsStroke;
+    import flash.display.Loader;
+    import flash.display.Sprite;
+    import flash.events.Event;
+    import flash.external.ExternalInterface;
+    import flash.geom.ColorTransform;
+    import flash.geom.Point;
+    import flash.geom.Rectangle;
+    import flash.net.URLRequest;
+    
+    import mx.controls.Alert;
+    import mx.controls.Image;
+    import mx.utils.URLUtil;
+    
+    import org.osmf.layout.PaddingLayoutFacet;
     
     /**
      * <p>Title: ShapeX</p>
@@ -120,76 +125,76 @@ package com.socialcomputing.wps.script  {
         
         /**
          * Return wether a point is inside this shape after it has been transformed
-		 * 
+         * 
          * @param zone		BagZone holding the Points table. ???? 
          * @param transfo	A transformation to scale or translate this shape.
          * @param center	The center of the shape before the transformation.
          * @param pos		A point position to test.
-		 * 
+         * 
          * @return			True if this contains pos, false otherwise
          */
         public function contains(g:Graphics, zone:ActiveZone, transfo:Transfo, center:Point, pos:Point):Boolean {
-			trace("[Shape contains method begin]");
-			if(!isDefined(SCALE_VAL)) return false; // it is just a void frame
-			
+            trace("[Shape contains method begin]");
+            if(!isDefined(SCALE_VAL)) return false; // it is just a void frame
+            
             var points:Array = getValue(POLYGON_VAL, zone.m_props) as Array;
             var shapeCenter:Point   = this.getCenter(zone);
             var shapePosition:Point = new Point();
             var size:Number = Math.floor(this.getShapePos(zone, transfo, center, shapeCenter, shapePosition));
             var nbPoint:int = points.length;
-		var ret:Boolean;
+            var ret:Boolean;
             
             switch(nbPoint) {
-				// 1 point = circle => Place
-				case 1: 
-					trace("  - 1 point situation : circle");
-					var distance:Point = shapeCenter.add(shapePosition).subtract(pos);
-					trace("  - size = " + size);
-					trace("  - (dx = " + distance.x + ", dy = " + distance.y  + ")"); 
-					
-					// We check if the position is located inside the circle
-					// Another way to express it : is the distance between the circle center and the position < circle radius
-					ret = (distance.x * distance.x) + (distance.y * distance.y) < (size * size);
-					trace("[Shape contains end, ret = " + ret + "]");
+                // 1 point = circle => Place
+                case 1: 
+                    trace("  - 1 point situation : circle");
+                    var distance:Point = shapeCenter.add(shapePosition).subtract(pos);
+                    trace("  - size = " + size);
+                    trace("  - (dx = " + distance.x + ", dy = " + distance.y  + ")"); 
+                    
+                    // We check if the position is located inside the circle
+                    // Another way to express it : is the distance between the circle center and the position < circle radius
+                    ret = (distance.x * distance.x) + (distance.y * distance.y) < (size * size);
+                    trace("[Shape contains end, ret = " + ret + "]");
                     return ret;
                     
-				// 2 points = segment => Street
+                    // 2 points = segment => Street
                 case 2:     
-					trace("  - 2 points situation : polygon");
-					var fromPoint:Point = (points[0] as Point).add(shapePosition);
+                    trace("  - 2 points situation : polygon");
+                    var fromPoint:Point = (points[0] as Point).add(shapePosition);
                     var toPoint:Point = (points[1] as Point).add(shapePosition);
-					var poly:Polygon = getLinkPoly(zone, fromPoint, toPoint, size);
-					
-					// DEBUG
-					/*
-					g.lineStyle(1, 0x0000FF);
-					g.moveTo(poly.xpoints[0], poly.ypoints[0]);
-					for(var p:int = 1; p < poly.npoints ; p++) {
-						g.lineTo(poly.xpoints[p], poly.ypoints[p]);
-					} 
-					g.lineTo(poly.xpoints[0], poly.ypoints[0]);
-					*/
-					// EN DEBUG
-					
-					ret = poly.contains(pos); 
-					trace("[Shape contains end, value = " + ret + "]");
+                    var poly:Polygon = getLinkPoly(zone, fromPoint, toPoint, size);
+                    
+                    // DEBUG
+                    /*
+                    g.lineStyle(1, 0x0000FF);
+                    g.moveTo(poly.xpoints[0], poly.ypoints[0]);
+                    for(var p:int = 1; p < poly.npoints ; p++) {
+                    g.lineTo(poly.xpoints[p], poly.ypoints[p]);
+                    } 
+                    g.lineTo(poly.xpoints[0], poly.ypoints[0]);
+                    */
+                    // EN DEBUG
+                    
+                    ret = poly.contains(pos); 
+                    trace("[Shape contains end, value = " + ret + "]");
                     return ret;
-				default:
-					throw new Error("Should never happen, a shape can only have 1 or 2 points");
+                default:
+                    throw new Error("Should never happen, a shape can only have 1 or 2 points");
             }
         }
         
         /**
          * Sets this bounds by updating an already created Rectangle.
-		 * 
+         * 
          * @param zone		BagZone holding the Points table.
          * @param transfo	A transformation to scale or translate this shape.
          * @param center	The center of the shape before the transformation.
          * @param bounds	A Rectangle to merge with this bounds.
          */
         public function setBounds(g:Graphics, zone:ActiveZone, transfo:Transfo, center:Point, bounds:Rectangle):void {
-			// else it is just a void frame
-			if (isDefined(SCALE_VAL)) {
+            // else it is just a void frame
+            if (isDefined(SCALE_VAL)) {
                 var points:Array = getValue(POLYGON_VAL, zone.m_props) as Array;
                 var shapeCenter:Point = getCenter(zone);
                 var shapePos:Point = new Point();
@@ -198,35 +203,35 @@ package com.socialcomputing.wps.script  {
                 var size:Number    = Math.floor(getShapePos(zone, transfo, center, shapeCenter, shapePos));
                 
                 switch (n) {
-					// 1 point = circle => Place
+                    // 1 point = circle => Place
                     case 1:     
                         // var width:int = size << 1;
-						size = size * 2;
+                        size = size * 2;
                         rect = new Rectangle(shapeCenter.x + shapePos.x - size / 2 ,
-											 shapeCenter.y + shapePos.y - size / 2 ,
-											 size,
-											 size);
-						// DEBUG 
-						// g.lineStyle(1, 0xFF00000);
-						// g.drawRect(rect.x, rect.y, rect.width, rect.height);
-						// END DEBUG
+                            shapeCenter.y + shapePos.y - size / 2 ,
+                            size,
+                            size);
+                        // DEBUG 
+                        // g.lineStyle(1, 0xFF00000);
+                        // g.drawRect(rect.x, rect.y, rect.width, rect.height);
+                        // END DEBUG
                         break;
                     
-					// 2 points = segment => Street
+                    // 2 points = segment => Street
                     case 2:     
                         var A:Point = (points[0] as Point).add(shapePos);
                         var B:Point = (points[1] as Point).add(shapePos);
                         rect = getLinkPoly(zone, A, B, size).getBounds();
-							
-							// DEBUG
-							// g.lineStyle(1, 0x0000FF);
-							// g.drawRect(rect.x, rect.y,
-							//	       rect.width, rect.height);
-							// END DEBUG
+                        
+                        // DEBUG
+                        // g.lineStyle(1, 0x0000FF);
+                        // g.drawRect(rect.x, rect.y,
+                        //	       rect.width, rect.height);
+                        // END DEBUG
                         break;
                 }
-
-				RectangleUtil.merge(bounds, rect);
+                
+                RectangleUtil.merge(bounds, rect);
             }
         }
         
@@ -243,13 +248,13 @@ package com.socialcomputing.wps.script  {
          */
         public function paint(s:Sprite, supZone:ActiveZone, zone:ActiveZone, slice:Slice, transfo:Transfo, center:Point):void {
             trace("[ShapeX paint method called]");
-
-			// else it is just a void frame
-			if(isDefined(SCALE_VAL)) {
+            
+            // else it is just a void frame
+            if(isDefined(SCALE_VAL)) {
                 
-				// Old Applet instructions
-				/*
-				//ON recup alpha val ? 
+                // Old Applet instructions
+                /*
+                //ON recup alpha val ? 
                 //boolean test = slice.isDefined(slice.ALPHA_VAL);
                 //if (test!=false) System.out.print("test "+test+"\n");
                 //float alpha = slice.getFloat(slice.ALPHA_VAL, supZone);
@@ -260,64 +265,64 @@ package com.socialcomputing.wps.script  {
                 var composite:Composite;
                 //Float alpha = slice.getFloat(prop, props);
                 */
-				
+                
                 var points:Array = getValue(POLYGON_VAL, supZone.m_props ) as Array;
                 var p:Point = points[0] as Point;
                 var shapePos:Point = new Point();
                 var n:int = points.length;
                 var i:int;
                 var size:Number = Math.floor(getShapePos(supZone, transfo, center, p, shapePos));
-				var color:ColorTransform;
-				
-				// Manage each case of number of points to draw for this shape
+                var color:ColorTransform;
+                
+                // Manage each case of number of points to draw for this shape
                 switch(n) {
-					// dot => Place ??
-					case 1:     
+                    // dot => Place ??
+                    case 1:     
                     {
-						trace("Circle shape detected: ");
-						//composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0);
+                        trace("Circle shape detected: ");
+                        //composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0);
                         //g.setComposite(composite);
                         var x:int = p.x + shapePos.x - size;
                         var y:int = p.y + shapePos.y - size;
-						
-						// Doubling size value : needed because we are using the  
-						// drawEllipse method that needs a height and width from the top,left starting point
-						// which means we have to double the radius value.
-						size = size * 2;
-						
-						color = slice.getColor( Slice.OUT_COL_VAL, zone.m_props);
-						if(color != null) {
-							s.graphics.lineStyle(1, color.color);
-						}
-						else {
-							// Set an empty line style
-							s.graphics.lineStyle();
-						}
-						
-						color = slice.getColor(Slice.IN_COL_VAL, zone.m_props);
-						if(color != null) {
+                        
+                        // Doubling size value : needed because we are using the  
+                        // drawEllipse method that needs a height and width from the top,left starting point
+                        // which means we have to double the radius value.
+                        size = size * 2;
+                        
+                        color = slice.getColor( Slice.OUT_COL_VAL, zone.m_props);
+                        if(color != null) {
+                            s.graphics.lineStyle(1, color.color);
+                        }
+                        else {
+                            // Set an empty line style
+                            s.graphics.lineStyle();
+                        }
+                        
+                        color = slice.getColor(Slice.IN_COL_VAL, zone.m_props);
+                        if(color != null) {
                             s.graphics.beginFill(color.color);
-						}
+                        }
                         s.graphics.drawEllipse(x, y, size, size );
                         s.graphics.endFill();
                         break;
                     }
-                    
-					// segment  => Street
+                        
+                        // segment  => Street
                     case 2:     
                     {
-						trace("Segment shape detected: ");
+                        trace("Segment shape detected: ");
                         /*composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f;					
                         g.setComposite(composite);*/
-						
-						// Half size value .... need to find why ... 
-						size >>= 1;
-						
-						var fromPoint:Point = (points[0] as Point).add(shapePos);
-					    var toPoint:Point = (points[1] as Point).add(shapePos);
-						var poly:Polygon = getLinkPoly( supZone, fromPoint, toPoint, size/2 );
-						
-						color = slice.getColor( Slice.OUT_COL_VAL, supZone.m_props);
+                        
+                        // Half size value .... need to find why ... 
+                        size >>= 1;
+                        
+                        var fromPoint:Point = (points[0] as Point).add(shapePos);
+                        var toPoint:Point = (points[1] as Point).add(shapePos);
+                        var poly:Polygon = getLinkPoly( supZone, fromPoint, toPoint, size/2 );
+                        
+                        color = slice.getColor( Slice.OUT_COL_VAL, supZone.m_props);
                         if ( color != null)     
                         {
                             s.graphics.lineStyle( size + 3, color.color);
@@ -325,26 +330,26 @@ package com.socialcomputing.wps.script  {
                             s.graphics.moveTo( poly.xpoints[poly.npoints-1], poly.ypoints[poly.npoints-1]);
                             for( i = 0 ; i < poly.npoints; ++i) {
                                 s.graphics.lineTo( poly.xpoints[i], poly.ypoints[i]);
-							}
+                            }
                             s.graphics.endFill();
                         }
                         
-						color = slice.getColor( Slice.IN_COL_VAL, supZone.m_props);
+                        color = slice.getColor( Slice.IN_COL_VAL, supZone.m_props);
                         if ( color != null)
                         {
                             s.graphics.lineStyle( size, color.color);
                             s.graphics.beginFill( color.color);
                             s.graphics.moveTo( poly.xpoints[poly.npoints-1], poly.ypoints[poly.npoints-1]);
-							for( i = 0 ; i < poly.npoints; ++i) {
+                            for( i = 0 ; i < poly.npoints; ++i) {
                                 s.graphics.lineTo( poly.xpoints[i], poly.ypoints[i]);
-							}
+                            }
                             s.graphics.endFill();
                         }
                         break;
                     }
                 }
             }
-			trace("[ShapeX paint end]");
+            trace("[ShapeX paint end]");
         }
         
         /**
@@ -424,14 +429,14 @@ package com.socialcomputing.wps.script  {
          * @param V			Vector V.
          */
         /*private function addLinkPoint( poly:Sprite, u:Number, v:Number, center:Point, U:Point, V:Point):void {
-            poly.addPoint(int(( center.x + u * U.x + v * V.x )), int(( center.y + u * U.y + v * V.y )));
+        poly.addPoint(int(( center.x + u * U.x + v * V.x )), int(( center.y + u * U.y + v * V.y )));
         }*/
         private function addLinkPoint( poly:Polygon, u:Number, v:Number, center:Point, U:Point, V:Point):void {
             poly.addPoint(center.x + u * U.x + v * V.x, center.y + u * U.y + v * V.y);
             /*if (first)
-                poly.graphics.moveTo(Number( center.x + u * U.x + v * V.x ), Number( center.y + u * U.y + v * V.y ));
+            poly.graphics.moveTo(Number( center.x + u * U.x + v * V.x ), Number( center.y + u * U.y + v * V.y ));
             else
-                poly.graphics.lineTo(Number( center.x + u * U.x + v * V.x ), Number( center.y + u * U.y + v * V.y ));*/
+            poly.graphics.lineTo(Number( center.x + u * U.x + v * V.x ), Number( center.y + u * U.y + v * V.y ));*/
         }
         
         /**
@@ -450,66 +455,76 @@ package com.socialcomputing.wps.script  {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
                 var medias:Array = applet.env.m_medias;
-				var scaledImg:Image;
+                var scaledImg:Image;
                 var image:Image = medias[imageNam];
-				
+                
                 if ( image == null )
                 {
-					var ldr:Loader = new Loader();
-                    //TODO DAK: workaround (en cours de correction)
-					var urlReq:URLRequest = new URLRequest(imageNam.replace("/wps", "http://10.0.2.2:8080/wps-server"));
-					//ldr.load(urlReq);
+                    var ldr:Loader = new Loader();
+                    //var baseUrl = "http://10.0.2.2:8080";
+                    var baseUrl = "http://localhost:8080";
+                    //trace(ldr.contentLoaderInfo.url);
+                    var urlReq:URLRequest = new URLRequest(baseUrl + imageNam);
+                    
+                    ldr.contentLoaderInfo.addEventListener(Event.COMPLETE,loaderCompleteHandler);
+                    function loaderCompleteHandler(e:Event):void{
+                        trace('Image has loaded.');
+                        s.addChild(ldr);
+                    }
+                    
                     /*image   = applet.getImage( applet.getCodeBase(), imageNam );
                     applet.prepareImage( image, applet );*/
                     medias.push( imageNam, image);
-              
+                    
                 }
                 
-                // TODO DAK: if ( applet.checkImage( image, applet )& ImageObserver.ALLBITS )!= 0)  // the image can be drawn now 
-                if (true) 
+                var p:Point= getCenter( zone );
+                var shapePos    = new Point();
+                var scale:Number= getShapePos( zone, transfo, center, p, shapePos );
+                var x:int;
+                var y:int;
+                //var imgWid:int = image.getWidth( null );
+                var imgWid:int = ldr.width;
+                var w:int = imgWid;
+                
+                if ( scale > 0.)    // disk
                 {
-                    var p:Point= getCenter( zone );
-                    var shapePos    = new Point();
-                    var scale:Number= getShapePos( zone, transfo, center, p, shapePos );
-                    var x:int;
-                    var y:int;
-                    /*var imgWid:int = image.getWidth( null );
-                    var w:int = imgWid;
-                    
-                    if ( scale > 0.)    // disk
-                    {
-                        w = int(( 1.414 * scale ));
-                    }
-                    
-                    if ( imgWid != w )
-                    {
-                        imageNam    += w;
-                        scaledImg   = Image(medias[ imageNam ]);
-                        
-                        if ( scaledImg == null )
-                        {
-                            scaledImg   = image.getScaledInstance( w, w, Image.SCALE_AREA_AVERAGING );
-                            applet.prepareImage( scaledImg, applet );
-                            medias[imageNam] = scaledImg;
-                        }
-                        
-                        image   = scaledImg;
-                    }
-                    
-                    w >>= 1;
-                    x = p.x + shapePos.x - w;
-                    y = p.y + shapePos.y - w;*/
-                    
-                    //g.drawImage( image, x, y, applet );
-                    
-                    s.addChild(ldr);
+                    w = int(( 1.414 * scale ));
                 }
+                
+                if ( imgWid != w )
+                {
+                    imageNam    += w;
+                    scaledImg   = Image(medias[ imageNam ]);
+                    
+                    if ( scaledImg == null )
+                    {
+                        //scaledImg   = image.getScaledInstance( w, w, Image.SCALE_AREA_AVERAGING );
+                        //applet.prepareImage( scaledImg, applet );
+                        medias[imageNam] = scaledImg;
+                    }
+                    
+                    image   = scaledImg;
+                }
+                
+                w >>= 1;
+                x = p.x + shapePos.x - w;
+                y = p.y + shapePos.y - w;
+                
+                //g.drawImage( image, x, y, applet );
+                
+                //s.addChild(ldr);
+                ldr.x = x;
+                ldr.y = y;
+                ldr.load(urlReq);
             }
         }
         
+        
+        
         /**
          * Evaluate the transformation of a point using a transformation on this shape and return its scale.
-		 * 
+         * 
          * @param zone		BagZone holding this props.
          * @param transfo	A transformation to scale or translate this shape.
          * @param center	The center of this shape(satellite) before the tranformation.
@@ -519,32 +534,32 @@ package com.socialcomputing.wps.script  {
          */
         private function getShapePos(zone:ActiveZone, transfo:Transfo, center:Point, p0:Point, pos:Point):Number {
             var scale:Number = getFloat(SCALE_VAL, zone.m_props);
-			trace("[GetShapePos, scale = " + scale + "]");
-			
-			var p:Point;
-			
-			// We are drawing a real Sat!
+            trace("[GetShapePos, scale = " + scale + "]");
+            
+            var p:Point;
+            
+            // We are drawing a real Sat!
             if(center != null) {
-				p = center.subtract(p0); 
-				pos.x = p.x;
-				pos.y = p.y;
+                p = center.subtract(p0); 
+                pos.x = p.x;
+                pos.y = p.y;
             }
             
-			
+            
             if(transfo != null){
-				p =  pos.add(transfo.getCart());
-				pos.x = p.x;
-				pos.y = p.y;
+                p =  pos.add(transfo.getCart());
+                pos.x = p.x;
+                pos.y = p.y;
                 scale *= transfo.m_scl;
-				trace("  - transformation scale: " + transfo.m_scl); 
+                trace("  - transformation scale: " + transfo.m_scl); 
             }
-			
-			trace("[GetShapePos end, scale = " + scale + "]");
+            
+            trace("[GetShapePos end, scale = " + scale + "]");
             return scale;
         }
         
-		
-
+        
+        
         
         
         /**
