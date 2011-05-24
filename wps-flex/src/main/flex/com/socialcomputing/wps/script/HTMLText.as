@@ -899,7 +899,6 @@ package com.socialcomputing.wps.script{
             
             for ( i = 0; i < n; i ++ )
             {
-                trace("****" + this.m_tokens[i]);
                 if (this.m_tokens[i] is TextToken) {
                     textTok = this.m_tokens[i] as TextToken;
                     textTok.paint( s, pos );

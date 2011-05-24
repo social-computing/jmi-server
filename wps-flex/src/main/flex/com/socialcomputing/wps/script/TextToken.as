@@ -73,12 +73,9 @@ package com.socialcomputing.wps.script {
             var text:TextField = new TextField();
             text.text = m_text;
             text.x = x;
-            text.y = y;
+            text.y = y - m_bounds.y;
             text.antiAliasType = AntiAliasType.ADVANCED;
-            var formatter:TextFormat = new TextFormat();
-            if ( m_color != null ) formatter.color = m_color.color; 
-            if ( m_font != null ) formatter.font = m_font.font;
-            text.setTextFormat(formatter);
+            text.setTextFormat(m_font);
             s.addChild(text);
         }
     }
