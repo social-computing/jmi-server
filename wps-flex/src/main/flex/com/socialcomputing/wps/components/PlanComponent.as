@@ -341,8 +341,8 @@ package com.socialcomputing.wps.components
 		/**
 		 * Wrapper for a menu item that call performAction with the ActionCommand String as argument.
 		 **/
-		public function actionPerformed( aactionStr:String ):void {
-			performAction( aactionStr);
+		public function actionPerformed( actionStr:String ):void {
+			performAction( actionStr);
 		}
 		
 		/**
