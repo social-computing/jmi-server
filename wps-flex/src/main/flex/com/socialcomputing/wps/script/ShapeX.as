@@ -132,23 +132,23 @@ package com.socialcomputing.wps.script  {
             var points:Array = getValue(POLYGON_VAL, zone.m_props) as Array;
             var shapeCenter:Point   = this.getCenter(zone),
                 shapePosition:Point = new Point();
-            var size:Number = this.getShapePos(zone, transfo, center, shapeCenter, shapePosition),
+            var size:Number = Math.floor(this.getShapePos(zone, transfo, center, shapeCenter, shapePosition)),
                 nbPoint:int = points.length;
+			var ret:Boolean;
             
             switch(nbPoint) {
 				// 1 point = circle => Place
 				case 1: 
-					// Dirty hack : see why this is needed
-					size = size * 2;
 					trace("  - 1 point situation : circle");
 					var distance:Point = shapeCenter.add(shapePosition).subtract(pos);
 					trace("  - size = " + size);
 					trace("  - (dx = " + distance.x + ", dy = " + distance.y  + ")"); 
 					
 					// We check if the position is located inside the circle
-					// Another way to express it : is the distance between the circle center and the position < circle (rayon)
-					trace("[Shape contains end]");
-                    return (distance.x * distance.x) + (distance.y * distance.y) < (size * size);
+					// Another way to express it : is the distance between the circle center and the position < circle radius
+					ret = (distance.x * distance.x) + (distance.y * distance.y) < (size * size);
+					trace("[Shape contains end, ret = " + ret + "]");
+                    return ret;
                     
 				// 2 points = segment => Street
                 case 2:     
@@ -168,7 +168,7 @@ package com.socialcomputing.wps.script  {
 					*/
 					// EN DEBUG
 					
-					var ret:Boolean = poly.contains(pos); 
+					ret = poly.contains(pos); 
 					trace("[Shape contains end, value = " + ret + "]");
                     return ret;
 				default:
