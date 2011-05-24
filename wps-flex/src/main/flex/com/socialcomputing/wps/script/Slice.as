@@ -114,12 +114,12 @@ package com.socialcomputing.wps.script  {
 			
             if(isDefined(IMAGE_VAL)) {
 				//throw new Error("not yet implemented");
-                /* 
+                 
 				var imageNam:String= parseString(IMAGE_VAL, zone.m_props )[0];
                 if (imageNam != null) {
-                    satShp.drawImage(applet, g, supZone, imageNam, transfo, satCtr);
+                    satShp.drawImage(applet, s, supZone, imageNam, transfo, satCtr);
                 }
-				*/
+				
             }
             
             if(text != null) {
