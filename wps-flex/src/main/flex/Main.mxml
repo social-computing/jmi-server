@@ -7,6 +7,7 @@
                creationComplete="onCreationComplete(event)">
     <fx:Script>
         <![CDATA[
+			import com.socialcomputing.wps.components.ActionEvent;
 			import com.adobe.serialization.json.JSON;
 			import com.socialcomputing.wps.services.planservice.PlanService;
 			
@@ -34,9 +35,13 @@
 				planService.showBusyCursor = false;
             }
 
-			protected function onReady(eventObj:Event):void
+			protected function onReady(event:Event):void
 			{
 //				Alert.show( "Ready");
+			}
+			protected function onAction(event:ActionEvent):void
+			{
+				Alert.show( event.action + ": " + event.args.toString());
 			}
 	]]>
     </fx:Script>
@@ -52,7 +57,8 @@
     <s:Label text="Cartographie WPS :" />
 	<components:PlanComponent width="{planWidth}" height="{planHeight}" dataProvider="{getPlanResult.lastResult}" 
 							  ready="onReady(event);"
-							  status="status.text = event.status;" 
+							  status="status.text = event.status;"
+							  action="onAction(event);" 
 	/>
 	<s:Label id="status" />
 </s:Application>

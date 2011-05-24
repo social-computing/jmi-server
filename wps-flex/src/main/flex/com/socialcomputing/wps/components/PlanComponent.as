@@ -42,7 +42,7 @@ package com.socialcomputing.wps.components
 	
 	[Event(name="ready", type="flash.events.Event")]
 	[Event(name="error", type="flash.events.Event")]
-	[Event(name="action", type="flash.events.Event")]
+	[Event(name="action", type="com.socialcomputing.wps.components.ActionEvent")]
 	[Event(name="status", type="com.socialcomputing.wps.components.StatusEvent")]
 	
 	public class PlanComponent extends Group
@@ -248,7 +248,7 @@ package com.socialcomputing.wps.components
 				plan.initZones(this.restDrawingSurface, plan.m_nodes, true);
 				plan.resize(size);
 				plan.init();
-				//plan.resize(size);
+				plan.resize(size);
 
 				_ready = true;
 		
@@ -334,7 +334,6 @@ package com.socialcomputing.wps.components
 		 * Wrapper for a menu item
 		 **/
 		public function menuHandler( evt:MenuEvent):void {
-			trace( "Item Menu selected: " + evt.label);
 			performAction( evt.item.action);
 		}
 		
@@ -384,10 +383,7 @@ package com.socialcomputing.wps.components
 						var func:String     = actionStr.substring( 0, pos ),
 							paramStr:String = actionStr.substring( pos + 1, actionStr.length- 1 );
 						var params:Array    = paramStr.split( ",");
-						
-						// TODO FireEvent
-						//m_planWindow.call( func, params );
-						trace("Perform " + func + " " + params);
+						dispatchEvent( new ActionEvent( func, params));
 					}
 					return;
 				}
@@ -404,7 +400,7 @@ package com.socialcomputing.wps.components
 			// TODO FireEvent
 /*			getAppletContext().showDocument( convertURL( actionStr ), target );
 			*/
-			trace("Perform " + actionStr + " " + target);
+			dispatchEvent(new ActionEvent( actionStr));
 		}
 		
 		

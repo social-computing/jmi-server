@@ -16,11 +16,5 @@ package com.socialcomputing.wps.components
 		{
 			return _status;
 		}
-
-		public function set status(value:String):void
-		{
-			_status = value;
-		}
-
 	}
 }
