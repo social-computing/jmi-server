@@ -10,6 +10,7 @@ package com.socialcomputing.wps.script{
     import flash.text.Font;
     import flash.text.FontStyle;
     import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
     import flash.text.TextFormat;
     import flash.text.TextLineMetrics;
     import flash.text.engine.ElementFormat;
@@ -377,7 +378,7 @@ package com.socialcomputing.wps.script{
                     if (( font.getFlags( zone.m_props) & 2 )!= 0) heapElements.push( "i" );
                     htmlTxt.m_heap = heapElements;
                     
-                    htmlTxt.parseText( font.getTextFormat( zone.m_props), lines );
+                    htmlTxt.parseText( applet, font.getTextFormat( zone.m_props), lines );
                     htmlTxt.setTextBnds( applet.size, getFlags( zone.m_props), zone.m_flags ,transfo, supCtr, center );
                 }
             }
@@ -396,7 +397,7 @@ package com.socialcomputing.wps.script{
          * @param g			The graphics used to retrieve the font metrics.
          * @param htmlText	A string of text with or without HTML tags to parse.
          */
-        public function parseText( format:TextFormat, htmlText:String):void {
+        public function parseText( applet:PlanComponent, format:TextFormat, htmlText:String):void {
             var tokenizer:StringTokenizer= new StringTokenizer( htmlText, "<>" );
             var tokenStr:String, nextStr:String,
             prevStr:String     = tokenizer.nextToken();
@@ -446,7 +447,7 @@ package com.socialcomputing.wps.script{
                         else
                         {
                             textTok = new TextToken();
-                            updateText( format, "<" + tokenStr + ">", textTok, isText );
+                            updateText( applet, format, "<" + tokenStr + ">", textTok, isText );
                             isText  = true;
                         }
                         
@@ -455,7 +456,7 @@ package com.socialcomputing.wps.script{
                         // An unclosed Tag. Handle it as normal text.
                     else
                     {
-                        updateText( format, "<" + tokenStr, textTok, isText );
+                        updateText( applet, format, "<" + tokenStr, textTok, isText );
                         prevStr = nextStr;
                         isText  = true;
                     }
@@ -463,7 +464,7 @@ package com.socialcomputing.wps.script{
                     // Normal text
                 else
                 {
-                    updateText( format, prevStr, textTok, isText );
+                    updateText( applet, format, prevStr, textTok, isText );
                     prevStr = tokenStr;
                     isText  = true;
                 }
@@ -474,7 +475,7 @@ package com.socialcomputing.wps.script{
             // Don't forget the last or only piece of text
             if ( prevStr != null )
             {
-                updateText( format, prevStr, textTok, isText );
+                updateText( applet, format, prevStr, textTok, isText );
             }
             
             updateTag( format, "br" );  // to set last line position
@@ -540,19 +541,21 @@ package com.socialcomputing.wps.script{
          * @param textTok	Current TextToken.
          * @param isText	True if the previous textToken was a Text Token so we can merge it with this.
          */
-        private function updateText( format:TextFormat, text:String, textTok:TextToken, isText:Boolean):void {
+        private function updateText( applet:PlanComponent, format:TextFormat, text:String, textTok:TextToken, isText:Boolean):void {
             // The text exists!
             if ( text.length > 0)
             {
 				var field:TextField = new TextField();
 				field.setTextFormat( format);
 				field.text = text;
+				field.autoSize = TextFieldAutoSize.LEFT;
+				var fieldRect:Rectangle = field.getBounds( applet);
 				var metric:TextLineMetrics = field.getLineMetrics(0);
 				var a:int	= metric.ascent,
                     d:int   = metric.descent,
-                    w:int   = metric.width,
-                    h:int   = metric.height;
-                
+                    w:int   = fieldRect.width, //metric.width,
+                    h:int   = fieldRect.height; //metric.height;
+				
                 // The previous token was a text too so we must merge it with this new one.
                 if ( isText )
                 {
@@ -911,7 +914,7 @@ package com.socialcomputing.wps.script{
                 var white:ColorTransform = new ColorTransform();
                 white.color = 0xFFFFFF;
                 s.graphics.beginFill(white.color);
-                s.graphics.drawRoundRect(pos.x+2, pos.y+2, m_bounds.width-4, m_bounds.height/3, 5, 5);
+                s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 5, 5);
                 s.graphics.endFill();
             }
             s.alpha = alpha_orig;
