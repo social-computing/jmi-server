@@ -11,6 +11,8 @@ package com.socialcomputing.wps.script  {
     import flash.geom.Rectangle;
     import flash.ui.MouseCursor;
     
+    import flashx.textLayout.tlf_internal;
+    
     import mx.controls.Alert;
     import mx.controls.Image;
     
@@ -171,51 +173,30 @@ package com.socialcomputing.wps.script  {
             var dim:Dimension= m_applet.size;
             var restDrawingSurface:Sprite = m_applet.restDrawingSurface;
 			var curDrawingSurface:Sprite  = m_applet.curDrawingSurface;
-                //restGfx:Graphics = m_applet.restDrawingSurface.graphics,
-            	// g:Graphics       = m_applet.graphics;
 
-			// Temporary commented, jonathan 12/05			
-			
             //restGfx.clear();
             
             // If there is any background image, load it
             //if (m_applet.backImgUrl != null)
-				// TODO
                 //renderBitmap( restGfx, m_applet.m_backImgUrl, 0, 0, null );
 			this.m_applet.clearDrawingSurface(restDrawingSurface);
-			restDrawingSurface.graphics.beginFill(0xFFFFFF); // TODO change by the real color when it works
+			restDrawingSurface.graphics.beginFill( this.m_applet.env.m_inCol.m_color);
 			restDrawingSurface.graphics.drawRect(0, 0, this.m_applet.width, this.m_applet.height);
 			restDrawingSurface.graphics.endFill();
 
-			
-            
             // Init Links, Nodes and subNodes.
 			// Commented by jonathan dray, 09/05
-			/*
-            initZones( g, m_links, false );
-            initZones( g, m_nodes, false );
-            */
 			initZones(restDrawingSurface, m_links, false);
 			initZones(restDrawingSurface, m_nodes, false);	
 				
-			// TODO : hack à supprimer
-			// Commented by jonathan dray, 09/05
-			// restGfx = g;
-			
             // Init backImg and restImg with background, links and places parts that are "ghostable"
 			// Commented by jonathan dray, 09/05
-			/*
-            paintZones( restGfx, m_links, m_links.length, false, Satellite.ALL_TYP, true, false );
-            paintZones( restGfx, m_nodes, m_nodesCnt, false, Satellite.ALL_TYP, true, true );
-			*/
-			
 			paintZones(restDrawingSurface, m_links, m_links.length, false, Satellite.ALL_TYP, true, false );
 			paintZones(restDrawingSurface, m_nodes, m_nodesCnt, false, Satellite.ALL_TYP, true, true );
             
             // Filters backImg so it looks ghosted
 			// TODO
 			// m_applet.renderShape( m_applet.restDrawingSurface, 0, 0); // ??? size
-			//backGfx = restGfx.; 
 			//m_applet.env.filterImage(m_applet.backDrawingSurface, dim);
             
             // Finish drawing restImg with places parts that are allways visible (tip, sel...)
