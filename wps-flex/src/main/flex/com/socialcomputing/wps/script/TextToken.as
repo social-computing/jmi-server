@@ -58,24 +58,27 @@ package com.socialcomputing.wps.script {
             var x:int= m_bounds.x + pos.x,
                 y:int = m_bounds.y + pos.y;
             
+			var text:TextField = new TextField();
             if ( m_bkCol != null )
             {
                 //g.setColor( m_bkCol );
                 //g.fillRect( x, y - g.getFontMetrics().getAscent(), m_bounds.width, m_bounds.height );
-                s.graphics.beginFill( m_bkCol.color );
-                s.graphics.drawRect(x, y , m_bounds.width, m_bounds.height);
-                s.graphics.endFill();    
+				text.background = true;
+				text.backgroundColor = m_bkCol.color;
             }
             
-            /*if ( m_color != null )  g.beginFill( m_color );
+			/*g.beginFill( m_color );
             if ( m_font != null )   g.setFont( m_font );
             g.drawString( m_text, x, y );*/
-            var text:TextField = new TextField();
             text.text = m_text;
             text.x = x;
             text.y = y - m_bounds.y;
             text.antiAliasType = AntiAliasType.ADVANCED;
-            text.setTextFormat(m_font);
+			if ( m_color != null ) {
+				m_font.color = m_color.color;
+			}
+            text.setTextFormat( m_font);
+			text.border = false;
             s.addChild(text);
         }
     }
