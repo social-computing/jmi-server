@@ -908,12 +908,13 @@ package com.socialcomputing.wps.script{
                 }
             }
             
-            s.alpha = 0.2;
             if ( n==1) // draw reflection only for one line boxes
             {
                 var white:ColorTransform = new ColorTransform();
                 white.color = 0xFFFFFF;
+				s.alpha = 0.2;
                 s.graphics.beginFill(white.color);
+				s.graphics.lineStyle();
                 s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 5, 5);
                 s.graphics.endFill();
             }
