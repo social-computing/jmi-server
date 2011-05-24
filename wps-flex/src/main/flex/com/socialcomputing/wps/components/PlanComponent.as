@@ -40,9 +40,10 @@ package com.socialcomputing.wps.components
 	
 	[IconFile("Plan.png")]
 	
-	[Event(name="onReady", type="flash.events.Event")]
-	[Event(name="onError", type="flash.events.Event")]
-	[Event(name="onAction", type="flash.events.Event")]
+	[Event(name="ready", type="flash.events.Event")]
+	[Event(name="error", type="flash.events.Event")]
+	[Event(name="action", type="flash.events.Event")]
+	[Event(name="status", type="com.socialcomputing.wps.components.StatusEvent")]
 	
 	public class PlanComponent extends Group
 	{
@@ -269,14 +270,14 @@ package com.socialcomputing.wps.components
 			this.invalidateProperties();
 			this.invalidateDisplayList();		
 			if( ready)
-				dispatchEvent(new Event( "onReady"));
+				dispatchEvent(new Event( "ready"));
 			else
-				dispatchEvent(new Event( "onError"));
+				dispatchEvent(new Event( "error"));
 		}
 		
 		
 		public function showStatus(message:String):void {
-			trace(message);
+			dispatchEvent(new StatusEvent( message));
 		}
 		
 		public function mouseOverHandler(event:MouseEvent):void {
