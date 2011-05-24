@@ -10,7 +10,7 @@ package com.socialcomputing.wps.script{
     import flash.text.Font;
     import flash.text.FontStyle;
     import flash.text.TextField;
-	import flash.text.TextFieldAutoSize;
+    import flash.text.TextFieldAutoSize;
     import flash.text.TextFormat;
     import flash.text.TextLineMetrics;
     import flash.text.engine.ElementFormat;
@@ -735,14 +735,20 @@ package com.socialcomputing.wps.script{
                         if ( startsWith( tag, "c=" ))
                         {
                             m_color = rgb;
-                            //textTok.m_color = new Color( rgb );
-                            //textTok.m_bkCol = m_bkCol != -1? new Color( m_bkCol ) : null;
+                            textTok.m_color = new ColorTransform();
+							textTok.m_color.color = rgb;
+							if( m_bkCol != -1) {
+                            	textTok.m_bkCol = new ColorTransform();
+								textTok.m_bkCol.color = m_bkCol;
+							}
                         }
                         else
                         {
                             m_bkCol = rgb;
-                            //textTok.m_bkCol = new Color( rgb );
-                            //textTok.m_color = new Color( m_color );
+							textTok.m_color = new ColorTransform();
+							textTok.m_color.color = m_color;
+							textTok.m_bkCol = new ColorTransform();
+							textTok.m_bkCol.color = rgb;
                         }
                     }
                 }
@@ -782,6 +788,7 @@ package com.socialcomputing.wps.script{
                     return null;
                 }
                 //textTok.m_font = new Font( m_name, m_style, m_size );
+				textTok.m_font = new TextFormat();
                 textTok.m_font.font = m_name;
                 if (m_style == 0x1)
                     textTok.m_font.bold =  true;
@@ -874,8 +881,6 @@ package com.socialcomputing.wps.script{
          * @param pos	Where to draw this.
          */
         protected function drawText3( s:Sprite, size:Dimension, pos:Point):void {
-            var alpha_orig:Number = s.alpha;
-            s.alpha = 0.8;
             var textTok:TextToken;
             var i:int;
             var n:int    = m_tokens.length; 
@@ -912,13 +917,11 @@ package com.socialcomputing.wps.script{
             {
                 var white:ColorTransform = new ColorTransform();
                 white.color = 0xFFFFFF;
-				s.alpha = 0.2;
-                s.graphics.beginFill(white.color);
+                s.graphics.beginFill(white.color, 0.2);
 				s.graphics.lineStyle();
                 s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 5, 5);
                 s.graphics.endFill();
             }
-            s.alpha = alpha_orig;
             m_bounds.x  = pos.x;
             m_bounds.y  = pos.y;
         }
