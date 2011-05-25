@@ -52,6 +52,7 @@ package com.socialcomputing.wps.components
 		private var _nodes:Array = null;
 		private var _curPos:Point= new Point();
 		private var _ready:Boolean = false;
+		private var _clear:Boolean = false;
 
 		private var _backImgUrl:String;
 		//private var _backImg:Image;
@@ -69,10 +70,14 @@ package com.socialcomputing.wps.components
 		public function PlanComponent()
 		{
 			super();
+			
 			// Drawing surface of the component
 			_drawingSurface = new SpriteVisualElement();
 			this.addElement(_drawingSurface);
-			
+
+			this._curDrawingSurface = new Sprite();
+			this._restDrawingSurface = new Sprite();
+		
 			addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
 			addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 			addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
@@ -151,6 +156,7 @@ package com.socialcomputing.wps.components
 			// If the given value is null return for now
 			// TODO : If the local plancontainer is set, reset objects 
 			if(value == null) {
+				//clear();
 				return;
 			}
 			
@@ -176,8 +182,6 @@ package com.socialcomputing.wps.components
 				this._onScreen = new BitmapData(this.width, this.height);
 				this._offScreen = new BitmapData(this.width, this.height);
 				this._drawingSurface.addChild(new Bitmap(this._onScreen));
-				this._curDrawingSurface = new Sprite();
-				this._restDrawingSurface = new Sprite();
 				
 				/*
                 /* DEBUT TEST */
@@ -275,7 +279,19 @@ package com.socialcomputing.wps.components
 			else
 				dispatchEvent(new Event( "error"));
 		}
-		
+
+		public function clear():void {
+			showStatus( "" );
+			this.clearDrawingSurface( this._restDrawingSurface);
+			this._restDrawingSurface.graphics.beginFill( this._ready ? this.env.m_inCol.m_color : 0xFFFFFF);
+			this._restDrawingSurface.graphics.drawRect(0, 0, this.width, this.height);
+			this._restDrawingSurface.graphics.endFill();
+			this._dataProvider = null;
+			this._ready = false;
+			this._clear = true;
+			this.invalidateProperties();
+			this.invalidateDisplayList();		
+		}
 		
 		public function showStatus(message:String):void {
 			dispatchEvent(new StatusEvent( message));
@@ -326,8 +342,9 @@ package com.socialcomputing.wps.components
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			trace("Update graphic display");
-			if(ready) {
+			if(this._ready || this._clear) {
 				this.renderShape(this._restDrawingSurface, this.width, this.height);
+				this._clear = false;
 			}
 		}
 		

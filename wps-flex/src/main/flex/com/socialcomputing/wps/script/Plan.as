@@ -200,18 +200,6 @@ package com.socialcomputing.wps.script  {
 			//m_applet.env.filterImage(m_applet.backDrawingSurface, dim);
             
             // Finish drawing restImg with places parts that are allways visible (tip, sel...)
-			// Commented by jonathan dray, 09/05
-			/*
-            paintZones( restGfx, m_links, m_links.length, true, Satellite.BASE_TYP, true, false );
-            paintZones( restGfx, m_links, m_links.length, true, Satellite.TIP_TYP, false, false );
-            paintZones( restGfx, m_links, m_links.length, true, Satellite.SEL_TYP, false, false );
-            
-            paintZones( restGfx, m_nodes, m_nodesCnt, true, Satellite.BASE_TYP, true, true );
-            paintZones( restGfx, m_nodes, m_nodesCnt, true, Satellite.TIP_TYP, false, true );
-            paintZones( restGfx, m_nodes, m_nodesCnt, true, Satellite.SEL_TYP, false, true );
-           	*/
-			
-			
 			paintZones(restDrawingSurface, m_links, m_links.length, true, Satellite.BASE_TYP, true, false );
 			paintZones(restDrawingSurface, m_links, m_links.length, true, Satellite.TIP_TYP, false, false );
 			paintZones(restDrawingSurface, m_links, m_links.length, true, Satellite.SEL_TYP, false, false );

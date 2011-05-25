@@ -38,10 +38,12 @@
 				trace( event.action + ": " + event.args.toString());
 				var parameters:Object  = new Object();
 				if( event.action == "NewWin") {
+					map.clear();
 					parameters["entityId"] = event.args[0];
 					getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
 				}
 				if( event.action == "Discover") {
+					map.clear();
 					parameters["attributeId"] = event.args[0];
 					parameters["analysisProfile"] = "DiscoveryProfile";
 					getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
