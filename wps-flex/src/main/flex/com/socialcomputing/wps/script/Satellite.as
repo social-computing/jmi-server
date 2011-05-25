@@ -289,7 +289,7 @@ package com.socialcomputing.wps.script  {
             if(i < n) {
 				planComponent.plan.m_newZone = zone;
                 if (isPie) {
-                    var supZone:BagZone = BagZone(zone);
+                    var supZone:BagZone = zone as BagZone;
                     var zones:Array     = supZone.m_subZones;
                     var nbZones:int     = zones.length + 1;
                     

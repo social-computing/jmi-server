@@ -118,9 +118,6 @@ public class Env
         var bkWhite:ColorTransform = new ColorTransform();
         bkWhite.color = 0xFFFFFF;
 		var bkCol:ColorTransform= needPrint ? bkWhite : m_inCol.getColor();
-		trace( "Enc init à terminer");
-		//component.setBackground( bkCol );
-		// ??? component.setStyle( "backgroundColor", 0);
 		//m_applet        = applet;
 		m_medias        = new Array();
 	}
