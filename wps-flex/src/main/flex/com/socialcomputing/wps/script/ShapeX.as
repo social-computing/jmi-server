@@ -505,7 +505,7 @@ package com.socialcomputing.wps.script  {
                     
                 }
                 
-                ldr.load(urlReq);   
+                ldr.load(urlReq);
             }
         }
         
