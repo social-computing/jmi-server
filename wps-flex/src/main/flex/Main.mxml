@@ -25,11 +25,10 @@
             {
                 planService.showBusyCursor = true; 
 				var parameters:Object  = new Object();
+				//parameters["analysisProfile"] = "GlobalProfile";
 				parameters["entityId"] = "5";
                 getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
-				planService.showBusyCursor = false;
             }
-
 			protected function onReady(event:Event):void
 			{
 				status.text = "C'est bon !!!";

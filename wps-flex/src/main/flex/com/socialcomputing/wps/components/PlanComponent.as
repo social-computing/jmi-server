@@ -157,7 +157,7 @@ package com.socialcomputing.wps.components
 			this._ready = false;
 			showStatus( "" );
 			
-			// CursorManager.setBusyCursor();
+			CursorManager.setBusyCursor();
 			if(value is PlanContainer) {
 				this._dataProvider = value as PlanContainer;
 			}
@@ -259,7 +259,7 @@ package com.socialcomputing.wps.components
 				trace( error.getStackTrace());	
 			}
 				
-			//CursorManager.removeBusyCursor();
+			CursorManager.removeBusyCursor();
 			
 			/*
 			 * Don't redraw immediately, because maybe the code that's calling us is
