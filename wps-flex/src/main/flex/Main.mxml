@@ -4,7 +4,7 @@
                xmlns:mx="library://ns.adobe.com/flex/mx" 
                minWidth="955" minHeight="600" 
                xmlns:components="com.socialcomputing.wps.components.*"
-               creationComplete="onCreationComplete(event)" width="640" height="550">
+               creationComplete="onCreationComplete(event)" width="640" height="540">
     <fx:Script>
         <![CDATA[
 			import com.adobe.serialization.json.JSON;
@@ -58,14 +58,14 @@
     </fx:Declarations>
     
     <s:layout>
-        <s:VerticalLayout gap="20" />
+        <s:VerticalLayout gap="0" />
     </s:layout>
-    <s:Label text="Cartographie WPS :" />
+    <s:Label text="Cartographie WPS :" height="20" />
 	<components:PlanComponent id="map" width="640" height="480" backgroundColor="#7F9FDF"
 							  dataProvider="{getPlanResult.lastResult}" 
 							  ready="onReady(event);"
 							  status="status.text = event.status;"
 							  action="onAction(event);" 
 	/>
-	<s:Label id="status"  backgroundColor="#C6C0C0" width="640" height="17"/>
+	<s:Label id="status"  backgroundColor="#C6C0C0" width="640" height="20"/>
 </s:Application>
