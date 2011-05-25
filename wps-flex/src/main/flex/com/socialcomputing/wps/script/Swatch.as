@@ -104,7 +104,7 @@ package com.socialcomputing.wps.script  {
         protected function drawSats(applet:PlanComponent, s:Sprite, zone:ActiveZone, shape:ShapeX, 
 									transfo:Transfo, isLinkOnly:Boolean, isCur:Boolean, isFront:Boolean, showTyp:int):void {
             var isBag:Boolean= zone is BagZone;
-            var supZone:BagZone= isBag ? BagZone(zone ): null;
+            var supZone:BagZone= isBag ? zone as BagZone: null;
             var zones:Array= isBag ? supZone.m_subZones : null;
             var curZone:ActiveZone= applet.plan.m_curZone,
 				subZone:ActiveZone;
@@ -207,7 +207,7 @@ package com.socialcomputing.wps.script  {
             var sat:Satellite    = m_satellites[0];
             var shape:ShapeX     = sat.m_shape;
             var isBag:Boolean    = zone is BagZone;
-            var supZone:BagZone  = isBag ? BagZone(zone) : null;
+            var supZone:BagZone  = isBag ? zone as BagZone : null;
             var zones:Array      = isBag ? supZone.m_subZones : null;
             var subZone:ActiveZone;
             var satRelTrf:Transfo, satTrf:Transfo,
