@@ -72,7 +72,7 @@ package com.socialcomputing.wps.script  {
 			var sat:Satellite = m_satellites[0];
             var shape:ShapeX = sat.m_shape;
             var flags:int = getFlags(zone.m_props);
-            var transfo:Transfo = sat.getTransfo(Satellite.TRANSFO_VAL, zone.m_props.m_propss);
+            var transfo:Transfo = sat.getTransfo(Satellite.TRANSFO_VAL, zone.m_props);
             
             // Draws Satellites links first (if they exists)
             // so they can be partly covered by other sats
