@@ -6,7 +6,6 @@ package com.socialcomputing.serializers
 	
 	public class RESTSerializationFilter extends SerializationFilter {
 		public static var URL_PARAMETERS_NAMES:String = "urlParametersNames";
-		private static var URL_PARAMETERS:String = "urlParameters";
 		private static var PARAM_BEGIN_TOKEN:String = "{";
 		private static var PARAM_END_TOKEN:String = "}";
 		
@@ -38,37 +37,7 @@ package com.socialcomputing.serializers
 		 *  @productversion Flex 3
 		 */
 		override public function serializeParameters(operation:AbstractOperation, params:Array):Object {
-			if (params == null || params.length == 0)
-				return params;
-			
-			// If a list of url parameters names are set then get the values in the
-			// url parameters array
-			var urlParamNames:Array;
-			if(operation.properties != null &&
-			   operation.properties.hasOwnProperty(URL_PARAMETERS_NAMES) && 
-			   operation.properties[URL_PARAMETERS_NAMES] != null) {
-			   
-			   urlParamNames = operation.properties[URL_PARAMETERS_NAMES] as Array;
-			} 
-			
-			// Special case for XML content type when only one parameter is provided.
-			// If there is more than one parameter though, we do not have a reliable way
-			// to turn the arguments into a body.
-			/*
-			if ((params.length - urlParamNames.length) == 1 && operation.contentType == mx_internal::CONTENT_TYPE_XML) {
-				
-				// Last parameter
-				var parameter:Object = params[(params.length -1)];
-				// Need to get extract URL paramters here
-				return parameter;
-			}
-			*/
-			
-			var opArgNames:Array = operation.argumentNames;
-			if (opArgNames == null || params.length != opArgNames.length)
-				throw new ArgumentError("HTTPMultiService operation called with " + (opArgNames == null ? 0 : opArgNames.length) + " argumentNames and " + params.length + " number of parameters.  When argumentNames is specified, it must match the number of arguments passed to the invocation");
-
-			return this.extractURLParameters(operation, urlParamNames, params);
+			return operation.arguments;
 		}
 		
 		
@@ -91,16 +60,16 @@ package com.socialcomputing.serializers
 			
 			if(url != null) {
 				if(operation.properties != null &&
-					operation.properties.hasOwnProperty(URL_PARAMETERS) && 
-					operation.properties[URL_PARAMETERS] != null) {
+					operation.properties.hasOwnProperty(URL_PARAMETERS_NAMES) && 
+					operation.properties[URL_PARAMETERS_NAMES] != null) {
 					
 					// Iterate throw url parameters and replace all the occurence of
 					// the url pattern PARAM_BEGIN_TOKEN + parameterName + PARAM_END_TOKEN by the corresponding value
-					var parameters:Object = operation.properties[URL_PARAMETERS];
+					var parameters:Object = operation.properties[URL_PARAMETERS_NAMES];
 					for(var parameterName:String in parameters){
-						var parameterPattern:String = PARAM_BEGIN_TOKEN + parameterName + PARAM_END_TOKEN;
+						var parameterPattern:String = PARAM_BEGIN_TOKEN + parameters[parameterName] + PARAM_END_TOKEN;
 						if(url.indexOf(parameterName) != -1) {
-							url = url.replace(new RegExp(parameterPattern, "//g"), parameters[parameterName]);
+							url = url.replace(new RegExp(parameterPattern, "//g"), operation.arguments[parameters[parameterName]]);
 						}
 					}
 				} 
@@ -108,47 +77,6 @@ package com.socialcomputing.serializers
 			return url;
 		}
 		
-		/**
-		 * Extract url parameters values from the parameters Array.
-		 * The tuples of (paramNames, paramValues) are stored as an Object in the operation property URL_PARAMETERS
-		 * 
-		 * @param operation The AbstractOperation being invoked
-		 * @param urlParamName an array of URL parameters names
-		 * @param params an array of parameters values
-		 * 
-		 * @return the remaining parameters that are not extracted from 
-		 */
-		private function extractURLParameters(operation:AbstractOperation, urlParamNames:Array, params:Array):Object {
-			
-			var nonURLParams:Object = {};
-			var urlParams:Object = {}
-			var opArgNames:Array = operation.argumentNames;
-			
-			// Iterate throw all operation argument names
-			for(var i:uint = 0 ;  i < opArgNames.length ; i++) {
-				// If the url parameter name is found in the operation argument names, extract it's value
-				// and place it in the operation property URL_PARAMETERS
-				if(urlParamNames != null && urlParamNames.indexOf(opArgNames[i]) != -1) {
-					urlParams[opArgNames[i]] = params[i];
-				}
-				// else put it in the nonURLParameters Object
-				else {
-					nonURLParams[opArgNames[i]] = params[i];
-				}
-			}
-
-			// Place the url parameters values in the operation property URL_PARAMETERS
-			if(urlParams != null) {
-				// Create the operation properties object if it doesn't exist
-				if(operation.properties == null) {
-					operation.properties = {};
-				} 
-				operation.properties[URL_PARAMETERS] = urlParams;
-			}
-			
-			// Return remaining non url parameters
-			return nonURLParams;
-		}
 	}
 }
 

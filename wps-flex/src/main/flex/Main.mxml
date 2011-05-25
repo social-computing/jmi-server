@@ -4,11 +4,11 @@
                xmlns:mx="library://ns.adobe.com/flex/mx" 
                minWidth="955" minHeight="600" 
                xmlns:components="com.socialcomputing.wps.components.*"
-               creationComplete="onCreationComplete(event)">
+               creationComplete="onCreationComplete(event)" width="640" height="550">
     <fx:Script>
         <![CDATA[
-			import com.socialcomputing.wps.components.ActionEvent;
 			import com.adobe.serialization.json.JSON;
+			import com.socialcomputing.wps.components.ActionEvent;
 			import com.socialcomputing.wps.services.planservice.PlanService;
 			
 			import mx.controls.Alert;
@@ -16,32 +16,37 @@
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
             
-            // TODO replace by parameter values
-            [Bindable]
-            private var planWidth:int = 640;
-            [Bindable]
-            private var planHeight:int = 480;
-
 			private var planUrl:String = "http://localhost:8080/wps-server/services/engine/";
             private var planName:String = "Xml_sample";
-            private var entityId:int = 5;
             
             private var planService:PlanService = new PlanService(planUrl);
 			
             protected function onCreationComplete(event:FlexEvent):void
             {
-                planService.showBusyCursor = true;
-                getPlanResult.token = planService.getPlan(planName, "5");
+                planService.showBusyCursor = true; 
+				var parameters:Object  = new Object();
+				parameters["entityId"] = "5";
+                getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
 				planService.showBusyCursor = false;
             }
 
 			protected function onReady(event:Event):void
 			{
-//				Alert.show( "Ready");
+				status.text = "C'est bon !!!";
 			}
 			protected function onAction(event:ActionEvent):void
 			{
-				Alert.show( event.action + ": " + event.args.toString());
+				trace( event.action + ": " + event.args.toString());
+				var parameters:Object  = new Object();
+				if( event.action == "NewWin") {
+					parameters["entityId"] = event.args[0];
+					getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
+				}
+				if( event.action == "Discover") {
+					parameters["attributeId"] = event.args[0];
+					parameters["analysisProfile"] = "DiscoveryProfile";
+					getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
+				}
 			}
 	]]>
     </fx:Script>
@@ -55,7 +60,8 @@
         <s:VerticalLayout gap="20" />
     </s:layout>
     <s:Label text="Cartographie WPS :" />
-	<components:PlanComponent width="{planWidth}" height="{planHeight}" dataProvider="{getPlanResult.lastResult}" 
+	<components:PlanComponent id="map" width="640" height="480" 
+							  dataProvider="{getPlanResult.lastResult}" 
 							  ready="onReady(event);"
 							  status="status.text = event.status;"
 							  action="onAction(event);" 

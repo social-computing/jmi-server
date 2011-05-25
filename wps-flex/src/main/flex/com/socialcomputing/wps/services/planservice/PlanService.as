@@ -32,7 +32,6 @@ package com.socialcomputing.wps.services.planservice
 			operation = new mx.rpc.http.Operation(null, "getPlan");
 			operation.url = engineInstance + "/{name}." + jsonFormat;
 			operation.method = "GET";
-			operation.argumentNames = new Array("name", "entityId");;     
 
 			operation.serializationFilter = restSerializationFilter;
 			operation.properties = new Object();
@@ -54,10 +53,14 @@ package com.socialcomputing.wps.services.planservice
 		 *
 		 * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
 		 */
-		public function getPlan(name:String, entityId:String) : mx.rpc.AsyncToken
+		public function getPlan(name:String, width:int, height:int, parameters:Object) : mx.rpc.AsyncToken
 		{
 			var _internal_operation:mx.rpc.AbstractOperation = this.getOperation("getPlan");
-			return _internal_operation.send(name, entityId) ;
+			parameters["name"] = name;
+			parameters["width"] = width;
+			parameters["height"] = height;
+			_internal_operation.arguments = parameters;
+			return _internal_operation.send() ;
 		}
 	}
 }

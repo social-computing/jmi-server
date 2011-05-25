@@ -29,7 +29,6 @@ package com.socialcomputing.wps.components
 	import mx.controls.Alert;
 	import mx.controls.Image;
 	import mx.controls.Menu;
-	import mx.controls.treeClasses.DefaultDataDescriptor;
 	import mx.events.MenuEvent;
 	import mx.managers.CursorManager;
 	
@@ -155,6 +154,9 @@ package com.socialcomputing.wps.components
 				return;
 			}
 			
+			this._ready = false;
+			showStatus( "" );
+			
 			// CursorManager.setBusyCursor();
 			if(value is PlanContainer) {
 				this._dataProvider = value as PlanContainer;
@@ -250,14 +252,13 @@ package com.socialcomputing.wps.components
 				plan.init();
 				plan.resize(size);
 
-				_ready = true;
+				this._ready = true;
 		
 			}
 			catch(error:Error) {
 				trace( error.getStackTrace());	
 			}
 				
-			// showStatus( "" );
 			//CursorManager.removeBusyCursor();
 			
 			/*
