@@ -8,6 +8,7 @@ package com.socialcomputing.wps.script  {
     import flash.display.Loader;
     import flash.display.Sprite;
     import flash.events.Event;
+    import flash.events.IOErrorEvent;
     import flash.external.ExternalInterface;
     import flash.geom.ColorTransform;
     import flash.geom.Point;
@@ -452,71 +453,59 @@ package com.socialcomputing.wps.script  {
          * @param center		This shape center before the transformation.
          */
         public function drawImage(applet:PlanComponent, s:Sprite, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
-            if ( isDefined( SCALE_VAL ))    // else it is just a void frame
-            {
+            if ( isDefined( SCALE_VAL )) {   // else it is just a void frame
                 var medias:Array = applet.env.m_medias;
                 var scaledImg:Image;
                 var image:Image = medias[imageNam];
                 
-                if ( image == null )
-                {
+                if ( image == null ) {
                     var ldr:Loader = new Loader();
                     //var baseUrl = "http://10.0.2.2:8080";
                     var baseUrl = "http://localhost:8080";
-                    //trace(ldr.contentLoaderInfo.url);
                     var urlReq:URLRequest = new URLRequest(baseUrl + imageNam);
                     
                     ldr.contentLoaderInfo.addEventListener(Event.COMPLETE,loaderCompleteHandler);
-                    function loaderCompleteHandler(e:Event):void{
+                    ldr.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+                    function loaderCompleteHandler(e:Event):void {
                         trace('Image has loaded.');
+                        var p:Point= getCenter( zone );
+                        var shapePos    = new Point();
+                        var scale:Number= getShapePos( zone, transfo, center, p, shapePos );
+                        var x:int;
+                        var y:int;
+                        var imgWid:int = ldr.width;
+                        var w:int = imgWid;
+                        
+                        if ( scale > 0.) {    // disk
+                            w = int(( 1.414 * scale ));
+                        }
+                        
+                        if ( imgWid != w ) {
+                            imageNam    += w;
+                            scaledImg   = Image(medias[imageNam]);
+                            
+                            if ( scaledImg == null ) {
+                                ldr.scaleX = w / ldr.width;
+                                ldr.scaleY = w / ldr.height;
+                                medias[imageNam] = scaledImg;
+                            }
+                        }
+                        
+                        w >>= 1;
+                        ldr.x = p.x + shapePos.x - w;
+                        ldr.y = p.y + shapePos.y - w;
                         s.addChild(ldr);
                     }
                     
-                    /*image   = applet.getImage( applet.getCodeBase(), imageNam );
-                    applet.prepareImage( image, applet );*/
-                    medias.push( imageNam, image);
-                    
-                }
-                
-                var p:Point= getCenter( zone );
-                var shapePos    = new Point();
-                var scale:Number= getShapePos( zone, transfo, center, p, shapePos );
-                var x:int;
-                var y:int;
-                //var imgWid:int = image.getWidth( null );
-                var imgWid:int = ldr.width;
-                var w:int = imgWid;
-                
-                if ( scale > 0.)    // disk
-                {
-                    w = int(( 1.414 * scale ));
-                }
-                
-                if ( imgWid != w )
-                {
-                    imageNam    += w;
-                    scaledImg   = Image(medias[ imageNam ]);
-                    
-                    if ( scaledImg == null )
-                    {
-                        //scaledImg   = image.getScaledInstance( w, w, Image.SCALE_AREA_AVERAGING );
-                        //applet.prepareImage( scaledImg, applet );
-                        medias[imageNam] = scaledImg;
+                    function ioErrorHandler(event:IOErrorEvent):void {
+                        trace("Impossible de charger l'image: " + urlReq);
                     }
                     
-                    image   = scaledImg;
+                    medias.push(imageNam, image);
+                    
                 }
                 
-                w >>= 1;
-                x = p.x + shapePos.x - w;
-                y = p.y + shapePos.y - w;
-                
-                //g.drawImage( image, x, y, applet );
-                
-                //s.addChild(ldr);
-                ldr.x = x;
-                ldr.y = y;
-                ldr.load(urlReq);
+                ldr.load(urlReq);   
             }
         }
         
