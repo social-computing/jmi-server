@@ -68,7 +68,7 @@ package com.socialcomputing.serializers
 					var parameters:Object = operation.properties[URL_PARAMETERS_NAMES];
 					for(var parameterName:String in parameters){
 						var parameterPattern:String = PARAM_BEGIN_TOKEN + parameters[parameterName] + PARAM_END_TOKEN;
-						if(url.indexOf(parameterName) != -1) {
+						if(url.indexOf(parameterPattern) != -1) {
 							url = url.replace(new RegExp(parameterPattern, "//g"), operation.arguments[parameters[parameterName]]);
 						}
 					}

@@ -19,8 +19,6 @@ package com.socialcomputing.wps.services.planservice
 	public class PlanService extends HTTPMultiService {
  		
 		private static var restSerializationFilter:JSONSerializationFilter = new JSONSerializationFilter();
-		private static var engineInstance:String = "0";
-		private static var jsonFormat:String = "json";
 
 		// Initialize service control
 		// "http://192.168.111.12:8180/wps/services/engine/"
@@ -30,12 +28,12 @@ package com.socialcomputing.wps.services.planservice
 			var operation:mx.rpc.http.Operation;
 
 			operation = new mx.rpc.http.Operation(null, "getPlan");
-			operation.url = engineInstance + "/{name}." + jsonFormat;
+			operation.url = "services/engine/{client}/{name}.json";
 			operation.method = "GET";
 
 			operation.serializationFilter = restSerializationFilter;
 			operation.properties = new Object();
-			operation.properties[RESTSerializationFilter.URL_PARAMETERS_NAMES] = ["name"];
+			operation.properties[RESTSerializationFilter.URL_PARAMETERS_NAMES] = ["name", "client"];
 			operation.resultType = Object;
 			operations.push(operation);
 			this.operationList = operations;  
@@ -57,6 +55,7 @@ package com.socialcomputing.wps.services.planservice
 		{
 			var _internal_operation:mx.rpc.AbstractOperation = this.getOperation("getPlan");
 			parameters["name"] = name;
+			parameters["client"] = "0";
 			parameters["width"] = width;
 			parameters["height"] = height;
 			_internal_operation.arguments = parameters;

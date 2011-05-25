@@ -16,7 +16,7 @@
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
             
-			private var planUrl:String = "http://localhost:8080/wps-server/services/engine/";
+			private var planUrl:String = "http://localhost:8080/wps-server";
             private var planName:String = "Xml_sample";
             
             private var planService:PlanService = new PlanService(planUrl);
