@@ -49,6 +49,7 @@ package com.socialcomputing.wps.components
 		include "../script/Version.as"
 		
 		private var _dataProvider:PlanContainer = null;
+		private var _backgroundColor:int = 0xFFFFFF;
 		private var _nodes:Array = null;
 		private var _curPos:Point= new Point();
 		private var _ready:Boolean = false;
@@ -85,6 +86,16 @@ package com.socialcomputing.wps.components
 			addEventListener(MouseEvent.DOUBLE_CLICK, mouseDoubleClickHandler);
 		}
 		
+		public function get backgroundColor():int
+		{
+			return _backgroundColor;
+		}
+
+		public function set backgroundColor(value:int):void
+		{
+			_backgroundColor = value;
+		}
+
 		public function get ready():Boolean {
 			return plan != null && _ready;
 		}			
@@ -153,10 +164,14 @@ package com.socialcomputing.wps.components
 		
 		public function set dataProvider(value:Object):void
 		{
+			this._onScreen = new BitmapData(this.width, this.height);
+			this._offScreen = new BitmapData(this.width, this.height);
+			this._drawingSurface.addChild(new Bitmap(this._onScreen));
+			
 			// If the given value is null return for now
 			// TODO : If the local plancontainer is set, reset objects 
 			if(value == null) {
-				//clear();
+				clear();
 				return;
 			}
 			
@@ -179,9 +194,6 @@ package com.socialcomputing.wps.components
 			try {
 				// TODO : Handle this properly
 			    // Should manage the onScreen object each time the service is called
-				this._onScreen = new BitmapData(this.width, this.height);
-				this._offScreen = new BitmapData(this.width, this.height);
-				this._drawingSurface.addChild(new Bitmap(this._onScreen));
 				
 				/*
                 /* DEBUT TEST */
@@ -281,9 +293,9 @@ package com.socialcomputing.wps.components
 		}
 
 		public function clear():void {
-			showStatus( "" );
+			//showStatus( "" );
 			this.clearDrawingSurface( this._restDrawingSurface);
-			this._restDrawingSurface.graphics.beginFill( this._ready ? this.env.m_inCol.m_color : 0xFFFFFF);
+			this._restDrawingSurface.graphics.beginFill( this._ready ? this.env.m_inCol.m_color : this._backgroundColor);
 			this._restDrawingSurface.graphics.drawRect(0, 0, this.width, this.height);
 			this._restDrawingSurface.graphics.endFill();
 			this._dataProvider = null;

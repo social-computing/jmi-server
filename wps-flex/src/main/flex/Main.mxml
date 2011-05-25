@@ -61,11 +61,11 @@
         <s:VerticalLayout gap="20" />
     </s:layout>
     <s:Label text="Cartographie WPS :" />
-	<components:PlanComponent id="map" width="640" height="480" 
+	<components:PlanComponent id="map" width="640" height="480" backgroundColor="#7F9FDF"
 							  dataProvider="{getPlanResult.lastResult}" 
 							  ready="onReady(event);"
 							  status="status.text = event.status;"
 							  action="onAction(event);" 
 	/>
-	<s:Label id="status" />
+	<s:Label id="status"  backgroundColor="#C6C0C0" width="640" height="17"/>
 </s:Application>
