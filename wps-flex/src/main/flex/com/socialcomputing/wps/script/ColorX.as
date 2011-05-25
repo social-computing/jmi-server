@@ -27,18 +27,9 @@ package com.socialcomputing.wps.script  {
         public  var m_scolor:String= null;
         
         // default constructor
-        public function ColorX() {
-            
-        }
-        
-        /**
-         * Creates a new ColorX using an int in ARGB format.
-         * @param color	The raw ARGB color.
-         */
-        /*public function ColorX(color:int)
-        {
+        public function ColorX( color:int=0) {
             m_color = color;
-        }*/
+        }
         
         /**
          * Creates a new ColorX using swatch properties.

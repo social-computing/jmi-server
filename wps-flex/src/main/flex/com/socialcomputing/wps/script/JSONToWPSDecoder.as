@@ -65,8 +65,7 @@ package com.socialcomputing.wps.script
 		}
 		
 		private static function toColorX(json:Object):ColorX {
-			var color:ColorX = new ColorX();
-			color.m_color = json.color;
+			var color:ColorX = new ColorX( json.color);
 			if( json.hasOwnProperty("scolor"))
 				color.m_scolor = json.scolor;
 			return color;
