@@ -891,8 +891,8 @@ package com.socialcomputing.wps.script{
             {
                 var black:ColorTransform = new ColorTransform();
                 black.color = 0x000000;
-                //var colors:Array = [m_inCol.color, black.color];
-				var colors:Array = ["0xFF0000", "0x0000FF"];
+                var colors:Array = [m_inCol.color, black.color];
+				//var colors:Array = ["0xFF0000", "0x0000FF"];
                 var alphas:Array = [1, 1];
                 var ratios:Array = [0, 255];
 				s.graphics.lineStyle();
@@ -917,7 +917,7 @@ package com.socialcomputing.wps.script{
                 }
             }
             
-            if ( false)//n==1) // draw reflection only for one line boxes
+            if ( n==1) // draw reflection only for one line boxes
             {
                 var white:ColorTransform = new ColorTransform();
                 white.color = 0xFFFFFF;
