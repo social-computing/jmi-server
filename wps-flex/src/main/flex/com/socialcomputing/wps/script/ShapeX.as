@@ -495,6 +495,7 @@ package com.socialcomputing.wps.script  {
                         ldr.x = p.x + shapePos.x - w;
                         ldr.y = p.y + shapePos.y - w;
                         s.addChild(ldr);
+                        applet.invalidateDisplayList();
                     }
                     
                     function ioErrorHandler(event:IOErrorEvent):void {
@@ -506,6 +507,7 @@ package com.socialcomputing.wps.script  {
                 }
                 
                 ldr.load(urlReq);
+                
             }
         }
         

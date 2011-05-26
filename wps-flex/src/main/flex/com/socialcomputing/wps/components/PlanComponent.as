@@ -202,9 +202,9 @@ package com.socialcomputing.wps.components
 			 * is invoked after all scripts have finished executing.
 			 */
 			this.invalidateProperties();
-			this.invalidateDisplayList();		
-			if( ready)
-				dispatchEvent(new Event( "ready"));
+			this.invalidateDisplayList();
+			if(ready)
+				dispatchEvent(new Event("ready"));
 			else
 				dispatchEvent(new Event( "error"));
 		}
