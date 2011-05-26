@@ -412,7 +412,8 @@ package com.socialcomputing.wps.script{
             
             var textTok:TextToken= new TextToken();
             
-            textTok.m_color = new ColorTransform( m_color );
+            textTok.m_color = new ColorTransform();
+			textTok.m_color.color = m_color;
             textTok.m_font  = font;
             
             m_curTok            = new FormatToken();
@@ -679,7 +680,8 @@ package com.socialcomputing.wps.script{
                     m_tokens.push( m_curTok );
                     
                     textTok = new TextToken();
-                    textTok.m_color = new ColorTransform( m_color );
+                    textTok.m_color = new ColorTransform();
+					textTok.m_color.color = m_color;
                     textTok.m_font  = new TextFormat();
                     textTok.m_font.font = m_name;
                     textTok.m_font.size = m_size;
@@ -889,9 +891,11 @@ package com.socialcomputing.wps.script{
             {
                 var black:ColorTransform = new ColorTransform();
                 black.color = 0x000000;
-                var colors:Array = [m_inCol.color, black.color];
+                //var colors:Array = [m_inCol.color, black.color];
+				var colors:Array = ["0xFF0000", "0x0000FF"];
                 var alphas:Array = [1, 1];
                 var ratios:Array = [0, 255];
+				s.graphics.lineStyle();
                 s.graphics.beginGradientFill(GradientType.LINEAR, colors, alphas, ratios);
                 s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 10, 10);
                 s.graphics.endFill();
@@ -913,7 +917,7 @@ package com.socialcomputing.wps.script{
                 }
             }
             
-            if ( n==1) // draw reflection only for one line boxes
+            if ( false)//n==1) // draw reflection only for one line boxes
             {
                 var white:ColorTransform = new ColorTransform();
                 white.color = 0xFFFFFF;
