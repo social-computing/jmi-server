@@ -87,9 +87,8 @@ package com.socialcomputing.wps.script  {
         public var m_curData:Vector.<SatData>;
         
         /**
-         * HTMLText Hashtable to avoid unnecessary calcs.
+         * HTMLText dictionary to avoid unnecessary calcs.
          */
-        [transient]
         public var m_datas:Dictionary;
         
 		
