@@ -65,8 +65,9 @@ package com.socialcomputing.wps.components
 		private var _onScreen:BitmapData;
 		private var _offScreen:BitmapData;
 		private var _drawingSurface:SpriteVisualElement;
-		private var _curDrawingSurface:Sprite;
 		private var _restDrawingSurface:Sprite; // Holds the initial state of the map 
+		private var _backDrawingSurface:Sprite; 
+		private var _curDrawingSurface:Sprite;
 		
 		public function PlanComponent()
 		{
@@ -78,6 +79,7 @@ package com.socialcomputing.wps.components
 
 			this._curDrawingSurface = new Sprite();
 			this._restDrawingSurface = new Sprite();
+			this._backDrawingSurface = new Sprite();
 		
 			addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
 			addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
@@ -86,6 +88,11 @@ package com.socialcomputing.wps.components
 			addEventListener(MouseEvent.DOUBLE_CLICK, mouseDoubleClickHandler);
 		}
 		
+		public function get backDrawingSurface():Sprite
+		{
+			return _backDrawingSurface;
+		}
+
 		public function get backgroundColor():int
 		{
 			return _backgroundColor;
@@ -129,31 +136,11 @@ package com.socialcomputing.wps.components
 			return _restDrawingSurface;
 		}
 		
-/*		public function get backImg():Image
-		{
-			return _backImg;
-		}
-*/		
-/*		public function get restImg():Image
-		{
-			return _restImg;
-		}
-*/		
 		public function get backImgUrl():String
 		{
 			return _backImgUrl;
 		}
 		
-/*		public function set backImg(value:Image):void
-		{
-			_backImg = value;
-		}
-*/		
-/*		public function set restImg(value:Image):void
-		{
-			_restImg = value;
-		}
-*/		
 		public function get curPos():Point {
 			return _curPos;
 		}
@@ -188,78 +175,8 @@ package com.socialcomputing.wps.components
 
 			var needPrint:Boolean = false; // Later
 			_dataProvider.env.init( this, needPrint);
-/*			m_backImg	= createImage( m_size.width, m_size.height );
-			m_restImg	= createImage( m_size.width, m_size.height );
-*/
+
 			try {
-				// TODO : Handle this properly
-			    // Should manage the onScreen object each time the service is called
-				
-				/*
-                /* DEBUT TEST */
-                //this._backTextSurface = new Sprite();
-                
-                /* var textfield:TextField = new TextField();
-                textfield.text = "text";
-
-                textfield.x = 20;
-                textfield.y = 20;
-                _backDrawingSurface.addChild(textfield);*/
-                
-				// Creating a fake BagZone as a parent zone for the following slice
-				/*var bagZone:BagZone = new BagZone(null);
-				bagZone.m_props = new Array();
-				bagZone.m_props[2] = 1;
-					
-					
-                // Definition de couleurs
-                var red:ColorX= new ColorX();
-                red.m_color = 0xFF0000;
-                var black:ColorX = new ColorX();
-                black.m_color = 0x000000;
-				// Creating a fake Shape to render in the following slice
-				var points:Array = new Array();
-				
-				// Test with 1 point
-				//points[0] = new Point(15, 15);
-				
-				// Test with 2 points
-				points[0] = new Point(15, 15);
-				points[1] = new Point(30, 30);
-				
-				var shape:ShapeX = new ShapeX();
-				shape.m_containers = new Array();
-				shape.m_containers[ShapeX.SCALE_VAL] = new VContainer(1, false);
-				shape.m_containers[ShapeX.POLYGON_VAL] = new VContainer(points, false);
-
-				// Creating the slice to display
-				var slice:Slice = new Slice();
-				slice.m_containers = new Array();			
-                slice.m_containers[Slice.IN_COL_VAL] = new VContainer(red, false);
-				*/
-/*				slice.paint(this,                               // Le plan component courant
-						    this._backDrawingSurface.graphics,  // La zone graphique dans laquelle dessiner
-							bagZone, 							// Zone parente du slice
-							bagZone,                            // Zone ?????
-							shape,                              // Shape à dessiner : pq, elle ne fait pas directement partie du SLICE ???
-							new Point(10, 10),                  // Centre d'un satellite .... ????
-							new Point(10, 10));                  // Centre de la sone parente ?????????
-	*/			
-
-				/*
-				var slices:Vector.<Slice> = new Vector.<Slice>();
-				slices.push(slice);
-				var satellite:Satellite = new Satellite(shape, slices);
-                var satData:SatData = new SatData();
-                satData.m_flags = Satellite.LINK_BIT;
-                satellite.m_containers = new Array();
-                satellite.m_containers[Satellite.LINK_DRK_COL_VAL] = new VContainer(red, false);
-                satellite.m_containers[Satellite.LINK_LIT_COL_VAL] = new VContainer(black, false);
-				satellite.paint(this, this._backDrawingSurface.graphics, bagZone, new Point(20, 20), new Point(40, 50), true, satData, Satellite.BASE_TYP);
-				
-                this._ready = true;*/
-                /* FIN TEST */
-                
 				plan.m_applet = this;
 				plan.m_curSel = -1;
 				plan.initZones(this.restDrawingSurface, plan.m_links, true);

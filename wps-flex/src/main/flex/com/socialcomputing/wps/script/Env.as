@@ -1,14 +1,15 @@
 package com.socialcomputing.wps.script  {
+    import com.socialcomputing.wps.components.PlanComponent;
+    
+    import flash.display.BitmapData;
     import flash.display.Graphics;
     import flash.display.Loader;
-	import flash.display.Shape;
-	
     import flash.geom.ColorTransform;
     import flash.geom.Rectangle;
     
     import mx.controls.Image;
-	
-	import com.socialcomputing.wps.components.PlanComponent;
+    
+    import org.osmf.layout.AbsoluteLayoutFacet;
 
 /**
  * <p>Title: Env</p>
@@ -197,60 +198,5 @@ public class Env
 		m_medias.length = 0;
 	}
 
-	/**
-	 * Apply a half transparent color over an image.
-	 * This is achieved by drawing 45� lines every 2 pixels.
-	 * @param image		The image to cover.
-	 * @param dim		size of the image.
-	 */
-	public function filterImage( shape:Shape, dim:Dimension):void {
-		if ( m_filterCol != null )
-		{
-			var col:ColorTransform= m_filterCol.getColor();
-            //TODO 
-			//image.alpha = 0.5; 
-			var g:Graphics= shape.graphics;
-
-			// TODO
-			//g.setColor( col );
-
-			var w:int= dim.width - 1,
-				h:int = dim.height - 1,
-				min:int = Math.min( w, h ),
-				i:int, j:int, n:int = min + 2;
-
-			for ( i = 1, j =( w + h + 1)% 2; i < n; i += 2, j += 2)
-			{
-				//g.drawLine( 0, i, i, 0);
-				g.moveTo(0, i);
-				g.lineTo(i, 0);
-				//g.drawLine( w - j, h, w, h - j );
-				g.moveTo(w - j, h);
-				g.lineTo(w, h-j);
-			}
-			if ( w > h )
-			{
-				n = w - min;
-
-				for ( i = 1+( h % 2); i < n; i += 2)
-				{
-					//g.drawLine( i, h, min + i, 0);
-					g.moveTo(i, h);
-					g.lineTo(min+i, 0);
-				}
-			}
-			else
-			{
-				n = h - min;
-
-				for ( i = 1+( w % 2); i < n; i += 2)
-				{
-					//g.drawLine( w, i, 0, min + i );
-					g.moveTo(w, i);
-					g.lineTo(0, min + i);
-				}
-			}
-		}
-	}
-}
+ }
 }

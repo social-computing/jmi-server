@@ -173,12 +173,12 @@ package com.socialcomputing.wps.script  {
             var dim:Dimension= m_applet.size;
             var restDrawingSurface:Sprite = m_applet.restDrawingSurface;
 			var curDrawingSurface:Sprite  = m_applet.curDrawingSurface;
+			var backDrawingSurface:Sprite = m_applet.backDrawingSurface;
 
-            //restGfx.clear();
-            
             // If there is any background image, load it
             //if (m_applet.backImgUrl != null)
                 //renderBitmap( restGfx, m_applet.m_backImgUrl, 0, 0, null );
+			
 			this.m_applet.clearDrawingSurface(restDrawingSurface);
 			restDrawingSurface.graphics.beginFill( this.m_applet.env.m_inCol.m_color);
 			restDrawingSurface.graphics.drawRect(0, 0, this.m_applet.width, this.m_applet.height);
@@ -195,9 +195,12 @@ package com.socialcomputing.wps.script  {
 			paintZones(restDrawingSurface, m_nodes, m_nodesCnt, false, Satellite.ALL_TYP, true, true );
             
             // Filters backImg so it looks ghosted
-			// TODO
-			// m_applet.renderShape( m_applet.restDrawingSurface, 0, 0); // ??? size
-			//m_applet.env.filterImage(m_applet.backDrawingSurface, dim);
+			if( this.m_applet.env.m_filterCol != null) {
+				ImageUtil.copy( restDrawingSurface, backDrawingSurface);
+				ImageUtil.filterImage( backDrawingSurface, dim, this.m_applet.env.m_filterCol.getColor().color);
+				// m_applet.renderShape( m_applet.restDrawingSurface, 0, 0); // ??? size
+				//m_applet.env.filterImage(m_applet.backDrawingSurface, dim);
+			}
             
             // Finish drawing restImg with places parts that are allways visible (tip, sel...)
 			paintZones(restDrawingSurface, m_links, m_links.length, true, Satellite.BASE_TYP, true, false );
@@ -231,17 +234,17 @@ package com.socialcomputing.wps.script  {
             	parent:ActiveZone = m_curZone != null ? m_curZone.getParent() : null;
             
 			// TODO : See how to set that graphics item
-			var s:Sprite = m_applet.curDrawingSurface;
+			//var s:Sprite = m_applet.backDrawingSurface; //curDrawingSurface;
             var i:int;
             
 			// Check if there is a current Active Zone (Satellite ?)
             if(m_curSat != null) {
-                curSat = m_curZone.m_curSwh.getSatAt(m_applet, s.graphics, parent, p, true);
+                curSat = m_curZone.m_curSwh.getSatAt(m_applet, m_applet.curDrawingSurface.graphics, parent, p, true);
                 
 				// The cursor is in the current Zone
                 if (curSat != null) {
 					//Alert.show("a current zone is hovered");
-                    return updateCurrentZone(s, curSat, p);
+                    return updateCurrentZone( m_curZone is BagZone ? m_applet.backDrawingSurface : m_applet.curDrawingSurface, curSat, p);
                 }
             }
             
@@ -251,12 +254,12 @@ package com.socialcomputing.wps.script  {
                 
 				// We know p is not in curZone so don't test it!
                 if (zone != parent) {
-                    curSat = zone.m_restSwh.getSatAt(m_applet, s.graphics, zone, p, false);
+                    curSat = zone.m_restSwh.getSatAt(m_applet, m_applet.curDrawingSurface.graphics, zone, p, false);
                     
 					// The cursor is on this node
                     if(curSat != null) {
 						//Alert.show("an inactive zone is hovered")
-                        return updateCurrentZone(s, curSat, p);
+                        return updateCurrentZone(zone is BagZone ? m_applet.backDrawingSurface : m_applet.curDrawingSurface, curSat, p);
                     }
                 }
             }
@@ -270,19 +273,19 @@ package com.socialcomputing.wps.script  {
                 if (zone != parent && zone.m_curSwh != null) {                                                
 					
 					// If this zone has no current Swatch, it can't be current.
-                    curSat = zone.m_restSwh.getSatAt(m_applet, s.graphics, zone, p, false );
+                    curSat = zone.m_restSwh.getSatAt(m_applet, m_applet.curDrawingSurface.graphics, zone, p, false );
                     
 					// The cursor is on this link
                     if (curSat != null) {
 						//Alert.show("a link is hovered")
-                        return updateCurrentZone(s, curSat, p);
+                        return updateCurrentZone(zone is BagZone ? m_applet.backDrawingSurface : m_applet.curDrawingSurface, curSat, p);
                     }
                 }
             }
             
             // Last case, the cursor is not in a Zone
             this.m_newZone = null;
-            return updateCurrentZone(s, null, p);
+            return updateCurrentZone( m_applet.curDrawingSurface, null, p);
         }
         
 		

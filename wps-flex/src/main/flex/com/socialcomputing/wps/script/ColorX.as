@@ -56,7 +56,9 @@ package com.socialcomputing.wps.script  {
          * @return	a new Color equivalent to this.
          */
         public function getColor():ColorTransform {
-            return new ColorTransform( m_color );
+            var color:ColorTransform = new ColorTransform();
+			color.color = m_color;
+			return color;
         }
         
 		public function getColor2(props:Array):ColorTransform {
