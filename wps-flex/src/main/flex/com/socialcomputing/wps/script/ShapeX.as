@@ -79,17 +79,17 @@ package com.socialcomputing.wps.script  {
             if ( isDefined( SCALE_VAL ))    // else it is just a void frame
             {
                 var p:Point;
-                var scale:Number= getFloat( SCALE_VAL, zone.m_props );
+                var scale:Number = getFloat(SCALE_VAL, zone.m_props);
                 var x:int;
                 var y:int;
                 
-                scale   *= transfo.m_pos;
-                p       = getCenter( zone );
+                scale *= transfo.m_pos;
+                p     = getCenter(zone);
                 
-                x = p.x + int(( scale * Math.cos( transfo.m_dir )));
-                y = p.y + int(( scale * Math.sin( transfo.m_dir )));
+                x = p.x + Math.floor(scale * Math.cos( transfo.m_dir ));
+                y = p.y + Math.floor(scale * Math.sin( transfo.m_dir ));
                 
-                return new Point( x, y );
+                return new Point(x, y);
             }
             
             return null;
@@ -266,7 +266,7 @@ package com.socialcomputing.wps.script  {
                 //Float alpha = slice.getFloat(prop, props);
                 */
                 
-                var points:Array = getValue(POLYGON_VAL, supZone.m_props ) as Array;
+                var points:Array = getValue(POLYGON_VAL, supZone.m_props) as Array;
                 var p:Point = points[0] as Point;
                 var shapePos:Point = new Point();
                 var n:int = points.length;
@@ -316,13 +316,27 @@ package com.socialcomputing.wps.script  {
                         g.setComposite(composite);*/
                         
                         // Half size value .... need to find why ... 
-                        size >>= 1;
+                        //size >>= 1;
                         
                         var fromPoint:Point = (points[0] as Point).add(shapePos);
                         var toPoint:Point = (points[1] as Point).add(shapePos);
-                        var poly:Polygon = getLinkPoly( supZone, fromPoint, toPoint, size/2 );
-                        
-                        color = slice.getColor( Slice.OUT_COL_VAL, supZone.m_props);
+                        var poly:Polygon = getLinkPoly(supZone, fromPoint, toPoint, size / 2);
+						
+						
+						color = slice.getColor(Slice.OUT_COL_VAL, supZone.m_props);
+						if (color != null) {
+							s.graphics.lineStyle(3, color.color);
+						}
+                        color = slice.getColor(Slice.IN_COL_VAL, supZone.m_props);
+						
+						if (color != null) s.graphics.beginFill(color.color);
+						s.graphics.moveTo( poly.xpoints[poly.npoints-1], poly.ypoints[poly.npoints-1]);
+						for( i = 0 ; i < poly.npoints; ++i) {
+							s.graphics.lineTo( poly.xpoints[i], poly.ypoints[i]);
+						}
+						if (color != null) s.graphics.endFill();
+						
+						/*
                         if ( color != null)     
                         {
                             s.graphics.lineStyle( size + 3, color.color);
@@ -345,6 +359,8 @@ package com.socialcomputing.wps.script  {
                             }
                             s.graphics.endFill();
                         }
+						*/
+						
                         break;
                     }
                 }
@@ -462,7 +478,8 @@ package com.socialcomputing.wps.script  {
                 {
                     var ldr:Loader = new Loader();
                     //var baseUrl = "http://10.0.2.2:8080";
-                    var baseUrl = "http://localhost:8080";
+					var baseUrl = "http://localhost:8080";
+                    
                     //trace(ldr.contentLoaderInfo.url);
                     var urlReq:URLRequest = new URLRequest(baseUrl + imageNam);
                     
