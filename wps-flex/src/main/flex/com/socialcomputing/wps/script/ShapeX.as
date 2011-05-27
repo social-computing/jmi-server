@@ -141,7 +141,7 @@ package com.socialcomputing.wps.script  {
             var points:Array = getValue(POLYGON_VAL, zone.m_props) as Array;
             var shapeCenter:Point   = this.getCenter(zone);
             var shapePosition:Point = new Point();
-            var size:Number = Math.floor(this.getShapePos(zone, transfo, center, shapeCenter, shapePosition));
+            var size:Number = int(this.getShapePos(zone, transfo, center, shapeCenter, shapePosition));
             var nbPoint:int = points.length;
             var ret:Boolean;
             
@@ -201,7 +201,7 @@ package com.socialcomputing.wps.script  {
                 var shapePos:Point = new Point();
                 var rect:Rectangle = null;
                 var n:int          = points.length;
-                var size:Number    = Math.floor(getShapePos(zone, transfo, center, shapeCenter, shapePos));
+                var size:Number    = int(getShapePos(zone, transfo, center, shapeCenter, shapePos));
                 
                 switch (n) {
                     // 1 point = circle => Place
@@ -272,7 +272,7 @@ package com.socialcomputing.wps.script  {
                 var shapePos:Point = new Point();
                 var n:int = points.length;
                 var i:int;
-                var size:Number = Math.floor(getShapePos(supZone, transfo, center, p, shapePos));
+                var size:Number = int(getShapePos(supZone, transfo, center, p, shapePos));
                 var color:ColorTransform;
                 
                 // Manage each case of number of points to draw for this shape
