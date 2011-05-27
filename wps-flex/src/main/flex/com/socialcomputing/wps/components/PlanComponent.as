@@ -164,6 +164,7 @@ package com.socialcomputing.wps.components
 		
 		public function set dataProvider(value:Object):void
 		{
+			this._ready = false;
 			this._onScreen = new BitmapData(this.width, this.height);
 			this._offScreen = new BitmapData(this.width, this.height);
 			this._drawingSurface.addChild(new Bitmap(this._onScreen));
@@ -175,7 +176,6 @@ package com.socialcomputing.wps.components
 				return;
 			}
 			
-			this._ready = false;
 			showStatus( "" );
 			
 			CursorManager.setBusyCursor();
