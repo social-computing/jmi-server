@@ -308,59 +308,28 @@ package com.socialcomputing.wps.script  {
                         break;
                     }
                         
-                        // segment  => Street
+                    // segment  => Street
                     case 2:     
                     {
                         trace("Segment shape detected: ");
                         /*composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f;					
                         g.setComposite(composite);*/
                         
-                        // Half size value .... need to find why ... 
-                        //size >>= 1;
-                        
-                        var fromPoint:Point = (points[0] as Point).add(shapePos);
+						var fromPoint:Point = (points[0] as Point).add(shapePos);
                         var toPoint:Point = (points[1] as Point).add(shapePos);
                         var poly:Polygon = getLinkPoly(supZone, fromPoint, toPoint, size / 2);
 						
-						
 						color = slice.getColor(Slice.OUT_COL_VAL, supZone.m_props);
 						if (color != null) {
-							s.graphics.lineStyle(3, color.color);
+							s.graphics.lineStyle(1, color.color);
 						}
                         color = slice.getColor(Slice.IN_COL_VAL, supZone.m_props);
-						
 						if (color != null) s.graphics.beginFill(color.color);
 						s.graphics.moveTo( poly.xpoints[poly.npoints-1], poly.ypoints[poly.npoints-1]);
 						for( i = 0 ; i < poly.npoints; ++i) {
 							s.graphics.lineTo( poly.xpoints[i], poly.ypoints[i]);
 						}
 						if (color != null) s.graphics.endFill();
-						
-						/*
-                        if ( color != null)     
-                        {
-                            s.graphics.lineStyle( size + 3, color.color);
-                            s.graphics.beginFill( color.color);
-                            s.graphics.moveTo( poly.xpoints[poly.npoints-1], poly.ypoints[poly.npoints-1]);
-                            for( i = 0 ; i < poly.npoints; ++i) {
-                                s.graphics.lineTo( poly.xpoints[i], poly.ypoints[i]);
-                            }
-                            s.graphics.endFill();
-                        }
-                        
-                        color = slice.getColor( Slice.IN_COL_VAL, supZone.m_props);
-                        if ( color != null)
-                        {
-                            s.graphics.lineStyle( size, color.color);
-                            s.graphics.beginFill( color.color);
-                            s.graphics.moveTo( poly.xpoints[poly.npoints-1], poly.ypoints[poly.npoints-1]);
-                            for( i = 0 ; i < poly.npoints; ++i) {
-                                s.graphics.lineTo( poly.xpoints[i], poly.ypoints[i]);
-                            }
-                            s.graphics.endFill();
-                        }
-						*/
-						
                         break;
                     }
                 }
