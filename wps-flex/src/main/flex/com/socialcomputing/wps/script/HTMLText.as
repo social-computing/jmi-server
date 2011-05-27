@@ -893,8 +893,7 @@ package com.socialcomputing.wps.script{
             {
                 var black:ColorTransform = new ColorTransform();
                 black.color = 0x000000;
-                //var colors:Array = [m_inCol.color, black.color];
-				var colors:Array = [0xFF0000, 0x0000FF];
+                var colors:Array = [m_inCol.color, black.color];
                 var alphas:Array = [1, 1];
                 var ratios:Array = [0x00, 0xFF];
 				if ( m_outCol != null )
@@ -902,11 +901,10 @@ package com.socialcomputing.wps.script{
 				else
 					s.graphics.lineStyle();
 				var matr:Matrix = new Matrix();
-				matr.createGradientBox(m_bounds.width, m_bounds.height, 0, 0, 0);
+				matr.createGradientBox(m_bounds.width, m_bounds.height * 2, Math.PI / 2, pos.x, pos.y);
                 s.graphics.beginGradientFill(GradientType.LINEAR, colors, alphas, ratios, matr, SpreadMethod.PAD);
-				s.graphics.drawCircle(pos.x + m_bounds.width / 2, pos.y, m_bounds.height); // Test
                 s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 10, 10);
-                //s.graphics.endFill();
+                s.graphics.endFill();
            }
             
             for ( i = 0; i < n; i ++ )
