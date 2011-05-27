@@ -11,6 +11,7 @@ package com.socialcomputing.wps.components
 	import com.socialcomputing.wps.script.ShapeX;
 	import com.socialcomputing.wps.script.Slice;
 	import com.socialcomputing.wps.script.VContainer;
+	import com.socialcomputing.wps.util.controls.ImageUtil;
 	import com.socialcomputing.wps.util.shapes.RectangleUtil;
 	
 	import flash.display.Bitmap;
@@ -65,8 +66,20 @@ package com.socialcomputing.wps.components
 		private var _onScreen:BitmapData;
 		private var _offScreen:BitmapData;
 		private var _drawingSurface:SpriteVisualElement;
-		private var _restDrawingSurface:Sprite; // Holds the initial state of the map 
+		
+		/**
+		 * Image used to quickly restore the aspect of a zone that is no longer current.
+		 * It includes the background + links + Satellites of each place at rest.
+		 */
+		private var _restDrawingSurface:Sprite;  
+
+		/**
+		 * Image used as a background on which the current zone is drawn.
+		 * It includes the background, and the zones rendered with their 'ghosted' satellites form the rest swatch.
+		 * The resulting image is then filtered with a transparency color.
+		 */
 		private var _backDrawingSurface:Sprite; 
+
 		private var _curDrawingSurface:Sprite;
 		
 		public function PlanComponent()
@@ -211,7 +224,7 @@ package com.socialcomputing.wps.components
 
 		public function clear():void {
 			//showStatus( "" );
-			this.clearDrawingSurface( this._restDrawingSurface);
+			ImageUtil.clear( this._restDrawingSurface);
 			this._restDrawingSurface.graphics.beginFill( this._ready ? this.env.m_inCol.m_color : this._backgroundColor);
 			this._restDrawingSurface.graphics.drawRect(0, 0, this.width, this.height);
 			this._restDrawingSurface.graphics.endFill();
@@ -367,14 +380,6 @@ package com.socialcomputing.wps.components
 			_onScreen.copyPixels(this._offScreen, sourceZone, position);
 
 			trace("renderShape method end");
-		}
-
-		
-		public function clearDrawingSurface(s:Sprite):void {
-			s.graphics.clear();
-			while(s.numChildren != 0) {
-				s.removeChildAt(0);
-			}
 		}
 	}
 }

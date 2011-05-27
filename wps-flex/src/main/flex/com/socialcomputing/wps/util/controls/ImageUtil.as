@@ -13,6 +13,13 @@ package com.socialcomputing.wps.util.controls
 	 * contructor overload limitations : on class can only have one constructor signature. 
 	 */
 	public class ImageUtil {
+
+		public static function clear(s:Sprite):void {
+			s.graphics.clear();
+			while(s.numChildren != 0) {
+				s.removeChildAt(0);
+			}
+		}
 		
 		public static function copy(src:Sprite, dst:Sprite):void {
 			dst.graphics.copyFrom( src.graphics);

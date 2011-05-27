@@ -19,6 +19,6 @@ package com.socialcomputing.wps.script  {
          * @param applet    WPSApplet owning this zone.
          * @param g         A Graphics on which this must be painted.
          */
-        function paintCur(applet:PlanComponent, s:Sprite):void ;
+        function paintCur(applet:PlanComponent):void ;
     }
 }

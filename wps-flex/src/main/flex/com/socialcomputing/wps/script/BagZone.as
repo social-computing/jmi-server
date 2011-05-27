@@ -1,11 +1,14 @@
 package com.socialcomputing.wps.script  {
     import com.socialcomputing.wps.components.PlanComponent;
+    import com.socialcomputing.wps.util.controls.ImageUtil;
     
     import flash.display.Graphics;
     import flash.display.Sprite;
     import flash.geom.Rectangle;
-    
+	import flash.geom.Point;
+   
     import spark.primitives.Rect;
+	
 
 /**
  * <p>Title: BagZone</p>
@@ -162,17 +165,19 @@ public class BagZone extends ActiveZone implements Activable
 	 * @param g         A Graphics on which this must be painted.
 	 */
     [synchronized]
-	public function paintCur(applet:PlanComponent, s:Sprite):void {
-/*
+	public function paintCur(applet:PlanComponent):void {
+		/*
 		bufGfx.drawImage( applet.m_backImg, 0, 0, m_bounds.width, m_bounds.height, m_bounds.x, m_bounds.y, m_bounds.x + m_bounds.width, m_bounds.y + m_bounds.height, null );
-		bufGfx.translate( -m_bounds.x, -m_bounds.y );
-		m_curSwh.paint( applet, bufGfx, this, true, true, Satellite.ALL_TYP, true );
+		bufGfx.translate( -m_bounds.x, -m_bounds.y );*/
+		// TODO restreindre la copie au rectangle
+		ImageUtil.copy( applet.backDrawingSurface, applet.curDrawingSurface); 
+		m_curSwh.paint( applet, applet.curDrawingSurface, this, true, true, Satellite.ALL_TYP, true);
+		/*
 		bufGfx.translate( m_bounds.x, m_bounds.y );
 		g.setClip( m_bounds.x, m_bounds.y, m_bounds.width, m_bounds.height );
 		g.drawImage( applet.m_plan.m_blitBuf, m_bounds.x, m_bounds.y, null );
 */
-
-		m_curSwh.paint(applet, s, this, true, true, Satellite.ALL_TYP, true);
+		applet.renderShape( applet.curDrawingSurface, m_bounds.width, m_bounds.height, new Point(m_bounds.x, m_bounds.y));
 	}
 
     public function get m_dir():Number

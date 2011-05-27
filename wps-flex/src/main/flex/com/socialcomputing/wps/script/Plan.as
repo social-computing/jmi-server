@@ -179,7 +179,7 @@ package com.socialcomputing.wps.script  {
             //if (m_applet.backImgUrl != null)
                 //renderBitmap( restGfx, m_applet.m_backImgUrl, 0, 0, null );
 			
-			this.m_applet.clearDrawingSurface(restDrawingSurface);
+			ImageUtil.clear( restDrawingSurface);
 			restDrawingSurface.graphics.beginFill( this.m_applet.env.m_inCol.m_color);
 			restDrawingSurface.graphics.drawRect(0, 0, this.m_applet.width, this.m_applet.height);
 			restDrawingSurface.graphics.endFill();
@@ -211,11 +211,6 @@ package com.socialcomputing.wps.script  {
 			paintZones(restDrawingSurface, m_nodes, m_nodesCnt, true, Satellite.TIP_TYP, false, true );
 			paintZones(restDrawingSurface, m_nodes, m_nodesCnt, true, Satellite.SEL_TYP, false, true );
 			
-			// TODO à suppriler ?
-            //g.setClip( 0, 0, dim.width, dim.height );
-			// TODO Utile ?
-            //g.dispose();
-            //m_applet.render();
         }
 
 		
@@ -233,8 +228,7 @@ package com.socialcomputing.wps.script  {
             var zone:ActiveZone,
             	parent:ActiveZone = m_curZone != null ? m_curZone.getParent() : null;
             
-			// TODO : See how to set that graphics item
-			//var s:Sprite = m_applet.backDrawingSurface; //curDrawingSurface;
+
             var i:int;
             
 			// Check if there is a current Active Zone (Satellite ?)
@@ -244,7 +238,7 @@ package com.socialcomputing.wps.script  {
 				// The cursor is in the current Zone
                 if (curSat != null) {
 					//Alert.show("a current zone is hovered");
-                    return updateCurrentZone( m_curZone is BagZone ? m_applet.backDrawingSurface : m_applet.curDrawingSurface, curSat, p);
+                    return updateCurrentZone( curSat, p);
                 }
             }
             
@@ -259,7 +253,7 @@ package com.socialcomputing.wps.script  {
 					// The cursor is on this node
                     if(curSat != null) {
 						//Alert.show("an inactive zone is hovered")
-                        return updateCurrentZone(zone is BagZone ? m_applet.backDrawingSurface : m_applet.curDrawingSurface, curSat, p);
+                        return updateCurrentZone( curSat, p);
                     }
                 }
             }
@@ -278,14 +272,14 @@ package com.socialcomputing.wps.script  {
 					// The cursor is on this link
                     if (curSat != null) {
 						//Alert.show("a link is hovered")
-                        return updateCurrentZone(zone is BagZone ? m_applet.backDrawingSurface : m_applet.curDrawingSurface, curSat, p);
+                        return updateCurrentZone( curSat, p);
                     }
                 }
             }
             
             // Last case, the cursor is not in a Zone
             this.m_newZone = null;
-            return updateCurrentZone( m_applet.curDrawingSurface, null, p);
+            return updateCurrentZone( null, p);
         }
         
 		
@@ -300,7 +294,7 @@ package com.socialcomputing.wps.script  {
          * @param p			Location of the cursor.	Used for the 'hover' event.
          * @return			True if the current satellite has changed.
          */
-        private function updateCurrentZone( s:Sprite, curSat:Satellite, p:Point):Boolean {
+        private function updateCurrentZone( curSat:Satellite, p:Point):Boolean {
             // TODO : comment this
 			trace("[Update current zone : not implemented yet]");
 			
@@ -327,7 +321,7 @@ package com.socialcomputing.wps.script  {
 					// Restore its rest image
                     //ON rollover non active zone => redraw
 					var curZoneBounds:Rectangle = m_curZone.getParent().m_bounds;
-					this.m_applet.clearDrawingSurface(this.m_applet.curDrawingSurface);
+					ImageUtil.clear( this.m_applet.curDrawingSurface);
 					this.m_applet.renderShape(this.m_applet.restDrawingSurface, curZoneBounds.width, curZoneBounds.height, new Point(curZoneBounds.x, curZoneBounds.y));
                     //blitImage(g, m_applet.m_restImg, m_curZone.getParent().m_bounds );
 					//blitImage(g, m_applet.restImg, m_curZone.getParent().m_bounds );
@@ -338,8 +332,8 @@ package com.socialcomputing.wps.script  {
 				// A new Zone is hovered, let's paint it!
                 if (m_curSat != null && (m_curZone != m_newZone)) {
                     m_curZone = m_newZone;
-                    paintCurZone(s);              
-                    m_curSat.execute(m_applet, m_curZone, p, Satellite.HOVER_VAL);
+                    paintCurZone();              
+                    m_curSat.execute( m_applet, m_curZone, p, Satellite.HOVER_VAL);
                     cursTyp = MouseCursor.HAND;   // Sets the cursor to a hand if the mouse entered a Zone
                 }
                 else {
@@ -361,12 +355,10 @@ package com.socialcomputing.wps.script  {
 		 * 
          * @param s	the sprite to paint the current zone in
          */
-        public function paintCurZone(s:Sprite):void {
+        public function paintCurZone():void {
 			// A new Zone is hovered, let's paint it!
 			if (m_curZone != null) {
-                (Activable(m_curZone.getParent())).paintCur(m_applet, s);
-				var curZoneBounds:Rectangle = m_curZone.getParent().m_bounds;
-				this.m_applet.renderShape(s, curZoneBounds.width, curZoneBounds.height, new Point(curZoneBounds.x, curZoneBounds.y));
+                (Activable(m_curZone.getParent())).paintCur( m_applet);
             }
         }
         
