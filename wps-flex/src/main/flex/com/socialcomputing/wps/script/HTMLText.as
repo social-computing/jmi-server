@@ -4,9 +4,11 @@ package com.socialcomputing.wps.script{
     import flash.display.GradientType;
     import flash.display.Graphics;
     import flash.display.Sprite;
+	import flash.display.SpreadMethod;
     import flash.geom.ColorTransform;
     import flash.geom.Point;
     import flash.geom.Rectangle;
+	import flash.geom.Matrix;
     import flash.text.Font;
     import flash.text.FontStyle;
     import flash.text.TextField;
@@ -891,23 +893,21 @@ package com.socialcomputing.wps.script{
             {
                 var black:ColorTransform = new ColorTransform();
                 black.color = 0x000000;
-                var colors:Array = [m_inCol.color, black.color];
-				//var colors:Array = ["0xFF0000", "0x0000FF"];
+                //var colors:Array = [m_inCol.color, black.color];
+				var colors:Array = [0xFF0000, 0x0000FF];
                 var alphas:Array = [1, 1];
-                var ratios:Array = [0, 255];
-				s.graphics.lineStyle();
-                s.graphics.beginGradientFill(GradientType.LINEAR, colors, alphas, ratios);
+                var ratios:Array = [0x00, 0xFF];
+				if ( m_outCol != null )
+					s.graphics.lineStyle( 1, m_outCol.color);
+				else
+					s.graphics.lineStyle();
+				var matr:Matrix = new Matrix();
+				matr.createGradientBox(m_bounds.width, m_bounds.height, 0, 0, 0);
+                s.graphics.beginGradientFill(GradientType.LINEAR, colors, alphas, ratios, matr, SpreadMethod.PAD);
+				s.graphics.drawCircle(pos.x + m_bounds.width / 2, pos.y, m_bounds.height); // Test
                 s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 10, 10);
-                s.graphics.endFill();
-                
-            }
-            
-            if ( m_outCol != null )
-            {
-                s.graphics.beginFill(m_inCol.color);
-                s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 5, 5);
-                s.graphics.endFill();
-            }
+                //s.graphics.endFill();
+           }
             
             for ( i = 0; i < n; i ++ )
             {
@@ -917,13 +917,13 @@ package com.socialcomputing.wps.script{
                 }
             }
             
-            if ( n==1) // draw reflection only for one line boxes
+            if ( n==1 && m_inCol == null) // draw reflection only for one line boxes
             {
                 var white:ColorTransform = new ColorTransform();
                 white.color = 0xFFFFFF;
                 s.graphics.beginFill(white.color, 0.2);
 				s.graphics.lineStyle();
-                s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 5, 5);
+                s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 10, 10);
                 s.graphics.endFill();
             }
             m_bounds.x  = pos.x;
