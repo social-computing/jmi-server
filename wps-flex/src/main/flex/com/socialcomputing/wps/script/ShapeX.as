@@ -304,7 +304,7 @@ package com.socialcomputing.wps.script  {
                         if(color != null) {
                             s.graphics.beginFill(color.color);
                         }
-                        s.graphics.drawEllipse(x, y, size, size );
+                        s.graphics.drawEllipse(x, y, size, size);
                         s.graphics.endFill();
                         break;
                     }
@@ -318,7 +318,7 @@ package com.socialcomputing.wps.script  {
                         
 						var fromPoint:Point = (points[0] as Point).add(shapePos);
                         var toPoint:Point = (points[1] as Point).add(shapePos);
-                        var poly:Polygon = getLinkPoly(supZone, fromPoint, toPoint, size / 2);
+                        var poly:Polygon = getLinkPoly(supZone, fromPoint, toPoint, (((size + 3) / 2)));
 						
 						color = slice.getColor(Slice.OUT_COL_VAL, supZone.m_props);
 						if (color != null) {
@@ -446,7 +446,7 @@ package com.socialcomputing.wps.script  {
                 if ( image == null ) {
                     var ldr:Loader = new Loader();
                     //var baseUrl = "http://10.0.2.2:8080";
-                    var baseUrl = "http://localhost:8080";
+					var baseUrl:String = "http://localhost:8080";
                     var urlReq:URLRequest = new URLRequest(baseUrl + imageNam);
                     
                     ldr.contentLoaderInfo.addEventListener(Event.COMPLETE,loaderCompleteHandler);
@@ -454,8 +454,8 @@ package com.socialcomputing.wps.script  {
                     function loaderCompleteHandler(e:Event):void {
                         trace('Image has loaded.');
                         var p:Point= getCenter( zone );
-                        var shapePos    = new Point();
-                        var scale:Number= getShapePos( zone, transfo, center, p, shapePos );
+                        var shapePos:Point = new Point();
+                        var scale:Number   = getShapePos(zone, transfo, center, p, shapePos);
                         var x:int;
                         var y:int;
                         var imgWid:int = ldr.width;
