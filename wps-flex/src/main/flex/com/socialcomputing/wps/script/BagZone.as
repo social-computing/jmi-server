@@ -24,7 +24,7 @@ public class BagZone extends ActiveZone implements Activable
 	/**
 	 * Clusterized subZones table.
 	 */
-	public   var m_subZones:Array= null;
+	public var m_subZones:Array = null;
 
 	/**
 	 * Initial angular direction of Satellites.
@@ -63,97 +63,83 @@ public class BagZone extends ActiveZone implements Activable
 	 */
     
 	public override function init(applet:PlanComponent, s:Sprite, isFirst:Boolean):void {
-		var i:int, n:int = m_subZones != null ? m_subZones.length : 0;
+		var i:int;
+		var nbSubZones:int = m_subZones != null ? m_subZones.length : 0;
 		super.init(applet, s, isFirst);
+		var restSwhBounds:Rectangle;			
+		var curSwhBounds:Rectangle; 
 		
-		// One time init
-		if (isFirst)      
-		{
-			m_parent = null;
+		// First time init
+		if (isFirst) {
+			this.m_parent = null;
 
-			if (n > 0) m_stp = Base.Pi2 / (n + 1);
-			m_dir = 10.;
+			if (nbSubZones > 0) this.m_stp = Base.Pi2 / (nbSubZones + 1);
+			this.m_dir = 10.0;
 
-			for ( i = 0; i < n; i ++ )
-			{
+			for (i = 0 ; i < nbSubZones ; i ++) {
 				m_subZones[i].m_parent = this;
 			}
 
-			m_bounds = m_restSwh.getBounds( applet, s.graphics, this, false );
-			// DEBUG
-			//s.graphics.lineStyle(1, 0xFF0000);
-			//s.graphics.drawRect(m_bounds.x, m_bounds.y, m_bounds.width, m_bounds.height);
-			// END DEBUG
+			restSwhBounds = this.m_restSwh.getBounds(applet, s.graphics, this, false);			
+			curSwhBounds  = this.m_curSwh.getBounds(applet, s.graphics, this, true);
+			this.m_bounds = restSwhBounds.union(curSwhBounds);
 			
-			var tempRectangle:Rectangle = m_curSwh.getBounds(applet, s.graphics, this, true);
-			//this.m_bounds = m_curSwh.getBounds(applet, s.graphics, this, true);
-			
-			// DEBUG
-			//g.lineStyle(1, 0x0000FF);
-			// g.drawRect(tempRectangle.x, tempRectangle.y, tempRectangle.width, tempRectangle.height);
-			// END DEBUG
-			
-			this.m_bounds = this.m_bounds.union(tempRectangle);
-			
-			var isLeft:Boolean= m_bounds.x < 0;
+			var isLeft:Boolean = this.m_bounds.x < 0;
 
-			if ( n > 0)
-			{
-				//float   dir     = 0.f,
-				var stp:Number= .25* Base.Pi2;
-				//   isLeft || isRight
-				if ( isLeft ||( m_bounds.x + m_bounds.width > applet.width ))
-				{
-					m_stp = Base.Pi2 /( n << 1);
+			if (nbSubZones > 0) {
+				// float dir = 0.f,
+				var stp:Number = 0.25 * Base.Pi2;
+				// isLeft || isRight
+				if (isLeft || (this.m_bounds.x + this.m_bounds.width > applet.width)) {
+					this.m_stp = Base.Pi2 / (nbSubZones << 1);
 
-					if ( isLeft )
-					{
+					if (isLeft) {
 						m_dir = -stp;
-						m_subZones[n-1].m_flags |= SIDE_BIT | LEFT_BIT;
+						m_subZones[nbSubZones - 1].m_flags |= SIDE_BIT | LEFT_BIT;
 					}
-					else
-					{
+					else {
 						m_dir = stp;
-						m_subZones[n-1].m_flags |= SIDE_BIT;
+						m_subZones[nbSubZones - 1].m_flags |= SIDE_BIT;
 					}
 				}
 			}
-			//   isLeft || isRight
-			if ( isLeft ||( m_bounds.x + m_bounds.width > applet.width ))
-			{
+			
+			// isLeft || isRight
+			if (isLeft || (this.m_bounds.x + this.m_bounds.width > applet.width)) {
 				m_flags |= isLeft ? SIDE_BIT | LEFT_BIT : SIDE_BIT;
 			}
 		}
 
-		m_bounds    = m_restSwh.getBounds( applet, s.graphics, this, false );
-
-		var win:Rectangle= applet.plan.m_prevBox.union( m_bounds );
-
-		m_bounds    = m_bounds.union( m_curSwh.getBounds( applet, s.graphics, this, true ));
-
+		restSwhBounds     = this.m_restSwh.getBounds(applet, s.graphics, this, false);
+		var win:Rectangle = applet.plan.m_prevBox.union(restSwhBounds);
+		curSwhBounds      = this.m_curSwh.getBounds(applet, s.graphics, this, true);
+		this.m_bounds     = restSwhBounds.union(curSwhBounds);
 		
-		if ( win.y > m_bounds.y )
-		{
-			win.height	+= win.y - m_bounds.y;
-			win.y		= m_bounds.y;
+		/*
+		this.m_bounds = this.m_restSwh.getBounds(applet, s.graphics, this, false);
+		var win:Rectangle = applet.plan.m_prevBox.union(m_bounds);
+		this.m_bounds = this.m_bounds.union(m_curSwh.getBounds(applet, s.graphics, this, true));
+		*/
+		
+		if (win.y > this.m_bounds.y) {
+			win.height += win.y - this.m_bounds.y;
+			win.y      = this.m_bounds.y;
 		}
-		else if ( win.y + win.height < m_bounds.y + m_bounds.height )
-		{
-			win.height	= m_bounds.y  + m_bounds.height - win.y;
+		else if (win.y + win.height < this.m_bounds.y + this.m_bounds.height) {
+			win.height	= this.m_bounds.y + this.m_bounds.height - win.y;
 		}
 
 		applet.plan.m_prevBox = win;
+		this.m_bounds.inflate(2, 2);
 
-		m_bounds.inflate(2, 2);
-
-		var w:int= m_bounds.width,
-			h:int=m_bounds.height;
+		var w:int = this.m_bounds.width;
+		var h:int = this.m_bounds.height;
 		var maxBox:Dimension= applet.plan.m_maxBox;
 
-		if ( w > maxBox.width )     maxBox.width    = w;
-		if ( h > maxBox.height )    maxBox.height   = h;
+		if (w > maxBox.width)  maxBox.width  = w;
+		if (h > maxBox.height) maxBox.height = h;
 
-		m_bounds = m_bounds.intersection(applet.size.toRectangle());
+		this.m_bounds = this.m_bounds.intersection(applet.size.toRectangle());
 	}
 
 	/**

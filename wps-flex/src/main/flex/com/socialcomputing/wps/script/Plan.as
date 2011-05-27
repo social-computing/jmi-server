@@ -10,6 +10,7 @@ package com.socialcomputing.wps.script  {
     import flash.geom.Point;
     import flash.geom.Rectangle;
     import flash.ui.MouseCursor;
+    import flash.utils.Dictionary;
     
     import flashx.textLayout.tlf_internal;
     
@@ -117,18 +118,18 @@ package com.socialcomputing.wps.script  {
          */
         //protected synchronized function initZones( g:Graphics, zones:Array, isFirst:Boolean):void {
         public function initZones(s:Sprite, zones:Array, isFirst:Boolean):void {
-            var i:int, n:int  = zones.length;
+            var i:int;
+			var n:int = zones.length;
             var dim:Dimension = m_applet.size;
             
             // Reset the BBOX of the biggest zone
-            m_prevBox   = new Rectangle( dim.width >> 1, dim.height >> 1, 1, 1);
+            m_prevBox = new Rectangle(dim.width >> 1, dim.height >> 1, 1, 1);
             
-            if ( zones == m_links )
-                m_maxBox    = new Dimension(0, 0);
+            if (zones == m_links) m_maxBox = new Dimension(0, 0);
             
             // Reversed order so subZones are initialized before supZones!
 			//zones[0].init(m_applet, s, isFirst);
-			for(i = n - 1 ; i >= 0 ; i --) {
+			for (i = n - 1 ; i >= 0 ; i --) {
                 zones[i].init( m_applet, s, isFirst );
             }
 			
@@ -367,61 +368,60 @@ package com.socialcomputing.wps.script  {
          * @param dim	New size of the Applet.
          */
         public function resize(dim:Dimension):void {
-            if ( m_prevBox != null &&(( m_prevBox.width != dim.width )||( m_prevBox.height != dim.height ))&& dim.width > 100&& dim.height > 100)
-            {
-				var i:int, n:int = m_nodesCnt;
+            if (m_prevBox != null &&
+					((m_prevBox.width != dim.width) || ( m_prevBox.height != dim.height )) &&
+					dim.width > 100 && dim.height > 100) {
+				var i:int;
                 var margin:int= 10;
-                //Point       p;
-                var scale:Number,sx:Number, sy:Number, dx:Number, dy:Number, s:Number;
+                var scale:Number;
+				var sx:Number, sy:Number, dx:Number, dy:Number, s:Number;
                 var zone:ActiveZone;
                 var isFakeFrom:Boolean, isFakeTo:Boolean;
                 
-				trace("Plan resize à terminer");
+				// trace("Plan resize à terminer");
 				// TODO 
-                //m_applet.backImg = ImageUtil.fromRectangle(dim);
-                //m_applet.restImg = ImageUtil.fromRectangle(dim);
+                // m_applet.backImg = ImageUtil.fromRectangle(dim);
+                // m_applet.restImg = ImageUtil.fromRectangle(dim);
                 
-                if ( n < 8)	// too few places, lets reduce their size
-                {
-                    scale	= 1.+ ( 2./ n );
-                    m_prevBox.x += int(( .5 *( m_prevBox.width * ( 1. - scale ))));
-                    m_prevBox.y += int(( .5 *( m_prevBox.height * ( 1. - scale ))));
-                    m_prevBox.width = int(( m_prevBox.width * scale ));
-                    m_prevBox.height = int(( m_prevBox.height * scale ));
+				// too few places, lets reduce their size
+                if (this.m_nodesCnt < 8) {
+                    scale	= 1.0 + (2.0 / this.m_nodesCnt);
+                    m_prevBox.x += Math.floor(0.5 * (m_prevBox.width * (1.0 - scale)));
+                    m_prevBox.y += Math.floor(0.5 * (m_prevBox.height * (1.0 - scale)));
+                    m_prevBox.width = Math.floor(m_prevBox.width * scale);
+                    m_prevBox.height = Math.floor(m_prevBox.height * scale);
                 }
                 
-                sx  = (dim.width- margin )/ m_prevBox.width;
-                sy  = (dim.height - margin )/ m_prevBox.height;
-                dx  = m_prevBox.x -( margin >> 1);
-                dy  = m_prevBox.y -( margin >> 1);
-                s	= sx > sy ? sy : sx;
-                
-				for ( i = 0; i < n; i ++ )
-				{
-					zone    = m_nodes[i];
-                    resizePoint( zone, 0, dx, dy, sx, sy );
-                    
-                    scale   = Number(zone.m_props[ "_SCALE" ]);
+                sx  = (dim.width  - margin) / m_prevBox.width;
+                sy  = (dim.height - margin) / m_prevBox.height;
+                dx  = m_prevBox.x - (margin >> 1);
+                dy  = m_prevBox.y - (margin >> 1);
+				s	= sx > sy ? sy : sx;
+
+				// Iterate through all "real" nodes 
+				for (i = 0 ; i < this.m_nodesCnt ; i++) {
+					zone = this.m_nodes[i];
+                    resizePoint(zone, 0, dx, dy, sx, sy);
+                    scale = zone.m_props["_SCALE"] as Number;
                     zone.m_props["_SCALE"] = s * scale;
                     zone.m_datas.length=0;
                 }
                 
-/*                n = m_nodes.length;
-                while ( i < n )
-                {
-                    m_nodes[i++].m_datas.clear();
+				// Iterate through remaining nodes (fake ones ??)
+                while (i < this.m_nodes.length) {
+                    m_nodes[i++].m_datas = new Dictionary();
                 }
-*/                
-				for each( zone in m_links) 
-                {
+
+				// Iterate through all links (real and fakes)
+				for each (zone in m_links) {
 					LinkZone.FAKEFROM_BIT;
-                    isFakeFrom  = Base.isEnabled( zone.m_flags, LinkZone.FAKEFROM_BIT );
-                    isFakeTo    = Base.isEnabled( zone.m_flags, LinkZone.FAKETO_BIT );
+                    isFakeFrom  = Base.isEnabled(zone.m_flags, LinkZone.FAKEFROM_BIT);
+                    isFakeTo    = Base.isEnabled(zone.m_flags, LinkZone.FAKETO_BIT);
                     
-                    if ( isFakeFrom )       resizePoint( zone, 0, dx, dy, sx, sy );
-                    else if ( isFakeTo )    resizePoint( zone, 1, dx, dy, sx, sy );
+                    if (isFakeFrom)    resizePoint(zone, 0, dx, dy, sx, sy);
+                    else if (isFakeTo) resizePoint(zone, 1, dx, dy, sx, sy);
                     
-                    scale   = Number(zone.m_props["_SCALE"]);
+                    scale = zone.m_props["_SCALE"] as Number;
                     zone.m_props["_SCALE"] = s * scale;
                     zone.m_datas.length=0;
                 }
@@ -540,6 +540,7 @@ package com.socialcomputing.wps.script  {
         /**
          * Change the location of a Zone Point after a resize.
          * The resize transform a location by translating it then scaling it.
+		 * 
          * @param zone	Zone holding the vertices (Points) to transform.
          * @param i		Index of the Point to transform in the vertices array.
          * @param dx	Horizontal translation before scaling.
@@ -547,10 +548,10 @@ package com.socialcomputing.wps.script  {
          * @param sx	Horizontal scaling after translation.
          * @param sy	Vertical scaling after translation.
          */
-		private function resizePoint( zone:ActiveZone, i:int, dx:Number, dy:Number, sx:Number, sy:Number):void {
-            var p:Point= zone.m_props["_VERTICES"][i];
-            p.x = int(( sx *( p.x - dx )));
-            p.y = int(( sy *( p.y - dy )));
+		private function resizePoint(zone:ActiveZone, i:int, dx:Number, dy:Number, sx:Number, sy:Number):void {
+            var p:Point = zone.m_props["_VERTICES"][i];
+            p.x = Math.floor(sx * (p.x - dx));
+            p.y = Math.floor(sy * (p.y - dy));
         }
         
         /**

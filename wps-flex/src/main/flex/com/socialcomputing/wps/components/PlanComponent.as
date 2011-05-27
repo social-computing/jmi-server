@@ -197,7 +197,7 @@ package com.socialcomputing.wps.components
 				plan.resize(size);
 				plan.init();
 				plan.resize(size);
-
+				plan.init();
 				this._ready = true;
 		
 			}
