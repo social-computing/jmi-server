@@ -87,9 +87,9 @@ package com.socialcomputing.wps.script  {
                 scale *= transfo.m_pos;
                 p     = getCenter(zone);
                 
-                x = p.x + Math.floor(scale * Math.cos( transfo.m_dir ));
-                y = p.y + Math.floor(scale * Math.sin( transfo.m_dir ));
-                
+                x = p.x + int(scale * Math.cos(transfo.m_dir));
+                y = p.y + int(scale * Math.sin(transfo.m_dir));
+				
                 return new Point(x, y);
             }
             
