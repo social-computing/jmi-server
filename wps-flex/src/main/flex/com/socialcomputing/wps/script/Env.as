@@ -1,9 +1,12 @@
 package com.socialcomputing.wps.script  {
+    import br.com.stimuli.loading.BulkLoader;
+    
     import com.socialcomputing.wps.components.PlanComponent;
     
     import flash.display.BitmapData;
     import flash.display.Graphics;
     import flash.display.Loader;
+    import flash.events.Event;
     import flash.geom.ColorTransform;
     import flash.geom.Rectangle;
     
@@ -89,9 +92,11 @@ public class Env
 	 * Table containing icons and sounds.
 	 * This buffer stores all media object using a unique key to load them asynchronously during init.
 	 */
-    [transient]
-	public var m_medias:Array = null;
+    //[transient]
+	// public var m_medias:Array = null;
 
+
+	public var loader: BulkLoader;
 	/**
 	 * A simple reference to the Applet.
 	 * This is necessary because the Thread must know the Applet.
@@ -120,7 +125,13 @@ public class Env
         bkWhite.color = 0xFFFFFF;
 		var bkCol:ColorTransform= needPrint ? bkWhite : m_inCol.getColor();
 		//m_applet        = applet;
-		m_medias        = new Array();
+		// m_medias        = new Array();
+		this.loader = new BulkLoader("main-site");
+		this.loader.addEventListener(
+			BulkLoader.COMPLETE,
+			function(event:Event):void {
+				component.invalidateDisplayList();	
+			});
 	}
 
 	/**
@@ -189,6 +200,7 @@ public class Env
 	 * This is needed to reload images when the plan is resized.
 	 */
 	protected function clearMedias():void {
+		/*
 		for(var media:Object in m_medias){
 			if ( media is Loader )
 			{
@@ -196,6 +208,8 @@ public class Env
 			}
 		}
 		m_medias.length = 0;
+		*/
+		this.loader.removeAll();
 	}
 
  }

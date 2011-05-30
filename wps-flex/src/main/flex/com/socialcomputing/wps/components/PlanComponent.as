@@ -198,6 +198,7 @@ package com.socialcomputing.wps.components
 				plan.init();
 				plan.resize(size);
 				plan.init();
+				plan.m_applet.env.loader.start();
 				this._ready = true;
 		
 			}

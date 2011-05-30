@@ -1,8 +1,11 @@
 package com.socialcomputing.wps.script  {
+    import br.com.stimuli.loading.BulkLoader;
+    
     import com.socialcomputing.wps.components.PlanComponent;
     import com.socialcomputing.wps.util.shapes.RectangleUtil;
     
     import flash.display.Bitmap;
+    import flash.display.BitmapData;
     import flash.display.Graphics;
     import flash.display.GraphicsStroke;
     import flash.display.Loader;
@@ -439,12 +442,20 @@ package com.socialcomputing.wps.script  {
          */
         public function drawImage(applet:PlanComponent, s:Sprite, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
             if ( isDefined( SCALE_VAL )) {   // else it is just a void frame
-                var medias:Array = applet.env.m_medias;
+                //var medias:Array = applet.env.m_medias;
                 var scaledImg:Image;
-                var image:Image = medias[imageNam];
+				//var image:Image = medias[imageNam];
+				
+				//var baseUrl = "http://10.0.2.2:8080";
+				var baseUrl = "http://localhost:8080";
+				var imageUrl:String = baseUrl + imageNam;
+				var imageLoader:BulkLoader = applet.env.loader;
+				var image:Bitmap = imageLoader.getBitmap(imageUrl);
+				
                 
-                if ( image == null ) {
-                    var ldr:Loader = new Loader();
+                if (image == null) {
+                    /*
+					var ldr:Loader = new Loader();
                     //var baseUrl = "http://10.0.2.2:8080";
 					var baseUrl:String = "http://localhost:8080";
                     var urlReq:URLRequest = new URLRequest(baseUrl + imageNam);
@@ -486,12 +497,51 @@ package com.socialcomputing.wps.script  {
                     function ioErrorHandler(event:IOErrorEvent):void {
                         trace("Impossible de charger l'image: " + urlReq);
                     }
-                    
-                    medias.push(imageNam, image);
+                    */
+					
+					function loaderCompleteHandler(e:Event):void {
+						trace('Image has loaded.');
+						var p:Point= getCenter( zone );
+						var shapePos:Point   = new Point();
+						var scale:Number     = getShapePos(zone, transfo, center, p, shapePos);
+						var image:Bitmap = imageLoader.getBitmap(imageUrl);
+						var x:int;
+						var y:int;
+						var imgWid:int = image.width;
+						var w:int = imgWid;
+						
+						if ( scale > 0.) {    // disk
+							w = int(( 1.414 * scale ));
+						}
+
+						
+						if ( imgWid != w ) {
+							imageNam    += w;
+							//scaledImg   = Image(medias[imageNam]);
+							
+							if ( scaledImg == null ) {
+								image.scaleX = w / image.width;
+								image.scaleY = w / image.height;
+								//medias[imageNam] = scaledImg;
+							}
+						}
+						
+						w >>= 1;
+						
+						image.x = p.x + shapePos.x - w;
+						image.y = p.y + shapePos.y - w;
+						s.addChild(image);
+						//applet.invalidateDisplayList();
+					}
+					
+					applet.env.loader.add(imageUrl);
+					applet.env.loader.get(imageUrl).addEventListener(Event.COMPLETE, loaderCompleteHandler)
+					
+                    //medias.push(imageNam, image);
                     
                 }
                 
-                ldr.load(urlReq);
+                //ldr.load(urlReq);
                 
             }
         }
