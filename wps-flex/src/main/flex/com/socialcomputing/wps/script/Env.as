@@ -130,7 +130,7 @@ public class Env
 		this.loader.addEventListener(
 			BulkLoader.COMPLETE,
 			function(event:Event):void {
-				component.invalidateDisplayList();	
+				component.invalidateDisplayList();
 			});
 	}
 

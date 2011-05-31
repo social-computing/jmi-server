@@ -314,18 +314,18 @@ package com.socialcomputing.wps.script  {
                 var isBag:Boolean = zone is BagZone;
                 var supZone:BagZone = isBag ? zone as BagZone : null;
                 var zones:Array = isBag ? supZone.m_subZones : null;
-                var curZone:ActiveZone = planComponent.plan.m_curZone,
-                    subZone:ActiveZone;
-                var satRelTrf:Transfo, satTrf:Transfo,
-                	transfo:Transfo = sat.getTransfo( Satellite.TRANSFO_VAL, zone.m_props );
-                var i:int, 
-				    n:int = m_satellites.length,
-                    flags:int;
-                var hasRestBit:Boolean,
-				    hasCurBit:Boolean,
-					hasSubBit:Boolean,
-					isCur:Boolean,
-					isVisible:Boolean;
+                var curZone:ActiveZone = planComponent.plan.m_curZone;
+                var subZone:ActiveZone;
+                var satRelTrf:Transfo, satTrf:Transfo;
+                var transfo:Transfo = sat.getTransfo( Satellite.TRANSFO_VAL, zone.m_props );
+                var i:int;
+				var n:int = m_satellites.length;
+                var flags:int;
+                var hasRestBit:Boolean;
+				var hasCurBit:Boolean;
+			    var hasSubBit:Boolean;
+				var isCur:Boolean;
+				var isVisible:Boolean;
                 var satData:SatData;
                 var supCtr:Point = shape.getCenter( zone );
                 

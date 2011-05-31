@@ -17,6 +17,7 @@ package com.socialcomputing.wps.script  {
     import flash.geom.Point;
     import flash.geom.Rectangle;
     import flash.net.URLRequest;
+    import flash.text.TextField;
     
     import mx.controls.Alert;
     import mx.controls.Image;
@@ -531,14 +532,15 @@ package com.socialcomputing.wps.script  {
 						image.x = p.x + shapePos.x - w;
 						image.y = p.y + shapePos.y - w;
 						s.addChild(image);
-						//applet.invalidateDisplayList();
 					}
 					
 					applet.env.loader.add(imageUrl);
-					applet.env.loader.get(imageUrl).addEventListener(Event.COMPLETE, loaderCompleteHandler)
+					applet.env.loader.get(imageUrl).addEventListener(Event.COMPLETE, loaderCompleteHandler);
 					
                     //medias.push(imageNam, image);
                     
+                } else {
+                    s.addChild(image);
                 }
                 
                 //ldr.load(urlReq);
@@ -550,6 +552,7 @@ package com.socialcomputing.wps.script  {
         
         /**
          * Evaluate the transformation of a point using a transformation on this shape and return its scale.
+
          * 
          * @param zone		BagZone holding this props.
          * @param transfo	A transformation to scale or translate this shape.

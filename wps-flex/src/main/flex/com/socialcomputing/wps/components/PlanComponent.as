@@ -169,6 +169,14 @@ package com.socialcomputing.wps.components
 			this._offScreen = new BitmapData(this.width, this.height);
 			this._drawingSurface.addChild(new Bitmap(this._onScreen));
 			
+            /*this.curDrawingSurface.x = 700;
+            this._drawingSurface.addChild(this.curDrawingSurface);
+            this.restDrawingSurface.x = 700;
+            this.restDrawingSurface.y = 200;
+            this._drawingSurface.addChild(this.restDrawingSurface);*/
+            this.restDrawingSurface.name = "REST drawing surface";
+            this.curDrawingSurface.name = "CUR drawing surface";
+            
 			// If the given value is null return for now
 			// TODO : If the local plancontainer is set, reset objects 
 			if(value == null) {
@@ -193,12 +201,13 @@ package com.socialcomputing.wps.components
 				plan.m_applet = this;
 				plan.m_curSel = -1;
 				plan.initZones(this.restDrawingSurface, plan.m_links, true);
-				plan.initZones(this.restDrawingSurface, plan.m_nodes, true);
+                plan.initZones(this.restDrawingSurface, plan.m_nodes, true);
 				plan.resize(size);
 				plan.init();
+                plan.m_applet.env.loader.start();
 				plan.resize(size);
 				plan.init();
-				plan.m_applet.env.loader.start();
+                
 				this._ready = true;
 		
 			}
