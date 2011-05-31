@@ -14,6 +14,7 @@ package com.socialcomputing.wps.script  {
     import flash.events.IOErrorEvent;
     import flash.external.ExternalInterface;
     import flash.geom.ColorTransform;
+    import flash.geom.Matrix;
     import flash.geom.Point;
     import flash.geom.Rectangle;
     import flash.net.URLRequest;
@@ -530,7 +531,13 @@ package com.socialcomputing.wps.script  {
 						
 						image.x = p.x + shapePos.x - w;
 						image.y = p.y + shapePos.y - w;
-						s.addChild(image);
+						//s.addChild(image);
+                        var matrix : Matrix = new Matrix();
+                        matrix.scale(image.scaleX, image.scaleY);
+                        matrix.translate(image.x, image.y);
+                        s.graphics.beginBitmapFill(image.bitmapData, matrix);
+                        s.graphics.drawRect(image.x, image.y, image.width, image.height);
+                        s.graphics.endFill();
 					}
 					
 					applet.env.loader.add(imageUrl);
