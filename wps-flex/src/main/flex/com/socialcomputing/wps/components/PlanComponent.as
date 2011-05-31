@@ -94,6 +94,7 @@ package com.socialcomputing.wps.components
 			this._restDrawingSurface = new Sprite();
 			this._backDrawingSurface = new Sprite();
 		
+			this.doubleClickEnabled = true;
 			addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
 			addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 			addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);

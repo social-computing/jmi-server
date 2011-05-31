@@ -17,7 +17,6 @@ package com.socialcomputing.wps.script  {
     import flash.geom.Point;
     import flash.geom.Rectangle;
     import flash.net.URLRequest;
-    import flash.text.TextField;
     
     import mx.controls.Alert;
     import mx.controls.Image;
@@ -563,7 +562,6 @@ package com.socialcomputing.wps.script  {
          */
         private function getShapePos(zone:ActiveZone, transfo:Transfo, center:Point, p0:Point, pos:Point):Number {
             var scale:Number = getFloat(SCALE_VAL, zone.m_props);
-            trace("[GetShapePos, scale = " + scale + "]");
             
             var p:Point;
             
@@ -580,10 +578,8 @@ package com.socialcomputing.wps.script  {
                 pos.x = p.x;
                 pos.y = p.y;
                 scale *= transfo.m_scl;
-                trace("  - transformation scale: " + transfo.m_scl); 
             }
             
-            trace("[GetShapePos end, scale = " + scale + "]");
             return scale;
         }
         

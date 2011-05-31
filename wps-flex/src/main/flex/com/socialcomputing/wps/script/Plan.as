@@ -10,7 +10,6 @@ package com.socialcomputing.wps.script  {
     import flash.geom.Matrix;
     import flash.geom.Point;
     import flash.geom.Rectangle;
-    import flash.text.TextField;
     import flash.ui.MouseCursor;
     import flash.utils.Dictionary;
     
@@ -298,7 +297,7 @@ package com.socialcomputing.wps.script  {
          */
         private function updateCurrentZone( curSat:Satellite, p:Point):Boolean {
 
-			if ( m_curZone != m_newZone )           // The current Satellite has changed
+				if ( m_curZone != m_newZone )           // The current Satellite has changed
             {
 				//TODO
                 /*for ( var waiter:Waiter in m_waiters)
