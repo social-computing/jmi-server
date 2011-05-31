@@ -226,7 +226,6 @@ package com.socialcomputing.wps.script  {
          * @return True if the current satellite has changed. 
          */
         public function updateZoneAt(p:Point):Boolean {
-			trace("[Plan : updateZoneAt method called]"); 
 			var curSat:Satellite;
             var zone:ActiveZone,
             	parent:ActiveZone = m_curZone != null ? m_curZone.getParent() : null;
@@ -298,9 +297,7 @@ package com.socialcomputing.wps.script  {
          * @return			True if the current satellite has changed.
          */
         private function updateCurrentZone( curSat:Satellite, p:Point):Boolean {
-            // TODO : comment this
-			trace("[Update current zone : not implemented yet]");
-			
+
 			if ( m_curZone != m_newZone )           // The current Satellite has changed
             {
 				//TODO
@@ -335,6 +332,7 @@ package com.socialcomputing.wps.script  {
 				// A new Zone is hovered, let's paint it!
                 if (m_curSat != null && (m_curZone != m_newZone)) {
                     m_curZone = m_newZone;
+				    ImageUtil.clear( this.m_applet.curDrawingSurface);
                     paintCurZone();              
                     m_curSat.execute( m_applet, m_curZone, p, Satellite.HOVER_VAL);
                     cursTyp = MouseCursor.HAND;   // Sets the cursor to a hand if the mouse entered a Zone
