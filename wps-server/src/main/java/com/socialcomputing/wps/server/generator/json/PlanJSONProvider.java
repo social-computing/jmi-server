@@ -112,6 +112,8 @@ public class PlanJSONProvider {
             node.put(key, (Float) value);
         else if (value instanceof Long)
             node.put(key, (Long) value);
+        else if (value instanceof Boolean)
+            node.put(key, (Boolean) value);
         else
             node.put(key, toJSON( value));
     }

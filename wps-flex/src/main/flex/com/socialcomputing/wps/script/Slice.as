@@ -152,7 +152,7 @@ package com.socialcomputing.wps.script  {
                             white.color = 0xFFFFFF;
                             var black:ColorTransform = new ColorTransform();
                             black.color = 0x000000;
-                            m_htmlTxt.initValues(white, black, 0, 12, 0, "SansSerif", 0, new Insets( 0, 4, 0, 4));
+                            m_htmlTxt.initValues(white, black, 0, 12, 0, "SansSerif", false, 0, new Insets( 0, 4, 0, 4));
                             
                             m_htmlTxt.parseText( applet, new TextFormat(), hTxt );
                             m_htmlTxt.drawText( s, applet.size, text.getFlags( zone.m_props )>> 16);//HTMLText.SOUTH_WEST );

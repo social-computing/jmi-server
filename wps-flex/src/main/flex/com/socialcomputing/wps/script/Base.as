@@ -92,10 +92,10 @@ package com.socialcomputing.wps.script  {
          * @param	props	If this contains a referenced property, props is the table that hold the property.
          * @return	the boolean corresponding to the field whose index is prop or null if the property doesn't exists or is void.
          */
-        /*	protected final boolean getBool( int prop, Hashtable props )
+        public function getBool( prop:int, props:Array):Boolean
         {
-        return ((Boolean)getValue( prop, props )).booleanValue();
-        }*/
+        	return getValue( prop, props ) as Boolean;
+        }
         
         /**
          * Gets the int value embedded in a Container.

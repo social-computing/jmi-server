@@ -2,15 +2,15 @@ package com.socialcomputing.wps.script {
     import flash.display.BitmapData;
     import flash.display.Graphics;
     import flash.display.Sprite;
+    import flash.filters.BlurFilter;
     import flash.geom.ColorTransform;
     import flash.geom.Point;
     import flash.geom.Rectangle;
     import flash.text.AntiAliasType;
     import flash.text.Font;
     import flash.text.TextField;
-	import flash.text.TextFieldAutoSize;
+    import flash.text.TextFieldAutoSize;
     import flash.text.TextFormat;
-    
 
     /**
      * <p>Title: TextToken</p>
@@ -55,11 +55,14 @@ package com.socialcomputing.wps.script {
          * @param g		The graphics to draw in.
          * @param pos	The position where this should be drawn before its internal translation is added.
          */
-        public function paint( s:Sprite, pos:Point):void {
+        public function paint( s:Sprite, pos:Point, blur:Boolean):void {
             var x:int= m_bounds.x + pos.x,
                 y:int = m_bounds.y + pos.y;
             
 			var text:TextField = new TextField();
+			if( blur) {
+				text.filters = [new BlurFilter(6, 6)];
+			}
             if ( m_bkCol != null )
             {
                 //g.setColor( m_bkCol );

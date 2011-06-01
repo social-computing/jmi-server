@@ -31,7 +31,7 @@ package com.socialcomputing.wps.script  {
          */
         public static const SIZE_VAL:int= 2;
         
-        /**
+       /**
          * A Font Buffer to reduce temporary Font object creation.
          */
         private const s_fontBuf:Object= new Object();

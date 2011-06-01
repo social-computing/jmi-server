@@ -107,10 +107,10 @@ public class Base implements Serializable
 	 * @param	props	If this contains a referenced property, props is the table that hold the property.
 	 * @return	the boolean corresponding to the field whose index is prop or null if the property doesn't exists or is void.
 	 */
-/*	protected final boolean getBool( int prop, Hashtable props )
+	protected final boolean getBool( int prop, Hashtable props )
 	{
 		return ((Boolean)getValue( prop, props )).booleanValue();
-	}*/
+	}
 
 	/**
 	 * Gets the int value embedded in a Container.

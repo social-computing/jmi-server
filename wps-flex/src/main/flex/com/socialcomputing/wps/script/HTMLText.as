@@ -3,12 +3,12 @@ package com.socialcomputing.wps.script{
     
     import flash.display.GradientType;
     import flash.display.Graphics;
+    import flash.display.SpreadMethod;
     import flash.display.Sprite;
-	import flash.display.SpreadMethod;
     import flash.geom.ColorTransform;
+    import flash.geom.Matrix;
     import flash.geom.Point;
     import flash.geom.Rectangle;
-	import flash.geom.Matrix;
     import flash.text.Font;
     import flash.text.FontStyle;
     import flash.text.TextField;
@@ -71,7 +71,12 @@ package com.socialcomputing.wps.script{
          */
         public static const TEXT_COL_VAL:int= 5;
         
-        /**
+		/**
+		 * Index of the text Color prop in VContainer table
+		 */
+		public static const BLUR_COL_VAL:int= 6;
+		
+       /**
          * True if this text is anchored by a corner.(like subZones tips).
          */
         public static const CORNER_BIT:int= 0x0100;	// Be carefull with this flags, they must not override Fonts ones (0x1, 0x2)!
@@ -120,6 +125,16 @@ package com.socialcomputing.wps.script{
         [transient]
         private var _m_heap:Vector.<String>;
         
+		public function get m_blur():Boolean
+		{
+			return _m_blur;
+		}
+
+		public function set m_blur(value:Boolean):void
+		{
+			_m_blur = value;
+		}
+
         /**
          * Heap of tags to manage the opening and closing of tags.
          */
@@ -258,6 +273,13 @@ package com.socialcomputing.wps.script{
             _m_name = value;
         }
         
+		
+		/**
+		 * Blur (not used in applet)
+		 */
+		[transient]
+		private var _m_blur:Boolean;
+		
         [transient]
         private var _m_wCur:int;
         
@@ -303,7 +325,7 @@ package com.socialcomputing.wps.script{
          * @param flags		Default text alignment flags.
          * @param margin	Default margins size.
          */
-        public function initValues(inCol:ColorTransform, outCol:ColorTransform, textCol:int, fontSiz:int, fontStl:int, fontNam:String, flags:int, margin:Insets):void
+        public function initValues(inCol:ColorTransform, outCol:ColorTransform, textCol:int, fontSiz:int, fontStl:int, fontNam:String, blur:Boolean, flags:int, margin:Insets):void
         {
             m_body          = new FormatToken();
             m_body.m_flags  = flags;
@@ -316,6 +338,7 @@ package com.socialcomputing.wps.script{
             m_style     = fontStl;
             m_size      = fontSiz;
             m_name      = fontNam;
+			m_blur		= blur;
             m_wCur      = 0;
             m_tokens    = new Vector.<Object>();
             m_heap      = new Vector.<String>();
@@ -368,6 +391,7 @@ package com.socialcomputing.wps.script{
                     htmlTxt.m_style = font.getFlags( zone.m_props);
                     htmlTxt.m_size = font.getInt( FontX.SIZE_VAL, zone.m_props);
                     htmlTxt.m_name = font.getString( FontX.NAME_VAL, zone.m_props);
+					htmlTxt.m_blur = getBool(BLUR_COL_VAL, zone.m_props);
                     htmlTxt.m_wCur = 0;
                     htmlTxt.m_tokens = new Vector.<Object>();
                     var heapElements:Vector.<String> = new Vector.<String>();
@@ -911,7 +935,7 @@ package com.socialcomputing.wps.script{
             {
                 if (this.m_tokens[i] is TextToken) {
                     textTok = this.m_tokens[i] as TextToken;
-                    textTok.paint( s, pos );
+                    textTok.paint( s, pos, m_blur);
                 }
             }
             

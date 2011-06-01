@@ -70,6 +70,11 @@ public class HTMLText extends Base implements Serializable
 	 */
 	public  static final int    TEXT_COL_VAL        = 5;
 
+    /**
+     * Index of the text Color prop in VContainer table
+     */
+    public  static final int    BLUR_COL_VAL        = 6;
+    
 	/**
 	 * True if this text is anchored by a corner.(like subZones tips).
 	 */
@@ -157,6 +162,11 @@ public class HTMLText extends Base implements Serializable
 	 */
 	private transient   int         m_style;
 
+    /**
+     * Blur (not used in applet)
+     */
+    private transient   boolean     m_blur;
+	
 	/**
 	 * Name of the font.
 	 */
@@ -193,7 +203,7 @@ public class HTMLText extends Base implements Serializable
 	 * @param flags		Default text alignment flags.
 	 * @param margin	Default margins size.
 	 */
-	public HTMLText( Color inCol, Color outCol, int textCol, int fontSiz, int fontStl, String fontNam, int flags, Insets margin )
+	public HTMLText( Color inCol, Color outCol, int textCol, int fontSiz, int fontStl, String fontNam, boolean blur, int flags, Insets margin )
 	{
 		m_body          = new FormatToken();
 		m_body.m_flags  = flags;
@@ -206,6 +216,7 @@ public class HTMLText extends Base implements Serializable
 		m_style     = fontStl;
 		m_size      = fontSiz;
 		m_name      = fontNam;
+		m_blur      = blur; 
 		m_wCur      = 0;
 		m_tokens    = new Vector();
 		m_heap      = new Vector();
@@ -246,7 +257,7 @@ public class HTMLText extends Base implements Serializable
 			{
 				FontX   font = getFont( FONT_VAL, zone );
 
-				htmlTxt = new HTMLText( getColor( IN_COL_VAL, zone ), getColor( OUT_COL_VAL, zone ), ((ColorX)getValue( TEXT_COL_VAL, zone )).m_color, font.getInt( FontX.SIZE_VAL, zone ), font.getFlags( zone ), font.getString( FontX.NAME_VAL, zone ), getFlags( zone ), new Insets( 0, 2, 0, 2 ));
+				htmlTxt = new HTMLText( getColor( IN_COL_VAL, zone ), getColor( OUT_COL_VAL, zone ), ((ColorX)getValue( TEXT_COL_VAL, zone )).m_color, font.getInt( FontX.SIZE_VAL, zone ), font.getFlags( zone ), font.getString( FontX.NAME_VAL, zone ), getBool(BLUR_COL_VAL, zone), getFlags( zone ), new Insets( 0, 2, 0, 2 ));
 				htmlTxt.parseText( g, lines );
 				htmlTxt.setTextBnds( applet.getSize(), getFlags( zone ), zone.m_flags ,transfo, supCtr, center );
 			}
