@@ -2,18 +2,27 @@ package com.socialcomputing.wps.util.controls
 {
 	import com.socialcomputing.wps.script.Dimension;
 	
+	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Graphics;
 	import flash.display.Sprite;
+	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
 
 	/**
 	 * Image utility class.
-	 * It is done this way instead of a specific Image class because of ActionScript3
-	 * contructor overload limitations : on class can only have one constructor signature. 
+	 * 
+	 * Contains utility methods to manipulate Bitmaps, BitmapsData and Graphics. 
 	 */
 	public class ImageUtil {
 
+		/**
+		 * Clear the given sprite which means : 
+		 *   - clear the sprite graphics 
+		 *   - remove all the sprite children
+		 * 
+		 * @param sprite the sprite to clear
+		 */
 		public static function clear(s:Sprite):void {
 			s.graphics.clear();
 			while(s.numChildren != 0) {
@@ -21,15 +30,44 @@ package com.socialcomputing.wps.util.controls
 			}
 		}
 		
+		/**
+		 * Copy the all the elements drawn in a sprite graphics to another sprite.
+		 * 
+		 * @param src the source sprite to copy the graphics content from
+		 * @param dst the destination sprite in which to paste the src graphics
+		 */
 		public static function copy(src:Sprite, dst:Sprite):void {
 			dst.graphics.copyFrom( src.graphics);
 		}
 		
 		/**
+		 * Draw the given bitmap in the specified graphics object.
+		 * The scala and the position are taken frop the bitmap attributes.
+		 * 
+		 * @param image    the bitmap image to draw
+		 * @param graphics the graphics object where the bitmap will be rendered
+		 */ 
+		public static function drawBitmap(image:Bitmap, graphics:Graphics):void {
+			// Initialize a matrix with the scale and position of the image
+			var matrix: Matrix = new Matrix();
+			matrix.scale(image.scaleX, image.scaleY);
+			matrix.translate(image.x, image.y);
+
+			// Reset line style
+			graphics.lineStyle();
+			
+			// Fill the graphics with the image bitmap data  
+			graphics.beginBitmapFill(image.bitmapData, matrix);
+			graphics.drawRect(image.x, image.y, image.width, image.height);
+			graphics.endFill();	
+		}
+		
+		/**
 		 * Apply a half transparent color over an image.
 		 * This is achieved by drawing 45° lines every 2 pixels.
-		 * @param image		The image to cover.
-		 * @param dim		size of the image.
+		 * 
+		 * @param image The image to cover.
+		 * @param dim   size of the image.
 		 */
 		public static function filterImage( sprite:Sprite, dim:Dimension, color:uint):void {
 			var g:Graphics = sprite.graphics;

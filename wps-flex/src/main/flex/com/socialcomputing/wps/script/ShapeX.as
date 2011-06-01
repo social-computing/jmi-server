@@ -2,6 +2,7 @@ package com.socialcomputing.wps.script  {
     import br.com.stimuli.loading.BulkLoader;
     
     import com.socialcomputing.wps.components.PlanComponent;
+    import com.socialcomputing.wps.util.controls.ImageUtil;
     import com.socialcomputing.wps.util.shapes.RectangleUtil;
     
     import flash.display.Bitmap;
@@ -432,125 +433,70 @@ package com.socialcomputing.wps.script  {
         /**
          * Draws an Image in a shape using a transformation to locate and scale it inside.
          * Only the disk case (1 point) is handled.
-         * The image is stored in the Env media table if not already.
-         * The next call to draw the same image will simply retrieve it from the table, not the net.
-         * @param applet		The Applet that owns this.
-         * @param g				A graphics to draw on.
+         * The image is kept in the image bulk loader if not already.
+         * The next call to draw the same image will simply retrieve it from the loader, not the net.
+		 * 
+         * @param s			    A sprite to draw on.
          * @param zone			The zone that holds the properties used by this shape.
          * @param imageNam		The path of the image to retrieve.
          * @param transfo		A transformation of this shape to put the image inside.
          * @param center		This shape center before the transformation.
          */
-        public function drawImage(applet:PlanComponent, s:Sprite, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
-            if ( isDefined( SCALE_VAL )) {   // else it is just a void frame
-                //var medias:Array = applet.env.m_medias;
+        public function drawImage(s:Sprite, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
+			// else it is just a void frame
+			if (isDefined(SCALE_VAL)) {
                 var scaledImg:Image;
-				//var image:Image = medias[imageNam];
 				
+				// TODO : Get the url from the applet parameters
 				//var baseUrl:String = "http://10.0.2.2:8080";
 				var baseUrl:String = "http://localhost:8080";
 				var imageUrl:String = baseUrl + imageNam;
 				var imageLoader:BulkLoader = applet.env.loader;
 				var image:Bitmap = imageLoader.getBitmap(imageUrl);
 				
-                
+				// Check if the image has already been loaded
+			    // If it isn't add the image url to the bulkloader and catch the event when done.
                 if (image == null) {
-                    /*
-					var ldr:Loader = new Loader();
-                    //var baseUrl = "http://10.0.2.2:8080";
-					var baseUrl:String = "http://localhost:8080";
-                    var urlReq:URLRequest = new URLRequest(baseUrl + imageNam);
-                    
-                    ldr.contentLoaderInfo.addEventListener(Event.COMPLETE,loaderCompleteHandler);
-                    ldr.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
-                    function loaderCompleteHandler(e:Event):void {
-                        trace('Image has loaded.');
-                        var p:Point= getCenter( zone );
-                        var shapePos:Point = new Point();
-                        var scale:Number   = getShapePos(zone, transfo, center, p, shapePos);
-                        var x:int;
-                        var y:int;
-                        var imgWid:int = ldr.width;
-                        var w:int = imgWid;
-                        
-                        if ( scale > 0.) {    // disk
-                            w = int(( 1.414 * scale ));
-                        }
-                        
-                        if ( imgWid != w ) {
-                            imageNam    += w;
-                            scaledImg   = Image(medias[imageNam]);
-                            
-                            if ( scaledImg == null ) {
-                                ldr.scaleX = w / ldr.width;
-                                ldr.scaleY = w / ldr.height;
-                                medias[imageNam] = scaledImg;
-                            }
-                        }
-                        
-                        w >>= 1;
-                        ldr.x = p.x + shapePos.x - w;
-                        ldr.y = p.y + shapePos.y - w;
-                        s.addChild(ldr);
-                        //applet.invalidateDisplayList();
-                    }
-                    
-                    function ioErrorHandler(event:IOErrorEvent):void {
-                        trace("Impossible de charger l'image: " + urlReq);
-                    }
-                    */
-					
+
+					// Fonction called to display the image when it was successfully loaded
 					function loaderCompleteHandler(e:Event):void {
-						trace('Image has loaded.');
-						var p:Point= getCenter( zone );
-						var shapePos:Point   = new Point();
-						var scale:Number     = getShapePos(zone, transfo, center, p, shapePos);
-						var image:Bitmap = imageLoader.getBitmap(imageUrl);
-						var x:int;
-						var y:int;
-						var imgWid:int = image.width;
-						var w:int = imgWid;
+						trace('Image has loaded: ' + imageUrl);
+						var p:Point        = getCenter(zone);
+						var shapePos:Point = new Point();
+						var scale:Number   = getShapePos(zone, transfo, center, p, shapePos);
+						var image:Bitmap   = imageLoader.getBitmap(imageUrl);
+						var imageWidth:int = image.width;
+						var imageScale:int = imageWidth;
 						
-						if ( scale > 0.) {    // disk
-							w = int(( 1.414 * scale ));
+						// Disk
+						if (scale > 0.) {
+							imageScale = int((1.414 * scale));
 						}
 
-						
-						if ( imgWid != w ) {
-							imageNam    += w;
-							//scaledImg   = Image(medias[imageNam]);
-							
-							if ( scaledImg == null ) {
-								image.scaleX = w / image.width;
-								image.scaleY = w / image.height;
-								//medias[imageNam] = scaledImg;
+						// Rescale image
+						if (imageWidth != imageScale) {
+							if (scaledImg == null) {
+								image.scaleX = imageScale / image.width;
+								image.scaleY = imageScale / image.height;
 							}
 						}
+
+						// Upadate image coordinates after rescale
+						imageScale >>= 1;
+						image.x = p.x + shapePos.x - imageScale;
+						image.y = p.y + shapePos.y - imageScale;
 						
-						w >>= 1;
-						
-						image.x = p.x + shapePos.x - w;
-						image.y = p.y + shapePos.y - w;
-						//s.addChild(image);
-                        var matrix : Matrix = new Matrix();
-                        matrix.scale(image.scaleX, image.scaleY);
-                        matrix.translate(image.x, image.y);
-                        s.graphics.beginBitmapFill(image.bitmapData, matrix);
-                        s.graphics.drawRect(image.x, image.y, image.width, image.height);
-                        s.graphics.endFill();
+						// Draw the bitmap on the sprite graphics
+						ImageUtil.drawBitmap(image, s.graphics);
 					}
-					
 					applet.env.loader.add(imageUrl);
 					applet.env.loader.get(imageUrl).addEventListener(Event.COMPLETE, loaderCompleteHandler);
-					
-                    //medias.push(imageNam, image);
                     
-                } else {
-                    s.addChild(image);
                 }
-                
-                //ldr.load(urlReq);
-                
+				// Draw the image if it has already been loaded
+				else {
+					ImageUtil.drawBitmap(image, s.graphics);
+                }
             }
         }
         
@@ -558,7 +504,6 @@ package com.socialcomputing.wps.script  {
         
         /**
          * Evaluate the transformation of a point using a transformation on this shape and return its scale.
-
          * 
          * @param zone		BagZone holding this props.
          * @param transfo	A transformation to scale or translate this shape.
