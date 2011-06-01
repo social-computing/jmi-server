@@ -126,7 +126,7 @@ public class Env
 		var bkCol:ColorTransform= needPrint ? bkWhite : m_inCol.getColor();
 		//m_applet        = applet;
 		// m_medias        = new Array();
-		this.loader = new BulkLoader("main-site");
+		this.loader = new BulkLoader();
 		this.loader.addEventListener(
 			BulkLoader.COMPLETE,
 			function(event:Event):void {
