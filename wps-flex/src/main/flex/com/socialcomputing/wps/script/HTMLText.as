@@ -549,15 +549,15 @@ package com.socialcomputing.wps.script{
             if ( text.length > 0)
             {
 				var field:TextField = new TextField();
-				field.setTextFormat( format);
 				field.text = text;
+				field.setTextFormat( format);
 				field.autoSize = TextFieldAutoSize.LEFT;
-				var fieldRect:Rectangle = field.getBounds( applet);
-				var metric:TextLineMetrics = field.getLineMetrics(0);
+				//var fieldRect:Rectangle = field.getBounds( applet);
+				var metric:TextLineMetrics = field.getLineMetrics(0); 
 				var a:int	= metric.ascent,
                     d:int   = metric.descent,
-                    w:int   = fieldRect.width, //metric.width,
-                    h:int   = fieldRect.height; //metric.height;
+                    w:int   = field.width, //metric.width,
+                    h:int   = field.height; //metric.height;
 				
                 // The previous token was a text too so we must merge it with this new one.
                 if ( isText )
@@ -922,7 +922,9 @@ package com.socialcomputing.wps.script{
                 s.graphics.beginFill(white.color, 0.2);
 				s.graphics.lineStyle();
                 s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 10, 10);
-                s.graphics.endFill();
+/*				s.graphics.lineStyle( 1, 0xFF0000);
+				s.graphics.drawRect(pos.x, pos.y, m_bounds.width, m_bounds.height);
+*/                s.graphics.endFill();
             }
             m_bounds.x  = pos.x;
             m_bounds.y  = pos.y;

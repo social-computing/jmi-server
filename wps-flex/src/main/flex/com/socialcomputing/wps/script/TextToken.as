@@ -8,6 +8,7 @@ package com.socialcomputing.wps.script {
     import flash.text.AntiAliasType;
     import flash.text.Font;
     import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
     import flash.text.TextFormat;
     
 
@@ -73,11 +74,12 @@ package com.socialcomputing.wps.script {
             text.text = m_text;
             text.x = x;
             text.y = y - m_bounds.y;
-            text.antiAliasType = AntiAliasType.ADVANCED;
 			if ( m_color != null ) {
 				m_font.color = m_color.color;
 			}
-            text.setTextFormat( m_font);
+			text.setTextFormat( m_font);
+			text.autoSize = TextFieldAutoSize.LEFT;
+            text.antiAliasType = AntiAliasType.ADVANCED;
 			text.border = false;
             s.addChild(text);
         }
