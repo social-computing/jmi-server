@@ -487,10 +487,14 @@ package com.socialcomputing.wps.script  {
 						
 						// Draw the bitmap on the sprite graphics
 						//ImageUtil.drawBitmap(image, s.graphics);
-                        s.addChild(image);
+                        //s.addChild(image);
 					}
+                    function loaderError(e:Event):void {
+                        trace('Load image ' + imageUrl + ' failed');
+                    }
 					imageLoader.add(imageUrl);
 					imageLoader.get(imageUrl).addEventListener(Event.COMPLETE, loaderCompleteHandler);
+                    imageLoader.get(imageUrl).addEventListener(BulkLoader.ERROR, loaderError);
                 }
 				// Draw the image if it has already been loaded
 				else {
