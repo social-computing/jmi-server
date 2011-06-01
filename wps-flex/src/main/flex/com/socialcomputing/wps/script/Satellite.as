@@ -304,7 +304,7 @@ package com.socialcomputing.wps.script  {
                     if (a < dir)  a   += Pi2;
                     
                     a = .5+(a - dir) / step;
-                    i = a as int;
+                    i = int( a);
                     
                     if (i > 0) {
                         if (i < nbZones) {
