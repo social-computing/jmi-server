@@ -447,8 +447,8 @@ package com.socialcomputing.wps.script  {
                 var scaledImg:Image;
 				//var image:Image = medias[imageNam];
 				
-				//var baseUrl = "http://10.0.2.2:8080";
-				var baseUrl = "http://localhost:8080";
+				//var baseUrl:String = "http://10.0.2.2:8080";
+				var baseUrl:String = "http://localhost:8080";
 				var imageUrl:String = baseUrl + imageNam;
 				var imageLoader:BulkLoader = applet.env.loader;
 				var image:Bitmap = imageLoader.getBitmap(imageUrl);
