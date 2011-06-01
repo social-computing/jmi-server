@@ -446,7 +446,7 @@ package com.socialcomputing.wps.script  {
 			// else it is just a void frame
 			if (isDefined(SCALE_VAL)) {
                 var scaledImg:Image;
-				
+
 				// TODO : Get the url from the applet parameters
 				//var baseUrl:String = "http://10.0.2.2:8080";
 				var baseUrl:String = "http://localhost:8080";
@@ -486,7 +486,8 @@ package com.socialcomputing.wps.script  {
 						image.y = p.y + shapePos.y - imageScale;
 						
 						// Draw the bitmap on the sprite graphics
-						ImageUtil.drawBitmap(image, s.graphics);
+						//ImageUtil.drawBitmap(image, s.graphics);
+                        s.addChild(image);
 					}
 					imageLoader.add(imageUrl);
 					imageLoader.get(imageUrl).addEventListener(Event.COMPLETE, loaderCompleteHandler);

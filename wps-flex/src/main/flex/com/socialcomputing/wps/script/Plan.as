@@ -181,7 +181,7 @@ package com.socialcomputing.wps.script  {
             //if (m_applet.backImgUrl != null)
                 //renderBitmap( restGfx, m_applet.m_backImgUrl, 0, 0, null );
 			
-			ImageUtil.clear( restDrawingSurface);
+			ImageUtil.clear(restDrawingSurface);
 			restDrawingSurface.graphics.beginFill( this.m_applet.env.m_inCol.m_color);
 			restDrawingSurface.graphics.drawRect(0, 0, this.m_applet.width, this.m_applet.height);
 			restDrawingSurface.graphics.endFill();
