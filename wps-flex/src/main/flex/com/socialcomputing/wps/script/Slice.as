@@ -111,13 +111,10 @@ package com.socialcomputing.wps.script  {
             }
             
 			// Draw a satellite's image it is set
-			
             if(isDefined(IMAGE_VAL)) {
-				//throw new Error("not yet implemented");
-                 
-				var imageNam:String= parseString(IMAGE_VAL, zone.m_props )[0];
+				var imageNam:String = parseString(IMAGE_VAL, zone.m_props )[0];
                 if (imageNam != null) {
-                    satShp.drawImage(applet, s, supZone, imageNam, transfo, satCtr);
+                    satShp.drawImage(applet.env.loader, s, supZone, imageNam, transfo, satCtr);
                 }
 				
             }

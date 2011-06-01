@@ -442,7 +442,7 @@ package com.socialcomputing.wps.script  {
          * @param transfo		A transformation of this shape to put the image inside.
          * @param center		This shape center before the transformation.
          */
-        public function drawImage(s:Sprite, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
+        public function drawImage(imageLoader:BulkLoader, s:Sprite, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
 			// else it is just a void frame
 			if (isDefined(SCALE_VAL)) {
                 var scaledImg:Image;
@@ -451,7 +451,6 @@ package com.socialcomputing.wps.script  {
 				//var baseUrl:String = "http://10.0.2.2:8080";
 				var baseUrl:String = "http://localhost:8080";
 				var imageUrl:String = baseUrl + imageNam;
-				var imageLoader:BulkLoader = applet.env.loader;
 				var image:Bitmap = imageLoader.getBitmap(imageUrl);
 				
 				// Check if the image has already been loaded
@@ -489,9 +488,8 @@ package com.socialcomputing.wps.script  {
 						// Draw the bitmap on the sprite graphics
 						ImageUtil.drawBitmap(image, s.graphics);
 					}
-					applet.env.loader.add(imageUrl);
-					applet.env.loader.get(imageUrl).addEventListener(Event.COMPLETE, loaderCompleteHandler);
-                    
+					imageLoader.add(imageUrl);
+					imageLoader.get(imageUrl).addEventListener(Event.COMPLETE, loaderCompleteHandler);
                 }
 				// Draw the image if it has already been loaded
 				else {
