@@ -32,6 +32,7 @@ package com.socialcomputing.wps.components
 	import mx.controls.Menu;
 	import mx.events.MenuEvent;
 	import mx.managers.CursorManager;
+	import mx.styles.CSSStyleDeclaration;
 	
 	import spark.components.Group;
 	import spark.core.SpriteVisualElement;
@@ -90,16 +91,29 @@ package com.socialcomputing.wps.components
 			_drawingSurface = new SpriteVisualElement();
 			this.addElement(_drawingSurface);
 
+			// Graphic zones
 			this._curDrawingSurface = new Sprite();
 			this._restDrawingSurface = new Sprite();
 			this._backDrawingSurface = new Sprite();
-		
+			
+			// Event listeners
 			this.doubleClickEnabled = true;
 			addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
 			addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 			addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
 			addEventListener(MouseEvent.CLICK, mouseClickHandler);
 			addEventListener(MouseEvent.DOUBLE_CLICK, mouseDoubleClickHandler);
+			
+			// Style declarations
+		    var cssDecl:CSSStyleDeclaration = styleManager.getStyleDeclaration("mx.controls.ToolTip");
+			if (!cssDecl) {
+				cssDecl = new CSSStyleDeclaration("mx.controls.ToolTip");
+			}
+			cssDecl.setStyle("backgroundAlpha", 0.8);
+			cssDecl.setStyle("backgroundColor", "black");
+			cssDecl.setStyle("color", "white");
+			cssDecl.setStyle("cornerRadius", 5);
+			cssDecl.setStyle("fontSize", 12);
 		}
 		
 		public function get backDrawingSurface():Sprite

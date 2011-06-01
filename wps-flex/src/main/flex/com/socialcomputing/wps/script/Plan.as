@@ -322,8 +322,7 @@ package com.socialcomputing.wps.script  {
 					var curZoneBounds:Rectangle = m_curZone.getParent().m_bounds;
 					ImageUtil.clear( this.m_applet.curDrawingSurface);
 					this.m_applet.renderShape(this.m_applet.restDrawingSurface, curZoneBounds.width, curZoneBounds.height, new Point(curZoneBounds.x, curZoneBounds.y));
-                    //blitImage(g, m_applet.m_restImg, m_curZone.getParent().m_bounds );
-					//blitImage(g, m_applet.restImg, m_curZone.getParent().m_bounds );
+                    this.m_applet.toolTip = null;
                 }
                 
                 m_curSat = curSat;
@@ -429,37 +428,7 @@ package com.socialcomputing.wps.script  {
 				m_prevBox.width = dim.width; 
             }
         }
-        
-        /**
-         * Popup a slice after a delay and during a fixed time (tooltips).
-         * A unique identifier for this slice is used to store it and kill its waiter if needed.
-         * @param zone		Zone holding this Slice properties.
-         * @param slice		A slice describing how to draw this tooltip.
-         * @param delay		Delay before poping the slice.
-         * @param length	Time to keep the slice visible before hiding it. -1 means stay visible until another tip with the same key is poped.
-         * @param key		A unique ID for each slices of the same kind (tooltip != infoTip).
-         */
-        public function popSlice( zone:ActiveZone, slice:Slice, delay:int, length:int, key:String):void {
-            // TODO
-			/*var tipWaiter:Waiter= Waiter(m_waiters.get( key ));
-            
-            if ( tipWaiter != null )
-            {
-                if ( tipWaiter.m_params[0] != zone )
-                    tipWaiter.finish();
-                else
-                {
-                    tipWaiter.m_loop = true;
-                    return;
-                }
-            }
-            
-            tipWaiter = new Waiter( this, new Array( zone, slice, new Rectangle(), new Boolean( false ), key ), delay, length );
-            m_waiters.put( key, tipWaiter );
-            tipWaiter.start();
-			*/
-        }
-        
+                
         /**
          * Callback of the Waiters listener to manage poping slices.
          * @param params	This Object table is filled as follow:
@@ -473,7 +442,7 @@ package com.socialcomputing.wps.script  {
          * @param state
          */
         //public synchronized function stateChanged( params:Array, state:int):void {
-        public function stateChanged( params:Array, state:int):void {
+        public function stateChanged(params:Array, state:int):void {
             /*if ( m_applet.m_plan != null )
             {
                 var g:Graphics= m_applet.graphics;

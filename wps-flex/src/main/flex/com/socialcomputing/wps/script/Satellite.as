@@ -423,15 +423,15 @@ package com.socialcomputing.wps.script  {
 								menu.show( point.x, point.y );
 							}
                         }
-                        else if ( func == ( "pop" ))    // Pop a tooltip
-                        {
+						// Pop a tooltip
+                        else if (func == ("pop")) {
                             var slice:Slice = zone.m_curSwh.m_refs[args] as Slice;
                             
-                            if ( slice != null )
-                            {
-                                var delay:int= slice.getInt( Slice.DELAY_VAL, zone.m_props ),
-                                    length:int  = slice.getInt( Slice.LENGTH_VAL, zone.m_props );
-                                applet.plan.popSlice( zone, slice, delay, length, args );
+							if (slice != null) {
+                                var delay:int     = slice.getInt(Slice.DELAY_VAL, zone.m_props);
+                                var length:int    = slice.getInt(Slice.LENGTH_VAL, zone.m_props);
+								var text:HTMLText = slice.getText(Slice.TEXT_VAL, zone.m_props);
+								applet.toolTip    = text.parseString(HTMLText.TEXT_VAL, zone.m_props).join("\n");
                             }
                         }
                         else if ( func == ( "play" ))    // Plays a sound in .au Sun audio format
