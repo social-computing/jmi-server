@@ -418,6 +418,7 @@ package com.socialcomputing.wps.script  {
 								menuData.addItem( root);
 								menux.parseMenu( root.children, zone );
 								var menu:Menu = Menu.createMenu( applet, menuData, false);
+                                menu.variableRowHeight = true;
 								menu.addEventListener(MenuEvent.ITEM_CLICK, applet.menuHandler);								
 								var point:Point = applet.localToGlobal(pos);
 								menu.show( point.x, point.y );
