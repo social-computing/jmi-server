@@ -22,15 +22,17 @@ package com.socialcomputing.wps.script {
         override public function set data(value:Object):void {
             if(value == null) return;
             super.data = value;
-            if(this.data && this.data.bold == "true"){
+            if(this.data){
                 //Si on veut rajouter une tooltip
                 //this.label.toolTip = "tooltip";
                 
                 /*var myTextFormat:TextFormat = new TextFormat();
                 myTextFormat.bold = true;
                 this.label.setTextFormat(myTextFormat);*/
-                this.setStyle("fontWeight", "bold");
+                if (this.data.bold == "true") this.setStyle("fontWeight", "bold");
+                this.setStyle("fontFamily", this.data.font);
             }
+            
         }
         
         
