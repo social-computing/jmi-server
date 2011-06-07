@@ -8,6 +8,7 @@ package com.socialcomputing.wps.script  {
     
     import mx.collections.ArrayCollection;
     import mx.controls.Menu;
+    import mx.core.ClassFactory;
     import mx.events.MenuEvent;
     
     /**
@@ -412,13 +413,10 @@ package com.socialcomputing.wps.script  {
                             if ( menux != null )
                             {
 								var menuData:ArrayCollection = new ArrayCollection();
-								var root:Object = new Object();
-								root.label = "root";
-								root.children = new ArrayCollection();
-								menuData.addItem( root);
-								menux.parseMenu( root.children, zone );
+								menux.parseMenu( menuData, zone );
 								var menu:Menu = Menu.createMenu( applet, menuData, false);
                                 menu.variableRowHeight = true;
+                                menu.itemRenderer = new ClassFactory(CustomMenuItemRenderer);
 								menu.addEventListener(MenuEvent.ITEM_CLICK, applet.menuHandler);								
 								var point:Point = applet.localToGlobal(pos);
 								menu.show( point.x, point.y );

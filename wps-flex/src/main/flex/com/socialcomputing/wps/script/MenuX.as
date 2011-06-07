@@ -68,9 +68,11 @@ package com.socialcomputing.wps.script  {
          * @throws UnsupportedEncodingException 
          */
         public function parseMenu( dst:ArrayCollection, zone:ActiveZone):Boolean {
-            var i:int, j:int, k:int	= -1,
-                n:int		= 1,
-                iCnt:int	= m_items.length;
+            var i:int;
+            var j:int;
+            var k:int	= -1;
+            var n:int		= 1;
+            var iCnt:int	= m_items.length;
             var isEmpty:Boolean= true;
             var subMenu:ArrayCollection;
             var menuItm:Object;
@@ -83,8 +85,6 @@ package com.socialcomputing.wps.script  {
             {
                 labels	= parseString( TEXT_VAL, zone.m_props);
                 n		= labels.length;
-                if ( n == 1)	
-					; // TODO dst.label = labels[0];
             }
             
             for ( j = 0; j < n; j ++ )
@@ -149,17 +149,18 @@ package com.socialcomputing.wps.script  {
          */
         private function parseItem( dst:ArrayCollection, zone:ActiveZone, j:int):Boolean {
             var parts:Array 	= getString( TEXT_VAL, zone.m_props ).split( SEP);
-            var title:String	= parts[0],
-                url:String      = parts.length > 1? parts[1] : null,
-                redir:String    = parts.length > 2? parts[2] : null;
+            var title:String	= parts[0];
+            var url:String      = parts.length > 1? parts[1] : null;
+            var redir:String    = parts.length > 2? parts[2] : null;
             //itemStr;
             var font:TextFormat= this.getTextFormat( zone.m_props);
-            var items:Vector.<String>	= parseString3( title, zone.m_props),
-                urls:Vector.<String>   	= url != null ? parseString3( url, zone .m_props) : null,
-                redirs:Vector.<String>  = redir != null ? parseString3( redir, zone.m_props) : urls;
+            var items:Vector.<String>	= parseString3( title, zone.m_props);
+            var urls:Vector.<String>   	= url != null ? parseString3( url, zone .m_props) : null;
+            var redirs:Vector.<String>  = redir != null ? parseString3( redir, zone.m_props) : urls;
             //MenuItem    item;
-            var i:int, n:int	= items.length,
-                m:int		= redirs != null ? redirs.length : 0;
+            var i:int;
+            var n:int	= items.length;
+            var m:int		= redirs != null ? redirs.length : 0;
             
             if ( j == -1)
             {
@@ -195,6 +196,10 @@ package com.socialcomputing.wps.script  {
 				item.label = title;
 				if ( url != null )
 					item.action = url;
+                if ( font != null && font.bold == true)
+                    item.bold = "true";
+                else
+                    item.bold = "false";
 				//    TODO        item.setFont( font );
 			}
 			menu.addItem( item );
