@@ -1,7 +1,8 @@
 package com.socialcomputing.wps.script {
     import flash.errors.IllegalOperationError;
 
-    public class StringTokenizer implements Iterator, IEnumeration
+    public class StringTokenizer 
+		
     {
         /**
          *
@@ -17,7 +18,7 @@ package com.socialcomputing.wps.script {
          * tokens are to be extracted
          *
          */
-        protected var delimiter:String;
+        protected var delimiters:String;
         
         /**
          *
@@ -25,7 +26,7 @@ package com.socialcomputing.wps.script {
          * String extracted by the <code>StringTokenizer</code> instance
          *
          */
-        protected var tokens:Array;
+        protected var tokens:Vector.<String>;
         
         /**
          *
@@ -54,68 +55,43 @@ package com.socialcomputing.wps.script {
          * @param the delimiter on which the tokens are extracted
          *
          */
-        public function StringTokenizer(source:String, delimiter:String)
+        public function StringTokenizer(source:String, delimiters:String)
         {
             this.source = source;
-            this.delimiter = delimiter;
+            this.delimiters = delimiters;
             
-            this.tokens = source.split( delimiter );
+			this.tokens  = new Vector.<String>();
+			tokenize( source, delimiters);
         }
-        
-        /**
-         *
-         * Static Factory method which creates a new <code>Iterator</code>
-         * StringTokenizer implementation
-         *
-         * @example
-         * <listing version="3.0">
-         *
-         * var tokens:Iterator = StringTokenizer.createIterator("This is a test", " ");
-         *
-         * while ( tokens.hasNext() )
-         * {
-         *     trace( tokens.next() );
-         * }
-         *
-         * </listing>
-         *
-         * @param  the source String from which the tokens are to be extracted
-         * @param  the delimiter on which the tokens are extracted
-         * @return a new <code>StringTokenizer</code> as an <code>Iterator</code>
-         *
-         */
-        public static function createIterator(source:String, delimiter:String) : Iterator
-        {
-            return new StringTokenizer( source, delimiter );
-        }
-        
-        /**
-         *
-         * Static Factory method which creates a new <code>IEnumeration</code>
-         * StringTokenizer implementation
-         *
-         * @example
-         * <listing version="3.0">
-         *
-         * var tokens:IEnumeration = StringTokenizer.createEnumeration("This is a test", " ");
-         *
-         * while ( tokens.hasMoreElements() )
-         * {
-         *     trace( tokens.nextElement() );
-         * }
-         *
-         * </listing>
-         *
-         * @param  the source String from which the tokens are to be extracted
-         * @param  the delimiter on which the tokens are extracted
-         * @return a new <code>StringTokenizer</code> as an <code>IEnumeration</code>
-         *
-         */
-        public static function createEnumeration(source:String, delimiter:String) : IEnumeration
-        {
-            return new StringTokenizer( source, delimiter );
-        }
-        
+
+		private function tokenize(source:String, delimiters:String):void
+		{
+			var start:int = 0;
+			for( var i:int = 0; i < source.length; ++i) {
+				var token:String = tokenizeDelimiter( source, i, delimiters);
+				if( token != null) {
+					if( start <= i) {
+						this.tokens.push( source.slice( start, i)); 
+					}
+					this.tokens.push( token); 
+					start = i+1;
+				}
+			}
+			if( start < source.length) {
+				this.tokens.push( source.slice( start, source.length)); 
+			}
+		}
+		
+		private function tokenizeDelimiter(source:String, pos:int, delimiters:String):String {
+			var car:String = source.charAt( pos);
+			for( var i:int = 0; i < delimiters.length; ++i) {
+				if( car == delimiters.charAt( i)) {
+					return delimiters.charAt( i);
+				}
+			}
+			return null;
+		}
+		
         /**
          *
          * Retrieves the length of tokens extracted from the source
@@ -168,104 +144,5 @@ package com.socialcomputing.wps.script {
             
             return token;
         }
-        
-        /**
-         *
-         * <code>Iterator</code> implementation which determines if
-         * there are more tokens which have yet to be retrieved via
-         * calls to <code>nextToken</code>
-         *
-         * @return true if more tokens remain, otherwise false
-         *
-         */
-        public function hasNext() : Boolean
-        {
-            return hasMoreTokens();
-        }
-        
-        /**
-         *
-         * Retrieves the next element in the <code>StringTokenizer</code>
-         * instance
-         *
-         * @return the next token based on the current position
-         *
-         */
-        public function next() : *
-        {
-            return nextToken();
-        }
-        
-        /**
-         *
-         * Resets the position of the <code>StringTokenizer</code> to
-         * zero
-         *
-         */
-        public function reset() : void
-        {
-            cursor = 0;
-        }
-        
-        
-        /**
-         *
-         * Determines the current position within the token
-         *
-         * @return the current index of the token
-         *
-         */
-        public function position() : int
-        {
-            return cursor;
-        }
-        
-        /**
-         *
-         * Remove must be implemented to provide a standard iterator
-         * implementation.
-         *
-         * <p>
-         * Typically this method would not provide an actual implementation
-         * as a concrete iterator is not to perform modifications, but rather
-         * simply provide a mechanism for iterating the object, thus being
-         * considered as read-only. Therefore concrete implementationx should
-         * throw an Exception
-         * </p>
-         *
-         * @throws flash.errors.IllegalOperationError
-         *
-         */
-        public function remove() : void
-        {
-            throw new IllegalOperationError("IllegalOperationError: remove is not supported");
-        }
-        
-        /**
-         *
-         * <code>IEnumeration</code> implementation which determines if
-         * there are more tokens which have yet to be retrieved via calls
-         * to <code>nextToken</code>
-         *
-         * @return true if more tokens remain, otherwise false
-         *
-         */
-        public function hasMoreElements() : Boolean
-        {
-            return hasMoreTokens();
-        }
-        
-        /**
-         *
-         * Retrieves the next token in the <code>StringTokenizer</code>
-         * instance
-         *
-         * @return the next token in the source String
-         *
-         */
-        public function nextElement() : *
-        {
-            return nextToken();
-        }
-    }
+	}        
 }
