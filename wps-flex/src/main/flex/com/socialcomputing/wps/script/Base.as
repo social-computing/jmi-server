@@ -167,7 +167,6 @@ package com.socialcomputing.wps.script  {
 			if( value is ColorX) {
 				return (value as ColorX).getColor2(props);
 			}
-			trace("Base getColor color is not set");
 			return null;	
         }
         

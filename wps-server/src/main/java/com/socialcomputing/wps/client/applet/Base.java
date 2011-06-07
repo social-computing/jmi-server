@@ -109,7 +109,8 @@ public class Base implements Serializable
 	 */
 	protected final boolean getBool( int prop, Hashtable props )
 	{
-		return ((Boolean)getValue( prop, props )).booleanValue();
+	    Object val = getValue( prop, props );
+		return val == null ? false : ((Boolean)val).booleanValue();
 	}
 
 	/**

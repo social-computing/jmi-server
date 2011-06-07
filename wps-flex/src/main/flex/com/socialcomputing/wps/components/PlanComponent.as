@@ -390,8 +390,6 @@ package com.socialcomputing.wps.components
 		
 		
 		public function renderShape(sprite:Sprite, width:uint, height:uint, position:Point = null):void {
-			trace("renderShape method called");
-			
 			// If no position is specified, take (0,0)
 			if(position == null) {
 				position = new Point(0, 0);
@@ -403,8 +401,6 @@ package com.socialcomputing.wps.components
 			// Copying the content of the back buffer on screen
 			var sourceZone:Rectangle = new Rectangle(position.x, position.y, width, height);
 			_onScreen.copyPixels(this._offScreen, sourceZone, position);
-
-			trace("renderShape method end");
 		}
 	}
 }

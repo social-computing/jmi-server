@@ -140,7 +140,6 @@ package com.socialcomputing.wps.script  {
          * @return			True if this contains pos, false otherwise
          */
         public function contains(g:Graphics, zone:ActiveZone, transfo:Transfo, center:Point, pos:Point):Boolean {
-            trace("[Shape contains method begin]");
             if(!isDefined(SCALE_VAL)) return false; // it is just a void frame
             
             var points:Array = getValue(POLYGON_VAL, zone.m_props) as Array;
@@ -153,20 +152,15 @@ package com.socialcomputing.wps.script  {
             switch(nbPoint) {
                 // 1 point = circle => Place
                 case 1: 
-                    trace("  - 1 point situation : circle");
                     var distance:Point = shapeCenter.add(shapePosition).subtract(pos);
-                    trace("  - size = " + size);
-                    trace("  - (dx = " + distance.x + ", dy = " + distance.y  + ")"); 
                     
                     // We check if the position is located inside the circle
                     // Another way to express it : is the distance between the circle center and the position < circle radius
                     ret = (distance.x * distance.x) + (distance.y * distance.y) < (size * size);
-                    trace("[Shape contains end, ret = " + ret + "]");
                     return ret;
                     
                     // 2 points = segment => Street
                 case 2:     
-                    trace("  - 2 points situation : polygon");
                     var fromPoint:Point = (points[0] as Point).add(shapePosition);
                     var toPoint:Point = (points[1] as Point).add(shapePosition);
                     var poly:Polygon = getLinkPoly(zone, fromPoint, toPoint, size);
@@ -183,7 +177,6 @@ package com.socialcomputing.wps.script  {
                     // EN DEBUG
                     
                     ret = poly.contains(pos); 
-                    trace("[Shape contains end, value = " + ret + "]");
                     return ret;
                 default:
                     throw new Error("Should never happen, a shape can only have 1 or 2 points");
@@ -253,7 +246,6 @@ package com.socialcomputing.wps.script  {
          * @throws UnsupportedEncodingException 
          */
         public function paint(s:Sprite, supZone:ActiveZone, zone:ActiveZone, slice:Slice, transfo:Transfo, center:Point):void {
-            trace("[ShapeX paint method called]");
             
             // else it is just a void frame
             if(isDefined(SCALE_VAL)) {
@@ -285,7 +277,6 @@ package com.socialcomputing.wps.script  {
                     // dot => Place ??
                     case 1:     
                     {
-                        trace("Circle shape detected: ");
                         //composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0);
                         //g.setComposite(composite);
                         var x:int = p.x + shapePos.x - size;
@@ -317,7 +308,6 @@ package com.socialcomputing.wps.script  {
                     // segment  => Street
                     case 2:     
                     {
-                        trace("Segment shape detected: ");
                         /*composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f;					
                         g.setComposite(composite);*/
                         
@@ -340,7 +330,6 @@ package com.socialcomputing.wps.script  {
                     }
                 }
             }
-            trace("[ShapeX paint end]");
         }
         
         /**
@@ -459,7 +448,6 @@ package com.socialcomputing.wps.script  {
 
 					// Fonction called to display the image when it was successfully loaded
 					function loaderCompleteHandler(e:Event):void {
-						trace('Image has loaded: ' + imageUrl);
 						var p:Point        = getCenter(zone);
 						var shapePos:Point = new Point();
 						var scale:Number   = getShapePos(zone, transfo, center, p, shapePos);

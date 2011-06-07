@@ -192,7 +192,6 @@ package com.socialcomputing.wps.script  {
          * @throws UnsupportedEncodingException 
          */
         public function paint(applet:PlanComponent, s:Sprite, zone:ActiveZone, satCtr:Point, supCtr:Point, isLinkOnly:Boolean, satData:SatData, showTyp:int):void {
-            trace("[Satellite paint method called]");
 			var flags:int= satData.m_flags;
             var isTip:Boolean		= isEnabled( flags, Satellite.TIP_BIT ),
                 isSel:Boolean       = isEnabled( flags, Satellite.SEL_BIT ),
@@ -204,14 +203,12 @@ package com.socialcomputing.wps.script  {
             {
                 if ( isLinkOnly )               // we must draw this Satellite Link if it exists
                 {
-					trace("Satellite is link only");
                     if ( isEnabled( flags, LINK_BIT ))    // This has a Link
                     {
                         var x1:int = supCtr.x,
                             y1:int = supCtr.y,
                             x2:int = satCtr.x,
                             y2:int = satCtr.y;
-                        trace("  - Satellite link x1 = " + x1 + ", y1 = " + y1 + ", x2 = " + x2 + ", y2 = " + y2);
                         setColor( s, LINK_DRK_COL_VAL, zone.m_props );
                         //g.drawLine( x1, y1 + 1, x2, y2 + 1);
                         s.graphics.moveTo(x1, y1 + 1);
@@ -247,7 +244,6 @@ package com.socialcomputing.wps.script  {
                         case TIP_TYP    : isShowable = isTip; break;
                         //			case SEL_TYP :  return isSel;
                     }
-					trace("Satellite is not link only, is showable = " + isShowable);
                     if ( isShowable )
                     {
 						for each( var slice:Slice in m_slices)
@@ -257,7 +253,6 @@ package com.socialcomputing.wps.script  {
                     }
                 }
             }
-			trace("[Satellite paint end]");
         }
         
         /**
@@ -429,8 +424,9 @@ package com.socialcomputing.wps.script  {
 							if (slice != null) {
                                 var delay:int     = slice.getInt(Slice.DELAY_VAL, zone.m_props);
                                 var length:int    = slice.getInt(Slice.LENGTH_VAL, zone.m_props);
-								var text:HTMLText = slice.getText(Slice.TEXT_VAL, zone.m_props);
+/*								var text:HTMLText = slice.getText(Slice.TEXT_VAL, zone.m_props);
 								applet.toolTip    = text.parseString(HTMLText.TEXT_VAL, zone.m_props).join("\n");
+*/								applet.plan.popSlice( zone, slice, delay, length, args);
                             }
                         }
                         else if ( func == ( "play" ))    // Plays a sound in .au Sun audio format
