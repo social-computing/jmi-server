@@ -411,6 +411,8 @@ package com.socialcomputing.wps.script  {
 								menux.parseMenu( menuData, zone );
 								var menu:Menu = Menu.createMenu( applet, menuData, false);
                                 menu.variableRowHeight = true;
+                                menu.labelField = "label";
+                                //menu.setStyle("fontWeight", "bold");
                                 menu.itemRenderer = new ClassFactory(CustomMenuItemRenderer);
 								menu.addEventListener(MenuEvent.ITEM_CLICK, applet.menuHandler);								
 								var point:Point = applet.localToGlobal(pos);
@@ -424,9 +426,9 @@ package com.socialcomputing.wps.script  {
 							if (slice != null) {
                                 var delay:int     = slice.getInt(Slice.DELAY_VAL, zone.m_props);
                                 var length:int    = slice.getInt(Slice.LENGTH_VAL, zone.m_props);
-/*								var text:HTMLText = slice.getText(Slice.TEXT_VAL, zone.m_props);
+								var text:HTMLText = slice.getText(Slice.TEXT_VAL, zone.m_props);
 								applet.toolTip    = text.parseString(HTMLText.TEXT_VAL, zone.m_props).join("\n");
-*/								applet.plan.popSlice( zone, slice, delay, length, args);
+								//applet.plan.popSlice( zone, slice, delay, length, args);
                             }
                         }
                         else if ( func == ( "play" ))    // Plays a sound in .au Sun audio format
