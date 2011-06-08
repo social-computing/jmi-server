@@ -136,7 +136,7 @@ package com.socialcomputing.wps.script  {
                             {
                                 var reader:BufferedReader= new BufferedReader( new InputStreamReader(istream ));
                                 while (( hLine = reader.readLine())!= null )	hTxt += hLine;
-                                if ( i < n - 1)    hTxt += "<br>";
+                                if ( i < n - 1)    hTxt += "<br/>";
                             }
                             
                             istream.close();*/
@@ -146,13 +146,13 @@ package com.socialcomputing.wps.script  {
                         {
                             
                             m_htmlTxt = new HTMLText();
+							m_htmlTxt.m_text = hTxt;
                             var white:ColorTransform = new ColorTransform();
                             white.color = 0xFFFFFF;
                             var black:ColorTransform = new ColorTransform();
                             black.color = 0x000000;
                             m_htmlTxt.initValues(white, black, 0, 12, 0, "SansSerif", false, 0, new Insets( 0, 4, 0, 4));
-                            
-                            m_htmlTxt.parseText( applet, new TextFormat(), hTxt );
+                            m_htmlTxt.updateBounds( applet);
                             m_htmlTxt.drawText( s, applet.size, text.getFlags( zone.m_props )>> 16);//HTMLText.SOUTH_WEST );
                             
                             return;

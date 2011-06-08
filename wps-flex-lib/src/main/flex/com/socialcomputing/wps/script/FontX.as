@@ -41,7 +41,6 @@ package com.socialcomputing.wps.script  {
          * @param props		A property table that should hold props referenced by this containers.
          * @return			a new Font equivalent to this.
          */
-        //function getFont( props:Hashtable):Font {
  		public function getTextFormat( props:Array):TextFormat {
             var flags:int= getFlags( props ),
                 size:int= getInt( SIZE_VAL, props );
@@ -51,15 +50,14 @@ package com.socialcomputing.wps.script  {
 			var font:TextFormat = s_fontBuf[ key ] as TextFormat;
             if ( font == null )
             {
-                //font = new Font( name, flags, size );
                 font = new TextFormat();
                 font.font = name;
                 font.size = size;
-                if (flags == 1) font.bold = true;
-                else if (flags == 2) font.italic = true;
-                
+
                 s_fontBuf[key] = font;
             }
+			if (( flags & HTMLText.BOLD )!= 0)  font.bold = true;
+			if (( flags & HTMLText.ITALIC )!= 0) font.italic = true;
             
             return font;
         }

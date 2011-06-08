@@ -334,7 +334,7 @@ package com.socialcomputing.wps.script  {
                     
                     dst += prop == null ? " ? " : prop;
                 }
-                if ( j < max - 1)  dst += "<br>";
+                if ( j < max - 1)  dst += "<br/>";
             }
             
             return dst;
