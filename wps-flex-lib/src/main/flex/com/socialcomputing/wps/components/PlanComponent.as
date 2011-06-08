@@ -46,10 +46,7 @@ package com.socialcomputing.wps.components
 	[Event(name="action", type="com.socialcomputing.wps.components.ActionEvent")]
 	[Event(name="status", type="com.socialcomputing.wps.components.StatusEvent")]
 	
-	public class PlanComponent extends Group
-	{
-		include "../script/Version.as"
-		
+	public class PlanComponent extends Group {
 		private var _dataProvider:PlanContainer = null;
 		private var _backgroundColor:int = 0xFFFFFF;
 		private var _nodes:Array = null;
