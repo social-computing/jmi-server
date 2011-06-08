@@ -5,10 +5,12 @@ package com.socialcomputing.wps.script{
     import flash.display.Graphics;
     import flash.display.SpreadMethod;
     import flash.display.Sprite;
+    import flash.filters.BlurFilter;
     import flash.geom.ColorTransform;
     import flash.geom.Matrix;
     import flash.geom.Point;
     import flash.geom.Rectangle;
+    import flash.text.AntiAliasType;
     import flash.text.Font;
     import flash.text.FontStyle;
     import flash.text.TextField;
@@ -18,6 +20,8 @@ package com.socialcomputing.wps.script{
     import flash.text.engine.ElementFormat;
     import flash.text.engine.FontDescription;
     import flash.text.engine.FontMetrics;
+    
+    import org.flexunit.internals.namespaces.classInternal;
     
     /**
      * <p>Title: HTMLText</p>
@@ -119,12 +123,38 @@ package com.socialcomputing.wps.script{
         /**
          * This bounding box, stored to avoid CPU overhead.
          */
-        [transient]
         public var m_bounds:Rectangle;
-        
-        [transient]
-        private var _m_heap:Vector.<String>;
-        
+		
+		public function get m_oneLine():Boolean
+		{
+			return _m_oneLine;
+		}
+
+		public function set m_oneLine(value:Boolean):void
+		{
+			_m_oneLine = value;
+		}
+
+		public function get m_font():TextFormat
+		{
+			return _m_font;
+		}
+
+		public function set m_font(value:TextFormat):void
+		{
+			_m_font = value;
+		}
+
+		public function get m_text():String
+		{
+			return _m_text;
+		}
+
+		public function set m_text(value:String):void
+		{
+			_m_text = value;
+		}
+
 		public function get m_blur():Boolean
 		{
 			return _m_blur;
@@ -135,33 +165,16 @@ package com.socialcomputing.wps.script{
 			_m_blur = value;
 		}
 
-        /**
-         * Heap of tags to manage the opening and closing of tags.
-         */
-        public function set m_heap(value:Vector.<String>):void
-        {
-            _m_heap = value;
-        }
-        
-        [transient]
-        private var _m_tokens:Vector.<Object>;
-        
-        /**
-         * List of graphical instructions (tokens) to draw this.
-         */
-        public function set m_tokens(value:Vector.<Object>):void
-        {
-            _m_tokens = value;
-        }
-        
-        [transient]
+        private var _m_text:String;
         private var _m_inCol:ColorTransform;
+		private var _m_font:TextFormat;
+		private var _m_oneLine:Boolean;
+		
         
         public function get m_inCol():ColorTransform
         {
             return _m_inCol;
         }
-        
         
         /**
          * Color of the bounding box background.
@@ -188,127 +201,12 @@ package com.socialcomputing.wps.script{
             _m_outCol = value;
         }
         
-        [transient]
-        private var _m_color:int;
-        
-        public function get m_color():int
-        {
-            return _m_color;
-        }
-        
-        
-        /**
-         * Color of the text.
-         */
-        public function set m_color(value:int):void
-        {
-            _m_color = value;
-        }
-        
-        [transient]
-        private var _m_bkCol:int;
-        
-        public function get m_bkCol():int
-        {
-            return _m_bkCol;
-        }
-        
-        
-        /**
-         * Color of the text background.
-         */
-        public function set m_bkCol(value:int):void
-        {
-            _m_bkCol = value;
-        }
-        
-        [transient]
-        private var _m_size:int;
-        
-        public function get m_size():int
-        {
-            return _m_size;
-        }
-        
-        
-        /**
-         * Size of the typeface.
-         */
-        public function set m_size(value:int):void
-        {
-            _m_size = value;
-        }
-        
-        [transient]
-        private var _m_style:int;
-        
-        public function get m_style():int
-        {
-            return _m_style;
-        }
-        
-        
-        /**
-         * Style of the text (bold, italic,...)
-         */
-        public function set m_style(value:int):void
-        {
-            _m_style = value;
-        }
-        
-        [transient]
-        private var _m_name:String;
-        
-        public function get m_name():String
-        {
-            return _m_name;
-        }
-        
-        
-        /**
-         * Name of the font.
-         */
-        public function set m_name(value:String):void
-        {
-            _m_name = value;
-        }
-        
-		
 		/**
 		 * Blur (not used in applet)
 		 */
 		[transient]
 		private var _m_blur:Boolean;
 		
-        [transient]
-        private var _m_wCur:int;
-        
-        /**
-         * Width of the current line of text while processing it.
-         */
-        public function set m_wCur(value:int):void
-        {
-            _m_wCur = value;
-        }
-        
-        [transient]
-        private var _m_body:FormatToken;
-        
-        /**
-         * Format of the whole text (HTML body). This is also the default format for new tokens.
-         */
-        public function set m_body(value:FormatToken):void
-        {
-            _m_body = value;
-        }
-        
-        
-        /**
-         * Format of the current Token.
-         */
-        [transient]
-        private var m_curTok:FormatToken;
-        
         /**
          * Fake default constructor. It's called by Server Swatchs.
          */
@@ -327,27 +225,16 @@ package com.socialcomputing.wps.script{
          */
         public function initValues(inCol:ColorTransform, outCol:ColorTransform, textCol:int, fontSiz:int, fontStl:int, fontNam:String, blur:Boolean, flags:int, margin:Insets):void
         {
-            m_body          = new FormatToken();
-            m_body.m_flags  = flags;
-            m_body.m_margin = margin;
-            
             m_inCol     = inCol;
             m_outCol    = outCol;
-            m_color     = textCol;
-            m_bkCol     = -1;
-            m_style     = fontStl;
-            m_size      = fontSiz;
-            m_name      = fontNam;
 			m_blur		= blur;
-            m_wCur      = 0;
-            m_tokens    = new Vector.<Object>();
-            m_heap      = new Vector.<String>();
-            m_heap.push( "c=#" + uint2hex( textCol ));
-            m_heap.push( "s=" + fontSiz );
-            m_heap.push( "f=" + fontNam );
-            
-            if (( fontStl & BOLD )!= 0)   m_heap.push( "b" );
-            if (( fontStl & ITALIC )!= 0) m_heap.push( "i" );
+			
+			this._m_font = new TextFormat();
+			this._m_font.font = fontNam;
+			this._m_font.size = fontSiz;
+			this._m_font.color = textCol;
+			if (( fontStl & BOLD )!= 0)  this._m_font.bold = true;
+			if (( fontStl & ITALIC )!= 0) this._m_font.italic = true;
         }
         
         /**
@@ -373,38 +260,22 @@ package com.socialcomputing.wps.script{
             
             if ( data == null )
             {
-                var lines:String= parseString2( TEXT_VAL, zone.m_props, true );
+				htmlTxt = new HTMLText();
+				htmlTxt.m_text = parseString2( TEXT_VAL, zone.m_props, true );
                 
-                if ( lines.length> 0)
+                if ( htmlTxt.m_text.length> 0)
                 {
                     var font:FontX= getFont( FONT_VAL, zone.m_props);
                     
-                    htmlTxt = new HTMLText();
-                    htmlTxt.m_body = new FormatToken();
-                    htmlTxt.m_body.m_flags = getFlags( zone.m_props );
-                    htmlTxt.m_body.m_margin = new Insets( 0, 2, 0, 2);
-                    
                     htmlTxt.m_inCol = getColor( IN_COL_VAL, zone.m_props);
                     htmlTxt.m_outCol = getColor( OUT_COL_VAL, zone.m_props);
-                    htmlTxt.m_color = (getValue( TEXT_COL_VAL, zone.m_props) as ColorX).m_color;
-                    htmlTxt.m_bkCol = -1;
-                    htmlTxt.m_style = font.getFlags( zone.m_props);
-                    htmlTxt.m_size = font.getInt( FontX.SIZE_VAL, zone.m_props);
-                    htmlTxt.m_name = font.getString( FontX.NAME_VAL, zone.m_props);
 					htmlTxt.m_blur = getBool(BLUR_COL_VAL, zone.m_props);
-                    htmlTxt.m_wCur = 0;
-                    htmlTxt.m_tokens = new Vector.<Object>();
-                    var heapElements:Vector.<String> = new Vector.<String>();
-                    heapElements.push("c#" + (ColorX(getValue( TEXT_COL_VAL, zone.m_props))).m_color.toString(16));
-                    heapElements.push("s=" + font.getInt( FontX.SIZE_VAL, zone.m_props));
-                    heapElements.push("f=" +   font.getString( FontX.NAME_VAL, zone.m_props));
-                    // Font Bold
-                    if (( font.getFlags( zone.m_props) & 1 )!= 0)   heapElements.push( "b" );
-                    //Font Italic
-                    if (( font.getFlags( zone.m_props) & 2 )!= 0) heapElements.push( "i" );
-                    htmlTxt.m_heap = heapElements;
+					htmlTxt._m_font = font.getTextFormat( zone.m_props);
+					var color:ColorX = getValue( HTMLText.TEXT_COL_VAL, zone.m_props) as ColorX;
+					if( color != null)
+						htmlTxt._m_font.color = color.m_color;
                     
-                    htmlTxt.parseText( applet, font.getTextFormat( zone.m_props), lines );
+                    htmlTxt.updateBounds( applet);
                     htmlTxt.setTextBnds( applet.size, getFlags( zone.m_props), zone.m_flags ,transfo, supCtr, center );
                 }
             }
@@ -418,459 +289,30 @@ package com.socialcomputing.wps.script{
         }
         
         /**
-         * Parses this to extract the Tokens using a line of text.
-         * This is necessary to evaluate the rendering of the text (color, size, alignment...).
+         * Evaluate this bounding box using margins.
+		 * 
          * @param g			The graphics used to retrieve the font metrics.
          * @param htmlText	A string of text with or without HTML tags to parse.
          */
-        public function parseText( applet:PlanComponent, format:TextFormat, htmlText:String):void {
-            var tokenizer:StringTokenizer= new StringTokenizer( htmlText, "<>" );
-            var tokenStr:String, nextStr:String,
-            prevStr:String     = tokenizer.nextToken();
-            var hasMore:Boolean= tokenizer.hasMoreTokens(),
-                isText:Boolean      = false;
-            //var font:Font= new Font( m_name, m_style, m_size );
-            var font:TextFormat = new TextFormat();
-            font.font = m_name;
-            font.size = m_size;
-            if (m_style == 1) font.bold = true;
-            else if (m_style == 2) font.italic = true;
-            
-            var textTok:TextToken= new TextToken();
-            
-            textTok.m_color = new ColorTransform();
-			textTok.m_color.color = m_color;
-            textTok.m_font  = font;
-            
-            m_curTok            = new FormatToken();
-            m_curTok.m_flags    = m_body.m_flags;
-            m_curTok.m_margin   = m_body.m_margin;
-            
-            m_tokens.push( m_curTok );
-            
-            //g.setFont( font );
-            
-            while ( hasMore )
-            {
-                tokenStr    = tokenizer.nextToken();
-                hasMore     = tokenizer.hasMoreTokens();
-                
-                // A start of Tag
-                if ( prevStr == ( "<" ))
-                {
-                    nextStr = hasMore ? tokenizer.nextToken(): null;
-                    
-                    // A closed Tag
-                    if ( hasMore && nextStr == ( ">" )) // tag
-                    {
-                        textTok = updateTag( format, tokenStr );
-                        
-                        // An real Tag
-                        if ( textTok != null )
-                        {
-                            isText  = false;
-                        }
-                            // An unknown Tag. Handle it as normal text.
-                        else
-                        {
-                            textTok = new TextToken();
-                            updateText( applet, format, "<" + tokenStr + ">", textTok, isText );
-                            isText  = true;
-                        }
-                        
-                        prevStr = tokenizer.hasMoreTokens() ? tokenizer.nextToken(): null;
-                    }
-                        // An unclosed Tag. Handle it as normal text.
-                    else
-                    {
-                        updateText( applet, format, "<" + tokenStr, textTok, isText );
-                        prevStr = nextStr;
-                        isText  = true;
-                    }
-                }
-                    // Normal text
-                else
-                {
-                    updateText( applet, format, prevStr, textTok, isText );
-                    prevStr = tokenStr;
-                    isText  = true;
-                }
-                
-                hasMore = tokenizer.hasMoreTokens();
-            }
-            
-            // Don't forget the last or only piece of text
-            if ( prevStr != null )
-            {
-                updateText( applet, format, prevStr, textTok, isText );
-            }
-            
-            updateTag( format, "br" );  // to set last line position
-            
-            updateBounds();
-        }
-        
-        /**
-         * Evaluate this bounding box using margins.
-         */
-        private function updateBounds():void {
-            var margin:Insets= m_body.m_margin;
-            var i:int;
-            var n:int    = m_tokens.length;
-            var x:int       = 0;
-            var y:int       = margin.top;
-            var token:Object;
-            var tTok:TextToken= null;
-            var fTok:FormatToken= null;
-            
-            for ( i = 0; i < n; i ++ )
-            {
-                token   = m_tokens[i];
-                
-                if ( token is FormatToken ) // a <br> or <p> or </p>
-                {
-                    if ( fTok != null )
-                    {
-                        y += fTok.m_dMax + ( fTok.m_margin != null ? fTok.m_margin.bottom : 0);
-                    }
-                    
-                    fTok    = token as FormatToken;
-                    
-                    var leftLen:int= m_body.m_width - fTok.m_width;
-                    
-                    x   = ( fTok.m_flags & CENTER_BIT )!= 0? leftLen >> 1:(( fTok.m_flags & RIGHT_BIT )!= 0? leftLen : 0);
-                    x  += margin.left +( fTok.m_margin != null ? fTok.m_margin.left : 0);
-                    y  += fTok.m_aMax +( fTok.m_margin != null ? fTok.m_margin.top : 0);
-					//m_tokens.removeElement( token );
-					for( var j:int = i; j < n-1; ++j) {
-						this.m_tokens[j] = this.m_tokens[j+1];
-					}
-                    i --;
-                    n --;
-					this.m_tokens.length --;
-                }
-                else
-                {
-                    tTok    = token as TextToken;
-                    tTok.m_bounds.x = x;
-                    tTok.m_bounds.y = y;
-                    x += tTok.m_bounds.width;
-                }
-            }
-            
-            m_bounds = new Rectangle( 0, 0, m_body.m_width + margin.left + margin.right-1, y + margin.bottom );
-        }
-        
-        /**
-         * Process this text Token to optimize tokens and evaluate the token bounding box.
-         * @param g			Graphics to get the font metrics.
-         * @param text		Text to add to the current textTokan.
-         * @param textTok	Current TextToken.
-         * @param isText	True if the previous textToken was a Text Token so we can merge it with this.
-         */
-        private function updateText( applet:PlanComponent, format:TextFormat, text:String, textTok:TextToken, isText:Boolean):void {
-            // The text exists!
-            if ( text.length > 0)
-            {
-				var field:TextField = new TextField();
-				field.text = text;
-				field.setTextFormat( format);
-				field.autoSize = TextFieldAutoSize.LEFT;
-				//var fieldRect:Rectangle = field.getBounds( applet);
-				var metric:TextLineMetrics = field.getLineMetrics(0); 
-				var a:int	= metric.ascent,
-                    d:int   = metric.descent,
-                    w:int   = field.width, //metric.width,
-                    h:int   = field.height; //metric.height;
-				
-                // The previous token was a text too so we must merge it with this new one.
-                if ( isText )
-                {
-                    //textTok = TextToken(m_tokens.lastElement());
-                    textTok = this.m_tokens[this.m_tokens.length - 1] as TextToken;
-                    
-                    textTok.m_text     += text;
-                    textTok.m_bounds.width += w;
-                    if ( textTok.m_bounds.height < h ) textTok.m_bounds.height = h;
-                }
-                    // The previous token was a formating one.
-                else
-                {
-                    m_tokens.push( textTok );
-                    
-                    textTok.m_text      = text;
-                    textTok.m_bounds    = new Rectangle ( 0, 0, w, h );
-                }
-                
-                if ( a > m_body.m_aMax )   m_body.m_aMax  = a;
-                if ( d > m_body.m_dMax )   m_body.m_dMax  = d;
-                
-                m_wCur             += w;
-            }
-        }
-        
-        /**
-         * Creates a new TextToken by parsing a pseudo-HTML tag.
-         * @param g		Graphics used to retrieve the font metric.
-         * @param tag	A pseudo HTML tag without '<' and '>'.
-         * @return		a new TextToken initialized according to the tag.
-         */
-        private function updateTag( format:TextFormat, tag:String):TextToken {
-            var tempTag:String;
-            var textTok:TextToken= null;
-            var begChar:String;
-            
-            if( tag.length > 0)
-            {
-                tag     = tag.toLowerCase();
-                begChar = tag.charAt( 0);
-                
-                // End of Tag, we returns except for the case </p>
-                if ( begChar == '/' )
-                {
-                    var nxtChar:String= tag.charAt( 1);
-                    
-                    tempTag = String(m_heap.pop());
-                    
-                    if ( tempTag.charAt( 0)== nxtChar ) // ! very simple verification !
-                    {
-                        textTok = closeTag( format, tempTag );
-                        if ( nxtChar != 'p' )   return textTok;
-                    }
-                    else
-                    {
-                        trace( "[updateTag] no corresponding opened Tag : " + tag );
-                        return null;
-                    }
-                }
-                
-                var prevTok:FormatToken= m_curTok;
-                var prevMrg:Insets= prevTok.m_margin,
-                    margin:Insets = m_body.m_margin;
-                var flags:int= m_body.m_flags,
-                    width:int= m_wCur +( prevMrg != null ? prevMrg.left + prevMrg.right : 0);
-                
-                // Start of Tag	+ </p>
-                if ( tag == ( "br" )|| begChar == 'p' || tag == ( "/p" ))
-                {
-                    if ( tag == ( "br" ))
-                    {
-                        if ( prevMrg != null )
-                            margin  = prevMrg;
-                        flags   = prevTok.m_flags;
-                    }
-                    
-                    // We specify new margins
-                    if ( begChar == 'p' )
-                    {
-                        var alignStr:String= readAtt( tag, "a" );
-                        
-                        if ( alignStr != null )
-                        {
-                            var align:String= alignStr.charAt(0).toLowerCase();
-                            
-                            flags   = align == 'r' ? RIGHT_BIT :( align == 'c' ? CENTER_BIT : 0);
-                        }
-                        
-                        margin  = readMargin( tag );
-                        
-                        if ( tag.length > 1&& alignStr == null && margin == null )
-                        {
-                            flags   = m_body.m_flags;
-                            trace( "[updateTag] syntax error Tag : " + tag );
-                            return null;
-                        }
-                        else
-                        {
-                            m_heap.push(tag);
-                        }
-                    }
-                    
-                    // update pr�vious format Token
-                    prevTok.m_aMax  = m_body.m_aMax;
-                    prevTok.m_dMax  = m_body.m_dMax;
-                    prevTok.m_width = width;
-                    
-                    // reset current vars
-                    m_body.m_aMax  = 0;
-                    m_body.m_dMax  = 0;
-                    m_wCur  = 0;
-                    
-                    // Stores the max width of all lines including its margins
-                    if ( width > m_body.m_width )   m_body.m_width  = width;
-                    
-                    m_curTok            = new FormatToken();
-                    m_curTok.m_flags    = flags;
-                    m_curTok.m_margin   = margin == null ? m_body.m_margin : margin;
-                    
-                    m_tokens.push( m_curTok );
-                    
-                    textTok = new TextToken();
-                    textTok.m_color = new ColorTransform();
-					textTok.m_color.color = m_color;
-                    textTok.m_font  = new TextFormat();
-                    textTok.m_font.font = m_name;
-                    textTok.m_font.size = m_size;
-                    if( m_style & BOLD)
-                        textTok.m_font.bold = true;
-                    else if( m_style & ITALIC)
-                        textTok.m_font.italic = true;
-                }
-                else if ( isGfx( begChar ))
-                {
-                    textTok = updateGfx( format, tag );
-                    m_heap.push( tag );
-                }
-                else
-                {
-                    trace( "[updateTag] Unknown Tag : " + tag );
-                    textTok = null;
-                }
-            }
-            return textTok;
-        }
-        
-        /**
-         * Creates a TextToken using a graphical tag.
-         * Such a tag is color or font related.
-         * @param g		Graphics used to retrieve the font metrics.
-         * @param tag	A pseudo HTML tag without '<', '</' and '>'.
-         * @return		a new TextToken initialized according to the tag.
-         */
-        private function updateGfx( format:TextFormat, tag:String):TextToken {
-            var textTok:TextToken= new TextToken();
-            
-            if ( startsWith(tag, "c=" )|| startsWith(tag, "k=" ))
-            {
-                var color:ColorTransform = startsWith(tag, "c=" )? textTok.m_color : textTok.m_bkCol;
-                var rgb:int= 0;
-                
-                //textTok.m_font = new Font( m_name, m_style, m_size );
-                textTok.m_font = new TextFormat();
-                textTok.m_font.font = m_name;
-                textTok.m_font.size = m_size;
-                if (m_style == 1) textTok.m_font.bold = true;
-                else if (m_style == 2) textTok.m_font.italic = true;
-                
-                //g.setFont( textTok.m_font );
-                
-                try
-                {
-                    rgb = int(tag.substring(2));// #RRGGBB
-                    
-                    if ( color == null || color.color == rgb )
-                    {
-                        if ( startsWith( tag, "c=" ))
-                        {
-                            m_color = rgb;
-                            textTok.m_color = new ColorTransform();
-							textTok.m_color.color = rgb;
-							if( m_bkCol != -1) {
-                            	textTok.m_bkCol = new ColorTransform();
-								textTok.m_bkCol.color = m_bkCol;
-							}
-                        }
-                        else
-                        {
-                            m_bkCol = rgb;
-							textTok.m_color = new ColorTransform();
-							textTok.m_color.color = m_color;
-							textTok.m_bkCol = new ColorTransform();
-							textTok.m_bkCol.color = rgb;
-                        }
-                    }
-                }
-                catch ( e:Error)
-                {
-                    trace( "[updateTag] Wrong color format : " + tag );
-                    return null;
-                }
-            }
-            else
-            {
-                var col:ColorTransform = new ColorTransform();
-                col.color = m_color;
-                textTok.m_color = col;
-                
-                if ( tag == ( "b" ))
-                {
-                    //m_style |= Font.BOLD;
-                    m_style |= 0x1;
-                }
-                else if ( tag == ( "i" ))
-                {
-                    //m_style |= Font.ITALIC;
-                    m_style |= 0x2;
-                }
-                else if ( startsWith( tag, "s=" ))
-                {
-                    m_size  = Number(tag.substring(2));
-                }
-                else if ( startsWith( tag, "f=" ))
-                {
-                    m_name  = tag.substring( 2);
-                }
-                else
-                {
-                    trace( "[updateGfx] Syntax error Tag : " + tag );
-                    return null;
-                }
-                //textTok.m_font = new Font( m_name, m_style, m_size );
-				textTok.m_font = new TextFormat();
-                textTok.m_font.font = m_name;
-                if (m_style == 0x1)
-                    textTok.m_font.bold =  true;
-                else if (m_style == 0x2)
-                    textTok.m_font.italic =  true;
-                textTok.m_font.size = m_size;
-                
-                //g.setFont( textTok.m_font );
-            }
-            return textTok;
-        }
-        
-        /**
-         * Handle the closing of a tag.
-         * @param g		Graphics used to retrieve the font metrics.
-         * @param tag	The closing tag without '</' and '>'.
-         * @return		A new TextToken corresponding to the new state.
-         */
-        private function closeTag( format:TextFormat, tag:String):TextToken {
-            var textTok:TextToken= new TextToken();
-            var i:int= m_heap.length - 1;
-            var c:String= tag.charAt( 0);
-            var prevTag:String;
-            
-            //m_heap.removeElement( tag );
-            var tag_index:int = m_heap.indexOf(tag);
-            m_heap.splice( tag_index , 1 );
-            
-            if ( c == 'b' )         m_style &= ~0x1;
-            else if ( c == 'i' )    m_style &= ~0x2;
-            
-            if ( isGfx( c ))
-            {
-                while (i-- > 0)
-                {   // find previous Tag of the same type in the heap
-                    prevTag = String(m_heap[i]);
-                    
-                    if ( prevTag.charAt( 0)== c )
-                    {
-                        return updateGfx( format, prevTag );
-                    }
-                }
-            }
-            //textTok.m_font = new Font( m_name, m_style, m_size );
-            textTok.m_font.font = m_name;
-            if (m_style == 0x1)
-                textTok.m_font.bold =  true;
-            else if (m_style == 0x2)
-                textTok.m_font.italic =  true;
-            textTok.m_font.size = m_size;
-            
-            //g.setFont( textTok.m_font );
-            
-            return textTok;
+        public function updateBounds( applet:PlanComponent):void {
+			 // The text exists!
+			m_oneLine = true;
+			 if ( this.m_text.length > 0)
+			 {
+				 var field:TextField = new TextField();
+				 field.multiline = true;
+				 field.htmlText = this.m_text;
+				 field.setTextFormat( this.m_font);
+				 field.autoSize = TextFieldAutoSize.LEFT;
+				 this.m_bounds = field.getBounds( applet);
+				 
+				 try {
+					 field.getLineText(1);
+					 m_oneLine = false;
+				 }catch( e : RangeError){
+					 m_oneLine = true;
+				 }
+			 }
         }
         
         /**
@@ -909,10 +351,6 @@ package com.socialcomputing.wps.script{
          * @param pos	Where to draw this.
          */
         protected function drawText3( s:Sprite, size:Dimension, pos:Point):void {
-            var textTok:TextToken;
-            var i:int;
-            var n:int    = m_tokens.length; 
-            
             if ( m_inCol != null )
             {
                 var black:ColorTransform = new ColorTransform();
@@ -921,7 +359,7 @@ package com.socialcomputing.wps.script{
                 var alphas:Array = [1, 1];
                 var ratios:Array = [0x00, 0xFF];
 				if ( m_outCol != null )
-					s.graphics.lineStyle( 1, m_outCol.color);
+					s.graphics.lineStyle( 2, m_outCol.color);
 				else
 					s.graphics.lineStyle();
 				var matr:Matrix = new Matrix();
@@ -930,30 +368,56 @@ package com.socialcomputing.wps.script{
                 s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 10, 10);
                 s.graphics.endFill();
            }
-            
-            for ( i = 0; i < n; i ++ )
-            {
-                if (this.m_tokens[i] is TextToken) {
-                    textTok = this.m_tokens[i] as TextToken;
-                    textTok.paint( s, pos, m_blur);
-                }
-            }
-            
-            if ( n==1 && m_inCol == null) // draw reflection only for one line boxes
+			
+			paint( s, pos);
+
+/*			if ( m_oneLine && m_inCol == null) // draw reflection only for one line boxes
             {
                 var white:ColorTransform = new ColorTransform();
                 white.color = 0xFFFFFF;
                 s.graphics.beginFill(white.color, 0.2);
 				s.graphics.lineStyle();
                 s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 10, 10);
-/*				s.graphics.lineStyle( 1, 0xFF0000);
-				s.graphics.drawRect(pos.x, pos.y, m_bounds.width, m_bounds.height);
-*/                s.graphics.endFill();
+                s.graphics.endFill();
             }
-            m_bounds.x  = pos.x;
+*/            m_bounds.x  = pos.x;
             m_bounds.y  = pos.y;
         }
         
+		/**
+		 * Paint this at a specified location.
+		 * The inner location is used to offset the fonts.
+		 * @param g		The graphics to draw in.
+		 * @param pos	The position where this should be drawn before its internal translation is added.
+		 */
+		public function paint( s:Sprite, pos:Point):void {
+			var x:int= m_bounds.x + pos.x,
+				y:int = m_bounds.y + pos.y;
+			
+			var text:TextField = new TextField();
+			if( m_blur) {
+				text.filters = [new BlurFilter(6, 6)];
+			}
+			var oneLine:Boolean = true;
+			if ( !m_oneLine && m_inCol != null )
+			{
+				text.background = true;
+				text.backgroundColor = m_inCol.color;
+			}
+			
+			//text.text = m_text;
+			text.multiline = true;
+			text.htmlText = m_text;
+			text.x = pos.x;
+			text.y = pos.y; //y - m_bounds.y;
+			if( m_font != null)
+				text.setTextFormat( m_font);
+			text.autoSize = TextFieldAutoSize.LEFT;
+			text.antiAliasType = AntiAliasType.ADVANCED;
+			text.border = false;
+			s.addChild(text);
+		}
+		
         /**
          * Evaluate this bounds.
          * The bounds member is updated.
@@ -1029,106 +493,7 @@ package com.socialcomputing.wps.script{
             m_bounds.y = y;
         }
         
-        /**
-         * Read margin attributes in a &lt;p&gt; tag.
-         * @param tag	A tag holding some margin attributes.
-         * @return		An inset of t, l, b, r margins or null if none are defined.
-         */
-        private function readMargin( tag:String):Insets {
-            var t:String, l:String, b:String, r:String;
-            
-            t = readAtt( tag, "t" );
-            l = readAtt( tag, "l" );
-            b = readAtt( tag, "b" );
-            r = readAtt( tag, "r" );
-            
-            if ( l == null )
-                l = readAtt( tag, "x" );
-            
-            if ( t == null && l == null && b == null && r == null )
-            {
-                return null;
-            }
-            else
-            {
-                var bc:Insets;
-                bc.top = t == null ? 0: int(t);
-                bc.bottom = b == null ? 0: int(b);
-                bc.left = l == null ? 0: int(l);
-                bc.right = r == null ? 0: int(r);
-                return bc;
-            }
-        }
-        
-        /**
-         * Reads a tag attribute.
-         * @param tag	Tag holding the attribute.
-         * @param att	Name of the attribute to find.
-         * @return		The value of the attribute or null if none where defined in this tag.
-         */
-        private function readAtt( tag:String, att:String):String {
-            var beg:int, end:int;
-            
-            if (( beg = tag.indexOf( att + '=' ))!= -1)
-            {
-                beg += att.length + 1;    // don't forget to skip '='
-                end = tag.indexOf( ' ', beg );
-                return end == -1? tag.substring( beg ) : tag.substring( beg, end );
-            }
-            
-            return null;
-        }
-        
-        /**
-         * Returns wether a character is a graphical tag.
-         * @param c	One letter tag to check.
-         * @return	True if this tag is color or font related.
-         */
-        private function isGfx( c:String):Boolean {
-            return c == 'c' || c == 'k' || c == 's' || c == 'f' || c == 'b' || c == 'i';
-        }
-        
-        public static function startsWith( string:String, pattern:String):Boolean
-        {
-            string  = string.toLowerCase();
-            pattern = pattern.toLowerCase();
-            
-            return pattern == string.substr( 0, pattern.length );
-        }
-        
-        public function get m_body():FormatToken
-        {
-            return _m_body;
-        }
-        
-        public function get m_tokens():Vector.<Object>
-        {
-            return _m_tokens;
-        }
-        
-        public function get m_heap():Vector.<String>
-        {
-            return _m_heap;
-        }
-        
-        public function get m_wCur():int
-        {
-            return _m_wCur;
-        }
-        
-        private function uint2hex(dec:uint):String {
-            var digits:String = "0123456789ABCDEF";
-            var hex:String = '';
-            while (dec > 0) {
-                var next:uint = dec & 0xF;
-                dec >>= 4;
-                hex = digits.charAt(next) + hex;
-            }
-            if (hex.length == 0) hex = '0';
-            return hex;
-        }
-        
-        // static properties/methods aren't inherited in AS3
+       // static properties/methods aren't inherited in AS3
         // http://help.adobe.com/en_US/ActionScript/3.0_ProgrammingAS3/WS5b3ccc516d4fbf351e63e3d118a9b90204-7fcd.html
         // http://www.davidarno.org/2009/09/25/actionscript-3-inheritance-developers-beware/
         public static function isEnabled( flags:int, bit:int):Boolean {
