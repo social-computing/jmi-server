@@ -127,6 +127,14 @@ package com.socialcomputing.wps.script  {
                                 menuItm = new Object;
 								menuItm.label = subitems[0];
                                 // TODO menuItm.setFont( menu.getFont( zone ));
+                                var fontMenu:TextFormat = menu.getFont( FONT_VAL, zone.m_props).getTextFormat(zone.m_props);
+                                if ( fontMenu != null) {
+                                    if (fontMenu.bold == true)
+                                        menuItm.bold = "true";
+                                    else
+                                        menuItm.bold = "false";
+                                    menuItm.font = fontMenu.font;
+                                }
                                 menuItm.enabled = false;
                                 subMenu.addItem( menuItm );
                             }
@@ -203,8 +211,6 @@ package com.socialcomputing.wps.script  {
                         item.bold = "false";
                     item.font = font.font;
                 }
-                    
-				//    TODO        item.setFont( font );
 			}
 			menu.addItem( item );
         }
