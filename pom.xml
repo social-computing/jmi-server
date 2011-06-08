@@ -27,6 +27,7 @@
   <url>http://www.social-computing.com/</url>
   
   <modules>
+    <module>wps-flex-lib</module>
     <module>wps-flex</module>
     <module>wps-server</module>
   </modules>
@@ -65,5 +66,6 @@
     <jersey.version>1.5</jersey.version>
     <flexmojos.version>4.0-SNAPSHOT</flexmojos.version>
     <flex-framework.version>4.5.0.17689</flex-framework.version>
+    <flex.sdk.version>4.5.0.17689</flex.sdk.version>
   </properties>
 </project>
