@@ -196,10 +196,14 @@ package com.socialcomputing.wps.script  {
 				item.label = title;
 				if ( url != null )
 					item.action = url;
-                if ( font != null && font.bold == true)
-                    item.bold = "true";
-                else
-                    item.bold = "false";
+                if ( font != null) {
+                    if (font.bold == true)
+                        item.bold = "true";
+                    else
+                        item.bold = "false";
+                    item.font = font.font;
+                }
+                    
 				//    TODO        item.setFont( font );
 			}
 			menu.addItem( item );

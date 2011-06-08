@@ -6,18 +6,6 @@ package com.socialcomputing.wps.script {
     [Bindable]
     public class CustomMenuItemRenderer extends MenuItemRenderer
     {
-        /*override protected function updateDisplayList(unscaledWidth:Number,
-        unscaledHeight:Number):void {
-        
-        //TODO set font bold on this.data.label 
-        if (this.data.bold == "true") {
-        //this.data.setStyle("fontWeight", "bold");
-        this.data.label.font = "bold";
-        }
-        super.updateDisplayList(unscaledWidth, unscaledHeight);
-        }*/
-        
-        
         
         override public function set data(value:Object):void {
             if(value == null) return;
