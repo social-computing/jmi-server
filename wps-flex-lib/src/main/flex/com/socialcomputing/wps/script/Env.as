@@ -11,8 +11,6 @@ package com.socialcomputing.wps.script  {
     import flash.geom.Rectangle;
     
     import mx.controls.Image;
-    
-    import org.osmf.layout.AbsoluteLayoutFacet;
 
 /**
  * <p>Title: Env</p>

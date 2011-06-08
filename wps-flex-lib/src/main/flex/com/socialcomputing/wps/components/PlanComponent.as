@@ -48,7 +48,6 @@ package com.socialcomputing.wps.components
 	
 	public class PlanComponent extends Group
 	{
-		include "../script/Version.as"
 		
 		private var _dataProvider:PlanContainer = null;
 		private var _backgroundColor:int = 0xFFFFFF;

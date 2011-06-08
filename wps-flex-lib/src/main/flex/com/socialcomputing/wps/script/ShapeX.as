@@ -24,8 +24,6 @@ package com.socialcomputing.wps.script  {
     import mx.controls.Image;
     import mx.utils.URLUtil;
     
-    import org.osmf.layout.PaddingLayoutFacet;
-    
     /**
      * <p>Title: ShapeX</p>
      * <p>Description: A graphical shape that can be transformed and filled.<br>
