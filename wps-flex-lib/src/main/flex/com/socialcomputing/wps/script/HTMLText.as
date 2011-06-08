@@ -21,8 +21,6 @@ package com.socialcomputing.wps.script{
     import flash.text.engine.FontDescription;
     import flash.text.engine.FontMetrics;
     
-    import org.flexunit.internals.namespaces.classInternal;
-    
     /**
      * <p>Title: HTMLText</p>
      * <p>Description: A piece of text that can be single or multilined and hold basic HTML-like tags.<br>
