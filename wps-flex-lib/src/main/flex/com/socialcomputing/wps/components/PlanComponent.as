@@ -46,7 +46,10 @@ package com.socialcomputing.wps.components
 	[Event(name="action", type="com.socialcomputing.wps.components.ActionEvent")]
 	[Event(name="status", type="com.socialcomputing.wps.components.StatusEvent")]
 	
-	public class PlanComponent extends Group {
+	public class PlanComponent extends Group
+	{
+		include "../script/Version.as"
+		
 		private var _dataProvider:PlanContainer = null;
 		private var _backgroundColor:int = 0xFFFFFF;
 		private var _nodes:Array = null;
@@ -251,7 +254,11 @@ package com.socialcomputing.wps.components
 		}
 		
 		public function mouseOverHandler(event:MouseEvent):void {
-			trace("mouseOverHandler");
+			mouseMoveHandler( event);
+		}
+		
+		public function mouseOutHandler(event:MouseEvent):void {
+			mouseMoveHandler( event);
 		}
 		
 		public function mouseMoveHandler(event:MouseEvent):void {
@@ -260,10 +267,6 @@ package com.socialcomputing.wps.components
 			if(ready) {
 				_dataProvider.plan.updateZoneAt(this.curPos);
 			}
-		}
-		
-		public function mouseOutHandler(event:MouseEvent):void {
-			trace("mouseOutHandler");
 		}
 		
 		public function mouseClickHandler(event:MouseEvent):void {

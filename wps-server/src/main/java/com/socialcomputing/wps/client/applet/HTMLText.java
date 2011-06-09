@@ -719,18 +719,15 @@ public class HTMLText extends Base implements Serializable
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setRenderingHint(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_QUALITY);
 
-		Composite composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f);
-		Composite cb = g.getComposite();
-		g.setComposite(composite);
-		
 		TextToken   textTok;
 		int         i, n    = m_tokens.size();
 
 		if ( m_inCol != null )
 		{
-			GradientPaint gradient = new GradientPaint(pos.x, pos.y, m_inCol , pos.x, pos.y + m_bounds.height*2, Color.black );
-	        
-			g.setPaint( gradient );
+            // TODO gérer le gradient dans les swatchs
+//			GradientPaint gradient = new GradientPaint(pos.x, pos.y, m_inCol , pos.x, pos.y + m_bounds.height*2, Color.black );
+//			g.setPaint( gradient );
+		    g.setColor( m_inCol);
 			g.fillRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height,10,10);
 			//ON g.fillRect( pos.x, pos.y, m_bounds.width, m_bounds.height );
 		}
@@ -739,8 +736,8 @@ public class HTMLText extends Base implements Serializable
 		{
 			//GradientPaint gradient = new GradientPaint(0, 0, m_inCol, 0, m_bounds.height, Color.black );
 			//g.setPaint( gradient );
-			g.setColor(m_inCol);
-			g.fillRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height,5,5);
+			g.setColor(m_outCol);
+			g.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height,5,5);
 			//ON g.drawRect( pos.x, pos.y, m_bounds.width, m_bounds.height );
 		}
 
@@ -750,16 +747,15 @@ public class HTMLText extends Base implements Serializable
 			textTok.paint( g, pos );
 		}
 
-		composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f);					
-		g.setComposite(composite);
-
-		if ( n==1 ) // draw reflection only for one line boxes
+		if ( n==1 && m_inCol == null) // draw reflection only for one line boxes
 		{
+	        Composite cb = g.getComposite();
+	        Composite composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f);                  
+	        g.setComposite(composite);
 			g.setColor( Color.white );
 			g.fillRoundRect(pos.x+2, pos.y+2, m_bounds.width-4, m_bounds.height/3,5,5);
+	        g.setComposite(cb);
 		}
-		
-		g.setComposite(cb);
 		
 		m_bounds.x  = pos.x;
 		m_bounds.y  = pos.y;

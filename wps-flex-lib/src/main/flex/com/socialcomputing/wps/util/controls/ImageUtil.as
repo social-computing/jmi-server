@@ -2,6 +2,7 @@ package com.socialcomputing.wps.util.controls
 {
 	import com.socialcomputing.wps.script.Dimension;
 	
+	import flash.text.TextField;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Graphics;
@@ -60,6 +61,21 @@ package com.socialcomputing.wps.util.controls
 			graphics.beginBitmapFill(image.bitmapData, matrix);
 			graphics.drawRect(image.x, image.y, image.width, image.height);
 			graphics.endFill();	
+		}
+
+		public static function drawTextField(text:TextField, graphics:Graphics):void {
+			var bitmapData:BitmapData = new BitmapData(text.width, text.height, true, 0x000000);
+			bitmapData.draw(text);
+			
+			// Initialize a matrix with the scale and position of the image
+			var matrix: Matrix = new Matrix();
+			matrix.scale(1, 1);
+			matrix.translate(text.x, text.y);
+			
+			// Fill the graphics with the image bitmap data  
+			graphics.beginBitmapFill(bitmapData, matrix);
+			graphics.lineStyle();
+			graphics.drawRect(text.x, text.y, text.width, text.height);
 		}
 		
 		/**
