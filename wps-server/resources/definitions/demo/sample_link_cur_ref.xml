@@ -39,7 +39,6 @@
 		<tip 	font="tipFnt"
 				label="[/20sREC_NAME]"
 				inCol="255 255 223"
-				outCol="&blackCol;"
 				textCol="&blackCol;"
 				align="center"
 				isFloating="true"/>
