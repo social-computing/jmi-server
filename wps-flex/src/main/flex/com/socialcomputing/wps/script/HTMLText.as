@@ -1,5 +1,7 @@
 package com.socialcomputing.wps.script{
     import com.socialcomputing.wps.components.PlanComponent;
+	import com.socialcomputing.wps.util.controls.ImageUtil;
+    import com.socialcomputing.wps.util.shapes.RectangleUtil;
     
     import flash.display.GradientType;
     import flash.display.Graphics;
@@ -45,6 +47,7 @@ package com.socialcomputing.wps.script{
      */
     public class HTMLText extends Base
     {
+		public static const BORDER_WIDTH:int= 2;
         /**
          * Index of the bit flag prop in VContainer table
          */
@@ -124,6 +127,14 @@ package com.socialcomputing.wps.script{
          * This bounding box, stored to avoid CPU overhead.
          */
         public var m_bounds:Rectangle;
+
+		private var _m_text:String;
+		private var _m_inCol:ColorTransform;
+		private var _m_font:TextFormat;
+		private var _m_oneLine:Boolean;
+		private var _m_outCol:ColorTransform;
+		private var _m_blur:Boolean;
+		
 		
 		public function get m_oneLine():Boolean
 		{
@@ -165,12 +176,6 @@ package com.socialcomputing.wps.script{
 			_m_blur = value;
 		}
 
-        private var _m_text:String;
-        private var _m_inCol:ColorTransform;
-		private var _m_font:TextFormat;
-		private var _m_oneLine:Boolean;
-		
-        
         public function get m_inCol():ColorTransform
         {
             return _m_inCol;
@@ -184,14 +189,10 @@ package com.socialcomputing.wps.script{
             _m_inCol = value;
         }
         
-        [transient]
-        private var _m_outCol:ColorTransform;
-        
         public function get m_outCol():ColorTransform
         {
             return _m_outCol;
         }
-        
         
         /**
          * Color of the bounding box border.
@@ -201,16 +202,10 @@ package com.socialcomputing.wps.script{
             _m_outCol = value;
         }
         
-		/**
-		 * Blur (not used in applet)
-		 */
-		[transient]
-		private var _m_blur:Boolean;
-		
         /**
-         * Fake default constructor. It's called by Server Swatchs.
          */
-        public function HTMLText(){}
+        public function HTMLText(){
+		}
         
         /**
          * Creates a new HTMLText and sets its default formatting properties.
@@ -235,6 +230,9 @@ package com.socialcomputing.wps.script{
 			this._m_font.color = textCol;
 			if (( fontStl & BOLD )!= 0)  this._m_font.bold = true;
 			if (( fontStl & ITALIC )!= 0) this._m_font.italic = true;
+			
+			this.m_font.leftMargin = margin.left;
+			this.m_font.rightMargin = margin.right;
         }
         
         /**
@@ -299,15 +297,21 @@ package com.socialcomputing.wps.script{
 			m_oneLine = true;
 			 if ( this.m_text.length > 0)
 			 {
-				 var field:TextField = new TextField();
-				 field.multiline = true;
-				 field.htmlText = this.m_text;
-				 field.setTextFormat( this.m_font);
-				 field.autoSize = TextFieldAutoSize.LEFT;
-				 this.m_bounds = field.getBounds( applet);
+				 var textField:TextField = new TextField();
+				 textField.defaultTextFormat = m_font;
+				 textField.multiline = true;
+				 textField.htmlText = this.m_text;
+				 textField.autoSize = TextFieldAutoSize.LEFT;
+				 textField.antiAliasType = AntiAliasType.ADVANCED;
+				 this.m_bounds = new Rectangle();
+				 RectangleUtil.copy( this.m_bounds, textField.getBounds( applet));
+				 if( this.m_outCol != null) {
+					 this.m_bounds.width += (BORDER_WIDTH*2);
+					 this.m_bounds.height += (BORDER_WIDTH*2);
+				 }					 
 				 
 				 try {
-					 field.getLineText(1);
+					 textField.getLineText(1);
 					 m_oneLine = false;
 				 }catch( e : RangeError){
 					 m_oneLine = true;
@@ -351,36 +355,42 @@ package com.socialcomputing.wps.script{
          * @param pos	Where to draw this.
          */
         protected function drawText3( s:Sprite, size:Dimension, pos:Point):void {
+			var borderWidth:int = 0;
+			if ( m_outCol != null )
+				borderWidth = 2;
             if ( m_inCol != null )
             {
-                var black:ColorTransform = new ColorTransform();
-                black.color = 0x000000;
-                var colors:Array = [m_inCol.color, black.color];
-                var alphas:Array = [1, 1];
-                var ratios:Array = [0x00, 0xFF];
-				if ( m_outCol != null )
-					s.graphics.lineStyle( 2, m_outCol.color);
+				if ( m_outCol != null ) {
+					//s.graphics.lineStyle( 2, m_outCol.color);
+					s.graphics.beginFill(m_outCol.color);
+					s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 10, 10);
+				}
 				else
 					s.graphics.lineStyle();
+				// TODO gérer le gradient dans les swatchs
+/*				var colors:Array = [m_inCol.color, 0x000000];
+				var alphas:Array = [1, 1];
+				var ratios:Array = [0x00, 0xFF];
 				var matr:Matrix = new Matrix();
 				matr.createGradientBox(m_bounds.width, m_bounds.height * 2, Math.PI / 2, pos.x, pos.y);
                 s.graphics.beginGradientFill(GradientType.LINEAR, colors, alphas, ratios, matr, SpreadMethod.PAD);
-                s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 10, 10);
+*/				s.graphics.beginFill(m_inCol.color);
+                s.graphics.drawRoundRect(pos.x+borderWidth, pos.y+borderWidth, m_bounds.width-2*borderWidth, m_bounds.height-2*borderWidth, 10, 10);
                 s.graphics.endFill();
            }
 			
-			paint( s, pos);
+			paint( s, pos, borderWidth);
 
-/*			if ( m_oneLine && m_inCol == null) // draw reflection only for one line boxes
+			if ( m_oneLine && m_inCol == null) // draw reflection only for one line boxes
             {
                 var white:ColorTransform = new ColorTransform();
                 white.color = 0xFFFFFF;
                 s.graphics.beginFill(white.color, 0.2);
 				s.graphics.lineStyle();
-                s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 10, 10);
+                s.graphics.drawRoundRect(pos.x+borderWidth, pos.y+3+borderWidth, m_bounds.width-2*borderWidth, (m_bounds.height/3)-2*borderWidth, 5, 5);
                 s.graphics.endFill();
             }
-*/            m_bounds.x  = pos.x;
+            m_bounds.x  = pos.x;
             m_bounds.y  = pos.y;
         }
         
@@ -390,32 +400,29 @@ package com.socialcomputing.wps.script{
 		 * @param g		The graphics to draw in.
 		 * @param pos	The position where this should be drawn before its internal translation is added.
 		 */
-		public function paint( s:Sprite, pos:Point):void {
-			var x:int= m_bounds.x + pos.x,
-				y:int = m_bounds.y + pos.y;
-			
-			var text:TextField = new TextField();
+		public function paint( s:Sprite, pos:Point, borderWidth:int):void {
+			var textField:TextField = new TextField();
 			if( m_blur) {
-				text.filters = [new BlurFilter(6, 6)];
+				textField.filters = [new BlurFilter(6, 6)];
 			}
-			var oneLine:Boolean = true;
-			if ( !m_oneLine && m_inCol != null )
+/*			if ( false && !m_oneLine && m_inCol != null )
 			{
 				text.background = true;
 				text.backgroundColor = m_inCol.color;
 			}
-			
+*/			
 			//text.text = m_text;
-			text.multiline = true;
-			text.htmlText = m_text;
-			text.x = pos.x;
-			text.y = pos.y; //y - m_bounds.y;
 			if( m_font != null)
-				text.setTextFormat( m_font);
-			text.autoSize = TextFieldAutoSize.LEFT;
-			text.antiAliasType = AntiAliasType.ADVANCED;
-			text.border = false;
-			s.addChild(text);
+				textField.defaultTextFormat = m_font;
+			textField.multiline = true;
+			textField.htmlText = m_text;
+			textField.x = pos.x + borderWidth;
+			textField.y = pos.y + borderWidth; 
+			textField.autoSize = TextFieldAutoSize.LEFT;
+			textField.antiAliasType = AntiAliasType.ADVANCED;
+			textField.border = false;
+			ImageUtil.drawTextField( textField, s.graphics);
+			//s.addChild(textField);
 		}
 		
         /**

@@ -254,7 +254,11 @@ package com.socialcomputing.wps.components
 		}
 		
 		public function mouseOverHandler(event:MouseEvent):void {
-			trace("mouseOverHandler");
+			mouseMoveHandler( event);
+		}
+		
+		public function mouseOutHandler(event:MouseEvent):void {
+			mouseMoveHandler( event);
 		}
 		
 		public function mouseMoveHandler(event:MouseEvent):void {
@@ -263,10 +267,6 @@ package com.socialcomputing.wps.components
 			if(ready) {
 				_dataProvider.plan.updateZoneAt(this.curPos);
 			}
-		}
-		
-		public function mouseOutHandler(event:MouseEvent):void {
-			trace("mouseOutHandler");
 		}
 		
 		public function mouseClickHandler(event:MouseEvent):void {

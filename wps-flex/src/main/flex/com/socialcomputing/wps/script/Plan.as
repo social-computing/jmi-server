@@ -107,7 +107,7 @@ package com.socialcomputing.wps.script  {
          * Table of waiters to manage tooltips.
          */
         [transient]
-        protected var m_waiters:Array;
+        public var m_tipTimers:Object;
         
         /**
          * Initialize an array of zones (Nodes or Links).
@@ -129,7 +129,6 @@ package com.socialcomputing.wps.script  {
             if (zones == m_links) m_maxBox = new Dimension(0, 0);
             
             // Reversed order so subZones are initialized before supZones!
-			//zones[0].init(m_applet, s, isFirst);
 			for (i = n - 1 ; i >= 0 ; i --) {
                 zones[i].init( m_applet, s, isFirst );
             }
@@ -172,6 +171,7 @@ package com.socialcomputing.wps.script  {
          */
         //protected synchronized function init( ):void {
         public function init():void {
+			this.m_tipTimers = new Object()
             var dim:Dimension= m_applet.size;
             var restDrawingSurface:Sprite = m_applet.restDrawingSurface;
 			var curDrawingSurface:Sprite  = m_applet.curDrawingSurface;
@@ -297,17 +297,12 @@ package com.socialcomputing.wps.script  {
          */
         private function updateCurrentZone( curSat:Satellite, p:Point):Boolean {
 
-				if ( m_curZone != m_newZone )           // The current Satellite has changed
+			if ( m_curZone != m_newZone )           // The current Satellite has changed
             {
-				//TODO
-                /*for ( var waiter:Waiter in m_waiters)
+                for each ( var waiter:TipTimer in m_tipTimers)
                 {
-                    while ( waiter != null && waiter.isAlive())  // hide the tooltip coz the zone changed
-                    {
-                        waiter.m_isInterrupted = true;
-                        try{ Thread.sleep( 10); } catch ( e:Exception){}
-                    }
-                }*/
+                 	waiter.interrupt();
+                }
             }
             
 			// The current Satellite has changed
@@ -360,7 +355,34 @@ package com.socialcomputing.wps.script  {
                 (Activable(m_curZone.getParent())).paintCur( m_applet);
             }
         }
-        
+
+		/**
+		 * Popup a slice after a delay and during a fixed time (tooltips).
+		 * A unique identifier for this slice is used to store it and kill its waiter if needed.
+		 * @param zone		Zone holding this Slice properties.
+		 * @param slice		A slice describing how to draw this tooltip.
+		 * @param delay		Delay before poping the slice.
+		 * @param length	Time to keep the slice visible before hiding it. -1 means stay visible until another tip with the same key is poped.
+		 * @param key		A unique ID for each slices of the same kind (tooltip != infoTip).
+		 */
+		public function popSlice( zone:ActiveZone, slice:Slice, delay:int, length:int, key:String):void
+		{
+			var tipTimer:TipTimer  = m_tipTimers[key];
+			
+			if ( tipTimer != null )
+			{
+				if ( tipTimer.zone != zone) {
+					tipTimer.interrupt()
+				}
+				else {
+					return;
+				}
+			}
+			
+			tipTimer = new TipTimer( this, zone, slice, key, delay, length );
+			m_tipTimers[key] = tipTimer;
+		}
+		
         /**
          * Evaluates the new position and size of the Places and Streets, and allocate the buffers accordingly to the new size.
          * @param dim	New size of the Applet.
@@ -427,82 +449,6 @@ package com.socialcomputing.wps.script  {
 				m_prevBox.height = dim.height;
 				m_prevBox.width = dim.width; 
             }
-        }
-                
-        /**
-         * Callback of the Waiters listener to manage poping slices.
-         * @param params	This Object table is filled as follow:
-         * <ul>
-         * <li>[0] ActiveZone holding the poping slice properties.</li>
-         * <li>[1] Slice to pop.</li>
-         * <li>[2] Rectangle holding the bounding box of the slice to locate its poping position.</li>
-         * <li>[3] A Boolean that is true when the slice is drawn and false before.</li>
-         * <li>[4] Unique key for this kind of poping slice. .</li>
-         * </ul>
-         * @param state
-         */
-        //public synchronized function stateChanged( params:Array, state:int):void {
-        public function stateChanged(params:Array, state:int):void {
-            /*if ( m_applet.m_plan != null )
-            {
-                var g:Graphics= m_applet.graphics;
-                var zone:ActiveZone= ActiveZone(params[0]);
-                var slice:Slice= Slice(params[1]);
-                var bounds:Rectangle= Rectangle(params[2]);
-                var key:Object= params[4];
-                
-                switch ( state )
-                {
-                    case WaitListener.INIT:
-                    {
-                        params[3] = false;
-                        break;
-                    }
-                        
-                    case WaitListener.START:
-                    {
-                        var pos:Point= m_applet.m_curPos;
-                        
-                        params[3] = true;
-                        
-                        slice.paint( m_applet, g, zone.getParent(), zone, null, pos, null );
-                        slice.setBounds( m_applet, g, zone.getParent(), zone, null, pos, null, bounds );
-                        
-                        bounds.grow( 1, 1);
-                        break;
-                    }
-                        
-                    case WaitListener.INTERRUPTED:
-                    {
-                        if (params[3])
-                        {
-                            blitImage( g, m_applet.m_restImg, bounds );
-                            params[3] = false;
-                        }
-                        bounds.setBounds( 0, 0, 0, 0);
-                        m_waiters.remove( key );
-                        break;
-                    }
-                        
-                    case WaitListener.END:
-                    {
-                        if (params[3])
-                        {
-                            blitImage( g, m_applet.m_restImg, bounds );
-                            g.setClip( bounds.x, bounds.y, bounds.width, bounds.height );
-                            paintCurZone( g );
-                            var dim:Dimension= m_applet.getSize();
-                            g.setClip( 0, 0, dim.width, dim.height );
-                            params[3] = false;
-                        }
-                        bounds.setBounds( 0, 0, 0, 0);
-                        m_waiters.remove( key );
-                    }
-                }
-                
-				// TODO ???
-                //g.dispose();
-            }*/
         }
         
         /**
