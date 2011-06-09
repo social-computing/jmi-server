@@ -59,6 +59,9 @@
           </dependency>
         </dependencies>
         <configuration>
+          <compilerWarnings>
+            <warn-no-constructor>false</warn-no-constructor>
+          </compilerWarnings>
           <quality>0.95</quality>
           <optimize>true</optimize>
           <debug>false</debug>
