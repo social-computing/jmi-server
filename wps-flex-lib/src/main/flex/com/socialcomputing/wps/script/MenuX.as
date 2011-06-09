@@ -79,8 +79,6 @@ package com.socialcomputing.wps.script  {
             var font:TextFormat= this.getTextFormat( zone.m_props);
             var labels:Vector.<String> = null;
             
-            // TODO dst.setFont( font );
-            
             if ( isDefined( TEXT_VAL ))
             {
                 labels	= parseString( TEXT_VAL, zone.m_props);

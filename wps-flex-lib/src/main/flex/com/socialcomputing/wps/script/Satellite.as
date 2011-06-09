@@ -5,6 +5,7 @@ package com.socialcomputing.wps.script  {
     import flash.display.Sprite;
     import flash.geom.Point;
     import flash.geom.Rectangle;
+    import flash.text.TextFormat;
     
     import mx.collections.ArrayCollection;
     import mx.controls.Menu;
@@ -412,7 +413,15 @@ package com.socialcomputing.wps.script  {
 								var menu:Menu = Menu.createMenu( applet, menuData, false);
                                 menu.variableRowHeight = true;
                                 menu.labelField = "label";
-                                //menu.setStyle("fontWeight", "bold");
+                                
+                                // Style sur le menu
+                                var font:TextFormat= menux.getTextFormat( zone.m_props);
+                                if (font != null) {
+                                    if (font.bold == true)
+                                        menu.setStyle("fontWeight", "bold");
+                                    menu.setStyle("fontFamily", font.font);
+                                }
+                                
                                 menu.itemRenderer = new ClassFactory(CustomMenuItemRenderer);
 								menu.addEventListener(MenuEvent.ITEM_CLICK, applet.menuHandler);								
 								var point:Point = applet.localToGlobal(pos);
