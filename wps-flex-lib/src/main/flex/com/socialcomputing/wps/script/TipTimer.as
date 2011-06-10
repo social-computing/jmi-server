@@ -7,8 +7,7 @@ package com.socialcomputing.wps.script
 	
 	import mx.containers.Tile;
 	import mx.rpc.events.HeaderEvent;
-	
-	import org.mockito.impl.ReturningAnswer;
+
 	
 	public class TipTimer
 	{

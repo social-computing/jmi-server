@@ -13,24 +13,25 @@
 			import com.socialcomputing.wps.services.planservice.PlanService;
 			
 			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
             
-			//private var planUrl:String = "http://10.0.2.2:8080/wps-server";
-            private var planUrl:String = "http://localhost:8080/wps-server";
-            private var planName:String = "Xml_sample";
-            
-            private var planService:PlanService = new PlanService(planUrl);
+            private var planName:String;
+            private var planService:PlanService;
 			
-            protected function onCreationComplete(event:FlexEvent):void
-            {
-                planService.showBusyCursor = true; 
-				var parameters:Object  = new Object();
-				//parameters["analysisProfile"] = "GlobalProfile";
-				parameters["entityId"] = "5";
-                getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
+            protected function onCreationComplete(event:FlexEvent):void {
+				// Reading application properties
+				var serverURL:String = this.checkApplicationParameter("wpsserverurl");
+				this.planName = this.checkApplicationParameter("wpsplanname");
+				var parameters:Object = FlexGlobals.topLevelApplication.parameters;
+				
+				// Initialising service
+				this.planService = new PlanService(serverURL);
+                getPlanResult.token = this.planService.getPlan(planName, map.width, map.height, parameters);
             }
+			
 			protected function onAction(event:ActionEvent):void
 			{
 				trace( event.action + ": " + event.args.toString());
@@ -46,6 +47,13 @@
 					parameters["analysisProfile"] = "DiscoveryProfile";
 					getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
 				}
+			}
+			
+			private function checkApplicationParameter(paramName:String):String {
+				if(!FlexGlobals.topLevelApplication.parameters.hasOwnProperty(paramName)) {
+					throw new Error("Missing application parameter: " + paramName); 
+				}
+				return FlexGlobals.topLevelApplication.parameters[paramName];
 			}
 	]]>
     </fx:Script>

@@ -36,7 +36,8 @@ package com.socialcomputing.wps.services.planservice
 			operation.properties[RESTSerializationFilter.URL_PARAMETERS_NAMES] = ["name", "client"];
 			operation.resultType = Object;
 			operations.push(operation);
-			this.operationList = operations;  
+			this.operationList = operations;
+			this.showBusyCursor = true;  
 		}
 		
 		

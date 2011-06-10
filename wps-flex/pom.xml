@@ -57,7 +57,28 @@
             <version>${flex.sdk.version}</version>
             <type>pom</type>
           </dependency>
-        </dependencies>  
+        </dependencies> 
+        <executions>
+          <execution>
+            <id>html-wrapper</id>
+            <goals>
+              <goal>wrapper</goal>
+            </goals>
+            <configuration>
+              <templateURI>folder:/${project.basedir}/html-template/</templateURI>
+              <targetPlayer>10.0.0</targetPlayer>
+              <parameters>
+                <swf>${project.build.finalName}</swf>
+                <width>100%</width>
+                <height>100%</height>
+                <bgcolor>#FFFFFF</bgcolor>
+                <wpsserverurl>${wps.serverurl}</wpsserverurl>
+                <wpsplanname>${wps.planname}</wpsplanname>
+                <wpsentityid>${wps.entityid}</wpsentityid>
+              </parameters>
+            </configuration>
+          </execution>
+        </executions> 
         <configuration>
           <quality>0.95</quality>
           <optimize>true</optimize>
