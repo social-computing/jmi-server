@@ -58,8 +58,6 @@ package com.socialcomputing.wps.components
 		private var _clear:Boolean = false;
 
 		private var _backImgUrl:String;
-		//private var _backImg:Image;
-		//private var _restImg:Image;
 
 		/*
 		 *  Specific display elements

@@ -5,6 +5,7 @@
                minWidth="955" minHeight="600" 
                xmlns:components="com.socialcomputing.wps.components.*"
                creationComplete="onCreationComplete(event)" width="640" height="540">
+    <fx:Style source="Main.css"/>
     <fx:Script>
         <![CDATA[
 			import com.adobe.serialization.json.JSON;
@@ -30,10 +31,6 @@
 				parameters["entityId"] = "5";
                 getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
             }
-			protected function onReady(event:Event):void
-			{
-				status.text = "C'est bon !!!";
-			}
 			protected function onAction(event:ActionEvent):void
 			{
 				trace( event.action + ": " + event.args.toString());
@@ -64,7 +61,7 @@
     <s:Label text="Cartographie WPS :" height="20" />
 	<components:PlanComponent id="map" width="640" height="480" backgroundColor="#7F9FDF"
 							  dataProvider="{getPlanResult.lastResult}" 
-							  ready="onReady(event);"
+							  ready="status.text = 'Ok !';"
 							  status="status.text = event.status;"
 							  action="onAction(event);" 
 	/>
