@@ -4,11 +4,7 @@ package com.socialcomputing.wps.script
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.Timer;
-	
-	import mx.containers.Tile;
-	import mx.rpc.events.HeaderEvent;
-
-	
+		
 	public class TipTimer
 	{
 		private var timer:Timer;

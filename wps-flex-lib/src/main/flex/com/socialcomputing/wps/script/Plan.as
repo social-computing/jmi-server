@@ -13,9 +13,6 @@ package com.socialcomputing.wps.script  {
     import flash.ui.MouseCursor;
     import flash.utils.Dictionary;
     
-    import flashx.textLayout.tlf_internal;
-    
-    import mx.controls.Alert;
     import mx.controls.Image;
     
     /**
