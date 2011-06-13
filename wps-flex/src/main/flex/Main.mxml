@@ -5,7 +5,6 @@
                minWidth="955" minHeight="600" 
                xmlns:components="com.socialcomputing.wps.components.*"
                creationComplete="onCreationComplete(event)" width="640" height="540">
-    <fx:Style source="Main.css"/>
     <fx:Script>
         <![CDATA[
 			import com.adobe.serialization.json.JSON;

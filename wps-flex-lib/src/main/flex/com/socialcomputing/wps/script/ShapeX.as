@@ -429,7 +429,7 @@ package com.socialcomputing.wps.script  {
          * @param transfo		A transformation of this shape to put the image inside.
          * @param center		This shape center before the transformation.
          */
-        public function drawImage(imageLoader:BulkLoader, s:Sprite, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
+        public function drawImage(env:Env, s:Sprite, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
 			// else it is just a void frame
 			if (isDefined(SCALE_VAL)) {
                 var scaledImg:Image;
@@ -438,53 +438,50 @@ package com.socialcomputing.wps.script  {
 				//var baseUrl:String = "http://10.0.2.2:8080";
 				var baseUrl:String = "http://localhost:8080";
 				var imageUrl:String = baseUrl + imageNam;
+				var imageLoader:BulkLoader = env.loader;
 				var image:Bitmap = imageLoader.getBitmap(imageUrl);
 				
 				// Check if the image has already been loaded
 			    // If it isn't add the image url to the bulkloader and catch the event when done.
                 if (image == null) {
-
-					// Fonction called to display the image when it was successfully loaded
-					function loaderCompleteHandler(e:Event):void {
-						var p:Point        = getCenter(zone);
-						var shapePos:Point = new Point();
-						var scale:Number   = getShapePos(zone, transfo, center, p, shapePos);
-						var image:Bitmap   = imageLoader.getBitmap(imageUrl);
-						var imageWidth:int = image.width;
-						var imageScale:int = imageWidth;
-						
-						// Disk
-						if (scale > 0.) {
-							imageScale = int((1.414 * scale));
-						}
-
-						// Rescale image
-						if (imageWidth != imageScale) {
-							if (scaledImg == null) {
-								image.scaleX = imageScale / image.width;
-								image.scaleY = imageScale / image.height;
-							}
-						}
-
-						// Upadate image coordinates after rescale
-						imageScale >>= 1;
-						image.x = p.x + shapePos.x - imageScale;
-						image.y = p.y + shapePos.y - imageScale;
-						
-						// Draw the bitmap on the sprite graphics
-						//ImageUtil.drawBitmap(image, s.graphics);
-                        //s.addChild(image);
-					}
                     function loaderError(e:Event):void {
                         trace('Load image ' + imageUrl + ' failed');
                     }
 					imageLoader.add(imageUrl);
-					imageLoader.get(imageUrl).addEventListener(Event.COMPLETE, loaderCompleteHandler);
                     imageLoader.get(imageUrl).addEventListener(BulkLoader.ERROR, loaderError);
                 }
+					
 				// Draw the image if it has already been loaded
 				else {
-					ImageUtil.drawBitmap(image, s.graphics);
+					// Create a new bitmap with the reference of the previously loaded bitmapData in memory (bulkLoader)
+					// Not cloning the bitmapData itself
+					var imageClone:Bitmap = new Bitmap(image.bitmapData);
+					
+					var p:Point        = getCenter(zone);
+					var shapePos:Point = new Point();
+					var scale:Number   = getShapePos(zone, transfo, center, p, shapePos);
+					var imageWidth:int = imageClone.width;
+					var imageScale:int = imageWidth;
+					
+					// Disk
+					if (scale > 0.0) {
+						imageScale = int(1.414 * scale);
+					}
+					
+					// Rescale image
+					if (imageWidth != imageScale) {
+						if (scaledImg == null) {
+							imageClone.scaleX = imageScale / imageClone.width;
+							imageClone.scaleY = imageScale / imageClone.height;
+						}
+					}
+					
+					// Upadate image coordinates after rescale
+					imageScale >>= 1;
+					imageClone.x = p.x + shapePos.x - imageScale;
+					imageClone.y = p.y + shapePos.y - imageScale;
+
+					ImageUtil.drawBitmap(imageClone, s.graphics);
                 }
             }
         }
