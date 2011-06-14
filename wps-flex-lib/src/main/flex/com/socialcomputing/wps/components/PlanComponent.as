@@ -200,18 +200,17 @@ package com.socialcomputing.wps.components
 			_dataProvider.env.init( this, needPrint);
 
 			try {
+				this._ready = false;
 				plan.m_applet = this;
 				plan.m_curSel = -1;
 				plan.initZones(this.restDrawingSurface, plan.m_links, true);
                 plan.initZones(this.restDrawingSurface, plan.m_nodes, true);
 				plan.resize(size);
 				plan.init();
-                plan.m_applet.env.loader.start();
 				plan.resize(size);
 				plan.init();
-                
 				this._ready = true;
-		
+				plan.m_applet.env.loader.start();
 			}
 			catch(error:Error) {
 				trace( error.getStackTrace());	

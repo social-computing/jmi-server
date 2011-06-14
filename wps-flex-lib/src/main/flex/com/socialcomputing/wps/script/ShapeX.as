@@ -2,6 +2,8 @@ package com.socialcomputing.wps.script  {
     import br.com.stimuli.loading.BulkLoader;
     
     import com.socialcomputing.wps.components.PlanComponent;
+    import com.socialcomputing.wps.util.ApplicationUtil;
+    import com.socialcomputing.wps.util.URLHelper;
     import com.socialcomputing.wps.util.controls.ImageUtil;
     import com.socialcomputing.wps.util.shapes.RectangleUtil;
     
@@ -22,6 +24,9 @@ package com.socialcomputing.wps.script  {
     
     import mx.controls.Alert;
     import mx.controls.Image;
+    import mx.core.FlexGlobals;
+    import mx.managers.BrowserManager;
+    import mx.managers.IBrowserManager;
     import mx.utils.URLUtil;
     
     /**
@@ -430,14 +435,20 @@ package com.socialcomputing.wps.script  {
          * @param center		This shape center before the transformation.
          */
         public function drawImage(env:Env, s:Sprite, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
-			// else it is just a void frame
+			// Else it is just a void frame
 			if (isDefined(SCALE_VAL)) {
                 var scaledImg:Image;
-
-				// TODO : Get the url from the applet parameters
-				//var baseUrl:String = "http://10.0.2.2:8080";
-				var baseUrl:String = "http://localhost:8080";
-				var imageUrl:String = baseUrl + imageNam;
+				var imageUrl:String;
+				
+				// Check if it is an absolute url starting with http(s) or file scheme
+				// Else get ressources from a path relative to the flash application hosting URL
+				if(URLUtil.isHttpURL(imageNam) || URLHelper.isFileURL(imageNam)) {
+					imageUrl = imageNam;
+				}
+				else {
+					imageUrl = URLHelper.getFullURL(ApplicationUtil.getSwfRoot(), imageNam);
+				}
+				
 				var imageLoader:BulkLoader = env.loader;
 				var image:Bitmap = imageLoader.getBitmap(imageUrl);
 				
