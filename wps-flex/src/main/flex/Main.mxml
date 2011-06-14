@@ -2,20 +2,20 @@
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
                xmlns:s="library://ns.adobe.com/flex/spark" 
                xmlns:mx="library://ns.adobe.com/flex/mx" 
-               minWidth="955" minHeight="600" 
-               xmlns:components="com.socialcomputing.wps.components.*"
+               minWidth="955" minHeight="640" 
+               xmlns:wps="com.socialcomputing.wps.components.*"
                creationComplete="onCreationComplete(event)" width="640" height="540">
     <fx:Script>
         <![CDATA[
-			import com.adobe.serialization.json.JSON;
-			import com.socialcomputing.wps.components.ActionEvent;
-			import com.socialcomputing.wps.services.planservice.PlanService;
-			
-			import mx.controls.Alert;
-			import mx.core.FlexGlobals;
-			import mx.events.FlexEvent;
-			import mx.rpc.events.FaultEvent;
-			import mx.rpc.events.ResultEvent;
+            import com.adobe.serialization.json.JSON;
+            import com.socialcomputing.wps.components.ActionEvent;
+            import com.socialcomputing.wps.services.planservice.PlanService;
+            
+            import mx.controls.Alert;
+            import mx.core.FlexGlobals;
+            import mx.events.FlexEvent;
+            import mx.rpc.events.FaultEvent;
+            import mx.rpc.events.ResultEvent;
             
             private var planName:String;
             private var planService:PlanService;
@@ -54,6 +54,10 @@
 				}
 				return FlexGlobals.topLevelApplication.parameters[paramName];
 			}
+			
+			private function labelFunction(item:Object):String {
+				return item.get( "NAME");
+			}
 	]]>
     </fx:Script>
     
@@ -65,12 +69,20 @@
     <s:layout>
         <s:VerticalLayout gap="0" />
     </s:layout>
-    <s:Label text="Cartographie WPS :" height="20" />
-	<components:PlanComponent id="map" width="640" height="480" backgroundColor="#7F9FDF"
-							  dataProvider="{getPlanResult.lastResult}" 
-							  ready="status.text = 'Ok !';"
-							  status="status.text = event.status;"
-							  action="onAction(event);" 
+	<s:Label text="Cartographie WPS :" height="20" />
+	<s:HGroup>
+		<s:Label text="Countries" />
+		<s:DropDownList id="countries" labelFunction="labelFunction" />
+		<s:Label text="Organizations" />
+		<s:DropDownList id="organizations" labelFunction="labelFunction" />
+	</s:HGroup>
+	<wps:PlanComponent id="map" 
+			width="640" height="480" 
+			backgroundColor="#7F9FDF"
+			dataProvider="{getPlanResult.lastResult}" 
+			ready="status.text = 'Ok !'; countries.dataProvider=map.nodes"
+			status="status.text = event.status;"
+			action="onAction(event);" 
 	/>
 	<s:Label id="status"  backgroundColor="#C6C0C0" width="640" height="20"/>
 </s:Application>

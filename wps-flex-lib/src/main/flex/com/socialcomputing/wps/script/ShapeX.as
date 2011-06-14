@@ -24,9 +24,6 @@ package com.socialcomputing.wps.script  {
     
     import mx.controls.Alert;
     import mx.controls.Image;
-    import mx.core.FlexGlobals;
-    import mx.managers.BrowserManager;
-    import mx.managers.IBrowserManager;
     import mx.utils.URLUtil;
     
     /**
@@ -450,7 +447,7 @@ package com.socialcomputing.wps.script  {
 				}
 				
 				var imageLoader:BulkLoader = env.loader;
-				var image:Bitmap = imageLoader.getBitmap(imageUrl);
+				var image:Bitmap = imageLoader.getBitmap(imageNam);
 				
 				// Check if the image has already been loaded
 			    // If it isn't add the image url to the bulkloader and catch the event when done.
@@ -458,10 +455,10 @@ package com.socialcomputing.wps.script  {
                     function loaderError(e:Event):void {
                         trace('Load image ' + imageUrl + ' failed');
                     }
-					imageLoader.add(imageUrl);
+					imageLoader.add(imageUrl, {id: imageNam});
                     imageLoader.get(imageUrl).addEventListener(BulkLoader.ERROR, loaderError);
                 }
-					
+
 				// Draw the image if it has already been loaded
 				else {
 					// Create a new bitmap with the reference of the previously loaded bitmapData in memory (bulkLoader)
@@ -528,13 +525,8 @@ package com.socialcomputing.wps.script  {
                 pos.y = p.y;
                 scale *= transfo.m_scl;
             }
-            
             return scale;
         }
-        
-        
-        
-        
         
         /**
          * Scales a Point previously normalized to 2^16.

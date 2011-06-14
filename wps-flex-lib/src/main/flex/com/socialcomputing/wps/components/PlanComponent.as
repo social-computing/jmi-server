@@ -1,6 +1,7 @@
 package com.socialcomputing.wps.components
 {
 	import com.socialcomputing.wps.plan.PlanContainer;
+	import com.socialcomputing.wps.script.ActiveZone;
 	import com.socialcomputing.wps.script.BagZone;
 	import com.socialcomputing.wps.script.ColorX;
 	import com.socialcomputing.wps.script.Dimension;
@@ -52,7 +53,6 @@ package com.socialcomputing.wps.components
 		
 		private var _dataProvider:PlanContainer = null;
 		private var _backgroundColor:int = 0xFFFFFF;
-		private var _nodes:Array = null;
 		private var _curPos:Point= new Point();
 		private var _ready:Boolean = false;
 		private var _clear:Boolean = false;
@@ -81,9 +81,16 @@ package com.socialcomputing.wps.components
 
 		private var _curDrawingSurface:Sprite;
 		
+		/**
+		 * API
+		 */
+		[ArrayElementType("Node")]
+		public var nodes:ArrayCollection;
+		
 		public function PlanComponent()
 		{
 			super();
+			nodes = new ArrayCollection();
 			
 			// Drawing surface of the component
 			_drawingSurface = new SpriteVisualElement();
@@ -209,12 +216,17 @@ package com.socialcomputing.wps.components
 				plan.init();
 				plan.resize(size);
 				plan.init();
+                plan.m_applet.env.loader.start();
 				this._ready = true;
-				plan.m_applet.env.loader.start();
 			}
 			catch(error:Error) {
 				trace( error.getStackTrace());	
 			}
+			
+			for each( var zone:ActiveZone in plan.m_nodes) {
+				this.nodes.addItem( new Node( zone));
+			}
+			this.nodes.sort;
 				
 			CursorManager.removeBusyCursor();
 			
@@ -240,6 +252,7 @@ package com.socialcomputing.wps.components
 			this._restDrawingSurface.graphics.drawRect(0, 0, this.width, this.height);
 			this._restDrawingSurface.graphics.endFill();
 			this._dataProvider = null;
+			this.nodes = new ArrayCollection();
 			this._ready = false;
 			this._clear = true;
 			this.invalidateProperties();
