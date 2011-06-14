@@ -435,11 +435,12 @@ package com.socialcomputing.wps.script  {
                 var scaledImg:Image;
 
 				// TODO : Get the url from the applet parameters
+				//var baseUrl:String = "";
 				//var baseUrl:String = "http://10.0.2.2:8080";
-				var baseUrl:String = "http://localhost:8080";
+                var baseUrl:String = "http://localhost:8080";
 				var imageUrl:String = baseUrl + imageNam;
 				var imageLoader:BulkLoader = env.loader;
-				var image:Bitmap = imageLoader.getBitmap(imageUrl);
+				var image:Bitmap = imageLoader.getBitmap(imageNam);
 				
 				// Check if the image has already been loaded
 			    // If it isn't add the image url to the bulkloader and catch the event when done.
@@ -447,10 +448,10 @@ package com.socialcomputing.wps.script  {
                     function loaderError(e:Event):void {
                         trace('Load image ' + imageUrl + ' failed');
                     }
-					imageLoader.add(imageUrl);
+					imageLoader.add(imageUrl, {id: imageNam});
                     imageLoader.get(imageUrl).addEventListener(BulkLoader.ERROR, loaderError);
                 }
-					
+
 				// Draw the image if it has already been loaded
 				else {
 					// Create a new bitmap with the reference of the previously loaded bitmapData in memory (bulkLoader)
@@ -517,13 +518,8 @@ package com.socialcomputing.wps.script  {
                 pos.y = p.y;
                 scale *= transfo.m_scl;
             }
-            
             return scale;
         }
-        
-        
-        
-        
         
         /**
          * Scales a Point previously normalized to 2^16.

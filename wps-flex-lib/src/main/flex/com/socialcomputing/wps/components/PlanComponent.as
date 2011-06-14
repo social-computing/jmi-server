@@ -213,10 +213,10 @@ package com.socialcomputing.wps.components
                 plan.initZones(this.restDrawingSurface, plan.m_nodes, true);
 				plan.resize(size);
 				plan.init();
-                plan.m_applet.env.loader.start();
+                
 				plan.resize(size);
 				plan.init();
-                
+                plan.m_applet.env.loader.start();
 				this._ready = true;
 		
 			}
