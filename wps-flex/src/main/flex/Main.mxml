@@ -13,10 +13,13 @@
 			
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
+			import mx.collections.Sort;
+			import mx.collections.SortField;
 			import mx.events.FlexEvent;
+			import spark.events.IndexChangeEvent;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
-            
+				
             private var planName:String;
             private var planService:PlanService;
 			
@@ -30,6 +33,13 @@
 				this.planService = new PlanService(serverURL);
                 getPlanResult.token = this.planService.getPlan(planName, map.width, map.height, parameters);
             }
+			
+			private function checkApplicationParameter(paramName:String):String {
+				if(!FlexGlobals.topLevelApplication.parameters.hasOwnProperty(paramName)) {
+					throw new Error("Missing application parameter: " + paramName); 
+				}
+				return FlexGlobals.topLevelApplication.parameters[paramName];
+			}
 			
 			protected function onAction(event:ActionEvent):void
 			{
@@ -48,15 +58,37 @@
 				}
 			}
 			
-			private function checkApplicationParameter(paramName:String):String {
-				if(!FlexGlobals.topLevelApplication.parameters.hasOwnProperty(paramName)) {
-					throw new Error("Missing application parameter: " + paramName); 
-				}
-				return FlexGlobals.topLevelApplication.parameters[paramName];
+			private function init():void {
+				status.text = 'Ok !'; 
+				
+				var sort:Sort = new Sort();
+				sort.fields = [new SortField("NAME", false)];
+				map.attributes.sort = sort;
+				map.attributes.refresh();
+				countries.dataProvider = map.attributes;
+				
+				map.defineEntities(["POSS_NAME"]);
+				sort = new Sort();
+				sort.fields = [new SortField("POSS_NAME", false)];
+				map.entities.sort = sort;
+				map.entities.refresh();
+				organizations.dataProvider = map.entities;
 			}
-			
-			private function labelFunction(item:Object):String {
-				return item.get( "NAME");
+			private function attLabelFunction(item:Object):String {
+				return item.NAME;
+			}
+			private function entLabelFunction(item:Object):String {
+				return item.POSS_NAME;
+			}
+			private function selectCountry(event:IndexChangeEvent):void {
+				if( event.newIndex == 0) {
+					map.clearSelection( "search");
+				}
+				else {
+					map.clearSelection( "search");
+					countries.selectedItem.select( "search");
+					map.setSelection( "search");
+				}
 			}
 	]]>
     </fx:Script>
@@ -72,15 +104,15 @@
 	<s:Label text="Cartographie WPS :" height="20" />
 	<s:HGroup>
 		<s:Label text="Countries" />
-		<s:DropDownList id="countries" labelFunction="labelFunction" />
+		<s:DropDownList id="countries" labelFunction="attLabelFunction" change="selectCountry(event);" />
 		<s:Label text="Organizations" />
-		<s:DropDownList id="organizations" labelFunction="labelFunction" />
+		<s:DropDownList id="organizations" labelFunction="entLabelFunction" />
 	</s:HGroup>
 	<wps:PlanComponent id="map" 
 			width="640" height="480" 
 			backgroundColor="#7F9FDF"
 			dataProvider="{getPlanResult.lastResult}" 
-			ready="status.text = 'Ok !'; countries.dataProvider=map.nodes"
+			ready="init();"
 			status="status.text = event.status;"
 			action="onAction(event);" 
 	/>
