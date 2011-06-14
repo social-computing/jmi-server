@@ -1,16 +1,14 @@
 package com.socialcomputing.wps.components
 {
-	import com.socialcomputing.wps.script.ActiveZone;
+	import com.socialcomputing.wps.script.BagZone;
 
 	public class Node
 	{
-		private var ref:ActiveZone;
-		public var name:String;
+		private var ref:BagZone;
 		
-		public function Node(ref:ActiveZone)
+		public function Node(ref:BagZone)
 		{
 			this.ref = ref;
-			this.name = "name";
 		}
 		
 		public function get(property:String):Object
