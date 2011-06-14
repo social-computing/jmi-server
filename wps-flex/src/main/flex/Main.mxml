@@ -7,15 +7,15 @@
                creationComplete="onCreationComplete(event)" width="640" height="540">
     <fx:Script>
         <![CDATA[
-			import com.adobe.serialization.json.JSON;
-			import com.socialcomputing.wps.components.ActionEvent;
-			import com.socialcomputing.wps.services.planservice.PlanService;
-			
-			import mx.controls.Alert;
-			import mx.core.FlexGlobals;
-			import mx.events.FlexEvent;
-			import mx.rpc.events.FaultEvent;
-			import mx.rpc.events.ResultEvent;
+            import com.adobe.serialization.json.JSON;
+            import com.socialcomputing.wps.components.ActionEvent;
+            import com.socialcomputing.wps.services.planservice.PlanService;
+            
+            import mx.controls.Alert;
+            import mx.core.FlexGlobals;
+            import mx.events.FlexEvent;
+            import mx.rpc.events.FaultEvent;
+            import mx.rpc.events.ResultEvent;
             
             private var planName:String;
             private var planService:PlanService;

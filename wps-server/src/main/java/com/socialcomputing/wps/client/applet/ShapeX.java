@@ -20,8 +20,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Hashtable;
 
-import com.socialcomputing.utils.URLHelper;
-
 /**
  * <p>Title: ShapeX</p>
  * <p>Description: A graphical shape that can be transformed and filled.<br>

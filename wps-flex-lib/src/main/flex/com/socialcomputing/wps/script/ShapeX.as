@@ -436,8 +436,8 @@ package com.socialcomputing.wps.script  {
 
 				// TODO : Get the url from the applet parameters
 				//var baseUrl:String = "";
-				//var baseUrl:String = "http://10.0.2.2:8080";
-                var baseUrl:String = "http://localhost:8080";
+				var baseUrl:String = "http://10.0.2.2:8080";
+                //var baseUrl:String = "http://localhost:8080";
 				var imageUrl:String = baseUrl + imageNam;
 				var imageLoader:BulkLoader = env.loader;
 				var image:Bitmap = imageLoader.getBitmap(imageNam);
