@@ -446,9 +446,8 @@ package com.socialcomputing.wps.script  {
                     
                     if ( sels != null )
                     {
-                        var selId:int= int(applet.env.m_selections[sels[0]]);
-                        
-                        sel = isNaN(selId) ? selId : -1;
+						if( applet.env.m_selections[sels[0]] != null)
+                        	sel = applet.env.m_selections[sels[0]];
                     }
                     
                     satData.m_isVisible = sat.isVisible( zone,  isTip, applet.plan.m_curSel, sel );
