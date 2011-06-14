@@ -16,7 +16,11 @@ import java.awt.geom.QuadCurve2D;
 import java.awt.image.ImageObserver;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Hashtable;
+
+import com.socialcomputing.utils.URLHelper;
 
 /**
  * <p>Title: ShapeX</p>
@@ -405,9 +409,20 @@ public final class ShapeX extends Base implements Serializable
 
 			if ( image == null )
 			{
-				image   = applet.getImage( applet.getCodeBase(), imageNam );
-				applet.prepareImage( image, applet );
-				medias.put( imageNam, image );
+			    if (imageNam.startsWith("http") || imageNam.startsWith("file")) {
+			        // Absolute URL
+			        try {
+    			        URL url = new URL(imageNam);
+    			        image = applet.getImage(url);
+			        } catch (MalformedURLException mue) {
+			            mue.printStackTrace();
+			        }
+			    } else {
+			        // Relative URL
+			        image = applet.getImage(applet.getCodeBase(), imageNam);
+			    }
+	            applet.prepareImage( image, applet );
+	            medias.put( imageNam, image );
 			}
 
 			if (( applet.checkImage( image, applet )& ImageObserver.ALLBITS )!= 0 )  // the image can be drawn now
