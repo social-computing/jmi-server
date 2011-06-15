@@ -32,6 +32,7 @@ package com.socialcomputing.wps.components
 	import mx.controls.Image;
 	import mx.controls.Menu;
 	import mx.events.MenuEvent;
+	import mx.events.ResizeEvent;
 	import mx.managers.CursorManager;
 	import mx.styles.CSSStyleDeclaration;
 	
@@ -47,67 +48,66 @@ package com.socialcomputing.wps.components
 	[Event(name="action", type="com.socialcomputing.wps.components.ActionEvent")]
 	[Event(name="status", type="com.socialcomputing.wps.components.StatusEvent")]
 	
-	public class PlanComponent extends Group
-	{
+	public class PlanComponent extends Group {
 		public static var version:String = "1.0-SNAPSHOT";
 		
 		private var _dataProvider:PlanContainer = null;
-		private var _backgroundColor:int = 0xFFFFFF;
-		private var _curPos:Point= new Point();
+		private var _curPos:Point = new Point();
 		private var _ready:Boolean = false;
-		private var _clear:Boolean = false;
-
-		private var _backImgUrl:String;
 
 		/*
 		 *  Specific display elements
 		 */
+		private var _backgroundColor:int = 0xFFFFFF;
 		private var _onScreen:BitmapData;
 		private var _offScreen:BitmapData;
 		private var _drawingSurface:SpriteVisualElement;
 		
-		/**
+		/*
 		 * Image used to quickly restore the aspect of a zone that is no longer current.
 		 * It includes the background + links + Satellites of each place at rest.
 		 */
 		private var _restDrawingSurface:Sprite;  
-
-		/**
+		/*
 		 * Image used as a background on which the current zone is drawn.
 		 * It includes the background, and the zones rendered with their 'ghosted' satellites form the rest swatch.
 		 * The resulting image is then filtered with a transparency color.
 		 */
 		private var _backDrawingSurface:Sprite; 
-
 		private var _curDrawingSurface:Sprite;
 		
-		/**
+		/*
 		 * API
 		 */
 		[ArrayElementType("Node")]
 		public var nodes:ArrayCollection;
 		
-		public function PlanComponent()
-		{
+		public function PlanComponent() {
 			super();
-			nodes = new ArrayCollection();
+			this.nodes = new ArrayCollection();
 			
 			// Drawing surface of the component
-			_drawingSurface = new SpriteVisualElement();
-			this.addElement(_drawingSurface);
+			this._drawingSurface = new SpriteVisualElement();
+			this.addElement(this._drawingSurface);
 
 			// Graphic zones
 			this._curDrawingSurface = new Sprite();
 			this._restDrawingSurface = new Sprite();
 			this._backDrawingSurface = new Sprite();
 			
+			// Debug helpers
+			this._restDrawingSurface.name = "REST drawing surface";
+			this._curDrawingSurface.name = "CUR drawing surface";
+			this._backDrawingSurface.name = "BACK drawing surface";
+			
 			// Event listeners
 			this.doubleClickEnabled = true;
-			addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
-			addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
-			addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
-			addEventListener(MouseEvent.CLICK, mouseClickHandler);
-			addEventListener(MouseEvent.DOUBLE_CLICK, mouseDoubleClickHandler);
+			this.addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
+			this.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+			this.addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
+			this.addEventListener(MouseEvent.CLICK, mouseClickHandler);
+			this.addEventListener(MouseEvent.DOUBLE_CLICK, mouseDoubleClickHandler);
+			this.addEventListener(ResizeEvent.RESIZE, resizeHandler);
 		}
 		
 		public function get backDrawingSurface():Sprite
@@ -132,7 +132,7 @@ package com.socialcomputing.wps.components
 		public function get plan():Plan
 		{
 			if(this._dataProvider == null) {
-				return null
+				return null;
 			}
 			return _dataProvider.plan;
 		}
@@ -158,11 +158,6 @@ package com.socialcomputing.wps.components
 			return _restDrawingSurface;
 		}
 		
-		public function get backImgUrl():String
-		{
-			return _backImgUrl;
-		}
-		
 		public function get curPos():Point {
 			return _curPos;
 		}
@@ -173,28 +168,27 @@ package com.socialcomputing.wps.components
 		
 		public function set dataProvider(value:Object):void
 		{
+			// Set component status to "not ready"
 			this._ready = false;
-			this._onScreen = new BitmapData(this.width, this.height);
-			this._offScreen = new BitmapData(this.width, this.height);
-			this._drawingSurface.addChild(new Bitmap(this._onScreen));
 			
-            /*this.curDrawingSurface.x = 700;
-            this._drawingSurface.addChild(this.curDrawingSurface);
-            this.restDrawingSurface.x = 700;
-            this.restDrawingSurface.y = 200;
-            this._drawingSurface.addChild(this.restDrawingSurface);*/
-            this.restDrawingSurface.name = "REST drawing surface";
-            this.curDrawingSurface.name = "CUR drawing surface";
-            
-			// If the given value is null return for now
-			// TODO : If the local plancontainer is set, reset objects 
+			// Clear all drawing surfaces
+			this.clear();
+			
+			this.nodes = new ArrayCollection();
+			
+			// If the given value is null 
+			// Reset all objects of this component
 			if(value == null) {
-				clear();
+				this._dataProvider = null;
+				//this._plan = null;
+				//this.
+				// TODO : If the local plancontainer is set, reset objects
+				this.invalidateProperties();
+				this.invalidateDisplayList();
 				return;
 			}
 			
-			showStatus( "" );
-			
+			this.showStatus("");
 			CursorManager.setBusyCursor();
 			if(value is PlanContainer) {
 				this._dataProvider = value as PlanContainer;
@@ -204,10 +198,9 @@ package com.socialcomputing.wps.components
 			}
 
 			var needPrint:Boolean = false; // Later
-			_dataProvider.env.init( this, needPrint);
+			this._dataProvider.env.init(this, needPrint);
 
 			try {
-				this._ready = false;
 				plan.m_applet = this;
 				plan.m_curSel = -1;
 				plan.initZones(this.restDrawingSurface, plan.m_links, true);
@@ -217,17 +210,15 @@ package com.socialcomputing.wps.components
 				plan.resize(size);
 				plan.init();
                 plan.m_applet.env.loader.start();
+				for each(var zone:ActiveZone in plan.m_nodes) {
+					this.nodes.addItem(new Node(zone));
+				}
+				this.nodes.sort;
 				this._ready = true;
 			}
 			catch(error:Error) {
-				trace( error.getStackTrace());	
+				trace(error.getStackTrace());	
 			}
-			
-			for each( var zone:ActiveZone in plan.m_nodes) {
-				this.nodes.addItem( new Node( zone));
-			}
-			this.nodes.sort;
-				
 			CursorManager.removeBusyCursor();
 			
 			/*
@@ -239,24 +230,23 @@ package com.socialcomputing.wps.components
 			 */
 			this.invalidateProperties();
 			this.invalidateDisplayList();
-			if(ready)
+			if(this._ready)
 				dispatchEvent(new Event("ready"));
 			else
-				dispatchEvent(new Event( "error"));
+				dispatchEvent(new Event("error"));
 		}
 
-		public function clear():void {
-			//showStatus( "" );
-			ImageUtil.clear( this._restDrawingSurface);
-			this._restDrawingSurface.graphics.beginFill( this._ready ? this.env.m_inCol.m_color : this._backgroundColor);
-			this._restDrawingSurface.graphics.drawRect(0, 0, this.width, this.height);
-			this._restDrawingSurface.graphics.endFill();
-			this._dataProvider = null;
-			this.nodes = new ArrayCollection();
-			this._ready = false;
-			this._clear = true;
-			this.invalidateProperties();
-			this.invalidateDisplayList();		
+		private function clear():void {
+			ImageUtil.clear(this._backDrawingSurface);
+			ImageUtil.clear(this._restDrawingSurface);
+			ImageUtil.clear(this._curDrawingSurface);
+			ImageUtil.clear(this._drawingSurface);
+			
+			if(this.width != 0 && this.height !=  0) {
+				this._onScreen = new BitmapData(this.width, this.height);
+				this._offScreen = new BitmapData(this.width, this.height);
+				this._drawingSurface.addChild(new Bitmap(this._onScreen));
+			}
 		}
 		
 		public function showStatus(message:String):void {
@@ -301,6 +291,20 @@ package com.socialcomputing.wps.components
 			}
 		}
 		
+		public function resizeHandler(event:ResizeEvent):void {
+			trace("resize, new size = (" + this.width + ", " + this.height + ")");
+			this.clear();
+			
+			this._restDrawingSurface.graphics.beginFill(this._ready ? this.env.m_inCol.m_color : this._backgroundColor);
+			this._restDrawingSurface.graphics.drawRect(0, 0, this.width, this.height);
+			this._restDrawingSurface.graphics.endFill();
+				
+			if(this._ready) {
+				this.plan.resize(new Dimension(this.width, this.height));
+				this.plan.init();
+				this.invalidateSize();  
+			}
+		}
 		
 		/**
 		 * @inheritDoc
@@ -308,10 +312,7 @@ package com.socialcomputing.wps.components
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			trace("Update graphic display");
-			if(this._ready || this._clear) {
-				this.renderShape(this._restDrawingSurface, this.width, this.height);
-				this._clear = false;
-			}
+			this.renderShape(this._restDrawingSurface, this.width, this.height);
 		}
 		
 		/**

@@ -2,9 +2,8 @@
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
                xmlns:s="library://ns.adobe.com/flex/spark" 
                xmlns:mx="library://ns.adobe.com/flex/mx" 
-               minWidth="955" minHeight="640" 
                xmlns:wps="com.socialcomputing.wps.components.*"
-               creationComplete="onCreationComplete(event)" width="640" height="540">
+               creationComplete="onCreationComplete(event)">
     <fx:Script>
         <![CDATA[
             import com.adobe.serialization.json.JSON;
@@ -36,12 +35,12 @@
 				trace( event.action + ": " + event.args.toString());
 				var parameters:Object  = new Object();
 				if( event.action == "NewWin") {
-					map.clear();
+					//map.clear();
 					parameters["entityId"] = event.args[0];
 					getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
 				}
 				if( event.action == "Discover") {
-					map.clear();
+					//map.clear();
 					parameters["attributeId"] = event.args[0];
 					parameters["analysisProfile"] = "DiscoveryProfile";
 					getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
@@ -67,7 +66,7 @@
     </fx:Declarations>
     
     <s:layout>
-        <s:VerticalLayout gap="0" />
+        <s:VerticalLayout gap="5" />
     </s:layout>
 	<s:Label text="Cartographie WPS :" height="20" />
 	<s:HGroup>
@@ -76,13 +75,14 @@
 		<s:Label text="Organizations" />
 		<s:DropDownList id="organizations" labelFunction="labelFunction" />
 	</s:HGroup>
-	<wps:PlanComponent id="map" 
-			width="640" height="480" 
+	<wps:PlanComponent id="map"
 			backgroundColor="#7F9FDF"
 			dataProvider="{getPlanResult.lastResult}" 
 			ready="status.text = 'Ok !'; countries.dataProvider=map.nodes"
 			status="status.text = event.status;"
 			action="onAction(event);" 
+			percentWidth="100"
+			percentHeight="100"
 	/>
-	<s:Label id="status"  backgroundColor="#C6C0C0" width="640" height="20"/>
+	<s:Label id="status" backgroundColor="#C6C0C0" percentWidth="100" height="20"/>
 </s:Application>
