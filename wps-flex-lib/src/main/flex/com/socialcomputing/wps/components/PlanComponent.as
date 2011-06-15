@@ -6,6 +6,7 @@ package com.socialcomputing.wps.components
 	import com.socialcomputing.wps.script.ColorX;
 	import com.socialcomputing.wps.script.Dimension;
 	import com.socialcomputing.wps.script.Env;
+	import com.socialcomputing.wps.script.LinkZone;
 	import com.socialcomputing.wps.script.Plan;
 	import com.socialcomputing.wps.script.SatData;
 	import com.socialcomputing.wps.script.Satellite;
@@ -79,12 +80,16 @@ package com.socialcomputing.wps.components
 		/*
 		 * API
 		 */
-		[ArrayElementType("Node")]
-		public var nodes:ArrayCollection;
+		[ArrayElementType("Attribute")]
+		public var attributes:ArrayCollection;
+
+		[ArrayElementType("Attribute")]
+		public var entities:ArrayCollection;
 		
 		public function PlanComponent() {
 			super();
-			this.nodes = new ArrayCollection();
+			attributes = new ArrayCollection();
+			entities = new ArrayCollection();
 			
 			// Drawing surface of the component
 			this._drawingSurface = new SpriteVisualElement();
@@ -174,7 +179,8 @@ package com.socialcomputing.wps.components
 			// Clear all drawing surfaces
 			this.clear();
 			
-			this.nodes = new ArrayCollection();
+			this.attributes = new ArrayCollection();
+			this.entities = new ArrayCollection();
 			
 			// If the given value is null 
 			// Reset all objects of this component
@@ -210,10 +216,9 @@ package com.socialcomputing.wps.components
 				plan.resize(size);
 				plan.init();
                 plan.m_applet.env.loader.start();
-				for each(var zone:ActiveZone in plan.m_nodes) {
-					this.nodes.addItem(new Node(zone));
+			    for each( var zone:ActiveZone in plan.m_nodes) {
+					this.attributes.addItem( new Attribute( env, zone));
 				}
-				this.nodes.sort;
 				this._ready = true;
 			}
 			catch(error:Error) {
@@ -388,6 +393,81 @@ package com.socialcomputing.wps.components
 			dispatchEvent(new ActionEvent( actionStr));
 		}
 		
+		public function defineEntities( nodeFields:Array, nodeId:String="POSS_ID", linkId:String="REC_ID"):void {
+			
+			// Extraction des entités
+			var ents:Object = new Object();
+			for each( var zone:ActiveZone in plan.m_nodes) {
+				var ids:Array = zone.m_props[nodeId] as Array;
+				for( var i:int = 0; i < ids.length; ++i) {
+					if( !ents.hasOwnProperty( ids[i])) {
+						var entity:Entity = new Entity( env);
+						entity[nodeId] = ids[i];
+						for each( var name:Object in nodeFields) {
+							entity[name] = zone.m_props[name][i];
+						}
+						ents[ids[i]] = entity;
+						this.entities.addItem( entity);
+					}
+				}
+			}
+			for each( var link:LinkZone in plan.m_links) {
+				ids = link.m_props[linkId] as Array;
+				for each( var id:String in ids) {
+					ents[id].addLink( link);
+				}
+			}
+		}
+		
+		/**
+		 * Sets the currently displayed selection.
+		 * Called by JavaScript.
+		 * @param selNam	A selection name as defined in the Dictionary.
+		 */
+		public function setSelection( selection:String):void
+		{
+			var selId:int   = getSelId( selection );
+			plan.m_curSel = selId;
+			plan.init();
+			this.invalidateDisplayList();
+		}
+		
+		public function clearSelection( selection:String):void {
+			clearZoneSelection( selection, plan.m_nodes, plan.m_nodes.length );
+			clearZoneSelection( selection, plan.m_links, plan.m_linksCnt );
+		}
+		
+		/**
+		 * Remove zones from a selection.
+		 * The display must be refresh to reflect the new selection.
+		 * @param selNam	A selection name as defined in the Dictionary.
+		 * @param zones		An array of Zones (Nodes or Links).
+		 * @param n			Number of zone to remove from selection in the array, starting from index 0.
+		 */
+		private function clearZoneSelection( selection:String, zones:Array, n:int):void
+		{
+			var selId:int   = getSelId( selection );
+			if ( selId != -1 )
+			{
+				var unselBit:int = ~( 1 << selId );
+				for( var i:int = 0; i < n; i ++ )
+				{
+					zones[i].m_selection &= unselBit;
+				}
+			}
+		}
+		
+		/**
+		 * Gets the id of a selection, knowing its name.
+		 * @param selNam	A selection name as defined in the Dictionary.
+		 * @return			An ID in [0,31] or -1 if the selection name is unknown.
+		 */
+		private function getSelId( selection:String):int
+		{
+			if( env.m_selections[selection] == null)
+				return -1;
+			return  env.m_selections[selection];
+		}
 		
 		public function renderShape(sprite:Sprite, width:uint, height:uint, position:Point = null):void {
 			// If no position is specified, take (0,0)
