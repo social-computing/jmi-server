@@ -81,14 +81,14 @@
 				return item.POSS_NAME;
 			}
 			private function selectCountry(event:IndexChangeEvent):void {
-				if( event.newIndex == 0) {
-					map.clearSelection( "search");
-				}
-				else {
-					map.clearSelection( "search");
-					countries.selectedItem.select( "search");
-					map.setSelection( "search");
-				}
+				map.clearSelection( "search");
+				countries.selectedItem.select( "search");
+				map.setSelection( "search");
+			}
+			private function selectOrganization(event:IndexChangeEvent):void {
+				map.clearSelection( "search");
+				organizations.selectedItem.select( "search");
+				map.setSelection( "search");
 			}
 	]]>
     </fx:Script>
@@ -106,7 +106,8 @@
 		<s:Label text="Countries" />
 		<s:DropDownList id="countries" labelFunction="attLabelFunction" change="selectCountry(event);" />
 		<s:Label text="Organizations" />
-		<s:DropDownList id="organizations" labelFunction="entLabelFunction" />
+		<s:DropDownList id="organizations" labelFunction="entLabelFunction" change="selectOrganization(event);" />
+		<s:Button label="Clear" click="map.clearSelection( 'search'); map.setSelection( 'search')"/>
 	</s:HGroup>
 	<wps:PlanComponent id="map" 
 			width="640" height="480" 

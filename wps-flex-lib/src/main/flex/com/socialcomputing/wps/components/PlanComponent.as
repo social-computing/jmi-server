@@ -6,6 +6,7 @@ package com.socialcomputing.wps.components
 	import com.socialcomputing.wps.script.ColorX;
 	import com.socialcomputing.wps.script.Dimension;
 	import com.socialcomputing.wps.script.Env;
+	import com.socialcomputing.wps.script.LinkZone;
 	import com.socialcomputing.wps.script.Plan;
 	import com.socialcomputing.wps.script.SatData;
 	import com.socialcomputing.wps.script.Satellite;
@@ -256,6 +257,7 @@ package com.socialcomputing.wps.components
 			this._restDrawingSurface.graphics.endFill();
 			this._dataProvider = null;
 			this.attributes = new ArrayCollection();
+			this.entities = new ArrayCollection();
 			this._ready = false;
 			this._clear = true;
 			this.invalidateProperties();
@@ -398,18 +400,24 @@ package com.socialcomputing.wps.components
 				var ids:Array = zone.m_props[nodeId] as Array;
 				for( var i:int = 0; i < ids.length; ++i) {
 					if( !ents.hasOwnProperty( ids[i])) {
-						var entity:Entity = new Entity();
+						var entity:Entity = new Entity( env);
 						entity[nodeId] = ids[i];
 						for each( var name:Object in nodeFields) {
 							entity[name] = zone.m_props[name][i];
 						}
-						ents[ids[i]] = true;
+						ents[ids[i]] = entity;
 						this.entities.addItem( entity);
 					}
 				}
 			}
+			for each( var link:LinkZone in plan.m_links) {
+				ids = link.m_props[linkId] as Array;
+				for each( var id:String in ids) {
+					ents[id].addLink( link);
+				}
+			}
 		}
-
+		
 		/**
 		 * Sets the currently displayed selection.
 		 * Called by JavaScript.
@@ -420,7 +428,6 @@ package com.socialcomputing.wps.components
 			var selId:int   = getSelId( selection );
 			plan.m_curSel = selId;
 			plan.init();
-			this.invalidateProperties();
 			this.invalidateDisplayList();
 		}
 		
