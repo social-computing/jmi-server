@@ -6,18 +6,20 @@
                creationComplete="onCreationComplete(event)">
     <fx:Script>
         <![CDATA[
-            import com.adobe.serialization.json.JSON;
-            import com.socialcomputing.wps.components.ActionEvent;
-            import com.socialcomputing.wps.services.planservice.PlanService;
-            
-            import mx.controls.Alert;
-            import mx.core.FlexGlobals;
+			import com.adobe.serialization.json.JSON;
+			import com.socialcomputing.wps.components.ActionEvent;
+			import com.socialcomputing.wps.components.Attribute;
+			import com.socialcomputing.wps.services.planservice.PlanService;
+			
 			import mx.collections.Sort;
 			import mx.collections.SortField;
-            import mx.events.FlexEvent;
+			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
 			import spark.events.IndexChangeEvent;
-            import mx.rpc.events.FaultEvent;
-            import mx.rpc.events.ResultEvent;
 				
             private var planName:String;
             private var planService:PlanService;
@@ -87,6 +89,9 @@
 			private function selectOrganization(event:IndexChangeEvent):void {
 				map.clearSelection( "search");
 				organizations.selectedItem.select( "search");
+				for each( var attribute:Attribute in organizations.selectedItem.attributes) {
+					attribute.select( "search");
+				}
 				map.setSelection( "search");
 			}
 	]]>
