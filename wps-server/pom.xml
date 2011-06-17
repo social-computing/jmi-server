@@ -274,11 +274,11 @@
               <goal>copy-flex-resources</goal>
             </goals>
             <configuration>
+              <webappDirectory>${project.build.directory}/${project.build.finalName}/flex</webappDirectory> 
               <!-- Hack :  
                    Move the generated flex client swf so that it also work with in eclipse
                    with the m2eclipse plugin -->
-              <!-- <webappDirectory>${project.build.directory}/${project.build.finalName}/flex</webappDirectory> -->
-              <webappDirectory>src/main/webapp/flex</webappDirectory>
+              <!--<webappDirectory>src/main/webapp/flex</webappDirectory> -->
             </configuration>
           </execution>
         </executions>
