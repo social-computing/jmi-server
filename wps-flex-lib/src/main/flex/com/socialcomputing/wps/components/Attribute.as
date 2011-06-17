@@ -6,22 +6,27 @@ package com.socialcomputing.wps.components
 	dynamic public class Attribute
 	{
 		private var env:Env;
-		private var ref:ActiveZone;
+		private var _zone:ActiveZone;
 		
 		public function Attribute( env:Env, ref:ActiveZone) {
 			this.env = env;
-			this.ref = ref;
-			for( var o : * in this.ref.m_props) {
-				this[o] = this.ref.m_props[o];
+			this._zone = ref;
+			for( var o : * in this._zone.m_props) {
+				this[o] = this._zone.m_props[o];
 			}
 		}
 		
+		public function get zone():ActiveZone
+		{
+			return _zone;
+		}
+
 		public function select( selection:String):void {
 			var selId:int   = env.m_selections[selection];
 			if ( selId != -1 )
 			{
 				selId = 1 << selId;
-				ref.m_selection   |= selId;
+				_zone.m_selection   |= selId;
 			}
 		}
 	}

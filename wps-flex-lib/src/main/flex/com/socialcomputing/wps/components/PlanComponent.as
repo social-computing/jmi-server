@@ -2,25 +2,15 @@ package com.socialcomputing.wps.components
 {
 	import com.socialcomputing.wps.plan.PlanContainer;
 	import com.socialcomputing.wps.script.ActiveZone;
-	import com.socialcomputing.wps.script.BagZone;
-	import com.socialcomputing.wps.script.ColorX;
 	import com.socialcomputing.wps.script.Dimension;
 	import com.socialcomputing.wps.script.Env;
 	import com.socialcomputing.wps.script.LinkZone;
 	import com.socialcomputing.wps.script.Plan;
-	import com.socialcomputing.wps.script.SatData;
 	import com.socialcomputing.wps.script.Satellite;
-	import com.socialcomputing.wps.script.ShapeX;
-	import com.socialcomputing.wps.script.Slice;
-	import com.socialcomputing.wps.script.VContainer;
 	import com.socialcomputing.wps.util.controls.ImageUtil;
-	import com.socialcomputing.wps.util.shapes.RectangleUtil;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
-	import flash.display.Graphics;
-	import flash.display.InteractiveObject;
-	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -29,13 +19,9 @@ package com.socialcomputing.wps.components
 	import flash.geom.Rectangle;
 	
 	import mx.collections.ArrayCollection;
-	import mx.controls.Alert;
-	import mx.controls.Image;
-	import mx.controls.Menu;
 	import mx.events.MenuEvent;
 	import mx.events.ResizeEvent;
 	import mx.managers.CursorManager;
-	import mx.styles.CSSStyleDeclaration;
 	
 	import spark.components.Group;
 	import spark.core.SpriteVisualElement;
@@ -415,6 +401,12 @@ package com.socialcomputing.wps.components
 				ids = link.m_props[linkId] as Array;
 				for each( var id:String in ids) {
 					ents[id].addLink( link);
+				}
+			}
+			for each( var attribute:Attribute in this.attributes) {
+				ids = attribute.zone.m_props[nodeId] as Array;
+				for( i = 0; i < ids.length; ++i) {
+					ents[ids[i]].addAttribute( attribute);
 				}
 			}
 		}
