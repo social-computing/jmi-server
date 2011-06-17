@@ -3,21 +3,23 @@
                xmlns:s="library://ns.adobe.com/flex/spark" 
                xmlns:mx="library://ns.adobe.com/flex/mx" 
                xmlns:wps="com.socialcomputing.wps.components.*"
-               creationComplete="onCreationComplete(event)">
+               creationComplete="onCreationComplete(event)"
+               width="80%" height="100%">
     <fx:Script>
         <![CDATA[
             import com.adobe.serialization.json.JSON;
             import com.socialcomputing.wps.components.ActionEvent;
             import com.socialcomputing.wps.services.planservice.PlanService;
             
+            import mx.collections.Sort;
+            import mx.collections.SortField;
             import mx.controls.Alert;
             import mx.core.FlexGlobals;
-			import mx.collections.Sort;
-			import mx.collections.SortField;
             import mx.events.FlexEvent;
-			import spark.events.IndexChangeEvent;
             import mx.rpc.events.FaultEvent;
             import mx.rpc.events.ResultEvent;
+            
+            import spark.events.IndexChangeEvent;
 				
             private var planName:String;
             private var planService:PlanService;
@@ -25,7 +27,7 @@
             protected function onCreationComplete(event:FlexEvent):void {
 				// Reading application properties
 				var serverURL:String = this.checkApplicationParameter("wpsserverurl");
-				this.planName = this.checkApplicationParameter("wpsplanname");
+                this.planName = this.checkApplicationParameter("wpsplanname");
 				var parameters:Object = FlexGlobals.topLevelApplication.parameters;
 				
 				// Initialising service
