@@ -188,9 +188,10 @@
 
     <dependency>
       <groupId>com.socialcomputing.wps</groupId>
-      <artifactId>wps-flex</artifactId>
+      <artifactId>wps-flex-demo</artifactId>
       <version>1.0-SNAPSHOT</version>
       <type>swf</type>
+      <scope>runtime</scope>      
     </dependency>
 
     <!-- Compilation only dependencies -->
