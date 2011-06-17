@@ -1,27 +1,17 @@
 package com.socialcomputing.wps.script{
     import com.socialcomputing.wps.components.PlanComponent;
-	import com.socialcomputing.wps.util.controls.ImageUtil;
+    import com.socialcomputing.wps.util.controls.ImageUtil;
     import com.socialcomputing.wps.util.shapes.RectangleUtil;
     
-    import flash.display.GradientType;
-    import flash.display.Graphics;
-    import flash.display.SpreadMethod;
     import flash.display.Sprite;
     import flash.filters.BlurFilter;
     import flash.geom.ColorTransform;
-    import flash.geom.Matrix;
     import flash.geom.Point;
     import flash.geom.Rectangle;
     import flash.text.AntiAliasType;
-    import flash.text.Font;
-    import flash.text.FontStyle;
     import flash.text.TextField;
     import flash.text.TextFieldAutoSize;
     import flash.text.TextFormat;
-    import flash.text.TextLineMetrics;
-    import flash.text.engine.ElementFormat;
-    import flash.text.engine.FontDescription;
-    import flash.text.engine.FontMetrics;
     
     /**
      * <p>Title: HTMLText</p>
@@ -77,9 +67,14 @@ package com.socialcomputing.wps.script{
         public static const TEXT_COL_VAL:int= 5;
         
 		/**
-		 * Index of the text Color prop in VContainer table
+		 * Index of the Blur prop in VContainer table
 		 */
 		public static const BLUR_COL_VAL:int= 6;
+		
+		/**
+		 * Index of the Rounded prop in VContainer table
+		 */
+		public static const ROUNDED_COL_VAL:int= 7;
 		
        /**
          * True if this text is anchored by a corner.(like subZones tips).
@@ -131,9 +126,20 @@ package com.socialcomputing.wps.script{
 		private var _m_font:TextFormat;
 		private var _m_oneLine:Boolean;
 		private var _m_outCol:ColorTransform;
-		private var _m_blur:Boolean;
+		private var _m_blur:int;
+		private var _m_rounded:int;
 		
 		
+		public function get m_rounded():int
+		{
+			return _m_rounded;
+		}
+
+		public function set m_rounded(value:int):void
+		{
+			_m_rounded = value;
+		}
+
 		public function get m_oneLine():Boolean
 		{
 			return _m_oneLine;
@@ -164,12 +170,12 @@ package com.socialcomputing.wps.script{
 			_m_text = value;
 		}
 
-		public function get m_blur():Boolean
+		public function get m_blur():int
 		{
 			return _m_blur;
 		}
 
-		public function set m_blur(value:Boolean):void
+		public function set m_blur(value:int):void
 		{
 			_m_blur = value;
 		}
@@ -216,11 +222,12 @@ package com.socialcomputing.wps.script{
          * @param flags		Default text alignment flags.
          * @param margin	Default margins size.
          */
-        public function initValues(inCol:ColorTransform, outCol:ColorTransform, textCol:int, fontSiz:int, fontStl:int, fontNam:String, blur:Boolean, flags:int, margin:Insets):void
+        public function initValues(inCol:ColorTransform, outCol:ColorTransform, textCol:int, fontSiz:int, fontStl:int, fontNam:String, blur:int, rounded:int, flags:int, margin:Insets):void
         {
             m_inCol     = inCol;
             m_outCol    = outCol;
 			m_blur		= blur;
+			m_rounded   = rounded;
 			
 			this._m_font = new TextFormat();
 			this._m_font.font = fontNam;
@@ -265,7 +272,8 @@ package com.socialcomputing.wps.script{
                     
                     htmlTxt.m_inCol = getColor( IN_COL_VAL, zone.m_props);
                     htmlTxt.m_outCol = getColor( OUT_COL_VAL, zone.m_props);
-					htmlTxt.m_blur = getBool(BLUR_COL_VAL, zone.m_props);
+					htmlTxt.m_blur = getInt(BLUR_COL_VAL, zone.m_props);
+					htmlTxt.m_rounded = getInt(ROUNDED_COL_VAL, zone.m_props);
 					htmlTxt._m_font = font.getTextFormat( zone.m_props);
 					var color:ColorX = getValue( HTMLText.TEXT_COL_VAL, zone.m_props) as ColorX;
 					if( color != null)
@@ -358,13 +366,16 @@ package com.socialcomputing.wps.script{
 				borderWidth = 2;
             if ( m_inCol != null )
             {
+				s.graphics.lineStyle();
 				if ( m_outCol != null ) {
 					//s.graphics.lineStyle( 2, m_outCol.color);
 					s.graphics.beginFill(m_outCol.color);
-					s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, 10, 10);
+					if( m_rounded == -1)
+						s.graphics.drawRect(pos.x, pos.y, m_bounds.width, m_bounds.height);
+					else
+						s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, m_rounded, m_rounded);
+					s.graphics.endFill();
 				}
-				else
-					s.graphics.lineStyle();
 				// TODO gérer le gradient dans les swatchs
 /*				var colors:Array = [m_inCol.color, 0x000000];
 				var alphas:Array = [1, 1];
@@ -373,7 +384,10 @@ package com.socialcomputing.wps.script{
 				matr.createGradientBox(m_bounds.width, m_bounds.height * 2, Math.PI / 2, pos.x, pos.y);
                 s.graphics.beginGradientFill(GradientType.LINEAR, colors, alphas, ratios, matr, SpreadMethod.PAD);
 */				s.graphics.beginFill(m_inCol.color);
-                s.graphics.drawRoundRect(pos.x+borderWidth, pos.y+borderWidth, m_bounds.width-2*borderWidth, m_bounds.height-2*borderWidth, 10, 10);
+				if( m_rounded == -1)
+					s.graphics.drawRect(pos.x+borderWidth, pos.y+borderWidth, m_bounds.width-2*borderWidth, m_bounds.height-2*borderWidth);
+				else
+                	s.graphics.drawRoundRect(pos.x+borderWidth, pos.y+borderWidth, m_bounds.width-2*borderWidth, m_bounds.height-2*borderWidth, m_rounded, m_rounded);
                 s.graphics.endFill();
            }
 			
@@ -400,8 +414,8 @@ package com.socialcomputing.wps.script{
 		 */
 		public function paint( s:Sprite, pos:Point, borderWidth:int):void {
 			var textField:TextField = new TextField();
-			if( m_blur) {
-				textField.filters = [new BlurFilter(6, 6)];
+			if( m_blur != -1) {
+				textField.filters = [new BlurFilter(m_blur, m_blur)];
 			}
 /*			if ( false && !m_oneLine && m_inCol != null )
 			{

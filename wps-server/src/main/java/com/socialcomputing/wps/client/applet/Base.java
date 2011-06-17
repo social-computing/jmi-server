@@ -122,7 +122,8 @@ public class Base implements Serializable
 	 */
 	protected final int getInt( int prop, Hashtable props )
 	{
-		return ((Integer)getValue( prop, props )).intValue();
+	    Object o = getValue( prop, props );
+		return o == null ? -1 : ((Integer)getValue( prop, props )).intValue();
 	}
 
 	/**

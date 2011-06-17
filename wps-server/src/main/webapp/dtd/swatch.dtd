@@ -146,7 +146,8 @@ At least 2 keys are needed to interpolate using a property or a randon factor. M
 						font    IDREF   #IMPLIED
 						inCol   CDATA   #IMPLIED
 						outCol  CDATA   #IMPLIED
-						blur	CDATA	"false"
+						blur	CDATA	"-1"
+						rounded CDATA	"-1"
 						dir   	( N | NE | E | SE | S | SW | W | NW )   "SW"
 						align   ( left | center | right )   "left"
 						isCorner ( true | false )   "false"

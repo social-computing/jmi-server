@@ -152,7 +152,7 @@ public final class Slice extends Base implements Serializable
 
 					if ( hTxt.length()> 0 )
 					{
-						m_htmlTxt = new HTMLText( Color.white, Color.black, 0, 12, Font.PLAIN, "SansSerif", false, 0, new Insets( 0, 4, 0, 4 ));
+						m_htmlTxt = new HTMLText( Color.white, Color.black, 0, 12, Font.PLAIN, "SansSerif", -1, -1, 0, new Insets( 0, 4, 0, 4 ));
 
 						m_htmlTxt.parseText( g, hTxt );
 						m_htmlTxt.drawText( g, applet.getSize(), text.getFlags( zone )>> 16 );//HTMLText.SOUTH_WEST );
