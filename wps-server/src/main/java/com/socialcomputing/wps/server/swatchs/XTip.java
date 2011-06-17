@@ -62,7 +62,8 @@ public class XTip extends XMLBase implements Serializable
 
 		tip.putAttRef( "inCol", ColorX.class, elem, root, refs, CDATA | IDREF );
 		tip.putAttRef( "outCol", ColorX.class, elem, root, refs, CDATA | IDREF );
-        tip.putAttRef( "blur", Boolean.class, elem, root, refs, CDATA | IDREF );
+        tip.putAttRef( "blur", Integer.class, elem, root, refs, CDATA | IDREF );
+        tip.putAttRef( "rounded", Integer.class, elem, root, refs, CDATA | IDREF );
 
 		if ( hasLabel ) // Label based Tip
 		{
@@ -98,7 +99,8 @@ public class XTip extends XMLBase implements Serializable
 			toClientCont( "inCol", refs ),
 			toClientCont( "outCol", refs ),
 			toClientCont( "textCol", refs ),
-            toClientCont( "blur", refs )
+            toClientCont( "blur", refs ),
+            toClientCont( "rounded", refs )
 		};
 
 		return tip;

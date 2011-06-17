@@ -44,8 +44,8 @@ List<Swatch> ls = dic.getSwatchs();
 			{
 				if( confirm("Are you sure you want to delete selected swatches ?"))
 				{
-					document.test.confirmdelete.value = 'y';
-					document.test.submit();
+					document.del.confirmdelete.value = 'y';
+					document.del.submit();
 				}
 				return false;
 			}
@@ -92,6 +92,7 @@ SwatchManager manager = new SwatchManagerImpl();
 if (request.getParameter("confirmdelete") != null && request.getParameter("confirmdelete").equalsIgnoreCase("y"))
 {
 	int maxDelete = Integer.parseInt( request.getParameter("maxdelete"));
+	
 	for (int i = 0; i < maxDelete; i++)
 	{
 		if( request.getParameter("swatch" + i) != null)
@@ -101,7 +102,6 @@ if (request.getParameter("confirmdelete") != null && request.getParameter("confi
 	}
 }
 %>
-
 
 <table width="100%">
 <tr>
@@ -136,7 +136,7 @@ if (request.getParameter("confirmdelete") != null && request.getParameter("confi
 
 <br/><br/>
 
-<form name="test" method="GET" action="dictionary-detail.jsp">
+<form name="del" method="GET" action="dictionary-detail.jsp">
 <input type="hidden" name="dictionary" value="<%=dictionaryName%>" />
 <input type="hidden" name="confirmdelete" value="n" />
 

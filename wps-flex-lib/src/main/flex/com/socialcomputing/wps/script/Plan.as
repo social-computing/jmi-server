@@ -385,15 +385,21 @@ package com.socialcomputing.wps.script  {
          * @param dim	New size of the Applet.
          */
         public function resize(dim:Dimension):void {
-            if (m_prevBox != null &&
-					((m_prevBox.width != dim.width) || ( m_prevBox.height != dim.height )) &&
-					dim.width > 100 && dim.height > 100) {
+            if (m_prevBox != null
+                    && ((m_prevBox.width != dim.width) || ( m_prevBox.height != dim.height ))
+					&& dim.width > 100 && dim.height > 100 )
+                    {
 				var i:int;
                 var margin:int= 10;
                 var scale:Number;
-				var sx:Number, sy:Number, dx:Number, dy:Number, s:Number;
+				var sx:Number;
+                var sy:Number;
+                var dx:Number;
+                var dy:Number;
+                var s:Number;
                 var zone:ActiveZone;
-                var isFakeFrom:Boolean, isFakeTo:Boolean;
+                var isFakeFrom:Boolean;
+                var isFakeTo:Boolean;
                 
 				// trace("Plan resize à terminer");
 				// TODO 
