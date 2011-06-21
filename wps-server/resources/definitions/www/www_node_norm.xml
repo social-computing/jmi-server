@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+
+<!DOCTYPE swatch SYSTEM "swatch.dtd">
+
+<swatch             name="WWW_NODE_NORM"
+					title="{sNAME}">
+
+<!-- Base Satellite definition -->
+	<sat	        shape="diskShp"
+					transfo="baseTrf"
+					isBack="true">
+		<slice		inCol="100 100 100"
+					outCol="56 56 56"/>
+		<slice		inCol="255 255 255"
+					outCol="56 56 56">
+			<transfo scale=".87"/>
+		</slice>
+	</sat>
+
+<!-- Sub Spots -->
+	<sat	        shape="diskShp"
+					isSub="true"
+					isSuper="false">
+		<slice		inCol="164 164 164"
+					outCol="100 100 100"
+					transfo="spotTrf"/>
+	</sat>
+
+<!-- Super Spot -->
+	<sat	        shape="diskShp">
+		<slice		inCol="164 164 164"
+					outCol="100 100 100"
+					transfo="spotTrf"/>
+	</sat>
+
+<!-- Title -->
+	<sat	        shape="voidShp"
+					transfo="titleTrf"
+					isSub="true"
+					isSuper="true"
+					isTip="true">
+		<slice>
+			<tip 	font="selFnt"
+					label="{+sNAME}"
+					textCol="@blackCol"
+					blur="19"
+					rounded="10"
+					isCorner="true"/>
+		</slice>
+	</sat>
+
+	<sat	        shape="voidShp"
+					selection="search"
+					transfo="titleTrf"
+					isSub="true" >
+		<slice>
+			<tip 	font="selFnt"
+					label="{+sNAME}"
+					inCol="255 0 0"
+					textCol="@whiteCol"
+					isCorner="true"/>
+		</slice>
+	</sat>
+
+<!-- References -->
+	<string         id="nameStr"        label="{sNAME}"/>
+
+	<color 		    id="blackCol"		rgb="000000"/>
+	<color 		    id="whiteCol"		rgb="ffffff"/>
+	<color 		    id="hLinkDrkCol"	rgb="0 0 127"/>
+	<color 		    id="hLinkCol"		rgb="0 0 255"/>
+	<color 		    id="hLinkLitCol"	rgb="191 191 255"/>
+
+	<shape		    id="voidShp"/>
+	<shape		    id="diskShp"
+					scale="1">
+	</shape>
+	<shape		    id="spotShp"
+					scale="0.2">
+	</shape>
+
+	<font		    id="nameFnt"
+					name="SansSerif"
+					size="11"
+					style="bold"/>
+	<font		    id="titleFnt"
+					name="SansSerif"
+					size="11"/>
+	<font		    id="selFnt"
+					name="SansSerif"
+					style="bold"
+					size="11"/>
+
+	<transfo        id="spotTrf"
+					scale="0.2"/>
+	<transfo        id="imgTrf"
+					scale="0.3"/>
+	<transfo	    id="baseTrf"
+					map="interpol">
+		<polar      dir="90"
+					rad="1"/>
+	</transfo>
+	<transfo        id="titleTrf"
+					map="interpol">
+		<polar      dir="0"
+					rad="1.1"/>
+	</transfo>
+	<transfo        id="selTrf"
+					map="interpol">
+		<polar      dir="0"
+					rad="1.4"/>
+	</transfo>
+
+	<tip 	        id="textTip"
+					font="nameFnt"
+					label="{+sNAME}"
+					textCol="@blackCol"
+					isCorner="true"/>
+					
+</swatch>
+
