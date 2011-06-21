@@ -35,7 +35,7 @@ package com.socialcomputing.wps.components
 	[Event(name="action", type="com.socialcomputing.wps.components.ActionEvent")]
 	[Event(name="status", type="com.socialcomputing.wps.components.StatusEvent")]
 	
-	public class PlanComponent extends Group {
+	public class Map extends Group {
 		public static var version:String = "1.0-SNAPSHOT";
 		
 		private var _dataProvider:PlanContainer = null;
@@ -72,7 +72,7 @@ package com.socialcomputing.wps.components
 		[ArrayElementType("Attribute")]
 		public var entities:ArrayCollection;
 		
-		public function PlanComponent() {
+		public function Map() {
 			super();
 			attributes = new ArrayCollection();
 			entities = new ArrayCollection();

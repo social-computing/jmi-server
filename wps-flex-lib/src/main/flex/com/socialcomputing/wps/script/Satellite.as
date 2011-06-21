@@ -1,5 +1,5 @@
 package com.socialcomputing.wps.script  {
-    import com.socialcomputing.wps.components.PlanComponent;
+    import com.socialcomputing.wps.components.Map;
     
     import flash.display.Graphics;
     import flash.display.Sprite;
@@ -191,7 +191,7 @@ package com.socialcomputing.wps.script  {
          * @param showTyp		The type of satellite to display.[ALL_TYP,BASE_TYP,TIP_TYP,SEL_TYP]
          * @throws UnsupportedEncodingException 
          */
-        public function paint(applet:PlanComponent, s:Sprite, zone:ActiveZone, satCtr:Point, supCtr:Point, isLinkOnly:Boolean, satData:SatData, showTyp:int):void {
+        public function paint(applet:Map, s:Sprite, zone:ActiveZone, satCtr:Point, supCtr:Point, isLinkOnly:Boolean, satData:SatData, showTyp:int):void {
 			var flags:int= satData.m_flags;
             var isTip:Boolean		= isEnabled( flags, Satellite.TIP_BIT ),
                 isSel:Boolean       = isEnabled( flags, Satellite.SEL_BIT ),
@@ -270,7 +270,7 @@ package com.socialcomputing.wps.script  {
 		 * 
          * @return					True if the cursor's position is inside this satellite, false otherwise.
          */
-        public function contains(planComponent:PlanComponent, g:Graphics, zone:ActiveZone, satCtr:Point, 
+        public function contains(planComponent:Map, g:Graphics, zone:ActiveZone, satCtr:Point, 
 								 supCtr:Point, transfo:Transfo, pos:Point, isPie:Boolean, isFake:Boolean):Boolean {
             //trace("[Satellite contains method called]");
 			var i:int, n:int = m_slices.length;
@@ -329,7 +329,7 @@ package com.socialcomputing.wps.script  {
          * @param bounds		A Rectangle to merge with this bounds.
          * @throws UnsupportedEncodingException 
          */
-        public function setBounds(applet:PlanComponent, g:Graphics, zone:ActiveZone,
+        public function setBounds(applet:Map, g:Graphics, zone:ActiveZone,
 								  satCtr:Point, supCtr:Point, bounds:Rectangle):void {
 			for each(var slice:Slice in m_slices) {
                 slice.setBounds(applet, g, zone.getParent(), zone, m_shape, satCtr, supCtr, bounds);
@@ -365,7 +365,7 @@ package com.socialcomputing.wps.script  {
          * @param pos			The current cursor position. Used to popup a menu.
          * @param actionId		Type of event that triggers the action.[HOVER_VAL,CLICK_VAL,DBLCLICK_VAL].
          */
-        public function execute(applet:PlanComponent, zone:ActiveZone, pos:Point, actionId:int):void {
+        public function execute(applet:Map, zone:ActiveZone, pos:Point, actionId:int):void {
             var firstSat:Satellite= zone.m_curSwh.m_satellites[0];
             var isExe:Boolean= isDefined( actionId );
             

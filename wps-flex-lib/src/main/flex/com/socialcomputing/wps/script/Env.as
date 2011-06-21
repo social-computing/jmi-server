@@ -1,7 +1,7 @@
 package com.socialcomputing.wps.script  {
     import br.com.stimuli.loading.BulkLoader;
     
-    import com.socialcomputing.wps.components.PlanComponent;
+    import com.socialcomputing.wps.components.Map;
     
     import flash.display.BitmapData;
     import flash.display.Graphics;
@@ -118,7 +118,7 @@ public class Env
 	 * @param applet
 	 * @param needPrint
 	 */
-	public function init(component:PlanComponent, needPrint:Boolean):void {
+	public function init(component:Map, needPrint:Boolean):void {
         var bkWhite:ColorTransform = new ColorTransform();
         bkWhite.color = 0xFFFFFF;
 		var bkCol:ColorTransform= needPrint ? bkWhite : m_inCol.getColor();

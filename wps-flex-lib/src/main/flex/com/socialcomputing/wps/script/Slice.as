@@ -1,5 +1,5 @@
 package com.socialcomputing.wps.script  {
-	import com.socialcomputing.wps.components.PlanComponent;
+	import com.socialcomputing.wps.components.Map;
 	import com.socialcomputing.wps.util.shapes.RectangleUtil;
 	
 	import flash.display.Graphics;
@@ -92,7 +92,7 @@ package com.socialcomputing.wps.script  {
          * @param supCtr		This parent satellite center.
          * @throws UnsupportedEncodingException 
          */
-        public function paint(applet:PlanComponent, s:Sprite, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point):void {
+        public function paint(applet:Map, s:Sprite, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point):void {
 			var text:HTMLText= getText( TEXT_VAL, zone.m_props );
             
             // Patch for IE old JVM JIT bug (build < 3000).
@@ -195,7 +195,7 @@ package com.socialcomputing.wps.script  {
 		 * 
          * @return				True if the cursor's position is inside this slice, false otherwise
          */
-        public function contains(planComponent:PlanComponent, g:Graphics, supZone:ActiveZone, zone:ActiveZone, 
+        public function contains(planComponent:Map, g:Graphics, supZone:ActiveZone, zone:ActiveZone, 
 								 satShp:ShapeX, satCtr:Point, supCtr:Point, pos:Point):Boolean {
 			var transfo:Transfo = getTransfo(TRANSFO_VAL, zone.m_props);
             
@@ -231,7 +231,7 @@ package com.socialcomputing.wps.script  {
          * @param supCtr		This parent satellite center.
          * @param bounds		A Rectangle to merge with this bounds.
          */
-        public function setBounds(applet:PlanComponent, g:Graphics, supZone:ActiveZone, zone:ActiveZone,
+        public function setBounds(applet:Map, g:Graphics, supZone:ActiveZone, zone:ActiveZone,
 								  satShp:ShapeX, satCtr:Point, supCtr:Point, bounds:Rectangle):void {
             var transfo:Transfo = getTransfo(TRANSFO_VAL, zone.m_props);
             

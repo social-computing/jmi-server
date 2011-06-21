@@ -1,6 +1,6 @@
 package com.socialcomputing.wps.script  {
 	import com.socialcomputing.wps.util.controls.ImageUtil;
-    import com.socialcomputing.wps.components.PlanComponent;
+    import com.socialcomputing.wps.components.Map;
     import com.socialcomputing.wps.plan.PlanContainer;
     
     import flash.display.Graphics;
@@ -66,7 +66,7 @@ package com.socialcomputing.wps.script  {
          * @param g         A graphics compatible with the one that will be used for painting.
          * @param isFirst   True if init called for the first time.
          */
-        public override function init(applet:PlanComponent, s:Sprite, isFirst:Boolean):void {
+        public override function init(applet:Map, s:Sprite, isFirst:Boolean):void {
             super.init( applet, s, isFirst );
             
             this.m_parent = null;
@@ -105,7 +105,7 @@ package com.socialcomputing.wps.script  {
          * @param applet    WPSApplet owning this zone.
          * @param g         A Graphics on which this must be painted.
          */
-        public function paintCur(applet:PlanComponent):void {
+        public function paintCur(applet:Map):void {
             if( (m_flags & INVISIBLE_BIT) != 0) return;
 			
 			/*

@@ -1,5 +1,5 @@
 package com.socialcomputing.wps.script  {
-    import com.socialcomputing.wps.components.PlanComponent;
+    import com.socialcomputing.wps.components.Map;
     
     import flash.display.Graphics;
     import flash.display.Sprite;
@@ -121,7 +121,7 @@ package com.socialcomputing.wps.script  {
          * @param g         A graphics compatible with the one that will be used for painting.
          * @param isFirst   True if init called for the first time.
          */
-		public function init(applet:PlanComponent, s:Sprite, isFirst:Boolean):void {
+		public function init(applet:Map, s:Sprite, isFirst:Boolean):void {
             if ( isFirst )  // One time init
             {
                 var sel:Object= m_props["SELECTION"];
@@ -154,7 +154,7 @@ package com.socialcomputing.wps.script  {
          * @param showTyp   The type of Satellite to show (SEL, TIP, BASE, ALL). See Satellite.XXXX_TYP.
          * @param showLinks True if we only wants to paint links.
          */
-        public function paint(applet:PlanComponent, s:Sprite, isCur:Boolean, isFront:Boolean, showTyp:int, showLinks:Boolean):void {
+        public function paint(applet:Map, s:Sprite, isCur:Boolean, isFront:Boolean, showTyp:int, showLinks:Boolean):void {
             if( (m_flags & INVISIBLE_BIT) != 0) return;
             var swatch:Swatch= isCur ? m_curSwh : m_restSwh;
             

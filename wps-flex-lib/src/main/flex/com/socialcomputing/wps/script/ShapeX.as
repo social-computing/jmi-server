@@ -1,7 +1,7 @@
 package com.socialcomputing.wps.script  {
     import br.com.stimuli.loading.BulkLoader;
     
-    import com.socialcomputing.wps.components.PlanComponent;
+    import com.socialcomputing.wps.components.Map;
     import com.socialcomputing.wps.util.ApplicationUtil;
     import com.socialcomputing.wps.util.URLHelper;
     import com.socialcomputing.wps.util.controls.ImageUtil;

@@ -1,5 +1,5 @@
 package com.socialcomputing.wps.script  {
-    import com.socialcomputing.wps.components.PlanComponent;
+    import com.socialcomputing.wps.components.Map;
     import com.socialcomputing.wps.util.controls.ImageUtil;
     
     import flash.display.BitmapData;
@@ -98,7 +98,7 @@ package com.socialcomputing.wps.script  {
          * The Applet holding this Plan.
          */
         [transient]
-        public var m_applet:PlanComponent;
+        public var m_applet:Map;
         
         /**
          * Table of waiters to manage tooltips.

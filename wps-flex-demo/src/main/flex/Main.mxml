@@ -113,7 +113,7 @@
 		<s:DropDownList id="organizations" labelFunction="entLabelFunction" change="selectOrganization(event);" />
 		<s:Button label="Clear" click="map.clearSelection( 'search'); map.setSelection( 'search')"/>
 	</s:HGroup>
-	<wps:PlanComponent id="map"
+	<wps:Map id="map"
 			backgroundColor="#7F9FDF"
 			dataProvider="{getPlanResult.lastResult}" 
 			ready="init();"

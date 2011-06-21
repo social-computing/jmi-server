@@ -1,5 +1,5 @@
 package com.socialcomputing.wps.script  {
-    import com.socialcomputing.wps.components.PlanComponent;
+    import com.socialcomputing.wps.components.Map;
     import com.socialcomputing.wps.util.controls.ImageUtil;
     
     import flash.display.Graphics;
@@ -62,7 +62,7 @@ public class BagZone extends ActiveZone implements Activable
 	 * @param isFirst	True if this init is the first one. False if this is a "refresh" init.
 	 */
     
-	public override function init(applet:PlanComponent, s:Sprite, isFirst:Boolean):void {
+	public override function init(applet:Map, s:Sprite, isFirst:Boolean):void {
 		var i:int;
 		var nbSubZones:int = m_subZones != null ? m_subZones.length : 0;
 		super.init(applet, s, isFirst);
@@ -151,7 +151,7 @@ public class BagZone extends ActiveZone implements Activable
 	 * @param g         A Graphics on which this must be painted.
 	 */
     [synchronized]
-	public function paintCur(applet:PlanComponent):void {
+	public function paintCur(applet:Map):void {
 		/*
 		bufGfx.drawImage( applet.m_backImg, 0, 0, m_bounds.width, m_bounds.height, m_bounds.x, m_bounds.y, m_bounds.x + m_bounds.width, m_bounds.y + m_bounds.height, null );
 		bufGfx.translate( -m_bounds.x, -m_bounds.y );*/

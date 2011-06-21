@@ -1,5 +1,5 @@
 package com.socialcomputing.wps.script{
-    import com.socialcomputing.wps.components.PlanComponent;
+    import com.socialcomputing.wps.components.Map;
     import com.socialcomputing.wps.util.controls.ImageUtil;
     import com.socialcomputing.wps.util.shapes.RectangleUtil;
     
@@ -254,7 +254,7 @@ package com.socialcomputing.wps.script{
          * @return			A new or existing HTMLText whose bounds are initilized.
          * @throws UnsupportedEncodingException 
          */
-        public function getHText( applet:PlanComponent, s:Sprite, zone:ActiveZone, transfo:Transfo, center:Point, supCtr:Point, textKey:HTMLText):HTMLText // throws UnsupportedEncodingException
+        public function getHText( applet:Map, s:Sprite, zone:ActiveZone, transfo:Transfo, center:Point, supCtr:Point, textKey:HTMLText):HTMLText // throws UnsupportedEncodingException
         {
             var htmlTxt:HTMLText= null;
             var data:Object= zone.m_datas[ textKey ];
@@ -298,7 +298,7 @@ package com.socialcomputing.wps.script{
          * @param g			The graphics used to retrieve the font metrics.
          * @param htmlText	A string of text with or without HTML tags to parse.
          */
-        public function updateBounds( applet:PlanComponent):void {
+        public function updateBounds( applet:Map):void {
 			 // The text exists!
 			m_oneLine = true;
 			 if ( this.m_text.length > 0)

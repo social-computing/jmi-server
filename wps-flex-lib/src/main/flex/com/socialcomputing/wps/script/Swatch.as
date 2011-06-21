@@ -1,5 +1,5 @@
 package com.socialcomputing.wps.script  {
-    import com.socialcomputing.wps.components.PlanComponent;
+    import com.socialcomputing.wps.components.Map;
     
     import flash.display.Graphics;
     import flash.display.Sprite;
@@ -67,7 +67,7 @@ package com.socialcomputing.wps.script  {
          * @param showLinks		True if links between satelites should be drawn. False for the opposite.
          * @throws UnsupportedEncodingException 
          */
-        public function paint(applet:PlanComponent, s:Sprite, zone:ActiveZone, isCur:Boolean, isFront:Boolean, showTyp:int, showLinks:Boolean):void {
+        public function paint(applet:Map, s:Sprite, zone:ActiveZone, isCur:Boolean, isFront:Boolean, showTyp:int, showLinks:Boolean):void {
 			var sat:Satellite = m_satellites[0];
             var shape:ShapeX = sat.m_shape;
             var flags:int = getFlags(zone.m_props);
@@ -98,7 +98,7 @@ package com.socialcomputing.wps.script  {
          * @param isFront		True to paint only satellites over the transparent filter. False to only paint those below.
          * @param showTyp		Flags indicating what type of satellite to draw.(Satellite.XXX_TYP)
          */
-        protected function drawSats(applet:PlanComponent, s:Sprite, zone:ActiveZone, shape:ShapeX, 
+        protected function drawSats(applet:Map, s:Sprite, zone:ActiveZone, shape:ShapeX, 
 									transfo:Transfo, isLinkOnly:Boolean, isCur:Boolean, isFront:Boolean, showTyp:int):void {
             var isBag:Boolean= zone is BagZone;
             var supZone:BagZone= isBag ? zone as BagZone: null;
@@ -199,7 +199,7 @@ package com.socialcomputing.wps.script  {
 		 * 
          * @return				This swatch bounding box for zone.
          */
-         public function getBounds(applet:PlanComponent, g:Graphics, zone:ActiveZone, isCurZone:Boolean):Rectangle {
+         public function getBounds(applet:Map, g:Graphics, zone:ActiveZone, isCurZone:Boolean):Rectangle {
             var bounds:Rectangle = new Rectangle();
             var sat:Satellite    = m_satellites[0];
             var shape:ShapeX     = sat.m_shape;
@@ -289,7 +289,7 @@ package com.socialcomputing.wps.script  {
          * @return				The sat of this swatch that is hovered or null if there isn't.
          * @throws UnsupportedEncodingException 
          */
-        public function getSatAt(planComponent:PlanComponent, g:Graphics, zone:ActiveZone, pos:Point, isCurZone:Boolean):Satellite {
+        public function getSatAt(planComponent:Map, g:Graphics, zone:ActiveZone, pos:Point, isCurZone:Boolean):Satellite {
 			//trace("[Swatch getSatAt method called]");
 			
 			// The cursor position is in the Bounding Box
@@ -423,7 +423,7 @@ package com.socialcomputing.wps.script  {
          * @return				An array of satellite data.
          * @throws UnsupportedEncodingException 
          */
-        public function evalSatData(applet:PlanComponent, zone:ActiveZone, isSuper:Boolean):Vector.<SatData>
+        public function evalSatData(applet:Map, zone:ActiveZone, isSuper:Boolean):Vector.<SatData>
         {
             var satDatas:Vector.<SatData>= new Vector.<SatData>();
             var satData:SatData;
