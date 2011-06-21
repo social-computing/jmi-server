@@ -46,6 +46,7 @@ Collection<Dictionary> dics = dManager.findAll();
 <tr><td height=20 >&nbsp;</td></tr>
 <tr><td height=20 ><hr noshade align="center" width="50%" size="1"></td></tr>
 <tr><td height=20 >&nbsp;</td></tr>
-<tr><td align="left" nowrap><a href="sample-applet.html" >Sample</a></td></tr>
+<tr><td align="left" nowrap><a href="sample-applet.html">Sample Applet</a></td></tr>
+<tr><td align="left" nowrap><a href="sample-flex.jsp">Sample Flex</a></td></tr>
 </table>
 
