@@ -53,7 +53,7 @@ if( request.getParameter( "confirmdelete") != null && request.getParameter( "con
 	{
 		if( request.getParameter( "delete" + i) != null)
 		{	// Delete
-			manager.remove( request.getParameter( "delete" + i) );
+			;//manager.remove( request.getParameter( "delete" + i) );
 		}
 	}
 }
@@ -74,7 +74,7 @@ Collection<Swatch> sws = manager.findAll();
 
  <tr>
   <th width="8%" ><span class="subTitleBlue">#</span></th>
-  <th width="8%" ><a href="" title="Delete selected dictionaries" onclick="javascript:return Delete()">delete</a></th>
+  <th width="8%" ><a href="" title="Delete selected swatches" onclick="javascript:return Delete()">delete</a></th>
   <th width="60%" ><span class="subTitleBlue">name</span></th>
  </tr>
 <%	

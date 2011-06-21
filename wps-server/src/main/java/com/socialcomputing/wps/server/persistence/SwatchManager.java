@@ -12,5 +12,5 @@ public interface SwatchManager {
 
     public void update(Swatch swatch);
 
-    public void remove(String name, String dicoName);
+    public void remove(String name, String dictionaryName);
 }
