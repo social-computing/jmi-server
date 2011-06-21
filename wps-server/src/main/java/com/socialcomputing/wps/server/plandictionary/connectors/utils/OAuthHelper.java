@@ -8,7 +8,6 @@ import java.security.SignatureException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Hashtable;
 import java.util.List;
 
 import javax.crypto.Mac;
@@ -19,9 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import sun.misc.BASE64Encoder;
-
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
-import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper.Type;
 
 public class OAuthHelper {
     private static final Logger LOG = LoggerFactory.getLogger(OAuthHelper.class);

@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,7 +93,7 @@ public class BeanPlanMaker implements PlanMaker {
             isVisual = true;
 
         try {
-            connection = getConnection();
+            connection = HibernateUtil.getSessionFactory().getCurrentSession().connection();
 
             // DICTIONARY LOADER
             DictionaryManagerImpl manager = new DictionaryManagerImpl();
@@ -139,7 +140,7 @@ public class BeanPlanMaker implements PlanMaker {
             status = Steps.PlanGenerated;
 
             container = new PlanContainer(planGenerator.getEnv(), planGenerator.getPlan());
-           status = Steps.EnvInitialized;
+            status = Steps.EnvInitialized;
 
         }
         catch (Exception e) {
@@ -148,8 +149,6 @@ public class BeanPlanMaker implements PlanMaker {
         }
         finally {
             try {
-                if (connection != null)
-                    connection.close();
                 if (dico != null)
                     dico.closeConnections();
             }
@@ -157,11 +156,6 @@ public class BeanPlanMaker implements PlanMaker {
         }
 
         return container;
-    }
-
-    private Connection getConnection() throws SQLException, RemoteException {
-        Session session = HibernateUtil.currentSession();
-        return session.connection();
     }
 
 }

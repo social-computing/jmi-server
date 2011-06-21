@@ -1,4 +1,5 @@
 <%@page import="org.hibernate.Session"%>
+<%@page import="org.hibernate.Transaction"%>
 <%@page import="com.socialcomputing.utils.database.HibernateUtil"%>
 <%@page import="com.socialcomputing.wps.server.persistence.Dictionary"%>
 <%@page import="com.socialcomputing.wps.server.persistence.DictionaryManager"%>
@@ -25,9 +26,7 @@ Collection<Dictionary> dics = dManager.findAll();
 //Context context = new InitialContext();
 //DataSource ds = (DataSource) context.lookup("java:comp/env/jdbc/WPSPooledDS");
 //Connection  connection = ds.getConnection();
-Session s = HibernateUtil.currentSession();
-Connection connection = s.connection();
-
+Connection connection = HibernateUtil.getSessionFactory().getCurrentSession().connection();
 DatabaseMetaData meta = connection.getMetaData();
 %>
 
@@ -91,6 +90,3 @@ if( request.getParameter( "openresults") != null && session.getAttribute( "Uploa
 	</table>
 </form>
 
-<%
-connection.close();
-%>

@@ -11,6 +11,7 @@ import java.util.StringTokenizer;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -55,7 +56,7 @@ public class DictionaryImpl implements Serializable, Dictionary {
     @Transient
     private WPSDictionary m_Dico = null; // Speeder
 
-    @OneToMany(mappedBy = "dictionary", targetEntity = SwatchImpl.class, cascade={CascadeType.ALL})
+    @OneToMany(mappedBy="dictionary", targetEntity=SwatchImpl.class, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
     //@OneToMany(targetEntity = SwatchImpl.class, cascade={CascadeType.ALL})
     private List<Swatch> swatchs;
 

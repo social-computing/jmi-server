@@ -8,7 +8,7 @@
 	<entities>
 		<XML-entities name="WPS Sample">
 			<URL-connection>
-				<url>http://localhost:8080/wps/data/SampleData.xml</url>
+				<url>http://localhost:8080/wps-server/data/SampleData.xml</url>
 			</URL-connection>
 	
 			<XML-entity markup="entity" id="id" >

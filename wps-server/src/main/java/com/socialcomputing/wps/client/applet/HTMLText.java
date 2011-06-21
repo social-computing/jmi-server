@@ -762,7 +762,7 @@ public class HTMLText extends Base implements Serializable
 			textTok.paint( g, pos );
 		}
 
-		if ( n==1 && m_inCol == null) // draw reflection only for one line boxes
+		if ( false)//n==1 && m_inCol == null) // draw reflection only for one line boxes
 		{
 	        Composite cb = g.getComposite();
 	        Composite composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f);                  
