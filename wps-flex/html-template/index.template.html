@@ -33,6 +33,39 @@
         <link rel="stylesheet" type="text/css" href="history/history.css" />
         <script type="text/javascript" src="history/history.js"></script>
         <!${useBrowserHistory} END Browser History required section -->  
+
+        <script type="text/javascript">
+		    function getMap() {
+		        if (navigator.appName.indexOf ("Microsoft") !=-1) {
+		            return window["${application}"];
+		        } else {
+		            return document["${application}"];
+		        }
+		    }
+		    
+        	function init() {
+        		// do something here
+        	}
+        	function status( status) {
+        		// do something here
+        	}
+        	function error( error) {
+        		alert( error);
+        	}
+			function NewWin( args)
+			{
+				var parameters = {};
+				parameters["entityId"] = args[0];
+        		getMap().compute( parameters);
+			}
+			function Discover( args)
+			{
+				var parameters = {};
+				parameters["attributeId"] = args[0];
+				parameters["analysisProfile"] = "DiscoveryProfile";
+        		getMap().compute( parameters);
+			}
+        </script>
 		    
         <script type="text/javascript" src="swfobject.js"></script>
         <script type="text/javascript">
@@ -46,7 +79,7 @@
             flashvars.entityId = "5";
             var params = {};
             params.quality = "high";
-            params.bgcolor = "${bgcolor}";
+            params.bgcolor = "#7F9FDF";
             params.allowscriptaccess = "sameDomain";
             params.allowfullscreen = "true";
             var attributes = {};
@@ -78,18 +111,20 @@
 								+ pageHost + "www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' /></a>" ); 
 			</script> 
         </div>
+        <div id="status">
+        </div>
 	   	
        	<noscript>
             <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="${width}" height="${height}" id="${application}">
                 <param name="movie" value="${swf}.swf" />
                 <param name="quality" value="high" />
-                <param name="bgcolor" value="${bgcolor}" />
+                <param name="bgcolor" value="#7F9FDF" />
                 <param name="allowScriptAccess" value="sameDomain" />
                 <param name="allowFullScreen" value="true" />
                 <!--[if !IE]>-->
                 <object type="application/x-shockwave-flash" data="${swf}.swf" width="${width}" height="${height}">
                     <param name="quality" value="high" />
-                    <param name="bgcolor" value="${bgcolor}" />
+                    <param name="bgcolor" value="#7F9FDF" />
                     <param name="allowScriptAccess" value="sameDomain" />
                     <param name="allowFullScreen" value="true" />
                 <!--<![endif]-->

@@ -103,9 +103,8 @@
     </fx:Declarations>
     
     <s:layout>
-        <s:VerticalLayout gap="5" />
+        <s:VerticalLayout gap="0" />
     </s:layout>
-	<s:Label text="Cartographie WPS :" height="20" />
 	<s:HGroup>
 		<s:Label text="Countries" />
 		<s:DropDownList id="countries" labelFunction="attLabelFunction" change="selectCountry(event);" />

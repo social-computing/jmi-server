@@ -8,27 +8,28 @@
         <![CDATA[
 			import com.adobe.serialization.json.JSON;
 			import com.socialcomputing.wps.components.ActionEvent;
-			import com.socialcomputing.wps.components.Attribute;
 			import com.socialcomputing.wps.services.planservice.PlanService;
 			
-			import mx.collections.Sort;
-			import mx.collections.SortField;
+			import flash.external.ExternalInterface;
+			
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			
-			import spark.events.IndexChangeEvent;
-				
             private var planName:String;
             private var planService:PlanService;
 			
             protected function onCreationComplete(event:FlexEvent):void {
+				
 				// Reading application properties
 				var serverURL:String = this.checkApplicationParameter("wpsserverurl");
 				this.planName = this.checkApplicationParameter("wpsplanname");
 				var parameters:Object = FlexGlobals.topLevelApplication.parameters;
+				
+				// for js calls
+				ExternalInterface.addCallback( "compute", compute);
 				
 				// Initialising service
 				this.planService = new PlanService(serverURL);
@@ -42,85 +43,25 @@
 				return FlexGlobals.topLevelApplication.parameters[paramName];
 			}
 			
-			protected function onAction(event:ActionEvent):void
-			{
-				trace( event.action + ": " + event.args.toString());
-				var parameters:Object  = new Object();
-				if( event.action == "NewWin") {
-					//map.clear();
-					parameters["entityId"] = event.args[0];
-					getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
-				}
-				if( event.action == "Discover") {
-					//map.clear();
-					parameters["attributeId"] = event.args[0];
-					parameters["analysisProfile"] = "DiscoveryProfile";
-					getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
-				}
-			}
+			public function compute(parameters:Object):void {
+				getPlanResult.token = this.planService.getPlan(planName, map.width, map.height, parameters);
+ 			}
 			
-			private function init():void {
-				status.text = 'Ok !'; 
-				
-				var sort:Sort = new Sort();
-				sort.fields = [new SortField("NAME", false)];
-				map.attributes.sort = sort;
-				map.attributes.refresh();
-				countries.dataProvider = map.attributes;
-				
-				map.defineEntities(["POSS_NAME"]);
-				sort = new Sort();
-				sort.fields = [new SortField("POSS_NAME", false)];
-				map.entities.sort = sort;
-				map.entities.refresh();
-				organizations.dataProvider = map.entities;
-			}
-			private function attLabelFunction(item:Object):String {
-				return item.NAME;
-			}
-			private function entLabelFunction(item:Object):String {
-				return item.POSS_NAME;
-			}
-			private function selectCountry(event:IndexChangeEvent):void {
-				map.clearSelection( "search");
-				countries.selectedItem.select( "search");
-				map.setSelection( "search");
-			}
-			private function selectOrganization(event:IndexChangeEvent):void {
-				map.clearSelection( "search");
-				organizations.selectedItem.select( "search");
-				for each( var attribute:Attribute in organizations.selectedItem.attributes) {
-					attribute.select( "search");
-				}
-				map.setSelection( "search");
-			}
 	]]>
     </fx:Script>
     
     <fx:Declarations>
         <s:CallResponder id="getPlanResult"
-						 fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)" />
+						 fault="ExternalInterface.call('error', event.fault.faultString);" />
     </fx:Declarations>
     
-    <s:layout>
-        <s:VerticalLayout gap="5" />
-    </s:layout>
-	<s:Label text="Cartographie WPS :" height="20" />
-	<s:HGroup>
-		<s:Label text="Countries" />
-		<s:DropDownList id="countries" labelFunction="attLabelFunction" change="selectCountry(event);" />
-		<s:Label text="Organizations" />
-		<s:DropDownList id="organizations" labelFunction="entLabelFunction" change="selectOrganization(event);" />
-		<s:Button label="Clear" click="map.clearSelection( 'search'); map.setSelection( 'search')"/>
-	</s:HGroup>
 	<wps:Map id="map"
 			backgroundColor="#7F9FDF"
 			dataProvider="{getPlanResult.lastResult}" 
-			ready="init();"
-			status="status.text = event.status;"
-			action="onAction(event);" 
+			ready="ExternalInterface.call('init');"
+			status="ExternalInterface.call('status', event.status);"
+			action="ExternalInterface.call(event.action, event.args);" 
 			percentWidth="100"
 			percentHeight="100"
 	/>
-	<s:Label id="status" backgroundColor="#C6C0C0" percentWidth="100" height="20"/>
 </s:Application>
