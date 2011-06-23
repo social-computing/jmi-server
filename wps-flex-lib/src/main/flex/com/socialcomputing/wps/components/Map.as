@@ -112,6 +112,7 @@ package com.socialcomputing.wps.components
 			this.addEventListener(MouseEvent.CLICK, mouseClickHandler);
 			this.addEventListener(MouseEvent.DOUBLE_CLICK, mouseDoubleClickHandler);
 			this.addEventListener(ResizeEvent.RESIZE, resizeHandler);
+			this.addEventListener(NavigateEvent.NAVIGATE, navigateHandler);
 		}
 		
 		public function get backDrawingSurface():Sprite
@@ -308,7 +309,7 @@ package com.socialcomputing.wps.components
 		}
 		
 		public function resizeHandler(event:ResizeEvent):void {
-			trace("resize, new size = (" + this.width + ", " + this.height + ")");
+			//trace("resize, new size = (" + this.width + ", " + this.height + ")");
 			this.clear();
 			
 			this._restDrawingSurface.graphics.beginFill(this._ready ? this.env.m_inCol.m_color : this._backgroundColor);
@@ -321,13 +322,17 @@ package com.socialcomputing.wps.components
 				this.invalidateSize();  
 			}
 		}
-		
+				
+		public function navigateHandler(event:NavigateEvent):void {
+			navigateToURL( new URLRequest( event.url), event.btarget);
+		}
+
 		/**
 		 * @inheritDoc
 		 */
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			trace("Update graphic display");
+			//trace("Update graphic display");
 			this.renderShape(this._restDrawingSurface, this.width, this.height);
 		}
 		
@@ -363,7 +368,7 @@ package com.socialcomputing.wps.components
 			var target:String = "_blank";
 			var sep:int       = actionStr.indexOf( ':' ),
 				pos:int;
-			
+
 			if ( sep != -1 )
 			{
 				target  = actionStr.substring( 0, sep );
@@ -399,7 +404,6 @@ package com.socialcomputing.wps.components
 				}
 			}
 			dispatchEvent(new NavigateEvent( actionStr, target)); 
-			navigateToURL( new URLRequest( actionStr), target);
 		}
 		
 		public function defineEntities( nodeFields:Array, nodeId:String="POSS_ID", linkId:String="REC_ID"):void {

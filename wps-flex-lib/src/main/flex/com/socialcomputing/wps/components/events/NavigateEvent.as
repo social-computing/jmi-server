@@ -8,9 +8,11 @@ package com.socialcomputing.wps.components.events
 		private var _url:String;
 		private var _target:String;
 		
-		public function NavigateEvent(url:String, btarget:String="_blank", bubbles:Boolean=false, cancelable:Boolean=false)
+		public function NavigateEvent(url:String, target:String="_blank", bubbles:Boolean=true, cancelable:Boolean=true)
 		{
 			super( NavigateEvent.NAVIGATE, bubbles, cancelable);
+			this._url = url;
+			this._target = target;
 		}
 
 		public function get btarget():String
