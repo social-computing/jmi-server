@@ -7,7 +7,8 @@
     <fx:Script>
         <![CDATA[
 			import com.adobe.serialization.json.JSON;
-			import com.socialcomputing.wps.components.ActionEvent;
+			import com.socialcomputing.wps.components.Attribute;
+			import com.socialcomputing.wps.components.events.ActionEvent;
 			import com.socialcomputing.wps.services.planservice.PlanService;
 			
 			import flash.external.ExternalInterface;
@@ -27,7 +28,7 @@
 				var serverURL:String = this.checkApplicationParameter("wpsserverurl");
 				this.planName = this.checkApplicationParameter("wpsplanname");
 				var parameters:Object = FlexGlobals.topLevelApplication.parameters;
-				
+
 				// for js calls
 				ExternalInterface.addCallback( "compute", compute);
 				
@@ -58,9 +59,10 @@
 	<wps:Map id="map"
 			backgroundColor="#7F9FDF"
 			dataProvider="{getPlanResult.lastResult}" 
-			ready="ExternalInterface.call('init');"
+			ready="ExternalInterface.call('ready');"
 			status="ExternalInterface.call('status', event.status);"
 			action="ExternalInterface.call(event.action, event.args);" 
+			navigate="ExternalInterface.call('navigate', event.url, event.btarget);"
 			percentWidth="100"
 			percentHeight="100"
 	/>

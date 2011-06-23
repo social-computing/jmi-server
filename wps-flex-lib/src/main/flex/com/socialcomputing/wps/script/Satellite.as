@@ -1,5 +1,6 @@
 package com.socialcomputing.wps.script  {
     import com.socialcomputing.wps.components.Map;
+    import com.socialcomputing.wps.components.events.AttributeEvent;
     
     import flash.display.Graphics;
     import flash.display.Sprite;
@@ -368,7 +369,24 @@ package com.socialcomputing.wps.script  {
         public function execute(applet:Map, zone:ActiveZone, pos:Point, actionId:int):void {
             var firstSat:Satellite= zone.m_curSwh.m_satellites[0];
             var isExe:Boolean= isDefined( actionId );
-            
+
+			// Events
+			if( zone != null) {
+				if( zone is LinkZone) {
+					//dispatchEvent( new LinkClickEvent( plan.m_curZone as LinkZone));
+				}
+				else {
+					var event:String = null;
+					if( actionId == Satellite.CLICK_VAL) 
+						event = AttributeEvent.CLICK;
+					else if( actionId == Satellite.HOVER_VAL) 
+						event = AttributeEvent.HOVER;
+					if( event != null) {
+						applet.dispatchEvent( new AttributeEvent( event, applet.findAttribute( zone)));
+					}
+				}
+			}
+		
             if ( isExe )
             {
                 var actionStr:String= getString( actionId, zone.m_props );

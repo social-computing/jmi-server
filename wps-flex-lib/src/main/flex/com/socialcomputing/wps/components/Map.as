@@ -1,5 +1,9 @@
 package com.socialcomputing.wps.components
 {
+	import com.socialcomputing.wps.components.events.ActionEvent;
+	import com.socialcomputing.wps.components.events.AttributeEvent;
+	import com.socialcomputing.wps.components.events.NavigateEvent;
+	import com.socialcomputing.wps.components.events.StatusEvent;
 	import com.socialcomputing.wps.plan.PlanContainer;
 	import com.socialcomputing.wps.script.ActiveZone;
 	import com.socialcomputing.wps.script.Dimension;
@@ -17,26 +21,35 @@ package com.socialcomputing.wps.components
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.net.URLRequest;
+	import flash.net.navigateToURL;
 	
 	import mx.collections.ArrayCollection;
+	import mx.core.UIComponent;
 	import mx.events.MenuEvent;
 	import mx.events.ResizeEvent;
 	import mx.managers.CursorManager;
 	
-	import spark.components.Group;
 	import spark.core.SpriteVisualElement;
 	
 	[DefaultBindingProperty(destination="dataProvider")]
 	
-	[IconFile("Plan.png")]
+	[IconFile("Map.png")]
 	
-	[Event(name="ready", type="flash.events.Event")]
-	[Event(name="error", type="flash.events.Event")]
-	[Event(name="action", type="com.socialcomputing.wps.components.ActionEvent")]
-	[Event(name="status", type="com.socialcomputing.wps.components.StatusEvent")]
+	[Event(name="ready",    type="flash.events.Event")]
+	[Event(name="error",    type="flash.events.Event")]
+	[Event(name="action",   type="com.socialcomputing.wps.components.events.ActionEvent")]
+	[Event(name="navigate", type="com.socialcomputing.wps.components.events.NavigateEvent")]
+	[Event(name="status",   type="com.socialcomputing.wps.components.events.StatusEvent")]
+	[Event(name="attribute_click", type="com.socialcomputing.wps.components.events.AttributeEvent")]
+	[Event(name="attribute_hover", type="com.socialcomputing.wps.components.events.AttributeEvent")]
+	//[Event(name="link_click",      type="com.socialcomputing.wps.components.events.LinkClickEvent")]
 	
-	public class Map extends Group {
+	public class Map extends UIComponent {
 		public static var version:String = "1.0-SNAPSHOT";
+
+		public static const ERROR:String = "error";
+		public static const READY:String = "ready";
 		
 		private var _dataProvider:PlanContainer = null;
 		private var _curPos:Point = new Point();
@@ -79,7 +92,7 @@ package com.socialcomputing.wps.components
 			
 			// Drawing surface of the component
 			this._drawingSurface = new SpriteVisualElement();
-			this.addElement(this._drawingSurface);
+			this.addChild(this._drawingSurface);
 
 			// Graphic zones
 			this._curDrawingSurface = new Sprite();
@@ -222,9 +235,9 @@ package com.socialcomputing.wps.components
 			this.invalidateProperties();
 			this.invalidateDisplayList();
 			if(this._ready)
-				dispatchEvent(new Event("ready"));
+				dispatchEvent(new Event(Map.READY));
 			else
-				dispatchEvent(new Event("error"));
+				dispatchEvent(new Event(Map.ERROR));
 		}
 
 		private function clear():void {
@@ -269,6 +282,18 @@ package com.socialcomputing.wps.components
 				plan.updateZoneAt( point);
 				plan.m_curSat.execute( this, plan.m_curZone, point, Satellite.CLICK_VAL);
 			}
+		}
+		
+		public function findAttribute( zone:ActiveZone):Attribute {
+			for each( var attribute:Attribute in attributes) {
+				if( attribute.zone == zone)
+					return attribute;
+			}
+			return null;
+		}
+		
+		private function findLink( zone:ActiveZone):Link {
+			return new Link( zone);
 		}
 		
 		public function mouseDoubleClickHandler(event:MouseEvent):void {
@@ -373,10 +398,8 @@ package com.socialcomputing.wps.components
 					target  = "_blank";
 				}
 			}
-			// TODO FireEvent
-/*			getAppletContext().showDocument( convertURL( actionStr ), target );
-			*/
-			dispatchEvent(new ActionEvent( actionStr));
+			dispatchEvent(new NavigateEvent( actionStr, target)); 
+			navigateToURL( new URLRequest( actionStr), target);
 		}
 		
 		public function defineEntities( nodeFields:Array, nodeId:String="POSS_ID", linkId:String="REC_ID"):void {

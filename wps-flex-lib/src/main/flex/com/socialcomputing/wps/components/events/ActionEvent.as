@@ -1,4 +1,4 @@
-package com.socialcomputing.wps.components
+package com.socialcomputing.wps.components.events
 {
 	import flash.events.Event;
 	
