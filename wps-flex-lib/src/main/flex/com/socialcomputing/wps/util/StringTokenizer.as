@@ -1,5 +1,5 @@
 package com.socialcomputing.wps.util {
-    import flash.errors.IllegalOperationError;
+    
 
     public class StringTokenizer 
 		

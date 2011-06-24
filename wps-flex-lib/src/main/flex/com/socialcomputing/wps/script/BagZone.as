@@ -2,12 +2,9 @@ package com.socialcomputing.wps.script  {
     import com.socialcomputing.wps.components.Map;
     import com.socialcomputing.wps.util.controls.ImageUtil;
     
-    import flash.display.Graphics;
     import flash.display.Sprite;
+    import flash.geom.Point;
     import flash.geom.Rectangle;
-	import flash.geom.Point;
-   
-    import spark.primitives.Rect;
 	
 
 /**

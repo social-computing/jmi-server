@@ -2,8 +2,6 @@ package com.socialcomputing.wps.script
 {
 	import flash.geom.Point;
 	
-	import mx.charts.chartClasses.InstanceCache;
-	
 	public class JSONToWPSDecoder
 	{
 		public static function toEnv(json:Object):Env

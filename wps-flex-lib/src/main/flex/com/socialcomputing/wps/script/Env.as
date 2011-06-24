@@ -3,14 +3,8 @@ package com.socialcomputing.wps.script  {
     
     import com.socialcomputing.wps.components.Map;
     
-    import flash.display.BitmapData;
-    import flash.display.Graphics;
-    import flash.display.Loader;
     import flash.events.Event;
     import flash.geom.ColorTransform;
-    import flash.geom.Rectangle;
-    
-    import mx.controls.Image;
 
 /**
  * <p>Title: Env</p>

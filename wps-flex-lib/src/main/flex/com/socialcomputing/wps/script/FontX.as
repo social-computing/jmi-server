@@ -1,5 +1,4 @@
 package com.socialcomputing.wps.script  {
-    import flash.text.Font;
     import flash.text.TextFormat;
 		
     /**

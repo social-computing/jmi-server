@@ -1,8 +1,6 @@
 package com.socialcomputing.wps.script
 {
 	import flash.geom.Rectangle;
-	
-	import mx.olap.aggregators.MaxAggregator;
 
 	public class Dimension
 	{

@@ -1,11 +1,7 @@
 package com.socialcomputing.wps.script  {
-    import flash.events.Event;
-    import flash.text.Font;
     import flash.text.TextFormat;
     
     import mx.collections.ArrayCollection;
-    import mx.controls.Menu;
-    import mx.events.EventListenerRequest;
     
     /**
      * <p>Title: MenuX</p>

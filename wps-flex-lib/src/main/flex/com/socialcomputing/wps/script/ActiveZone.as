@@ -1,7 +1,6 @@
 package com.socialcomputing.wps.script  {
     import com.socialcomputing.wps.components.Map;
     
-    import flash.display.Graphics;
     import flash.display.Sprite;
     import flash.geom.Rectangle;
     import flash.utils.Dictionary;

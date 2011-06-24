@@ -7,7 +7,6 @@ package com.socialcomputing.wps.script  {
 	import flash.geom.ColorTransform;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flash.text.TextFormat;
 	    
     /**
      * <p>Title: Slice</p>

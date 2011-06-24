@@ -2,13 +2,12 @@ package com.socialcomputing.wps.util.controls
 {
 	import com.socialcomputing.wps.script.Dimension;
 	
-	import flash.text.TextField;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.geom.Matrix;
-	import flash.geom.Rectangle;
+	import flash.text.TextField;
 
 	/**
 	 * Image utility class.

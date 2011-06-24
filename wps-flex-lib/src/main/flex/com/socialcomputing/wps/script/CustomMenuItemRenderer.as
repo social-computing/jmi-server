@@ -1,6 +1,4 @@
 package com.socialcomputing.wps.script {
-    import flash.text.TextFormat;
-    
     import mx.controls.menuClasses.MenuItemRenderer;
     
     [Bindable]

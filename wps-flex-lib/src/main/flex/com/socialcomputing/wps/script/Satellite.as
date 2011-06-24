@@ -9,7 +9,6 @@ package com.socialcomputing.wps.script  {
     
     import mx.collections.ArrayCollection;
     import mx.controls.Menu;
-    import mx.core.ClassFactory;
     import mx.events.MenuEvent;
     
     /**

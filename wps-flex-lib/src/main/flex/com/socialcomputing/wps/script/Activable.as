@@ -1,9 +1,6 @@
 package com.socialcomputing.wps.script  {
     import com.socialcomputing.wps.components.Map;
     
-    import flash.display.Graphics;
-    import flash.display.Sprite;
-    
     /**
      * <p>Title: Activable</p>
      * <p>Description: An interface for zone that can be painted differently when they are hovered.</p>

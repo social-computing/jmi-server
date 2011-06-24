@@ -2,18 +2,13 @@ package com.socialcomputing.wps.script  {
     import com.socialcomputing.wps.components.Map;
     import com.socialcomputing.wps.util.controls.ImageUtil;
     
-    import flash.display.BitmapData;
-    import flash.display.DisplayObject;
     import flash.display.Graphics;
     import flash.display.Shape;
     import flash.display.Sprite;
-    import flash.geom.Matrix;
     import flash.geom.Point;
     import flash.geom.Rectangle;
     import flash.ui.MouseCursor;
     import flash.utils.Dictionary;
-    
-    import mx.controls.Image;
     
     /**
      * <p>Title: Plan</p>

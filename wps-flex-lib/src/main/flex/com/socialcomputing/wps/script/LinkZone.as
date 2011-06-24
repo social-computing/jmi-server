@@ -1,14 +1,9 @@
 package com.socialcomputing.wps.script  {
+	import com.socialcomputing.wps.components.Map;
 	import com.socialcomputing.wps.util.controls.ImageUtil;
-    import com.socialcomputing.wps.components.Map;
-    import com.socialcomputing.wps.plan.PlanContainer;
-    
-    import flash.display.Graphics;
-    import flash.display.Shape;
-    import flash.display.Sprite;
-    import flash.geom.Matrix;
+	
+	import flash.display.Sprite;
 	import flash.geom.Point;
-    import flash.geom.Rectangle;
     
 /**
      * <p>Title: LinkZone</p>

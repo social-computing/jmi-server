@@ -1,5 +1,4 @@
 package com.socialcomputing.wps.script  {
-    import flash.display.Graphics;
     import flash.display.Sprite;
     import flash.geom.ColorTransform;
     

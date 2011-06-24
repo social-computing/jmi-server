@@ -1,28 +1,19 @@
 package com.socialcomputing.wps.script  {
     import br.com.stimuli.loading.BulkLoader;
     
-    import com.socialcomputing.wps.components.Map;
     import com.socialcomputing.wps.util.ApplicationUtil;
     import com.socialcomputing.wps.util.URLHelper;
     import com.socialcomputing.wps.util.controls.ImageUtil;
     import com.socialcomputing.wps.util.shapes.RectangleUtil;
     
     import flash.display.Bitmap;
-    import flash.display.BitmapData;
     import flash.display.Graphics;
-    import flash.display.GraphicsStroke;
-    import flash.display.Loader;
     import flash.display.Sprite;
     import flash.events.Event;
-    import flash.events.IOErrorEvent;
-    import flash.external.ExternalInterface;
     import flash.geom.ColorTransform;
-    import flash.geom.Matrix;
     import flash.geom.Point;
     import flash.geom.Rectangle;
-    import flash.net.URLRequest;
     
-    import mx.controls.Alert;
     import mx.controls.Image;
     import mx.utils.URLUtil;
     
