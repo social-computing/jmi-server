@@ -4,6 +4,7 @@
                xmlns:mx="library://ns.adobe.com/flex/mx" 
                xmlns:wps="com.socialcomputing.wps.components.*"
                creationComplete="onCreationComplete(event)">
+    <fx:Style source="Main.css"/>
     <fx:Script>
         <![CDATA[
 			import com.adobe.serialization.json.JSON;
@@ -57,9 +58,10 @@
     </fx:Declarations>
     
 	<wps:Map id="map"
-			backgroundColor="#7F9FDF"
+			backgroundColor="{this.getStyle('contentBackgroundColor')}"
 			dataProvider="{getPlanResult.lastResult}" 
 			ready="ExternalInterface.call('ready');"
+			error="ExternalInterface.call('error');"
 			status="ExternalInterface.call('status', event.status);"
 			action="ExternalInterface.call(event.action, event.args);" 
 			navigate="ExternalInterface.call('navigate', event.url, event.btarget);"
