@@ -7,7 +7,7 @@
     <fx:Script>
         <![CDATA[
 			import com.adobe.serialization.json.JSON;
-			import com.socialcomputing.wps.components.ActionEvent;
+			import com.socialcomputing.wps.components.events.ActionEvent;
 			import com.socialcomputing.wps.components.Attribute;
 			import com.socialcomputing.wps.services.planservice.PlanService;
 			
