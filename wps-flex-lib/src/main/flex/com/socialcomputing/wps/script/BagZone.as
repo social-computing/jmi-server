@@ -2,9 +2,14 @@ package com.socialcomputing.wps.script  {
     import com.socialcomputing.wps.components.Map;
     import com.socialcomputing.wps.util.controls.ImageUtil;
     
+    import flash.display.BitmapData;
+    import flash.display.Graphics;
     import flash.display.Sprite;
+    import flash.geom.Matrix;
     import flash.geom.Point;
     import flash.geom.Rectangle;
+    
+    import spark.primitives.Rect;
 	
 
 /**
@@ -152,8 +157,15 @@ public class BagZone extends ActiveZone implements Activable
 		/*
 		bufGfx.drawImage( applet.m_backImg, 0, 0, m_bounds.width, m_bounds.height, m_bounds.x, m_bounds.y, m_bounds.x + m_bounds.width, m_bounds.y + m_bounds.height, null );
 		bufGfx.translate( -m_bounds.x, -m_bounds.y );*/
-		// TODO restreindre la copie au rectangle
-		ImageUtil.copy( applet.backDrawingSurface, applet.curDrawingSurface); 
+        
+        // Copy backDrawingSurface hovered zone to curDrawingSurface
+        // Use this method instead of ImageUtil.copy to improve performance  
+        var backBitmap:BitmapData = new BitmapData(m_bounds.width+m_bounds.x, m_bounds.height+m_bounds.y);
+        backBitmap.draw(applet.backDrawingSurface, null, null, null, new Rectangle(m_bounds.x, m_bounds.y, m_bounds.width+m_bounds.x, m_bounds.height+m_bounds.y));
+        applet.curDrawingSurface.graphics.beginBitmapFill(backBitmap);
+        applet.curDrawingSurface.graphics.drawRect(m_bounds.x, m_bounds.y, m_bounds.width, m_bounds.height);
+        applet.curDrawingSurface.graphics.endFill();
+        
 		m_curSwh.paint( applet, applet.curDrawingSurface, this, true, true, Satellite.ALL_TYP, true);
 		/*
 		bufGfx.translate( m_bounds.x, m_bounds.y );
