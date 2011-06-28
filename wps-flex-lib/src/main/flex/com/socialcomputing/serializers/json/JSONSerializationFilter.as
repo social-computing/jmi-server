@@ -1,6 +1,7 @@
 package com.socialcomputing.serializers.json
 {
 	import com.adobe.serialization.json.JSON;
+	import com.brokenfunction.json.decodeJson;
 	import com.socialcomputing.serializers.RESTSerializationFilter;
 	
 	import mx.rpc.http.AbstractOperation;
@@ -27,7 +28,10 @@ package com.socialcomputing.serializers.json
 			if(operation.resultType != Object) {
 				throw new ArgumentError("The only supported return type is Object");
 			}
-			var json:Object = JSON.decode(result as String);
+            // Use actionjson instead of ascorelib3 to improve perf
+            // http://workflowflash.com/45947/actionjson-%E2%80%93-the-fastest-actionscript-3-0-json-parser.php
+			//var json:Object = JSON.decode(result as String);
+            var json:Object = decodeJson(result as String);
 			return json;
 		}
 	}
