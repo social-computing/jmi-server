@@ -37,7 +37,7 @@ package com.socialcomputing.wps.components
 	[IconFile("Map.png")]
 	
 	[Event(name="ready",    type="flash.events.Event")]
-	[Event(name="error",    type="flash.events.Event")]
+	[Event(name="error",    type="com.socialcomputing.wps.components.events.StatusEvent")]
 	[Event(name="action",   type="com.socialcomputing.wps.components.events.ActionEvent")]
 	[Event(name="navigate", type="com.socialcomputing.wps.components.events.NavigateEvent")]
 	[Event(name="status",   type="com.socialcomputing.wps.components.events.StatusEvent")]
@@ -48,7 +48,6 @@ package com.socialcomputing.wps.components
 	public class Map extends UIComponent {
 		public static var version:String = "1.0-SNAPSHOT";
 
-		public static const ERROR:String = "error";
 		public static const READY:String = "ready";
 		
 		private var _dataProvider:PlanContainer = null;
@@ -202,43 +201,48 @@ package com.socialcomputing.wps.components
 			else {
 				this._dataProvider = PlanContainer.fromJSON(value);
 			}
-
-			var needPrint:Boolean = false; // Later
-			this._dataProvider.env.init(this, needPrint);
-
-			try {
-				plan.m_applet = this;
-				plan.m_curSel = -1;
-				plan.initZones(this.restDrawingSurface, plan.m_links, true);
-                plan.initZones(this.restDrawingSurface, plan.m_nodes, true);
-				plan.resize(size);
-				plan.init();
-				plan.resize(size);
-				plan.init();
-                plan.m_applet.env.loader.start();
-			    for each( var zone:ActiveZone in plan.m_nodes) {
-					this.attributes.addItem( new Attribute( env, zone));
+			if( this._dataProvider.hasOwnProperty( "error")) {
+				// Server error
+				dispatchEvent(new StatusEvent(StatusEvent.ERROR, this._dataProvider.error));
+			}
+			else {
+				var needPrint:Boolean = false; // Later
+				this._dataProvider.env.init(this, needPrint);
+	
+				try {
+					plan.m_applet = this;
+					plan.m_curSel = -1;
+					plan.initZones(this.restDrawingSurface, plan.m_links, true);
+	                plan.initZones(this.restDrawingSurface, plan.m_nodes, true);
+					plan.resize(size);
+					plan.init();
+					plan.resize(size);
+					plan.init();
+	                plan.m_applet.env.loader.start();
+				    for each( var zone:ActiveZone in plan.m_nodes) {
+						this.attributes.addItem( new Attribute( env, zone));
+					}
+					this._ready = true;
 				}
-				this._ready = true;
+				catch(error:Error) {
+					// Client error
+					dispatchEvent(new StatusEvent(StatusEvent.ERROR, error.message));
+					trace(error.getStackTrace());	
+				}
+				CursorManager.removeBusyCursor();
+				
+				/*
+				 * Don't redraw immediately, because maybe the code that's calling us is
+				 * going to change several settings, and we don't want to redraw for each 
+				 * setting change. Instead, tell the flex framework that
+				 * we need to be redrawn; the framework will ensure that updateDisplayList
+				 * is invoked after all scripts have finished executing.
+				 */
+				this.invalidateProperties();
+				this.invalidateDisplayList();
+				if(this._ready)
+					dispatchEvent(new Event(Map.READY));
 			}
-			catch(error:Error) {
-				trace(error.getStackTrace());	
-			}
-			CursorManager.removeBusyCursor();
-			
-			/*
-			 * Don't redraw immediately, because maybe the code that's calling us is
-			 * going to change several settings, and we don't want to redraw for each 
-			 * setting change. Instead, tell the flex framework that
-			 * we need to be redrawn; the framework will ensure that updateDisplayList
-			 * is invoked after all scripts have finished executing.
-			 */
-			this.invalidateProperties();
-			this.invalidateDisplayList();
-			if(this._ready)
-				dispatchEvent(new Event(Map.READY));
-			else
-				dispatchEvent(new Event(Map.ERROR));
 		}
 
 		private function clear():void {
@@ -255,7 +259,7 @@ package com.socialcomputing.wps.components
 		}
 		
 		public function showStatus(message:String):void {
-			dispatchEvent(new StatusEvent( message));
+			dispatchEvent(new StatusEvent( StatusEvent.STATUS, message));
 		}
 		
 		public function mouseOverHandler(event:MouseEvent):void {

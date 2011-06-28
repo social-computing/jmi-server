@@ -61,7 +61,7 @@
 			backgroundColor="{this.getStyle('contentBackgroundColor')}"
 			dataProvider="{getPlanResult.lastResult}" 
 			ready="ExternalInterface.call('ready');"
-			error="ExternalInterface.call('error');"
+			error="ExternalInterface.call('error', event.status);"
 			status="ExternalInterface.call('status', event.status);"
 			action="ExternalInterface.call(event.action, event.args);" 
 			navigate="ExternalInterface.call('navigate', event.url, event.btarget);"

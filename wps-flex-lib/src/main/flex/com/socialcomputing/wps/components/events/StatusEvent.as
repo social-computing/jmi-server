@@ -5,11 +5,13 @@ package com.socialcomputing.wps.components.events
 	public class StatusEvent extends Event
 	{
 		public static const STATUS:String = "status";
+		public static const ERROR:String = "error";
+		
 		private var _status:String;
 		
-		public function StatusEvent(status:String, bubbles:Boolean=false, cancelable:Boolean=false)
+		public function StatusEvent(type:String, status:String, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
-			super(StatusEvent.STATUS, bubbles, cancelable);
+			super(type, bubbles, cancelable);
 			this._status = status;
 		}
 
