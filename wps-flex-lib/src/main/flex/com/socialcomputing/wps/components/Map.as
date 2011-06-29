@@ -37,6 +37,7 @@ package com.socialcomputing.wps.components
 	[IconFile("Map.png")]
 	
 	[Event(name="ready",    type="flash.events.Event")]
+	[Event(name="empty",    type="flash.events.Event")]
 	[Event(name="error",    type="com.socialcomputing.wps.components.events.StatusEvent")]
 	[Event(name="action",   type="com.socialcomputing.wps.components.events.ActionEvent")]
 	[Event(name="navigate", type="com.socialcomputing.wps.components.events.NavigateEvent")]
@@ -48,6 +49,7 @@ package com.socialcomputing.wps.components
 	public class Map extends UIComponent {
 		public static var version:String = "1.0-SNAPSHOT";
 
+		public static const EMPTY:String = "empty";
 		public static const READY:String = "ready";
 		
 		private var _dataProvider:PlanContainer = null;
@@ -205,11 +207,15 @@ package com.socialcomputing.wps.components
 				// Server error
 				dispatchEvent(new StatusEvent(StatusEvent.ERROR, this._dataProvider.error));
 			}
+			if( !this._dataProvider.hasOwnProperty( "plan")) {
+				// Empty map
+				dispatchEvent(new Event( Map.EMPTY));
+			}
 			else {
 				var needPrint:Boolean = false; // Later
-				this._dataProvider.env.init(this, needPrint);
 	
 				try {
+					this._dataProvider.env.init(this, needPrint);
 					plan.m_applet = this;
 					plan.m_curSel = -1;
 					plan.initZones(this.restDrawingSurface, plan.m_links, true);

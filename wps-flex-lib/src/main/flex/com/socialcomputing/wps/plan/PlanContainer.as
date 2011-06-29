@@ -6,22 +6,9 @@ package com.socialcomputing.wps.plan
 
 	dynamic public class PlanContainer
 	{
-		private var _env:Env;
-		private var _plan:Plan;
-		
 		public function PlanContainer() {
 		}
 
-		public function get plan():Plan
-		{
-			return _plan;
-		}
-		
-		public function get env():Env
-		{
-			return _env;
-		}
-		
 		public static function fromJSON(jsonObject:Object): PlanContainer {
 			var planContainer:PlanContainer = new PlanContainer();
 			if(jsonObject == null) {
@@ -30,8 +17,10 @@ package com.socialcomputing.wps.plan
 			else {
 				for( var p:String in jsonObject) {
 					if( p == "map") {
-						planContainer._env = JSONToWPSDecoder.toEnv(jsonObject.map.env);
-						planContainer._plan = JSONToWPSDecoder.toPlan(jsonObject.map.plan);
+						if( jsonObject.map.hasOwnProperty("env"))
+							planContainer.env = JSONToWPSDecoder.toEnv(jsonObject.map.env);
+						if( jsonObject.map.hasOwnProperty("plan"))
+							planContainer.plan = JSONToWPSDecoder.toPlan(jsonObject.map.plan);
 					}
 					else {
 						planContainer[ p] = jsonObject[p];
