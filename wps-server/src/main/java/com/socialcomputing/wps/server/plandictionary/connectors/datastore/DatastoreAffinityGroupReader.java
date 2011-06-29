@@ -55,20 +55,22 @@ public class DatastoreAffinityGroupReader implements iAffinityGroupReader {
 			case AnalysisProfile.PERSONAL_PLAN:
 			    LOG.debug("Personal plan with id = {}", id);
 				Map<String, Integer> set = new HashMap<String, Integer> ();
-				for(AttributeEnumeratorItem attributeItem : m_entityConnector.m_Entities.get(id).m_Attributes) {
-					for( String entityId2 : m_entityConnector.m_Attributes.get( attributeItem.m_Id).m_Entities) {
-						if( set.containsKey( entityId2)) {
-							int pond = set.get( entityId2) + 1;
-							set.put( entityId2, pond);
-							if( pond > maxPond)
-								maxPond = pond;
-						}
-						else {
-							set.put( entityId2, 1);
-							if( maxPond < 1)
-								maxPond = 1;
-						}
-					}
+				if( m_entityConnector.m_Entities.get(id) != null) {
+    				for(AttributeEnumeratorItem attributeItem : m_entityConnector.m_Entities.get(id).m_Attributes) {
+    					for( String entityId2 : m_entityConnector.m_Attributes.get( attributeItem.m_Id).m_Entities) {
+    						if( set.containsKey( entityId2)) {
+    							int pond = set.get( entityId2) + 1;
+    							set.put( entityId2, pond);
+    							if( pond > maxPond)
+    								maxPond = pond;
+    						}
+    						else {
+    							set.put( entityId2, 1);
+    							if( maxPond < 1)
+    								maxPond = 1;
+    						}
+    					}
+    				}
 				}
 				result = new StringAndFloat[ set.size()];
 				for( Entry<String, Integer> entry : set.entrySet()) {
@@ -79,18 +81,20 @@ public class DatastoreAffinityGroupReader implements iAffinityGroupReader {
 			case AnalysisProfile.DISCOVERY_PLAN:
 			    LOG.debug("discovery plan with id = {}", id);
 				Map<String,Integer> set2 = new HashMap<String,Integer>();
-				for( String entityId : m_entityConnector.m_Attributes.get( id).m_Entities) {
-					if( set2.containsKey( entityId)) {
-						int pond = set2.get( entityId) + 1;
-						set2.put( entityId, pond);
-						if( pond > maxPond)
-							maxPond = pond;
-					}
-					else {
-						set2.put( entityId, 1);
-						if( maxPond < 1)
-							maxPond = 1;
-					}
+				if( m_entityConnector.m_Attributes.get( id) != null) {
+    				for( String entityId : m_entityConnector.m_Attributes.get( id).m_Entities) {
+    					if( set2.containsKey( entityId)) {
+    						int pond = set2.get( entityId) + 1;
+    						set2.put( entityId, pond);
+    						if( pond > maxPond)
+    							maxPond = pond;
+    					}
+    					else {
+    						set2.put( entityId, 1);
+    						if( maxPond < 1)
+    							maxPond = 1;
+    					}
+    				}
 				}
 				result = new StringAndFloat[ set2.size()];
 				for( Entry<String, Integer> entry : set2.entrySet()) {
