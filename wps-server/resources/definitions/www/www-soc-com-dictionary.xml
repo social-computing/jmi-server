@@ -7,9 +7,9 @@
 
 	<entities>
 		<JDBC-entities name="WPS Social Computing blog">
-			<JDBC-connection catalog="wors-press" >
+			<JDBC-connection catalog="wordpresstest" >
 				<JNDI-data-source>
-					<url>java:comp/env/jdbc/WPS_SAMPLE_DS</url>
+					<url>java:comp/env/jdbc/WPS_BLOG_DS</url>
 				</JNDI-data-source>
 			</JDBC-connection>
 	
