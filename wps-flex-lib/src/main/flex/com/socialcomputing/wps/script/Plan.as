@@ -414,8 +414,9 @@ package com.socialcomputing.wps.script  {
                 sy  = (dim.height - margin) / m_prevBox.height;
                 dx  = m_prevBox.x - (margin >> 1);
                 dy  = m_prevBox.y - (margin >> 1);
-				s	= sx > sy ? sy : sx;
-
+				//s	= sx > sy ? sy : sx;
+                s = (sx + sy)/2;
+                
 				// Iterate through all "real" nodes 
 				for (i = 0 ; i < this.m_nodesCnt ; i++) {
 					zone = this.m_nodes[i];
