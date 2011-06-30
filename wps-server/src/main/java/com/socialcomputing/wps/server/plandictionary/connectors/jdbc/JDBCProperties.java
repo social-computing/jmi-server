@@ -85,8 +85,8 @@ public class JDBCProperties implements java.io.Serializable {
                         m_ColumnInfo = new Vector<InternalColumnInfo>(count);
                         for (int i = 1; i <= count; ++i) {
                             // System.out.println("m_bNameIsLabel("+i+") :"+m_bNameIsLabel);
-                            m_ColumnInfo.add(new InternalColumnInfo(m_bNameIsLabel ? rsmd.getColumnLabel(i) : rsmd
-                                    .getColumnName(i), rsmd.getColumnType(i)));
+                            m_ColumnInfo.add(new InternalColumnInfo(m_bNameIsLabel ? rsmd.getColumnLabel(i) : 
+                                    rsmd.getColumnName(i), rsmd.getColumnType(i)));
                         }
                     }
                 }
@@ -139,7 +139,6 @@ public class JDBCProperties implements java.io.Serializable {
                     case java.sql.Types.LONGVARCHAR:
                     case java.sql.Types.VARCHAR:
                     case java.sql.Types.CHAR:
-                        info.m_Type = 12;
                         return rs.getString(index + 1);
                         /*
                          * String testString =

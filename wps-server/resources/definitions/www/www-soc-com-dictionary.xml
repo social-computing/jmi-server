@@ -7,9 +7,9 @@
 
 	<entities>
 		<JDBC-entities name="WPS Social Computing blog">
-			<JDBC-connection catalog="wordpresstest" >
+			<JDBC-connection catalog="wors-press" >
 				<JNDI-data-source>
-					<url>java:comp/env/jdbc/WPS_BLOG_DS</url>
+					<url>java:comp/env/jdbc/WPS_SAMPLE_DS</url>
 				</JNDI-data-source>
 			</JDBC-connection>
 	
@@ -39,10 +39,10 @@
 			<JDBC-attributes name="JDBC_Profile">
 			    <comment>Tags attributes</comment>
                 <JDBC-query2>SELECT b.object_id, 1 as ponderation FROM wp_term_taxonomy a INNER JOIN wp_term_relationships b ON a.term_taxonomy_id=b.term_taxonomy_id WHERE a.term_id={icurEntity} AND a.taxonomy='post_tag'</JDBC-query2>
-				<JDBC-property name="Post properties" column-name="name">
+				<JDBC-property name="Post properties" column-name="label">
                     <JDBC-query2>SELECT ID as id, post_title as name FROM wp_posts where ID={icurAttribute}</JDBC-query2>
                 </JDBC-property>
-                <JDBC-property name="Belong to properties" multiple-rows="yes" column-name="name">
+                <JDBC-property name="Belong to properties" multiple-rows="yes" column-name="label">
 				    <JDBC-query2>SELECT c.term_id as poss_id, c.name as poss_name FROM wp_term_relationships a INNER JOIN wp_term_taxonomy b ON a.term_taxonomy_id=b.term_taxonomy_id INNER JOIN wp_terms c ON b.term_id=c.term_id WHERE a.object_id={icurAttribute} AND b.taxonomy='post_tag' ORDER BY c.name ASC</JDBC-query2>
                 </JDBC-property>
 			</JDBC-attributes>
