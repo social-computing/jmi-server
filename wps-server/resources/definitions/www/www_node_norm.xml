@@ -43,7 +43,6 @@
 			<tip 	font="selFnt"
 					label="{+sNAME}"
 					textCol="@blackCol"
-					blur="19"
 					rounded="10"
 					isCorner="true"/>
 		</slice>
