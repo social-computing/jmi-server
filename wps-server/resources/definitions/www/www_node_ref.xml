@@ -43,7 +43,7 @@
 		</transfo>
 		<slice>
 			<tip 	font="selFnt"
-					label="{+sNAME}"
+					label="{+15sNAME}"
 					textCol="37 137 235"
 					isCorner="true"/>
 		</slice>
@@ -55,7 +55,7 @@
 					isSub="true" >
 		<slice>
 			<tip 	font="selFnt"
-					label="{+sNAME}"
+					label="{+15sNAME}"
 					inCol="255 0 0"
 					textCol="@whiteCol"
 					isCorner="true"/>

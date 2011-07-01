@@ -41,7 +41,7 @@
 					isTip="true">
 		<slice>
 			<tip 	font="selFnt"
-					label="{+sNAME}"
+					label="{+15sNAME}"
 					textCol="@blackCol"
 					rounded="10"
 					isCorner="true"/>
@@ -54,7 +54,7 @@
 					isSub="true" >
 		<slice>
 			<tip 	font="selFnt"
-					label="{+sNAME}"
+					label="{+15sNAME}"
 					inCol="255 0 0"
 					textCol="@whiteCol"
 					isCorner="true"/>

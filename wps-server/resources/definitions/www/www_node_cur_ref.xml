@@ -153,7 +153,10 @@
 
 		<menu		    id="menu"
 						font="menuFnt">
-			<item 		label="{+sNAME}"
+			<item 		label="Afficher"
+						font="nameFnt"
+						url="http://www.social-computing.com" />
+			<item 		label="Centrer"
 						font="nameFnt"
 						url="javascript:Discover({sID},{sNAME})" />
 			<separator />
@@ -167,7 +170,7 @@
 
 	<!-- DblClkEvt event -->
 	<event 	        id="dblClkEvt">
-		<open       url="javascript:alert({sNAME})" />
+		<open       url="http://www.social-computing.com" />
 	</event>
 
 </swatch>
