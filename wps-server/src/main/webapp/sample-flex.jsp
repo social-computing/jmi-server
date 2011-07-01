@@ -37,7 +37,7 @@
             var flashvars = {};
             flashvars.wpsserverurl = "http://localhost:8080/wps-server";
             flashvars.wpsplanname = "Xml_sample";
-            flashvars.entityId = "5";
+            flashvars.analysisProfile = "GlobalProfile";
             var params = {};
             params.quality = "high";
             params.bgcolor = "#FFFFFF";
