@@ -415,6 +415,12 @@ package com.socialcomputing.wps.components
 			}
 			dispatchEvent(new NavigateEvent( actionStr, target)); 
 		}
+
+		public function getGlobalProperty( name:String):Object {
+			if( env.m_props.hasOwnProperty( name))
+				return env.m_props[name];
+			return null;
+		}
 		
 		public function defineEntities( nodeFields:Array, nodeId:String="POSS_ID", linkId:String="REC_ID"):void {
 			
