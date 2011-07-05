@@ -2,33 +2,58 @@
 
 <!DOCTYPE dictionary SYSTEM "WPS-dictionary.dtd" >
 
-<dictionary name="www_soc_com" >
+<dictionary name="scblog" >
 	<comment>www Social Computing Plan Dictionary</comment>
 
 	<entities>
-		<XML-entities name="WPS Sample">
-			<URL-connection>
-				<url>http://localhost:8080/wps-server/data/SampleData.xml</url>
-			</URL-connection>
+		<JDBC-entities name="WPS Social Computing blog">
+			<JDBC-connection catalog="wordpresstest" >
+				<JNDI-data-source>
+					<url>java:comp/env/jdbc/WPS_BLOG_DS</url>
+				</JNDI-data-source>
+			</JDBC-connection>
 	
-			<XML-entity markup="entity" id="id" >
-				<XML-property id="name" />
-			</XML-entity>
+			<JDBC-default-classifier>
+				<JDBC-query2>SELECT term_id as id FROM wp_term_taxonomy WHERE taxonomy='post_tag'</JDBC-query2>
+			</JDBC-default-classifier>
 	
-			<XML-attribute markup="attribute" id="id" >
-				<XML-property id="name" />
-				<XML-property id="poss_id" entity="id" />
-				<XML-property id="poss_name" entity="name" />
-			</XML-attribute>
-			
-		</XML-entities>
+			<JDBC-property name="Tags properties" column-name="label">
+				<JDBC-query2>SELECT a.term_id as id, a.name as name FROM wp_terms a LEFT JOIN wp_term_taxonomy b ON a.term_id=b.term_id WHERE b.taxonomy='post_tag' AND a.term_id={icurEntity}</JDBC-query2>
+			</JDBC-property>
+
+			<JDBC-affinity-reader name="JDBC_AffReader">
+				<comment>Affinity Group for a tag (=obtenir a partir d'un tag les autres tags (et leur nombre) presents dans les articles ou le tag specifie est present ?)</comment>
+				<JDBC-query2>SELECT d.term_id as id, count(d.term_id) FROM wp_term_taxonomy a INNER JOIN wp_term_relationships b ON a.term_taxonomy_id=b.term_taxonomy_id INNER JOIN wp_term_relationships c ON b.object_id=c.object_id INNER JOIN wp_term_taxonomy d ON c.term_taxonomy_id=d.term_taxonomy_id WHERE a.term_id ={i$entityId} AND a.taxonomy='post_tag' AND d.taxonomy='post_tag' GROUP BY d.term_id</JDBC-query2>
+			</JDBC-affinity-reader>
+
+			<JDBC-affinity-reader name="JDBC_DiscoveryAffReader">
+			    <comment>Affinity Discovery Group for a tag (=obtenir a partir d'un post la liste des tags et leur compte. Leur compte etant le nombre d'articles dans lesquels ils apparaissent)</comment>
+				<JDBC-query2>SELECT d.term_id as id, count(d.term_id) FROM wp_term_taxonomy a INNER JOIN wp_term_relationships b ON a.term_taxonomy_id=b.term_taxonomy_id INNER JOIN wp_term_relationships c ON b.object_id=c.object_id INNER JOIN wp_term_taxonomy d ON c.term_taxonomy_id=d.term_taxonomy_id WHERE c.object_id={i$attributeId} AND a.taxonomy='post_tag' AND d.taxonomy='post_tag' GROUP BY d.term_id</JDBC-query2>
+			</JDBC-affinity-reader>
+
+			<JDBC-affinity-reader name="JDBC_GlobalAffReader">
+                <comment>Affinity Group for a tag (1 for each tag ?)</comment>
+                <JDBC-query2>SELECT a.term_id as id, 1 FROM wp_terms a INNER JOIN wp_term_taxonomy b ON a.term_id=b.term_id WHERE b.taxonomy='post_tag'</JDBC-query2>
+			</JDBC-affinity-reader>
+	
+			<JDBC-attributes name="JDBC_Profile">
+			    <comment>Tags attributes</comment>
+                <JDBC-query2>SELECT b.object_id, 1 as ponderation FROM wp_term_taxonomy a INNER JOIN wp_term_relationships b ON a.term_taxonomy_id=b.term_taxonomy_id WHERE a.term_id={icurEntity} AND a.taxonomy='post_tag'</JDBC-query2>
+				<JDBC-property name="Post properties" column-name="label">
+                    <JDBC-query2>SELECT ID as id, post_title as name FROM wp_posts where ID={icurAttribute}</JDBC-query2>
+                </JDBC-property>
+                <JDBC-property name="Belong to properties" multiple-rows="yes" column-name="label">
+				    <JDBC-query2>SELECT c.term_id as poss_id, c.name as poss_name FROM wp_term_relationships a INNER JOIN wp_term_taxonomy b ON a.term_taxonomy_id=b.term_taxonomy_id INNER JOIN wp_terms c ON b.term_id=c.term_id WHERE a.object_id={icurAttribute} AND b.taxonomy='post_tag' ORDER BY c.name ASC</JDBC-query2>
+                </JDBC-property>
+			</JDBC-attributes>
+		</JDBC-entities>
 	</entities>
+
+	<env-property name="$web_context" value ="/" />
 	
-	<env-property name="$web_context" value ="http://localhost:8080/wps-server/" />
-	
-	<affinity-reader-profile name="AffReader" affinity-reader-ref="*" threshold="100" />
-	<affinity-reader-profile name="DiscoveryAffReader" affinity-reader-ref="*" threshold="100" />
-	<affinity-reader-profile name="GlobalAffReader" affinity-reader-ref="*" threshold="100" />
+	<affinity-reader-profile name="AffReader" affinity-reader-ref="JDBC_AffReader" threshold="100" />
+	<affinity-reader-profile name="DiscoveryAffReader" affinity-reader-ref="JDBC_DiscoveryAffReader" threshold="100" />
+	<affinity-reader-profile name="GlobalAffReader" affinity-reader-ref="JDBC_GlobalAffReader" threshold="100" />
 
 	<analysis-profile name="Profile" attributes-ref="JDBC_Profile" type="personal" attribute-size="frequency">
 		<props-mapping>

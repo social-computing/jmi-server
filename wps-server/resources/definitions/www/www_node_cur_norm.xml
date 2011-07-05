@@ -155,7 +155,10 @@
 
 		<menu		    id="menu"
 						font="menuFnt">
-			<item 		label="{+sNAME}"
+			<item 		label="Afficher"
+						font="nameFnt"
+						url="http://www.social-computing.com" />
+			<item 		label="Centrer"
 						font="nameFnt"
 						url="javascript:Discover({sID},{sNAME})" />
 			<separator />

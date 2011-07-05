@@ -85,8 +85,10 @@ package com.socialcomputing.wps.script  {
             {
                 if ( n > 1|| (n == 1 && labels != null))
                 {
-					menuItm	= new Object();
+					subMenu	= new ArrayCollection();
+					menuItm = new Object();
 					menuItm.label = labels[j];
+					menuItm.children = subMenu;
                     dst.addItem( menuItm );
                     if( n > 1)
                         k = j;
