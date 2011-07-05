@@ -93,6 +93,10 @@
         <filter-name>Guice Filter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
+<resource-ref>
+ <res-ref-name>jdbc/wps-db</res-ref-name>
+ <res-type>javax.sql.DataSource</res-type>
+ <res-auth>Container</res-auth>
+</resource-ref>
   
 </web-app>

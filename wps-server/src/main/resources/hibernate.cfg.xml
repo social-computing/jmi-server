@@ -4,13 +4,16 @@
 	<session-factory>
 		<!-- Database connection settings -->
 		<!-- MySQL -->
-		
+		 
 		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
 		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="connection.url">jdbc:mysql://localhost:3306/wps</property>
 		<property name="connection.username">wps</property>
         <property name="connection.password">wps</property>
- 		
+        <!-- 
+ 		<property name="connection.datasource">java:comp/env/jdbc/wps-db</property>
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+        -->	 
 		<!-- HSQL -->
 		<!-- 
 		<property name="connection.driver_class">org.hsqldb.jdbcDriver</property>
@@ -22,15 +25,15 @@
 		
 		<!-- pooling configuration with 3rd party c3p0 lib -->
 		<!-- Min pool size -->
-        <property name="c3p0.min_size">5</property>
+<!--         <property name="c3p0.min_size">5</property> -->
         <!--Max pool size -->
-        <property name="c3p0.max_size">20</property>
+<!--         <property name="c3p0.max_size">20</property> -->
         <!-- Max idle time -->
-        <property name="c3p0.timeout">1800</property>
+<!--         <property name="c3p0.timeout">1800</property> -->
         <!--Max statements - size of the prepared statement cache -->
-        <property name="c3p0.max_statements">50</property>
+<!--         <property name="c3p0.max_statements">50</property> -->
         <!-- Set the pooling implementation to c3p0 -->
-        <property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+<!--         <property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property> -->
 		
 		
 		<!-- Not recommended in hibernate documentation
