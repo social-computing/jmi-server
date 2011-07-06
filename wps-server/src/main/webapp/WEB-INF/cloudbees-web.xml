@@ -1,0 +1,10 @@
+<cloudbees-web-app>
+	<appid>wps/wps</appid>
+	<resource name="jdbc/wps-db" auth="Container" type="javax.sql.DataSource">
+		<param name="username" value="wps" />
+		<param name="password" value="wps" />
+		<param name="url" value="jdbc:cloudbees://wps-db" />
+		<param name="maxActive" value="20" />
+		<param name="maxWait" value="1800" />
+	</resource>
+</cloudbees-web-app>
