@@ -1,5 +1,8 @@
-<cloudbees-web-app>
+<?xml version="1.0" encoding="UTF-8" ?>
+<cloudbees-web-app xmlns="http://www.cloudbees.com/xml/webapp/1">
+
 	<appid>wps/wps</appid>
+
 	<resource name="jdbc/wps-db" auth="Container" type="javax.sql.DataSource">
 		<param name="username" value="wps" />
 		<param name="password" value="wps" />
@@ -7,4 +10,13 @@
 		<param name="maxActive" value="20" />
 		<param name="maxWait" value="1800" />
 	</resource>
+
+	<realm>
+		<param name="name" value="UserDatabase" />
+		<param name="auth" value="Container" />
+		<param name="type" value="org.apache.catalina.UserDatabase" />
+		<param name="factory" value="org.apache.catalina.users.MemoryUserDatabaseFactory" />
+		<param name="pathname" value="WEB-INF/tomcat-users.xml" />
+	</realm>
+
 </cloudbees-web-app>

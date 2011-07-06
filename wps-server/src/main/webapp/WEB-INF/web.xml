@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="2.5">
 
-	<!--  Configuration générale de l'application -->
+	<!-- Configuration générale de l'application -->
 	<display-name>WPS</display-name>
 	<description>WPS Server</description>
 	<welcome-file-list>
@@ -9,14 +12,14 @@
 			/welcome.jsp
 		</welcome-file>
 	</welcome-file-list>
-	
-	<!-- Liste des servlets  -->
-	<filter>
-        <filter-name>HibernateFilter</filter-name>
-        <filter-class>com.socialcomputing.wps.server.web.HibernateSessionRequestFilter</filter-class>
-    </filter>
 
-    <servlet>
+	<!-- Liste des servlets -->
+	<filter>
+		<filter-name>HibernateFilter</filter-name>
+		<filter-class>com.socialcomputing.wps.server.web.HibernateSessionRequestFilter</filter-class>
+	</filter>
+
+	<servlet>
 		<servlet-name>WPSPlanMakerServlet</servlet-name>
 		<servlet-class>com.socialcomputing.wps.server.web.WPSPlanMakerServlet</servlet-class>
 		<load-on-startup></load-on-startup>
@@ -36,67 +39,68 @@
 		<servlet-class>com.socialcomputing.wps.server.web.WPSUploadServlet</servlet-class>
 		<load-on-startup></load-on-startup>
 	</servlet>
-	
+
 	<!-- Servlet mapping configuration -->
-    <filter-mapping>
-        <filter-name>HibernateFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-    	
-	<servlet-mapping> 
-		<servlet-name>WPSPlanMakerServlet</servlet-name> 
-  		<url-pattern>/maker</url-pattern> 
-	</servlet-mapping> 
-	<servlet-mapping> 
-		<servlet-name>WPSPlanUploaderServlet</servlet-name> 
-  		<url-pattern>/loader</url-pattern> 
-	</servlet-mapping> 
-	<servlet-mapping> 
-		<servlet-name>WPSSchedulerServlet</servlet-name> 
-  		<url-pattern>/scheduler</url-pattern> 
-	</servlet-mapping> 
-	<servlet-mapping> 
-		<servlet-name>WPSUploadServlet</servlet-name> 
-  		<url-pattern>/upload</url-pattern> 
-	</servlet-mapping> 
-	
+	<filter-mapping>
+		<filter-name>HibernateFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<servlet-mapping>
+		<servlet-name>WPSPlanMakerServlet</servlet-name>
+		<url-pattern>/maker</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>WPSPlanUploaderServlet</servlet-name>
+		<url-pattern>/loader</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>WPSSchedulerServlet</servlet-name>
+		<url-pattern>/scheduler</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>WPSUploadServlet</servlet-name>
+		<url-pattern>/upload</url-pattern>
+	</servlet-mapping>
+
+	<resource-ref>
+		<res-ref-name>jdbc/wps-db</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Container</res-auth>
+	</resource-ref>
+
 	<login-config>
 		<auth-method>BASIC</auth-method>
 		<realm-name>WPS administration</realm-name>
 	</login-config>
 	<security-role>
-		<role-name>administrator</role-name>
+		<role-name>wps-admin</role-name>
 	</security-role>
-	<!--security-constraint>
+	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>Administration WPS</web-resource-name>
-			<url-pattern>*</url-pattern>
-			<http-method>*</http-method>
+			<url-pattern>/admin/*</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
-			<role-name>administrator</role-name>
+			<role-name>wps-admin</role-name>
 		</auth-constraint>
-	</security-constraint-->
-	<session-config> 
-		<session-timeout>10</session-timeout> 
-	</session-config> 
-  
-    <!-- Jersey Servlet filter configuration with Guice dependecy injection -->
-    <listener>
-        <listener-class>com.socialcomputing.config.GuiceConfig</listener-class>
-    </listener>
-    <filter>
-        <filter-name>Guice Filter</filter-name>
-        <filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>Guice Filter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-<resource-ref>
- <res-ref-name>jdbc/wps-db</res-ref-name>
- <res-type>javax.sql.DataSource</res-type>
- <res-auth>Container</res-auth>
-</resource-ref>
-  
+	</security-constraint>
+	<session-config>
+		<session-timeout>10</session-timeout>
+	</session-config>
+
+	<!-- Jersey Servlet filter configuration with Guice dependecy injection -->
+	<listener>
+		<listener-class>com.socialcomputing.config.GuiceConfig</listener-class>
+	</listener>
+	<filter>
+		<filter-name>Guice Filter</filter-name>
+		<filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>Guice Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+
 </web-app>
