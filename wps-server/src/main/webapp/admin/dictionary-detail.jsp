@@ -27,11 +27,11 @@ List<Swatch> ls = dic.getSwatchs();
 		<title>WPS Administration</title>
 		<META http-equiv="content-type" content="text/html;charset=ISO-8859-1">
 		<META http-equiv="content-language" content="fr-FX">
-		<link rel="stylesheet" href="css/main.css"/>
-		<link rel="stylesheet" href="css/wps.css">
+		<link rel="stylesheet" href="../css/main.css"/>
+		<link rel="stylesheet" href="../css/wps.css">
 		<script type="text/javascript" src="./applet/jquery.js" ></script>
 		<script type="text/javascript" src="javascript/jquery.fancybox-1.3.4.pack.js"></script>
-		<link rel="stylesheet" href="css/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="../css/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
 		<SCRIPT LANGUAGE="JavaScript1.2" > 
 			function SubmitForm(resetStart)
 			{

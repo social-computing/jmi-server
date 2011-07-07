@@ -17,7 +17,7 @@ DatabaseMetaData meta = connection.getMetaData();
 <table width="100%" cellpadding="0" cellspacing="0" width="100%" >
 <tr>
 <td align="left" valign="middle">
-	<a href="welcome.jsp" ><img title="Social Computing" src="../images/logo-sc-white.jpg" /></a>
+	<a href="../welcome.jsp" ><img title="Social Computing" src="../images/logo-sc-white.jpg" /></a>
 </td>
 <td align="left" valign="middle" >
 	<h1><b>Web Positioning System Administration <span class="texblanc"> - <%=meta.getDatabaseProductName()%> - v. <%=meta.getDatabaseProductVersion()%></span></b></h1>

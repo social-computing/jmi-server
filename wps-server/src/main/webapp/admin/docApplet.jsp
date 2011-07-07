@@ -10,8 +10,8 @@ public long getLastModified(HttpServletRequest request) {
 		<title>WPS Administration</title>
 		<META http-equiv="content-type" content="text/html;charset=ISO-8859-1">
 		<META http-equiv="content-language" content="fr-FX">
-		<link rel="stylesheet" href="css/main.css"/>
-		<link rel="stylesheet" href="css/wps.css">
+		<link rel="stylesheet" href="../css/main.css"/>
+		<link rel="stylesheet" href="../css/wps.css">
 		<script>
 			function Auth()
 			{

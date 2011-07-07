@@ -1,7 +1,7 @@
 <%@ page import="com.socialcomputing.wps.server.web.InternalReport" %>
 <html>
 <head>
-<link rel="stylesheet" href="css/wps.css">
+<link rel="stylesheet" href="../css/wps.css">
 <link rel="stylesheet" href="result.css">
 </head>
 <body bgcolor="7f9fdf">
