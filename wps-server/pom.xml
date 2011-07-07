@@ -389,7 +389,7 @@
               <!-- Hack :  
                    Move the generated applet so that it also work with in eclipse
                    with the m2eclipse plugin -->
-              <outputDirectory>src/main/webapp/applet</outputDirectory>
+              <outputDirectory>src/main/webapp/client/applet</outputDirectory>
             </configuration>
           </execution>
         </executions>
