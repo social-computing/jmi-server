@@ -60,7 +60,7 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>WPSUploadServlet</servlet-name>
-		<url-pattern>/upload</url-pattern>
+		<url-pattern>/admin/upload</url-pattern>
 	</servlet-mapping>
 
 	<resource-ref>
