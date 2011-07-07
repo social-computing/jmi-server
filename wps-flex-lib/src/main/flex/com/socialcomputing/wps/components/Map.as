@@ -405,7 +405,7 @@ package com.socialcomputing.wps.components
 				}
 				else if( target.charAt( 0 )== '_' )   // open a frame window
 				{
-					target      = actionStr.substring( 1, sep );
+					target      = actionStr.substring( 0, sep );
 					actionStr   = actionStr.substring( sep + 1 );
 				}
 				else
