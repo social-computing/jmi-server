@@ -30,40 +30,6 @@ Connection connection = HibernateUtil.getSessionFactory().getCurrentSession().co
 DatabaseMetaData meta = connection.getMetaData();
 %>
 
-
-<table border=0 width="100%">
- <tr> 
-  <td>
-	<table width="100%" border=1>
-	 <tr>
-	  <td nowrap><span class="subTitleBlue">WPS database</span></td>
-	  <td align="center" ><span class="texblanc"><%=meta.getDatabaseProductName()%> - v. <%=meta.getDatabaseProductVersion()%></span></td>
-	 </tr>
-	 <tr>
-	  <td nowrap><span class="subTitleBlue">WPS database driver</span></td>
-	  <td align="center" ><span class="texblanc"><%=meta.getDriverName()%> - v. <%=meta.getDriverVersion()%></span></td>
-	 </tr>
-	 <tr>
-	  <td nowrap><span class="subTitleBlue">WPS database url</span></td>
-	  <td align="center" ><span class="texblanc"><%=meta.getURL()%></span></td>
-	 </tr>
-	</table>
-  </td>
-  </tr>
-  <tr><td>&nbsp;</td></tr>
-  <tr>
-  <td>
-	<table width="30%" border=1>
-	 <tr>
-	  <td nowrap><span class="subTitleBlue"># dictionaries</span></td>
-	  <td align="center" nowrap><span class="texblanc"><b><%=dics.size()%></b></span></td>
-	 </tr>
-	</table>
-  </td>
-  <td>&nbsp;</td>
- </tr>
-</table>
-
 <br/><br/>
 
 <!-- UPLOAD DICTIONARY -->
