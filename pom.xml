@@ -30,6 +30,7 @@
     <module>wps-flex-lib</module>
     <module>wps-flex</module>
     <module>wps-flex-demo</module>
+    <module>wps-facebook</module>
     <module>wps-server</module>
   </modules>
 
