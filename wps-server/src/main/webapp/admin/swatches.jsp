@@ -12,8 +12,8 @@ public long getLastModified(HttpServletRequest request) {
 
 <html>
 <head>
-<link rel="stylesheet" href="./wps.css">
-<link rel="stylesheet" href="./result.css">
+<link rel="stylesheet" href="../css/wps.css">
+<link rel="stylesheet" href="../css/result.css">
 <base target="main">
 <SCRIPT LANGUAGE="JavaScript1.2" > 
 	function SubmitForm(resetStart)

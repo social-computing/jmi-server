@@ -32,7 +32,7 @@ function onWpsError( id) {
 			version: '1.0-SNAPSHOT',
 			name: 'WPSApplet',
 			codebase: '../client/applet/',
-			wpsurl: '../services/',
+			wpsurl: '../../services/',
 			wpsclient: '0'
 		}, options['plugin']);
 		

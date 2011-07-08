@@ -25,8 +25,8 @@
         <script type="text/javascript" src="../client/flex/history/history.js"></script>
         <!-- END Browser History required section -->  
 		
-		<link rel="stylesheet" href="../admin/css/main.css"/>
-		<link rel="stylesheet" href="../admin/css/wps.css">
+		<link rel="stylesheet" href="../css/main.css"/>
+		<link rel="stylesheet" href="../css/wps.css">
 		    
         <script type="text/javascript" src="../client/flex/swfobject.js"></script>
         <script type="text/javascript">

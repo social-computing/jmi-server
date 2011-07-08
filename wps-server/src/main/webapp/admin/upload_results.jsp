@@ -2,7 +2,6 @@
 <html>
 <head>
 <link rel="stylesheet" href="../css/wps.css">
-<link rel="stylesheet" href="result.css">
 </head>
 <body bgcolor="ffffff">
  <table width="100%" align="left" border="0" cellpadding="0" cellspacing="0" >

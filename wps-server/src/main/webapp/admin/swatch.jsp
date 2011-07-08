@@ -13,9 +13,9 @@ public long getLastModified(HttpServletRequest request) {
 <head>
 <link rel="stylesheet" href="./wps.css">
 <link rel="stylesheet" href="./result.css">
-<script type="text/javascript" src="./applet/jquery.js" ></script>
-<script type="text/javascript" src="javascript/jquery.fancybox-1.3.4.pack.js"></script>
-<link rel="stylesheet" href="../css/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
+<script type="text/javascript" src="../client/applet/jquery.js" ></script>
+<script type="text/javascript" src="./javascript/jquery.fancybox-1.3.4.pack.js"></script>
+<link rel="stylesheet" href="./css/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
 <base target="main">
 <SCRIPT LANGUAGE="JavaScript1.2" > 
     function SubmitForm(resetStart) {

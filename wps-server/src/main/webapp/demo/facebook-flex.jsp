@@ -6,12 +6,12 @@
         <%
 String code = request.getParameter("code");
 if( code == null) { %>
-<meta http-equiv="refresh" content="0; url=https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook-flex.jsp" />
+<meta http-equiv="refresh" content="0; url=https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/demo/facebook-flex.jsp" />
 <title>Redirection</title>
 <meta name="robots" content="noindex,follow" />
 </head>
 <body>
-<p><a href="https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook-flex.jsp">Redirection</a></p>
+<p><a href="https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/demo/facebook-flex.jsp">Redirection</a></p>
 </body>
 </html>
 <%} else {%>
@@ -37,8 +37,8 @@ if( code == null) { %>
         <script type="text/javascript" src="../client/flex/history/history.js"></script>
         <!-- END Browser History required section -->  
 		
-		<link rel="stylesheet" href="../admin/css/main.css"/>
-		<link rel="stylesheet" href="../admin/css/wps.css">
+		<link rel="stylesheet" href="../css/main.css"/>
+		<link rel="stylesheet" href="../css/wps.css">
 		    
         <script type="text/javascript" src="../client/flex/swfobject.js"></script>
         <script type="text/javascript">
@@ -47,7 +47,7 @@ if( code == null) { %>
             <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
             var xiSwfUrlStr = "../client/flex/playerProductInstall.swf";
             var flashvars = {};
-            flashvars.wpsserverurl = "http://localhost:8080";
+            flashvars.wpsserverurl = "http://wps.wps.cloudbees.net";
             flashvars.wpsplanname = "Facebook_sample";
             flashvars.fbauthcode = '<%=code%>';
             flashvars.analysisProfile = "GlobalProfile";

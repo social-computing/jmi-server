@@ -7,7 +7,7 @@
 public long getLastModified(HttpServletRequest request) {
 	return System.currentTimeMillis();
 }%>
-<%@ include file="applet/AppletVersion.jsp" %>
+<%@ include file="../client/applet/AppletVersion.jsp" %>
 
 <%
 PlanMaker planmaker = new BeanPlanMaker();
@@ -16,8 +16,7 @@ PlanMaker planmaker = new BeanPlanMaker();
 <HTML>
 <HEAD>
 <title>View <%=request.getParameter( "dictionary")%> plan</title>
-<link rel="stylesheet" href="./wps.css">
-<link rel="stylesheet" href="./result.css">
+<link rel="stylesheet" href="../css/wps.css">
 </HEAD>
 <BODY bgcolor=7f9fdf topmargin=0 leftmargin=0 marginheight=0 marginwidth=0>
 <%
@@ -109,7 +108,7 @@ else
 	appletParams.append( "&");
 	appletParams.append( request.getParameter( "appletparams"));
 	%>	
-	<APPLET name="WPSApplet" archive="WPSApplet<%=APPLET_VERSION%>.jar" code="com.socialcomputing.wps.client.applet.WPSApplet.class" codebase="./applet/" MAYSCRIPT="" align="absmiddle" hspace="0" vspace="0" width="100%" height="100%">
+	<APPLET name="WPSApplet" archive="WPSApplet<%=APPLET_VERSION%>.jar" code="com.socialcomputing.wps.client.applet.WPSApplet.class" codebase="../client/applet/" MAYSCRIPT="" align="absmiddle" hspace="0" vspace="0" width="100%" height="100%">
 		<PARAM NAME="WPSParameters"		VALUE="<%=appletParams.toString()%>" />
 		<PARAM NAME="ServletUrl"		VALUE="../maker" />
 		<PARAM NAME="VoidPlanUrl"    	VALUE="../view-applet.jsp?error=nodata&<%=appletParams.toString()%>" />

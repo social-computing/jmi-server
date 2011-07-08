@@ -2,8 +2,7 @@
 <html>
 <head>
 <title>Basic authentication</title>
-<link rel="stylesheet" href="./wps.css">
-<link rel="stylesheet" href="./result.css">
+<link rel="stylesheet" href="../css/wps.css">
 </head>
 <body>
 <body bgcolor=7f9fdf>
