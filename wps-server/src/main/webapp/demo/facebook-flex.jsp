@@ -33,19 +33,19 @@ if( code == null) { %>
 		
 		<!-- Enable Browser History by replacing useBrowserHistory tokens with two hyphens -->
         <!-- BEGIN Browser History required section -->
-        <link rel="stylesheet" type="text/css" href="./flex/history/history.css" />
-        <script type="text/javascript" src="./flex/history/history.js"></script>
+        <link rel="stylesheet" type="text/css" href="../client/flex/history/history.css" />
+        <script type="text/javascript" src="../client/flex/history/history.js"></script>
         <!-- END Browser History required section -->  
 		
-		<link rel="stylesheet" href="../css/main.css"/>
-		<link rel="stylesheet" href="../css/wps.css">
+		<link rel="stylesheet" href="../admin/css/main.css"/>
+		<link rel="stylesheet" href="../admin/css/wps.css">
 		    
-        <script type="text/javascript" src="./flex/swfobject.js"></script>
+        <script type="text/javascript" src="../client/flex/swfobject.js"></script>
         <script type="text/javascript">
             <!-- For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. --> 
             var swfVersionStr = "10.0.0";
             <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
-            var xiSwfUrlStr = "./flex/playerProductInstall.swf";
+            var xiSwfUrlStr = "../client/flex/playerProductInstall.swf";
             var flashvars = {};
             flashvars.wpsserverurl = "http://wps.wps.cloudbees.net";
             flashvars.wpsplanname = "Facebook_sample";
@@ -61,7 +61,7 @@ if( code == null) { %>
             attributes.name = "wps-facebook";
             attributes.align = "middle";
             swfobject.embedSWF(
-                "./flex/wps-facebook-1.0-SNAPSHOT.swf", "flashContent", 
+                "../client/flex/wps-facebook-1.0-SNAPSHOT.swf", "flashContent", 
                 "100%", "100%", 
                 swfVersionStr, xiSwfUrlStr, 
                 flashvars, params, attributes);
@@ -71,8 +71,8 @@ if( code == null) { %>
     </head>
     <body>
     
-    	<div id="top"><jsp:include page="top.jsp" /></div>
-	    <div id="menu"><jsp:include page="menu.jsp" /></div>
+<%--     	<div id="top"><jsp:include page="top.jsp" /></div> --%>
+<%-- 	    <div id="menu"><jsp:include page="menu.jsp" /></div> --%>
         <!-- SWFObject's dynamic embed method replaces this alternative HTML content with Flash content when enough 
 			 JavaScript and Flash plug-in support is available. The div is initially hidden so that it doesn't show
 			 when JavaScript is disabled.
@@ -92,13 +92,13 @@ if( code == null) { %>
 	   	
        	<noscript>
             <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%" id="wps-flex-demo">
-                <param name="movie" value="./flex/wps-facebook-1.0-SNAPSHOT.swf" />
+                <param name="movie" value="../client/flex/wps-facebook-1.0-SNAPSHOT.swf" />
                 <param name="quality" value="high" />
                 <param name="bgcolor" value="#FFFFFF" />
                 <param name="allowScriptAccess" value="sameDomain" />
                 <param name="allowFullScreen" value="true" />
                 <!--[if !IE]>-->
-                <object type="application/x-shockwave-flash" data="./flex/wps-facebook-1.0-SNAPSHOT.swf" width="100%" height="100%">
+                <object type="application/x-shockwave-flash" data="../client/flex/wps-facebook-1.0-SNAPSHOT.swf" width="100%" height="100%">
                     <param name="quality" value="high" />
                     <param name="bgcolor" value="#FFFFFF" />
                     <param name="allowScriptAccess" value="sameDomain" />

@@ -31,8 +31,8 @@ if( oauth_token == null) {
 <%
 } else {
 %>
-    <script type="text/javascript" src="../applet/jquery.js" ></script>
-    <script type="text/javascript" src="../applet/jquery.wpsmap.js" ></script>
+    <script type="text/javascript" src="../client/applet/jquery.js" ></script>
+    <script type="text/javascript" src="../client/applet/jquery.wpsmap.js" ></script>
     <script type="text/javascript" >
     	function setMap(params) {
     		params['planName'] = 'Twitter_sample';
@@ -43,7 +43,7 @@ if( oauth_token == null) {
     		$("#map").wpsmap({
     			wps: params, 
     			display: {color:'336699'},
-    			plugin: {codebase: '../applet/', wpsurl: './../services/', noscript:'../../noscript.jsp'}
+    			plugin: {codebase: '../client/applet/', wpsurl: './../services/', noscript:'../../noscript.jsp'}
     		});
     	}
     	// Fired from applet

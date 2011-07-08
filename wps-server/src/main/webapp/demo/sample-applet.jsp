@@ -3,10 +3,10 @@
 		<title>WPS Administration</title>
 		<meta http-equiv="content-type" content="text/html;charset=ISO-8859-1" />
 		<meta http-equiv="content-language" content="fr-FX" />
-		<link rel="stylesheet" href="../css/main.css"/>
-		<link rel="stylesheet" href="../css/wps.css">
-		<script type="text/javascript" src="./applet/jquery.js" ></script>
-		<script type="text/javascript" src="./applet/jquery.wpsmap.js" ></script>
+		<link rel="stylesheet" href="css/main.css"/>
+		<link rel="stylesheet" href="css/wps.css">
+		<script type="text/javascript" src="../client/applet/jquery.js" ></script>
+		<script type="text/javascript" src="../client/applet/jquery.wpsmap.js" ></script>
 		<script type="text/javascript" >
 			function attributeChanged()
 			{
@@ -170,8 +170,8 @@
 	</head>
 	
 	<body>	
-	<div id="top"><jsp:include page="top.jsp" /></div>
-	<div id="menu"><jsp:include page="menu.jsp" /></div>
+<%-- 	<div id="top"><jsp:include page="top.jsp" /></div> --%>
+<%-- 	<div id="menu"><jsp:include page="menu.jsp" /></div> --%>
 	<div id="content">
 
 
