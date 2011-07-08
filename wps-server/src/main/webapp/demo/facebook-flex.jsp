@@ -47,10 +47,11 @@ if( code == null) { %>
             <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
             var xiSwfUrlStr = "../client/flex/playerProductInstall.swf";
             var flashvars = {};
-            flashvars.wpsserverurl = "http://wps.wps.cloudbees.net";
+            flashvars.wpsserverurl = "http://localhost:8080";
             flashvars.wpsplanname = "Facebook_sample";
             flashvars.fbauthcode = '<%=code%>';
             flashvars.analysisProfile = "GlobalProfile";
+            flashvars.kind = "likes";
             var params = {};
             params.quality = "high";
             params.bgcolor = "#FFFFFF";
