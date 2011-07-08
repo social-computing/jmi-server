@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="./wps.css">
 <link rel="stylesheet" href="./result.css">
 </head>
-<body bgcolor="7f9fdf">
+<body bgcolor="ffffff">
 
 <br><br>
 

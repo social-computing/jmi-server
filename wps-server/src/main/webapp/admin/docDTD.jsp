@@ -22,16 +22,16 @@
 		<td colspan=2><span class="subTitleBlue">Dictionary DTD</span></td>
 	</tr>
 	<tr>
-		<td><a href="dtd/WPS-dictionary.dtd" target="_blank">dictionary</a></td>
+		<td><a href="../dtd/WPS-dictionary.dtd" target="_blank">dictionary</a></td>
 		<td>main definition</td>
 	</tr>
 	<tr>
-		<td><a href="dtd/JDBC-connector.dtd" target="_blank">JDBC
+		<td><a href="../dtd/JDBC-connector.dtd" target="_blank">JDBC
 		dictionary connector</a></td>
 		<td>SGBD data, access thru JDBC</td>
 	</tr>
 	<tr>
-		<td><a href="dtd/XML-connector.dtd" target="_blank">XML
+		<td><a href="../dtd/XML-connector.dtd" target="_blank">XML
 		dictionary connector</a></td>
 		<td>Xml data</td>
 	</tr>
@@ -42,7 +42,7 @@
 		<td colspan=2><span class="subTitleBlue">Swatch DTD</span></td>
 	</tr>
 	<tr>
-		<td><a href="dtd/swatch.dtd" target="_blank">swatch</a></td>
+		<td><a href="../dtd/swatch.dtd" target="_blank">swatch</a></td>
 		<td>main definition</td>
 	</tr>
 </table>
