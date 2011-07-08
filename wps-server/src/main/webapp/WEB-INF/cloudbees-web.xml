@@ -12,11 +12,22 @@
 	</resource>
 
 	<realm>
-		<param name="name" value="UserDatabase" />
-		<param name="auth" value="Container" />
-		<param name="type" value="org.apache.catalina.UserDatabase" />
-		<param name="factory" value="org.apache.catalina.users.MemoryUserDatabaseFactory" />
-		<param name="pathname" value="WEB-INF/tomcat-users.xml" />
+		<param name="className" value="org.apache.catalina.realm.MemoryRealm" />
+<!-- 		<param name="name" value="UserDatabase" /> -->
+<!-- 		<param name="auth" value="Container" /> -->
+<!-- 		<param name="type" value="org.apache.catalina.UserDatabase" /> -->
+<!-- 		<param name="factory" value="org.apache.catalina.users.MemoryUserDatabaseFactory" /> -->
+		<param name="pathname" value="${catalina.home}/tomcat-users.xml" />
+		
+		<!-- Datasource -->
+<!-- 		<param name="className" value="org.apache.catalina.realm.DataSourceRealm" /> -->
+<!-- 		<param name="dataSourceName" value="jdbc/DATASOURCE_NAME" /> -->
+<!-- 		<param name="localDataSource" value="true" /> -->
+<!-- 		<param name="userTable" value="users" /> -->
+<!-- 		<param name="userNameCol" value="user_name" /> -->
+<!-- 		<param name="userCredCol" value="user_pass" /> -->
+<!-- 		<param name="userRoleTable" value="user_roles" /> -->
+<!-- 		<param name="roleNameCol" value="role_name" /> -->
 	</realm>
 
 </cloudbees-web-app>
