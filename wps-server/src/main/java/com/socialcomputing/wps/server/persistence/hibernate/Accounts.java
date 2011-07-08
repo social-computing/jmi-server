@@ -2,6 +2,8 @@ package com.socialcomputing.wps.server.persistence.hibernate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -9,17 +11,17 @@ import javax.persistence.Table;
 @Table(name = "accounts")
 public class Accounts {
 
-    @Id
-    @Column(name = "id")
     int id;
 
-    @Column(name = "name", columnDefinition = "varchar(255)")
     String name;
 
     public Accounts() {
         
     }
     
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -28,6 +30,7 @@ public class Accounts {
         this.id = id;
     }
 
+    @Column(name = "name", nullable = false, length=255)
     public String getName() {
         return name;
     }

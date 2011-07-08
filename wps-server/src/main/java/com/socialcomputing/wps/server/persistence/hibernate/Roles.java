@@ -2,24 +2,28 @@ package com.socialcomputing.wps.server.persistence.hibernate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "user_roles")
 public class Roles {
-
-    @Id
-    @Column(name = "id")
+    
     int id;
 
-    @Column(name = "label", columnDefinition = "varchar(255)")
-    String label;
+    String username;
+    
+    String role;
 
     public Roles() {
         
     }
     
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -28,12 +32,22 @@ public class Roles {
         this.id = id;
     }
 
-    public String getLabel() {
-        return label;
+    @Column(name = "username", nullable = false, length=255)
+    public String getUsername() {
+        return username;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    @Column(name = "role", nullable = false, length=255)
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
 }

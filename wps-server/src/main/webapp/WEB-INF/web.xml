@@ -82,7 +82,7 @@
 			<url-pattern>/admin/*</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
-			<role-name>wps-admin</role-name>
+			<role-name>superadmin</role-name>
 		</auth-constraint>
 	</security-constraint>
 	<session-config>

@@ -1,7 +1,10 @@
 package com.socialcomputing.wps.server.persistence.hibernate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -13,10 +16,11 @@ public class Users {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     int id;
 
-    @Column(name = "login", columnDefinition = "varchar(255)")
-    String login;
+    @Column(name = "username", columnDefinition = "varchar(255)")
+    String username;
     
     @Column(name = "password", columnDefinition = "varchar(255)")
     String password;
@@ -30,13 +34,9 @@ public class Users {
     @Column(name = "email", columnDefinition = "varchar(255)")
     String email;
 
-    @ManyToOne
-    @JoinColumn(name = "account_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="account_id")
     private Accounts account;
-    
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Roles roles;
     
     public Users() {
         
@@ -50,12 +50,12 @@ public class Users {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getUsername() {
+        return username;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -89,5 +89,9 @@ public class Users {
     public void setEmail(String email) {
         this.email = email;
     }
-
+    
+    public Accounts getUserAccount() {
+        return this.account;
+    }
+    
 }
