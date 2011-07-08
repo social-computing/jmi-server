@@ -31,7 +31,7 @@ function onWpsError( id) {
 		var pluginOptions = $.extend({
 			version: '1.0-SNAPSHOT',
 			name: 'WPSApplet',
-			codebase: './applet/',
+			codebase: '../client/applet/',
 			wpsurl: '../services/',
 			wpsclient: '0'
 		}, options['plugin']);
