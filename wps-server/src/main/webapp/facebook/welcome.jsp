@@ -6,12 +6,12 @@
         <%
 String code = request.getParameter("code");
 if( code == null) { %>
-<meta http-equiv="refresh" content="0; url=https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/welcome.jsp" />
+<meta http-equiv="refresh" content="0; url=https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/welcome.jsp&scope=friends_likes,friends_groups,friends_activities,friends_events" />
 <title>Redirection</title>
 <meta name="robots" content="noindex,follow" />
 </head>
 <body>
-<p><a href="https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/welcome.jsp">Redirection</a></p>
+<p><a href="https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/welcome.jsp&&scope=friends_likes,friends_groups,friends_activities,friends_events">Redirection</a></p>
 </body>
 </html>
 <%} else {%>
@@ -47,7 +47,7 @@ if( code == null) { %>
             <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
             var xiSwfUrlStr = "../client/flex/playerProductInstall.swf";
             var flashvars = {};
-            flashvars.wpsserverurl = "http://wps.wps.cloudbees.net";
+            flashvars.wpsserverurl = "http://localhost:8080/wps-server";
             flashvars.wpsplanname = "Facebook_sample";
             flashvars.fbauthcode = '<%=code%>';
             flashvars.analysisProfile = "GlobalProfile";
