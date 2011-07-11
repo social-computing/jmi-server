@@ -74,7 +74,10 @@
 		<realm-name>WPS administration</realm-name>
 	</login-config>
 	<security-role>
-		<role-name>wps-admin</role-name>
+		<role-name>admin</role-name>
+	</security-role>
+	<security-role>
+		<role-name>superadmin</role-name>
 	</security-role>
 	<security-constraint>
 		<web-resource-collection>
@@ -83,6 +86,7 @@
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>superadmin</role-name>
+			<role-name>admin</role-name>
 		</auth-constraint>
 	</security-constraint>
 	<session-config>
