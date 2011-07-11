@@ -6,12 +6,12 @@
         <%
 String code = request.getParameter("code");
 if( code == null) { %>
-<meta http-equiv="refresh" content="0; url=https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/demo/facebook-flex.jsp" />
+<meta http-equiv="refresh" content="0; url=https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/welcome.jsp" />
 <title>Redirection</title>
 <meta name="robots" content="noindex,follow" />
 </head>
 <body>
-<p><a href="https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/demo/facebook-flex.jsp">Redirection</a></p>
+<p><a href="https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/welcome.jsp">Redirection</a></p>
 </body>
 </html>
 <%} else {%>

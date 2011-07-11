@@ -19,7 +19,7 @@
 	<td>
 		<h1>Demos</a>
 		<ul>
-		<li><a href="./demo/facebook-flex.jsp"><h2>Facebook with the flex client</h2></a>
+		<li><a href="./facebook/welcome.jsp"><h2>Facebook with the flex client</h2></a>
 		</li>
 		</ul>
 	</td>
