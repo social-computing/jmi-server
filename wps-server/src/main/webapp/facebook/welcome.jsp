@@ -11,7 +11,7 @@ if( code == null) { %>
 <meta name="robots" content="noindex,follow" />
 </head>
 <body>
-<p><a href="https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/welcome.jsp&&scope=friends_likes,friends_groups,friends_activities,friends_events">Redirection</a></p>
+<p><a href="https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/welcome.jsp&scope=friends_likes,friends_groups,friends_activities,friends_events">Redirection</a></p>
 </body>
 </html>
 <%} else {%>
