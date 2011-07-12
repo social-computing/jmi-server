@@ -1,0 +1,1 @@
+<b><%=request.getParameter("id")%></b>

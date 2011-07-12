@@ -1,9 +1,12 @@
 package com.socialcomputing.wps.script  {
+	import br.com.stimuli.loading.BulkLoader;
+	
 	import com.socialcomputing.wps.components.Map;
 	import com.socialcomputing.wps.util.shapes.RectangleUtil;
 	
 	import flash.display.Graphics;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.geom.ColorTransform;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -120,42 +123,39 @@ package com.socialcomputing.wps.script  {
                 if ( HTMLText.isEnabled( text.getFlags( zone.m_props ), HTMLText.URL_BIT ))
                 {
                     var textUrls:Vector.<String> = text.parseString( HTMLText.TEXT_VAL, zone.m_props );
-                    var hLine:String = "";
-                    var hTxt:String = "";
-                    var i:int;
-                    var n:int = textUrls.length;
+                    var t:String, hTxt:String = "";
                     
                     try
                     {
-                        for ( i = 0; i < n; i ++ )
-                        {
-                            /*var istream:InputStream= WPSApplet.getBinaryStream( applet, textUrls[i], true);
-                            
-                            if ( istream != null )
-                            {
-                                var reader:BufferedReader= new BufferedReader( new InputStreamReader(istream ));
-                                while (( hLine = reader.readLine())!= null )	hTxt += hLine;
-                                if ( i < n - 1)    hTxt += "<br/>";
-                            }
-                            
-                            istream.close();*/
-                        }
-                        
-                        if ( hTxt.length > 0)
-                        {
-                            
-                            m_htmlTxt = new HTMLText();
-							m_htmlTxt.m_text = hTxt;
-                            var white:ColorTransform = new ColorTransform();
-                            white.color = 0xFFFFFF;
-                            var black:ColorTransform = new ColorTransform();
-                            black.color = 0x000000;
-                            m_htmlTxt.initValues(white, black, 0, 12, 0, "SansSerif", -1, -1, 0, new Insets( 0, 4, 0, 4));
-                            m_htmlTxt.updateBounds( applet);
-                            m_htmlTxt.drawText( s, applet.size, text.getFlags( zone.m_props )>> 16);//HTMLText.SOUTH_WEST );
-                            
-                            return;
-                        }
+						var loader:BulkLoader = new BulkLoader();
+						loader.addEventListener(
+							BulkLoader.COMPLETE,
+							function(event:Event):void {
+								for each ( url in textUrls)
+								{
+									t = loader.getText( url);
+									if( t!= null) 
+										hTxt = hTxt + t;
+								}
+								if ( hTxt.length > 0)
+								{
+									m_htmlTxt = new HTMLText();
+									m_htmlTxt.m_text = hTxt;
+									var white:ColorTransform = new ColorTransform();
+									white.color = 0xFFFFFF;
+									var black:ColorTransform = new ColorTransform();
+									black.color = 0x000000;
+									m_htmlTxt.initValues(white, black, 0, 12, 0, "SansSerif", -1, -1, 0, new Insets( 0, 4, 0, 4));
+									m_htmlTxt.updateBounds( applet);
+									m_htmlTxt.drawText2( s, applet.size);//, text.getFlags( zone.m_props )>> 16);//HTMLText.SOUTH_WEST );
+								}
+							});
+						for each ( var url:String in textUrls)
+						{
+							loader.add( url);
+						}
+						loader.start();
+						return;
                     }
                     catch ( e:Error){}
                     
@@ -166,7 +166,7 @@ package com.socialcomputing.wps.script  {
                     supCtr	= supZone.m_restSwh.m_satellites[0].m_shape.getCenter( supZone );
                     var htmlTxt:HTMLText= text.getHText( applet, s, zone, transfo, satCtr, supCtr, text );
                     
-                    if ( htmlTxt != null )
+                    if ( htmlTxt != null && htmlTxt.m_text.length > 0)
                     {
                         htmlTxt.drawText2( s, applet.size);
                         zone.m_datas[text] = htmlTxt;
@@ -266,7 +266,7 @@ package com.socialcomputing.wps.script  {
                     
 					// TODO null à remplacer par Sprite
                     htmlTxt = text.getHText( applet, null, zone, transfo, satCtr, supCtr, text);
-                    if ( htmlTxt != null )
+                    if ( htmlTxt != null && htmlTxt.m_text.length > 0)
                     {
                         RectangleUtil.merge( bounds, htmlTxt.m_bounds );
                     }

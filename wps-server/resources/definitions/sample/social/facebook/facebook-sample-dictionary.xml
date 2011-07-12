@@ -19,7 +19,7 @@
 		</Facebook-entities>
 	</entities>
 	
-	<env-property name="$web_context" value ="/wps" />
+	<env-property name="$web_context" value ="http://localhost:8080/wps-server" />
 	
 	<affinity-reader-profile name="AffReader" affinity-reader-ref="*" threshold="100" />
 	<affinity-reader-profile name="DiscoveryAffReader" affinity-reader-ref="*" threshold="100" />
@@ -82,12 +82,12 @@
 		</entities-recommendation>
 	</analysis-profile>
 
-	<display-profile name="Display" display-empty-links="no" in-color="7F9FDF" out-color="0" filter-color="9fbfff" >
+	<display-profile name="Display" display-empty-links="no" in-color="ffffff" out-color="0" filter-color="56b2ff" >
 		<swatch-segmentation>
 			<attribute-swatch>
 				<norm-swatch default-ref="SAMPLE_NODE_NORM" />
 				<ref-swatch default-ref="SAMPLE_NODE_REF" />
-				<active-norm-swatch default-ref="SAMPLE_NODE_CUR_NORM" />
+				<active-norm-swatch default-ref="FB_NODE_CUR_NORM" />
 				<active-ref-swatch default-ref="SAMPLE_NODE_CUR_REF" />
 			</attribute-swatch>
 			<link-swatch>
@@ -100,12 +100,12 @@
 		<selection-swatch name="search" />
 	</display-profile>
 
-	<display-profile name="GlobalDisplay" display-empty-links="no" display-fake-links="no" in-color="7F9FDF" out-color="0" filter-color="9fbfff" >
+	<display-profile name="GlobalDisplay" display-empty-links="no" display-fake-links="no" in-color="ffffff" out-color="0" filter-color="56b2ff" >
 		<swatch-segmentation>
 			<attribute-swatch>
 				<norm-swatch default-ref="SAMPLE_NODE_NORM" />
 				<ref-swatch default-ref="SAMPLE_NODE_REF" />
-				<active-norm-swatch default-ref="SAMPLE_NODE_CUR_NORM" />
+				<active-norm-swatch default-ref="FB_NODE_CUR_NORM" />
 				<active-ref-swatch default-ref="SAMPLE_NODE_CUR_REF" />
 			</attribute-swatch>
 			<link-swatch>

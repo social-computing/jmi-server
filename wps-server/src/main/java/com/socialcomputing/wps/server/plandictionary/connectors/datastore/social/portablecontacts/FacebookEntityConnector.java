@@ -122,7 +122,7 @@ public class FacebookEntityConnector extends SocialEntityConnector {
                 urlHelper.openConnections( planType, wpsparams);
                 
                 JsonNode node = mapper.readTree(urlHelper.getStream());
-                List<String> kindslist = new ArrayList<String>();
+
                 ArrayNode friends = (ArrayNode)node.get( "data");
                 
                 for( JsonNode friend : friends) {
@@ -144,7 +144,6 @@ public class FacebookEntityConnector extends SocialEntityConnector {
                         }
                     }
                 }
-                
                 for( Attribute attribute : m_Attributes.values()) {
                     addEntityProperties( attribute);
                 }
