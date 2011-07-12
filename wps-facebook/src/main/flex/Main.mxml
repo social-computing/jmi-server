@@ -4,12 +4,12 @@
                xmlns:mx="library://ns.adobe.com/flex/mx" 
                xmlns:wps="com.socialcomputing.wps.components.*"
                creationComplete="onCreationComplete(event)">
-    <fx:Style source="Main.css"/>
     <fx:Script>
         <![CDATA[
 			import com.adobe.serialization.json.JSON;
 			import com.socialcomputing.wps.components.Attribute;
 			import com.socialcomputing.wps.components.events.ActionEvent;
+			import com.socialcomputing.wps.components.events.StatusEvent;
 			import com.socialcomputing.wps.services.planservice.PlanService;
 			
 			import flash.external.ExternalInterface;
@@ -49,22 +49,40 @@
 				getPlanResult.token = this.planService.getPlan(planName, map.width, map.height, parameters);
  			}
 			
+			private function onInit():void {
+			}
+			private function onEmpty():void {
+				Alert.show("Sorry, the map is empty");
+			}
+			private function onError(event:com.socialcomputing.wps.components.events.StatusEvent):void {
+				Alert.show( event.status);
+			}
+			
+			protected function onAction(event:ActionEvent):void
+			{
+				trace( event.action + ": " + event.args.toString());
+				if( event.action == "Discover") {
+					//map.clear();
+					parameters["attributeId"] = event.args[0];
+					parameters["analysisProfile"] = "DiscoveryProfile";
+					getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
+				}
+			}
 	]]>
     </fx:Script>
     
     <fx:Declarations>
         <s:CallResponder id="getPlanResult"
-						 fault="ExternalInterface.call('error', event.fault.faultString);" />
+						 fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)" />
     </fx:Declarations>
     
 	<wps:Map id="map"
-			backgroundColor="{this.getStyle('contentBackgroundColor')}"
+			backgroundColor="#FFFFFF"
 			dataProvider="{getPlanResult.lastResult}" 
-			ready="ExternalInterface.call('ready');"
-			error="ExternalInterface.call('error', event.status);"
-			status="ExternalInterface.call('status', event.status);"
-			action="ExternalInterface.call(event.action, event.args);" 
-			navigate="ExternalInterface.call('navigate', event.url, event.btarget);"
+			ready="onInit();"
+			empty="onEmpty()"
+			error="onError(event);"
+			action="onAction(event);" 
 			percentWidth="100"
 			percentHeight="100"
 	/>
