@@ -10,7 +10,9 @@ import org.codehaus.jackson.node.ArrayNode;
 import org.jdom.Element;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Attribute;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.AttributePropertyDefinition;
+import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Entity;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.SocialEntityConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper;
 import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper.Type;
@@ -55,7 +57,7 @@ public class FacebookEntityConnector extends SocialEntityConnector {
         }
         
         try {
-            String kind = ( String)wpsparams.get("$kind");
+            String kind = ( String)wpsparams.get("kind");
             if( kind == null ||  kind.equalsIgnoreCase( "friends")) {
                 // Liste amis
                 UrlHelper urlHelper = new UrlHelper();
@@ -114,7 +116,6 @@ public class FacebookEntityConnector extends SocialEntityConnector {
                 setEntityProperities();
             }
             else {
-                // Liste amis
                 UrlHelper urlHelper = new UrlHelper();
                 urlHelper.setUrl( "https://graph.facebook.com/me/friends");
                 urlHelper.addParameter( "access_token", token);
@@ -123,23 +124,35 @@ public class FacebookEntityConnector extends SocialEntityConnector {
                 JsonNode node = mapper.readTree(urlHelper.getStream());
                 List<String> kindslist = new ArrayList<String>();
                 ArrayNode friends = (ArrayNode)node.get( "data");
+                
                 for( JsonNode friend : friends) {
+                    Attribute attribute = addAttribute( friend.get("id").getTextValue());
+                    attribute.addProperty( "name", friend.get("name").getTextValue());
+
                     UrlHelper urlHelper2 = new UrlHelper();
-                    urlHelper2.setUrl( "https://graph.facebook.com/" + friend.get("id")+ "/" + kind);
+                    urlHelper2.setUrl( "https://graph.facebook.com/" + friend.get("id").getTextValue() + "/" + kind);
                     urlHelper2.addParameter( "access_token", token);
                     urlHelper2.openConnections( planType, wpsparams);
                     
                     JsonNode node2 = mapper.readTree(urlHelper2.getStream());
                     ArrayNode kinds = (ArrayNode)node2.get( "data");
                     for( JsonNode curkind : kinds) {
-                        addPerson(curkind.get("id").getTextValue()).addProperty("name", curkind.get("name").getTextValue());
-                        kindslist.add(curkind.get("id").getTextValue());
+                        if (curkind.get("id") != null && curkind.get("name") != null) {
+                            Entity entity = addEntity( curkind.get("id").getTextValue());
+                            entity.addProperty( "name", curkind.get("name").getTextValue());
+                            entity.addAttribute(attribute, 1);
+                        }
                     }
+                }
+                
+                for( Attribute attribute : m_Attributes.values()) {
+                    addEntityProperties( attribute);
                 }
                 
             }
         }
         catch (Exception e) {
+            e.printStackTrace();
             throw new WPSConnectorException( "openConnections", e);
         }
     }
