@@ -207,7 +207,7 @@ package com.socialcomputing.wps.components
 				// Server error
 				dispatchEvent(new StatusEvent(StatusEvent.ERROR, this._dataProvider.error));
 			}
-			if( !this._dataProvider.hasOwnProperty( "plan")) {
+			else if( !this._dataProvider.hasOwnProperty( "plan")) {
 				// Empty map
 				dispatchEvent(new Event( Map.EMPTY));
 			}

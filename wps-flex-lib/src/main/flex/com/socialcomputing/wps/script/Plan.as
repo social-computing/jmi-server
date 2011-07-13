@@ -289,7 +289,7 @@ package com.socialcomputing.wps.script  {
          */
         private function updateCurrentZone( curSat:Satellite, p:Point):Boolean {
 
-			if ( m_curZone != m_newZone )           // The current Satellite has changed
+			if ( m_curZone != m_newZone )//|| m_curSat != curSat)           // The current Satellite has changed
             {
                 for each ( var waiter:TipTimer in m_tipTimers)
                 {

@@ -239,6 +239,18 @@ package com.socialcomputing.wps.script{
 			this.m_font.leftMargin = margin.left;
 			this.m_font.rightMargin = margin.right;
         }
+		
+		public function init( base:Base, zone:ActiveZone ):void {
+			var font:FontX = base.getFont( FONT_VAL, zone.m_props);
+			this.m_font = font.getTextFormat( zone.m_props);
+			this.m_inCol = base.getColor( IN_COL_VAL, zone.m_props);
+			this.m_outCol = base.getColor( OUT_COL_VAL, zone.m_props);
+			this.m_blur = base.getInt(BLUR_COL_VAL, zone.m_props);
+			this.m_rounded = base.getInt(ROUNDED_COL_VAL, zone.m_props);
+			var color:ColorX = base.getValue( HTMLText.TEXT_COL_VAL, zone.m_props) as ColorX;
+			if( color != null)
+				this._m_font.color = color.m_color;
+		}
         
         /**
          * Gets a new or existing HTMLText and initialize its bounding box.
@@ -268,17 +280,7 @@ package com.socialcomputing.wps.script{
                 
                 if ( htmlTxt.m_text.length> 0)
                 {
-                    var font:FontX= getFont( FONT_VAL, zone.m_props);
-                    
-                    htmlTxt.m_inCol = getColor( IN_COL_VAL, zone.m_props);
-                    htmlTxt.m_outCol = getColor( OUT_COL_VAL, zone.m_props);
-					htmlTxt.m_blur = getInt(BLUR_COL_VAL, zone.m_props);
-					htmlTxt.m_rounded = getInt(ROUNDED_COL_VAL, zone.m_props);
-					htmlTxt._m_font = font.getTextFormat( zone.m_props);
-					var color:ColorX = getValue( HTMLText.TEXT_COL_VAL, zone.m_props) as ColorX;
-					if( color != null)
-						htmlTxt._m_font.color = color.m_color;
-                    
+					htmlTxt.init( this, zone);
                     htmlTxt.updateBounds( applet);
                     htmlTxt.setTextBnds( applet.size, getFlags( zone.m_props), zone.m_flags ,transfo, supCtr, center );
                 }
@@ -447,7 +449,7 @@ package com.socialcomputing.wps.script{
          * @param supCtr	Center of the parent satellite (Place center).
          * @param center	Center of this before the transformation.
          */
-        protected function setTextBnds( size:Dimension, flags:int, posFlags:int, transfo:Transfo, supCtr:Point, center:Point):void {
+        public function setTextBnds( size:Dimension, flags:int, posFlags:int, transfo:Transfo, supCtr:Point, center:Point):void {
             var isFloat:Boolean= Base.isEnabled( flags, FLOAT_BIT );
             var dx:int= 0,
                 dy:int	= 0,

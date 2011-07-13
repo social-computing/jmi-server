@@ -141,18 +141,22 @@ package com.socialcomputing.wps.script  {
 								{
 									m_htmlTxt = new HTMLText();
 									m_htmlTxt.m_text = hTxt;
-									var white:ColorTransform = new ColorTransform();
+/*									var white:ColorTransform = new ColorTransform();
 									white.color = 0xFFFFFF;
 									var black:ColorTransform = new ColorTransform();
 									black.color = 0x000000;
 									m_htmlTxt.initValues(white, black, 0, 12, 0, "SansSerif", -1, -1, 0, new Insets( 0, 4, 0, 4));
+*/									m_htmlTxt.init( text, zone);
 									m_htmlTxt.updateBounds( applet);
-									m_htmlTxt.drawText2( s, applet.size);//, text.getFlags( zone.m_props )>> 16);//HTMLText.SOUTH_WEST );
+									supCtr	= supZone.m_restSwh.m_satellites[0].m_shape.getCenter( supZone );
+									m_htmlTxt.setTextBnds( applet.size, getFlags( zone.m_props), zone.m_flags ,transfo, satCtr, supCtr );
+									m_htmlTxt.drawText2( s, applet.size);// text.getFlags( zone.m_props )>> 16);//HTMLText.SOUTH_WEST );
+									applet.renderShape( applet.curDrawingSurface, m_htmlTxt.m_bounds.width, m_htmlTxt.m_bounds.height, new Point(m_htmlTxt.m_bounds.x, m_htmlTxt.m_bounds.y));
 								}
 							});
 						for each ( var url:String in textUrls)
 						{
-							loader.add( url);
+							loader.add( url, {type:"text"});
 						}
 						loader.start();
 						return;

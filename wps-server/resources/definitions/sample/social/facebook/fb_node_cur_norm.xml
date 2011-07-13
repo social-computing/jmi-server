@@ -87,7 +87,7 @@
 		</transfo>
 		<slice>
 			<tip 	font="nameFnt"
-					url="{s$web_context}/facebook/people.jsp?id={sID}"
+					label="{sNAME}"
 					inCol="63 127 223"
 					textCol="@whiteCol"
 					isCorner="true"/>
@@ -145,10 +145,24 @@
 				textCol="@blackCol"
 				isCorner="true"/>
 
+	<tooltip    id="tooltip"
+				delay="500"
+				length="30000">
+		<transfo    map="interpol">
+			<polar  dir="0" rad="1.2"/>
+		</transfo>
+		<tip 	font="nameFnt"
+				url="{s$web_context}/facebook/people.jsp?id={sID}&amp;code={s$fbauthcode}"
+				inCol="63 127 223"
+				textCol="@whiteCol"
+				align="center"
+				isFloating="true"/>
+	</tooltip>
+
 	<!-- Hover event -->
 	<event 	        id="hoverEvt">
 		<show       status="Cliquez pour afficher le menu de '{sNAME}'. Double-cliquez pour afficher sa fiche."/>
-		<!--pop        tooltip="tooltip"/-->
+		<pop        tooltip="tooltip"/>
 	</event>
 
 	<!-- Click event -->

@@ -51,7 +51,7 @@ if( code == null) { %>
             flashvars.wpsplanname = "Facebook_sample";
             flashvars.fbauthcode = '<%=code%>';
             flashvars.analysisProfile = "GlobalProfile";
-            flashvars.kind = "likes";
+            flashvars.kind = "books";
             var params = {};
             params.quality = "high";
             params.bgcolor = "#FFFFFF";
