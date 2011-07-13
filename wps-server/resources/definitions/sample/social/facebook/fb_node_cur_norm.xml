@@ -148,9 +148,6 @@
 	<tooltip    id="tooltip"
 				delay="500"
 				length="30000">
-		<transfo    map="interpol">
-			<polar  dir="0" rad="1.2"/>
-		</transfo>
 		<tip 	font="nameFnt"
 				url="{s$web_context}/facebook/people.jsp?id={sID}&amp;code={s$fbauthcode}"
 				inCol="63 127 223"
