@@ -6,19 +6,22 @@
                creationComplete="onCreationComplete(event)">
     <fx:Script>
         <![CDATA[
-			import com.adobe.serialization.json.JSON;
-			import com.socialcomputing.wps.components.Attribute;
-			import com.socialcomputing.wps.components.events.ActionEvent;
-			import com.socialcomputing.wps.components.events.StatusEvent;
-			import com.socialcomputing.wps.services.planservice.PlanService;
-			
-			import flash.external.ExternalInterface;
-			
-			import mx.controls.Alert;
-			import mx.core.FlexGlobals;
-			import mx.events.FlexEvent;
-			import mx.rpc.events.FaultEvent;
-			import mx.rpc.events.ResultEvent;
+            import com.adobe.serialization.json.JSON;
+            import com.socialcomputing.wps.components.Attribute;
+            import com.socialcomputing.wps.components.events.ActionEvent;
+            import com.socialcomputing.wps.components.events.StatusEvent;
+            import com.socialcomputing.wps.services.planservice.PlanService;
+            
+            import flash.external.ExternalInterface;
+            
+            import mx.collections.ArrayCollection;
+            import mx.controls.Alert;
+            import mx.core.FlexGlobals;
+            import mx.events.FlexEvent;
+            import mx.rpc.events.FaultEvent;
+            import mx.rpc.events.ResultEvent;
+            
+            import spark.events.IndexChangeEvent;
 			
             private var planName:String;
             private var planService:PlanService;
@@ -68,6 +71,28 @@
 					getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
 				}
 			}
+            
+            [Bindable]
+            public var myTypes:ArrayCollection = new ArrayCollection(
+                [ {type:"friends"},
+                  {type:"likes"},
+                  {type:"movies"},
+                  {type:"music"},
+                  {type:"books"},
+                  {type:"notes"},
+                  {type:"photos"},
+                  {type:"videos"},
+                  {type:"events"},
+                  {type:"groups"},
+                  {type:"checkins"}
+                ]);
+            
+            private function selectType(event:IndexChangeEvent):void { 
+                parameters["analysisProfile"] = "GlobalProfile";
+                parameters["kind"] = type.selectedItem.type;
+                getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
+            }
+            private function selectPerson(event:IndexChangeEvent):void { }
 	]]>
     </fx:Script>
     
@@ -75,7 +100,15 @@
         <s:CallResponder id="getPlanResult"
 						 fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)" />
     </fx:Declarations>
-    
+    <s:layout>
+        <s:VerticalLayout gap="0" />
+    </s:layout>
+    <s:HGroup>
+        <s:Label text="Type" />
+        <s:DropDownList id="type" labelField="type" dataProvider="{myTypes}" change="selectType(event);" />
+        <s:Label text="Personne" />
+        <s:DropDownList id="personne" change="selectPerson(event);" />
+    </s:HGroup>
 	<wps:Map id="map"
 			backgroundColor="#FFFFFF"
 			dataProvider="{getPlanResult.lastResult}" 
