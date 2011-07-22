@@ -60,6 +60,7 @@
                 map.attributes.sort = sort;
                 map.attributes.refresh();
                 personne.dataProvider = map.attributes;
+                searchperson.dataProvider = map.attributes;
 			}
             
 			private function onEmpty():void {
@@ -109,6 +110,12 @@
                 parameters["analysisProfile"] = "DiscoveryProfile";
                 getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
             }
+            
+            private function searchPerson(event:IndexChangeEvent):void {
+                map.clearSelection( "search");
+                searchperson.selectedItem.select( "search");
+                map.setSelection( "search");
+            }
 	]]>
     </fx:Script>
     
@@ -124,6 +131,8 @@
         <s:DropDownList id="type" labelField="type" dataProvider="{myTypes}" change="selectType(event);" />
         <s:Label text="Personne" />
         <s:DropDownList id="personne" labelFunction="persLabelFunction" change="selectPerson(event);" />
+        <s:Label text="Rechercher" />
+        <s:DropDownList id="searchperson" labelFunction="persLabelFunction" change="searchPerson(event);" />
     </s:HGroup>
 	<wps:Map id="map"
 			backgroundColor="#FFFFFF"
