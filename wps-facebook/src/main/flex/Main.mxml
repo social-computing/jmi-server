@@ -105,8 +105,7 @@
             }
             
             private function selectPerson(event:IndexChangeEvent):void { 
-                var parameters:Object  = new Object();
-                //parameters["attributeId"] = personne.selectedItem.person;
+                parameters["attributeId"] = personne.selectedItem.ID;
                 parameters["analysisProfile"] = "DiscoveryProfile";
                 getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
             }
