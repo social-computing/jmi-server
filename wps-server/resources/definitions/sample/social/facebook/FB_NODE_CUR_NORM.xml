@@ -11,34 +11,64 @@
 					click="clickEvt"
 					dblClk="dblClkEvt" 
 					isSub="true"
-					isCur="true">
-		<slice		inCol="127 191 255"
-					outCol="191 223 255"/>
-		<slice		inCol="255 255 255">
-			<transfo scale=".87"/>
+					isCur="true"
+					isVisible="true" 
+					isSuper="true" 
+					isRest="true" 
+					isBack="false" 
+					isTip="false" 
+					isNoSided="false">
+		<slice		inCol="164 164 164"
+					outCol="100 100 100"
+					alpha="1"
+					linewidth="1"/>
+		<slice		inCol="255 255 255"
+					alpha="1"
+					linewidth="1">
+			<transfo scale=".87" map="absolute"/>
 		</slice>
 	</sat>
 
 <!-- Rest Spots -->
 	<sat	        shape="diskShp"
-					isSub="true">
-		<slice		inCol="47 207 47"
-					outCol="0 159 0"
-					transfo="spotTrf"/>
+					isSub="true"
+					isVisible="true" 
+					isSuper="true" 
+					isCur="false" 
+					isRest="true" 
+					isBack="false" 
+					isTip="false" 
+					isNoSided="false">
+		<slice		inCol="100 100 100"
+					outCol="0 0 0"
+					transfo="spotTrf"
+					alpha="1"
+					linewidth="1"/>
 		<slice		image="{s$web_context}/images/{sID}.gif"
-					transfo="imgTrf" />
+					transfo="imgTrf"
+					alpha="1"
+					linewidth="1"/>
 	</sat>
 
 <!-- Cur Spot -->
 	<sat	        shape="diskShp"
 					isSub="true"
 					isRest="false"
-					isCur="true">
-		<slice		inCol="159 255 111"
-					outCol="0 159 0"
-					transfo="spotTrf"/>
+					isCur="true"
+					isVisible="true" 
+					isSuper="true" 
+					isBack="false" 
+					isTip="false" 
+					isNoSided="false">
+		<slice		inCol="164 164 164"
+					outCol="100 100 100"
+					transfo="spotTrf"
+					alpha="1"
+					linewidth="1"/>
 		<slice		image="{s$web_context}/images/{sID}.gif"
-					transfo="imgTrf" />
+					transfo="imgTrf" 
+					alpha="1"
+					linewidth="1"/>
 	</sat>
 
 <!-- Rest Titles -->
@@ -46,15 +76,26 @@
 					click="clickEvt"
 					dblClk="dblClkEvt"
 					isSub="true"
-					isTip="true">
+					isTip="true"
+					isVisible="true" 
+					isSuper="true" 
+					isCur="false" 
+					isRest="true" 
+					isBack="false" 
+					isNoSided="false">
 		<transfo    map="interpol">
 			<polar  dir="0" rad="1.3"/>
 		</transfo>
-		<slice>
+		<slice alpha="1" linewidth="1">
 			<tip 	font="nameFnt"
 					label="@nameStr"
 					textCol="@blackCol"
-					isCorner="true"/>
+					isCorner="true"
+					blur="-1" 
+					rounded="-1" 
+					dir="SW" 
+					align="left" 
+					isFloating="false"/>
 		</slice>
 	</sat>
 
@@ -62,16 +103,28 @@
 <!-- Sel sats must be declared before the ones they should hides when they'll be activated -->
 	<sat	        shape="voidShp"
 					isSub="true"
-					selection="search">
+					selection="search"
+					isVisible="true" 
+					isSuper="true" 
+					isCur="false" 
+					isRest="true" 
+					isBack="false" 
+					isTip="false" 
+					isNoSided="false">
 		<transfo    map="interpol">
 			<polar  dir="0" rad="1.2"/>
 		</transfo>
-		<slice>
+		<slice alpha="1" linewidth="1">
 			<tip 	font="selFnt"
 					label="{sNAME}"
 					inCol="255 0 0"
 					textCol="@whiteCol"
-					isCorner="true"/>
+					isCorner="true"
+					blur="-1" 
+					rounded="-1" 
+					dir="SW" 
+					align="left" 
+					isFloating="false"/>
 		</slice>
 	</sat>
 
@@ -81,16 +134,25 @@
 					dblClk="dblClkEvt"
 					isSub="true"
 					isRest="false"
-					isCur="true">
-		<transfo    map="interpol">
+					isCur="true"
+					isVisible="true" 
+					isSuper="true" 
+					isBack="false" 
+					isTip="false" 
+					isNoSided="false">
+		<transfo    map="interpol" scale="0">
 			<polar  dir="0" rad="1.2"/>
 		</transfo>
-		<slice>
+		<slice alpha="1" linewidth="1">
 			<tip 	font="nameFnt"
 					label="{sNAME}"
-					inCol="63 127 223"
+					inCol="100 100 100"
 					textCol="@whiteCol"
-					isCorner="true"/>
+					isCorner="true"
+					blur="-1" 
+					dir="SW" 
+					align="left" 
+					isFloating="false"/>
 		</slice>
 	</sat>
 
@@ -103,12 +165,10 @@
 	<color 		    id="hLinkCol"		rgb="0 0 255"/>
 	<color 		    id="hLinkLitCol"	rgb="191 191 255"/>
 
-	<shape		    id="voidShp"/>
-	<shape		    id="diskShp"
-					scale="1">
+	<shape		    id="voidShp" scale="0" anchor="center"/>
+	<shape		    id="diskShp" scale="1" anchor="center">
 	</shape>
-	<shape		    id="spotShp"
-					scale="0.2">
+	<shape		    id="spotShp" scale="0.2" anchor="center">
 	</shape>
 
 	<font		    id="nameFnt"
@@ -125,16 +185,20 @@
 					style="bold" />
 
 	<transfo        id="spotTrf"
-					scale="0.2"/>
+					scale="0.2"
+					map="absolute" />
 	<transfo        id="imgTrf"
-					scale="0.4"/>
+					scale="0.4"
+					map="absolute"/>
 	<transfo	    id="baseTrf"
-					map="interpol">
+					map="interpol"
+					scale="0">
 		<polar      dir="90"
 					rad="1"/>
 	</transfo>
 	<transfo        id="selTrf"
-					map="interpol">
+					map="interpol"
+					scale="0">
 		<polar      dir="0"
 					rad="1.4"/>
 	</transfo>
@@ -143,7 +207,12 @@
 				font="nameFnt"
 				label="@nameStr"
 				textCol="@blackCol"
-				isCorner="true"/>
+				isCorner="true"
+				blur="-1" 
+				rounded="-1" 
+				dir="SW" 
+				align="left" 
+				isFloating="false"/>
 
 	<tooltip    id="tooltip"
 				delay="500"
