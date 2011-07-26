@@ -385,7 +385,8 @@ public final class Plan implements Serializable, WaitListener
 			sy  = ((float)dim.height - margin )/ m_prevBox.height;
 			dx  = m_prevBox.x -( margin >> 1 );
 			dy  = m_prevBox.y -( margin >> 1 );
-			s	= sx > sy ? sy : sx;
+			//s	= sx > sy ? sy : sx;
+			s = (sx + sy)/2;
 
 			for ( i = 0; i < n; i ++ )
 			{

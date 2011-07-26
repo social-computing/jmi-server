@@ -21,26 +21,13 @@ public class SwatchManagerImpl implements SwatchManager {
     @Override
     public Collection<Swatch> findAll() {
         Collection<Swatch> results = null;
-        Session session = null;
-        Transaction tx = null;
         try {
-            session = HibernateUtil.currentSession();
-            tx = session.beginTransaction();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             results = session.createQuery("from SwatchImpl").list();
-            tx.commit();
         }
         catch (HibernateException e) {
-            // If a transaction was opened before the error occured
-            if ( tx != null )
-                tx.rollback();
             LOG.error(e.getMessage(), e);
         }
-        // Do not close session here yet 
-        // closed in jsp files
-        //        finally {
-        //            HibernateUtil.closeSession();
-        //        }
-
         return results;
     }
 
@@ -48,24 +35,13 @@ public class SwatchManagerImpl implements SwatchManager {
     public Swatch findByName(String name, String dictionaryName) {
         Swatch result = null;
         SwatchPk swatchPk = new SwatchPk(name, dictionaryName);
-        Session session = null;
-        Transaction tx = null;
         try {
-            session = HibernateUtil.currentSession();
-            tx = session.beginTransaction();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             result = (Swatch) session.get(SwatchImpl.class, swatchPk);
         }
         catch (HibernateException e) {
-            // If a transaction was opened before the error occured
-            if ( tx != null )
-                tx.rollback();
             LOG.error(e.getMessage(), e);
         }
-        // Do not close session here yet 
-        // closed in jsp files
-        //        finally {
-        //            HibernateUtil.closeSession();
-        //        }
         return result;
     }
 
@@ -74,79 +50,43 @@ public class SwatchManagerImpl implements SwatchManager {
     public Swatch create(String name, String definition, String dictionaryName) {
         Swatch result = null;
         SwatchPk swatchPk = new SwatchPk(name, dictionaryName);
-        Session session = null;
-        Transaction tx = null;
         try {
-            session = HibernateUtil.currentSession();
-            tx = session.beginTransaction();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             result = new SwatchImpl(swatchPk, definition);
             session.save(result);
-            tx.commit();
         }
         catch (HibernateException e) {
-            // If a transaction was opened before the error occured
-            if ( tx != null )
-                tx.rollback();
             LOG.error(e.getMessage(), e);
         }
-        // Do not close session here yet 
-        // closed in jsp files
-        //        finally {
-        //            HibernateUtil.closeSession();
-        //        }
         return result;
     }
 
     @Override
     public void update(Swatch swatch) {
-        Session session = null;
-        Transaction tx = null;
         try {
-            session = HibernateUtil.currentSession();
-            tx = session.beginTransaction();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.update(swatch);
-            tx.commit();
         }
         catch (HibernateException e) {
-            // If a transaction was opened before the error occured
-            if ( tx != null )
-                tx.rollback();
             LOG.error(e.getMessage(), e);
         }
-        // Do not close session here yet 
-        // closed in jsp files
-        //        finally {
-        //            HibernateUtil.closeSession();
-        //        }
     }
 
     
     @Override
     public void remove(String name, String dicoName) {
         SwatchPk swatchPk = new SwatchPk(name, dicoName);
-        Session session = null;
-        Transaction tx = null;
         DictionaryManager dManager = new DictionaryManagerImpl();
         Dictionary d = dManager.findByName(dicoName);
         
         try {
-            session = HibernateUtil.currentSession();
-            tx = session.beginTransaction();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             Swatch s = (Swatch) session.get(SwatchImpl.class, swatchPk);
             d.getSwatchs().remove(s);
             session.delete(s);
-            tx.commit();
         }
         catch (HibernateException e) {
-            // If a transaction was opened before the error occured
-            if ( tx != null )
-                tx.rollback();
             LOG.error(e.getMessage(), e);
         }
-        // Do not close session here yet 
-        // closed in jsp files
-        //        finally {
-        //            HibernateUtil.closeSession();
-        //        }
     }
 }

@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.socialcomputing.utils.database.HibernateUtil;
 import com.socialcomputing.utils.servlet.ExtendedRequest;
 import com.socialcomputing.utils.servlet.UploadedFile;
 import com.socialcomputing.wps.server.persistence.Dictionary;
@@ -31,7 +30,6 @@ public class WPSPlanUploaderServlet extends HttpServlet
 	*/
 	public void doPost( HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		HibernateUtil.currentSession();
 		ExtendedRequest exRequest = new ExtendedRequest( request);
 		int status = HttpServletResponse.SC_BAD_REQUEST;
 		String action = exRequest.getParameter( "action");
@@ -48,7 +46,6 @@ public class WPSPlanUploaderServlet extends HttpServlet
 				status = HttpServletResponse.SC_OK;
 			}
 		}
-		HibernateUtil.closeSession();
 		response.setStatus( status);
 	}
 

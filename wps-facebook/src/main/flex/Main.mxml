@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+               xmlns:s="library://ns.adobe.com/flex/spark" 
+               xmlns:mx="library://ns.adobe.com/flex/mx" 
+               xmlns:wps="com.socialcomputing.wps.components.*"
+               creationComplete="onCreationComplete(event)">
+    <fx:Script>
+        <![CDATA[
+            import com.adobe.serialization.json.JSON;
+            import com.socialcomputing.wps.components.Attribute;
+            import com.socialcomputing.wps.components.events.ActionEvent;
+            import com.socialcomputing.wps.components.events.StatusEvent;
+            import com.socialcomputing.wps.services.planservice.PlanService;
+            
+            import flash.external.ExternalInterface;
+            
+            import mx.collections.ArrayCollection;
+            import mx.collections.Sort;
+            import mx.collections.SortField;
+            import mx.controls.Alert;
+            import mx.core.FlexGlobals;
+            import mx.events.FlexEvent;
+            import mx.rpc.events.FaultEvent;
+            import mx.rpc.events.ResultEvent;
+            
+            import spark.events.IndexChangeEvent;
+			
+            private var planName:String;
+            private var planService:PlanService;
+			
+            protected function onCreationComplete(event:FlexEvent):void {
+				
+				// Reading application properties
+				var serverURL:String = this.checkApplicationParameter("wpsserverurl");
+				this.planName = this.checkApplicationParameter("wpsplanname");
+				var parameters:Object = FlexGlobals.topLevelApplication.parameters;
+
+				// for js calls
+				ExternalInterface.addCallback( "compute", compute);
+				
+				// Initialising service
+				this.planService = new PlanService(serverURL);
+                getPlanResult.token = this.planService.getPlan(planName, map.width, map.height, parameters);
+            }
+			
+			private function checkApplicationParameter(paramName:String):String {
+				if(!FlexGlobals.topLevelApplication.parameters.hasOwnProperty(paramName)) {
+					throw new Error("Missing application parameter: " + paramName); 
+				}
+				return FlexGlobals.topLevelApplication.parameters[paramName];
+			}
+			
+			public function compute(parameters:Object):void {
+				getPlanResult.token = this.planService.getPlan(planName, map.width, map.height, parameters);
+ 			}
+			
+			private function onInit():void {
+                var sort:Sort = new Sort();
+                sort.fields = [new SortField("NAME", false)];
+                map.attributes.sort = sort;
+                map.attributes.refresh();
+                personne.dataProvider = map.attributes;
+                searchperson.dataProvider = map.attributes;
+			}
+            
+			private function onEmpty():void {
+				Alert.show("Sorry, the map is empty");
+			}
+			private function onError(event:com.socialcomputing.wps.components.events.StatusEvent):void {
+				Alert.show( event.status);
+			}
+			
+			protected function onAction(event:ActionEvent):void
+			{
+				trace( event.action + ": " + event.args.toString());
+				if( event.action == "Discover") {
+					parameters["attributeId"] = event.args[0];
+					parameters["analysisProfile"] = "DiscoveryProfile";
+					getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
+				}
+			}
+            
+            [Bindable]
+            public var myTypes:ArrayCollection = new ArrayCollection(
+                [ {type:"friends"},
+                  {type:"likes"},
+                  {type:"movies"},
+                  {type:"music"},
+                  {type:"books"},
+                  {type:"notes"},
+                  {type:"photos"},
+                  {type:"videos"},
+                  {type:"events"},
+                  {type:"groups"},
+                  {type:"checkins"}
+                ]);
+            
+            private function persLabelFunction(item:Object):String {
+                return item.NAME;
+            }
+            
+            private function selectType(event:IndexChangeEvent):void { 
+                parameters["analysisProfile"] = "GlobalProfile";
+                parameters["kind"] = type.selectedItem.type;
+                getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
+            }
+            
+            private function selectPerson(event:IndexChangeEvent):void { 
+                parameters["attributeId"] = personne.selectedItem.ID;
+                parameters["analysisProfile"] = "DiscoveryProfile";
+                getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
+            }
+            
+            private function searchPerson(event:IndexChangeEvent):void {
+                map.clearSelection( "search");
+                searchperson.selectedItem.select( "search");
+                map.setSelection( "search");
+            }
+	]]>
+    </fx:Script>
+    
+    <fx:Declarations>
+        <s:CallResponder id="getPlanResult"
+						 fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)" />
+    </fx:Declarations>
+    <s:layout>
+        <s:VerticalLayout gap="0" />
+    </s:layout>
+    <s:HGroup>
+        <s:Label text="Type" />
+        <s:DropDownList id="type" labelField="type" dataProvider="{myTypes}" change="selectType(event);" />
+        <s:Label text="Personne" />
+        <s:DropDownList id="personne" labelFunction="persLabelFunction" change="selectPerson(event);" />
+        <s:Label text="Rechercher" />
+        <s:DropDownList id="searchperson" labelFunction="persLabelFunction" change="searchPerson(event);" />
+    </s:HGroup>
+	<wps:Map id="map"
+			backgroundColor="#FFFFFF"
+			dataProvider="{getPlanResult.lastResult}" 
+			ready="onInit();"
+			empty="onEmpty()"
+			error="onError(event);"
+			action="onAction(event);" 
+			percentWidth="100"
+			percentHeight="100"
+	/>
+</s:Application>

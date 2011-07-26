@@ -50,7 +50,39 @@
         <artifactId>flexmojos-maven-plugin</artifactId>
         <version>${flexmojos.version}</version>
         <extensions>true</extensions>
+        <dependencies>
+          <dependency>
+            <groupId>com.adobe.flex</groupId>
+            <artifactId>compiler</artifactId>
+            <version>${flex.sdk.version}</version>
+            <type>pom</type>
+          </dependency>
+        </dependencies> 
+        <executions>
+          <execution>
+            <id>html-wrapper</id>
+            <goals>
+              <goal>wrapper</goal>
+            </goals>
+            <configuration>
+              <templateURI>folder:/${project.basedir}/html-template/</templateURI>
+              <targetPlayer>10.0.0</targetPlayer>
+              <parameters>
+                <swf>${project.build.finalName}</swf>
+                <width>100%</width>
+                <height>100%</height>
+                <bgcolor>#FFFFFF</bgcolor>
+                <wpsserverurl>${wps.serverurl}</wpsserverurl>
+                <wpsplanname>${wps.planname}</wpsplanname>
+                <wpsentityid>${wps.entityid}</wpsentityid>
+              </parameters>
+            </configuration>
+          </execution>
+        </executions> 
         <configuration>
+          <quality>0.95</quality>
+          <optimize>true</optimize>
+          <debug>false</debug>
           <locales>
             <locale>en_US</locale>
           </locales>
@@ -61,21 +93,31 @@
   </build>
 
   <dependencies>
+    <!-- RSL dependencies -->
+    <!-- 
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>osmf</artifactId>
+      <version>${flex.sdk.version}</version>
+      <type>swc</type>
+      <scope>provided</scope>
+    </dependency> 
+    -->
+  
+    <!-- Standard dependencies -->
+    <dependency>
+      <groupId>com.socialcomputing.wps</groupId>
+      <artifactId>wps-flex-lib</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>swc</type>
+    </dependency>
+  
     <dependency>
       <groupId>com.adobe.flex.framework</groupId>
       <artifactId>flex-framework</artifactId>
       <!--<version>4.1.0.16248</version> -->
       <version>${flex-framework.version}</version>
       <type>pom</type>
-    </dependency>
-
-	<!-- AS3Corelib, open source library used to serialize / deserialize JSON -->
-	<!-- see https://github.com/mikechambers/as3corelib -->
-	<dependency>
-      <groupId>com.adobe.as3corelib</groupId>
-      <artifactId>as3corelib</artifactId>
-      <version>0.93</version>
-      <type>swc</type>
     </dependency>
 
 

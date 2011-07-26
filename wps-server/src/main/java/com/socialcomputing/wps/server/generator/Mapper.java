@@ -679,7 +679,7 @@ public class Mapper {
 		m_subNodeCnt = m_protoPlan.m_attributes.length - 1;
 		m_plan.m_nodes = new ActiveZone[m_protoPlan.m_attributes.length];
 		m_curNode = 1;
-		m_plan.m_nodes[0] = node.toZone(this);
+		m_plan.m_nodes[0] = node.toZone(this, 0);
 		m_plan.m_links = new ActiveZone[0];
 		m_plan.m_linksCnt = 0;
 	}
@@ -700,7 +700,7 @@ public class Mapper {
 		m_curNode = n;
 
 		for (i = 0; i < n; i++) {
-			m_plan.m_nodes[i] = m_nodes[i].toZone(this);
+			m_plan.m_nodes[i] = m_nodes[i].toZone(this, i);
 		}
 
 		LinkRelaxData[] linksDat = m_relaxer.getDataLinks();

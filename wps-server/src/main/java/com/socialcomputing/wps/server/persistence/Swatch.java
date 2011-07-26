@@ -14,7 +14,7 @@ import com.socialcomputing.wps.server.swatchs.XSwatch;
  */
 
 public interface Swatch {
-    //public String getName();
+    public String getName();
 
     public XSwatch getSwatch() throws JDOMException;
 

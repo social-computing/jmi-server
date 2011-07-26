@@ -53,6 +53,11 @@ public class SwatchImpl implements Serializable, Swatch {
     }
     
     @Override
+    public String getName() {
+        return swatchPk.getName();
+    }
+    
+    @Override
     public String getDefinition() {
         return swatch;
     }

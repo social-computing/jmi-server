@@ -2,53 +2,70 @@
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
                xmlns:s="library://ns.adobe.com/flex/spark" 
                xmlns:mx="library://ns.adobe.com/flex/mx" 
-               minWidth="955" minHeight="600" 
-               xmlns:components="com.socialcomputing.wps.components.*"
+               xmlns:wps="com.socialcomputing.wps.components.*"
                creationComplete="onCreationComplete(event)">
+    <fx:Style source="Main.css"/>
     <fx:Script>
         <![CDATA[
 			import com.adobe.serialization.json.JSON;
+			import com.socialcomputing.wps.components.Attribute;
+			import com.socialcomputing.wps.components.events.ActionEvent;
 			import com.socialcomputing.wps.services.planservice.PlanService;
 			
+			import flash.external.ExternalInterface;
+			
 			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
-            
-            // TODO replace by parameter values
-            [Bindable]
-            private var planWidth:int = 640;
-            [Bindable]
-            private var planHeight:int = 480;
-
-			private var planUrl:String = "http://localhost:8080/wps/services/engine/";
-            private var planName:String = "Xml_sample";
-            private var entityId:int = 5;
-            
-            private var planService:PlanService = new PlanService(planUrl);
 			
-            protected function onCreationComplete(event:FlexEvent):void
-            {
-                planService.showBusyCursor = true;
-                getPlanResult.token = planService.getPlan(planName, "5");
-				planService.showBusyCursor = false;
-            }
+            private var planName:String;
+            private var planService:PlanService;
+			
+            protected function onCreationComplete(event:FlexEvent):void {
+				
+				// Reading application properties
+				var serverURL:String = this.checkApplicationParameter("wpsserverurl");
+				this.planName = this.checkApplicationParameter("wpsplanname");
+				var parameters:Object = FlexGlobals.topLevelApplication.parameters;
 
-			protected function onReady(eventObj:Event):void
-			{
-				//Alert.show( "Ready");
+				// for js calls
+				ExternalInterface.addCallback( "compute", compute);
+				
+				// Initialising service
+				this.planService = new PlanService(serverURL);
+                getPlanResult.token = this.planService.getPlan(planName, map.width, map.height, parameters);
+            }
+			
+			private function checkApplicationParameter(paramName:String):String {
+				if(!FlexGlobals.topLevelApplication.parameters.hasOwnProperty(paramName)) {
+					throw new Error("Missing application parameter: " + paramName); 
+				}
+				return FlexGlobals.topLevelApplication.parameters[paramName];
 			}
+			
+			public function compute(parameters:Object):void {
+				getPlanResult.token = this.planService.getPlan(planName, map.width, map.height, parameters);
+ 			}
+			
 	]]>
     </fx:Script>
     
     <fx:Declarations>
         <s:CallResponder id="getPlanResult"
-						 fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)" />
+						 fault="ExternalInterface.call('error', event.fault.faultString);" />
     </fx:Declarations>
     
-    <s:layout>
-        <s:VerticalLayout gap="20" />
-    </s:layout>
-    <s:Label text="Cartographie WPS :" />
-	<components:PlanComponent width="{planWidth}" height="{planHeight}" dataProvider="{getPlanResult.lastResult}" onReady="onReady(event);" />
+	<wps:Map id="map"
+			backgroundColor="{this.getStyle('contentBackgroundColor')}"
+			dataProvider="{getPlanResult.lastResult}" 
+			ready="ExternalInterface.call('ready');"
+			error="ExternalInterface.call('error', event.status);"
+			status="ExternalInterface.call('status', event.status);"
+			action="ExternalInterface.call(event.action, event.args);" 
+			navigate="ExternalInterface.call('navigate', event.url, event.btarget);"
+			percentWidth="100"
+			percentHeight="100"
+	/>
 </s:Application>

@@ -7,9 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashSet;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import org.hibernate.Session;
@@ -165,8 +162,7 @@ public class BeanAffinityScheduler implements AffinityScheduler {
 			}
 		}
 		return m_DataSource.getConnection();*/
-		Session session = HibernateUtil.currentSession();
-		
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		return session.connection();
 	}
 }

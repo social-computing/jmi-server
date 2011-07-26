@@ -27,7 +27,10 @@
   <url>http://www.social-computing.com/</url>
   
   <modules>
+    <module>wps-flex-lib</module>
     <module>wps-flex</module>
+    <module>wps-flex-demo</module>
+    <module>wps-facebook</module>
     <module>wps-server</module>
   </modules>
 
@@ -36,6 +39,28 @@
 	<repository>
       <id>adobe-3rd-party</id>
       <url>http://dev.centreressources.com:8081/nexus/content/repositories/thirdparty</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    
+    <repository>
+      <id>sonatype-repository</id>
+      <url>http://repository.sonatype.org/content/groups/public/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+
+    <repository>
+      <id>flexgroup-repository</id>
+      <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
       <releases>
         <enabled>true</enabled>
       </releases>
@@ -65,5 +90,6 @@
     <jersey.version>1.5</jersey.version>
     <flexmojos.version>4.0-SNAPSHOT</flexmojos.version>
     <flex-framework.version>4.5.0.17689</flex-framework.version>
+    <flex.sdk.version>4.5.0.17689</flex.sdk.version>
   </properties>
 </project>

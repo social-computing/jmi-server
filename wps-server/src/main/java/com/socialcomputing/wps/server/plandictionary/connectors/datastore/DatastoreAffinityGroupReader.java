@@ -55,6 +55,8 @@ public class DatastoreAffinityGroupReader implements iAffinityGroupReader {
 			case AnalysisProfile.PERSONAL_PLAN:
 			    LOG.debug("Personal plan with id = {}", id);
 				Map<String, Integer> set = new HashMap<String, Integer> ();
+				if( m_entityConnector.m_Entities.get(id) == null) 
+				    throw new WPSConnectorException( "Unknonwn entity id " + id);
 				for(AttributeEnumeratorItem attributeItem : m_entityConnector.m_Entities.get(id).m_Attributes) {
 					for( String entityId2 : m_entityConnector.m_Attributes.get( attributeItem.m_Id).m_Entities) {
 						if( set.containsKey( entityId2)) {
@@ -79,6 +81,8 @@ public class DatastoreAffinityGroupReader implements iAffinityGroupReader {
 			case AnalysisProfile.DISCOVERY_PLAN:
 			    LOG.debug("discovery plan with id = {}", id);
 				Map<String,Integer> set2 = new HashMap<String,Integer>();
+				if( m_entityConnector.m_Attributes.get( id) == null) 
+				    throw new WPSConnectorException( "Unknonwn attribute id " + id);
 				for( String entityId : m_entityConnector.m_Attributes.get( id).m_Entities) {
 					if( set2.containsKey( entityId)) {
 						int pond = set2.get( entityId) + 1;

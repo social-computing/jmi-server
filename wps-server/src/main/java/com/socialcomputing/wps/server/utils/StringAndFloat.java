@@ -25,12 +25,13 @@ package com.socialcomputing.wps.server.utils;
   *
   * ********************************************************** */
 
-public class StringAndFloat extends AndFloat {
+public class StringAndFloat { 
     
     public String m_Id = null;
+    public float m_value = 0;
 
     public StringAndFloat(String id, float value ) {
-        super(value);
+        m_value = value;
         m_Id = id;
     }
 

@@ -2,9 +2,7 @@ package com.socialcomputing.wps.server.web;
 
 import java.io.ByteArrayInputStream;
 import java.io.CharArrayWriter;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.Hashtable;
 import java.util.List;
@@ -24,14 +22,12 @@ import org.jdom.output.XMLOutputter;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
-import com.socialcomputing.utils.database.HibernateUtil;
 import com.socialcomputing.utils.servlet.ExtendedRequest;
 import com.socialcomputing.utils.servlet.UploadedFile;
 import com.socialcomputing.wps.server.persistence.Dictionary;
 import com.socialcomputing.wps.server.persistence.DictionaryManager;
 import com.socialcomputing.wps.server.persistence.Swatch;
 import com.socialcomputing.wps.server.persistence.SwatchManager;
-import com.socialcomputing.wps.server.persistence.hibernate.DictionaryImpl;
 import com.socialcomputing.wps.server.persistence.hibernate.DictionaryManagerImpl;
 import com.socialcomputing.wps.server.persistence.hibernate.SwatchManagerImpl;
 import com.socialcomputing.wps.server.persistence.hibernate.SwatchPk;
@@ -60,7 +56,6 @@ public class WPSUploadServlet extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HibernateUtil.currentSession();
         ExtendedRequest exrequest = new ExtendedRequest(request);
         String action = exrequest.getParameter("action");
         String dictionaryName = exrequest.getParameter("dictionary");
@@ -82,11 +77,9 @@ public class WPSUploadServlet extends HttpServlet {
             out.print("\"></head></html>");
             out.close();*/
             response.sendRedirect(exrequest.getParameter("redirect"));
-            HibernateUtil.closeSession();
             response.setStatus(HttpServletResponse.SC_OK);
             return;
         }
-        HibernateUtil.closeSession();
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
     }
 

@@ -89,6 +89,42 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>org.hibernate.javax.persistence</groupId>
+      <artifactId>hibernate-jpa-2.0-api</artifactId>
+      <version>1.0.0.Final</version>
+    </dependency>
+    <!--dependency>
+      <groupId>antlr</groupId>
+      <artifactId>antlr</artifactId>
+      <version>2.7.6</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.1</version>
+    </dependency-->
+    <!--dependency>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <version>1.6.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>xml-apis</groupId>
+          <artifactId>xml-apis</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-commons-annotations</artifactId>
+      <version>3.2.0.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.transaction</groupId>
+      <artifactId>jta</artifactId>
+      <version>1.1</version>
+    </dependency-->
+    <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-c3p0</artifactId>
       <version>3.6.1.Final</version>
@@ -121,10 +157,15 @@
       <artifactId>jdom</artifactId>
       <version>1.1</version>
     </dependency>
-    <dependency>
+    <!--dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <version>0.9.27</version>
+    </dependency-->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.6.1</version>
     </dependency>
     
 	<!--  Http client-->
@@ -147,6 +188,16 @@
       <artifactId>jersey-guice</artifactId>
       <version>1.5</version>
     </dependency>
+    <dependency>
+      <groupId>com.google.inject.extensions</groupId>
+      <artifactId>guice-servlet</artifactId>
+      <version>2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
+      <version>2.0</version>
+    </dependency>
 	
 	<!--  JSON simple -->
     <dependency>
@@ -163,6 +214,21 @@
 			<groupId>org.codehaus.jettison</groupId>
 		</exclusion>
 	  </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-core</artifactId>
+      <version>1.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-core-asl</artifactId>
+      <version>1.5.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-mapper-asl</artifactId>
+      <version>1.5.5</version>
     </dependency>
     
 
@@ -188,9 +254,18 @@
 
     <dependency>
       <groupId>com.socialcomputing.wps</groupId>
-      <artifactId>wps-flex</artifactId>
+      <artifactId>wps-flex-demo</artifactId>
       <version>1.0-SNAPSHOT</version>
       <type>swf</type>
+      <scope>runtime</scope>      
+    </dependency>
+
+    <dependency>
+      <groupId>com.socialcomputing.wps</groupId>
+      <artifactId>wps-facebook</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>swf</type>
+      <scope>runtime</scope>      
     </dependency>
 
     <!-- Compilation only dependencies -->
@@ -220,8 +295,20 @@
 	  <artifactId>jetty-webapp</artifactId>
 	  <version>${jetty.version}</version>
 	  <scope>test</scope>
-	</dependency>
-	<dependency>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-servlet</artifactId>
+      <version>8.0.0.M2</version>
+	  <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-server</artifactId>
+      <version>8.0.0.M2</version>
+	  <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-client</artifactId>
       <version>1.5</version>
@@ -273,11 +360,11 @@
               <goal>copy-flex-resources</goal>
             </goals>
             <configuration>
+                <webappDirectory>${project.build.directory}/${project.build.finalName}/client/flex</webappDirectory> 
               <!-- Hack :  
                    Move the generated flex client swf so that it also work with in eclipse
                    with the m2eclipse plugin -->
-              <!-- <webappDirectory>${project.build.directory}/${project.build.finalName}/flex</webappDirectory> -->
-              <webappDirectory>src/main/webapp/flex</webappDirectory>
+              <!--<webappDirectory>src/main/webapp/flex</webappDirectory> -->
             </configuration>
           </execution>
         </executions>
@@ -302,7 +389,7 @@
               <!-- Hack :  
                    Move the generated applet so that it also work with in eclipse
                    with the m2eclipse plugin -->
-              <outputDirectory>src/main/webapp/applet</outputDirectory>
+              <outputDirectory>src/main/webapp/client/applet</outputDirectory>
             </configuration>
           </execution>
         </executions>

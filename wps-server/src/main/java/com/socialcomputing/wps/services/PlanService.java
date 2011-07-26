@@ -13,6 +13,7 @@ import com.socialcomputing.wps.server.webservices.maker.BeanPlanMaker;
  * @author anteika
  *
  */
+@Deprecated
 public class PlanService {
 	
 	private PlanContainer 		_plan;

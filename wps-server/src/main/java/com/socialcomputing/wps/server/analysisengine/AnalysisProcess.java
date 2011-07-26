@@ -488,7 +488,7 @@ public class AnalysisProcess {
 
         ProtoAttribute a;
         String aId;
-		Collection<String>      recommendations;
+        Collection<String> recommendations;
         int i, j, k, aNum, jNum, kNum;
         int size, weight, baseAttrMinSize = Integer.MAX_VALUE;
         boolean isRef = (m_Profile.m_planType == AnalysisProfile.GLOBAL_PLAN) ? false : true, isBase = true;
@@ -498,7 +498,7 @@ public class AnalysisProcess {
             aNum = ((Integer) bIt.next()).intValue();
             aId = m_RadData.getString(aNum);
 
-            if (m_Profile.m_planType == AnalysisProfile.PERSONAL_PLAN)
+            if (m_Profile.m_planType == AnalysisProfile.PERSONAL_PLAN) 
                 isRef = ((Arrays.binarySearch(m_RadData.m_refEntityProfile, new NumAndFloat(aNum, 0)) >= 0) ? true
                         : false);
             else if (m_Profile.m_planType == AnalysisProfile.DISCOVERY_PLAN) {
@@ -530,12 +530,16 @@ public class AnalysisProcess {
             // On fixe les recommandations pour chaque attributs
             if (m_RecomInterface != null) {
                 a.m_recomGroups = new RecommendationGroup[RecommendationGroup.RECOM_TYPE_CNT];
-			   if ((recommendations=m_RecomInterface.getRecommendations(aId)) != null) {
-			       a.m_recomGroups[RecommendationGroup.SATTRIBUTES_RECOM]= new RecommendationGroup(aId, RecommendationGroup.SATTRIBUTES_RECOM);
-			       a.m_recomGroups[RecommendationGroup.SATTRIBUTES_RECOM].setRecommendations(recommendations);
-				}
-               a.m_recomGroups[RecommendationGroup.ENTITIES_RECOM]= new RecommendationGroup(aId, RecommendationGroup.ENTITIES_RECOM);
-               a.m_recomGroups[RecommendationGroup.ENTITIES_RECOM].setRecommendations(new ArrayList());
+                if ((recommendations = m_RecomInterface.getRecommendations(aId)) != null) {
+                    a.m_recomGroups[RecommendationGroup.SATTRIBUTES_RECOM] = new RecommendationGroup(
+                                                                                                     aId,
+                                                                                                     RecommendationGroup.SATTRIBUTES_RECOM);
+                    a.m_recomGroups[RecommendationGroup.SATTRIBUTES_RECOM].setRecommendations(recommendations);
+                }
+                a.m_recomGroups[RecommendationGroup.ENTITIES_RECOM] = new RecommendationGroup(
+                                                                                              aId,
+                                                                                              RecommendationGroup.ENTITIES_RECOM);
+                a.m_recomGroups[RecommendationGroup.ENTITIES_RECOM].setRecommendations(new ArrayList());
             }
 
             // On met � jour les bornes inf�rieures et sup�rieures de size et

@@ -112,6 +112,8 @@ public class PlanJSONProvider {
             node.put(key, (Float) value);
         else if (value instanceof Long)
             node.put(key, (Long) value);
+        else if (value instanceof Boolean)
+            node.put(key, (Boolean) value);
         else
             node.put(key, toJSON( value));
     }
@@ -196,13 +198,11 @@ public class PlanJSONProvider {
         return node;
     }
     
-    // TODO à checker
+    // Ok
     static private ObjectNode toJSON(ColorX color) {
         ObjectNode node = createObjectNode("ColorX");
         node.put("color", color.m_color);
-        if (color.m_scolor == null)
-            node.putNull("scolor");
-        else
+        if (color.m_scolor != null)
             node.put("scolor", color.m_scolor);
         return node;
     }
@@ -247,8 +247,8 @@ public class PlanJSONProvider {
     // Ok
     static private ObjectNode toJSON(LinkZone zone) {
         ObjectNode node = createObjectNode("LinkZone");
-        node.put("from", toJSON(zone.m_from));
-        node.put("to", toJSON(zone.m_to));
+        node.put("from", zone.m_from == null ? -1 : (Integer)zone.m_from.get("_INDEX"));
+        node.put("to", zone.m_to == null ? -1 : (Integer)zone.m_to.get("_INDEX"));
         return node;
     }
 

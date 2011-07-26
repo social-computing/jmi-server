@@ -45,7 +45,7 @@ public final class BagZone extends ActiveZone implements Serializable, Activable
 	 * Its size and position should be initialized by setting the "_SCALE" (float) and "_VERTICES" (Point[1]) properties;
 	 * @param subs	A subZone table whose parent is this.
 	 */
-	public BagZone( ActiveZone[] subs )
+	public BagZone( ActiveZone[] subs)
 	{
 		m_subZones  = subs;
 	}

@@ -46,7 +46,7 @@ public class PlanAffinityThread extends Thread
 
 			//DataSource dataSource = (DataSource) context.lookup("java:comp/env/jdbc/WPSPooledDS");
 			//connection = dataSource.getConnection();
-			Session session = HibernateUtil.currentSession();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 			
 			connection = session.connection();
 
@@ -107,9 +107,9 @@ public class PlanAffinityThread extends Thread
 			try {
 				/*affinitySchedulerHome = null;
 				if( scheduler != null)
-					scheduler.remove();*/
+					scheduler.remove();
 				if( connection != null)
-					connection.close();
+					connection.close();*/
 			}
 			catch (Exception e)
 			{

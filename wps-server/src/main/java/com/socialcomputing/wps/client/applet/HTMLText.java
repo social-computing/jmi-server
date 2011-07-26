@@ -70,6 +70,16 @@ public class HTMLText extends Base implements Serializable
 	 */
 	public  static final int    TEXT_COL_VAL        = 5;
 
+    /**
+     * Index of the f prop in VContainer table
+     */
+    public  static final int    BLUR_COL_VAL        = 6;
+    
+    /**
+     * Index of the Rounded prop in VContainer table
+     */
+    public  static final int    ROUNDED_COL_VAL     = 7;
+    
 	/**
 	 * True if this text is anchored by a corner.(like subZones tips).
 	 */
@@ -157,6 +167,16 @@ public class HTMLText extends Base implements Serializable
 	 */
 	private transient   int         m_style;
 
+    /**
+     * Blur (not used in applet)
+     */
+    private transient   int     m_blur;
+	
+    /**
+     * Rounded 
+     */
+    private transient   int     m_rounded;
+    
 	/**
 	 * Name of the font.
 	 */
@@ -193,7 +213,7 @@ public class HTMLText extends Base implements Serializable
 	 * @param flags		Default text alignment flags.
 	 * @param margin	Default margins size.
 	 */
-	public HTMLText( Color inCol, Color outCol, int textCol, int fontSiz, int fontStl, String fontNam, int flags, Insets margin )
+	public HTMLText( Color inCol, Color outCol, int textCol, int fontSiz, int fontStl, String fontNam, int blur, int rounded, int flags, Insets margin )
 	{
 		m_body          = new FormatToken();
 		m_body.m_flags  = flags;
@@ -206,6 +226,8 @@ public class HTMLText extends Base implements Serializable
 		m_style     = fontStl;
 		m_size      = fontSiz;
 		m_name      = fontNam;
+		m_blur      = blur; 
+		m_rounded   = rounded;
 		m_wCur      = 0;
 		m_tokens    = new Vector();
 		m_heap      = new Vector();
@@ -246,7 +268,7 @@ public class HTMLText extends Base implements Serializable
 			{
 				FontX   font = getFont( FONT_VAL, zone );
 
-				htmlTxt = new HTMLText( getColor( IN_COL_VAL, zone ), getColor( OUT_COL_VAL, zone ), ((ColorX)getValue( TEXT_COL_VAL, zone )).m_color, font.getInt( FontX.SIZE_VAL, zone ), font.getFlags( zone ), font.getString( FontX.NAME_VAL, zone ), getFlags( zone ), new Insets( 0, 2, 0, 2 ));
+				htmlTxt = new HTMLText( getColor( IN_COL_VAL, zone ), getColor( OUT_COL_VAL, zone ), ((ColorX)getValue( TEXT_COL_VAL, zone )).m_color, font.getInt( FontX.SIZE_VAL, zone ), font.getFlags( zone ), font.getString( FontX.NAME_VAL, zone ), getInt(BLUR_COL_VAL, zone), getInt(ROUNDED_COL_VAL, zone), getFlags( zone ), new Insets( 0, 2, 0, 2 ));
 				htmlTxt.parseText( g, lines );
 				htmlTxt.setTextBnds( applet.getSize(), getFlags( zone ), zone.m_flags ,transfo, supCtr, center );
 			}
@@ -708,29 +730,30 @@ public class HTMLText extends Base implements Serializable
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setRenderingHint(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_QUALITY);
 
-		Composite composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f);
-		Composite cb = g.getComposite();
-		g.setComposite(composite);
-		
 		TextToken   textTok;
 		int         i, n    = m_tokens.size();
 
 		if ( m_inCol != null )
 		{
-			GradientPaint gradient = new GradientPaint(pos.x, pos.y, m_inCol , pos.x, pos.y + m_bounds.height*2, Color.black );
-	        
-			g.setPaint( gradient );
-			g.fillRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height,10,10);
-			//ON g.fillRect( pos.x, pos.y, m_bounds.width, m_bounds.height );
+            // TODO gérer le gradient dans les swatchs
+//			GradientPaint gradient = new GradientPaint(pos.x, pos.y, m_inCol , pos.x, pos.y + m_bounds.height*2, Color.black );
+//			g.setPaint( gradient );
+		    g.setColor( m_inCol);
+		    if( m_rounded == -1)
+	            g.fillRect( pos.x, pos.y, m_bounds.width, m_bounds.height );
+		    else
+		        g.fillRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, m_rounded, m_rounded);
 		}
 
 		if ( m_outCol != null )
 		{
 			//GradientPaint gradient = new GradientPaint(0, 0, m_inCol, 0, m_bounds.height, Color.black );
 			//g.setPaint( gradient );
-			g.setColor(m_inCol);
-			g.fillRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height,5,5);
-			//ON g.drawRect( pos.x, pos.y, m_bounds.width, m_bounds.height );
+			g.setColor(m_outCol);
+            if( m_rounded == -1)
+                g.drawRect( pos.x, pos.y, m_bounds.width, m_bounds.height );
+            else
+                g.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, m_rounded, m_rounded);
 		}
 
 		for ( i = 0; i < n; i ++ )
@@ -739,16 +762,15 @@ public class HTMLText extends Base implements Serializable
 			textTok.paint( g, pos );
 		}
 
-		composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f);					
-		g.setComposite(composite);
-
-		if ( n==1 ) // draw reflection only for one line boxes
+		if ( false)//n==1 && m_inCol == null) // draw reflection only for one line boxes
 		{
+	        Composite cb = g.getComposite();
+	        Composite composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f);                  
+	        g.setComposite(composite);
 			g.setColor( Color.white );
 			g.fillRoundRect(pos.x+2, pos.y+2, m_bounds.width-4, m_bounds.height/3,5,5);
+	        g.setComposite(cb);
 		}
-		
-		g.setComposite(cb);
 		
 		m_bounds.x  = pos.x;
 		m_bounds.y  = pos.y;
