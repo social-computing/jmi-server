@@ -3,7 +3,10 @@ package com.socialcomputing.wps.script{
     import com.socialcomputing.wps.util.controls.ImageUtil;
     import com.socialcomputing.wps.util.shapes.RectangleUtil;
     
+    import flash.display.DisplayObject;
+    import flash.display.Loader;
     import flash.display.Sprite;
+    import flash.events.Event;
     import flash.filters.BlurFilter;
     import flash.geom.ColorTransform;
     import flash.geom.Point;
@@ -312,7 +315,7 @@ package com.socialcomputing.wps.script{
 				 textField.autoSize = TextFieldAutoSize.LEFT;
 				 textField.antiAliasType = AntiAliasType.ADVANCED;
 				 this.m_bounds = new Rectangle();
-				 RectangleUtil.copy( this.m_bounds, textField.getBounds( applet));
+				 RectangleUtil.copy( this.m_bounds, textField.getBounds(applet));
 				 if( this.m_outCol != null) {
 					 this.m_bounds.width += (BORDER_WIDTH*2);
 					 this.m_bounds.height += (BORDER_WIDTH*2);
@@ -352,8 +355,8 @@ package com.socialcomputing.wps.script{
          * @param g		Graphics to draw in.
          * @param size	Size of the Window to draw in.
          */
-        public function drawText2( s:Sprite, size:Dimension):void {
-            drawText3( s, size, new Point( m_bounds.x, m_bounds.y ));
+        public function drawText2( s:Sprite, size:Dimension):TextField {
+            return drawText3( s, size, new Point( m_bounds.x, m_bounds.y ));
         }
         
         /**
@@ -362,7 +365,7 @@ package com.socialcomputing.wps.script{
          * @param size	Size of the Window to draw in.
          * @param pos	Where to draw this.
          */
-        protected function drawText3( s:Sprite, size:Dimension, pos:Point):void {
+        protected function drawText3( s:Sprite, size:Dimension, pos:Point):TextField {
 			var borderWidth:int = 0;
 			if ( m_outCol != null )
 				borderWidth = 2;
@@ -393,7 +396,7 @@ package com.socialcomputing.wps.script{
                 s.graphics.endFill();
            }
 			
-			paint( s, pos, borderWidth);
+			var t:TextField = paint( s, pos, borderWidth);
 
 			if ( m_oneLine && m_inCol == null) // draw reflection only for one line boxes
             {
@@ -406,6 +409,7 @@ package com.socialcomputing.wps.script{
             }
             m_bounds.x  = pos.x;
             m_bounds.y  = pos.y;
+            return t;
         }
         
 		/**
@@ -414,7 +418,7 @@ package com.socialcomputing.wps.script{
 		 * @param g		The graphics to draw in.
 		 * @param pos	The position where this should be drawn before its internal translation is added.
 		 */
-		public function paint( s:Sprite, pos:Point, borderWidth:int):void {
+		public function paint( s:Sprite, pos:Point, borderWidth:int):TextField {
 			var textField:TextField = new TextField();
 			if( m_blur != -1) {
 				textField.filters = [new BlurFilter(m_blur, m_blur)];
@@ -432,11 +436,13 @@ package com.socialcomputing.wps.script{
 			textField.htmlText = m_text;
 			textField.x = pos.x + borderWidth;
 			textField.y = pos.y + borderWidth; 
-			textField.autoSize = TextFieldAutoSize.LEFT;
+			//textField.autoSize = TextFieldAutoSize.LEFT;
 			textField.antiAliasType = AntiAliasType.ADVANCED;
 			textField.border = false;
-			ImageUtil.drawTextField( textField, s.graphics);
-			//s.addChild(textField);
+			//ImageUtil.drawTextField( textField, s.graphics);
+            
+            s.addChild(textField);
+            return textField;
 		}
 		
         /**
@@ -451,14 +457,14 @@ package com.socialcomputing.wps.script{
          */
         public function setTextBnds( size:Dimension, flags:int, posFlags:int, transfo:Transfo, supCtr:Point, center:Point):void {
             var isFloat:Boolean= Base.isEnabled( flags, FLOAT_BIT );
-            var dx:int= 0,
-                dy:int	= 0,
-                x:int   = center.x,
-                y:int   = center.y,
-                w:int   = m_bounds.width,
-                h:int   = m_bounds.height,
-                w2:int  = w >> 1,
-                h2:int  = h >> 1;
+            var dx:int= 0;
+            var dy:int	= 0;
+            var x:int   = center.x;
+            var y:int   = center.y;
+            var w:int   = m_bounds.width;
+            var h:int   = m_bounds.height;
+            var w2:int  = w >> 1;
+            var h2:int  = h >> 1;
             
             if ( supCtr != null )
             {
@@ -520,7 +526,7 @@ package com.socialcomputing.wps.script{
         public static function isEnabled( flags:int, bit:int):Boolean {
             return Base.isEnabled(flags, bit);
         }
-            
+     
     }
     
 }
