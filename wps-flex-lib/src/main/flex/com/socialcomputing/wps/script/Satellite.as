@@ -279,7 +279,7 @@ package com.socialcomputing.wps.script  {
             
 			// Iterate throw all this satellite's slices and check if one of them contains the cursor's position
 			// Stop if it's the case 
-            for(i = 0 ; (i < n && !m_slices[i].contains(planComponent, g, zone.getParent(), zone, m_shape, satCtr, supCtr, pos)) ; i++);
+            for(i = 0 ; (i < n && !m_slices[i].contains(planComponent, g, zone.getParent(), zone, m_shape, satCtr, supCtr, pos)) ; i++){};
             
 			// if the cursor's position is in one of the slices
             if(i < n) {

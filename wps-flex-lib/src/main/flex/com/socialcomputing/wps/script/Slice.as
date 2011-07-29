@@ -15,10 +15,13 @@ package com.socialcomputing.wps.script  {
 	import flash.geom.Rectangle;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
+	import flash.system.LoaderContext;
+	import flash.system.Security;
 	import flash.text.AntiAliasType;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	
+	import mx.controls.Alert;
 	import mx.controls.Text;
 	    
     /**
@@ -164,20 +167,26 @@ package com.socialcomputing.wps.script  {
                                     
 									//applet.renderShape( applet.curDrawingSurface, m_htmlTxt.m_bounds.width, m_htmlTxt.m_bounds.height, new Point(m_htmlTxt.m_bounds.x, m_htmlTxt.m_bounds.y));
                                     
-                                    var img:DisplayObject = textField.getImageReference("facebook");  
-                                    var loaderf:Loader = Loader(img);  
+                                    Security.loadPolicyFile("http://graph.facebook.com/crossdomain.xml");
+                                    Security.loadPolicyFile("http://profile.ak.fbcdn.net/crossdomain.xml");
+                                    Security.allowDomain("*");
+                                    Security.allowInsecureDomain("*");
+
+                                    var context: LoaderContext = new LoaderContext();
+                                    context.checkPolicyFile = true;
                                     
-                                        loaderf.contentLoaderInfo.addEventListener(Event.COMPLETE, loadedImage);  
-                                        
-                                        //Image chargée, on attache l'événement qui fait le lien  
-                                        function loadedImage(e:Event):void
-                                        {
-                                            trace("m_htmlTxt.m_bounds.width" + m_htmlTxt.m_bounds.width);
-                                            trace("m_htmlTxt.m_bounds.height" + m_htmlTxt.m_bounds.height);
-                                            trace("textField.width : " + textField.width);
-                                            trace("textField.height : " + textField.height);
-                                            applet.renderShape(applet.curDrawingSurface, m_htmlTxt.m_bounds.width, m_htmlTxt.m_bounds.height, new Point(m_htmlTxt.m_bounds.x, m_htmlTxt.m_bounds.y));
-                                        }
+                                    var img:DisplayObject = textField.getImageReference("facebook");
+                                    var ldr:Loader = Loader(img);  
+                                    ldr.contentLoaderInfo.addEventListener(Event.COMPLETE, loadedImage);  
+                                    function loadedImage(e:Event):void
+                                    {
+                                        /*Alert.show("m_htmlTxt.m_bounds.width" + m_htmlTxt.m_bounds.width);
+                                        Alert.show("m_htmlTxt.m_bounds.height" + m_htmlTxt.m_bounds.height);
+                                        Alert.show("textField.width : " + textField.width);
+                                        Alert.show("textField.height : " + textField.height);
+                                        Alert.show("m_htmlTxt : " + m_htmlTxt.m_text);*/
+                                        applet.renderShape(applet.curDrawingSurface, m_htmlTxt.m_bounds.width, m_htmlTxt.m_bounds.height, new Point(m_htmlTxt.m_bounds.x, m_htmlTxt.m_bounds.y));
+                                    }
 								}
 							});
 						for each ( var url:String in textUrls)

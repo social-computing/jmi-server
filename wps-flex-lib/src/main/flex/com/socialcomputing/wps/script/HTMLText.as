@@ -436,7 +436,7 @@ package com.socialcomputing.wps.script{
 			textField.htmlText = m_text;
 			textField.x = pos.x + borderWidth;
 			textField.y = pos.y + borderWidth; 
-			//textField.autoSize = TextFieldAutoSize.LEFT;
+			textField.autoSize = TextFieldAutoSize.LEFT;
 			textField.antiAliasType = AntiAliasType.ADVANCED;
 			textField.border = false;
 			//ImageUtil.drawTextField( textField, s.graphics);
