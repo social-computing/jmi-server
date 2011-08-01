@@ -9,7 +9,7 @@
 		<JDBC-entities name="WPS Social Computing blog">
 			<JDBC-connection catalog="wordpresstest" >
 				<JNDI-data-source>
-					<url>java:comp/env/jdbc/WPS_BLOG_DS</url>
+					<url>java:comp/env/jdbc/wps-blog</url>
 				</JNDI-data-source>
 			</JDBC-connection>
 	
@@ -55,7 +55,7 @@
 	<affinity-reader-profile name="DiscoveryAffReader" affinity-reader-ref="JDBC_DiscoveryAffReader" threshold="100" />
 	<affinity-reader-profile name="GlobalAffReader" affinity-reader-ref="JDBC_GlobalAffReader" threshold="100" />
 
-	<analysis-profile name="Profile" attributes-ref="JDBC_Profile" type="personal" attribute-size="frequency">
+	<analysis-profile name="Profile" attributes-ref="JDBC_Profile" type="personal" attribute-size="frequency" cluster-threshold="40" attributes-max="40" attributes-base-max="40">
 		<props-mapping>
 			<entity-props-mapping>
 				<mapping key="ID" 	value="id" />
@@ -74,7 +74,7 @@
 		</entities-recommendation>
 	</analysis-profile>
 
-	<analysis-profile name="DiscoveryProfile" attributes-ref="JDBC_Profile" type="discovery" attribute-size="frequency" attributes-max="300" >
+	<analysis-profile name="DiscoveryProfile" attributes-ref="JDBC_Profile" type="discovery" attribute-size="frequency" attributes-max="300" attributes-max="40" attributes-base-max="40">
 		<props-mapping>
 			<entity-props-mapping>
 				<mapping key="ID" 	value="id" />
