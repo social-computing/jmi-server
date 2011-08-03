@@ -1,8 +1,10 @@
 package com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.portablecontacts;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Set;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -58,7 +60,7 @@ public class FacebookEntityConnector extends SocialEntityConnector {
         
         try {
             String kind = ( String)wpsparams.get("kind");
-            if( kind == null ||  kind.equalsIgnoreCase( "friends")) {
+            if( kind == null || kind.equalsIgnoreCase( "friends")) {
                 // Liste amis
                 UrlHelper urlHelper = new UrlHelper();
                 urlHelper.setUrl( "https://graph.facebook.com/me/friends");
@@ -122,8 +124,15 @@ public class FacebookEntityConnector extends SocialEntityConnector {
                 urlHelper.openConnections( planType, wpsparams);
                 
                 JsonNode node = mapper.readTree(urlHelper.getStream());
-
                 ArrayNode friends = (ArrayNode)node.get( "data");
+
+                // My self
+                UrlHelper uh = new UrlHelper();
+                uh.setUrl( "https://graph.facebook.com/me");
+                uh.addParameter("access_token", token);
+                uh.openConnections( planType, wpsparams);
+                JsonNode me = mapper.readTree(uh.getStream());
+                friends.add( me);
                 
                 for( JsonNode friend : friends) {
                     Attribute attribute = addAttribute( friend.get("id").getTextValue());
@@ -140,9 +149,19 @@ public class FacebookEntityConnector extends SocialEntityConnector {
                         if (curkind.get("id") != null && curkind.get("name") != null) {
                             Entity entity = addEntity( curkind.get("id").getTextValue());
                             entity.addProperty( "name", curkind.get("name").getTextValue());
-                            entity.addAttribute(attribute, 1);
+                            entity.addAttribute( attribute, 1);
                         }
                     }
+                }
+                // Delete entities with only one attribute 
+                Set<String> toRemove = new HashSet<String>();
+                for( Entity entity : m_Entities.values()) {
+                    if( entity.getAttributes().size() == 1) {
+                        toRemove.add( entity.getId());
+                    }
+                }
+                for( String id : toRemove) {
+                    removeEntity( id);
                 }
                 for( Attribute attribute : m_Attributes.values()) {
                     addEntityProperties( attribute);

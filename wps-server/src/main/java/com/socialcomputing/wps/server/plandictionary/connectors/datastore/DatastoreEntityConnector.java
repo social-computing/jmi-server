@@ -7,6 +7,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
+import com.socialcomputing.wps.server.plandictionary.connectors.AttributeEnumeratorItem;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iAffinityGroupReader;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierConnector;
@@ -143,6 +144,17 @@ public abstract class DatastoreEntityConnector implements iEntityConnector {
         return entity;
     }
 
+    protected void removeEntity(String id) {
+        Entity entity = getEntity( id);
+        if( id != null) {
+            AttributeEnumeratorItem item = new AttributeEnumeratorItem( id, 0);
+            if( entity.m_Attributes.contains( item)) {
+                entity.m_Attributes.remove( item);
+            }
+            m_Entities.remove( id);
+        }
+    }
+    
     protected Attribute getAttribute(String id) {
         return m_Attributes.get(id);
     }
@@ -161,9 +173,12 @@ public abstract class DatastoreEntityConnector implements iEntityConnector {
             if (!propDefinition.isSimple()) {
                 ArrayList<String> property = new ArrayList<String>();
                 for (String entityId : attribute.m_Entities) {
-                    String value = (String) m_Entities.get(entityId).getProperties().get(propDefinition.getEntity());
-                    if (value != null)
-                        property.add(value);
+                    Entity entity = m_Entities.get(entityId);
+                    if( entity != null) {
+                        String value = (String) entity.getProperties().get(propDefinition.getEntity());
+                        if (value != null)
+                            property.add(value);
+                    }
                 }
                 attribute.addProperty(propDefinition, property.toArray(new String[property.size()]));
             }

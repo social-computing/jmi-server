@@ -13,6 +13,10 @@ public class Entity extends Data {
 		super(id);
 	}
 	
+    public List<AttributeEnumeratorItem> getAttributes() {
+        return m_Attributes;
+    }
+    
 	public void addAttribute( Attribute attribute, float ponderation) {
 	    AttributeEnumeratorItem item = new AttributeEnumeratorItem( attribute.getId(), ponderation);
 	    if( !m_Attributes.contains( item)) {
