@@ -430,7 +430,7 @@ package com.socialcomputing.wps.script  {
                                 menu.variableRowHeight = true;
                                 menu.labelField = "label";
                                 //menu.setStyle("fontWeight", "bold");
-								menu.addEventListener(MenuEvent.ITEM_CLICK, applet.menuHandler);								
+								menu.addEventListener(MenuEvent.ITEM_CLICK, applet.menuHandler);
 								var point:Point = applet.localToGlobal(pos);
 								menu.show( point.x, point.y );
 							}
