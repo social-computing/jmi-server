@@ -56,13 +56,16 @@ package com.socialcomputing.wps.script
 		public function clean( full:Boolean):void {
 			if( this._started) {
 				this._started = false;
-				if( _bounds.width == 0 && _bounds.height == 0) {
-					// Asynchronous URL content loaded (bounds not set)
-					slice.setBounds( _plan.m_applet, _plan.m_applet.curDrawingSurface.graphics, zone.getParent(), zone, null, null, null, _bounds );
+				if( _plan.m_applet.plan != null) {
+					// 
+					if( _bounds.width == 0 && _bounds.height == 0) {
+						// Asynchronous URL content loaded (bounds not set)
+						slice.setBounds( _plan.m_applet, _plan.m_applet.curDrawingSurface.graphics, zone.getParent(), zone, null, null, null, _bounds );
+					}
+					_plan.m_applet.renderShape( _plan.m_applet.restDrawingSurface, _bounds.width, _bounds.height, new Point( _bounds.x, _bounds.y));
+					if( full)
+						_plan.paintCurZone();
 				}
-				_plan.m_applet.renderShape( _plan.m_applet.restDrawingSurface, _bounds.width, _bounds.height, new Point( _bounds.x, _bounds.y));
-				if( full)
-					_plan.paintCurZone();
 				delete _plan.m_tipTimers[_key];
 			}
 		}
