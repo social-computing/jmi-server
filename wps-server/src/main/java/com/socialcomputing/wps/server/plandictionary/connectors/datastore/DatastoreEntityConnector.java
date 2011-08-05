@@ -146,10 +146,9 @@ public abstract class DatastoreEntityConnector implements iEntityConnector {
 
     protected void removeEntity(String id) {
         if( id != null) {
-            AttributeEnumeratorItem item = new AttributeEnumeratorItem( id, 0);
             for( Attribute attribute : m_Attributes.values()) {
-                if( attribute.m_Entities.contains( item)) {
-                    attribute.m_Entities.remove( item);
+                if( attribute.m_Entities.contains( id)) {
+                    attribute.m_Entities.remove( id);
                 }
             }
             m_Entities.remove( id);

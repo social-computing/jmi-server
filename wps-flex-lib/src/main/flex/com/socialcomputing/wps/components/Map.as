@@ -205,10 +205,12 @@ package com.socialcomputing.wps.components
 			}
 			if( this._dataProvider.hasOwnProperty( "error")) {
 				// Server error
+				CursorManager.removeBusyCursor();
 				dispatchEvent(new StatusEvent(StatusEvent.ERROR, this._dataProvider.error));
 			}
 			else if( !this._dataProvider.hasOwnProperty( "plan")) {
 				// Empty map
+				CursorManager.removeBusyCursor();
 				dispatchEvent(new Event( Map.EMPTY));
 			}
 			else {
@@ -232,6 +234,7 @@ package com.socialcomputing.wps.components
 				}
 				catch(error:Error) {
 					// Client error
+					CursorManager.removeBusyCursor();
 					dispatchEvent(new StatusEvent(StatusEvent.ERROR, error.message));
 					trace(error.getStackTrace());	
 				}

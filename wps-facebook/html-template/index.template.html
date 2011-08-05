@@ -42,33 +42,6 @@
 		            return document["${application}"];
 		        }
 		    }
-		    
-        	function ready() {
-        		// do something here
-        	}
-        	function status( status) {
-        		// do something here
-        	}
-        	function error( error) {
-        		alert( error);
-        	}
-        	function navigate( url, target) {
-        		// do something here
-        	}
-        	// Actions that are swatch defined
-			function NewWin( args)
-			{
-				var parameters = {};
-				parameters["entityId"] = args[0];
-        		getMap().compute( parameters);
-			}
-			function Discover( args)
-			{
-				var parameters = {};
-				parameters["attributeId"] = args[0];
-				parameters["analysisProfile"] = "DiscoveryProfile";
-        		getMap().compute( parameters);
-			}
         </script>
 		    
         <script type="text/javascript" src="swfobject.js"></script>
@@ -78,12 +51,13 @@
             <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
             var xiSwfUrlStr = "${expressInstallSwf}";
             var flashvars = {};
-            flashvars.wpsserverurl = "http://wps.wps.cloudbees.net";
+            flashvars.wpsserverurl = "http://localhost:8080/wps-server";
             flashvars.wpsplanname = "Facebook_sample";
             flashvars.analysisProfile = "GlobalProfile";
-            var params = {};
+            flashvars.fbauthcode="AQCF89xEVk84thz8WLpXCYUG95BUcw0ginggAD0jeQbMtyj02sYHtw1X-K2WYYJelPz6XRqtJWtNUoWglZeKdlyWqdSXwEM-j1eqrIOIWckJDL40uHosez6lKcu5MBFJS0u4LgczqAZFP839CCgJALzfstUKqQOuXnXQXTSQnB6dlN2yKfyU0wTTLA9MsTh2sUk";
+			var params = {};
             params.quality = "high";
-            params.bgcolor = "#7F9FDF";
+            params.bgcolor = "#ffffff";
             params.allowscriptaccess = "sameDomain";
             params.allowfullscreen = "true";
             var attributes = {};
@@ -122,13 +96,13 @@
             <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="${width}" height="${height}" id="${application}">
                 <param name="movie" value="${swf}.swf" />
                 <param name="quality" value="high" />
-                <param name="bgcolor" value="#7F9FDF" />
+                <param name="bgcolor" value="#ffffff" />
                 <param name="allowScriptAccess" value="sameDomain" />
                 <param name="allowFullScreen" value="true" />
                 <!--[if !IE]>-->
                 <object type="application/x-shockwave-flash" data="${swf}.swf" width="${width}" height="${height}">
                     <param name="quality" value="high" />
-                    <param name="bgcolor" value="#7F9FDF" />
+                    <param name="bgcolor" value="#ffffff" />
                     <param name="allowScriptAccess" value="sameDomain" />
                     <param name="allowFullScreen" value="true" />
                 <!--<![endif]-->

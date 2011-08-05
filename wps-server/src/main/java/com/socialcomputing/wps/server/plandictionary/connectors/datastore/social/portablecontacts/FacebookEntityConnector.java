@@ -84,8 +84,7 @@ public class FacebookEntityConnector extends SocialEntityConnector {
         //        JSONObject me =  (JSONObject)JSONValue.parse(new InputStreamReader(uh.getStream()));
         //        addPerson((String)me.get("id")).addProperty("name", me.get("name"));
                 
-                // Amis d'amis
-                
+                // Les amis entre eux 
                 for (int i = 0 ; i < friendslist.size() -1 ; i++) {
                     StringBuilder sb1 = new StringBuilder();
                     StringBuilder sb2 = new StringBuilder();
@@ -110,8 +109,7 @@ public class FacebookEntityConnector extends SocialEntityConnector {
                     }
                 }
                 
-                
-                // Je suis amis avec tous mes amis
+                // Je suis ami avec tous mes amis
                 //setFriendShip((String)me.get("id"), friendslist);
                 
                 // AJout des propriétés d'entités sur les attributs

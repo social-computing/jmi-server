@@ -6,27 +6,47 @@
                creationComplete="onCreationComplete(event)">
     <fx:Script>
         <![CDATA[
-            import com.adobe.serialization.json.JSON;
-            import com.socialcomputing.wps.components.Attribute;
-            import com.socialcomputing.wps.components.events.ActionEvent;
-            import com.socialcomputing.wps.components.events.StatusEvent;
-            import com.socialcomputing.wps.services.planservice.PlanService;
-            
-            import flash.external.ExternalInterface;
-            
-            import mx.collections.ArrayCollection;
-            import mx.collections.Sort;
-            import mx.collections.SortField;
-            import mx.controls.Alert;
-            import mx.core.FlexGlobals;
-            import mx.events.FlexEvent;
-            import mx.rpc.events.FaultEvent;
-            import mx.rpc.events.ResultEvent;
-            
-            import spark.events.IndexChangeEvent;
+			import com.adobe.serialization.json.JSON;
+			import com.socialcomputing.wps.components.Attribute;
+			import com.socialcomputing.wps.components.events.ActionEvent;
+			import com.socialcomputing.wps.components.events.StatusEvent;
+			import com.socialcomputing.wps.services.planservice.PlanService;
+			
+			import com.brokenfunction.json.decodeJson;
+			import br.com.stimuli.loading.BulkLoader;
+
+			import flash.external.ExternalInterface;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.Sort;
+			import mx.collections.SortField;
+			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			import mx.messaging.channels.StreamingAMFChannel;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.events.IndexChangeEvent;
 			
             private var planName:String;
             private var planService:PlanService;
+			private var loader:BulkLoader; 
+			
+			[Bindable]
+			public var types:ArrayCollection = new ArrayCollection(
+				[ {type:"friends", single:"a friend"},
+					{type:"likes", single:"like"},
+					{type:"movies", single:"a movie"},
+					{type:"music", single:"music"},
+					{type:"books", single:"a book"},
+					{type:"notes", single:"a note"},
+					{type:"photos", single:"a photo"},
+					{type:"videos", single:"a video"},
+					{type:"events", single:"an event"},
+					{type:"groups", single:"a group"},
+					{type:"checkins", single:"a checkin"}
+				]);
 			
             protected function onCreationComplete(event:FlexEvent):void {
 				
@@ -35,12 +55,11 @@
 				this.planName = this.checkApplicationParameter("wpsplanname");
 				var parameters:Object = FlexGlobals.topLevelApplication.parameters;
 
-				// for js calls
-				ExternalInterface.addCallback( "compute", compute);
-				
 				// Initialising service
 				this.planService = new PlanService(serverURL);
-                getPlanResult.token = this.planService.getPlan(planName, map.width, map.height, parameters);
+				computeMap();
+				
+				this.loader = new BulkLoader();
             }
 			
 			private function checkApplicationParameter(paramName:String):String {
@@ -50,72 +69,108 @@
 				return FlexGlobals.topLevelApplication.parameters[paramName];
 			}
 			
-			public function compute(parameters:Object):void {
-				getPlanResult.token = this.planService.getPlan(planName, map.width, map.height, parameters);
- 			}
+			private function computeMap():void {
+				//type.enabled = false;
+				if( parameters["kind"] == null)
+					parameters["kind"] = "friends";
+				friends.enabled = false;
+				items.enabled = false;
+				getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
+			}
+			
 			
 			private function onInit():void {
-                var sort:Sort = new Sort();
-                sort.fields = [new SortField("NAME", false)];
-                map.attributes.sort = sort;
-                map.attributes.refresh();
-                personne.dataProvider = map.attributes;
-                searchperson.dataProvider = map.attributes;
+				var sort:Sort = new Sort();
+				map.defineEntities(["POSS_NAME"]);
+				sort.fields = [new SortField("POSS_NAME", false)];
+				map.entities.sort = sort;
+				map.entities.refresh();
+				items.dataProvider = map.entities;
+				items.visible = true;
+				items.enabled = true;
+				itemsLabel.text = "Select " + type.selectedItem.single;
+				itemsLabel.visible = true;
+				
+				if( parameters["kind"] != "friends") {
+					sort = new Sort();
+					sort.fields = [new SortField("NAME", false)];
+					map.attributes.sort = sort;
+					map.attributes.refresh();
+					friends.dataProvider = map.attributes;
+					friends.visible = true;
+					friends.enabled = true;
+					friendsLabel.visible = true;
+				}
+				else {
+					friends.visible = false;
+					friends.enabled = false;
+					friendsLabel.visible = false;
+				}
+				type.enabled = true;
 			}
             
 			private function onEmpty():void {
 				Alert.show("Sorry, the map is empty");
+				type.enabled = true;
 			}
 			private function onError(event:com.socialcomputing.wps.components.events.StatusEvent):void {
 				Alert.show( event.status);
+				type.enabled = true;
 			}
 			
 			protected function onAction(event:ActionEvent):void
 			{
-				trace( event.action + ": " + event.args.toString());
 				if( event.action == "Discover") {
 					parameters["attributeId"] = event.args[0];
 					parameters["analysisProfile"] = "DiscoveryProfile";
-					getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
+					parameters["kind"] = type.selectedItem.type;
+					computeMap();
+				}
+				if( event.action == "Display") {
+					displayFBLink( event.args[0]);
 				}
 			}
-            
-            [Bindable]
-            public var myTypes:ArrayCollection = new ArrayCollection(
-                [ {type:"friends"},
-                  {type:"likes"},
-                  {type:"movies"},
-                  {type:"music"},
-                  {type:"books"},
-                  {type:"notes"},
-                  {type:"photos"},
-                  {type:"videos"},
-                  {type:"events"},
-                  {type:"groups"},
-                  {type:"checkins"}
-                ]);
-            
-            private function persLabelFunction(item:Object):String {
-                return item.NAME;
-            }
-            
+			
             private function selectType(event:IndexChangeEvent):void { 
                 parameters["analysisProfile"] = "GlobalProfile";
                 parameters["kind"] = type.selectedItem.type;
-                getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
+				computeMap();
             }
             
-            private function selectPerson(event:IndexChangeEvent):void { 
-                parameters["attributeId"] = personne.selectedItem.ID;
-                parameters["analysisProfile"] = "DiscoveryProfile";
-                getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
-            }
-            
-            private function searchPerson(event:IndexChangeEvent):void {
+            private function selectFriend(event:IndexChangeEvent):void {
                 map.clearSelection( "search");
-                searchperson.selectedItem.select( "search");
+				friends.selectedItem.select( "search");
                 map.setSelection( "search");
+				items.selectedItem = null;
             }
+			
+			private function selectItem(event:IndexChangeEvent):void {
+				map.clearSelection( "search");
+				items.selectedItem.select( "search");
+				for each( var attribute:Attribute in items.selectedItem.attributes) {
+					attribute.select( "search");
+				}
+				map.setSelection( "search");
+				friends.selectedItem = null;
+			}
+			
+			private function displayFBLink( id:String):void {
+				var url:String = "https://graph.facebook.com/" + id;
+				loader.addEventListener(
+					BulkLoader.COMPLETE,
+					function(event:Event):void {
+						var json:String = loader.getText( url);
+						var jso:Object = decodeJson( json);
+						var link:String;
+						if( jso.hasOwnProperty( "link"))
+							link = jso[ "link"] as String;
+						else
+							link = "http://www.facebook.com";
+						navigateToURL( new URLRequest( link), "_blank");
+					});
+				loader.add( url, {type:"text"});
+				loader.start();
+			}
 	]]>
     </fx:Script>
     
@@ -126,14 +181,19 @@
     <s:layout>
         <s:VerticalLayout gap="0" />
     </s:layout>
-    <s:HGroup>
-        <s:Label text="Type" />
-        <s:DropDownList id="type" labelField="type" dataProvider="{myTypes}" change="selectType(event);" />
-        <s:Label text="Personne" />
-        <s:DropDownList id="personne" labelFunction="persLabelFunction" change="selectPerson(event);" />
-        <s:Label text="Rechercher" />
-        <s:DropDownList id="searchperson" labelFunction="persLabelFunction" change="searchPerson(event);" />
+    <s:HGroup horizontalAlign="left" paddingBottom="5">
+		<!--s:ButtonBar
+			labelField="type" dataProvider="{types}"
+			selectedIndex="0">
+		</s:ButtonBar-->
+        <s:Label text="View map of " />
+        <s:DropDownList id="type" labelField="type" dataProvider="{types}" change="selectType(event);" selectedIndex="0"/>
+        <s:Label id="friendsLabel" text="Select a friend" visible="false"/>
+        <s:DropDownList id="friends" labelField="NAME" change="selectFriend(event);" width="200" visible="false"/>
+		<s:Label id="itemsLabel" visible="false"/>
+		<s:DropDownList id="items" labelField="POSS_NAME"  change="selectItem(event);" width="200" visible="false"/>
     </s:HGroup>
+    <mx:HRule width="100%"/>
 	<wps:Map id="map"
 			backgroundColor="#FFFFFF"
 			dataProvider="{getPlanResult.lastResult}" 
