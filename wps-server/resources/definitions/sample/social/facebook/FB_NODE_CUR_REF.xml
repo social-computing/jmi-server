@@ -93,14 +93,14 @@
         <popup menu="menu" />
     </event>
 
-        <menu id="menu" font="menuFnt">
-            <item label="Afficher" font="nameFnt" url="_self:http://www.social-computing.com/?p={sID}" />
-            <item label="Centrer" font="nameFnt" url="javascript:Discover({sID},{sNAME})" />
-            <separator />
-            <item label="[+80sPOSS_NAME]" url="javascript:NewWin([sPOSS_ID],[sPOSS_NAME])" />
-        </menu>
+	<menu id="menu" font="menuFnt">
+		<item label="Afficher" font="nameFnt" url="javascript:Display({sID})" />
+		<item label="Centrer" font="nameFnt" url="javascript:Discover({sID},{sNAME})" />
+		<separator />
+		<item label="[+30sPOSS_NAME]" url="javascript:Display([sPOSS_ID])" />
+	</menu>
 
-        <font id="menuFnt" name="Monospaced" size="11" style="plain" />
+	<font id="menuFnt" name="Monospaced" size="11" style="plain" />
 
     <!-- DblClkEvt event -->
     <event id="dblClkEvt">

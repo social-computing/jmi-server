@@ -44,10 +44,6 @@
 					transfo="spotTrf"
 					alpha="1"
 					linewidth="1"/>
-		<slice		image="{s$web_context}/images/{sID}.gif"
-					transfo="imgTrf"
-					alpha="1"
-					linewidth="1"/>
 	</sat>
 
 <!-- Cur Spot -->
@@ -63,10 +59,6 @@
 		<slice		inCol="164 164 164"
 					outCol="100 100 100"
 					transfo="spotTrf"
-					alpha="1"
-					linewidth="1"/>
-		<slice		image="{s$web_context}/images/{sID}.gif"
-					transfo="imgTrf" 
 					alpha="1"
 					linewidth="1"/>
 	</sat>
@@ -214,7 +206,7 @@
 				align="left" 
 				isFloating="false"/>
 
-	<tooltip    id="tooltip"
+	<!--tooltip    id="tooltip"
 				delay="500"
 				length="30000">
 		<tip 	font="nameFnt"
@@ -223,12 +215,12 @@
 				textCol="@whiteCol"
 				align="center"
 				isFloating="true"/>
-	</tooltip>
+	</tooltip-->
 
 	<!-- Hover event -->
 	<event 	        id="hoverEvt">
 		<show       status="Cliquez pour afficher le menu de '{sNAME}'. Double-cliquez pour afficher sa fiche."/>
-		<pop        tooltip="tooltip"/>
+		<!--pop        tooltip="tooltip"/-->
 	</event>
 
 	<!-- Click event -->
@@ -236,15 +228,12 @@
 		<popup      menu="menu"/>
 	</event>
 
-		<menu		    id="menu"
-						font="menuFnt">
-			<item 		label="{+sNAME}"
-						font="nameFnt"
-						url="javascript:Discover({sID},{sNAME})" />
-			<separator />
-			<item 		label="[+80sPOSS_NAME]"
-						url="javascript:NewWin([sPOSS_ID],[sPOSS_NAME])"/>
-		</menu>
+	<menu id="menu" font="menuFnt">
+		<item label="Afficher" font="nameFnt" url="javascript:Display({sID})" />
+		<item label="Centrer" font="nameFnt" url="javascript:Discover({sID},{sNAME})" />
+		<separator />
+		<item label="[+30sPOSS_NAME]" url="javascript:Display([sPOSS_ID])" />
+	</menu>
 
 		<font		    id="menuFnt"
 						name="Monospaced"
