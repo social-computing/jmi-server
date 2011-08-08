@@ -44,7 +44,7 @@
 		</entities-recommendation>
 	</analysis-profile>
 
-	<analysis-profile name="DiscoveryProfile" attributes-ref="*" type="discovery" attribute-size="frequency" attributes-max="300" attributes-base-max="1000" >
+	<analysis-profile name="DiscoveryProfile" attributes-ref="*" type="discovery" attribute-size="frequency" attributes-max="80" attributes-base-max="1000" >
 		<props-mapping>
 			<entity-props-mapping>
 				<mapping key="ID" 	value="id" />
@@ -63,7 +63,7 @@
 		</entities-recommendation>
 	</analysis-profile>
 
-	<analysis-profile name="GlobalProfile" attributes-ref="*" type="global" attribute-size="same" attributes-max="300" >
+	<analysis-profile name="GlobalProfile" attributes-ref="*" type="global" attribute-size="same" attributes-max="80" >
 		<props-mapping>
 			<entity-props-mapping>
 				<mapping key="ID" 	value="id" />

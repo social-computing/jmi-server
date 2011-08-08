@@ -155,6 +155,10 @@ package com.socialcomputing.wps.components
 			return new Dimension(this.width, this.height);
 		}
 		
+		public function get bitmapData():BitmapData
+		{
+			return _offScreen;
+		}
 		public function get curDrawingSurface():Sprite
 		{
 			return _curDrawingSurface;

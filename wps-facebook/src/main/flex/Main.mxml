@@ -6,15 +6,15 @@
                creationComplete="onCreationComplete(event)">
     <fx:Script>
         <![CDATA[
+			import br.com.stimuli.loading.BulkLoader;
+			
 			import com.adobe.serialization.json.JSON;
+			import com.brokenfunction.json.decodeJson;
 			import com.socialcomputing.wps.components.Attribute;
 			import com.socialcomputing.wps.components.events.ActionEvent;
 			import com.socialcomputing.wps.components.events.StatusEvent;
 			import com.socialcomputing.wps.services.planservice.PlanService;
 			
-			import com.brokenfunction.json.decodeJson;
-			import br.com.stimuli.loading.BulkLoader;
-
 			import flash.external.ExternalInterface;
 			
 			import mx.collections.ArrayCollection;
@@ -23,6 +23,7 @@
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
+			import mx.graphics.codec.PNGEncoder;
 			import mx.messaging.channels.StreamingAMFChannel;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
@@ -40,12 +41,12 @@
 					{type:"movies", single:"a movie"},
 					{type:"music", single:"music"},
 					{type:"books", single:"a book"},
-					{type:"notes", single:"a note"},
+					//{type:"notes", single:"a note"},
 					{type:"photos", single:"a photo"},
 					{type:"videos", single:"a video"},
 					{type:"events", single:"an event"},
-					{type:"groups", single:"a group"},
-					{type:"checkins", single:"a checkin"}
+					{type:"groups", single:"a group"}
+					//{type:"checkins", single:"a checkin"}
 				]);
 			
             protected function onCreationComplete(event:FlexEvent):void {
@@ -171,6 +172,12 @@
 				loader.add( url, {type:"text"});
 				loader.start();
 			}
+			
+			private function uploadAsPhoto(): void {
+				var encoder:PNGEncoder  = new PNGEncoder();
+				encoder.encode( map.bitmapData);
+				
+			}
 	]]>
     </fx:Script>
     
@@ -182,12 +189,11 @@
         <s:VerticalLayout gap="0" />
     </s:layout>
     <s:HGroup horizontalAlign="left" paddingBottom="5">
-		<!--s:ButtonBar
-			labelField="type" dataProvider="{types}"
-			selectedIndex="0">
-		</s:ButtonBar-->
-        <s:Label text="View map of " />
-        <s:DropDownList id="type" labelField="type" dataProvider="{types}" change="selectType(event);" selectedIndex="0"/>
+		<s:ButtonBar id="type" labelField="type" dataProvider="{types}" change="selectType(event);" selectedIndex="0" />
+	</s:HGroup>
+	<s:HGroup>
+        <!--s:Label text="View map of " />
+        <s:DropDownList id="type" labelField="type" dataProvider="{types}" change="selectType(event);" selectedIndex="0"/-->
         <s:Label id="friendsLabel" text="Select a friend" visible="false"/>
         <s:DropDownList id="friends" labelField="NAME" change="selectFriend(event);" width="200" visible="false"/>
 		<s:Label id="itemsLabel" visible="false"/>

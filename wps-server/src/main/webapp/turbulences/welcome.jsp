@@ -2,19 +2,7 @@
 <!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">	
     <head>
-        <title>WPS Administration - Flex demo client</title>
-        <%
-String code = request.getParameter("code");
-if( code == null) { %>
-<meta http-equiv="refresh" content="0; url=https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/welcome.jsp&scope=friends_likes,friends_groups,friends_activities,friends_events" />
-<title>Redirection</title>
-<meta name="robots" content="noindex,follow" />
-</head>
-<body>
-<p><a href="https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/welcome.jsp&scope=friends_likes,friends_groups,friends_activities,friends_events">Redirection</a></p>
-</body>
-</html>
-<%} else {%>
+        <title>Turbulences</title>
         <meta name="google" value="notranslate">         
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<!-- Include CSS to eliminate any default margins/padding and set the height of the html element and 
@@ -47,22 +35,20 @@ if( code == null) { %>
             <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
             var xiSwfUrlStr = "../client/flex/playerProductInstall.swf";
             var flashvars = {};
-            flashvars.wpsserverurl = "http://wps.wps.cloudbees.net/";
-            flashvars.wpsplanname = "Facebook_sample";
-            flashvars.fbauthcode = '<%=code%>';
+            flashvars.wpsserverurl = "http://168.143.91.243/wps-server";
+            flashvars.wpsplanname = "Xml_sample";
             flashvars.analysisProfile = "GlobalProfile";
-            flashvars.kind = "friends";
             var params = {};
             params.quality = "high";
             params.bgcolor = "#FFFFFF";
             params.allowscriptaccess = "sameDomain";
             params.allowfullscreen = "true";
             var attributes = {};
-            attributes.id = "wps-facebook";
-            attributes.name = "wps-facebook";
+            attributes.id = "wps-flex-demo";
+            attributes.name = "wps-flex-demo";
             attributes.align = "middle";
             swfobject.embedSWF(
-                "../client/flex/wps-facebook-1.0-SNAPSHOT.swf", "flashContent", 
+                "../client/flex/wps-flex-demo-1.0-SNAPSHOT.swf", "flashContent", 
                 "100%", "100%", 
                 swfVersionStr, xiSwfUrlStr, 
                 flashvars, params, attributes);
@@ -93,13 +79,13 @@ if( code == null) { %>
 	   	
        	<noscript>
             <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%" id="wps-flex-demo">
-                <param name="movie" value="../client/flex/wps-facebook-1.0-SNAPSHOT.swf" />
+                <param name="movie" value="../client/flex/wps-flex-demo-1.0-SNAPSHOT.swf" />
                 <param name="quality" value="high" />
                 <param name="bgcolor" value="#FFFFFF" />
                 <param name="allowScriptAccess" value="sameDomain" />
                 <param name="allowFullScreen" value="true" />
                 <!--[if !IE]>-->
-                <object type="application/x-shockwave-flash" data="../client/flex/wps-facebook-1.0-SNAPSHOT.swf" width="100%" height="100%">
+                <object type="application/x-shockwave-flash" data="../client/flex/wps-flex-demo-1.0-SNAPSHOT.swf" width="100%" height="100%">
                     <param name="quality" value="high" />
                     <param name="bgcolor" value="#FFFFFF" />
                     <param name="allowScriptAccess" value="sameDomain" />
@@ -122,4 +108,3 @@ if( code == null) { %>
 	    </div>
    </body>
 </html>
-<%} %>
