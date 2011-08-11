@@ -42,6 +42,9 @@
 		            return document["${application}"];
 		        }
 		    }
+         	function navigate( url, target) {
+        		window.open( url, target);
+        	}
         </script>
 		    
         <script type="text/javascript" src="swfobject.js"></script>
@@ -54,7 +57,7 @@
             flashvars.wpsserverurl = "http://localhost:8080/wps-server";
             flashvars.wpsplanname = "Facebook_sample";
             flashvars.analysisProfile = "GlobalProfile";
-            flashvars.fbauthcode="AQCF89xEVk84thz8WLpXCYUG95BUcw0ginggAD0jeQbMtyj02sYHtw1X-K2WYYJelPz6XRqtJWtNUoWglZeKdlyWqdSXwEM-j1eqrIOIWckJDL40uHosez6lKcu5MBFJS0u4LgczqAZFP839CCgJALzfstUKqQOuXnXQXTSQnB6dlN2yKfyU0wTTLA9MsTh2sUk";
+            flashvars.fbauthcode="AQBWnKb8Ja-LgZOMhdnXKr9s4C2_5wDC88UTbYHDua3wSM-ftq2BYYZ-r4K8LTvQb4xr1l_3D-GFS3NYNk3GEkpF2nuePfgB-IHHpPssAXeKjXBhewlqLuZVc-KtnWLERzHIMa4Y_iuGl30xcUAcPfXeUsW-wGSJiA0CnLXhnZQMU_p7CK0PXMH8kMCvg3Kigtw";
 			var params = {};
             params.quality = "high";
             params.bgcolor = "#ffffff";

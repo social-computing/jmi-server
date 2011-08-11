@@ -28,6 +28,8 @@
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			
+			import ru.inspirit.net.MultipartURLLoader;
+			
 			import spark.events.IndexChangeEvent;
 			
             private var planName:String;
@@ -76,6 +78,7 @@
 					parameters["kind"] = "friends";
 				friends.enabled = false;
 				items.enabled = false;
+				photo.enabled = false;
 				getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
 			}
 			
@@ -108,6 +111,8 @@
 					friendsLabel.visible = false;
 				}
 				type.enabled = true;
+				photo.visible = true;
+				photo.enabled = true;
 			}
             
 			private function onEmpty():void {
@@ -167,16 +172,54 @@
 							link = jso[ "link"] as String;
 						else
 							link = "http://www.facebook.com";
-						navigateToURL( new URLRequest( link), "_blank");
+						//navigateToURL( new URLRequest( link), "_blank");
+						ExternalInterface.call('navigate', link, "_blank");
 					});
 				loader.add( url, {type:"text"});
 				loader.start();
 			}
 			
-			private function uploadAsPhoto(): void {
+			private function uploadAsPhoto( tag:Boolean): void {
+				photo.enabled = false;
+				var name:String = "My friends sharing " + type.selectedItem.type;
 				var encoder:PNGEncoder  = new PNGEncoder();
-				encoder.encode( map.bitmapData);
-				
+				var bphoto:ByteArray = encoder.encode( map.bitmapData);
+				var mploader:MultipartURLLoader = new MultipartURLLoader();
+				mploader.addEventListener(
+					Event.COMPLETE, 
+					function onComplete(e:Event):void {
+						var jso:Object = decodeJson( mploader.getData());
+						if( tag && jso.hasOwnProperty( "id")) {
+							tagUsersInPhoto( jso["id"]);
+						}
+						photo.enabled = true;
+					});
+				mploader.addVariable( "access_token", map.getProperty( "$access_token"));
+				mploader.addFile( bphoto, "social-computing.png", "filedata", "image/png");
+				mploader.load( "https://graph.facebook.com/" + map.getProperty("$MY_FB_ID") + "/photos");
+			}
+			
+			private function tagUsersInPhoto( photo:String): void {
+				for each( var user:Attribute in map.attributes) {
+					tagUserInPhoto( photo, user);
+				}
+			}
+			
+			private function tagUserInPhoto( photo:String, user:Attribute): void {
+				if( user.hasOwnProperty( "_VERTICES")) {
+					var x:int = user._VERTICES[0].x - 10;
+					var y:int = user._VERTICES[0].y - 10;
+					var mploader:MultipartURLLoader = new MultipartURLLoader();
+					mploader.addEventListener(
+						Event.COMPLETE, 
+						function onReady(e:Event):void {
+							//Alert.show( "ok");
+						});
+					mploader.addVariable( "access_token", map.getProperty( "$access_token"));
+					mploader.addVariable( "x", int( x * 100 /map.width));
+					mploader.addVariable( "y", int( y * 100 /map.height));
+					mploader.load( "https://graph.facebook.com/" + photo + "/tags/" + user.ID);
+				}
 			}
 	]]>
     </fx:Script>
@@ -192,6 +235,7 @@
 		<s:ButtonBar id="type" labelField="type" dataProvider="{types}" change="selectType(event);" selectedIndex="0" />
 	</s:HGroup>
 	<s:HGroup>
+		<s:Button id="photo" label="Photo" click="uploadAsPhoto( true);" visible="false"/>	
         <!--s:Label text="View map of " />
         <s:DropDownList id="type" labelField="type" dataProvider="{types}" change="selectType(event);" selectedIndex="0"/-->
         <s:Label id="friendsLabel" text="Select a friend" visible="false"/>

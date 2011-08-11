@@ -3,7 +3,7 @@
 <!-- =====================================================================  -->
 <!-- Turbulences-entities : data connectors description -->
 <!-- =====================================================================  -->
-<!ELEMENT Turbulences-entities (comment?, URL-connection, Facebook-property*)>
+<!ELEMENT Turbulences-entities (comment?, URL-connection, Turbulences-property*)>
 <!ATTLIST Turbulences-entities	name    CDATA    #REQUIRED>
 <!ATTLIST Turbulences-entities	class   CDATA    "com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.portablecontacts.TurbulencesEntityConnector" >
 

@@ -423,8 +423,8 @@ package com.socialcomputing.wps.components
 			dispatchEvent(new NavigateEvent( actionStr, target)); 
 		}
 
-		public function getGlobalProperty( name:String):Object {
-			if( env.m_props.hasOwnProperty( name))
+		public function getProperty( name:String):Object {
+			if( env != null && env.m_props.hasOwnProperty( name))
 				return env.m_props[name];
 			return null;
 		}

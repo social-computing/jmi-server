@@ -58,6 +58,7 @@ public class FacebookEntityConnector extends SocialEntityConnector {
             }
         }
         
+        wpsparams.put( "$access_token", token);
         try {
             String kind = ( String)wpsparams.get("kind");
             if( kind == null || kind.equalsIgnoreCase( "friends")) {
@@ -75,14 +76,13 @@ public class FacebookEntityConnector extends SocialEntityConnector {
                     friendslist.add(friend.get("id").getTextValue());
                 }
                 
-                // Mes infos
-        //        String url = "https://graph.facebook.com/me";
-        //        UrlHelper uh = new UrlHelper();
-        //        uh.setUrl(url);
-        //        uh.addParameter("access_token", oAuth2Helper.getToken());
-        //        uh.openConnections( planType, wpsparams);
-        //        JSONObject me =  (JSONObject)JSONValue.parse(new InputStreamReader(uh.getStream()));
-        //        addPerson((String)me.get("id")).addProperty("name", me.get("name"));
+                // My self
+                UrlHelper uh = new UrlHelper();
+                uh.setUrl( "https://graph.facebook.com/me");
+                uh.addParameter("access_token", token);
+                uh.openConnections( planType, wpsparams);
+                JsonNode me = mapper.readTree(uh.getStream());
+                wpsparams.put( "$MY_FB_ID", me.get("id").getTextValue());
                 
                 // Les amis entre eux 
                 for (int i = 0 ; i < friendslist.size() -1 ; i++) {
@@ -111,6 +111,17 @@ public class FacebookEntityConnector extends SocialEntityConnector {
                 
                 // Je suis ami avec tous mes amis
                 //setFriendShip((String)me.get("id"), friendslist);
+
+                // Delete entities with only one attribute 
+                Set<String> toRemove = new HashSet<String>();
+                for( Entity entity : m_Entities.values()) {
+                    if( entity.getAttributes().size() == 1) {
+                        toRemove.add( entity.getId());
+                    }
+                }
+                for( String id : toRemove) {
+                    removeEntity( id);
+                }
                 
                 // AJout des propriétés d'entités sur les attributs
                 setEntityProperities();
@@ -130,6 +141,7 @@ public class FacebookEntityConnector extends SocialEntityConnector {
                 uh.addParameter("access_token", token);
                 uh.openConnections( planType, wpsparams);
                 JsonNode me = mapper.readTree(uh.getStream());
+                wpsparams.put( "$MY_FB_ID", me.get("id").getTextValue());
                 friends.add( me);
                 
                 for( JsonNode friend : friends) {

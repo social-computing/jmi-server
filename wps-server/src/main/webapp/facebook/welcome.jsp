@@ -2,16 +2,17 @@
 <!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">	
     <head>
-        <title>WPS Administration - Flex demo client</title>
+        <title>Social Computing for Facebook</title>
         <%
 String code = request.getParameter("code");
 if( code == null) { %>
-<meta http-equiv="refresh" content="0; url=https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/welcome.jsp&scope=friends_likes,friends_groups,friends_activities,friends_events" />
 <title>Redirection</title>
 <meta name="robots" content="noindex,follow" />
+<meta http-equiv="refresh" content="0; url=https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/welcome.jsp&scope=friends_likes,friends_groups,friends_activities,friends_events,publish_stream,user_photos" />
 </head>
 <body>
-<p><a href="https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/welcome.jsp&scope=friends_likes,friends_groups,friends_activities,friends_events">Redirection</a></p>
+<!--script> top.location.href='https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/welcome.jsp&scope=friends_likes,friends_groups,friends_activities,friends_events,publish_stream,user_photos'</script-->
+<!-- script> top.location.href='https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://apps.facebook.com/social-computing/&scope=friends_likes,friends_groups,friends_activities,friends_events,publish_stream,user_photos'</script-->
 </body>
 </html>
 <%} else {%>
@@ -39,6 +40,12 @@ if( code == null) { %>
 		
 		<link rel="stylesheet" href="../css/main.css"/>
 		<link rel="stylesheet" href="../css/wps.css">
+
+        <script type="text/javascript">
+         	function navigate( url, target) {
+        		window.open( url, target);
+        	}
+         </script>
 		    
         <script type="text/javascript" src="../client/flex/swfobject.js"></script>
         <script type="text/javascript">
