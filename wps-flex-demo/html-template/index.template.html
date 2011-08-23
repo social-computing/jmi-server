@@ -41,9 +41,11 @@
             <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
             var xiSwfUrlStr = "${expressInstallSwf}";
             var flashvars = {};
-            flashvars.wpsserverurl = "http://10.0.2.2:8080/wps-server";
+            flashvars.wpsserverurl = "http://localhost:8080/wps-server";
             flashvars.wpsplanname = "Xml_sample";
-            flashvars.entityId = "5";
+            flashvars.analysisProfile = "GlobalProfile";
+            flashvars.entitiesName = "Organizations";
+            flashvars.attributesName = "Countries";
             var params = {};
             params.quality = "high";
             params.bgcolor = "${bgcolor}";
