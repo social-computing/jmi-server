@@ -219,10 +219,10 @@
 	</event>
 
         <menu id="menu" font="menuFnt">
-            <item label="Afficher" font="nameFnt" url="javascript:Display({sID})" />
+            <item label="Afficher" font="nameFnt" url="javascript:alert({sNAME})" />
 	    <item label="Centrer" font="nameFnt" url="javascript:Discover({sID},{sNAME})" />
             <separator />
-            <item label="[+30sPOSS_NAME]" url="javascript:NewWin([sPOSS_ID],[sPOSS_NAME])"/>
+            <item label="[+30sPOSS_NAME]" url="javascript:Discover([sPOSS_ID],[sPOSS_NAME])"/>
         </menu>
         <font id="menuFnt" name="Monospaced" size="11"/>
 

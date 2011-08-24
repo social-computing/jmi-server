@@ -39,30 +39,37 @@
 			<JDBC-affinity-reader name="JDBC_DiscoveryAffReader">
 				<comment>Affinity Group for a user</comment>
 				<JDBC-query2>
-				SELECT b.id_contact, count(a.id_contact)
-				FROM tbl_contacts a
-				LEFT JOIN tbl_contacts b ON a.id_contact=b.id_contact
-				WHERE a.id_user={s$attributeId}
-				GROUP BY b.id_user
+				SELECT pc.id, SUM(pc.c) 
+				FROM
+					(
+						SELECT id_contact as id, count(id_contact) as c FROM tbl_contacts WHERE id_user={s$attributeId} GROUP BY id_contact
+						UNION ALL
+						SELECT id_user as id, count(id_user) as c FROM tbl_contacts WHERE id_contact={s$attributeId} GROUP BY id_user
+						UNION ALL
+						SELECT {s$attributeId} as id, 1 as c
+					) pc				
+				GROUP BY id;
 				</JDBC-query2>
 			</JDBC-affinity-reader>
 
 			<JDBC-affinity-reader name="JDBC_GlobalAffReader">
 				<comment>Global Affinity Group</comment>
 				<JDBC-query2>
-				SELECT id_contact, count(id_contact)
-				FROM tbl_contacts
-				GROUP BY id_contact
+					SELECT id, 1 FROM tbl_users
 				</JDBC-query2>
 			</JDBC-affinity-reader>
 	
 			<JDBC-attributes name="JDBC_Profile">
 				<comment>Contact attributes (Get contact attributes = users for one contact)</comment>
 				<JDBC-query2>
-				SELECT id_user, count(id_user)
-				FROM tbl_contacts
-				WHERE id_contact={scurEntity}
-				GROUP BY id_user
+				SELECT pc.id, SUM(pc.c) 
+				FROM
+					(
+						SELECT id_contact as id, count(id_contact) as c FROM tbl_contacts WHERE id_user={scurEntity} GROUP BY id_contact
+						UNION ALL
+						SELECT id_user as id, count(id_user) as c FROM tbl_contacts WHERE id_contact={scurEntity} GROUP BY id_user
+					) pc				
+				GROUP BY id;
 				</JDBC-query2>
 	
 				<JDBC-property name="Users properties" column-name="label" >
@@ -74,12 +81,15 @@
 				</JDBC-property>
 				<JDBC-property name="Belong to properties" column-name="label" multiple-rows="yes" >
 					<JDBC-query2>
-					SELECT c.id_user as poss_id, u.displayName as poss_name
-                    FROM tbl_contacts as c 
-                    LEFT JOIN tbl_users as u ON c.id_user=u.id
-                    WHERE c.id_contact={scurAttribute}
-                    GROUP BY c.id_user
-                    ORDER BY displayName ASC
+					SELECT u.id as poss_id, u.displayName as poss_name
+					FROM
+						(
+							SELECT id_contact as id, count(id_contact) as c FROM tbl_contacts WHERE id_user={scurAttribute} GROUP BY id_contact
+							UNION ALL
+							SELECT id_user as id, count(id_user) as c FROM tbl_contacts WHERE id_contact={scurAttribute} GROUP BY id_user
+						) pc	
+					LEFT JOIN tbl_users AS u ON u.id = pc.id
+					GROUP BY u.id;
                     </JDBC-query2>
 				</JDBC-property>
 			</JDBC-attributes>

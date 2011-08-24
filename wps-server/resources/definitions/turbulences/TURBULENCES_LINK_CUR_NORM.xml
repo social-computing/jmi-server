@@ -36,7 +36,7 @@
     </event>
     
     <menu id="menu" font="menuFnt">
-        <item label="[sREC_NAME]" url="javascript:NewWin([sREC_ID],[sREC_NAME])" />
+        <item label="[sREC_NAME]" url="javascript:Discover([sREC_ID],[sREC_NAME])" />
     </menu>
 
     <font id="menuFnt" name="Monospaced" size="11" style="plain" />
