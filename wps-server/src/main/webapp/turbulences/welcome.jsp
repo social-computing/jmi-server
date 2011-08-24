@@ -2,8 +2,8 @@
 <!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">	
     <head>
-        <title>Turbulences</title>
-        <meta name="google" value="notranslate">         
+        <title>WPS turbulences application</title>
+        <meta name="google" value="notranslate" />         
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<!-- Include CSS to eliminate any default margins/padding and set the height of the html element and 
 		     the body element to 100%, because Firefox, or any Gecko based browser, interprets percentage as 
@@ -26,17 +26,20 @@
         <!-- END Browser History required section -->  
 		
 		<link rel="stylesheet" href="../css/main.css"/>
-		<link rel="stylesheet" href="../css/wps.css">
-		    
+		<link rel="stylesheet" href="../css/wps.css" />
+		
+		<script type="text/javascript" src="../client/applet/jquery.js" ></script>
+        <script type="text/javascript" src="../client/applet/jquery.wpsmap.js" ></script>    
         <script type="text/javascript" src="../client/flex/swfobject.js"></script>
         <script type="text/javascript">
-            <!-- For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. --> 
+            // For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. 
             var swfVersionStr = "10.0.0";
-            <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
+            
+            // To use express install, set to playerProductInstall.swf, otherwise the empty string.
             var xiSwfUrlStr = "../client/flex/playerProductInstall.swf";
             var flashvars = {};
-            flashvars.wpsserverurl = "http://168.143.91.243/wps-server";
-            flashvars.wpsplanname = "Xml_sample";
+            flashvars.wpsserverurl = "http://168.143.91.243:8080/wps-server/";
+            flashvars.wpsplanname = "turbulences";
             flashvars.analysisProfile = "GlobalProfile";
             var params = {};
             params.quality = "high";
@@ -44,16 +47,79 @@
             params.allowscriptaccess = "sameDomain";
             params.allowfullscreen = "true";
             var attributes = {};
-            attributes.id = "wps-flex-demo";
-            attributes.name = "wps-flex-demo";
+            attributes.id = "wps-flex";
+            attributes.name = "wps-flex";
             attributes.align = "middle";
             swfobject.embedSWF(
-                "../client/flex/wps-flex-demo-1.0-SNAPSHOT.swf", "flashContent", 
+                "../client/flex/wps-flex-1.0-SNAPSHOT.swf", "flashContent", 
                 "100%", "100%", 
                 swfVersionStr, xiSwfUrlStr, 
                 flashvars, params, attributes);
-			<!-- JavaScript enabled so display the flashContent div in case it is not replaced with a swf object. -->
+			// JavaScript enabled so display the flashContent div in case it is not replaced with a swf object.
 			swfobject.createCSS("#flashContent", "display:block;text-align:left;");
+        </script>
+        <script type="text/javascript" >
+	        function getMap() {
+	            if (navigator.appName.indexOf ("Microsoft") !=-1) {
+	                return window["wps-flex"];
+	            } 
+	            else {
+	                return document["wps-flex"];
+	            }
+	        }
+	        
+	    	function ready() {
+	    		// do something here
+	    	}
+	    	function status( status) {
+	    		// do something here
+	    	}
+	    	function error( error) {
+	    		alert( error);
+	    	}
+	    	function navigate( url, target) {
+	    		// alert("url :"  + url + ", target : " + target); 
+	    		// Nothing to do here, using native flex behavior
+	    	}
+	    	
+	    	// Actions that are swatch defined
+	        function NewWin(args) {
+		        var parameters = {};
+		        parameters["entityId"] = args[0];
+		        getMap().compute(parameters);
+	        }
+	        function Discover( args) {
+		        var parameters = {};
+		        parameters["attributeId"] = args[0];
+		        parameters["analysisProfile"] = "DiscoveryProfile";
+		        getMap().compute(parameters);
+	        }
+        
+        
+        /*
+	    	function setMap(params) {
+	    		alert("setMap");
+	    		params['planName'] = 'turbulences';
+	
+	    		$("#map").wpsmap({
+	    			wps: params, 
+	    			display: {color:'336699'},
+	    			plugin: {noscript:'../../noscript.jsp'}
+	    		});
+	    	}
+        
+			// Fired from flex application
+			function NewWin(id, name) {
+				setMap({entityId:id});
+				$('#titre').html(name);
+			}
+			
+			// Fired from flex application
+			function Discover(id, name) {
+				setMap({analysisProfile:'DiscoveryProfile', attributeId:id});
+				$('#titre').html( name);
+			}
+	    */
         </script>
     </head>
     <body>
@@ -76,16 +142,17 @@
 								+ pageHost + "www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' /></a>" ); 
 			</script> 
         </div>
+	    <div id="status">Status here</div>
 	   	
        	<noscript>
-            <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%" id="wps-flex-demo">
-                <param name="movie" value="../client/flex/wps-flex-demo-1.0-SNAPSHOT.swf" />
+            <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%" id="wps-flex">
+                <param name="movie" value="../client/flex/wps-flex-1.0-SNAPSHOT.swf" />
                 <param name="quality" value="high" />
                 <param name="bgcolor" value="#FFFFFF" />
                 <param name="allowScriptAccess" value="sameDomain" />
                 <param name="allowFullScreen" value="true" />
                 <!--[if !IE]>-->
-                <object type="application/x-shockwave-flash" data="../client/flex/wps-flex-demo-1.0-SNAPSHOT.swf" width="100%" height="100%">
+                <object type="application/x-shockwave-flash" data="../client/flex/wps-flex-1.0-SNAPSHOT.swf" width="100%" height="100%">
                     <param name="quality" value="high" />
                     <param name="bgcolor" value="#FFFFFF" />
                     <param name="allowScriptAccess" value="sameDomain" />
