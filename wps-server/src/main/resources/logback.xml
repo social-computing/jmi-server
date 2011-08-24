@@ -13,13 +13,13 @@
         <file>${logback.path}/wps.log</file>
         <append>false</append>
         <encoder>
-            <pattern>%d|%-5level| %logger{36} - %msg%n</pattern>
+            <pattern>%d|%-5level|%logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
 
     <!-- Loggers -->
-    <logger name="com.socialcomputing" level="debug" />
+    <logger name="com.socialcomputing"/>
 
     <!-- Embedded frameworks & tools -->
     <logger name="org.apache.commons" level="warn" />
