@@ -8,6 +8,7 @@ package com.socialcomputing.wps.script  {
     import flash.geom.Rectangle;
     
     import mx.collections.ArrayCollection;
+    import mx.controls.Alert;
     import mx.controls.Menu;
     import mx.events.MenuEvent;
     
@@ -433,6 +434,13 @@ package com.socialcomputing.wps.script  {
 								menu.addEventListener(MenuEvent.ITEM_CLICK, applet.menuHandler);
 								var point:Point = applet.localToGlobal(pos);
 								menu.show( point.x, point.y );
+								menu.visible = false;
+								if( point.x + menu.width > applet.width) 
+									point.x = Math.max( point.x - menu.width, 0);
+								if( point.y + menu.height > applet.height) 
+									point.y = Math.max( point.y - menu.height, 0);
+								menu.move( point.x, point.y);
+								menu.visible = true;
 							}
                         }
 						// Pop a tooltip
