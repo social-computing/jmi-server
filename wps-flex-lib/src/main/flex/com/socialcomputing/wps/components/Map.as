@@ -181,6 +181,12 @@ package com.socialcomputing.wps.components
 			// Set component status to "not ready"
 			this._ready = false;
 			
+			// Clear current
+			if( this.plan != null) {
+				this.plan.m_curSat = null;
+				this.plan.m_curZone = null;
+			}
+			
 			// Clear all drawing surfaces
 			this.clear();
 			
