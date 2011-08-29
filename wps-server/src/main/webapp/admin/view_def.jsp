@@ -11,7 +11,7 @@ public long getLastModified(HttpServletRequest request) {
 	return System.currentTimeMillis();
 }%>
 <%
-response.setContentType( "text/xml");
+response.setContentType( "text/plain");
 
 String dictionaryName = request.getParameter( "dictionary");
 String swatchName = request.getParameter("swatch");
