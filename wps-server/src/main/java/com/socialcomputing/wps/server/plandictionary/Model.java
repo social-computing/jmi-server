@@ -65,15 +65,24 @@ public class Model implements java.io.Serializable
 		model.m_DisplayEntities = element.getAttributeValue( "display-entities").equalsIgnoreCase( "yes");
 		if( element.getAttributeValue( "display-empty-links") != null)
 			model.m_DisplayEmptyLinks = element.getAttributeValue( "display-empty-links").equalsIgnoreCase( "yes");
+		else
+		    model.m_DisplayEmptyLinks = false;
 		if( element.getAttributeValue( "display-fake-links") != null)
 			model.m_DisplayFakeLinks = element.getAttributeValue( "display-fake-links").equalsIgnoreCase( "yes");
+        else
+            model.m_DisplayFakeLinks = false;
 		if( element.getAttributeValue( "in-color") != null)
 			model.m_inCol = new ColorX( Integer.parseInt( element.getAttributeValue( "in-color"), 16));
+        else
+            model.m_inCol = new ColorX( 0xFFFFFF);
 		if( element.getAttributeValue( "out-color") != null)
 			model.m_outCol = new ColorX( Integer.parseInt( element.getAttributeValue( "out-color"), 16));
+        else
+            model.m_outCol = new ColorX( 0xFFFFFF);
 		if( element.getAttributeValue( "filter-color") != null)
 			model.m_filterCol = new ColorX( Integer.parseInt( element.getAttributeValue( "filter-color"), 16));
-
+		else
+		    model.m_filterCol = new ColorX( 0xFFFFFF);
 		{   // Swatchs
 			org.jdom.Element props = element.getChild( "swatch-segmentation");
 			org.jdom.Element subprops = props.getChild( "attribute-swatch");
