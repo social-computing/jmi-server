@@ -159,7 +159,7 @@ package com.socialcomputing.wps.script  {
             //itemStr;
             var font:TextFormat= this.getTextFormat( zone.m_props);
             var items:Vector.<String>	= parseString3( title, zone.m_props);
-            var urls:Vector.<String>   	= url != null ? parseString3( url, zone .m_props) : null;
+            var urls:Vector.<String>   	= url != null ? parseString3( url, zone.m_props) : null;
             var redirs:Vector.<String>  = redir != null ? parseString3( redir, zone.m_props) : urls;
             //MenuItem    item;
             var i:int;
