@@ -3,7 +3,9 @@ package com.socialcomputing.wps.server.webservices;
 import java.sql.Connection;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.Map.Entry;
 
 import com.socialcomputing.wps.client.applet.Env;
 import com.socialcomputing.wps.client.applet.Transfo;
@@ -198,6 +200,15 @@ public class PlanRequest {
             }
         }
 
+        // ALL OTHER DB Properties
+        for( Entry<String, String> entry : profile.m_EntityPropertiesMapper.entryies()) {
+            if( !swatchProperties.contains( entry.getKey())) {
+                prop = dbProperties.get( entry.getValue());
+                if( prop != null)
+                    swatchProperties.put( entry.getKey(), prop);
+            }
+        }
+
         // SELECTION property
         int propSelection = 0, mask = 1, sCnt = getSelectionCount();
 
@@ -250,8 +261,7 @@ public class PlanRequest {
         // DB properties
         boolean isBase = recommendable.isRef();
         String strId = recommendable.getStrId();
-        Hashtable dbProperties = getAnalysisProfile().getConnector(m_Dictionary).getProperties(strId, isBase,
-                                                                                               m_entityId);
+        Hashtable<String, Object> dbProperties = getAnalysisProfile().getConnector(m_Dictionary).getProperties(strId, isBase, m_entityId);
         Model model = getModel();
         AnalysisProfile profile = this.getAnalysisProfile();
 
@@ -319,6 +329,15 @@ public class PlanRequest {
                         props.put(name, v);
                     }
                 }
+            }
+        }
+        
+        // ALL OTHER DB Properties
+        for( Entry<String, String> entry : profile.m_AttributePropertiesMapper.entryies()) {
+            if( !props.contains( entry.getKey())) {
+                prop = dbProperties.get( entry.getValue());
+                if( prop != null)
+                    props.put( entry.getKey(), prop);
             }
         }
 

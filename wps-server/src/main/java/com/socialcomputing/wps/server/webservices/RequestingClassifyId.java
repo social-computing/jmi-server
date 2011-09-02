@@ -13,12 +13,12 @@ public class RequestingClassifyId
 	public RequestingClassifyId( String userId)
 	{
 		m_Id = userId;
-		m_ClassifiersResults = new Hashtable();
+		m_ClassifiersResults = new Hashtable<String, String>();
 	}
 
 	/**
 	* Store previous classification results for the requesting entity (classifier name, classifier result) */
-	public Hashtable m_ClassifiersResults = null;
+	public Hashtable<String, String> m_ClassifiersResults = null;
 
 
 }

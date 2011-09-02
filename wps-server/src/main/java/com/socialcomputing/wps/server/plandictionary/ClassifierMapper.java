@@ -1,7 +1,8 @@
 package com.socialcomputing.wps.server.plandictionary;
 
 import java.util.Hashtable;
-import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierConnector;
@@ -25,7 +26,7 @@ public class ClassifierMapper implements java.io.Serializable
 
 	/**
 	* The classifier association map (for ech rule of iClassifierConnector) */
-	private Hashtable m_ClassifierData = null;
+	private Hashtable<String, String> m_ClassifierData = null;
 	private String m_DefaultClassifierData =  WPSDictionary.DEFAULT_NAME;
 
 	static public ClassifierMapper readObject( org.jdom.Element element)
@@ -65,7 +66,7 @@ public class ClassifierMapper implements java.io.Serializable
 	// classifier / default rule
 	public ClassifierMapper()
 	{
-		m_ClassifierData = new Hashtable();
+		m_ClassifierData = new Hashtable<String, String>();
 	}
 
 	public void setClassifier( String classifier)
@@ -89,6 +90,11 @@ public class ClassifierMapper implements java.io.Serializable
 		m_ClassifierData.put( key, value);
 	}
 
+   public Set<Entry<String, String>> entryies()
+    {
+        return m_ClassifierData.entrySet();
+    }
+
 	public String getAssociatedName( iEntityConnector entityConnector, RequestingClassifyId classifyId)  throws WPSConnectorException
 	{
 		if( m_ClassifierName.equals(  WPSDictionary.DEFAULT_NAME)) // No segmentation
@@ -100,7 +106,7 @@ public class ClassifierMapper implements java.io.Serializable
 			result = this.classify( entityConnector, classifyId.m_Id);
 			classifyId.m_ClassifiersResults.put( m_ClassifierName, result);
 		}
-		result = ( String) m_ClassifierData.get( result);
+		result = m_ClassifierData.get( result);
 
 		if( result == null) // Error : Association not defined
 			return m_DefaultClassifierData;
@@ -134,12 +140,10 @@ public class ClassifierMapper implements java.io.Serializable
 		String value = this.getDefault();
 		if( dico.m_FilteringProfiles.get( value ) == null)
 			throw new org.jdom.JDOMException( m + " : Unknown Filtering Profile '" + value + "'");
-		Iterator it = this.m_ClassifierData.values().iterator();
-		while( it.hasNext())
+		for( String val :  this.m_ClassifierData.values())
 		{
-			value = (String )it.next();
-			if( dico.m_FilteringProfiles.get( value ) == null)
-				throw new org.jdom.JDOMException( m + " : Unknown Filtering Profile '" + value + "'");
+			if( dico.m_FilteringProfiles.get( val ) == null)
+				throw new org.jdom.JDOMException( m + " : Unknown Filtering Profile '" + val + "'");
 		}
 	}
 
@@ -149,12 +153,10 @@ public class ClassifierMapper implements java.io.Serializable
 		String value = this.getDefault();
 		if( dico.m_AnalysisProfiles.get( value ) == null)
 			throw new org.jdom.JDOMException( m + " : Unknown Analysis Profile '" + value + "'");
-		Iterator it = this.m_ClassifierData.values().iterator();
-		while( it.hasNext())
+		for( String val :  this.m_ClassifierData.values())
 		{
-			value = (String )it.next();
-			if( dico.m_AnalysisProfiles.get( value ) == null)
-				throw new org.jdom.JDOMException( m + " : Unknown Analysis Profile '" + value + "'");
+			if( dico.m_AnalysisProfiles.get( val ) == null)
+				throw new org.jdom.JDOMException( m + " : Unknown Analysis Profile '" + val + "'");
 		}
 	}
 
@@ -164,12 +166,10 @@ public class ClassifierMapper implements java.io.Serializable
 		String value = this.getDefault();
 		if( dico.m_AffinityReaderProfiles.get( value ) == null)
 			throw new org.jdom.JDOMException( m + " : Unknown Affinity Reader Profile '" + value + "'");
-		Iterator it = this.m_ClassifierData.values().iterator();
-		while( it.hasNext())
+	    for( String val :  this.m_ClassifierData.values())
 		{
-			value = (String )it.next();
-			if( dico.m_AffinityReaderProfiles.get( value ) == null)
-				throw new org.jdom.JDOMException( m + " : Unknown Affinity Reader Profile '" + value + "'");
+			if( dico.m_AffinityReaderProfiles.get( val ) == null)
+				throw new org.jdom.JDOMException( m + " : Unknown Affinity Reader Profile '" + val + "'");
 		}
 	}
 
@@ -193,13 +193,11 @@ public class ClassifierMapper implements java.io.Serializable
 		if( model == null)
 			throw new org.jdom.JDOMException( m + " : Unknown Display Profile '" + value + "'");
 		model.checkIntegrity( m + " : Default Model '" + model.m_Name + "'", dico.getEntityConnector(), attributes);
-		Iterator it = this.m_ClassifierData.values().iterator();
-		while( it.hasNext())
+	    for( String val :  this.m_ClassifierData.values())
 		{
-			value = (String )it.next();
-			model = dico.getModel( value );
+			model = dico.getModel( val );
 			if( model == null)
-				throw new org.jdom.JDOMException( m + " : Unknown Display Profile '" + value + "'");
+				throw new org.jdom.JDOMException( m + " : Unknown Display Profile '" + val + "'");
 			model.checkIntegrity( m + " : Model '" + model.m_Name + "'", dico.getEntityConnector(), attributes);
 		}
 	}
