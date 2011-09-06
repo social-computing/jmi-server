@@ -13,7 +13,8 @@ package com.socialcomputing.wps.script  {
     import flash.geom.ColorTransform;
     import flash.geom.Point;
     import flash.geom.Rectangle;
-    
+	import flash.utils.getDefinitionByName;
+	
     import mx.controls.Image;
     import mx.utils.URLUtil;
     
@@ -425,21 +426,28 @@ package com.socialcomputing.wps.script  {
         public function drawImage(env:Env, s:Sprite, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
 			// Else it is just a void frame
 			if (isDefined(SCALE_VAL)) {
+				var image:Bitmap;
                 var scaledImg:Image;
 				var imageUrl:String;
-				
-				// Check if it is an absolute url starting with http(s) or file scheme
-				// Else get ressources from a path relative to the flash application hosting URL
-				if(URLUtil.isHttpURL(imageNam) || URLHelper.isFileURL(imageNam)) {
-					imageUrl = imageNam;
+
+				if( imageNam.search( "embed:") == 0) {
+					var ClassReference:Class = getDefinitionByName( imageNam.substr(6)) as Class;
+					image = new ClassReference();
 				}
 				else {
-					imageUrl = URLHelper.getFullURL(ApplicationUtil.getSwfRoot(), imageNam);
+					// Check if it is an absolute url starting with http(s) or file scheme
+					// Else get ressources from a path relative to the flash application hosting URL
+					if(URLUtil.isHttpURL(imageNam) || URLHelper.isFileURL(imageNam)) {
+						imageUrl = imageNam;
+					}
+					else {
+						imageUrl = URLHelper.getFullURL(ApplicationUtil.getSwfRoot(), imageNam);
+					}
+					
+					var imageLoader:BulkLoader = env.loader;
+					image = imageLoader.getBitmap(imageNam);
 				}
-				
-				var imageLoader:BulkLoader = env.loader;
-				var image:Bitmap = imageLoader.getBitmap(imageNam);
-				
+
 				// Check if the image has already been loaded
 			    // If it isn't add the image url to the bulkloader and catch the event when done.
                 if (image == null) {

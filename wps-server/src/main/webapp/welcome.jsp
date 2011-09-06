@@ -7,19 +7,20 @@
 	<link rel="stylesheet" href="css/wps.css">
 </head>
 <body>
-<img alt="Social Computing" src="./images/logo-sc-white.jpg" style="text-align:center">
+<a src=href="http://www.social-computing.com" target="_blank"></a><img alt="Social Computing" src="./images/logo-sc-white.jpg" style="text-align:center"></a>
 <br/><br/>
 <table width="100%">
 	<tr>
 	<td>
-		<a href="./admin"><h1>Administration</h1></a>
+		<a href="./admin"><h1>WPS Administration</h1></a>
 	</td>
 	</tr>
 	<tr>
 	<td>
-		<h1>Demos</a>
+		<h1>On the web</a>
 		<ul>
-		<li><a href="./facebook/welcome.jsp"><h2>Facebook with the flex client</h2></a>
+		<li><a href="http://www.social-computing.com" target="_blank"><h2>Social Computing</h2></a>
+		<li><a href="http://www.facebook.com/apps/application.php?id=108710779211353" target="_blank"><h2>Facebook application</h2></a>
 		</li>
 		</ul>
 	</td>
