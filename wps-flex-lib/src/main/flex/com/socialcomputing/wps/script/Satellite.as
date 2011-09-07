@@ -384,7 +384,7 @@ package com.socialcomputing.wps.script  {
 					else if( actionId == Satellite.HOVER_VAL) 
 						event = AttributeEvent.HOVER;
 					if( event != null) {
-						applet.dispatchEvent( new AttributeEvent( event, applet.findAttribute( zone)));
+						applet.dispatchEvent( new AttributeEvent( event, applet.findAttribute( zone), pos.x, pos.y));
 					}
 				}
 			}
