@@ -379,6 +379,8 @@ package com.socialcomputing.wps.script  {
 					var event:String = null;
 					if( actionId == Satellite.CLICK_VAL) 
 						event = AttributeEvent.CLICK;
+					else if( actionId == Satellite.DBLCLICK_VAL) 
+						event = AttributeEvent.DOUBLE_CLICK;
 					else if( actionId == Satellite.HOVER_VAL) 
 						event = AttributeEvent.HOVER;
 					if( event != null) {

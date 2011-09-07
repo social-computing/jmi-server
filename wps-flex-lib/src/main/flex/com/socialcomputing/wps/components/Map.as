@@ -25,6 +25,7 @@ package com.socialcomputing.wps.components
 	import flash.net.navigateToURL;
 	
 	import mx.collections.ArrayCollection;
+	import mx.controls.Alert;
 	import mx.core.UIComponent;
 	import mx.events.MenuEvent;
 	import mx.events.ResizeEvent;
@@ -43,6 +44,7 @@ package com.socialcomputing.wps.components
 	[Event(name="navigate", type="com.socialcomputing.wps.components.events.NavigateEvent")]
 	[Event(name="status",   type="com.socialcomputing.wps.components.events.StatusEvent")]
 	[Event(name="attribute_click", type="com.socialcomputing.wps.components.events.AttributeEvent")]
+	[Event(name="attribute_double_click", type="com.socialcomputing.wps.components.events.AttributeEvent")]
 	[Event(name="attribute_hover", type="com.socialcomputing.wps.components.events.AttributeEvent")]
 	//[Event(name="link_click",      type="com.socialcomputing.wps.components.events.LinkClickEvent")]
 	
@@ -178,6 +180,8 @@ package com.socialcomputing.wps.components
 		
 		public function set dataProvider(value:Object):void
 		{
+			//Alert.show( unescape( flash.display.LoaderInfo(this.root.loaderInfo).url));
+			
 			// Set component status to "not ready"
 			this._ready = false;
 			
