@@ -430,8 +430,8 @@ package com.socialcomputing.wps.script  {
                 var scaledImg:Image;
 				var imageUrl:String;
 
-				if( imageNam.search( "embed:") == 0) {
-					var ClassReference:Class = getDefinitionByName( imageNam.substr(6)) as Class;
+				if( imageNam.search( "embedded:") == 0) {
+					var ClassReference:Class = getDefinitionByName( imageNam.substr(9)) as Class;
 					image = new ClassReference();
 				}
 				else {
