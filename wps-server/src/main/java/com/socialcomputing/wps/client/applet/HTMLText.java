@@ -268,7 +268,10 @@ public class HTMLText extends Base implements Serializable
 			{
 				FontX   font = getFont( FONT_VAL, zone );
 
-				htmlTxt = new HTMLText( getColor( IN_COL_VAL, zone ), getColor( OUT_COL_VAL, zone ), ((ColorX)getValue( TEXT_COL_VAL, zone )).m_color, font.getInt( FontX.SIZE_VAL, zone ), font.getFlags( zone ), font.getString( FontX.NAME_VAL, zone ), getInt(BLUR_COL_VAL, zone), getInt(ROUNDED_COL_VAL, zone), getFlags( zone ), new Insets( 0, 2, 0, 2 ));
+				htmlTxt = new HTMLText( getColor( IN_COL_VAL, zone ), getColor( OUT_COL_VAL, zone ), 
+				                        ((ColorX)getValue( TEXT_COL_VAL, zone )).m_color, font.getInt( FontX.SIZE_VAL, zone ), font.getFlags( zone ), font.getString( FontX.NAME_VAL, zone ),
+				                        Integer.parseInt( getString(BLUR_COL_VAL, zone)), getInt(ROUNDED_COL_VAL, zone), 
+				                        getFlags( zone ), new Insets( 0, 2, 0, 2 ));
 				htmlTxt.parseText( g, lines );
 				htmlTxt.setTextBnds( applet.getSize(), getFlags( zone ), zone.m_flags ,transfo, supCtr, center );
 			}

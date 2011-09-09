@@ -245,7 +245,8 @@ package com.socialcomputing.wps.script{
 			this.m_font = font.getTextFormat( zone.m_props);
 			this.m_inCol = base.getColor( IN_COL_VAL, zone.m_props);
 			this.m_outCol = base.getColor( OUT_COL_VAL, zone.m_props);
-			this.m_blur = base.getInt(BLUR_COL_VAL, zone.m_props);
+			//this.m_blur = base.getInt(BLUR_COL_VAL, zone.m_props);
+			this.m_blur = parseInt( base.parseString(BLUR_COL_VAL, zone.m_props )[0]);
 			this.m_rounded = base.getInt(ROUNDED_COL_VAL, zone.m_props);
 			var color:ColorX = base.getValue( HTMLText.TEXT_COL_VAL, zone.m_props) as ColorX;
 			if( color != null)
