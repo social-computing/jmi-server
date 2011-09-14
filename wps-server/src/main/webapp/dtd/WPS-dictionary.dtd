@@ -17,6 +17,8 @@
 %Twitter-entities;
 <!ENTITY % Turbulences-entities SYSTEM "Turbulences-connector.dtd" >
 %Turbulences-entities;
+<!ENTITY % Viadeo-entities SYSTEM "Viadeo-connector.dtd" >
+%Viadeo-entities;
 
 <!ENTITY % Relax-params SYSTEM "Relax-params.dtd" >
 %Relax-params;
