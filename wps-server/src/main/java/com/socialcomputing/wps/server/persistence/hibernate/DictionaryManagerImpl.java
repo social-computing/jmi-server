@@ -52,7 +52,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
 
             result = new DictionaryImpl(name, definition, "");
             session.save(result);
-            String coefTable = WPSDictionary.getCoefficientTableName(name);
+/*            String coefTable = WPSDictionary.getCoefficientTableName(name);
             String queueTable = WPSDictionary.getCoefficientQueuingTableName(name);
             session.createSQLQuery("create table "
                                            + coefTable
@@ -72,7 +72,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
                 case DatabaseHelper.DB_HSQL:
                     session.createSQLQuery("create table " + queueTable + " (id varchar(255) not null, date timestamp)").executeUpdate();
             }
-            session.createSQLQuery("create index id on " + queueTable + " (id)").executeUpdate();
+            session.createSQLQuery("create index id on " + queueTable + " (id)").executeUpdate();*/
         }
         catch (Exception e) {
             LOG.error(e.getMessage(), e);
@@ -98,8 +98,8 @@ public class DictionaryManagerImpl implements DictionaryManager {
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             DictionaryImpl d =  ( DictionaryImpl)session.get(DictionaryImpl.class, name);
             session.delete(d);
-            session.createSQLQuery("drop table " + WPSDictionary.getCoefficientTableName(name)).executeUpdate();
-            session.createSQLQuery("drop table " + WPSDictionary.getCoefficientQueuingTableName(name)).executeUpdate();
+//            session.createSQLQuery("drop table " + WPSDictionary.getCoefficientTableName(name)).executeUpdate();
+//            session.createSQLQuery("drop table " + WPSDictionary.getCoefficientQueuingTableName(name)).executeUpdate();
         }
         catch (Exception e) {
             LOG.error(e.getMessage(), e);
