@@ -9,7 +9,10 @@ import java.util.Set;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
+import org.eclipse.jetty.util.log.Log;
 import org.jdom.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Attribute;
@@ -17,10 +20,11 @@ import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Attrib
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Entity;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.SocialEntityConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper;
-import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper.Type;
 
 public class ViadeoEntityConnector extends SocialEntityConnector {
 
+    private final static Logger LOG = LoggerFactory.getLogger(ViadeoEntityConnector.class);
+    
     private static final ObjectMapper mapper = new ObjectMapper();
 
     protected UrlHelper oAuth2Helper;
@@ -40,7 +44,7 @@ public class ViadeoEntityConnector extends SocialEntityConnector {
     public void _readObject(Element element) {
         super._readObject(element);
         oAuth2Helper.readObject( element);
-        for( Element property: (List<Element>)element.getChildren( "Facebook-property")) {
+        for( Element property: (List<Element>)element.getChildren( "Viadeo-property")) {
             attributeProperties.add( new AttributePropertyDefinition( property.getAttributeValue( "id"), property.getAttributeValue( "entity")));
         }
     }
@@ -50,62 +54,68 @@ public class ViadeoEntityConnector extends SocialEntityConnector {
     public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
         super.openConnections( planType, wpsparams);
         oAuth2Helper.openConnections( planType, wpsparams);
-        String token = "";
-        for( String p : oAuth2Helper.getResult().split("&")) {
-            if( p.startsWith( "access_token=")) {
-                token = p.substring( p.indexOf( '=') + 1);
-                break;
-            }
-        }
-        
-        wpsparams.put( "$access_token", token);
         try {
+            JsonNode node = mapper.readTree( oAuth2Helper.getStream());
+            String token = node.get( "access_token").getTextValue();
+            wpsparams.put( "$access_token", token);
+            
             String kind = ( String)wpsparams.get("kind");
             if( kind == null || kind.equalsIgnoreCase( "friends")) {
                 // Liste amis
                 UrlHelper urlHelper = new UrlHelper();
-                urlHelper.setUrl( "https://graph.facebook.com/me/friends");
+                urlHelper.setUrl( "https://api.viadeo.com/me/contacts.json");
+                urlHelper.addParameter( "limit", "50");
+                urlHelper.addParameter( "user_detail", "none");
                 urlHelper.addParameter( "access_token", token);
                 urlHelper.openConnections( planType, wpsparams);
-                
-                JsonNode node = mapper.readTree(urlHelper.getStream());
+                node = mapper.readTree(urlHelper.getStream());
                 List<String> friendslist = new ArrayList<String>();
                 ArrayNode friends = (ArrayNode)node.get( "data");
-                for( JsonNode friend : friends) {
-                    addPerson(friend.get("id").getTextValue()).addProperty("name", friend.get("name").getTextValue());
-                    friendslist.add(friend.get("id").getTextValue());
-                }
+                do {
+                    for( JsonNode friend : friends) {
+                        addPerson(friend.get("id").getTextValue()).addProperty("name", friend.get("name").getTextValue());
+                        friendslist.add(friend.get("id").getTextValue());
+                    }
+                    friends = null;
+                    String next = node.get( "paging").get( "next").getTextValue();
+                    if( next != "") {
+                        UrlHelper nextHelper = new UrlHelper();
+                        nextHelper.setUrl( next);
+                        nextHelper.openConnections( planType, wpsparams);
+                        node = mapper.readTree( nextHelper.getStream());
+                        friends = (ArrayNode)node.get( "data");
+                    }
+                } while (friends != null);  
                 
                 // My self
                 UrlHelper uh = new UrlHelper();
-                uh.setUrl( "https://graph.facebook.com/me");
+                uh.setUrl( "https://api.viadeo.com/me.json");
                 uh.addParameter("access_token", token);
                 uh.openConnections( planType, wpsparams);
                 JsonNode me = mapper.readTree(uh.getStream());
-                wpsparams.put( "$MY_FB_ID", me.get("id").getTextValue());
+                wpsparams.put( "$MY_VIADEO_ID", me.get("id").getTextValue());
                 
                 // Les amis entre eux 
                 for (int i = 0 ; i < friendslist.size() -1 ; i++) {
-                    StringBuilder sb1 = new StringBuilder();
-                    StringBuilder sb2 = new StringBuilder();
-                    for (int j = i + 1 ; j < friendslist.size() ; j++) {
-                        sb1.append(friendslist.get(i)).append(",");
-                        sb2.append(friendslist.get(j)).append(",");
-                    }
-                    String areFriends = "https://api.facebook.com/method/friends.areFriends";
                     UrlHelper uh1 = new UrlHelper();
-                    uh1.setUrl(areFriends);
-                    uh1.setType( Type.POST);
-                    uh1.addParameter("uids1", sb1.toString());
-                    uh1.addParameter("uids2", sb2.toString());
+                    uh1.setUrl( "https://api.viadeo.com/" + friendslist.get(i) + "/mutual_contacts.json");
                     uh1.addParameter("access_token", token);
-                    uh1.addParameter("format", "json");
                     uh1.openConnections( planType, wpsparams);
-                    ArrayNode r = ( ArrayNode)mapper.readTree(uh1.getStream());
-                    for (JsonNode rs : r) {
-                        //System.out.println(rs.get("uid1") + "=>" + rs.get("uid2") + "=>" + rs.get("are_friends"));
-                        if ( rs.get("are_friends").getBooleanValue())
-                            setFriendShip(String.valueOf(rs.get("uid1").getLongValue()), String.valueOf(rs.get("uid2").getLongValue()).toString());
+                    node = mapper.readTree( uh1.getStream());
+                    friends = (ArrayNode)node.get( "data");
+                    while( friends != null) {
+                        for( JsonNode friend : friends) {
+                            setFriendShip( friendslist.get(i), friend.get("id").getTextValue());
+                        }
+                        friends = null;
+                        String next = node.get( "paging").get( "next").getTextValue();
+                        if( next != "") {
+                            UrlHelper nextHelper = new UrlHelper();
+                            nextHelper.setUrl( next);
+                            nextHelper.openConnections( planType, wpsparams);
+                            node = mapper.readTree( nextHelper.getStream());
+                            friends = (ArrayNode)node.get( "data");
+                        }
                     }
                 }
                 
@@ -132,7 +142,7 @@ public class ViadeoEntityConnector extends SocialEntityConnector {
                 urlHelper.addParameter( "access_token", token);
                 urlHelper.openConnections( planType, wpsparams);
                 
-                JsonNode node = mapper.readTree(urlHelper.getStream());
+                node = mapper.readTree(urlHelper.getStream());
                 ArrayNode friends = (ArrayNode)node.get( "data");
 
                 // My self

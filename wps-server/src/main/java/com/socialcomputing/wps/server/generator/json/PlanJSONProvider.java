@@ -133,7 +133,9 @@ public class PlanJSONProvider {
     }
     
     static private ObjectNode toJSON(Object value) {
-        if (value instanceof ObjectNode)
+        if (value == null)
+            return null;
+        else if (value instanceof ObjectNode)
             return ( ObjectNode)value;
         else if (value instanceof Slice)
             return toJSON((Slice) value);

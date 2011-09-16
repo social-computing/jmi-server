@@ -52,9 +52,9 @@ if( code == null) { %>
             <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
             var xiSwfUrlStr = "../client/flex/playerProductInstall.swf";
             var flashvars = {};
-            flashvars.wpsserverurl = "http://wps.wps.cloudbees.net/";
+            flashvars.wpsserverurl = "http://localhost:8080/wps-server";
             flashvars.wpsplanname = "Viadeo";
-            flashvars.fbauthcode = '<%=code%>';
+            flashvars.authcode = '<%=code%>';
             flashvars.analysisProfile = "GlobalProfile";
             flashvars.kind = "friends";
             var params = {};
