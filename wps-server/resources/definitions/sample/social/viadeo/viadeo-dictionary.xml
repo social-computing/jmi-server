@@ -17,6 +17,7 @@
 			</URL-connection>
 			<Viadeo-property id="poss_id" entity="id" />
 			<Viadeo-property id="poss_name" entity="name" />
+			<Viadeo-property id="poss_url" entity="url" />
 		</Viadeo-entities>
 	</entities>
 	
@@ -58,6 +59,7 @@
 				<mapping key="URL" value="url" />
 				<mapping key="POSS_ID" 	value="poss_id" />
 				<mapping key="POSS_NAME" value="poss_name" />
+				<mapping key="POSS_URL" value="poss_url" />
 			</attribute-props-mapping>
 		</props-mapping>
 		<entities-recommendation>
@@ -80,6 +82,7 @@
 				<mapping key="URL" value="url" />
 				<mapping key="POSS_ID" 	value="poss_id" />
 				<mapping key="POSS_NAME" value="poss_name" />
+				<mapping key="POSS_URL" value="poss_url" />
 			</attribute-props-mapping>
 		</props-mapping>
 		<entities-recommendation>

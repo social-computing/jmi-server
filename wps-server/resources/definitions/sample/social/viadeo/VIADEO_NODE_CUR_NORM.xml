@@ -232,7 +232,7 @@
 		<item label="Afficher" font="nameFnt" url="javascript:Display({sID},{sURL})" />
 		<item label="Centrer" font="nameFnt" url="javascript:Discover({sID},{sNAME})" />
 		<separator />
-		<item label="[+30sPOSS_NAME]" url="javascript:Display([sPOSS_ID])" />
+		<item label="[+30sPOSS_NAME]" url="javascript:Display([sPOSS_ID],[sPOSS_URL])" />
 	</menu>
 
 		<font		    id="menuFnt"
