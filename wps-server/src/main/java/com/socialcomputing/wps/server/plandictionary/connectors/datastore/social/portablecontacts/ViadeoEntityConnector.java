@@ -98,17 +98,17 @@ public class ViadeoEntityConnector extends SocialEntityConnector {
                 wpsparams.put( "$MY_VIADEO_ID", me.get("id").getTextValue());
                 
                 // Les amis entre eux 
-                for (int i = 0 ; i < friendslist.size() -1 ; i++) {
+                for (String friend : friendslist) {
                     UrlHelper uh1 = new UrlHelper();
-                    uh1.setUrl( "https://api.viadeo.com/" + friendslist.get(i) + "/mutual_contacts.json");
+                    uh1.setUrl( "https://api.viadeo.com/" + friend + "/mutual_contacts.json");
                     uh1.addParameter( "limit", "50");
                     uh1.addParameter("access_token", token);
                     uh1.openConnections( planType, wpsparams);
                     node = mapper.readTree( uh1.getStream());
                     friends = (ArrayNode)node.get( "data");
                     while( friends != null) {
-                        for( JsonNode friend : friends) {
-                            setFriendShip( friendslist.get(i), friend.get("id").getTextValue());
+                        for( JsonNode friendJson : friends) {
+                            setFriendShip( friend, friendJson.get("id").getTextValue());
                         }
                         friends = null;
                         String next = node.get( "paging").get( "next").getTextValue();

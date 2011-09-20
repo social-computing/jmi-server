@@ -52,7 +52,7 @@ if( code == null) { %>
             <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
             var xiSwfUrlStr = "../client/flex/playerProductInstall.swf";
             var flashvars = {};
-            flashvars.wpsserverurl = "http://localhost:8080/wps-server";
+            flashvars.wpsserverurl = "http://wps.wps.cloudbees.net/";
             flashvars.wpsplanname = "Viadeo";
             flashvars.authcode = '<%=code%>';
             flashvars.analysisProfile = "GlobalProfile";
@@ -63,11 +63,11 @@ if( code == null) { %>
             params.allowscriptaccess = "sameDomain";
             params.allowfullscreen = "true";
             var attributes = {};
-            attributes.id = "wps-facebook";
-            attributes.name = "wps-facebook";
+            attributes.id = "wps-viadeo";
+            attributes.name = "wps-viadeo";
             attributes.align = "middle";
             swfobject.embedSWF(
-                "../client/flex/wps-facebook-1.0-SNAPSHOT.swf", "flashContent", 
+                "../client/flex/wps-viadeo-1.0-SNAPSHOT.swf", "flashContent", 
                 "100%", "100%", 
                 swfVersionStr, xiSwfUrlStr, 
                 flashvars, params, attributes);
