@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   xmlns:wps="com.socialcomputing.wps.components.*"
+			   creationComplete="onCreationComplete(event)">
+	<fx:Script>
+		<![CDATA[
+			import br.com.stimuli.loading.BulkLoader;
+			
+			import com.adobe.serialization.json.JSON;
+			import com.brokenfunction.json.decodeJson;
+			import com.socialcomputing.wps.components.Attribute;
+			import com.socialcomputing.wps.components.events.ActionEvent;
+			import com.socialcomputing.wps.components.events.StatusEvent;
+			import com.socialcomputing.wps.services.planservice.PlanService;
+			
+			import flash.external.ExternalInterface;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.Sort;
+			import mx.collections.SortField;
+			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			import mx.graphics.codec.PNGEncoder;
+			import mx.messaging.channels.StreamingAMFChannel;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.events.IndexChangeEvent;
+			
+			private var planName:String;
+			private var planService:PlanService;
+			private var loader:BulkLoader; 
+			
+			[Bindable]
+			public var types:ArrayCollection = new ArrayCollection(
+				[ {type:"contacts", single:"a contact"},
+					{type:"groups", single:"a group"},
+					{type:"likes", single:"Like"}
+//					{type:"tags", single:"a tag"}
+				]);
+			
+			protected function onCreationComplete(event:FlexEvent):void {
+				
+				// Reading application properties
+				var serverURL:String = this.checkApplicationParameter("wpsserverurl");
+				this.planName = this.checkApplicationParameter("wpsplanname");
+				var parameters:Object = FlexGlobals.topLevelApplication.parameters;
+				
+				// Initialising service
+				this.planService = new PlanService(serverURL);
+				computeMap();
+				
+				this.loader = new BulkLoader();
+			}
+			
+			private function checkApplicationParameter(paramName:String):String {
+				if(!FlexGlobals.topLevelApplication.parameters.hasOwnProperty(paramName)) {
+					throw new Error("Missing application parameter: " + paramName); 
+				}
+				return FlexGlobals.topLevelApplication.parameters[paramName];
+			}
+			
+			private function computeMap():void {
+				//type.enabled = false;
+				if( parameters["kind"] == null)
+					parameters["kind"] = "contacts";
+				friends.enabled = false;
+				items.enabled = false;
+				getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
+			}
+			
+			
+			private function onInit():void {
+				var sort:Sort = new Sort();
+				map.defineEntities(["POSS_NAME"]);
+				sort.fields = [new SortField("POSS_NAME", false)];
+				map.entities.sort = sort;
+				map.entities.refresh();
+				items.dataProvider = map.entities;
+				items.visible = true;
+				items.enabled = true;
+				itemsLabel.text = "Select " + type.selectedItem.single;
+				itemsLabel.visible = true;
+				
+				if( parameters["kind"] != "contacts") {
+					sort = new Sort();
+					sort.fields = [new SortField("NAME", false)];
+					map.attributes.sort = sort;
+					map.attributes.refresh();
+					friends.dataProvider = map.attributes;
+					friends.visible = true;
+					friends.enabled = true;
+					friendsLabel.visible = true;
+				}
+				else {
+					friends.visible = false;
+					friends.enabled = false;
+					friendsLabel.visible = false;
+				}
+				type.enabled = true;
+			}
+			
+			private function onEmpty():void {
+				Alert.show("Sorry, the map is empty");
+				type.enabled = true;
+			}
+			private function onError(event:com.socialcomputing.wps.components.events.StatusEvent):void {
+				Alert.show( event.status);
+				type.enabled = true;
+			}
+			
+			protected function onAction(event:ActionEvent):void
+			{
+				if( event.action == "Discover") {
+					parameters["attributeId"] = event.args[0];
+					parameters["analysisProfile"] = "DiscoveryProfile";
+					parameters["kind"] = type.selectedItem.type;
+					computeMap();
+				}
+				if( event.action == "Display") {
+					ExternalInterface.call('navigate', event.args[1], "_blank");
+				}
+			}
+			
+			private function selectType(event:IndexChangeEvent):void { 
+				parameters["analysisProfile"] = "GlobalProfile";
+				parameters["kind"] = type.selectedItem.type;
+				computeMap();
+			}
+			
+			private function selectFriend(event:IndexChangeEvent):void {
+				map.clearSelection( "search");
+				friends.selectedItem.select( "search");
+				map.setSelection( "search");
+				items.selectedItem = null;
+			}
+			
+			private function selectItem(event:IndexChangeEvent):void {
+				map.clearSelection( "search");
+				items.selectedItem.select( "search");
+				for each( var attribute:Attribute in items.selectedItem.attributes) {
+					attribute.select( "search");
+				}
+				map.setSelection( "search");
+				friends.selectedItem = null;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<s:CallResponder id="getPlanResult"
+						 fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)" />
+	</fx:Declarations>
+	<s:layout>
+		<s:VerticalLayout gap="0" />
+	</s:layout>
+	<s:HGroup horizontalAlign="left" paddingBottom="5">
+		<s:ButtonBar id="type" labelField="type" dataProvider="{types}" change="selectType(event);" selectedIndex="0" />
+	</s:HGroup>
+	<s:HGroup>
+		<!--s:Label text="View map of " />
+		<s:DropDownList id="type" labelField="type" dataProvider="{types}" change="selectType(event);" selectedIndex="0"/-->
+		<s:Label id="friendsLabel" text="Select a friend" visible="false"/>
+		<s:DropDownList id="friends" labelField="NAME" change="selectFriend(event);" width="200" visible="false"/>
+		<s:Label id="itemsLabel" visible="false"/>
+		<s:DropDownList id="items" labelField="POSS_NAME"  change="selectItem(event);" width="200" visible="false"/>
+	</s:HGroup>
+	<mx:HRule width="100%"/>
+	<wps:Map id="map"
+			 backgroundColor="#FFFFFF"
+			 dataProvider="{getPlanResult.lastResult}" 
+			 ready="onInit();"
+			 empty="onEmpty()"
+			 error="onError(event);"
+			 action="onAction(event);" 
+			 percentWidth="100"
+			 percentHeight="100"
+			 />
+</s:Application>

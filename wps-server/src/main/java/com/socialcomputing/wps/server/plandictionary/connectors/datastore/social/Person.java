@@ -14,6 +14,10 @@ public class Person {
         this.entity = entity;
     }
     
+    public String getId() {
+        return entity.getId();
+    }
+    
     public Attribute getAttribute() {
         return attribute;
     }

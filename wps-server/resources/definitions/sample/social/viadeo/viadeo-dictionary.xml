@@ -50,10 +50,12 @@
 			<entity-props-mapping>
 				<mapping key="ID" 	value="id" />
 				<mapping key="NAME" value="name" />
+				<mapping key="URL" value="url" />
 			</entity-props-mapping>
 			<attribute-props-mapping>
 				<mapping key="ID" 	value="id" />
 				<mapping key="NAME" value="name" />
+				<mapping key="URL" value="url" />
 				<mapping key="POSS_ID" 	value="poss_id" />
 				<mapping key="POSS_NAME" value="poss_name" />
 			</attribute-props-mapping>
@@ -61,6 +63,7 @@
 		<entities-recommendation>
 			<mapping key="REC_ID"  		value="id" />
 			<mapping key="REC_NAME"  	value="name" />
+			<mapping key="REC_URL"  	value="url" />
 		</entities-recommendation>
 	</analysis-profile>
 
@@ -69,10 +72,12 @@
 			<entity-props-mapping>
 				<mapping key="ID" 	value="id" />
 				<mapping key="NAME" value="name" />
+				<mapping key="URL" value="url" />
 			</entity-props-mapping>
 			<attribute-props-mapping>
 				<mapping key="ID" 	value="id" />
 				<mapping key="NAME" value="name" />
+				<mapping key="URL" value="url" />
 				<mapping key="POSS_ID" 	value="poss_id" />
 				<mapping key="POSS_NAME" value="poss_name" />
 			</attribute-props-mapping>
@@ -80,22 +85,23 @@
 		<entities-recommendation>
 			<mapping key="REC_ID"  		value="id" />
 			<mapping key="REC_NAME"  	value="name" />
+			<mapping key="REC_URL"  	value="url" />
 		</entities-recommendation>
 	</analysis-profile>
 
 	<display-profile name="Display" display-empty-links="no" in-color="ffffff" out-color="0" filter-color="56b2ff" >
 		<swatch-segmentation>
 			<attribute-swatch>
-				<norm-swatch default-ref="FB_NODE_NORM" />
-				<ref-swatch default-ref="FB_NODE_REF" />
-				<active-norm-swatch default-ref="FB_NODE_CUR_NORM" />
-				<active-ref-swatch default-ref="FB_NODE_CUR_REF" />
+				<norm-swatch default-ref="VIADEO_NODE_NORM" />
+				<ref-swatch default-ref="VIADEO_NODE_REF" />
+				<active-norm-swatch default-ref="VIADEO_NODE_CUR_NORM" />
+				<active-ref-swatch default-ref="VIADEO_NODE_CUR_REF" />
 			</attribute-swatch>
 			<link-swatch>
-				<norm-swatch default-ref="FB_LINK_NORM" />
-				<ref-swatch default-ref="FB_LINK_REF" />
-				<active-norm-swatch default-ref="FB_LINK_CUR_NORM" />
-				<active-ref-swatch default-ref="FB_LINK_CUR_REF" />
+				<norm-swatch default-ref="VIADEO_LINK_NORM" />
+				<ref-swatch default-ref="VIADEO_LINK_REF" />
+				<active-norm-swatch default-ref="VIADEO_LINK_CUR_NORM" />
+				<active-ref-swatch default-ref="VIADEO_LINK_CUR_REF" />
 			</link-swatch>
 		</swatch-segmentation>
 		<selection-swatch name="search" />
@@ -104,16 +110,16 @@
 	<display-profile name="GlobalDisplay" display-empty-links="no" display-fake-links="no" in-color="ffffff" out-color="0" filter-color="56b2ff" >
 		<swatch-segmentation>
 			<attribute-swatch>
-				<norm-swatch default-ref="FB_NODE_NORM" />
-				<ref-swatch default-ref="FB_NODE_REF" />
-				<active-norm-swatch default-ref="FB_NODE_CUR_NORM" />
-				<active-ref-swatch default-ref="FB_NODE_CUR_REF" />
+				<norm-swatch default-ref="VIADEO_NODE_NORM" />
+				<ref-swatch default-ref="VIADEO_NODE_REF" />
+				<active-norm-swatch default-ref="VIADEO_NODE_CUR_NORM" />
+				<active-ref-swatch default-ref="VIADEO_NODE_CUR_REF" />
 			</attribute-swatch>
 			<link-swatch>
-				<norm-swatch default-ref="FB_LINK_NORM" />
-				<ref-swatch default-ref="FB_LINK_REF" />
-				<active-norm-swatch default-ref="FB_LINK_CUR_NORM" />
-				<active-ref-swatch default-ref="FB_LINK_CUR_REF" />
+				<norm-swatch default-ref="VIADEO_LINK_NORM" />
+				<ref-swatch default-ref="VIADEO_LINK_REF" />
+				<active-norm-swatch default-ref="VIADEO_LINK_CUR_NORM" />
+				<active-ref-swatch default-ref="VIADEO_LINK_CUR_REF" />
 			</link-swatch>
 		</swatch-segmentation>
 		<selection-swatch name="search" />
