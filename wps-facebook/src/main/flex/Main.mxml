@@ -34,7 +34,6 @@
 			
             private var planName:String;
             private var planService:PlanService;
-			private var loader:BulkLoader; 
 			
 			[Bindable]
 			public var types:ArrayCollection = new ArrayCollection(
@@ -61,9 +60,7 @@
 				// Initialising service
 				this.planService = new PlanService(serverURL);
 				computeMap();
-				
-				this.loader = new BulkLoader();
-            }
+				            }
 			
 			private function checkApplicationParameter(paramName:String):String {
 				if(!FlexGlobals.topLevelApplication.parameters.hasOwnProperty(paramName)) {
@@ -138,8 +135,14 @@
 			}
 			
             private function selectType(event:IndexChangeEvent):void { 
-                parameters["analysisProfile"] = "GlobalProfile";
-                parameters["kind"] = type.selectedItem.type;
+				if( type.selectedItem.type != "friends" && map.getProperty("$MY_FB_ID")) {
+					parameters["attributeId"] = map.getProperty("$MY_FB_ID");
+					parameters["analysisProfile"] = "DiscoveryProfile";
+				}
+				else {
+	                parameters["analysisProfile"] = "GlobalProfile";
+				}
+				parameters["kind"] = type.selectedItem.type;
 				computeMap();
             }
             
@@ -162,13 +165,14 @@
 			
 			private function displayFBLink( id:String):void {
 				var url:String = "https://graph.facebook.com/" + id;
+				var loader:BulkLoader = new BulkLoader();
 				loader.addEventListener(
 					BulkLoader.COMPLETE,
 					function(event:Event):void {
 						var json:String = loader.getText( url);
 						var jso:Object = decodeJson( json);
 						var link:String;
-						if( jso.hasOwnProperty( "link"))
+						if( jso && jso.hasOwnProperty( "link"))
 							link = jso[ "link"] as String;
 						else
 							link = "http://www.facebook.com";
