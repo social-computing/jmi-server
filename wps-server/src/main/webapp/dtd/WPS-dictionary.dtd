@@ -3,8 +3,8 @@
 <!ENTITY % JDBC-entities SYSTEM "JDBC-connector.dtd" >
 %JDBC-entities;
 
-<!ENTITY % XML-entities SYSTEM "XML-connector.dtd" >
-%XML-entities;
+<!ENTITY % REST-entities SYSTEM "REST-connector.dtd" >
+%REST-entities;
 
 <!ENTITY % SOLR-entities SYSTEM "SOLR-connector.dtd" >
 %SOLR-entities;
@@ -55,7 +55,7 @@
 <!ELEMENT dictionary (comment?, entities, env-property*, filtering-scheduling?, filtering-profile*, affinity-reader-profile+, analysis-profile+, display-profile+, segmentation)>
 <!ATTLIST dictionary name   NMTOKEN 	#REQUIRED>
 
-<!ELEMENT entities (JDBC-entities|XML-entities|SOLR-entities|Facebook-entities|Google-entities|Twitter-entities|Turbulences-entities|Viadeo-entities)>
+<!ELEMENT entities (JDBC-entities|REST-entities|SOLR-entities|Facebook-entities|Google-entities|Twitter-entities|Turbulences-entities|Viadeo-entities)>
 
 <!-- =====================================================================  -->
 <!-- Env Properties : fixing env properties -->

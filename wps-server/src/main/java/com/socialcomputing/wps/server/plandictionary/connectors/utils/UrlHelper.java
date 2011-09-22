@@ -41,7 +41,8 @@ public class UrlHelper extends ConnectorHelper {
     protected String user, password;
 
     protected InputStream stream = null;
-
+    protected String contentType = null;
+    
     public UrlHelper() {
         super();
     }
@@ -115,6 +116,7 @@ public class UrlHelper extends ConnectorHelper {
                 wr.close ();
            }
            stream = connection.getInputStream();
+           contentType = connection.getContentType();
             
         } catch (IOException e) {
             throw new WPSConnectorException("openConnections: ", e);
@@ -149,6 +151,10 @@ public class UrlHelper extends ConnectorHelper {
         return stream;
     }
 
+    public String getContentType() {
+        return contentType;
+    }
+    
     public String getResult() throws WPSConnectorException {
         Writer writer = new StringWriter();
         Reader reader = new BufferedReader( new InputStreamReader( stream));

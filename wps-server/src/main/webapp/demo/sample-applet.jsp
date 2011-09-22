@@ -148,7 +148,7 @@
 				// params['analysisProfile'] = 'DiscoveryProfile';
 		
 				// Uncomment to switch to XML based dictionary
-				params['planName'] = 'Xml_sample';
+				params['planName'] = 'Json_sample';
 		
 				$("#map").wpsmap({
 					wps: params, 

@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+
+<!-- =====================================================================  -->
+<!-- REST-entities : data connectors description -->
+<!-- =====================================================================  -->
+<!ELEMENT REST-entities (comment?, URL-connection, REST-entity, REST-attribute)>
+<!ATTLIST REST-entities	name    CDATA    #REQUIRED>
+<!ATTLIST REST-entities	class   CDATA    "com.socialcomputing.wps.server.plandictionary.connectors.datastore.file.rest.RESTEntityConnector" >
+<!ATTLIST REST-entities	type    (xml|json) "xml">
+
+<!ELEMENT REST-entity 	(REST-property*)>
+<!ATTLIST REST-entity	markup	    CDATA    #REQUIRED>
+<!ATTLIST REST-entity	id    		CDATA    #REQUIRED>
+
+<!ELEMENT REST-property 	EMPTY>
+<!ATTLIST REST-property	id    		CDATA    #REQUIRED>
+<!ATTLIST REST-property	entity    	CDATA    #IMPLIED>
+
+<!ELEMENT REST-attribute (REST-property*)>
+<!ATTLIST REST-attribute	markup		   	CDATA    #REQUIRED>
+<!ATTLIST REST-attribute	id    			CDATA    #REQUIRED>

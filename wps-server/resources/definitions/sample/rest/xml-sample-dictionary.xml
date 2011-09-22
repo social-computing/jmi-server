@@ -6,22 +6,22 @@
 	<comment>Sample Xml Plan Dictionary</comment>
 
 	<entities>
-		<XML-entities name="WPS Sample">
+		<REST-entities name="WPS Sample">
 			<URL-connection>
 				<url>http://localhost:8080/wps-server/data/SampleData.xml</url>
 			</URL-connection>
 	
-			<XML-entity markup="entity" id="id" >
-				<XML-property id="name" />
-			</XML-entity>
+			<REST-entity markup="entity" id="id" >
+				<REST-property id="name" />
+			</REST-entity>
 	
-			<XML-attribute markup="attribute" id="id" >
-				<XML-property id="name" />
-				<XML-property id="poss_id" entity="id" />
-				<XML-property id="poss_name" entity="name" />
-			</XML-attribute>
+			<REST-attribute markup="attribute" id="id" >
+				<REST-property id="name" />
+				<REST-property id="poss_id" entity="id" />
+				<REST-property id="poss_name" entity="name" />
+			</REST-attribute>
 			
-		</XML-entities>
+		</REST-entities>
 	</entities>
 	
 	<env-property name="$web_context" value ="http://localhost:8080/wps-server/" />
