@@ -5,9 +5,7 @@ import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
-import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
 import org.jdom.Element;
