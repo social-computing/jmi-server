@@ -6,26 +6,26 @@
 
 <!-- Base Satellite definition -->
     <sat shape="diskShp" transfo="baseTrf" isBack="true" isVisible="true" isSuper="true" isSub="false" isCur="false" isRest="true" isTip="false" isNoSided="false">
-        <slice inCol="100 100 100" outCol="56 56 56" alpha="1" linewidth="1" />
-        <slice inCol="255 255 255" outCol="56 56 56" alpha="1" linewidth="1">
+        <slice inCol="90 120 171" outCol="90 120 171" alpha="1" linewidth="1" />
+        <slice inCol="255 255 255" outCol="90 120 171" alpha="1" linewidth="1">
             <transfo scale=".87" map="absolute" />
         </slice>
     </sat>
 
 <!-- Sub Spots -->
     <sat shape="diskShp" isSub="true" isSuper="false" isVisible="true" isCur="false" isRest="true" isBack="false" isTip="false" isNoSided="false">
-        <slice inCol="164 164 164" outCol="100 100 100" transfo="spotTrf" alpha="1" linewidth="1" />
+        <slice inCol="236 239 199" outCol="90 120 171" transfo="spotTrf" alpha="1" linewidth="1" />
     </sat>
 
 <!-- Super Spot -->
     <sat shape="diskShp" isVisible="true" isSuper="true" isSub="false" isCur="false" isRest="true" isBack="false" isTip="false" isNoSided="false">
-        <slice inCol="164 164 164" outCol="100 100 100" transfo="spotTrf" alpha="1" linewidth="1" />
+        <slice inCol="236 239 199" outCol="90 120 171" transfo="spotTrf" alpha="1" linewidth="1" />
     </sat>
 
 <!-- Title -->
     <sat shape="voidShp" transfo="titleTrf" isSub="true" isSuper="true" isTip="true" isVisible="true" isCur="false" isRest="true" isBack="false" isNoSided="false">
         <slice alpha="1" linewidth="1">
-            <tip font="selFnt" label="{+20sNAME}" textCol="@blackCol" rounded="10" isCorner="true" blur="-1" dir="SW" align="left" isFloating="false" />
+            <tip font="selFnt" label="{+20sNAME}" textCol="90 120 171" rounded="10" isCorner="true" blur="-1" dir="SW" align="left" isFloating="false" />
         </slice>
     </sat>
 

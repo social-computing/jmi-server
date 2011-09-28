@@ -6,7 +6,7 @@
 
 <!-- Base Satellite definition -->
     <sat shape="edgeShp" transfo="noTrf" isBack="true" isVisible="true" isSuper="true" isSub="false" isCur="false" isRest="true" isTip="false" isNoSided="false">
-        <slice inCol="100 100 100" outCol="56 56 56" alpha="1" linewidth="1" />
+        <slice inCol="236 239 199" outCol="90 120 171" alpha="1" linewidth="1" />
     </sat>
 
 <!-- General purpose Selection -->

@@ -6,20 +6,20 @@
 
 <!-- Base -->
     <sat shape="diskShp" transfo="baseTrf" hover="hoverEvt" click="clickEvt" dblClk="dblClkEvt" isVisible="true" isSuper="true" isSub="false" isCur="false" isRest="true" isBack="false" isTip="false" isNoSided="false">
-        <slice inCol="86 178 255" outCol="0 102 204" alpha="1" linewidth="1" />
-        <slice inCol="255 255 255" outCol="0 102 204" alpha="1" linewidth="1">
+        <slice inCol="249 162 36" outCol="90 120 171" alpha="1" linewidth="1" />
+        <slice inCol="255 255 255" outCol="90 120 171" alpha="1" linewidth="1">
             <transfo scale=".87" map="absolute" />
         </slice>
     </sat>
 
 <!-- Rest Spots -->
     <sat shape="diskShp" isSub="true" isVisible="true" isSuper="true" isCur="false" isRest="true" isBack="false" isTip="false" isNoSided="false">
-        <slice inCol="37 137 235" outCol="0 102 204" transfo="spotTrf" alpha="1" linewidth="1" />
+        <slice inCol="249 162 36" outCol="90 120 171" transfo="spotTrf" alpha="1" linewidth="1" />
     </sat>
 
 <!-- Cur Spot -->
     <sat shape="diskShp" isSub="true" isRest="false" isCur="true" isVisible="true" isSuper="true" isBack="false" isTip="false" isNoSided="false">
-        <slice inCol="86 178 255" outCol="0 102 204" transfo="spotTrf" alpha="1" linewidth="1" />
+        <slice inCol="249 162 36" outCol="90 120 171" transfo="spotTrf" alpha="1" linewidth="1" />
     </sat>
 
 <!-- Rest Titles -->
@@ -39,7 +39,7 @@
             <polar dir="0" rad="1.2" />
         </transfo>
         <slice alpha="1" linewidth="1">
-            <tip font="selFnt" label="{sNAME}" inCol="255 0 0" textCol="@whiteCol" isCorner="true" blur="-1" rounded="-1" dir="SW" align="left" isFloating="false" />
+            <tip font="selFnt" label="{sNAME}" inCol="249 162 36" textCol="@whiteCol" isCorner="true" blur="-1" rounded="-1" dir="SW" align="left" isFloating="false" />
         </slice>
     </sat>
     
@@ -49,7 +49,7 @@
             <polar dir="0" rad="1.2" />
         </transfo>
         <slice alpha="1" linewidth="1">
-            <tip font="nameFnt" label="@nameStr" inCol="37 137 235" textCol="@whiteCol" rounded="10" isCorner="true" blur="-1" dir="SW" align="left" isFloating="false" />
+            <tip font="nameFnt" label="@nameStr" inCol="249 162 36" textCol="@whiteCol" rounded="10" isCorner="true" blur="-1" dir="SW" align="left" isFloating="false" />
         </slice>
     </sat>
 <!-- References -->

@@ -18,8 +18,8 @@
 					isBack="false" 
 					isTip="false" 
 					isNoSided="false">
-		<slice		inCol="164 164 164"
-					outCol="100 100 100"
+		<slice		inCol="179 203 73"
+					outCol="90 120 171"
 					alpha="1"
 					linewidth="1"/>
 		<slice		inCol="255 255 255"
@@ -39,8 +39,8 @@
 					isBack="false" 
 					isTip="false" 
 					isNoSided="false">
-		<slice		inCol="100 100 100"
-					outCol="0 0 0"
+		<slice		inCol="179 203 73"
+					outCol="90 120 171"
 					transfo="spotTrf"
 					alpha="1"
 					linewidth="1"/>
@@ -56,8 +56,8 @@
 					isBack="false" 
 					isTip="false" 
 					isNoSided="false">
-		<slice		inCol="164 164 164"
-					outCol="100 100 100"
+		<slice		inCol="249 162 36"
+					outCol="90 120 171"
 					transfo="spotTrf"
 					alpha="1"
 					linewidth="1"/>
@@ -81,7 +81,7 @@
 		<slice alpha="1" linewidth="1">
 			<tip 	font="nameFnt"
 					label="@nameStr"
-					textCol="@blackCol"
+					textCol="90 120 171"
 					isCorner="true"
 					blur="-1" 
 					rounded="-1" 
@@ -138,9 +138,10 @@
 		<slice alpha="1" linewidth="1">
 			<tip 	font="nameFnt"
 					label="{sNAME}"
-					inCol="100 100 100"
+					inCol="249 162 36"
 					textCol="@whiteCol"
 					isCorner="true"
+					rounded="5"
 					blur="-1" 
 					dir="SW" 
 					align="left" 
