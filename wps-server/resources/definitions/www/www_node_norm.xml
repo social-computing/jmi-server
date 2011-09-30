@@ -40,7 +40,7 @@
 					isSuper="true"
 					isTip="true">
 		<slice>
-			<tip 	font="selFnt"
+			<tip 	font="nameFnt"
 					label="{+15sNAME}"
 					textCol="@blackCol"
 					rounded="10"
@@ -79,14 +79,14 @@
 	</shape>
 
 	<font		    id="nameFnt"
-					name="SansSerif"
+					name="Helvetica"
 					size="11"
 					style="bold"/>
 	<font		    id="titleFnt"
-					name="SansSerif"
+					name="Helvetica"
 					size="11"/>
 	<font		    id="selFnt"
-					name="SansSerif"
+					name="Helvetica"
 					style="bold"
 					size="11"/>
 

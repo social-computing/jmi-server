@@ -42,7 +42,7 @@
 			<polar  dir="0" rad="1.1"/>
 		</transfo>
 		<slice>
-			<tip 	font="selFnt"
+			<tip 	font="nameFnt"
 					label="{+15sNAME}"
 					textCol="37 137 235"
 					isCorner="true"/>
@@ -80,11 +80,11 @@
 	</shape>
 
 	<font		    id="nameFnt"
-					name="SansSerif"
+					name="Helvetica"
 					size="11"
 					style="bold"/>
 	<font		    id="selFnt"
-					name="SansSerif"
+					name="Helvetica"
 					style="bold"
 					size="11"/>
 

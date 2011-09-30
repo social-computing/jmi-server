@@ -109,15 +109,15 @@
 	</shape>
 
 	<font		    id="nameFnt"
-					name="SansSerif"
+					name="Helvetica"
 					size="12"
 					style="bold"/>
 	<font		    id="italicFnt"
-					name="SansSerif"
+					name="Helvetica"
 					size="12"
 					style="italic"/>
 	<font		    id="selFnt"
-					name="SansSerif"
+					name="Helvetica"
 					size="12"
 					style="bold" />
 

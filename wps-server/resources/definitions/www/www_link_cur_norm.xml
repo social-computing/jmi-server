@@ -21,7 +21,7 @@
 
 <!-- References -->
 	<font		    id="tipFnt"
-					name="SansSerif"
+					name="Helvetica"
 					size="12"/>
 
 	<font		    id="fixedFnt"

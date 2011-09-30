@@ -44,7 +44,7 @@
 	</transfo>
 
 	<font		    id="selFnt"
-					name="SansSerif"
+					name="Helvetica"
 					size="10"/>
 	<transfo	    id="noTrf"/>
 
