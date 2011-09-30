@@ -6,20 +6,20 @@
 
 <!-- Base -->
     <sat shape="diskShp" transfo="baseTrf" isBack="true" isVisible="true" isSuper="true" isSub="false" isCur="false" isRest="true" isTip="false" isNoSided="false">
-        <slice inCol="249 162 36" outCol="90 120 171" alpha="1" linewidth="1" />
-        <slice inCol="255 255 255" outCol="90 120 171" alpha="1" linewidth="1">
+        <slice inCol="195 39 47" outCol="195 39 47" alpha="1" linewidth="1" />
+        <slice inCol="255 255 255" outCol="195 39 47" alpha="1" linewidth="1">
             <transfo scale=".87" map="absolute" />
         </slice>
     </sat>
 
 <!-- Sub Spots -->
     <sat shape="diskShp" isSub="true" isSuper="false" isVisible="true" isCur="false" isRest="true" isBack="false" isTip="false" isNoSided="false">
-        <slice inCol="249 162 36" outCol="90 120 171" transfo="spotTrf" alpha="1" linewidth="1" />
+        <slice inCol="195 39 47" outCol="138 138 138" transfo="spotTrf" alpha="1" linewidth="1" />
     </sat>
 
 <!-- Super Spot -->
     <sat shape="diskShp" isVisible="true" isSuper="true" isSub="false" isCur="false" isRest="true" isBack="false" isTip="false" isNoSided="false">
-        <slice inCol="249 162 36" outCol="90 120 171" transfo="spotTrf" alpha="1" linewidth="1" />
+        <slice inCol="195 39 47" outCol="138 138 138" transfo="spotTrf" alpha="1" linewidth="1" />
     </sat>
 
 <!-- Title -->
@@ -28,7 +28,7 @@
             <polar dir="0" rad="1.1" />
         </transfo>
         <slice alpha="1" linewidth="1">
-            <tip font="selFnt" label="{+20sNAME}" textCol="249 162 36" isCorner="true" blur="-1" rounded="-1" dir="SW" align="left" isFloating="false" />
+            <tip font="nameFnt" label="{+20sNAME}" inCol="195 39 47" textCol="@whiteCol" rounded="10" isCorner="true" blur="-1" dir="SW" align="left" isFloating="false" />
         </slice>
     </sat>
 
@@ -53,8 +53,8 @@
     <shape id="spotShp" scale="0.2" anchor="center">
     </shape>
 
-    <font id="nameFnt" name="SansSerif" size="11" style="bold" />
-    <font id="selFnt" name="SansSerif" style="bold" size="11" />
+    <font id="nameFnt" name="Arial" size="11" style="bold" />
+    <font id="selFnt" name="Arial" style="bold" size="11" />
 
     <transfo id="spotTrf" scale="0.2" map="absolute" />
     <transfo id="imgTrf" scale="0.3" map="absolute" />

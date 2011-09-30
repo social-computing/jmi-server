@@ -6,7 +6,7 @@
 
 <!-- Base Satellite definition -->
     <sat shape="edgeShp" hover="hoverEvt" click="clickEvt" isBack="true" isVisible="true" isSuper="true" isSub="false" isCur="false" isRest="true" isTip="false" isNoSided="false">
-        <slice inCol="179 203 73" outCol="90 120 171" alpha="1" linewidth="1" />
+        <slice inCol="245 158 35" outCol="138 138 138" alpha="1" linewidth="1" />
     </sat>
 
     <sat shape="edgeShp" selection="search" isVisible="true" isSuper="true" isSub="false" isCur="false" isRest="true" isBack="false" isTip="false" isNoSided="false">
@@ -14,7 +14,7 @@
     </sat>
 
 <!-- References -->
-    <font id="tipFnt" name="SansSerif" size="12" style="plain" />
+    <font id="tipFnt" name="Arial" size="12" style="plain" />
 
     <font id="fixedFnt" name="Monospaced" size="12" style="plain" />
 
@@ -40,6 +40,6 @@
         <item label="[sREC_NAME]" url="javascript:Display([sREC_ID],[sREC_URL])" />
     </menu>
 
-    <font id="menuFnt" name="Monospaced" size="11" style="plain" />
+    <font id="menuFnt" name="Arial" size="11" style="plain" />
 </swatch>
 

@@ -18,8 +18,8 @@
 					isBack="false" 
 					isTip="false" 
 					isNoSided="false">
-		<slice		inCol="179 203 73"
-					outCol="90 120 171"
+		<slice		inCol="55 176 227"
+					outCol="55 176 227"
 					alpha="1"
 					linewidth="1"/>
 		<slice		inCol="255 255 255"
@@ -39,8 +39,8 @@
 					isBack="false" 
 					isTip="false" 
 					isNoSided="false">
-		<slice		inCol="179 203 73"
-					outCol="90 120 171"
+		<slice		inCol="55 176 227"
+					outCol="138 138 138"
 					transfo="spotTrf"
 					alpha="1"
 					linewidth="1"/>
@@ -56,8 +56,8 @@
 					isBack="false" 
 					isTip="false" 
 					isNoSided="false">
-		<slice		inCol="249 162 36"
-					outCol="90 120 171"
+		<slice		inCol="245 158 35"
+					outCol="138 138 138"
 					transfo="spotTrf"
 					alpha="1"
 					linewidth="1"/>
@@ -81,10 +81,11 @@
 		<slice alpha="1" linewidth="1">
 			<tip 	font="nameFnt"
 					label="@nameStr"
-					textCol="90 120 171"
+					inCol="138 138 138" 
+					textCol="@whiteCol" 
+					rounded="10"  
 					isCorner="true"
 					blur="-1" 
-					rounded="-1" 
 					dir="SW" 
 					align="left" 
 					isFloating="false"/>
@@ -141,7 +142,7 @@
 					inCol="249 162 36"
 					textCol="@whiteCol"
 					isCorner="true"
-					rounded="5"
+					rounded="10"
 					blur="-1" 
 					dir="SW" 
 					align="left" 
@@ -165,15 +166,15 @@
 	</shape>
 
 	<font		    id="nameFnt"
-					name="SansSerif"
+					name="Arial"
 					size="12"
 					style="bold"/>
 	<font		    id="italicFnt"
-					name="SansSerif"
+					name="Arial"
 					size="12"
 					style="italic"/>
 	<font		    id="selFnt"
-					name="SansSerif"
+					name="Arial"
 					size="12"
 					style="bold" />
 
@@ -237,7 +238,7 @@
 	</menu>
 
 		<font		    id="menuFnt"
-						name="Monospaced"
+						name="Arial"
 						size="11"/>
 
 	<!-- DblClkEvt event -->

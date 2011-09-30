@@ -6,20 +6,20 @@
 
 <!-- Base -->
     <sat shape="diskShp" transfo="baseTrf" hover="hoverEvt" click="clickEvt" dblClk="dblClkEvt" isVisible="true" isSuper="true" isSub="false" isCur="false" isRest="true" isBack="false" isTip="false" isNoSided="false">
-        <slice inCol="249 162 36" outCol="90 120 171" alpha="1" linewidth="1" />
-        <slice inCol="255 255 255" outCol="90 120 171" alpha="1" linewidth="1">
+        <slice inCol="195 39 47" outCol="195 39 47" alpha="1" linewidth="1" />
+        <slice inCol="255 255 255" outCol="195 39 47" alpha="1" linewidth="1">
             <transfo scale=".87" map="absolute" />
         </slice>
     </sat>
 
 <!-- Rest Spots -->
     <sat shape="diskShp" isSub="true" isVisible="true" isSuper="true" isCur="false" isRest="true" isBack="false" isTip="false" isNoSided="false">
-        <slice inCol="249 162 36" outCol="90 120 171" transfo="spotTrf" alpha="1" linewidth="1" />
+        <slice inCol="195 39 47" outCol="138 138 138" transfo="spotTrf" alpha="1" linewidth="1" />
     </sat>
 
 <!-- Cur Spot -->
     <sat shape="diskShp" isSub="true" isRest="false" isCur="true" isVisible="true" isSuper="true" isBack="false" isTip="false" isNoSided="false">
-        <slice inCol="249 162 36" outCol="90 120 171" transfo="spotTrf" alpha="1" linewidth="1" />
+        <slice inCol="195 39 47" outCol="138 138 138" transfo="spotTrf" alpha="1" linewidth="1" />
     </sat>
 
 <!-- Rest Titles -->
@@ -49,7 +49,7 @@
             <polar dir="0" rad="1.2" />
         </transfo>
         <slice alpha="1" linewidth="1">
-            <tip font="nameFnt" label="@nameStr" inCol="249 162 36" textCol="@whiteCol" rounded="10" isCorner="true" blur="-1" dir="SW" align="left" isFloating="false" />
+            <tip font="nameFnt" label="@nameStr" inCol="195 39 47" textCol="@whiteCol" rounded="10" isCorner="true" blur="-1" dir="SW" align="left" isFloating="false" />
         </slice>
     </sat>
 <!-- References -->
@@ -67,9 +67,9 @@
     <shape id="spotShp" scale="0.2" anchor="center">
     </shape>
 
-    <font id="nameFnt" name="SansSerif" size="12" style="bold" />
-    <font id="italicFnt" name="SansSerif" size="12" style="italic" />
-    <font id="selFnt" name="SansSerif" size="12" style="bold" />
+    <font id="nameFnt" name="Arial" size="12" style="bold" />
+    <font id="italicFnt" name="Arial" size="12" style="italic" />
+    <font id="selFnt" name="Arial" size="12" style="bold" />
 
     <transfo id="spotTrf" scale="0.2" map="absolute" />
     <transfo id="imgTrf" scale="0.4" map="absolute" />
@@ -100,7 +100,7 @@
 		<item label="[+30sPOSS_NAME]" url="javascript:Display([sPOSS_ID],[sPOSS_URL])" />
 	</menu>
 
-	<font id="menuFnt" name="Monospaced" size="11" style="plain" />
+	<font id="menuFnt" name="Arial" size="11" style="plain" />
 
     <!-- DblClkEvt event -->
     <event id="dblClkEvt">
