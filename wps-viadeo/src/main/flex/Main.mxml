@@ -4,6 +4,22 @@
 			   xmlns:mx="library://ns.adobe.com/flex/mx" 
 			   xmlns:wps="com.socialcomputing.wps.components.*"
 			   creationComplete="onCreationComplete(event)">
+	<fx:Style>
+		@namespace "library://ns.adobe.com/flex/spark";
+		
+		ButtonBar ToggleButton:upAndSelected,
+		ButtonBar ToggleButton:overAndSelected,
+		ButtonBar ToggleButton:downAndSelected,
+		ButtonBar ToggleButton:disabledAndSelected {
+			chromeColor: #b3c949;
+			color: #ffffff;
+		}
+		
+		ButtonBar {
+			chromeColor: #ffffff;
+			color: #b3c949;
+		}
+	</fx:Style>
 	<fx:Script>
 		<![CDATA[
 			import br.com.stimuli.loading.BulkLoader;
@@ -158,7 +174,7 @@
 	<s:layout>
 		<s:VerticalLayout gap="0" />
 	</s:layout>
-	<s:HGroup horizontalAlign="left" paddingBottom="5">
+	<s:HGroup horizontalAlign="left" paddingBottom="5" width="100%" paddingTop="2">
 		<s:ButtonBar id="type" labelField="type" dataProvider="{types}" change="selectType(event);" selectedIndex="0" />
 	</s:HGroup>
 	<s:HGroup>
