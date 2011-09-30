@@ -140,6 +140,7 @@
 					label="{sNAME}"
 					inCol="100 100 100"
 					textCol="@whiteCol"
+					rounded="10"
 					isCorner="true"
 					blur="-1" 
 					dir="SW" 
@@ -164,15 +165,15 @@
 	</shape>
 
 	<font		    id="nameFnt"
-					name="SansSerif"
+					name="Arial"
 					size="12"
 					style="bold"/>
 	<font		    id="italicFnt"
-					name="SansSerif"
+					name="Arial"
 					size="12"
 					style="italic"/>
 	<font		    id="selFnt"
-					name="SansSerif"
+					name="Arial"
 					size="12"
 					style="bold" />
 
@@ -236,7 +237,7 @@
 	</menu>
 
 		<font		    id="menuFnt"
-						name="Monospaced"
+						name="Arial"
 						size="11"/>
 
 	<!-- DblClkEvt event -->

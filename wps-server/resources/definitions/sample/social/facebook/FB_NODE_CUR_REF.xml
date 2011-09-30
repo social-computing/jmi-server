@@ -67,9 +67,9 @@
     <shape id="spotShp" scale="0.2" anchor="center">
     </shape>
 
-    <font id="nameFnt" name="SansSerif" size="12" style="bold" />
-    <font id="italicFnt" name="SansSerif" size="12" style="italic" />
-    <font id="selFnt" name="SansSerif" size="12" style="bold" />
+    <font id="nameFnt" name="Arial" size="12" style="bold" />
+    <font id="italicFnt" name="Arial" size="12" style="italic" />
+    <font id="selFnt" name="Arial" size="12" style="bold" />
 
     <transfo id="spotTrf" scale="0.2" map="absolute" />
     <transfo id="imgTrf" scale="0.4" map="absolute" />
@@ -100,7 +100,7 @@
 		<item label="[+30sPOSS_NAME]" url="javascript:Display([sPOSS_ID])" />
 	</menu>
 
-	<font id="menuFnt" name="Monospaced" size="11" style="plain" />
+	<font id="menuFnt" name="Arial" size="11" style="plain" />
 
     <!-- DblClkEvt event -->
     <event id="dblClkEvt">

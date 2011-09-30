@@ -25,7 +25,7 @@
 <!-- Title -->
     <sat shape="voidShp" transfo="titleTrf" isSub="true" isSuper="true" isTip="true" isVisible="true" isCur="false" isRest="true" isBack="false" isNoSided="false">
         <slice alpha="1" linewidth="1">
-            <tip font="selFnt" label="{+20sNAME}" textCol="@blackCol" rounded="10" isCorner="true" blur="-1" dir="SW" align="left" isFloating="false" />
+            <tip font="nameFnt" label="{+20sNAME}" textCol="@blackCol" rounded="10" isCorner="true" blur="-1" dir="SW" align="left" isFloating="false" />
         </slice>
     </sat>
 
@@ -50,9 +50,9 @@
     <shape id="spotShp" scale="0.2" anchor="center">
     </shape>
 
-    <font id="nameFnt" name="SansSerif" size="11" style="bold" />
-    <font id="titleFnt" name="SansSerif" size="11" style="plain" />
-    <font id="selFnt" name="SansSerif" style="bold" size="11" />
+    <font id="nameFnt" name="Arial" size="11" style="bold" />
+    <font id="titleFnt" name="Arial" size="11" style="plain" />
+    <font id="selFnt" name="Arial" style="bold" size="11" />
 
     <transfo id="spotTrf" scale="0.2" map="absolute" />
     <transfo id="imgTrf" scale="0.3" map="absolute" />

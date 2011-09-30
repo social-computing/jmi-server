@@ -14,7 +14,7 @@
     </sat>
     
 <!-- References -->
-    <font id="tipFnt" name="SansSerif" size="12" style="plain" />
+    <font id="tipFnt" name="Arial" size="12" style="plain" />
 
     <font id="fixedFnt" name="Monospaced" size="12" style="plain" />
 
