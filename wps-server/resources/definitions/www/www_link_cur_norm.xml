@@ -46,7 +46,7 @@
 
 	<!-- Hover event -->
 	<event 	        id="hoverEvt">
-		<show       status="Click to show this link menu"/>
+		<show       status="Cliquez pour afficher le menu du lien"/>
 		<pop        tooltip="tooltip"/>
 	</event>
 
