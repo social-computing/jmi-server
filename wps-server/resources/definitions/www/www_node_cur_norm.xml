@@ -157,7 +157,7 @@
 						font="menuFnt">
 			<item 		label="Afficher"
 						font="nameFnt"
-						url="http://www.social-computing.com" />
+						url="_self:http://www.social-computing.com/?p={sID}" />
 			<item 		label="Centrer"
 						font="nameFnt"
 						url="javascript:Discover({sID},{sNAME})" />
@@ -172,7 +172,7 @@
 
 	<!-- DblClkEvt event -->
 	<event 	        id="dblClkEvt">
-		<open       url="javascript:alert({sNAME})" />
+		<open       url="javascript:Discover({sID},{sNAME})" />
 	</event>
 	
 </swatch>
