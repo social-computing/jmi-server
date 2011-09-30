@@ -21,8 +21,8 @@
     <shape id="edgeShp" scale="1" anchor="intersect">
     </shape>
 
-    <tooltip id="tooltip" delay="0" length="3000">
-        <tip font="tipFnt" label="[/20sREC_NAME]" inCol="255 255 223" textCol="0" align="center" isFloating="true" blur="-1" rounded="-1" dir="SW" isCorner="false" />
+    <tooltip id="tooltip" delay="0" length="5000">
+        <tip font="tipFnt" label="[/20sREC_NAME]" inCol="255 255 255" outCol="245 158 35" textCol="138 138 138" align="center" isFloating="true" blur="-1" rounded="10" dir="SW" isCorner="false" />
     </tooltip>
 
     <!-- Hover event -->

@@ -92,7 +92,7 @@
 		</entities-recommendation>
 	</analysis-profile>
 
-	<display-profile name="Display" display-empty-links="no" in-color="ffffff" out-color="0" filter-color="56b2ff" >
+	<display-profile name="Display" display-empty-links="no" in-color="ffffff" out-color="0" filter-color="e7e8e8" >
 		<swatch-segmentation>
 			<attribute-swatch>
 				<norm-swatch default-ref="VIADEO_NODE_NORM" />
@@ -110,7 +110,7 @@
 		<selection-swatch name="search" />
 	</display-profile>
 
-	<display-profile name="GlobalDisplay" display-empty-links="no" display-fake-links="no" in-color="ffffff" out-color="0" filter-color="56b2ff" >
+	<display-profile name="GlobalDisplay" display-empty-links="no" display-fake-links="no" in-color="ffffff" out-color="0" filter-color="e7e8e8" >
 		<swatch-segmentation>
 			<attribute-swatch>
 				<norm-swatch default-ref="VIADEO_NODE_NORM" />
