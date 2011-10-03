@@ -38,6 +38,8 @@
             flashvars.wpsserverurl = "http://localhost:8080/wps-server";
             flashvars.wpsplanname = "Json_sample";
             flashvars.analysisProfile = "GlobalProfile";
+            flashvars.entitiesName = "Organizations";
+            flashvars.attributesName = "Countries";
             var params = {};
             params.quality = "high";
             params.bgcolor = "#FFFFFF";
