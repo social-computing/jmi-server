@@ -6,6 +6,7 @@
 <!ELEMENT Viadeo-entities (comment?, URL-connection, Viadeo-property*)>
 <!ATTLIST Viadeo-entities	name    CDATA    #REQUIRED>
 <!ATTLIST Viadeo-entities	class   CDATA    "com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.portablecontacts.ViadeoEntityConnector" >
+<!ATTLIST Viadeo-entities	contact-limit    CDATA    "-1">
 
 <!ELEMENT Viadeo-property 		EMPTY>
 <!ATTLIST Viadeo-property	id    	CDATA    #REQUIRED>

@@ -6,7 +6,7 @@
 	<comment>Viadeo Plan Dictionary</comment>
 
 	<entities>
-		<Viadeo-entities name="Viadeo">
+		<Viadeo-entities name="Viadeo" contact-limit="-1">
 			<URL-connection>
 				<url>https://secure.viadeo.com/oauth-provider/access_token2</url>
 				<url-parameter name="code">{$authcode}</url-parameter>

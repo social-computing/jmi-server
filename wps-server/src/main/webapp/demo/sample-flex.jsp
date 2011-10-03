@@ -35,8 +35,8 @@
             <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
             var xiSwfUrlStr = "../client/flex/playerProductInstall.swf";
             var flashvars = {};
-            flashvars.wpsserverurl = "http://wps.wps.cloudbees.net";
-            flashvars.wpsplanname = "Xml_sample";
+            flashvars.wpsserverurl = "http://localhost:8080/wps-server";
+            flashvars.wpsplanname = "Json_sample";
             flashvars.analysisProfile = "GlobalProfile";
             var params = {};
             params.quality = "high";
