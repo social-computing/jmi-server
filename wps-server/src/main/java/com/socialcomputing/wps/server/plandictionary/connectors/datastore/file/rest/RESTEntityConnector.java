@@ -12,31 +12,34 @@ import org.jdom.Element;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Attribute;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.AttributePropertyDefinition;
+import com.socialcomputing.wps.server.plandictionary.connectors.datastore.PropertyDefinition;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Entity;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.file.FileEntityConnector;
+import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper;
 
 public class RESTEntityConnector extends FileEntityConnector {
     protected   String m_Type = null;
+    protected   String m_InvertedDef = null;
     protected	String m_EntityId = null, m_EntityMarkup = null, m_AttributeId = null, m_AttributeMarkup = null;
 	
 	static RESTEntityConnector readObject(org.jdom.Element element) {
 		RESTEntityConnector connector = new RESTEntityConnector( element.getAttributeValue("name"));
 		connector._readObject( element);
 		connector.m_Type = element.getAttributeValue( "type");
+        connector.m_InvertedDef = element.getAttributeValue( "invert");
 		
 		Element entity = element.getChild( "REST-entity");
 		connector.m_EntityMarkup = entity.getAttributeValue( "markup");
 		connector.m_EntityId = entity.getAttributeValue( "id");
 		for( Element property: (List<Element>)entity.getChildren( "REST-property")) {
-			connector.entityProperties.add( property.getAttributeValue( "id"));
+			connector.entityProperties.add( new PropertyDefinition( property.getAttributeValue( "id"), property.getAttributeValue( "attribute")));
 		}
 
 		Element attribute = element.getChild( "REST-attribute");
 		connector.m_AttributeMarkup = attribute.getAttributeValue( "markup");
 		connector.m_AttributeId = attribute.getAttributeValue( "id");
 		for( Element property: (List<Element>)attribute.getChildren( "REST-property")) {
-			connector.attributeProperties.add( new AttributePropertyDefinition( property.getAttributeValue( "id"), property.getAttributeValue( "entity")));
+			connector.attributeProperties.add( new PropertyDefinition( property.getAttributeValue( "id"), property.getAttributeValue( "entity")));
 		}
 	
 		return connector;
@@ -53,6 +56,7 @@ public class RESTEntityConnector extends FileEntityConnector {
 		if( type == null) {
 		    type = m_Type;
 		}
+		m_inverted =  UrlHelper.ReplaceParameter( m_InvertedDef, wpsparams).equalsIgnoreCase( "true");
 		if( type != null && (type.equalsIgnoreCase("json") || type.equalsIgnoreCase( MediaType.APPLICATION_JSON)))
             readJSON( planType, wpsparams);
 		else
@@ -67,8 +71,10 @@ public class RESTEntityConnector extends FileEntityConnector {
             if( entities != null) {
                 for( JsonNode jsonentity: entities) {
                     Entity entity = addEntity( jsonentity.get( m_EntityId).getTextValue());
-                    for( String property : entityProperties) {
-                        entity.addProperty( property, jsonentity.get( property).getTextValue());
+                    for( PropertyDefinition property : entityProperties) {
+                        if( property.isSimple()) {
+                            entity.addProperty( property.getName(), jsonentity.get( property.getName()).getTextValue());
+                        }
                     }
                     
                     ArrayNode attributes = (ArrayNode) jsonentity.get( m_AttributeMarkup);
@@ -84,12 +90,18 @@ public class RESTEntityConnector extends FileEntityConnector {
             if( attributes != null) {
                 for( JsonNode jsonattribute: attributes) {
                     Attribute attribute = addAttribute( jsonattribute.get( m_AttributeId).getTextValue());
-                    for( AttributePropertyDefinition property : attributeProperties) {
+                    for( PropertyDefinition property : attributeProperties) {
                         if( property.isSimple()) {
                             attribute.addProperty( property, jsonattribute.get( property.getName()).getTextValue());
                         }
                     }
-                    addEntityProperties( attribute);
+                    if( !isInverted())
+                        addEntityProperties( attribute);
+                }
+            }
+            if( isInverted()) {
+                for( Entity entity : m_Entities.values()) { 
+                    addAttributeProperties( entity);
                 }
             }
         }
@@ -111,8 +123,10 @@ public class RESTEntityConnector extends FileEntityConnector {
 		}
 		for( Element el: (List<Element>)root.getChildren( m_EntityMarkup)) {
 			Entity entity = addEntity( el.getAttributeValue( m_EntityId));
-			for( String property : entityProperties) {
-				entity.addProperty( property, el.getAttributeValue( property));
+	        for( PropertyDefinition property : entityProperties) {
+                if( property.isSimple()) {
+                    entity.addProperty( property.getName(), el.getAttributeValue( property.getName()));
+                }
 			}
 			
 			for( Element el2: (List<Element>)el.getChildren( m_AttributeMarkup)) {
@@ -122,13 +136,19 @@ public class RESTEntityConnector extends FileEntityConnector {
 		}
 		for( Element el: (List<Element>)root.getChildren( m_AttributeMarkup)) {
 			Attribute attribute = addAttribute( el.getAttributeValue( m_AttributeId));
-			for( AttributePropertyDefinition property : attributeProperties) {
+			for( PropertyDefinition property : attributeProperties) {
 				if( property.isSimple()) {
 					attribute.addProperty( property, el.getAttributeValue( property.getName()));
 				}
 			}
-			addEntityProperties( attribute);
+			if( !isInverted())
+			    addEntityProperties( attribute);
 		}
+        if( isInverted()) {
+            for( Entity entity : m_Entities.values()) { 
+                addAttributeProperties( entity);
+            }
+        }
 	}
 
 	@Override

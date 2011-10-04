@@ -136,19 +136,9 @@
 				// Mysql based dictionary by default  
 				// params['planName'] = 'sample';
 				
-				// Uncomment to switch to Solr based dictionary
-				// params['planName'] = 'Solr_sample';
-				// params['maxResults'] = '35';
-				// params['q'] = 'fulltext:retraite AND assetTagNames:[* TO *]';
-				// params['invert'] = false;
-				
-				// Uncomment to enable search by document proximity
-				// params['searchDocumentId'] = '15_PORTLET_10156_FIELD_47260';
-				// params['attributeId'] = '15_PORTLET_10156_FIELD_47260';
-				// params['analysisProfile'] = 'DiscoveryProfile';
-		
 				// Uncomment to switch to XML based dictionary
 				params['planName'] = 'Json_sample';
+				params['wpsserverurl'] = 'http://localhost:8080/wps-server';
 		
 				$("#map").wpsmap({
 					wps: params, 

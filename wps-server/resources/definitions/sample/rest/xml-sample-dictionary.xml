@@ -6,13 +6,15 @@
 	<comment>Sample Xml Plan Dictionary</comment>
 
 	<entities>
-		<REST-entities name="WPS Sample">
+		<REST-entities name="WPS Sample" invert="{$invert}">
 			<URL-connection>
-				<url>http://localhost:8080/wps-server/data/SampleData.xml</url>
+				<url>{$wpsserverurl}/data/SampleData.xml</url>
 			</URL-connection>
 	
 			<REST-entity markup="entity" id="id" >
 				<REST-property id="name" />
+				<REST-property id="poss_id" attribute="id" />
+				<REST-property id="poss_name" attribute="name" />
 			</REST-entity>
 	
 			<REST-attribute markup="attribute" id="id" >
@@ -23,9 +25,7 @@
 			
 		</REST-entities>
 	</entities>
-	
-	<env-property name="$web_context" value ="http://localhost:8080/wps-server/" />
-	
+		
 	<affinity-reader-profile name="AffReader" affinity-reader-ref="*" threshold="100" />
 	<affinity-reader-profile name="DiscoveryAffReader" affinity-reader-ref="*" threshold="100" />
 	<affinity-reader-profile name="GlobalAffReader" affinity-reader-ref="*" threshold="100" />

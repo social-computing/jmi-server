@@ -23,12 +23,14 @@ public abstract class DatastoreEntityConnector implements iEntityConnector {
     public String m_Description = null;
     protected Hashtable<String, Object> m_WPSParams = null;
     protected int m_planType;
+    
+    protected boolean m_inverted = false;
 
     protected Hashtable<String, Entity> m_Entities = new Hashtable<String, Entity>();
     protected Hashtable<String, Attribute> m_Attributes = new Hashtable<String, Attribute>();
 
-    protected Set<String> entityProperties = new HashSet<String>();
-    protected Set<AttributePropertyDefinition> attributeProperties = new HashSet<AttributePropertyDefinition>();
+    protected Set<PropertyDefinition> entityProperties = new HashSet<PropertyDefinition>();
+    protected Set<PropertyDefinition> attributeProperties = new HashSet<PropertyDefinition>();
 
     protected List<DatastoreAffinityGroupReader> affinityGroupReaders = new ArrayList<DatastoreAffinityGroupReader>();
     protected List<DatastoreProfileConnector> profileConnectors = new ArrayList<DatastoreProfileConnector>();
@@ -78,12 +80,12 @@ public abstract class DatastoreEntityConnector implements iEntityConnector {
 
     @Override
     public Hashtable<String, Object> getProperties(String entityId) throws WPSConnectorException {
-        return getEntity(entityId).getProperties();
+        return isInverted() ? getAttribute(entityId).getProperties() : getEntity(entityId).getProperties();
     }
 
     @Override
     public iEnumerator<String> getEnumerator() throws WPSConnectorException {
-        return new DataEnumerator<String>(m_Entities.keySet());
+        return isInverted() ? new DataEnumerator<String>(m_Attributes.keySet()) : new DataEnumerator<String>(m_Entities.keySet());
     }
 
     @Override
@@ -131,6 +133,10 @@ public abstract class DatastoreEntityConnector implements iEntityConnector {
         return null;
     }
 
+    protected boolean isInverted() {
+        return m_inverted;
+    }
+
     protected Entity getEntity(String id) {
         return m_Entities.get(id);
     }
@@ -168,14 +174,31 @@ public abstract class DatastoreEntityConnector implements iEntityConnector {
         return attribute;
     }
 
-    public void addEntityProperties(Attribute attribute) {
-        for (AttributePropertyDefinition propDefinition : attributeProperties) {
+    public void addAttributeProperties(Entity entity) {
+        for (PropertyDefinition propDefinition : entityProperties) {
+            if (!propDefinition.isSimple()) {
+                ArrayList<String> property = new ArrayList<String>();
+                for (AttributeEnumeratorItem attributeItem : entity.m_Attributes) {
+                    Attribute attribute = m_Attributes.get(attributeItem.m_Id);
+                    if( attribute != null) {
+                        String value = (String) attribute.getProperties().get(propDefinition.getId());
+                        if (value != null)
+                            property.add(value);
+                    }
+                }
+                entity.addProperty(propDefinition.getName(), property.toArray(new String[property.size()]));
+            }
+        }
+    }
+        
+   public void addEntityProperties(Attribute attribute) {
+        for (PropertyDefinition propDefinition : attributeProperties) {
             if (!propDefinition.isSimple()) {
                 ArrayList<String> property = new ArrayList<String>();
                 for (String entityId : attribute.m_Entities) {
                     Entity entity = m_Entities.get(entityId);
                     if( entity != null) {
-                        String value = (String) entity.getProperties().get(propDefinition.getEntity());
+                        String value = (String) entity.getProperties().get(propDefinition.getId());
                         if (value != null)
                             property.add(value);
                     }

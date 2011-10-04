@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.AttributePropertyDefinition;
+import com.socialcomputing.wps.server.plandictionary.connectors.datastore.PropertyDefinition;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.SocialEntityConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.utils.OAuthHelper;
 import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper;
@@ -48,7 +48,7 @@ public class TwitterEntityConnector extends SocialEntityConnector {
         callback = element.getAttributeValue("callback");
         oAuth2Helper.readObject(element);
         for (Element property : (List<Element>) element.getChildren("Twitter-property")) {
-            attributeProperties.add(new AttributePropertyDefinition(property.getAttributeValue("id"), property
+            attributeProperties.add(new PropertyDefinition(property.getAttributeValue("id"), property
                     .getAttributeValue("entity")));
         }
     }

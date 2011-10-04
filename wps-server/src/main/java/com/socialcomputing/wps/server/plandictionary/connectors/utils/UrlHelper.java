@@ -74,6 +74,7 @@ public class UrlHelper extends ConnectorHelper {
     public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
         StringBuilder parameters = new StringBuilder();
         try {
+            String realUrl = super.ReplaceParameter( url, wpsparams);
             boolean first = true;
             if (defParams != null) {
                 for( NameValuePair param : defParams) {
@@ -91,7 +92,7 @@ public class UrlHelper extends ConnectorHelper {
             }
             
             LOG.debug(" url = {}, params = {}", url, parameters.toString());
-            URL u = new URL( type == Type.POST || (type == Type.GET && parameters.length() == 0) ? url : url + "?" + parameters.toString());
+            URL u = new URL( type == Type.POST || (type == Type.GET && parameters.length() == 0) ? realUrl : realUrl + "?" + parameters.toString());
             URLConnection connection = u.openConnection();
             connection.setUseCaches(false);
             connection.setDoInput(true);

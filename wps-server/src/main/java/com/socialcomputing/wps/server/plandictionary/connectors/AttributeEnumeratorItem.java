@@ -3,8 +3,8 @@ package com.socialcomputing.wps.server.plandictionary.connectors;
 /**
  * Title:        WPS Connectors
  * Description:
- * Copyright:    Copyright (c) 2000
- * Company:      VOYEZ VOUS
+ * Copyright:    Copyright (c) 2010
+ * Company:      Social Computing
  * @author Franck Valetas
  * @version 1.0
  */

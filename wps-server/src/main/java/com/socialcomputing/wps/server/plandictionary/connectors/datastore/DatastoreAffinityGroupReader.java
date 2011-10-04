@@ -46,32 +46,61 @@ public class DatastoreAffinityGroupReader implements iAffinityGroupReader {
 		{
 			case AnalysisProfile.GLOBAL_PLAN:
 			    LOG.debug("global plan");
-				result = new StringAndFloat[  m_entityConnector.m_Entities.size()];
-				for( String id2 : m_entityConnector.m_Entities.keySet()) {
-					result[i++] = new StringAndFloat( id2, 1);
-				}
+			    if( m_entityConnector.isInverted()) {
+                    result = new StringAndFloat[  m_entityConnector.m_Attributes.size()];
+                    for( String id2 : m_entityConnector.m_Attributes.keySet()) {
+                        result[i++] = new StringAndFloat( id2, 1);
+                    }
+			    }
+			    else {
+    				result = new StringAndFloat[  m_entityConnector.m_Entities.size()];
+    				for( String id2 : m_entityConnector.m_Entities.keySet()) {
+    					result[i++] = new StringAndFloat( id2, 1);
+    				}
+			    }
 				break;
 				
 			case AnalysisProfile.PERSONAL_PLAN:
 			    LOG.debug("Personal plan with id = {}", id);
 				Map<String, Integer> set = new HashMap<String, Integer> ();
-				if( m_entityConnector.m_Entities.get(id) == null) 
-				    throw new WPSConnectorException( "Unknonwn entity id " + id);
-				for(AttributeEnumeratorItem attributeItem : m_entityConnector.m_Entities.get(id).m_Attributes) {
-					for( String entityId2 : m_entityConnector.m_Attributes.get( attributeItem.m_Id).m_Entities) {
-						if( set.containsKey( entityId2)) {
-							int pond = set.get( entityId2) + 1;
-							set.put( entityId2, pond);
-							if( pond > maxPond)
-								maxPond = pond;
-						}
-						else {
-							set.put( entityId2, 1);
-							if( maxPond < 1)
-								maxPond = 1;
-						}
-					}
-				}
+                if( m_entityConnector.isInverted()) {
+                    if( m_entityConnector.m_Attributes.get(id) == null) 
+                        throw new WPSConnectorException( "Unknonwn entity id " + id);
+                    for(String entityId2 : m_entityConnector.m_Attributes.get(id).m_Entities) {
+                        for( AttributeEnumeratorItem attributeItem : m_entityConnector.m_Entities.get( entityId2).m_Attributes) {
+                            if( set.containsKey( attributeItem.m_Id)) {
+                                int pond = set.get( attributeItem.m_Id) + 1;
+                                set.put( attributeItem.m_Id, pond);
+                                if( pond > maxPond)
+                                    maxPond = pond;
+                            }
+                            else {
+                                set.put( attributeItem.m_Id, 1);
+                                if( maxPond < 1)
+                                    maxPond = 1;
+                            }
+                        }
+                    }
+                }
+                else {
+    				if( m_entityConnector.m_Entities.get(id) == null) 
+    				    throw new WPSConnectorException( "Unknonwn entity id " + id);
+    				for(AttributeEnumeratorItem attributeItem : m_entityConnector.m_Entities.get(id).m_Attributes) {
+    					for( String entityId2 : m_entityConnector.m_Attributes.get( attributeItem.m_Id).m_Entities) {
+    						if( set.containsKey( entityId2)) {
+    							int pond = set.get( entityId2) + 1;
+    							set.put( entityId2, pond);
+    							if( pond > maxPond)
+    								maxPond = pond;
+    						}
+    						else {
+    							set.put( entityId2, 1);
+    							if( maxPond < 1)
+    								maxPond = 1;
+    						}
+    					}
+    				}
+                }
 				result = new StringAndFloat[ set.size()];
 				for( Entry<String, Integer> entry : set.entrySet()) {
 					result[i++] = new StringAndFloat( entry.getKey(), (maxPond - entry.getValue()) / maxPond);
@@ -81,21 +110,40 @@ public class DatastoreAffinityGroupReader implements iAffinityGroupReader {
 			case AnalysisProfile.DISCOVERY_PLAN:
 			    LOG.debug("discovery plan with id = {}", id);
 				Map<String,Integer> set2 = new HashMap<String,Integer>();
-				if( m_entityConnector.m_Attributes.get( id) == null) 
-				    throw new WPSConnectorException( "Unknonwn attribute id " + id);
-				for( String entityId : m_entityConnector.m_Attributes.get( id).m_Entities) {
-					if( set2.containsKey( entityId)) {
-						int pond = set2.get( entityId) + 1;
-						set2.put( entityId, pond);
-						if( pond > maxPond)
-							maxPond = pond;
-					}
-					else {
-						set2.put( entityId, 1);
-						if( maxPond < 1)
-							maxPond = 1;
-					}
-				}
+                if( m_entityConnector.isInverted()) {
+                    if( m_entityConnector.m_Entities.get(id) == null) 
+                        throw new WPSConnectorException( "Unknonwn attribute id " + id);
+                    for(AttributeEnumeratorItem attributeItem : m_entityConnector.m_Entities.get(id).m_Attributes) {
+                        if( set2.containsKey( attributeItem.m_Id)) {
+                            int pond = set2.get( attributeItem.m_Id) + 1;
+                            set2.put( attributeItem.m_Id, pond);
+                            if( pond > maxPond)
+                                maxPond = pond;
+                        }
+                        else {
+                            set2.put( attributeItem.m_Id, 1);
+                            if( maxPond < 1)
+                                maxPond = 1;
+                        }
+                    }
+                }
+                else {
+    				if( m_entityConnector.m_Attributes.get( id) == null) 
+    				    throw new WPSConnectorException( "Unknonwn attribute id " + id);
+    				for( String entityId : m_entityConnector.m_Attributes.get( id).m_Entities) {
+    					if( set2.containsKey( entityId)) {
+    						int pond = set2.get( entityId) + 1;
+    						set2.put( entityId, pond);
+    						if( pond > maxPond)
+    							maxPond = pond;
+    					}
+    					else {
+    						set2.put( entityId, 1);
+    						if( maxPond < 1)
+    							maxPond = 1;
+    					}
+    				}
+                }
 				result = new StringAndFloat[ set2.size()];
 				for( Entry<String, Integer> entry : set2.entrySet()) {
 					result[i++] = new StringAndFloat( entry.getKey(), (maxPond - entry.getValue()) / maxPond);

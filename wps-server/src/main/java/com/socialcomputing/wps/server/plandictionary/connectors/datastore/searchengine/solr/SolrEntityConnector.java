@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.socialcomputing.utils.http.BasicAuthHttpClient;
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Attribute;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.AttributePropertyDefinition;
+import com.socialcomputing.wps.server.plandictionary.connectors.datastore.PropertyDefinition;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Entity;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.searchengine.SearchengineEntityConnector;
 
@@ -46,7 +46,7 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 	private final String entityField;
 	private final String attributeId;
 	private final boolean invert;
-	private Set<AttributePropertyDefinition> simpleAttributeDefinitions;
+	private Set<PropertyDefinition> simpleAttributeDefinitions;
 
 	
 	/**
@@ -147,12 +147,12 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 		for(Element property : (List<Element>) attribute.getChildren("property")) {
 		    if(property.getAttributeValue("entity") !=  null) {
 		        connector.attributeProperties.add(
-		            new AttributePropertyDefinition(property.getAttributeValue("id"),
+		            new PropertyDefinition(property.getAttributeValue("id"),
 		                                            property.getAttributeValue("entity")));    
 		    }
 		    else{
 		        connector.addSimpleAttributeDefinition(
-		            new AttributePropertyDefinition(property.getAttributeValue("id"),
+		            new PropertyDefinition(property.getAttributeValue("id"),
                                                     property.getAttributeValue("field")));
 		    }
         }
@@ -201,7 +201,7 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
         this.entityField = entityField;
         this.attributeId = attributeId;
         this.invert = invert;
-        this.simpleAttributeDefinitions = new HashSet<AttributePropertyDefinition>();
+        this.simpleAttributeDefinitions = new HashSet<PropertyDefinition>();
     }
 	
     
@@ -211,7 +211,7 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
      * 
      * @param attributePropertyDefinition
      */
-    public void addSimpleAttributeDefinition(AttributePropertyDefinition attributePropertyDefinition) {
+    public void addSimpleAttributeDefinition(PropertyDefinition attributePropertyDefinition) {
         if(attributePropertyDefinition == null) {
             throw new IllegalArgumentException("attributePropertyDefinition");
         }
@@ -283,13 +283,13 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 	        
 	        // Reading document properties
             Map<String, String> documentProperties = new HashMap<String, String>();
-            for(AttributePropertyDefinition property : this.simpleAttributeDefinitions) {
+            for(PropertyDefinition property : this.simpleAttributeDefinitions) {
                 String field;
                 if(property.isSimple()) {
                     field = property.getName();
                 }
                 else {
-                    field = property.getEntity();
+                    field = property.getId();
                 }
                 String fieldValue = (String)document.getFieldValue(field);
                 documentProperties.put(property.getName(), (fieldValue == null) ? "" : fieldValue);

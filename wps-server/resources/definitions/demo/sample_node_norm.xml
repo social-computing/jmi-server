@@ -24,7 +24,7 @@
 		<slice		inCol="47 207 47"
 					outCol="0 159 0"
 					transfo="spotTrf"/>
-		<slice		image="{s$web_context}/images/{sID}.gif"
+		<slice		image="{$wpsserverurl}/images/{sID}.gif"
 					transfo="imgTrf" />
 	</sat>
 
@@ -33,7 +33,7 @@
 		<slice		inCol="47 207 47"
 					outCol="0 159 0"
 					transfo="spotTrf"/>
-		<slice		image="{s$web_context}/images/{sID}.gif"
+		<slice		image="{$wpsserverurl}/images/{sID}.gif"
 					transfo="imgTrf" />
 	</sat>
 

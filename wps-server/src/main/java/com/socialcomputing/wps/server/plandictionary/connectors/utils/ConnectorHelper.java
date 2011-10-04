@@ -28,6 +28,7 @@ public abstract class ConnectorHelper {
     public abstract void closeConnections() throws WPSConnectorException;
     
     public static String ReplaceParameter(String value, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
+        if( value == null) return "";
         StringBuilder result = new StringBuilder();
         StringTokenizer st = new StringTokenizer( value, "{}", false);
         while( st.hasMoreTokens()) {

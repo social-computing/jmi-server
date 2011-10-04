@@ -10,7 +10,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.AttributePropertyDefinition;
+import com.socialcomputing.wps.server.plandictionary.connectors.datastore.PropertyDefinition;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.SocialEntityConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper;
 
@@ -34,7 +34,7 @@ public class GoogleEntityConnector extends SocialEntityConnector {
         super._readObject(element);
         oAuth2Helper.readObject(element);
         for( Element property: (List<Element>)element.getChildren( "Google-property")) {
-            attributeProperties.add( new AttributePropertyDefinition( property.getAttributeValue( "id"), property.getAttributeValue( "entity")));
+            attributeProperties.add( new PropertyDefinition( property.getAttributeValue( "id"), property.getAttributeValue( "entity")));
         }
     }
 

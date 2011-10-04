@@ -22,11 +22,12 @@
 			import spark.events.IndexChangeEvent;
 				
             private var planName:String;
+			private var serverURL:String;
             private var planService:PlanService;
 			
             protected function onCreationComplete(event:FlexEvent):void {
 				// Reading application properties
-				var serverURL:String = this.checkApplicationParameter("wpsserverurl");
+				this.serverURL = this.checkApplicationParameter("wpsserverurl");
 				this.planName = this.checkApplicationParameter("wpsplanname");
 				var parameters:Object = FlexGlobals.topLevelApplication.parameters;
 				
@@ -53,12 +54,14 @@
 				if( event.action == "NewWin") {
 					//map.clear();
 					parameters["entityId"] = event.args[0];
+					parameters["wpsserverurl"] = serverURL;
 					getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
 				}
 				if( event.action == "Discover") {
 					//map.clear();
 					parameters["attributeId"] = event.args[0];
 					parameters["analysisProfile"] = "DiscoveryProfile";
+					parameters["wpsserverurl"] = serverURL;
 					getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
 				}
 			}

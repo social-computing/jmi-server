@@ -43,7 +43,16 @@ public class DatastoreProfileConnector implements iProfileConnector {
 
 	@Override
 	public iEnumerator<AttributeEnumeratorItem> getEnumerator(String entityId) throws WPSConnectorException {
-		return new DataEnumerator<AttributeEnumeratorItem>( m_entityConnector.getEntity(entityId).m_Attributes);
+        if( m_entityConnector.isInverted()) {
+            DataEnumerator<AttributeEnumeratorItem> e = new DataEnumerator<AttributeEnumeratorItem>();
+            for( String id : m_entityConnector.getAttribute(entityId).m_Entities) {
+                e.m_Collection.add( new AttributeEnumeratorItem( id, 1));
+            }
+            return e;
+        }
+        else {
+            return new DataEnumerator<AttributeEnumeratorItem>( m_entityConnector.getEntity(entityId).m_Attributes);
+        }
 	}
 
 	@Override
@@ -59,7 +68,9 @@ public class DatastoreProfileConnector implements iProfileConnector {
 
 	@Override
 	public Hashtable<String, Object> getProperties(String attributeId, boolean bInBase, String entityId) throws WPSConnectorException {
-		return m_entityConnector.getAttribute( attributeId).getProperties();
+		return m_entityConnector.isInverted() ? 
+                m_entityConnector.getEntity( attributeId).getProperties() 
+		        : m_entityConnector.getAttribute( attributeId).getProperties();
 	}
 
 	@Override

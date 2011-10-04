@@ -11,7 +11,7 @@ public class Attribute extends Data {
 		super(id);
 	}
 
-	public void addProperty(AttributePropertyDefinition definition, Object value) {
+	public void addProperty(PropertyDefinition definition, Object value) {
 		addProperty(definition.getName(), value);
 	}
 
