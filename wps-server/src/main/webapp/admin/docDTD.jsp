@@ -26,14 +26,12 @@
 		<td>main definition</td>
 	</tr>
 	<tr>
-		<td><a href="../dtd/JDBC-connector.dtd" target="_blank">JDBC
-		dictionary connector</a></td>
-		<td>SGBD data, access thru JDBC</td>
+		<td><a href="../dtd/JDBC-connector.dtd" target="_blank">JDBC connector</a></td>
+		<td>SGBD data</td>
 	</tr>
 	<tr>
-		<td><a href="../dtd/XML-connector.dtd" target="_blank">XML
-		dictionary connector</a></td>
-		<td>Xml data</td>
+		<td><a href="../dtd/REST-connector.dtd" target="_blank">REST connector</a></td>
+		<td>Xml/Json data</td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
