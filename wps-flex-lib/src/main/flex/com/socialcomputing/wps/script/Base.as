@@ -261,6 +261,8 @@ package com.socialcomputing.wps.script  {
         // Renommage nom fonction
         public function parseString3(text:String, props:Array):Vector.<String>
         {
+			// Bug fix : javascript
+			var javascript:Boolean = text.substr( 0, 10) == "javascript";
             var tokens:Vector.<Token> = parseTokens( text );
             var j:int, n:int, max:int = 0;
 			for each( var token:Token in tokens)
@@ -282,6 +284,9 @@ package com.socialcomputing.wps.script  {
                 
 				for each( token in tokens)
 				{
+					if( javascript) {
+						token.m_buffer = token.m_buffer.split( ",").join( String.fromCharCode( 0xFFFC));
+					}
                     prop    = token.toString( j, props );
                     
                     if ( prop == null )
@@ -289,7 +294,6 @@ package com.socialcomputing.wps.script  {
                         dst[j] = null;
                         break;
                     }
-                    
 					dst[j] = dst[j].concat( prop);
                 }
             }

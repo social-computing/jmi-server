@@ -415,7 +415,7 @@ package com.socialcomputing.wps.components
 					{
 						var func:String     = actionStr.substring( 0, pos ),
 							paramStr:String = actionStr.substring( pos + 1, actionStr.length- 1 );
-						var params:Array    = paramStr.split( ",");
+						var params:Array    = paramStr.split( String.fromCharCode( 0xFFFC));
 						dispatchEvent( new ActionEvent( func, params));
 					}
 					return;
