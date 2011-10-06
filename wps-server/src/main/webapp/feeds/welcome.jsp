@@ -78,7 +78,7 @@ if (feed != null && feed.length() > 0) {%>
             flashvars.wpsserverurl = "http://wps.wps.cloudbees.net/";
             flashvars.wpsplanname = "Feeds";
             flashvars.analysisProfile = "GlobalProfile";
-            flashvars.feed = "<%=feed%>";
+            flashvars.feed = "<%=java.net.URLEncoder.encode(feed)%>";
             var params = {};
             params.quality = "high";
             params.bgcolor = "#FFFFFF";
