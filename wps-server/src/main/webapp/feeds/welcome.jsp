@@ -13,10 +13,10 @@
 		-->
         <style type="text/css" media="screen"> 
 			html, body	{ height:95%; }
-			body { margin:0; padding:0; overflow:auto; text-align:center; 
-			       background-color: #FFFFFF; }   
+			body { margin:0; padding:0; overflow:auto; text-align:center; background-color: #FFFFFF; }   
 			object:focus { outline:none; }
 			#flashContent { display:none; }
+			#content {width: 100%; height:99%; background-color: #FFFFFF;}
         </style>
 <%String feed = request.getParameter("feed");
 if (feed != null && feed.length() > 0) {%>
@@ -29,6 +29,9 @@ if (feed != null && feed.length() > 0) {%>
 			  }
 		  }
       
+         function empty() {
+        	 alert( "Sorry, map is empty");
+         }
          function ready() {
           // do something here
          }
@@ -36,7 +39,7 @@ if (feed != null && feed.length() > 0) {%>
           // do something here
          }
          function error( error) {
-          alert( error);
+          	alert( error);
          }
          function Navigate( url) {
         	 window.open( url, "_blank");
@@ -101,10 +104,11 @@ if (feed != null && feed.length() > 0) {%>
 			 JavaScript and Flash plug-in support is available. The div is initially hidden so that it doesn't show
 			 when JavaScript is disabled.
 		-->
+	<div id="content">
 		<table>
 		<tr>
 			<td rowspan="2">		
-				<a href="http://www.social-computing.com/" target="_blank"><img title="Social Computing" src="../images/logo-sc-white.jpg" /></a>
+				<a href="http://www.social-computing.com/" target="_blank"><img border="0" title="Social Computing" src="../images/logo-sc-white.jpg" /></a>
 			</td>
 			<td style="padding-top:20px;text-align:left;font-family:arial;color:#37b0e3;font-size:14px;"><b>Enter a feed url:</b>
 			</td>
@@ -118,7 +122,6 @@ if (feed != null && feed.length() > 0) {%>
 			</td>
 		</tr>
 		</table>
-		<div id="content">
 		
 <%if (feed != null && feed.length() > 0) {%>
         <div id="flashContent">
@@ -132,8 +135,10 @@ if (feed != null && feed.length() > 0) {%>
 								+ pageHost + "www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' /></a>" ); 
 			</script> 
         </div>
+        <div id="status">
+        </div>
        	<noscript>
-            <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%" id="wps-flex-demo">
+            <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%" id="wps-feeds">
                 <param name="movie" value="../client/flex/wps-flex-1.0-SNAPSHOT.swf" />
                 <param name="quality" value="high" />
                 <param name="bgcolor" value="#FFFFFF" />
@@ -160,7 +165,7 @@ if (feed != null && feed.length() > 0) {%>
                 <!--<![endif]-->
             </object>
 	    </noscript>		
-	    </div>
+	</div>
 <%} %>	    
    </body>
 </html>
