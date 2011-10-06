@@ -17,15 +17,19 @@ package com.socialcomputing.wps.components
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.ContextMenuEvent;
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
+	import flash.ui.ContextMenu;
+	import flash.ui.ContextMenuItem;
 	
 	import mx.collections.ArrayCollection;
 	import mx.controls.Alert;
+	import mx.controls.Menu;
 	import mx.core.UIComponent;
 	import mx.events.MenuEvent;
 	import mx.events.ResizeEvent;
@@ -116,6 +120,17 @@ package com.socialcomputing.wps.components
 			this.addEventListener(MouseEvent.DOUBLE_CLICK, mouseDoubleClickHandler);
 			this.addEventListener(ResizeEvent.RESIZE, resizeHandler);
 			this.addEventListener(NavigateEvent.NAVIGATE, navigateHandler);
+			
+			var wpsMenu:ContextMenu = new ContextMenu();
+			wpsMenu.hideBuiltInItems();
+			var menuItem:ContextMenuItem = new ContextMenuItem("Social Computing");
+			menuItem.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, openSoCom);
+			wpsMenu.customItems.push( menuItem);
+			this.contextMenu = wpsMenu;
+		}
+		
+		private function openSoCom( e:ContextMenuEvent):void {
+			navigateToURL( new URLRequest( "http://www.social-computing.com"), "_blank");
 		}
 		
 		public function get backDrawingSurface():Sprite
