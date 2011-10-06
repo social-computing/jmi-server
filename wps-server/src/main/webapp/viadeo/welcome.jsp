@@ -24,10 +24,10 @@ if( code == null) { %>
 		-->
         <style type="text/css" media="screen"> 
 			html, body	{ height:100%; }
-			body { margin:0; padding:0; overflow:auto; text-align:center; 
-			       background-color: #FFFFFF; }   
+			body { margin:0; padding:0; overflow:auto; text-align:center; background-color: #FFFFFF; }   
 			object:focus { outline:none; }
 			#flashContent { display:none; }
+			#content {width: 100%; height:99%; background-color: #FFFFFF;}
         </style>
 		
 		<!-- Enable Browser History by replacing useBrowserHistory tokens with two hyphens -->
@@ -37,7 +37,6 @@ if( code == null) { %>
         <!-- END Browser History required section -->  
 		
 		<link rel="stylesheet" href="../css/main.css"/>
-		<link rel="stylesheet" href="../css/wps.css">
 
         <script type="text/javascript">
          	function navigate( url, target) {
