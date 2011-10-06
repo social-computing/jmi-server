@@ -46,7 +46,7 @@ public class TwitterEntityConnector extends SocialEntityConnector {
         oauthConsumerKey = element.getAttributeValue("consumer-key");
         oauthConsumerSecret = element.getAttributeValue("consumer-secret");
         callback = element.getAttributeValue("callback");
-        oAuth2Helper.readObject(element);
+        oAuth2Helper.readObject( element.getChild( UrlHelper.DTD_DEFINITION));
         for (Element property : (List<Element>) element.getChildren("Twitter-property")) {
             attributeProperties.add(new PropertyDefinition(property.getAttributeValue("id"), property
                     .getAttributeValue("entity")));

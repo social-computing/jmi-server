@@ -36,7 +36,7 @@
             var xiSwfUrlStr = "../client/flex/playerProductInstall.swf";
             var flashvars = {};
             flashvars.wpsserverurl = "http://localhost:8080/wps-server";
-            flashvars.wpsplanname = "Json_sample";
+            flashvars.wpsplanname = "Xml_sample";
             flashvars.analysisProfile = "GlobalProfile";
             flashvars.entitiesName = "Organizations";
             flashvars.attributesName = "Countries";

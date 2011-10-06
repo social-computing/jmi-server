@@ -39,7 +39,7 @@ public class FacebookEntityConnector extends SocialEntityConnector {
     @Override
     public void _readObject(Element element) {
         super._readObject(element);
-        oAuth2Helper.readObject( element);
+        oAuth2Helper.readObject( element.getChild( UrlHelper.DTD_DEFINITION));
         for( Element property: (List<Element>)element.getChildren( "Facebook-property")) {
             attributeProperties.add( new PropertyDefinition( property.getAttributeValue( "id"), property.getAttributeValue( "entity")));
         }

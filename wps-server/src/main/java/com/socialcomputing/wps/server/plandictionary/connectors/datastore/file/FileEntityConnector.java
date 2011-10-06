@@ -18,7 +18,7 @@ public abstract class FileEntityConnector extends DatastoreEntityConnector {
 	@Override
 	public void _readObject(org.jdom.Element element) {
 		super._readObject( element);
-		urlHelper.readObject( element);
+		urlHelper.readObject( element.getChild( UrlHelper.DTD_DEFINITION));
 	}
 
 	@Override

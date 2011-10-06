@@ -43,7 +43,7 @@ public class ViadeoEntityConnector extends SocialEntityConnector {
     @Override
     public void _readObject(Element element) {
         super._readObject(element);
-        oAuth2Helper.readObject( element);
+        oAuth2Helper.readObject( element.getChild( UrlHelper.DTD_DEFINITION));
         for( Element property: (List<Element>)element.getChildren( "Viadeo-property")) {
             attributeProperties.add( new PropertyDefinition( property.getAttributeValue( "id"), property.getAttributeValue( "entity")));
         }

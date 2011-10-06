@@ -28,6 +28,8 @@ import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorExce
 public class UrlHelper extends ConnectorHelper {
     private static final Logger LOG = LoggerFactory.getLogger(UrlHelper.class);
 
+    public static final String DTD_DEFINITION = "URL-connection";
+    
     public enum Type {
         POST, GET;
     }
@@ -54,8 +56,7 @@ public class UrlHelper extends ConnectorHelper {
     }
 
     @Override
-    public void readObject(Element element) {
-        Element connection = element.getChild( "URL-connection");
+    public void readObject(Element connection) {
         url = connection.getChildText("url");
         if( connection.getAttributeValue( "type") != null && connection.getAttributeValue( "type").equalsIgnoreCase( "POST"))
             type = Type.POST;
@@ -91,7 +92,7 @@ public class UrlHelper extends ConnectorHelper {
                 }
             }
             
-            LOG.debug(" url = {}, params = {}", url, parameters.toString());
+            LOG.debug(" url = {}, params = {}", realUrl, parameters.toString());
             URL u = new URL( type == Type.POST || (type == Type.GET && parameters.length() == 0) ? realUrl : realUrl + "?" + parameters.toString());
             URLConnection connection = u.openConnection();
             connection.setUseCaches(false);
