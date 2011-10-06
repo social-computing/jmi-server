@@ -11,13 +11,13 @@
 		ButtonBar ToggleButton:overAndSelected,
 		ButtonBar ToggleButton:downAndSelected,
 		ButtonBar ToggleButton:disabledAndSelected {
-			chromeColor: #b3c949;
+			chromeColor: #37b0e3;
 			color: #ffffff;
 		}
 		
 		ButtonBar {
 			chromeColor: #ffffff;
-			color: #b3c949;
+			color: #37b0e3;
 		}
 	</fx:Style>
 	<fx:Script>
@@ -49,7 +49,9 @@
 			private var planName:String;
 			private var planService:PlanService;
 			private var loader:BulkLoader; 
-			
+
+			[Embed(source="images/logo-sc-white.jpg")] [Bindable] public var LogoSoCom:Class; 
+			 
 			[Bindable]
 			public var types:ArrayCollection = new ArrayCollection(
 				[ {type:"contacts", single:"a contact"},
@@ -175,15 +177,21 @@
 		<s:VerticalLayout gap="0" />
 	</s:layout>
 	<s:HGroup horizontalAlign="left" paddingBottom="5" width="100%" paddingTop="2">
-		<s:ButtonBar id="type" labelField="type" dataProvider="{types}" change="selectType(event);" selectedIndex="0" />
-	</s:HGroup>
-	<s:HGroup>
-		<!--s:Label text="View map of " />
-		<s:DropDownList id="type" labelField="type" dataProvider="{types}" change="selectType(event);" selectedIndex="0"/-->
-		<s:Label id="friendsLabel" text="Select a friend" visible="false"/>
-		<s:DropDownList id="friends" labelField="NAME" change="selectFriend(event);" width="200" visible="false"/>
-		<s:Label id="itemsLabel" visible="false"/>
-		<s:DropDownList id="items" labelField="POSS_NAME"  change="selectItem(event);" width="200" visible="false"/>
+		<mx:Image id="soc_com" source="@Embed('images/logo-sc-white.jpg')" 
+				  buttonMode="true" click="ExternalInterface.call('navigate', 'http://www.social-computing.com/', '_blank')"/>
+		<s:VGroup>
+		<s:HGroup horizontalAlign="left" paddingBottom="5" width="100%">
+			<s:ButtonBar id="type" labelField="type" dataProvider="{types}" change="selectType(event);" selectedIndex="0" />
+		</s:HGroup>
+		<s:HGroup>
+			<!--s:Label text="View map of " />
+			<s:DropDownList id="type" labelField="type" dataProvider="{types}" change="selectType(event);" selectedIndex="0"/-->
+			<s:Label id="friendsLabel" text="Select a contact" visible="false"/>
+			<s:DropDownList id="friends" labelField="NAME" change="selectFriend(event);" width="200" visible="false"/>
+			<s:Label id="itemsLabel" visible="false"/>
+			<s:DropDownList id="items" labelField="POSS_NAME"  change="selectItem(event);" width="200" visible="false"/>
+		</s:HGroup>
+		</s:VGroup>
 	</s:HGroup>
 	<mx:HRule width="100%"/>
 	<wps:Map id="map"
