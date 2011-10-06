@@ -360,7 +360,8 @@ package com.socialcomputing.wps.components
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			//trace("Update graphic display");
-			this.renderShape(this._restDrawingSurface, this.width, this.height);
+			if( this._restDrawingSurface)
+				this.renderShape(this._restDrawingSurface, this.width, this.height);
 		}
 		
 		/**
