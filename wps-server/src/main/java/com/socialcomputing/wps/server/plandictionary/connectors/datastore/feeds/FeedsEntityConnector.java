@@ -47,11 +47,14 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
 
 		m_inverted =  UrlHelper.ReplaceParameter( m_InvertedDef, wpsparams).equalsIgnoreCase( "true");
 		for( UrlHelper feed : m_feeds) {
-		    feed.openConnections( planType, wpsparams);
-	        readXml( feed, planType, wpsparams);
+            for( String url : UrlHelper.ReplaceParameter( feed.getUrl(), wpsparams).split( ",")) {
+                feed.setUrl( url);
+    		    feed.openConnections( planType, wpsparams);
+    	        readXml( feed, planType, wpsparams);
+                feed.closeConnections();
+            }
 		}
 	}
-	
 
 	private void readXml(UrlHelper feed, int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
 	    Element root;
@@ -63,7 +66,8 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
 		} catch (Exception e) {
             throw new WPSConnectorException( "openConnections", e);
 		}
-		for( Element item : (List<Element>)root.getChild("channel").getChildren( "item")) {
+		Element channel = root.getChild( "channel");
+		for( Element item : (List<Element>)channel.getChildren( "item")) {
 			Attribute attribute = addAttribute( item.getChildText( "link"));
 			attribute.addProperty( "name", item.getChildText( "title"));
 			

@@ -141,6 +141,10 @@ public class UrlHelper extends ConnectorHelper {
         this.url = url;
     }
     
+    public String getUrl() {
+        return this.url;
+    }
+    
     public void setType(Type type) {
         this.type = type;
     }
