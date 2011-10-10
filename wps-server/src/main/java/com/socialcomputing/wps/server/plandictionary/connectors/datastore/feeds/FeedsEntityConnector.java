@@ -107,8 +107,8 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
 
 	private String getAtomId( List<Element> content) {
         for( Element item : content) {
-            if( item.getName().equalsIgnoreCase( "id"))
-                return getAtomContent( item);
+            if( item.getName().equalsIgnoreCase( "link") && item.getAttributeValue( "rel").equalsIgnoreCase( "alternate"))
+                return item.getAttributeValue( "href");
         }
         return null;
 	}
