@@ -2,7 +2,7 @@
 <!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">	
     <head>
-        <title>Social Computing Cartographie - Administration - Demo RSS With Categories</title>
+        <title>Social Computing Feeds Cartography</title>
         <meta name="google" value="notranslate">         
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<!-- Include CSS to eliminate any default margins/padding and set the height of the html element and 
