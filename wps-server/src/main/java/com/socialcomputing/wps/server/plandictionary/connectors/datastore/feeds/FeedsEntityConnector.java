@@ -76,7 +76,8 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
                 String type = tag.getAttributeValue( "type");
                 if( type != null && type.equalsIgnoreCase( "application/rss+xml")) {
                     UrlHelper curFeed = new UrlHelper();
-                    curFeed.setUrl( tag.getAttributeValue( "href"));
+                    String url = tag.getAttributeValue( "href");
+                    curFeed.setUrl( url.startsWith( "/") ? feed.getUrl() + url : url);
                     curFeed.openConnections( planType, wpsparams);
                     readXml( curFeed, planType, wpsparams);
                     curFeed.closeConnections();
