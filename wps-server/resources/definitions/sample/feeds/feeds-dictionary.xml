@@ -57,7 +57,7 @@
 		</entities-recommendation>
 	</analysis-profile>
 
-	<analysis-profile name="GlobalProfile" attributes-ref="JDBC_Profile" type="global" attribute-size="same" attributes-max="300" >
+	<analysis-profile name="GlobalProfile" attributes-ref="JDBC_Profile" type="global" attribute-size="same" attributes-max="60" >
 		<props-mapping>
 			<entity-props-mapping>
 				<mapping key="ID" 	value="id" />
