@@ -5,6 +5,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 import org.jdom.Element;
+import org.jdom.Text;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Attribute;
@@ -66,28 +67,69 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
 		} catch (Exception e) {
             throw new WPSConnectorException( "openConnections", e);
 		}
-		Element channel = root.getChild( "channel");
-		for( Element item : (List<Element>)channel.getChildren( "item")) {
-			Attribute attribute = addAttribute( item.getChildText( "link"));
-			attribute.addProperty( "name", item.getChildText( "title"));
-			
-			for( Element category : (List<Element>)item.getChildren( "category")) {
-				Entity entity = addEntity( category.getText());
-				entity.addProperty( "name", entity.getId());
-				entity.addAttribute( attribute, 1);
-			}
+		Element top = root.getChild( "channel");
+		if( top != null) {
+		    parseRss2( top);
 		}
-		for( Attribute attribute : m_Attributes.values()) {
-			if( !isInverted())
-			    addEntityProperties( attribute);
+		else {
+		    parseAtom( root);
 		}
+        for( Attribute attribute : m_Attributes.values()) {
+            if( !isInverted())
+                addEntityProperties( attribute);
+        }
         if( isInverted()) {
             for( Entity entity : m_Entities.values()) { 
                 addAttributeProperties( entity);
             }
         }
 	}
+	
+	private void parseAtom( Element feed) {
+        for( Element item : (List<Element>)feed.getContent()) {
+            if( item.getName().equalsIgnoreCase( "entry")) {
+                List<Element> content = item.getContent();
+                Attribute attribute = addAttribute( getAtomId( content));
+                for( Element contentItem : content) {
+                    if( contentItem.getName().equalsIgnoreCase( "title"))
+                        attribute.addProperty( "name", getAtomContent( contentItem));
+                    
+                    if( contentItem.getName().equalsIgnoreCase( "category")) {
+                        Entity entity = addEntity( contentItem.getAttributeValue( "term"));
+                        String label = contentItem.getAttributeValue( "label");
+                        entity.addProperty( "name", label != null ? label : entity.getId());
+                        entity.addAttribute( attribute, 1);
+                    }
+                }
+            }
+        }
+	}
 
+	private String getAtomId( List<Element> content) {
+        for( Element item : content) {
+            if( item.getName().equalsIgnoreCase( "id"))
+                return getAtomContent( item);
+        }
+        return null;
+	}
+	
+    private String getAtomContent( Element item) {
+        return ((Text)item.getContent().get( 0)).getText();
+    }
+    
+    private void parseRss2( Element channel) {
+        for( Element item : (List<Element>)channel.getChildren( "item")) {
+            Attribute attribute = addAttribute( item.getChildText( "link"));
+            attribute.addProperty( "name", item.getChildText( "title"));
+            
+            for( Element category : (List<Element>)item.getChildren( "category")) {
+                Entity entity = addEntity( category.getText());
+                entity.addProperty( "name", entity.getId());
+                entity.addAttribute( attribute, 1);
+            }
+        }
+    }
+	
 	@Override
 	public void closeConnections() throws WPSConnectorException {
 		super.closeConnections();
