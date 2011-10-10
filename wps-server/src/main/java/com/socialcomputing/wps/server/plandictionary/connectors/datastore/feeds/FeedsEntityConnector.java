@@ -7,6 +7,10 @@ import java.util.List;
 import org.jdom.Element;
 import org.jdom.Text;
 
+import au.id.jericho.lib.html.Segment;
+import au.id.jericho.lib.html.Source;
+import au.id.jericho.lib.html.StartTag;
+
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Attribute;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.DatastoreEntityConnector;
@@ -51,28 +55,54 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
             for( String url : UrlHelper.ReplaceParameter( feed.getUrl(), wpsparams).split( ",")) {
                 feed.setUrl( url);
     		    feed.openConnections( planType, wpsparams);
-    	        readXml( feed, planType, wpsparams);
+    	        read( feed, planType, wpsparams);
                 feed.closeConnections();
             }
 		}
 	}
 
+    private void read(UrlHelper feed, int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
+        String content = feed.getContentType();
+        if( content.contains( "text/html")) {
+            // HTML ?
+            Source source;
+            try {
+                source = new Source( feed.getStream());
+            } catch (Exception e) {
+                throw new WPSConnectorException( "openConnections", e);
+            }
+            List<StartTag> tags = ((Segment)source.findAllElements( "head").get( 0)).findAllStartTags( "link");
+            for( StartTag tag : tags) {
+                String type = tag.getAttributeValue( "type");
+                if( type != null && type.equalsIgnoreCase( "application/rss+xml")) {
+                    UrlHelper curFeed = new UrlHelper();
+                    curFeed.setUrl( tag.getAttributeValue( "href"));
+                    curFeed.openConnections( planType, wpsparams);
+                    readXml( curFeed, planType, wpsparams);
+                    curFeed.closeConnections();
+                }
+            }
+        }
+        else {
+            readXml( feed, planType, wpsparams);
+        }
+    }
+    
 	private void readXml(UrlHelper feed, int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
-	    Element root;
 	    try {
-			// TODO SAX Parser => faster
 			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(false);
 			org.jdom.Document doc = builder.build( feed.getStream());
-			root = doc.getRootElement();
+			Element root = doc.getRootElement();
+			
+	        Element top = root.getChild( "channel");
+	        if( top != null) {
+	            parseRss2( top);
+	        }
+	        else {
+	            parseAtom( root);
+	        }
 		} catch (Exception e) {
             throw new WPSConnectorException( "openConnections", e);
-		}
-		Element top = root.getChild( "channel");
-		if( top != null) {
-		    parseRss2( top);
-		}
-		else {
-		    parseAtom( root);
 		}
         for( Attribute attribute : m_Attributes.values()) {
             if( !isInverted())
