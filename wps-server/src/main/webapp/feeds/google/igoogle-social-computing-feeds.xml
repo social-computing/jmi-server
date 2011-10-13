@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="Map your Feeds!" title_url="http://www.social-computing.com" width="300" height="300" 
+	  	author="Social Computing" author_email="contact@social-computing.com" author_link="http://www.social-computing.com"
+		description="View and navigate your feeds thru an interactive map! by Social Computing" 
+		screenshot="http://wps-saas.social-computing.com/feeds/images/screenshot.png" 
+		thumbnail="http://wps-saas.social-computing.com/feeds/images/thumbnail.png">
+    <Icon>http://www.social-computing.com/favicon.ico</Icon>
+    <Require feature="flash" />
+  </ModulePrefs>
+  <UserPref name="feed" display_name="Feed" datatype="string" required="true" default_value="http://www.social-computing.com/feed/"/>
+  <Content type="html" view="home,profile,canvas">
+<![CDATA[
+<div id='wps-feeds'></div>
+<script type="text/javascript" language="javascript"> 
+ var prefs = new gadgets.Prefs();
+ var flashvars = {
+	allowDomain: "*",
+	wpsserverurl: "http%3A%2F%2Fwps-saas.social-computing.com%2F",
+	wpsplanname: "Feeds",
+	analysisProfile: "GlobalProfile",
+	feed: prefs.getString( "feed")
+   };
+   var parameters = gadgets.views ? gadgets.views.getParams() : null;
+   if( parameters) {
+    	for (var prop in parameters) {
+    		flashvars[prop] = parameters[prop];
+   		}
+   }
+   var fv='';
+   for (var prop in flashvars) {
+      if (fv) fv=fv+'&'
+      fv=fv + prop + '=' + flashvars[prop];
+   }
+   var params= {
+		bgcolor: "fff", allowFullScreen: "true", allowscriptaccess: "always",
+        allowNetworking: "all", quality: "high", menu: "true", 
+        flashvars: fv
+ 	};
+  	gadgets.flash.embedFlash('http://wps-saas.social-computing.com/client/flex/wps-flex-1.0-SNAPSHOT.swf', 'wps-feeds', 10, params);
+
+  function getMap() {
+  	 return document.getElementById('wps-feeds').childNodes[0];
+  }
+    
+  function empty() {
+ 	 alert( "Sorry, map is empty");
+  }
+  function ready() {
+   // do something here
+  }
+  function status( status) {
+   // do something here
+  }
+  function error( error) {
+   	alert( error);
+  }
+  function Navigate( url) {
+ 	 window.open( url, "_blank");
+  }
+  function NewWin( args)
+  {
+	var parameters = {};
+	parameters["entityId"] = args[0];
+	parameters["feed"] = args[2];
+	getMap().compute( parameters);
+  }
+  function Discover( args)
+  {
+	var parameters = {};
+	parameters["attributeId"] = args[0];
+	parameters["analysisProfile"] = "DiscoveryProfile";
+	parameters["feed"] = args[2];
+  	getMap().compute( parameters);
+  }
+</script>
+]]>   
+</Content>
+</Module>

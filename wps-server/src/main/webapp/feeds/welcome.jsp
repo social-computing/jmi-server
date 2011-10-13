@@ -108,7 +108,7 @@ if (feed != null && feed.length() > 0) {%>
 		<table>
 		<tr>
 			<td rowspan="2">		
-				<a href="http://www.social-computing.com/" target="_blank"><img border="0" title="Social Computing" src="../images/logo-sc-white.jpg" /></a>
+				<a href="http://www.social-computing.com/" target="_blank"><img border="0" width="144" height="70" title="Social Computing" src="../images/logo-sc-white.jpg" /></a>
 			</td>
 			<td style="padding-top:20px;text-align:left;font-family:arial;color:#37b0e3;font-size:14px;"><b>Enter an url:</b>
 			</td>
