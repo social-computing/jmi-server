@@ -74,7 +74,7 @@
 		</entities-recommendation>
 	</analysis-profile>
 
-	<analysis-profile name="DiscoveryProfile" attributes-ref="JDBC_Profile" type="discovery" attribute-size="frequency" attributes-max="300" attributes-max="40" attributes-base-max="40">
+	<analysis-profile name="DiscoveryProfile" attributes-ref="JDBC_Profile" type="discovery" attribute-size="frequency" attributes-max="40" attributes-base-max="40">
 		<props-mapping>
 			<entity-props-mapping>
 				<mapping key="ID" 	value="id" />
