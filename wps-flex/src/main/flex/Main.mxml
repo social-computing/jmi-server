@@ -13,6 +13,7 @@
 			import com.socialcomputing.wps.services.planservice.PlanService;
 			
 			import flash.external.ExternalInterface;
+			import flash.system.Security;
 			
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
@@ -30,8 +31,14 @@
 				this.planName = this.checkApplicationParameter("wpsplanname");
 				var parameters:Object = FlexGlobals.topLevelApplication.parameters;
 
+				// Security Sandbox
+				if( FlexGlobals.topLevelApplication.parameters.hasOwnProperty( "allowDomain")) {
+					Security.allowDomain( FlexGlobals.topLevelApplication.parameters["allowDomain"]);
+				}
+				
 				// for js calls
 				ExternalInterface.addCallback( "compute", compute);
+				ExternalInterface.addCallback( "entities", compute);
 				
 				// Initialising service
 				this.planService = new PlanService(serverURL);
