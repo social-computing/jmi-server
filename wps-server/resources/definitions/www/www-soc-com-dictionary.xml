@@ -7,7 +7,7 @@
 
 	<entities>
 		<JDBC-entities name="WPS Social Computing blog">
-			<JDBC-connection catalog="wordpresstest" >
+			<JDBC-connection catalog="wordpress" >
 				<JNDI-data-source>
 					<url>java:comp/env/jdbc/wps-blog</url>
 				</JNDI-data-source>
@@ -18,7 +18,7 @@
 			</JDBC-default-classifier>
 	
 			<JDBC-property name="Tags properties" column-name="label">
-				<JDBC-query2>SELECT a.term_id as id, a.name as name FROM wp_terms a LEFT JOIN wp_term_taxonomy b ON a.term_id=b.term_id WHERE b.taxonomy='post_tag' AND a.term_id={icurEntity}</JDBC-query2>
+				<JDBC-query2>SELECT a.slug as id, a.name as name FROM wp_terms a LEFT JOIN wp_term_taxonomy b ON a.term_id=b.term_id WHERE b.taxonomy='post_tag' AND a.term_id={icurEntity}</JDBC-query2>
 			</JDBC-property>
 
 			<JDBC-affinity-reader name="JDBC_AffReader">
@@ -43,7 +43,7 @@
                     <JDBC-query2>SELECT ID as id, post_title as name FROM wp_posts where ID={icurAttribute}</JDBC-query2>
                 </JDBC-property>
                 <JDBC-property name="Belong to properties" multiple-rows="yes" column-name="label">
-				    <JDBC-query2>SELECT c.term_id as poss_id, c.name as poss_name FROM wp_term_relationships a INNER JOIN wp_term_taxonomy b ON a.term_taxonomy_id=b.term_taxonomy_id INNER JOIN wp_terms c ON b.term_id=c.term_id WHERE a.object_id={icurAttribute} AND b.taxonomy='post_tag' ORDER BY c.name ASC</JDBC-query2>
+				    <JDBC-query2>SELECT c.slug as poss_id, c.name as poss_name FROM wp_term_relationships a INNER JOIN wp_term_taxonomy b ON a.term_taxonomy_id=b.term_taxonomy_id INNER JOIN wp_terms c ON b.term_id=c.term_id WHERE a.object_id={icurAttribute} AND b.taxonomy='post_tag' ORDER BY c.name ASC</JDBC-query2>
                 </JDBC-property>
 			</JDBC-attributes>
 		</JDBC-entities>
@@ -74,7 +74,7 @@
 		</entities-recommendation>
 	</analysis-profile>
 
-	<analysis-profile name="DiscoveryProfile" attributes-ref="JDBC_Profile" type="discovery" attribute-size="frequency" attributes-max="300" attributes-max="40" attributes-base-max="40">
+	<analysis-profile name="DiscoveryProfile" attributes-ref="JDBC_Profile" type="discovery" attribute-size="frequency" attributes-max="40" attributes-base-max="40">
 		<props-mapping>
 			<entity-props-mapping>
 				<mapping key="ID" 	value="id" />

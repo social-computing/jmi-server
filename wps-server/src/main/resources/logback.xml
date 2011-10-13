@@ -5,7 +5,7 @@
     <!-- Console log -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d|%-5level| %logger{36} - %msg%n</pattern>
+            <pattern>%d|%-5level|%logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
     <!-- Log file -->
@@ -17,9 +17,6 @@
         </encoder>
     </appender>
 
-
-    <!-- Loggers -->
-    <logger name="com.socialcomputing"/>
 
     <!-- Embedded frameworks & tools -->
     <logger name="org.apache.commons" level="warn" />
