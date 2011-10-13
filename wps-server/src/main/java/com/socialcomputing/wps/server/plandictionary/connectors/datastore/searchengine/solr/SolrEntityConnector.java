@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,6 +41,8 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
     private static final Logger LOG = LoggerFactory.getLogger(SolrEntityConnector.class);
     private static final String INVERT_PARAM = "invert";
     private static final String SEARCH_DOCUMENT_ID_PARAM = "searchDocumentId";
+    private static final String FILTER_QUERY_PARAM = "fq";
+    
     
 	private final CommonsHttpSolrServer solrClient;
 	private final QueryParameters queryParameters;
@@ -226,21 +229,35 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 	    super.openConnections(planType, wpsparams);
 	    LOG.info("Query remote search server to get attributes and entities");
 	    
-	    // Query parameters 
+	    
+	    /*  Reading query parameters */
+        Object invertParam = wpsparams.get(INVERT_PARAM);
+        boolean invert = (invertParam != null) ? (Boolean.parseBoolean((String) invertParam)) : this.invert;
+        LOG.debug("  - invert: {}", invert);
+        
+        String searchDocumentId = (String) wpsparams.get(SEARCH_DOCUMENT_ID_PARAM);
+        LOG.debug("  - search document id: {}", searchDocumentId);
+	    
+        /*
+        String rawQuery = null;
+	    if(wpsparams.containsKey(RAW_QUERY_PARAM)) {
+	         rawQuery = (String) wpsparams.get(RAW_QUERY_PARAM);
+	    }
+	    */
+	    
 	    QueryParameter<String> queryString = this.queryParameters.getQueryString();
 	    String query = (String) wpsparams.get(queryString.getName());
 	    LOG.debug("  - query: {}", query);
 	    
 	    QueryParameter<Integer> maxResults = this.queryParameters.getMaxResults();
-	    Integer max = Integer.valueOf((String) wpsparams.get(maxResults.getName()));
+	    Object maxResultsParam = wpsparams.get(maxResults.getName());
+	    Integer max = (maxResultsParam != null) ?  Integer.valueOf((String) maxResultsParam) : maxResults.getValue(); 
         LOG.debug("  - max results: {}", max);
+        
+        String filterQuery = (String) wpsparams.get(FILTER_QUERY_PARAM);
+        LOG.debug("  - filter query: {}", filterQuery);
 	    
-	    Object invertParam = wpsparams.get(INVERT_PARAM);
-	    boolean invert = (invertParam != null) ? (Boolean.parseBoolean((String) invertParam)) : this.invert;
-	    LOG.debug("  - invert: {}", invert);
-	    
-	    String searchDocumentId = (String) wpsparams.get(SEARCH_DOCUMENT_ID_PARAM);
-	    LOG.debug("  - search document id: {}", searchDocumentId);
+
 
 	    // Construct the query
 	    SolrDocumentList documents;
@@ -256,7 +273,7 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
             
             solrQuery = 
                 new SolrQuery().setQueryType("/" + MoreLikeThisParams.MLT);
-                solrQuery.setRows((max != null) ? max : maxResults.getValue())
+                solrQuery.setRows(max)
                          .setQuery("uid:" + searchDocumentId)
                          .set(MoreLikeThisParams.MATCH_INCLUDE, true)
                          .set(MoreLikeThisParams.MIN_DOC_FREQ, 1)
@@ -268,8 +285,11 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
         else {
             SolrQuery solrQuery = 
                 new SolrQuery((query != null) ? query : queryString.getValue())
-                    .setRows((max != null) ? max : maxResults.getValue());
-            
+                    .setRows(max);
+            if(filterQuery != null) {
+                String[] filterQueries = filterQuery.split("\\|\\|");
+                solrQuery.setFilterQueries(filterQueries);
+            }
             documents = this.query(solrQuery);
         }
 	   
