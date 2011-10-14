@@ -130,7 +130,7 @@ if (feed != null && feed.length() > 0) {%>
 				</form>
 			</td>
 			<td>
-				<a href="http://www.google.com/ig/adde?moduleurl=http://www.mapyourfeeds.com/google/igoogle-social-computing-feeds.xml"><img src="http://buttons.googlesyndication.com/fusion/add.gif" style="width:104px; height:17px;border:0px;" alt="Add to iGoogle" /></a>
+				<a title="Add this as an Google gadget" target="_blank" href="http://www.google.com/ig/directory?url=www.mapyourfeeds.com/google/igoogle-social-computing-feeds.xml"><img src="http://buttons.googlesyndication.com/fusion/add.gif" style="width:104px; height:17px;border:0px;" alt="Add this as an Google gadget" /></a>
 			</td>
 		</tr>
 		</table>
