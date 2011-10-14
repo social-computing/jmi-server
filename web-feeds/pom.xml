@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>wps</artifactId>
+    <groupId>com.socialcomputing.wps</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <groupId>com.social-computing.feeds</groupId>
+  <artifactId>web-feeds</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <name>Feeds Webapp</name>
+  <url>http://mapyourfeeds.com</url>
+  
+  <dependencies>
+     <dependency>
+      <groupId>com.socialcomputing.wps</groupId>
+      <artifactId>wps-flex</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>swf</type>
+      <scope>runtime</scope>      
+    </dependency>
+ 
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  		
+  <build>
+    <finalName>web-feeds</finalName>
+	<plugins>
+      <!-- récupération de l'application flex -->
+      <plugin>
+        <groupId>org.sonatype.flexmojos</groupId>
+        <artifactId>flexmojos-maven-plugin</artifactId>
+        <version>${flexmojos.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>copy-flex-resources</goal>
+            </goals>
+            <configuration>
+                <webappDirectory>${project.build.directory}/${project.build.finalName}/client</webappDirectory> 
+              <!-- Hack :  
+                   Move the generated flex client swf so that it also work with in eclipse
+                   with the m2eclipse plugin -->
+              <!--<webappDirectory>src/main/webapp/flex</webappDirectory> -->
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+	</plugins>
+  </build>
+</project>

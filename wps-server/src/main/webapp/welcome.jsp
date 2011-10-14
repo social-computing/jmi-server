@@ -22,7 +22,7 @@
 		<ul>
 		<li><a href="http://www.social-computing.com" target="_blank"><h2>Social Computing</h2></a>
 		<li><a href="http://www.facebook.com/apps/application.php?id=108710779211353" target="_blank"><h2>Facebook application</h2></a>
-		<li><a href="http://map.social-computing.com/feeds" target="_blank"><h2>Map your feeds!</h2></a>
+		<li><a href="http://www.mapyourfeeds.com" target="_blank"><h2>Map your feeds!</h2></a>
 		</li>
 		</ul>
 	</td>

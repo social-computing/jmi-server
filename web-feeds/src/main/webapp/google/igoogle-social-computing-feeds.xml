@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
   <ModulePrefs title="Map your Feeds!" title_url="http://www.social-computing.com" width="300" height="300" 
-	  	author="Social Computing" author_email="contact@social-computing.com" author_link="http://www.social-computing.com"
+	  	author="Social Computing" author_email="mapyourfeeds@social-computing.com" author_link="http://www.social-computing.com"
 		description="View and navigate your feeds thru an interactive map! by Social Computing" 
 		screenshot="http://wps-saas.social-computing.com/feeds/images/screenshot.png" 
 		thumbnail="http://wps-saas.social-computing.com/feeds/images/thumbnail.png">
