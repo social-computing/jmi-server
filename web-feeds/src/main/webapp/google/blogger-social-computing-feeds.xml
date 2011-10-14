@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
   <ModulePrefs title="Map your blog!" title_url="http://www.social-computing.com" width="300" height="300" 
-	  	author="Social Computing" author_email="mapyourfeeds@social-computing.com" author_link="http://www.social-computing.com"
-		description="View feeds another way! Social Computing Cartography" 
+	  	author="Social Computing" author_email="mapyourfeeds@social-computing.com" author_link="http://www.mapyourfeeds.com/"
+		description="View and navigate your posts thru an interactive map! by Social Computing" 
 		screenshot="http://www.mapyourfeeds.com/images/screenshot.png" 
 		thumbnail="http://www.mapyourfeeds.com/images/thumbnail.png">
     <Icon>http://www.social-computing.com/favicon.ico</Icon>
@@ -41,7 +41,7 @@
 	        allowNetworking: "all", quality: "high", menu: "true", 
 	        flashvars: fv
 	   };
-	   gadgets.flash.embedFlash('http://wps-saas.social-computing.com/client/flex/wps-flex-1.0-SNAPSHOT.swf', 'wps-feeds', 10, params);
+	   gadgets.flash.embedFlash('http://www.mapyourfeeds.com/client/wps-flex-1.0-SNAPSHOT.swf', 'wps-feeds', 10, params);
   }
 
   function getMap() {
