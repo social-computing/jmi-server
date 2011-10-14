@@ -34,7 +34,7 @@
   <build>
     <finalName>web-feeds</finalName>
 	<plugins>
-      <!-- récupération de l'application flex -->
+      <!-- rÃ©cupÃ©ration de l'application flex -->
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>

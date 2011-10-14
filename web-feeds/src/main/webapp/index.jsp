@@ -1,9 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">	
     <head>
-        <title>Social Computing Feeds Cartography</title>
-        <meta name="google" value="notranslate">         
+        <title>Map your feeds!</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta http-equiv="content-language" content="en">
 		<link rel="shortcut icon" href="./favicon.ico" />
@@ -93,26 +91,10 @@ if (feed != null && feed.length() > 0) {%>
 			<!-- JavaScript enabled so display the flashContent div in case it is not replaced with a swf object. -->
 			swfobject.createCSS("#flashContent", "display:block;text-align:left;");
         </script>
-<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-4543609-4']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
+<jsp:include page="./js/ga.js" /> 
 </head>
  <%}%>   
     <body>
-    
-        <!-- SWFObject's dynamic embed method replaces this alternative HTML content with Flash content when enough 
-			 JavaScript and Flash plug-in support is available. The div is initially hidden so that it doesn't show
-			 when JavaScript is disabled.
-		-->
 	<div id="content">
 		<table>
 		<tr>
@@ -124,9 +106,9 @@ if (feed != null && feed.length() > 0) {%>
 		</tr>
 		<tr>
 			<td>
-				<form method="GET">
-					<INPUT type="text" name="feed" size="80" value="<%=feed != null ? feed : "" %>">
-					<INPUT type="submit" value="View map">
+				<form method="get">
+					<input type="text" name="feed" size="80" value="<%=feed != null ? feed : "" %>" />
+					<input type="submit" value="View map" />
 				</form>
 			</td>
 			<td>
