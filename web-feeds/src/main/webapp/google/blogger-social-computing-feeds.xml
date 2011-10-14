@@ -3,8 +3,8 @@
   <ModulePrefs title="Map your blog!" title_url="http://www.social-computing.com" width="300" height="300" 
 	  	author="Social Computing" author_email="mapyourfeeds@social-computing.com" author_link="http://www.social-computing.com"
 		description="View feeds another way! Social Computing Cartography" 
-		screenshot="http://wps-saas.social-computing.com/feeds/images/screenshot.png" 
-		thumbnail="http://wps-saas.social-computing.com/feeds/images/thumbnail.png">
+		screenshot="http://www.mapyourfeeds.com/images/screenshot.png" 
+		thumbnail="http://www.mapyourfeeds.com/images/thumbnail.png">
     <Icon>http://www.social-computing.com/favicon.ico</Icon>
 	<Require feature="google.blog"/>
     <Require feature="flash" />
@@ -19,7 +19,7 @@
   function getFeedUrl() {
 	  var flashvars = {
 		allowDomain: "*",
-		wpsserverurl: "http%3A%2F%2Fwps-saas.social-computing.com%2F",
+		wpsserverurl: "http%3A%2F%2Fmap.social-computing.com%2F",
 		wpsplanname: "Feeds",
 		analysisProfile: "GlobalProfile",
 		feed: viewFeeds.getPostsFeedUrl()
