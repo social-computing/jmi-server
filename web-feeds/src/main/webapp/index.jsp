@@ -20,9 +20,10 @@ if( feed == null) feed = "";%>
 		
 		#bandeau {width: 100%; }
 		#bandeau td {text-align:left; }
-		#bandeau #logo {width:148px; }
-		#bandeau .label {padding-top:20px;text-align:left;font-family:arial;color:#37b0e3;font-size:14px;}
+		#bandeau #logo {width:150px; }
+		#bandeau .label {margin:0px;text-align:left;font-family:arial;color:#37b0e3;font-size:14px;}
 		#bandeau .social {width:120px; align:left}
+		#bandeau #focus {width:180px;padding-left:4px;margin:0;text-align:left;font-family:arial;color:#c3372f;font-size:14px;font-weight:bold;}
 
 		.slogan {padding-top:20px; padding-left:154px;text-align:left;font-family:arial;color:#37b0e3;font-size:18px;}
 		
@@ -31,11 +32,11 @@ if( feed == null) feed = "";%>
     </style>
 <%if( feed.length() > 0) {%>
 <script type="text/javascript">
-  function getMap() {
+  function getElem( name) {
 	  if (navigator.appName.indexOf ("Microsoft") !=-1) {
-		  return window["wps-feeds"];
+		  return window[name];
 	  } else {
-		  return document["wps-feeds"];
+		  return document[name];
 	  }
   }
   function empty() {
@@ -52,7 +53,8 @@ if( feed == null) feed = "";%>
 	var parameters = {};
 	parameters["entityId"] = args[0];
 	parameters["feed"] = args[2];
-	getMap().compute( parameters);
+	getElem("wps-feeds").compute( parameters);
+	document.getElementById("focus").innerHTML = "<i>Focus on category:</i> " + args[1];
   }
   function Discover( args)
   {
@@ -60,7 +62,8 @@ if( feed == null) feed = "";%>
 	parameters["attributeId"] = args[0];
 	parameters["analysisProfile"] = "DiscoveryProfile";
 	parameters["feed"] = args[2];
-  	getMap().compute( parameters);
+  	getElem("wps-feeds").compute( parameters);
+	document.getElementById("focus").innerHTML = "<i>Centered on item:</i> " + args[1];
   }
 </script>
 <!-- Enable Browser History by replacing useBrowserHistory tokens with two hyphens -->
@@ -105,29 +108,34 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 
 <body>
 <div id="header">
-<table id="bandeau" >
+<table id="bandeau" border="0">
 <tr>
-	<td id="logo" rowspan="2">		
+	<td id="logo" rowspan="3">		
 		<a href="http://www.social-computing.com/" target="_blank"><img border="0" width="144" height="70" title="Social Computing" src="./images/logo-sc-white.jpg" /></a>
 	</td>
-	<td class="label"><b>Enter an url:</b>
+	<td class="label" ><b>Enter an url:</b>
 	</td>
 	<td class="social"><g:plusone size="medium" href="http://www.mapyourfeeds.com/"></g:plusone></td>
-	<td class="social"><a title="Post to Google Buzz" class="google-buzz-button" href="http://www.google.com/buzz/post" data-button-style="small-count" data-url="http://www.mapyourfeeds.com"></a><script type="text/javascript" src="http://www.google.com/buzz/api/button.js"></script></td>
+	<!--td class="social"><a title="Post to Google Buzz" class="google-buzz-button" href="http://www.google.com/buzz/post" data-button-style="small-count" data-url="http://www.mapyourfeeds.com"></a><script type="text/javascript" src="http://www.google.com/buzz/api/button.js"></script></td-->
 	<td class="social"><iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.mapyourfeeds.com%2F&amp;send=false&amp;layout=button_count&amp;width=70&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=arial&amp;height=21&amp;appId=205005596217672" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:150px; height:21px;" allowTransparency="true"></iframe></td>
 </tr>
 <tr>
-	<td>
+	<td nowrap >
 		<form method="get">
 			<input type="text" name="feed" title="Url" size="80" value="<%=feed != null ? feed : "" %>" />
 			<input type="submit" value="View map" />
 		</form>
 	</td>
+	<td class="social"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.mapyourfeeds.com" data-count="horizontal">Tweet</a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script></td>
+	<td class="social"><script src="http://platform.linkedin.com/in.js" type="text/javascript"></script><script type="IN/Share" data-url="http://www.mapyourfeeds.com/" data-counter="right"></script></td>
+</tr>
+<tr>
+	<td nowrap colspan="2">
+		<p id="focus">&nbsp;</p>
+	</td>
 	<td>
 		<a title="Add Map Your Feeds! as a Google Gadget" target="_blank" href="http://www.google.com/ig/directory?url=www.mapyourfeeds.com/google/igoogle-social-computing-feeds.xml"><img src="http://buttons.googlesyndication.com/fusion/add.gif" style="width:104px; height:17px;border:0px;" alt="Add this as an Google gadget" /></a>
 	</td>
-	<td class="social"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.mapyourfeeds.com" data-count="horizontal">Tweet</a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script></td>
-	<td class="social"><script src="http://platform.linkedin.com/in.js" type="text/javascript"></script><script type="IN/Share" data-url="http://www.mapyourfeeds.com/" data-counter="right"></script></td>
 </tr>
 </table>
 </div>
