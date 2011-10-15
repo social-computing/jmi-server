@@ -6,8 +6,8 @@ if( feed == null) feed = "";%>
     <title>Map your feeds! <%=feed%></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta http-equiv="content-language" content="en" />
-	<meta name="description" content="View and navigate your posts thru an interactive map! by Social Computing" />
-	<meta name="keywords" content="rss, feeds, feed, map, cartography, social, social computing, category, represenation, information" />
+	<meta name="description" content="View and navigate your feeds thru an interactive map! by Social Computing" />
+	<meta name="keywords" content="rss, feeds, feed, map, cartography, visualization, social, blog, gadget, widget, social computing, category, representation, information" />
 	<meta name="author" content="Social Computing" /> 
 	<meta name="robots" content="all" /> 
 	<link rel="shortcut icon" href="./favicon.ico" />
@@ -23,6 +23,8 @@ if( feed == null) feed = "";%>
 		#bandeau #logo {width:148px; }
 		#bandeau .label {padding-top:20px;text-align:left;font-family:arial;color:#37b0e3;font-size:14px;}
 		#bandeau .social {width:120px; align:left}
+
+		.slogan {padding-top:20px; padding-left:154px;text-align:left;font-family:arial;color:#37b0e3;font-size:18px;}
 		
 		#flashContent { display:none; }
 		object:focus { outline:none; }
@@ -131,7 +133,9 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 </div>
 
 <div id="map" >
-<%if (feed.length() > 0) {%>
+<%if (feed.length() == 0) {%>
+<p class="slogan">View and navigate your feeds thru an interactive map!<p>
+<%} else {%>
      <div id="flashContent">
      	<p>
       	To view this page ensure that Adobe Flash Player version 
