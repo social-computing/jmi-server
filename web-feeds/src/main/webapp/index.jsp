@@ -6,11 +6,20 @@
 		<meta http-equiv="content-language" content="en">
 		<link rel="shortcut icon" href="./favicon.ico" />
         <style type="text/css" media="screen"> 
-			html, body	{ height:95%; }
-			body { margin:0; padding:0; overflow:auto; text-align:center; background-color: #FFFFFF; }   
-			object:focus { outline:none; }
+			html, body	{ height:100%; }
+			body { margin:0; padding:0; overflow:auto; height:100%; text-align:left; background-color: #FFFFFF; }   
+
+			#header { width:100%; height:78px; }
+			#map	{ width:100%; height:88%;}
+			
+			#bandeau {width: 100%; }
+			#bandeau td {text-align:left; }
+			#bandeau #logo {width:148px; }
+			#bandeau .label {padding-top:20px;text-align:left;font-family:arial;color:#37b0e3;font-size:14px;}
+			#bandeau .social {width:120px; align:left}
+			
 			#flashContent { display:none; }
-			#content {width: 100%; height:99%; background-color: #FFFFFF;}
+			object:focus { outline:none; }
         </style>
 <%String feed = request.getParameter("feed");
 if (feed != null && feed.length() > 0) {%>
@@ -95,14 +104,17 @@ if (feed != null && feed.length() > 0) {%>
 </head>
  <%}%>   
     <body>
-	<div id="content">
-		<table>
+<div id="header">
+		<table id="bandeau" >
 		<tr>
-			<td rowspan="2">		
+			<td id="logo" rowspan="2">		
 				<a href="http://www.social-computing.com/" target="_blank"><img border="0" width="144" height="70" title="Social Computing" src="./images/logo-sc-white.jpg" /></a>
 			</td>
-			<td style="padding-top:20px;text-align:left;font-family:arial;color:#37b0e3;font-size:14px;"><b>Enter an url:</b>
+			<td class="label"><b>Enter an url:</b>
 			</td>
+			<td class="social"><g:plusone size="medium" href="http://www.mapyourfeeds.com/"></g:plusone></td>
+			<td class="social"><a title="Post to Google Buzz" class="google-buzz-button" href="http://www.google.com/buzz/post" data-button-style="small-count" data-url="http://www.mapyourfeeds.com"></a><script type="text/javascript" src="http://www.google.com/buzz/api/button.js"></script></td>
+			<td class="social"><iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.mapyourfeeds.com%2F&amp;send=false&amp;layout=button_count&amp;width=70&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=arial&amp;height=21&amp;appId=205005596217672" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:150px; height:21px;" allowTransparency="true"></iframe></td>
 		</tr>
 		<tr>
 			<td>
@@ -112,11 +124,15 @@ if (feed != null && feed.length() > 0) {%>
 				</form>
 			</td>
 			<td>
-				<a title="Add this as an Google gadget" target="_blank" href="http://www.google.com/ig/directory?url=www.mapyourfeeds.com/google/igoogle-social-computing-feeds.xml"><img src="http://buttons.googlesyndication.com/fusion/add.gif" style="width:104px; height:17px;border:0px;" alt="Add this as an Google gadget" /></a>
+				<a title="Add Map Your Feeds! as a Google Gadget" target="_blank" href="http://www.google.com/ig/directory?url=www.mapyourfeeds.com/google/igoogle-social-computing-feeds.xml"><img src="http://buttons.googlesyndication.com/fusion/add.gif" style="width:104px; height:17px;border:0px;" alt="Add this as an Google gadget" /></a>
 			</td>
+			<td class="social"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.mapyourfeeds.com" data-count="horizontal">Tweet</a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script></td>
+			<td class="social"><script src="http://platform.linkedin.com/in.js" type="text/javascript"></script><script type="IN/Share" data-url="http://www.mapyourfeeds.com/" data-counter="right"></script></td>
 		</tr>
 		</table>
-		
+</div>
+
+<div id="map" >
 <%if (feed != null && feed.length() > 0) {%>
         <div id="flashContent">
         	<p>
@@ -158,7 +174,9 @@ if (feed != null && feed.length() > 0) {%>
                 <!--<![endif]-->
             </object>
 	    </noscript>		
-	</div>
-<%} %>	    
+<%} %>
+</div>
+
+	<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
    </body>
 </html>
