@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
-  <ModulePrefs title="Map your blog!" title_url="http://www.social-computing.com" width="300" height="300" 
-	  	author="Social Computing" author_email="mapyourfeeds@social-computing.com" author_link="http://www.mapyourfeeds.com/"
+  <ModulePrefs title="Map your blog!" title_url="http://www.mapyourfeeds.com/" width="300" height="300" 
+	  	author="Social Computing" author_email="mapyourfeeds@social-computing.com" author_link="http://www.social-computing.com"
 		description="View and navigate your posts thru an interactive map! by Social Computing" 
 		screenshot="http://www.mapyourfeeds.com/images/screenshot.png" 
 		thumbnail="http://www.mapyourfeeds.com/images/thumbnail.png">
