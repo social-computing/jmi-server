@@ -10,6 +10,9 @@ if( feed == null) feed = "";%>
 	<meta name="keywords" content="rss, feeds, feed, map, cartography, visualization, social, blog, gadget, widget, social computing, category, representation, information" />
 	<meta name="author" content="Social Computing" /> 
 	<meta name="robots" content="all" /> 
+	<meta property="og:title" content="Map your feeds!" />
+	<meta property="og:description" content="View and navigate your feeds thru an interactive map! by Social Computing" />
+	<meta property="og:image" content="http://www.mapyourfeeds.com/images/thumbnail.png" />
 	<link rel="shortcut icon" href="./favicon.ico" />
     <style type="text/css" media="screen"> 
 		html, body	{ height:100%; }
@@ -26,6 +29,7 @@ if( feed == null) feed = "";%>
 		#bandeau #focus {width:180px;padding-left:4px;margin:0;text-align:left;font-family:arial;color:#c3372f;font-size:14px;font-weight:bold;}
 
 		.slogan {padding-top:20px; padding-left:154px;text-align:left;font-family:arial;color:#37b0e3;font-size:18px;}
+		.hidden-slogan {text-align:left;font-family:arial;color:#ffffff;font-size:12px;}
 		
 		#flashContent { display:none; }
 		object:focus { outline:none; }
@@ -40,10 +44,10 @@ if( feed == null) feed = "";%>
 	  }
   }
   function empty() {
- 	 alert( "Sorry, map is empty");
+ 	document.getElementById("focus").innerHTML = "Sorry, the map is empty. Does the feed contains categories ?";
   }
   function error( error) {
-   	alert( error);
+	document.getElementById("focus").innerHTML = "Sorry, an error occured. Is this url correct? <span class='hidden-slogan'>" + error + "</span>";
   }
   function Navigate( url) {
  	 window.open( url, "_blank");
@@ -111,7 +115,7 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 <table id="bandeau" border="0">
 <tr>
 	<td id="logo" rowspan="3">		
-		<a href="http://www.social-computing.com/" target="_blank"><img border="0" width="144" height="70" title="Social Computing" src="./images/logo-sc-white.jpg" /></a>
+		<a href="http://www.social-computing.com/" target="_blank" title="Social Computing"><img border="0" width="144" height="70" title="Social Computing" src="./images/logo-sc-white.jpg" /></a>
 	</td>
 	<td class="label" ><b>Enter an url:</b>
 	</td>
@@ -126,8 +130,8 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 			<input type="submit" value="View map" />
 		</form>
 	</td>
-	<td class="social"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.mapyourfeeds.com" data-count="horizontal">Tweet</a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script></td>
-	<td class="social"><script src="http://platform.linkedin.com/in.js" type="text/javascript"></script><script type="IN/Share" data-url="http://www.mapyourfeeds.com/" data-counter="right"></script></td>
+	<td class="social"><a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal">Tweet</a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script></td>
+	<td class="social"><script src="http://platform.linkedin.com/in.js" type="text/javascript"></script><script type="IN/Share" data-counter="right"></script></td>
 </tr>
 <tr>
 	<td nowrap colspan="2">
