@@ -38,7 +38,7 @@
 				
 				// for js calls
 				ExternalInterface.addCallback( "compute", compute);
-				ExternalInterface.addCallback( "entities", compute);
+				ExternalInterface.addCallback( "getProperty", getProperty);
 				
 				// Initialising service
 				this.planService = new PlanService(serverURL);
@@ -56,6 +56,9 @@
 				getPlanResult.token = this.planService.getPlan(planName, map.width, map.height, parameters);
  			}
 			
+			public function getProperty( name:String):Object {
+				return this.map.getProperty( name);
+			}
 	]]>
     </fx:Script>
     

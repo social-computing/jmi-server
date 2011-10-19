@@ -3,7 +3,7 @@
 <%String feed = request.getParameter("feed");
 if( feed == null) feed = "";%>
 <head>
-    <title>Map your feeds! <%=feed%></title>
+    <title>Map your feeds!</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta http-equiv="content-language" content="en" />
 	<meta name="description" content="View and navigate your feeds thru an interactive map! by Social Computing" />
@@ -43,11 +43,14 @@ if( feed == null) feed = "";%>
 		  return document[name];
 	  }
   }
+  function ready() {
+	  document.title = document.title + ' - ' + getElem("wps-feeds").getProperty( "$FEEDS_TITLE");
+  }
   function empty() {
  	document.getElementById("focus").innerHTML = "Sorry, the map is empty. Does the feed contains categories ?";
   }
   function error( error) {
-	document.getElementById("focus").innerHTML = "Sorry, an error occured. Is this url correct? <span class='hidden-slogan'>" + error + "</span>";
+	document.getElementById("focus").innerHTML = "Sorry, an error occured. Is this URL correct? <span class='hidden-slogan'>" + error + "</span>";
   }
   function Navigate( url) {
  	 window.open( url, "_blank");
@@ -117,17 +120,17 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 	<td id="logo" rowspan="3">		
 		<a href="http://www.social-computing.com/" target="_blank" title="Social Computing"><img border="0" width="144" height="70" title="Social Computing" src="./images/logo-sc-white.jpg" /></a>
 	</td>
-	<td class="label" ><b>Enter an url:</b>
+	<td class="label" ><b>Enter one or more URLs (comma separated):</b>
 	</td>
 	<td class="social"><g:plusone size="medium" href="http://www.mapyourfeeds.com/"></g:plusone></td>
 	<!--td class="social"><a title="Post to Google Buzz" class="google-buzz-button" href="http://www.google.com/buzz/post" data-button-style="small-count" data-url="http://www.mapyourfeeds.com"></a><script type="text/javascript" src="http://www.google.com/buzz/api/button.js"></script></td-->
-	<td class="social"><iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.mapyourfeeds.com%2F&amp;send=false&amp;layout=button_count&amp;width=70&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=arial&amp;height=21&amp;appId=205005596217672" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:150px; height:21px;" allowTransparency="true"></iframe></td>
+	<td class="social"><iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.mapyourfeeds.com%2F&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=arial&amp;height=21&amp;appId=205005596217672" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe></td>
 </tr>
 <tr>
 	<td nowrap >
 		<form method="get">
-			<input type="text" name="feed" title="Url" size="80" value="<%=feed != null ? feed : "" %>" />
-			<input type="submit" value="View map" />
+			<input type="text" name="feed" title="URLs" size="80" value="<%=feed != null ? feed : "" %>" />
+			<input type="submit" value="Just Map It!" />
 		</form>
 	</td>
 	<td class="social"><a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal">Tweet</a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script></td>

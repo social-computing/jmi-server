@@ -50,18 +50,29 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
 	public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
 		super.openConnections( planType, wpsparams);
 
+		List<String> titles = new ArrayList<String>();
 		m_inverted =  UrlHelper.ReplaceParameter( m_InvertedDef, wpsparams).equalsIgnoreCase( "true");
 		for( UrlHelper feed : m_feeds) {
             for( String url : UrlHelper.ReplaceParameter( feed.getUrl(), wpsparams).split( ",")) {
                 feed.setUrl( url);
     		    feed.openConnections( planType, wpsparams);
-    	        read( feed, planType, wpsparams);
+    	        read( feed, planType, wpsparams, titles);
                 feed.closeConnections();
             }
 		}
+		StringBuilder sb = new StringBuilder();
+		boolean first = true;
+		for( String title : titles) {
+		    if( first) 
+		        first = false;
+		    else
+		        sb.append( ", ");
+            sb.append( title);
+		}
+		wpsparams.put( "FEEDS_TITLE", sb.toString());
 	}
 
-    private void read(UrlHelper feed, int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
+    private void read(UrlHelper feed, int planType, Hashtable<String, Object> wpsparams, List<String> titles) throws WPSConnectorException {
         String content = feed.getContentType();
         if( content.contains( "text/html")) {
             // HTML ?
@@ -79,17 +90,17 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
                     String url = tag.getAttributeValue( "href");
                     curFeed.setUrl( url.startsWith( "/") ? feed.getUrl() + url : url);
                     curFeed.openConnections( planType, wpsparams);
-                    readXml( curFeed, planType, wpsparams);
+                    readXml( curFeed, planType, wpsparams, titles);
                     curFeed.closeConnections();
                 }
             }
         }
         else {
-            readXml( feed, planType, wpsparams);
+            readXml( feed, planType, wpsparams, titles);
         }
     }
     
-	private void readXml(UrlHelper feed, int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
+	private void readXml(UrlHelper feed, int planType, Hashtable<String, Object> wpsparams, List<String> titles) throws WPSConnectorException {
 	    try {
 			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(false);
 			org.jdom.Document doc = builder.build( feed.getStream());
@@ -97,10 +108,10 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
 			
 	        Element top = root.getChild( "channel");
 	        if( top != null) {
-	            parseRss2( top);
+	            titles.add( parseRss2( top));
 	        }
 	        else {
-	            parseAtom( root);
+	            titles.add( parseAtom( root));
 	        }
 		} catch (Exception e) {
             throw new WPSConnectorException( "openConnections", e);
@@ -116,8 +127,13 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
         }
 	}
 	
-	private void parseAtom( Element feed) {
+	private String parseAtom( Element feed) {
+	    String title = "";
         for( Element item : (List<Element>)feed.getContent()) {
+            if( item.getName().equalsIgnoreCase( "title")) {
+                title = getAtomContent( item);;
+                
+            }
             if( item.getName().equalsIgnoreCase( "entry")) {
                 List<Element> content = item.getContent();
                 Attribute attribute = addAttribute( getAtomId( content));
@@ -134,6 +150,7 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
                 }
             }
         }
+        return title;
 	}
 
 	private String getAtomId( List<Element> content) {
@@ -148,7 +165,8 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
         return ((Text)item.getContent().get( 0)).getText();
     }
     
-    private void parseRss2( Element channel) {
+    private String parseRss2( Element channel) {
+        String title = channel.getChildText( "title");
         for( Element item : (List<Element>)channel.getChildren( "item")) {
             Attribute attribute = addAttribute( item.getChildText( "link"));
             attribute.addProperty( "name", item.getChildText( "title"));
@@ -159,6 +177,7 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
                 entity.addAttribute( attribute, 1);
             }
         }
+        return title;
     }
 	
 	@Override
