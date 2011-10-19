@@ -23,13 +23,14 @@ if( feed == null) feed = "";%>
 		
 		#bandeau {width: 100%; }
 		#bandeau td {text-align:left; }
-		#bandeau #logo {width:150px; }
+		#bandeau #logo {width:155px; }
 		#bandeau .label {margin:0px;text-align:left;font-family:arial;color:#37b0e3;font-size:14px;}
 		#bandeau .social {width:120px; align:left}
-		#bandeau #focus {width:180px;padding-left:4px;margin:0;text-align:left;font-family:arial;color:#c3372f;font-size:14px;font-weight:bold;}
+		#bandeau #message {width:180px;padding-left:4px;margin:0;text-align:left;font-family:arial;color:#c3372f;font-size:14px;font-weight:bold;}
+		#bandeau #doc a {width:180px;padding-left:4px;margin:0;text-align:left;font-family:arial;color:#ffffff;font-size:12px;font-weight:bold;}
+		#bandeau .hidden-message {text-align:left;font-family:arial;color:#ffffff;font-size:12px;}
 
 		.slogan {padding-top:20px; padding-left:154px;text-align:left;font-family:arial;color:#37b0e3;font-size:18px;}
-		.hidden-slogan {text-align:left;font-family:arial;color:#ffffff;font-size:12px;}
 		
 		#flashContent { display:none; }
 		object:focus { outline:none; }
@@ -40,10 +41,10 @@ if( feed == null) feed = "";%>
 	  document.title = document.title + ' - ' + document.getElementById("wps-feeds").getProperty( "$FEEDS_TITLE");
   }
   function empty() {
- 	document.getElementById("focus").innerHTML = "Sorry, the map is empty. Does the feed contains categories ?";
+ 	document.getElementById("message").innerHTML = "Sorry, the map is empty. Does the feed contains categories ?";
   }
   function error( error) {
-	document.getElementById("focus").innerHTML = "Sorry, an error occured. Is this URL correct? <span class='hidden-slogan'>" + error + "</span>";
+	document.getElementById("message").innerHTML = "Sorry, an error occured. Is this URL correct? <span class='hidden-message'>" + error + "</span>";
   }
   function Navigate( url) {
  	 window.open( url, "_blank");
@@ -54,7 +55,7 @@ if( feed == null) feed = "";%>
 	parameters["entityId"] = args[0];
 	parameters["feed"] = args[2];
 	document.getElementById("wps-feeds").compute( parameters);
-	document.getElementById("focus").innerHTML = "<i>Focus on category:</i> " + args[1];
+	document.getElementById("message").innerHTML = "<i>Focus on category:</i> " + args[1];
   }
   function Discover( args)
   {
@@ -63,7 +64,7 @@ if( feed == null) feed = "";%>
 	parameters["analysisProfile"] = "DiscoveryProfile";
 	parameters["feed"] = args[2];
 	document.getElementById("wps-feeds").compute( parameters);
-	document.getElementById("focus").innerHTML = "<i>Centered on item:</i> " + args[1];
+	document.getElementById("message").innerHTML = "<i>Centered on item:</i> " + args[1];
   }
 </script>
 <!-- Enable Browser History by replacing useBrowserHistory tokens with two hyphens -->
@@ -110,8 +111,8 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 <div id="header">
 <table id="bandeau" border="0">
 <tr>
-	<td id="logo" rowspan="3">		
-		<a href="http://www.social-computing.com/" target="_blank" title="Social Computing"><img border="0" width="144" height="70" title="Social Computing" src="./images/logo-sc-white.jpg" /></a>
+	<td id="logo" rowspan="3">
+		<a href="./" title="Map your feeds!"><img border="0" width="144" height="70" title="Map your feeds!" src="./images/logo-sc-white.jpg" /></a>
 	</td>
 	<td class="label" ><b>Enter one or more URLs (comma separated):</b>
 	</td>
@@ -124,6 +125,7 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 		<form method="get">
 			<input type="text" name="feed" title="URLs" size="80" value="<%=feed != null ? feed : "" %>" />
 			<input type="submit" value="Just Map It!" />
+			<span id="doc"><a href="./documentation.html">How to use the service</a></span>
 		</form>
 	</td>
 	<td class="social"><a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal">Tweet</a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script></td>
@@ -131,7 +133,7 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 </tr>
 <tr>
 	<td nowrap colspan="2">
-		<p id="focus">&nbsp;</p>
+		<p id="message">&nbsp;</p>
 	</td>
 	<td>
 		<a title="Add Map Your Feeds! as a Google Gadget" target="_blank" href="http://www.google.com/ig/directory?url=www.mapyourfeeds.com/google/igoogle-social-computing-feeds.xml"><img src="http://buttons.googlesyndication.com/fusion/add.gif" style="width:104px; height:17px;border:0px;" alt="Add this as an Google gadget" /></a>

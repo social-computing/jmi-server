@@ -1,14 +1,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">	
 <head>
-<title>Integrate your feeds map on your website - Map your feeds!</title>
+<title>Add Map your feeds! to your webpage - Map your feeds!</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="content-language" content="en">
-<meta name="description" content="Integrate your feeds map in your website! by Social Computing" />
+<meta name="description" content="Add Map your feeds! to your webpage. by Social Computing" />
 <meta name="author" content="Social Computing" /> 
 <meta name="robots" content="all" /> 
 <jsp:include page="./js/ga.js" /> 
 </head>
 <body>
+<div id="header">
+<a href="./" title="Map your feeds!"><img border="0" width="144" height="70" title="Map your feeds!" src="./images/logo-sc-white.jpg" /></a>
+</div>
 <%String feed = request.getParameter("feed");
 if( feed==null) feed="";
 String m = request.getParameter("m");
