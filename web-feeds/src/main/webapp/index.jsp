@@ -36,15 +36,8 @@ if( feed == null) feed = "";%>
     </style>
 <%if( feed.length() > 0) {%>
 <script type="text/javascript">
-  function getElem( name) {
-	  if (navigator.appName.indexOf ("Microsoft") !=-1) {
-		  return window[name];
-	  } else {
-		  return document[name];
-	  }
-  }
   function ready() {
-	  document.title = document.title + ' - ' + getElem("wps-feeds").getProperty( "$FEEDS_TITLE");
+	  document.title = document.title + ' - ' + document.getElementById("wps-feeds").getProperty( "$FEEDS_TITLE");
   }
   function empty() {
  	document.getElementById("focus").innerHTML = "Sorry, the map is empty. Does the feed contains categories ?";
@@ -60,7 +53,7 @@ if( feed == null) feed = "";%>
 	var parameters = {};
 	parameters["entityId"] = args[0];
 	parameters["feed"] = args[2];
-	getElem("wps-feeds").compute( parameters);
+	document.getElementById("wps-feeds").compute( parameters);
 	document.getElementById("focus").innerHTML = "<i>Focus on category:</i> " + args[1];
   }
   function Discover( args)
@@ -69,7 +62,7 @@ if( feed == null) feed = "";%>
 	parameters["attributeId"] = args[0];
 	parameters["analysisProfile"] = "DiscoveryProfile";
 	parameters["feed"] = args[2];
-  	getElem("wps-feeds").compute( parameters);
+	document.getElementById("wps-feeds").compute( parameters);
 	document.getElementById("focus").innerHTML = "<i>Centered on item:</i> " + args[1];
   }
 </script>
