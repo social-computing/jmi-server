@@ -40,12 +40,12 @@ if( feed == null) feed = "";%>
 <script type="text/javascript">
   function ready() {
 	  var map = $("#wps-feeds")[0];
-	  var urls = map.getArrayProperty( "$FEEDS_URLS");
-	  var titles = map.getArrayProperty( "$FEEDS_TITLES");
-	  var counts = map.getArrayProperty( "$FEEDS_COUNTS");
-	  document.title = document.title + ' - ' + titles.source.join( ', ');
+	  var urls = map.getArrayProperty( "$FEEDS_URLS").split( String.fromCharCode(0xFFFC));
+	  var titles = map.getArrayProperty( "$FEEDS_TITLES").split( String.fromCharCode(0xFFFC));
+	  var counts = map.getArrayProperty( "$FEEDS_COUNTS").split( String.fromCharCode(0xFFFC));
+	  document.title = document.title + ' - ' + titles.join( ', ');
 	  for( var i=0; i < titles.length; ++i) {
-		  var params = { url:urls.source[i], title:titles.source[i], count:counts.source[i] };
+		  var params = { url:urls[i], title:titles[i], count:counts[i] };
 		  $.ajax({
 			  url: "./services/feeds/record",
 			  data: $.param( params)
