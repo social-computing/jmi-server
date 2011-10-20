@@ -48,7 +48,7 @@ if( feed == null) feed = "";%>
 		  for( var i=0; i < titles.length; ++i) {
 			  var params = { url:urls[i], title:titles[i], count:counts[i] };
 			  $.ajax({
-				  url: "./services/feeds/record",
+				  url: "./services/feeds/record.json",
 				  data: $.param( params)
 				});
 	  	  }

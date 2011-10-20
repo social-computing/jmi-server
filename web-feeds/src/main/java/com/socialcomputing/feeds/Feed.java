@@ -46,12 +46,15 @@ public class Feed {
         this.title = title;
         this.success = success;
         this.count = 1;
-        created = new Date();
+        this.created = new Date();
+        this.updated = created;
     }
     
-    public void increment() {
-        count = count + 1;
-        updated = new Date();
+    public void incrementUpdate(String title, boolean success) {
+        this.title = title;
+        this.success = success;
+        this.count++;
+        this.updated = new Date();
     }
     
 }

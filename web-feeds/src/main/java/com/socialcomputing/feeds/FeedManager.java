@@ -29,7 +29,7 @@ public class FeedManager {
      * @param ui
      */
     @GET
-    @Path("record")
+    @Path("record.json")
     @Produces(MediaType.APPLICATION_JSON)
     public Feed record( @Context UriInfo ui) {
         Feed feed = null;
@@ -44,7 +44,7 @@ public class FeedManager {
                     feed = new Feed( url, params.getFirst( "title"), Integer.parseInt( params.getFirst( "count")) > 0);
                 }
                 else {
-                    feed.increment();
+                    feed.incrementUpdate(params.getFirst( "title"), Integer.parseInt( params.getFirst( "count")) > 0);
                 }
                 session.save( feed);
             }
@@ -61,7 +61,7 @@ public class FeedManager {
      * @param ui
      */
     @GET
-    @Path("top")
+    @Path("top.json")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Feed> top( @Context UriInfo ui) {
         List<Feed> feeds = null;
@@ -70,12 +70,10 @@ public class FeedManager {
             MultivaluedMap<String, String> params = ui.getQueryParameters();
             
             String smax = params.getFirst( "max");
-            if( smax != null) {
-                int max = Integer.parseInt( smax);
-                feeds = session.createQuery( "from Feed as feed order by feed.count desc").list();
-                while( feeds.size() > max)
-                    feeds.remove( feeds.size()-1);
-            }
+            int max = smax == null ? 100 : Math.min( Integer.parseInt( smax), 100);
+            feeds = session.createQuery( "from Feed as feed order by feed.count desc").list();
+            while( feeds.size() > max)
+                feeds.remove( feeds.size()-1);
             Response.ok();
         }
         catch (HibernateException e) {
@@ -89,7 +87,7 @@ public class FeedManager {
      * @param ui
      */
     @GET
-    @Path("last")
+    @Path("last.json")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Feed> last( @Context UriInfo ui) {
         List<Feed> feeds = null;
@@ -98,12 +96,11 @@ public class FeedManager {
             MultivaluedMap<String, String> params = ui.getQueryParameters();
             
             String smax = params.getFirst( "max");
-            if( smax != null) {
-                int max = Integer.parseInt( smax);
-                feeds = session.createQuery( "from Feed as feed order by feed.updated desc").list();
-                while( feeds.size() > max)
-                    feeds.remove( feeds.size()-1);
-            }
+            int max = smax == null ? 100 : Math.min( Integer.parseInt( smax), 100);
+            feeds = session.createQuery( "from Feed as feed order by feed.updated desc").list();
+            while( feeds.size() > max)
+                feeds.remove( feeds.size()-1);
+
             Response.ok();
         }
         catch (HibernateException e) {
