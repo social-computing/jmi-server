@@ -44,13 +44,15 @@ if( feed == null) feed = "";%>
 	  var titles = map.getArrayProperty( "$FEEDS_TITLES").split( String.fromCharCode(0xFFFC));
 	  var counts = map.getArrayProperty( "$FEEDS_COUNTS").split( String.fromCharCode(0xFFFC));
 	  document.title = document.title + ' - ' + titles.join( ', ');
-	  for( var i=0; i < titles.length; ++i) {
-		  var params = { url:urls[i], title:titles[i], count:counts[i] };
-		  $.ajax({
-			  url: "./services/feeds/record",
-			  data: $.param( params)
-			});
-  		}
+	  if( map.getProperty( "$analysisProfile") == "GlobalProfile") {
+		  for( var i=0; i < titles.length; ++i) {
+			  var params = { url:urls[i], title:titles[i], count:counts[i] };
+			  $.ajax({
+				  url: "./services/feeds/record",
+				  data: $.param( params)
+				});
+	  	  }
+	  }
   }
   function empty() {
 	$("#message")[0].innerHTML = "Sorry, the map is empty. Does the feed contains categories ?";

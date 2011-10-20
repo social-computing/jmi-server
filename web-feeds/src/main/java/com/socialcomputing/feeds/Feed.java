@@ -2,11 +2,14 @@ package com.socialcomputing.feeds;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.hibernate.annotations.Index;
 
 @Entity
 @XmlRootElement
@@ -14,16 +17,20 @@ public class Feed {
 
     @Id
     @XmlElement
+    @Column(columnDefinition = "varchar(512)")
     private String      url;
     @XmlElement
+    @Column(columnDefinition = "varchar(512)")
     private String      title;
     @XmlAttribute
+    @Index(name="countIndex")
     private int         count;
     @XmlAttribute
     private boolean     success;
     @XmlAttribute
     private Date        created;
     @XmlAttribute
+    @Index(name="updateIndex")
     private Date        updated;
 
     public Feed() {

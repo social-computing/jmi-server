@@ -1,5 +1,7 @@
 package com.socialcomputing.feeds;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -11,6 +13,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,5 +55,61 @@ public class FeedManager {
             Response.status( HttpServletResponse.SC_BAD_REQUEST);
         }
         return feed;
+    }
+    
+    /**
+     * @param ui
+     */
+    @GET
+    @Path("top")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Feed> top( @Context UriInfo ui) {
+        List<Feed> feeds = null;
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            MultivaluedMap<String, String> params = ui.getQueryParameters();
+            
+            String smax = params.getFirst( "max");
+            if( smax != null) {
+                int max = Integer.parseInt( smax);
+                feeds = session.createQuery( "from Feed as feed order by feed.count desc").list();
+                while( feeds.size() > max)
+                    feeds.remove( feeds.size()-1);
+            }
+            Response.ok();
+        }
+        catch (HibernateException e) {
+            LOG.error(e.getMessage(), e);
+            Response.status( HttpServletResponse.SC_BAD_REQUEST);
+        }
+        return feeds;
+    }
+    
+    /**
+     * @param ui
+     */
+    @GET
+    @Path("last")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Feed> last( @Context UriInfo ui) {
+        List<Feed> feeds = null;
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            MultivaluedMap<String, String> params = ui.getQueryParameters();
+            
+            String smax = params.getFirst( "max");
+            if( smax != null) {
+                int max = Integer.parseInt( smax);
+                feeds = session.createQuery( "from Feed as feed order by feed.updated desc").list();
+                while( feeds.size() > max)
+                    feeds.remove( feeds.size()-1);
+            }
+            Response.ok();
+        }
+        catch (HibernateException e) {
+            LOG.error(e.getMessage(), e);
+            Response.status( HttpServletResponse.SC_BAD_REQUEST);
+        }
+        return feeds;
     }
 }

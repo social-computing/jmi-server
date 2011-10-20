@@ -16,15 +16,13 @@
 	</filter-mapping>
 	
     <servlet>
-           <servlet-name>JerseyTest</servlet-name>
-            <servlet-class>
-                com.sun.jersey.spi.container.servlet.ServletContainer
-            </servlet-class>
+           <servlet-name>Jersey</servlet-name>
+            <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>JerseyTest</servlet-name>
+        <servlet-name>Jersey</servlet-name>
         <url-pattern>/services/*</url-pattern>
     </servlet-mapping>
   
