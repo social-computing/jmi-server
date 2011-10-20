@@ -35,16 +35,28 @@ if( feed == null) feed = "";%>
 		#flashContent { display:none; }
 		object:focus { outline:none; }
     </style>
+<script type="text/javascript" src="./js/jquery-1.6.4.min.js"></script>
 <%if( feed.length() > 0) {%>
 <script type="text/javascript">
   function ready() {
-	  document.title = document.title + ' - ' + document.getElementById("wps-feeds").getProperty( "$FEEDS_TITLE");
+	  var map = $("#wps-feeds")[0];
+	  var urls = map.getArrayProperty( "$FEEDS_URLS");
+	  var titles = map.getArrayProperty( "$FEEDS_TITLES");
+	  var counts = map.getArrayProperty( "$FEEDS_COUNTS");
+	  document.title = document.title + ' - ' + titles.source.join( ', ');
+	  for( var i=0; i < titles.length; ++i) {
+		  var params = { url:urls.source[i], title:titles.source[i], count:counts.source[i] };
+		  $.ajax({
+			  url: "./services/feeds/record",
+			  data: $.param( params)
+			});
+  		}
   }
   function empty() {
- 	document.getElementById("message").innerHTML = "Sorry, the map is empty. Does the feed contains categories ?";
+	$("#message")[0].innerHTML = "Sorry, the map is empty. Does the feed contains categories ?";
   }
   function error( error) {
-	document.getElementById("message").innerHTML = "Sorry, an error occured. Is this URL correct? <span class='hidden-message'>" + error + "</span>";
+	$("#message")[0].innerHTML = "Sorry, an error occured. Is this URL correct? <span class='hidden-message'>" + error + "</span>";
   }
   function Navigate( url) {
  	 window.open( url, "_blank");
@@ -54,8 +66,8 @@ if( feed == null) feed = "";%>
 	var parameters = {};
 	parameters["entityId"] = args[0];
 	parameters["feed"] = args[2];
-	document.getElementById("wps-feeds").compute( parameters);
-	document.getElementById("message").innerHTML = "<i>Focus on category:</i> " + args[1];
+	$("#wps-feeds")[0].compute( parameters);
+	$("#message")[0].innerHTML = "<i>Focus on category:</i> " + args[1];
   }
   function Discover( args)
   {
@@ -63,8 +75,8 @@ if( feed == null) feed = "";%>
 	parameters["attributeId"] = args[0];
 	parameters["analysisProfile"] = "DiscoveryProfile";
 	parameters["feed"] = args[2];
-	document.getElementById("wps-feeds").compute( parameters);
-	document.getElementById("message").innerHTML = "<i>Centered on item:</i> " + args[1];
+	$("#wps-feeds")[0].compute( parameters);
+	$("#message")[0].innerHTML = "<i>Centered on item:</i> " + args[1];
   }
 </script>
 <!-- Enable Browser History by replacing useBrowserHistory tokens with two hyphens -->

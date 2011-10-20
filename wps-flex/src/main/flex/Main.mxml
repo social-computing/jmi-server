@@ -15,6 +15,7 @@
 			import flash.external.ExternalInterface;
 			import flash.system.Security;
 			
+			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
@@ -39,6 +40,7 @@
 				// for js calls
 				ExternalInterface.addCallback( "compute", compute);
 				ExternalInterface.addCallback( "getProperty", getProperty);
+				ExternalInterface.addCallback( "getArrayProperty", getArrayProperty);
 				
 				// Initialising service
 				this.planService = new PlanService(serverURL);
@@ -56,8 +58,12 @@
 				getPlanResult.token = this.planService.getPlan(planName, map.width, map.height, parameters);
  			}
 			
-			public function getProperty( name:String):Object {
-				return this.map.getProperty( name);
+			public function getProperty( name:String):String {
+				return this.map.getProperty( name) as String;
+			}
+			public function getArrayProperty( name:String):String {
+				var a:Array = this.map.getProperty( name) as Array;
+				return a.join( String.fromCharCode( 0xFFFC));
 			}
 	]]>
     </fx:Script>

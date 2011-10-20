@@ -51,28 +51,24 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
 		super.openConnections( planType, wpsparams);
 
 		List<String> titles = new ArrayList<String>();
+        List<String> urls = new ArrayList<String>();
+        List<String> counts = new ArrayList<String>();
+        
 		m_inverted =  UrlHelper.ReplaceParameter( m_InvertedDef, wpsparams).equalsIgnoreCase( "true");
 		for( UrlHelper feed : m_feeds) {
             for( String url : UrlHelper.ReplaceParameter( feed.getUrl(), wpsparams).split( ",")) {
                 feed.setUrl( url);
     		    feed.openConnections( planType, wpsparams);
-    	        read( feed, planType, wpsparams, titles);
+    	        read( feed, planType, wpsparams, titles, urls, counts);
                 feed.closeConnections();
             }
 		}
-		StringBuilder sb = new StringBuilder();
-		boolean first = true;
-		for( String title : titles) {
-		    if( first) 
-		        first = false;
-		    else
-		        sb.append( ", ");
-            sb.append( title);
-		}
-		wpsparams.put( "FEEDS_TITLE", sb.toString());
+		wpsparams.put( "FEEDS_TITLES",  titles.toArray());
+        wpsparams.put( "FEEDS_URLS",    urls.toArray());
+        wpsparams.put( "FEEDS_COUNTS",  counts.toArray());
 	}
 
-    private void read(UrlHelper feed, int planType, Hashtable<String, Object> wpsparams, List<String> titles) throws WPSConnectorException {
+    private void read(UrlHelper feed, int planType, Hashtable<String, Object> wpsparams, List<String> titles, List<String> urls, List<String> counts) throws WPSConnectorException {
         String content = feed.getContentType();
         if( content.contains( "text/html")) {
             // HTML ?
@@ -90,17 +86,17 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
                     String url = tag.getAttributeValue( "href");
                     curFeed.setUrl( url.startsWith( "/") ? feed.getUrl() + url : url);
                     curFeed.openConnections( planType, wpsparams);
-                    readXml( curFeed, planType, wpsparams, titles);
+                    readXml( curFeed, planType, wpsparams, titles, urls, counts);
                     curFeed.closeConnections();
                 }
             }
         }
         else {
-            readXml( feed, planType, wpsparams, titles);
+            readXml( feed, planType, wpsparams, titles, urls, counts);
         }
     }
     
-	private void readXml(UrlHelper feed, int planType, Hashtable<String, Object> wpsparams, List<String> titles) throws WPSConnectorException {
+	private void readXml(UrlHelper feed, int planType, Hashtable<String, Object> wpsparams, List<String> titles, List<String> urls, List<String> counts) throws WPSConnectorException {
 	    try {
 			org.jdom.input.SAXBuilder builder = new org.jdom.input.SAXBuilder(false);
 			org.jdom.Document doc = builder.build( feed.getStream());
@@ -108,10 +104,12 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
 			
 	        Element top = root.getChild( "channel");
 	        if( top != null) {
-	            titles.add( parseRss2( top));
+	            urls.add( feed.getUrl());
+	            parseRss2( top, titles, counts);
 	        }
 	        else {
-	            titles.add( parseAtom( root));
+                urls.add( feed.getUrl());
+	            parseAtom( root, titles, counts);
 	        }
 		} catch (Exception e) {
             throw new WPSConnectorException( "openConnections", e);
@@ -127,12 +125,12 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
         }
 	}
 	
-	private String parseAtom( Element feed) {
+	private void parseAtom( Element feed, List<String> titles, List<String> counts) {
 	    String title = "";
+	    int count = 0;
         for( Element item : (List<Element>)feed.getContent()) {
             if( item.getName().equalsIgnoreCase( "title")) {
                 title = getAtomContent( item);;
-                
             }
             if( item.getName().equalsIgnoreCase( "entry")) {
                 List<Element> content = item.getContent();
@@ -146,11 +144,13 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
                         String label = contentItem.getAttributeValue( "label");
                         entity.addProperty( "name", label != null ? label : entity.getId());
                         entity.addAttribute( attribute, 1);
+                        ++count;
                     }
                 }
             }
         }
-        return title;
+        counts.add( String.valueOf(count));
+        titles.add( title);
 	}
 
 	private String getAtomId( List<Element> content) {
@@ -165,8 +165,9 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
         return ((Text)item.getContent().get( 0)).getText();
     }
     
-    private String parseRss2( Element channel) {
+    private void parseRss2( Element channel, List<String> titles, List<String> counts) {
         String title = channel.getChildText( "title");
+        int count = 0;
         for( Element item : (List<Element>)channel.getChildren( "item")) {
             Attribute attribute = addAttribute( item.getChildText( "link"));
             attribute.addProperty( "name", item.getChildText( "title"));
@@ -175,11 +176,13 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
                 Entity entity = addEntity( category.getText());
                 entity.addProperty( "name", entity.getId());
                 entity.addAttribute( attribute, 1);
+                ++ count;
             }
         }
-        return title;
+        counts.add( String.valueOf(count));
+        titles.add( title);
     }
-	
+    	
 	@Override
 	public void closeConnections() throws WPSConnectorException {
 		super.closeConnections();

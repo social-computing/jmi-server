@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <cloudbees-web-app xmlns="http://www.cloudbees.com/xml/webapp/1">
 
+	<resource name="jdbc/feeds-db" auth="Container" type="javax.sql.DataSource">
+	 <param name="username" value="feeds" />
+	 <param name="password" value="feeds" />
+	 <param name="url" value="jdbc:cloudbees://feeds-db" />
+	</resource>
+
 	<appid>wps/feeds</appid>
 
 </cloudbees-web-app>

@@ -166,7 +166,14 @@ public class PlanJSONProvider {
         node.put("transfo", toJSON(env.m_transfo));
         ObjectNode props = node.putObject("props");
         for (String key : (Set<String>) env.m_props.keySet()) {
-            props.put(key, (String) env.m_props.get(key));
+            Object val = env.m_props.get(key);
+            if( val instanceof String)
+                props.put(key, (String) val);
+            else if( val instanceof Object[]) {
+                ArrayNode a = props.putArray( key);
+                for( Object v : (Object[])val)
+                    a.add( (String)v);
+            }
         }
         ObjectNode sel = node.putObject("selections");
         for (String key : (Set<String>) env.m_selections.keySet()) {

@@ -1,5 +1,6 @@
 package com.socialcomputing.wps.server.webservices;
 
+import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -570,7 +571,7 @@ public class PlanRequest {
         while (enumvar.hasMoreElements()) {
             String name = (String) enumvar.nextElement();
             Object value = m_RequestParameters.get(name);
-            if (value instanceof String) {
+            if (value instanceof String || value instanceof Object[]) {
                 if (name.startsWith("$"))
                     env.m_props.put(name, value);
                 else
