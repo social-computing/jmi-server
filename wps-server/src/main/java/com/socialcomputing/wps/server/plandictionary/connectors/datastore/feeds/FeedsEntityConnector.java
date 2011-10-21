@@ -106,10 +106,12 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
 	        if( top != null) {
 	            urls.add( feed.getUrl());
 	            parseRss2( top, titles, counts);
+                track( wpsparams, urls.get( urls.size()-1), titles.get( titles.size()-1), counts.get( urls.size()-1));
 	        }
 	        else {
                 urls.add( feed.getUrl());
 	            parseAtom( root, titles, counts);
+                track( wpsparams, urls.get( urls.size()-1), titles.get( titles.size()-1), counts.get( urls.size()-1));
 	        }
 		} catch (Exception e) {
             throw new WPSConnectorException( "openConnections", e);
@@ -183,6 +185,23 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
         titles.add( title);
     }
     	
+    private void track( Hashtable<String, Object> wpsparams, String url, String title, String count) {
+        String track = ( String) wpsparams.get( "track");
+        if( track != null) {
+            UrlHelper u = new UrlHelper( UrlHelper.Type.GET, track);
+            u.addParameter( "url", url);
+            u.addParameter( "title", title);
+            u.addParameter( "count", count);
+            try {
+                u.openConnections( 0, wpsparams);
+                u.closeConnections();
+            }
+            catch (WPSConnectorException e) {
+                //e.printStackTrace();
+            }
+        }
+    }
+    
 	@Override
 	public void closeConnections() throws WPSConnectorException {
 		super.closeConnections();

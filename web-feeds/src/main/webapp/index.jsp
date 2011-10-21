@@ -35,30 +35,20 @@ if( feed == null) feed = "";%>
 		#flashContent { display:none; }
 		object:focus { outline:none; }
     </style>
-<script type="text/javascript" src="./js/jquery-1.6.4.min.js"></script>
 <%if( feed.length() > 0) {%>
 <script type="text/javascript">
   function ready() {
-	  var map = $("#wps-feeds")[0];
-	  var urls = map.getArrayProperty( "$FEEDS_URLS").split( String.fromCharCode(0xFFFC));
-	  var titles = map.getArrayProperty( "$FEEDS_TITLES").split( String.fromCharCode(0xFFFC));
-	  var counts = map.getArrayProperty( "$FEEDS_COUNTS").split( String.fromCharCode(0xFFFC));
+	  var map = document.getElementById("wps-feeds");
+	  var urls = map.getArrayProperty( "$FEEDS_URLS");
+	  var titles = map.getArrayProperty( "$FEEDS_TITLES");
+	  var counts = map.getArrayProperty( "$FEEDS_COUNTS");
 	  document.title = document.title + ' - ' + titles.join( ', ');
-	  if( map.getProperty( "$analysisProfile") == "GlobalProfile") {
-		  for( var i=0; i < titles.length; ++i) {
-			  var params = { url:urls[i], title:titles[i], count:counts[i] };
-			  $.ajax({
-				  url: "./services/feeds/record.json",
-				  data: $.param( params)
-				});
-	  	  }
-	  }
   }
   function empty() {
-	$("#message")[0].innerHTML = "Sorry, the map is empty. Does the feed contains categories ?";
+	document.getElementById("message").innerHTML = "Sorry, the map is empty. Does the feed contains categories ?";
   }
   function error( error) {
-	$("#message")[0].innerHTML = "Sorry, an error occured. Is this URL correct? <span class='hidden-message'>" + error + "</span>";
+	document.getElementById("message").innerHTML = "Sorry, an error occured. Is this URL correct? <span class='hidden-message'>" + error + "</span>";
   }
   function Navigate( url) {
  	 window.open( url, "_blank");
@@ -68,8 +58,8 @@ if( feed == null) feed = "";%>
 	var parameters = {};
 	parameters["entityId"] = args[0];
 	parameters["feed"] = args[2];
-	$("#wps-feeds")[0].compute( parameters);
-	$("#message")[0].innerHTML = "<i>Focus on category:</i> " + args[1];
+	document.getElementById("wps-feeds").compute( parameters);
+	document.getElementById("message").innerHTML = "<i>Focus on category:</i> " + args[1];
   }
   function Discover( args)
   {
@@ -77,8 +67,8 @@ if( feed == null) feed = "";%>
 	parameters["attributeId"] = args[0];
 	parameters["analysisProfile"] = "DiscoveryProfile";
 	parameters["feed"] = args[2];
-	$("#wps-feeds")[0].compute( parameters);
-	$("#message")[0].innerHTML = "<i>Centered on item:</i> " + args[1];
+	document.getElementById("wps-feeds").compute( parameters);
+	document.getElementById("message").innerHTML = "<i>Centered on item:</i> " + args[1];
   }
 </script>
 <!-- Enable Browser History by replacing useBrowserHistory tokens with two hyphens -->
@@ -96,24 +86,26 @@ if( feed == null) feed = "";%>
     var flashvars = {};
     flashvars.allowDomain = "*";
     //flashvars.wpsserverurl = "http://localhost:8080/wps-server";
+    //flashvars.track = "http://localhost:8080/web-feeds/services/feeds/record.json";
     flashvars.wpsserverurl = "http://map.social-computing.com/";
+    flashvars.track = "http://www.mapyourfeeds.com/services/feeds/record.json";
     flashvars.wpsplanname = "Feeds";
     flashvars.analysisProfile = "GlobalProfile";
     flashvars.feed = "<%=java.net.URLEncoder.encode(feed)%>";
-         var params = {};
-         params.quality = "high";
-         params.bgcolor = "#FFFFFF";
-         params.allowscriptaccess = "always";
-         params.allowfullscreen = "true";
-         var attributes = {};
-         attributes.id = "wps-feeds";
-         attributes.name = "wps-feeds";
-         attributes.align = "middle";
-         swfobject.embedSWF(
-             "./client/wps-flex-1.0-SNAPSHOT.swf", "flashContent", 
-             "100%", "100%", 
-             swfVersionStr, xiSwfUrlStr, 
-             flashvars, params, attributes);
+    var params = {};
+    params.quality = "high";
+    params.bgcolor = "#FFFFFF";
+    params.allowscriptaccess = "always";
+    params.allowfullscreen = "true";
+    var attributes = {};
+    attributes.id = "wps-feeds";
+    attributes.name = "wps-feeds";
+    attributes.align = "middle";
+    swfobject.embedSWF(
+        "./client/wps-flex-1.0-SNAPSHOT.swf", "flashContent", 
+        "100%", "100%", 
+        swfVersionStr, xiSwfUrlStr, 
+        flashvars, params, attributes);
 <!-- JavaScript enabled so display the flashContent div in case it is not replaced with a swf object. -->
 swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 </script>

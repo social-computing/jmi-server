@@ -13,7 +13,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,11 +41,12 @@ public class FeedManager {
                 feed = (Feed) session.get(Feed.class, url);
                 if( feed == null) {
                     feed = new Feed( url, params.getFirst( "title"), Integer.parseInt( params.getFirst( "count")) > 0);
+                    session.save( feed);
                 }
                 else {
                     feed.incrementUpdate(params.getFirst( "title"), Integer.parseInt( params.getFirst( "count")) > 0);
+                    session.update( feed);
                 }
-                session.save( feed);
             }
             Response.ok();
         }
@@ -57,13 +57,22 @@ public class FeedManager {
         return feed;
     }
     
-    /**
-     * @param ui
-     */
+
     @GET
     @Path("top.json")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Feed> top( @Context UriInfo ui) {
+    public List<Feed> topJson( @Context UriInfo ui) {
+        return top( ui);
+    }
+    
+    @GET
+    @Path("top.xml")
+    @Produces(MediaType.APPLICATION_XML)
+    public List<Feed> topXml( @Context UriInfo ui) {
+        return top( ui);
+    }
+    
+    private List<Feed> top( @Context UriInfo ui) {
         List<Feed> feeds = null;
         try {
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -83,13 +92,21 @@ public class FeedManager {
         return feeds;
     }
     
-    /**
-     * @param ui
-     */
     @GET
     @Path("last.json")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Feed> last( @Context UriInfo ui) {
+    public List<Feed> lastJson( @Context UriInfo ui) {
+        return last( ui);
+    }
+
+    @GET
+    @Path("last.xml")
+    @Produces(MediaType.APPLICATION_XML)
+    public List<Feed> lastXml( @Context UriInfo ui) {
+        return last( ui);
+    }
+    
+    private List<Feed> last( @Context UriInfo ui) {
         List<Feed> feeds = null;
         try {
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();

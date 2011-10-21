@@ -45,7 +45,7 @@
 		    
         	function ready() {
         		// do something here
-        		alert( getMap().getArrayProperty( "$FEEDS_TITLE").split( String.fromCharCode(0xFFFC)));
+        		alert( getMap().getArrayProperty( "$FEEDS_TITLES").join( ", "));
         	}
         	function empty() {
         		// do something here
@@ -87,7 +87,7 @@
             flashvars.wpsserverurl = "http://localhost:8080/wps-server";
             flashvars.wpsplanname = "Feeds";
             flashvars.analysisProfile = "GlobalProfile";
-            flashvars.feed = "http://www.social-computing.com/feed/,http://feeds.feedburner.com/blogspot/MKuf?format=xml";
+            flashvars.feed = "http://www.social-computing.com/feed/";
             var params = {};
             params.quality = "high";
             params.bgcolor = "#7F9FDF";
