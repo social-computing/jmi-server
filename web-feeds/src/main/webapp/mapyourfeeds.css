@@ -45,7 +45,13 @@ body {
 
 #bandeau .social {
 	width: 120px;
-	align: left
+	align: left;
+}
+
+#bandeau .share {
+	color: #37b0e3;
+	font-size: 14px;
+	font-weight: bold;
 }
 
 #bandeau #message {

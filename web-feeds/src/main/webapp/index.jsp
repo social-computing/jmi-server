@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">	
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb#" lang="en" xml:lang="en">	
 <%String feed = request.getParameter("feed");
 if( feed == null) feed = "";%>
 <head>
@@ -93,35 +93,46 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 </head>
 
 <body>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/fr_FR/all.js#xfbml=1&appId=205005596217672";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 <div id="header">
 <table id="bandeau" border="0">
 <tr>
-	<td id="logo" rowspan="3">
-		<a href="./" title="Map your feeds!"><img border="0" width="144" height="70" title="Map your feeds!" src="./images/logo-sc-white.jpg" /></a>
-	</td>
-	<td class="label" ><b>Enter one or more URLs (comma separated):</b>
-	</td>
+<td id="logo" rowspan="3">
+	<a href="./" title="Map your feeds!"><img border="0" width="144" height="70" title="Map your feeds!" src="./images/logo-sc-white.jpg" /></a>
+</td>
+<td class="label" ><b>Enter one or more URLs (comma separated):</b>
+</td>
+<td class="share" colspan="2">Share your map</td>
+</tr>
+<tr>
+<td nowrap >
+	<form method="get">
+		<input type="text" name="feed" title="URLs" size="80" value="<%=feed != null ? feed : "" %>" />
+		<input type="submit" value="Just Map It!" />
+		<span id="doc"><a href="./documentation.html">How to use the service</a></span>
+	</form>
+</td>
+<td rowspan="2">
+<table border="0"><tr>
 	<td class="social"><g:plusone size="medium" href="http://www.mapyourfeeds.com/"></g:plusone></td>
 	<!--td class="social"><a title="Post to Google Buzz" class="google-buzz-button" href="http://www.google.com/buzz/post" data-button-style="small-count" data-url="http://www.mapyourfeeds.com"></a><script type="text/javascript" src="http://www.google.com/buzz/api/button.js"></script></td-->
-	<td class="social"><iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.mapyourfeeds.com%2F&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=arial&amp;height=21&amp;appId=205005596217672" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe></td>
-</tr>
-<tr>
-	<td nowrap >
-		<form method="get">
-			<input type="text" name="feed" title="URLs" size="80" value="<%=feed != null ? feed : "" %>" />
-			<input type="submit" value="Just Map It!" />
-			<span id="doc"><a href="./documentation.html">How to use the service</a></span>
-		</form>
-	</td>
+	<td class="social"><fb:like href="<%=request.getRequestURL().toString()+(request.getQueryString() != null? "?"+request.getQueryString() : "")%>" send="true" layout="button_count" width="450" show_faces="false" font="arial"></fb:like></td>
+</tr><tr>
 	<td class="social"><a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal">Tweet</a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script></td>
 	<td class="social"><script src="http://platform.linkedin.com/in.js" type="text/javascript"></script><script type="IN/Share" data-counter="right"></script></td>
+</tr></table>
+</td>
 </tr>
 <tr>
-	<td nowrap colspan="2">
+	<td nowrap colspan="1">
 		<p id="message">&nbsp;</p>
-	</td>
-	<td>
-		<a title="Add Map Your Feeds! as a Google Gadget" target="_blank" href="http://www.google.com/ig/directory?url=www.mapyourfeeds.com/google/igoogle-social-computing-feeds.xml"><img src="http://buttons.googlesyndication.com/fusion/add.gif" style="width:104px; height:17px;border:0px;" alt="Add this as an Google gadget" /></a>
 	</td>
 </tr>
 </table>
