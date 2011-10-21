@@ -1,0 +1,135 @@
+html,body {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	overflow: auto;
+	height: 100%;
+	text-align: left;
+	background-color: #FFFFFF;
+	font-family: arial;
+	font-size: 12px;
+}
+
+#header {
+	width: 100%;
+	height: 78px;
+}
+
+#map {
+	width: 100%;
+	height: 88%;
+}
+
+#bandeau {
+	width: 100%;
+}
+
+#bandeau td {
+	text-align: left;
+}
+
+#bandeau #logo {
+	width: 155px;
+}
+
+#bandeau .label {
+	width: 100%;
+	margin: 0px;
+	text-align: left;
+	color: #37b0e3;
+	font-size: 14px;
+}
+
+#bandeau .social {
+	width: 120px;
+	align: left
+}
+
+#bandeau #message {
+	width: 180px;
+	padding-left: 4px;
+	margin: 0;
+	text-align: left;
+	color: #c3372f;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+#bandeau #doc a {
+	width: 180px;
+	padding-left: 4px;
+	margin: 0;
+	text-align: left;
+	color: #ffffff;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+#bandeau .hidden-message {
+	text-align: left;
+	color: #ffffff;
+	font-size: 12px;
+}
+
+.slogan {
+	padding-top: 20px;
+	padding-left: 154px;
+	text-align: left;
+	color: #37b0e3;
+	font-size: 18px;
+}
+
+#flashContent {
+	display: none;
+}
+
+object:focus {
+	outline: none;
+}
+
+h1 {
+	font-size: 36px;
+	font-weight: bold;
+	color: #37b0e3;
+	margin-bottom: 0px;
+}
+
+h2 {
+	padding: 10px 0 0 0;
+	font-size: 20px;
+	font-weight: bold;
+	color: #37b0e3;
+}
+
+h3 {
+	padding: 6px 0 0 10px;
+	font-size: 16px;
+	font-weight: bold;
+	color: #37b0e3;
+}
+
+#documentation {
+	padding: 20px 40px 20px 40px;
+}
+
+#integrate {
+	padding: 20px 40px 20px 40px;
+	font-size: 14px;
+	text-align: top;
+	align: top;
+}
+
+#integrate #formulaire {
+	padding: 0px 40px 20px 20px;
+}
+
+#integrate #preview {
+	padding: 0px 40px 20px 20px;
+}
+
+#integrate #code {
+	padding: 0px 40px 20px 20px;
+}
