@@ -38,6 +38,7 @@ public class FeedManager {
             
             String url = params.getFirst( "url");
             if( url != null) {
+                url = url.trim();
                 feed = (Feed) session.get(Feed.class, url);
                 if( feed == null) {
                     feed = new Feed( url, params.getFirst( "title"), Integer.parseInt( params.getFirst( "count")) > 0);

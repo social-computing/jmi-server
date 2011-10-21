@@ -4,7 +4,7 @@
     <diskStore path="java.io.tmpdir"/>
     
     <defaultCache
-        maxElementsInMemory="10000"
+        maxElementsInMemory="100"
         eternal="false"
         timeToIdleSeconds="120"
         timeToLiveSeconds="120"
@@ -13,7 +13,7 @@
         diskExpiryThreadIntervalSeconds="120"/>
     <cache
         name="com.socialcomputing.wps.server.persistence.hibernate.DictionaryImpl"
-        maxElementsInMemory="10000"
+        maxElementsInMemory="100"
         eternal="false"
         overflowToDisk="false" />
     <cache

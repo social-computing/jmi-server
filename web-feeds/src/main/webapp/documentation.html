@@ -8,13 +8,24 @@
 	<meta name="keywords" content="documentation, rss, feeds, feed, map, cartography, visualization, social, blog, gadget, widget, social computing, category, representation, information" />
 	<meta name="author" content="Social Computing" /> 
 	<meta name="robots" content="all" /> 
+	<link rel=StyleSheet href="./mapyourfeeds.css" type="text/css" media="screen" />
 </head>
 <body>
 <div id="header">
-<a href="./" title="Map your feeds!"><img border="0" width="144" height="70" title="Map your feeds!" src="./images/logo-sc-white.jpg" /></a>
+<table id="bandeau" border="0">
+<tr>
+	<td id="logo" rowspan="3">
+		<a href="./" title="Map your feeds!"><img border="0" width="144" height="70" title="Map your feeds!" src="./images/logo-sc-white.jpg" /></a>
+	</td>
+	<td><h1>How to use the service</h1>
+	</td>
+</tr>
+</table>
 </div>
+<div id="documentation">
 <h2>Overview</h2>
-<h3>Kinds of URL(s)</h3>
+Map your feeds! displays your feed(s) items on a map. 
+<h2>Kinds of URL(s)</h2>
 <p>RSS 2.0 and Atom feeds are supported. The feeds items MUST contain categories; otherwise we won't be able to produce a map.</p>
 <p>You also can give directly a website URL. All the feeds described in it will be mapped.</p>
 <h3>One URL, two URL(s), ...</h3>
@@ -34,5 +45,6 @@ You can place the map directly on any webpage. <a href="./integrate.jsp">Here it
 <p>Verify the feed contains items with categories.</p>
 <h3>Flash is not supported</h3>
 <p>The HTML5 client is coming soon...</p>
+</div>
 </body>
 </html>

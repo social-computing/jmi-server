@@ -4,7 +4,7 @@
     <diskStore path="java.io.tmpdir"/>
     
     <defaultCache
-        maxElementsInMemory="10000"
+        maxElementsInMemory="100"
         eternal="false"
         timeToIdleSeconds="120"
         timeToLiveSeconds="120"
@@ -12,8 +12,8 @@
         diskPersistent="false"
         diskExpiryThreadIntervalSeconds="120"/>
     <cache
-        name="com.socialcomputing.feeds.FeedUrl"
-        maxElementsInMemory="10000"
+        name="com.socialcomputing.feeds.Feed"
+        maxElementsInMemory="100"
         eternal="false"
         overflowToDisk="false" />
 </ehcache>

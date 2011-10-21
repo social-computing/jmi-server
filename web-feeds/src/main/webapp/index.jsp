@@ -3,46 +3,25 @@
 <%String feed = request.getParameter("feed");
 if( feed == null) feed = "";%>
 <head>
-    <title>Map your feeds!</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta http-equiv="content-language" content="en" />
-	<meta name="description" content="View and navigate your feeds thru an interactive map! by Social Computing" />
-	<meta name="keywords" content="rss, feeds, feed, map, cartography, visualization, social, blog, gadget, widget, social computing, category, representation, information" />
-	<meta name="author" content="Social Computing" /> 
-	<meta name="robots" content="all" /> 
-	<meta property="og:title" content="Map your feeds!" />
-	<meta property="og:description" content="View and navigate your feeds thru an interactive map! by Social Computing" />
-	<meta property="og:image" content="http://www.mapyourfeeds.com/images/thumbnail.png" />
-	<link rel="shortcut icon" href="./favicon.ico" />
-    <style type="text/css" media="screen"> 
-		html, body	{ height:100%; }
-		body { margin:0; padding:0; overflow:auto; height:100%; text-align:left; background-color: #FFFFFF; }   
-
-		#header { width:100%; height:78px; }
-		#map	{ width:100%; height:88%;}
-		
-		#bandeau {width: 100%; }
-		#bandeau td {text-align:left; }
-		#bandeau #logo {width:155px; }
-		#bandeau .label {margin:0px;text-align:left;font-family:arial;color:#37b0e3;font-size:14px;}
-		#bandeau .social {width:120px; align:left}
-		#bandeau #message {width:180px;padding-left:4px;margin:0;text-align:left;font-family:arial;color:#c3372f;font-size:14px;font-weight:bold;}
-		#bandeau #doc a {width:180px;padding-left:4px;margin:0;text-align:left;font-family:arial;color:#ffffff;font-size:12px;font-weight:bold;}
-		#bandeau .hidden-message {text-align:left;font-family:arial;color:#ffffff;font-size:12px;}
-
-		.slogan {padding-top:20px; padding-left:154px;text-align:left;font-family:arial;color:#37b0e3;font-size:18px;}
-		
-		#flashContent { display:none; }
-		object:focus { outline:none; }
-    </style>
+<title>Map your feeds!</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="content-language" content="en" />
+<meta name="description" content="View and navigate your feeds thru an interactive map! by Social Computing" />
+<meta name="keywords" content="rss, feeds, feed, map, cartography, visualization, social, blog, gadget, widget, social computing, category, representation, information" />
+<meta name="author" content="Social Computing" /> 
+<meta name="robots" content="all" /> 
+<meta property="og:title" content="Map your feeds!" />
+<meta property="og:description" content="View and navigate your feeds thru an interactive map! by Social Computing" />
+<meta property="og:image" content="http://www.mapyourfeeds.com/images/thumbnail.png" />
+<link rel="shortcut icon" href="./favicon.ico" />
+<link rel=StyleSheet href="./mapyourfeeds.css" type="text/css" media="screen" />
 <%if( feed.length() > 0) {%>
 <script type="text/javascript">
   function ready() {
 	  var map = document.getElementById("wps-feeds");
-	  var urls = map.getArrayProperty( "$FEEDS_URLS");
 	  var titles = map.getArrayProperty( "$FEEDS_TITLES");
-	  var counts = map.getArrayProperty( "$FEEDS_COUNTS");
-	  document.title = document.title + ' - ' + titles.join( ', ');
+	  if( titles)
+	  	document.title = 'Map your feeds! - ' + titles.join( ', ');
   }
   function empty() {
 	document.getElementById("message").innerHTML = "Sorry, the map is empty. Does the feed contains categories ?";
