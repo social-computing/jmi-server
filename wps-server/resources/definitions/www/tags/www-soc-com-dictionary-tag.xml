@@ -1,0 +1,237 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+
+<!DOCTYPE dictionary SYSTEM "WPS-dictionary.dtd" >
+
+<dictionary name="scblogtags" >
+	<comment>www Social Computing Plan Dictionary</comment>
+
+        <!-- entities definitions (links) -->
+	<entities>
+		<JDBC-entities name="WPS Social Computing blog">
+		        <!-- Source connection configuration -->
+			<JDBC-connection catalog="wordpress">
+				<JNDI-data-source>
+					<url>java:comp/env/jdbc/wps-blog</url>
+				</JNDI-data-source>
+			</JDBC-connection>
+	
+	                <!-- Select all entities : published blog posts that are tagged -->
+			<JDBC-default-classifier>
+        			<JDBC-query2>
+        			        SELECT posts.ID as id, posts.post_title as title
+                                        FROM wp_posts AS posts
+                                        JOIN wp_term_relationships AS ptr ON ptr.object_id = posts.ID
+                                        JOIN wp_term_taxonomy AS ptt ON ptt.term_taxonomy_id = ptr.term_taxonomy_id
+                                        WHERE ptt.taxonomy = 'post_tag'
+                                        AND posts.post_status = 'publish'
+                                        AND (posts.post_type = 'page' OR posts.post_type = 'post')
+                                        GROUP BY posts.ID
+                                </JDBC-query2>
+			</JDBC-default-classifier>
+	
+	                <!-- Get properties for one entity -->
+			<JDBC-property name="Post properties" column-name="label">
+			        <comment>Query post properties for a given post id</comment>
+				<JDBC-query2>
+				        SELECT posts.ID as id, posts.post_title as title, users.user_nicename as author
+                                        FROM wp_posts as posts 
+                                        JOIN wp_users as users ON users.id=posts.post_author
+                                        WHERE posts.ID={icurEntity}
+				</JDBC-query2>
+			</JDBC-property>
+			
+		        <!-- Affinity group -->	
+		        <JDBC-affinity-reader name="JDBC_AffReader">
+				<comment>Affinity group : get the posts which share the same tags as the selected post (weight = 1)</comment>
+				<JDBC-query2>
+                                        SELECT linked_posts.ID as id, 1
+				        FROM wp_posts as posts
+				        JOIN wp_term_relationships AS ptr ON ptr.object_id = posts.ID
+                                        JOIN wp_term_taxonomy AS ptt ON ptt.term_taxonomy_id = ptr.term_taxonomy_id
+                                        JOIN wp_term_relationships AS term_post ON term_post.term_taxonomy_id = ptt.term_taxonomy_id
+                                        JOIN wp_posts as linked_posts ON linked_posts.ID = term_post.object_id
+                                        WHERE posts.ID = {i$entityId}
+                                        AND ptt.taxonomy = 'post_tag'
+                                        AND linked_posts.post_status = 'publish'
+                                        AND (linked_posts.post_type = 'page' OR linked_posts.post_type = 'post')
+                                        GROUP BY  term_post.object_id
+                                </JDBC-query2>
+			</JDBC-affinity-reader>
+
+                        <!-- Discovery group -->
+			<JDBC-affinity-reader name="JDBC_DiscoveryAffReader">
+			        <comment>Discovery group : for a selected tag get the posts and the number of posts per tag</comment>
+				<JDBC-query2>
+                                        SELECT posts.ID as id, count(posts.ID)
+                                        FROM wp_posts AS posts
+                                        JOIN wp_term_relationships AS ptr ON ptr.object_id = posts.ID
+                                        JOIN wp_term_taxonomy AS ptt ON ptt.term_taxonomy_id = ptr.term_taxonomy_id
+                                        WHERE ptt.taxonomy = 'post_tag'
+                                        AND ptt.term_id = {i$attributeId}
+                                        AND posts.post_status = 'publish'
+                                        AND (posts.post_type = 'page' OR posts.post_type = 'post')
+                                        GROUP BY posts.ID
+				</JDBC-query2>
+			</JDBC-affinity-reader>
+
+                        <!-- Global group -->
+			<JDBC-affinity-reader name="JDBC_GlobalAffReader">
+			        <comment>Global group : get all tagged posts with published status</comment>
+			        <JDBC-query2>
+			                SELECT posts.ID as id, 1
+                                        FROM wp_posts AS posts
+                                        JOIN wp_term_relationships AS ptr ON ptr.object_id = posts.ID
+                                        JOIN wp_term_taxonomy AS ptt ON ptt.term_taxonomy_id = ptr.term_taxonomy_id
+                                        WHERE ptt.taxonomy = 'post_tag'
+                                        AND posts.post_status = 'publish'
+                                        AND (posts.post_type = 'page' OR posts.post_type = 'post')
+                                        GROUP BY posts.ID
+			        </JDBC-query2>
+			</JDBC-affinity-reader>
+
+                        <!-- Attributes definition -->
+			<JDBC-attributes name="JDBC_Profile">
+			        <comment>Attibutes definition : tags for a selected page ?</comment>
+			        <JDBC-query2>
+                                        SELECT ptt.term_id as id, 1
+                                        FROM wp_term_taxonomy AS ptt
+			                JOIN wp_term_relationships AS ptr ON ptr.term_taxonomy_id=ptt.term_taxonomy_id
+                                        WHERE ptr.object_id = {icurEntity}
+			                AND ptt.taxonomy='post_tag'
+			        </JDBC-query2>
+				<JDBC-property name="Attribute properties" column-name="label">
+				        <comment>Attribute properties : list of all properties for a tag</comment>
+				        <JDBC-query2>
+				                SELECT term_id as id, slug, name
+        			                FROM wp_terms
+				                WHERE term_id={icurAttribute}
+				        </JDBC-query2>
+                                </JDBC-property>
+                                <JDBC-property name="Belong to properties" multiple-rows="yes" column-name="label">
+                                        <comment>Attribute properties : list of all posts for a tag</comment>
+                                        <JDBC-query2>
+                                                SELECT posts.ID as poss_id, posts.post_title as poss_name
+                                                FROM wp_posts AS posts
+                                                JOIN wp_term_relationships AS ptr ON ptr.object_id = posts.ID
+                                                JOIN wp_term_taxonomy AS ptt ON ptt.term_taxonomy_id = ptr.term_taxonomy_id
+                                                WHERE ptt.term_id = {icurAttribute}
+                                                AND ptt.taxonomy = 'post_tag'
+                                                AND posts.post_status = 'publish'
+                                                AND (posts.post_type = 'page' OR posts.post_type = 'post')
+                                                GROUP BY posts.ID
+                                        </JDBC-query2>
+                                </JDBC-property>
+			</JDBC-attributes>
+		</JDBC-entities>
+	</entities>
+
+	<env-property name="$web_context" value ="/" />
+	
+	<affinity-reader-profile name="AffReader" affinity-reader-ref="JDBC_AffReader" threshold="100" />
+	<affinity-reader-profile name="DiscoveryAffReader" affinity-reader-ref="JDBC_DiscoveryAffReader" threshold="100" />
+	<affinity-reader-profile name="GlobalAffReader" affinity-reader-ref="JDBC_GlobalAffReader" threshold="100" />
+
+	<analysis-profile name="Profile" attributes-ref="JDBC_Profile" type="personal" attribute-size="frequency" cluster-threshold="40" attributes-max="40" attributes-base-max="40">
+		<props-mapping>
+			<entity-props-mapping>
+				<mapping key="ID"   value="id" />
+				<mapping key="NAME" value="name" />
+			</entity-props-mapping>
+			<attribute-props-mapping>
+				<mapping key="ID"        value="id" />
+				<mapping key="NAME"      value="name" />
+				<mapping key="POSS_ID" 	 value="poss_id" />
+				<mapping key="POSS_NAME" value="poss_name" />
+			</attribute-props-mapping>
+		</props-mapping>
+		<entities-recommendation>
+			<mapping key="REC_ID"   value="id" />
+			<mapping key="REC_NAME" value="name" />
+		</entities-recommendation>
+	</analysis-profile>
+
+	<analysis-profile name="DiscoveryProfile" attributes-ref="JDBC_Profile" type="discovery" attribute-size="frequency" attributes-max="40" attributes-base-max="40">
+		<props-mapping>
+			<entity-props-mapping>
+				<mapping key="ID"   value="id" />
+				<mapping key="NAME" value="name" />
+			</entity-props-mapping>
+			<attribute-props-mapping>
+				<mapping key="ID"        value="id" />
+				<mapping key="NAME"      value="name" />
+				<mapping key="POSS_ID" 	 value="poss_id" />
+				<mapping key="POSS_NAME" value="poss_name" />
+			</attribute-props-mapping>
+		</props-mapping>
+		<entities-recommendation>
+			<mapping key="REC_ID"  		value="id" />
+			<mapping key="REC_NAME"  	value="name" />
+		</entities-recommendation>
+	</analysis-profile>
+
+	<analysis-profile name="GlobalProfile" attributes-ref="JDBC_Profile" type="global" attribute-size="same" attributes-max="300" >
+		<props-mapping>
+			<entity-props-mapping>
+				<mapping key="ID" 	 value="id" />
+				<mapping key="NAME"      value="name" />
+			</entity-props-mapping>
+			<attribute-props-mapping>
+				<mapping key="ID" 	 value="id" />
+				<mapping key="NAME"      value="name" />
+				<mapping key="POSS_ID"   value="poss_id" />
+				<mapping key="POSS_NAME" value="poss_name" />
+			</attribute-props-mapping>
+		</props-mapping>
+		<entities-recommendation>
+			<mapping key="REC_ID"   value="id" />
+			<mapping key="REC_NAME" value="name" />
+		</entities-recommendation>
+	</analysis-profile>
+
+	<display-profile name="Display" display-empty-links="no" in-color="ffffff" out-color="0" filter-color="56b2ff" >
+		<swatch-segmentation>
+			<attribute-swatch>
+				<norm-swatch default-ref="WWW_NODE_NORM" />
+				<ref-swatch default-ref="WWW_NODE_REF" />
+				<active-norm-swatch default-ref="WWW_NODE_CUR_NORM" />
+				<active-ref-swatch default-ref="WWW_NODE_CUR_REF" />
+			</attribute-swatch>
+			<link-swatch>
+				<norm-swatch default-ref="WWW_LINK_NORM" />
+				<ref-swatch default-ref="WWW_LINK_REF" />
+				<active-norm-swatch default-ref="WWW_LINK_CUR_NORM" />
+				<active-ref-swatch default-ref="WWW_LINK_CUR_REF" />
+			</link-swatch>
+		</swatch-segmentation>
+		<selection-swatch name="search" />
+	</display-profile>
+
+	<display-profile name="GlobalDisplay" display-empty-links="no" display-fake-links="no" in-color="ffffff" out-color="0" filter-color="56b2ff" >
+		<swatch-segmentation>
+			<attribute-swatch>
+				<norm-swatch default-ref="WWW_NODE_NORM" />
+				<ref-swatch default-ref="WWW_NODE_REF" />
+				<active-norm-swatch default-ref="WWW_NODE_CUR_NORM" />
+				<active-ref-swatch default-ref="WWW_NODE_CUR_REF" />
+			</attribute-swatch>
+			<link-swatch>
+				<norm-swatch default-ref="WWW_LINK_NORM" />
+				<ref-swatch default-ref="WWW_LINK_REF" />
+				<active-norm-swatch default-ref="WWW_LINK_CUR_NORM" />
+				<active-ref-swatch default-ref="WWW_LINK_CUR_REF" />
+			</link-swatch>
+		</swatch-segmentation>
+		<selection-swatch name="search" />
+	</display-profile>
+
+	<segmentation>
+		<analysis-segmentation  default-ref="Profile" />
+		<affinity-reader-segmentation default-ref="AffReader" >
+			<affreader-analysis-mapping analysis-ref="DiscoveryProfile" default-ref="DiscoveryAffReader" />
+			<affreader-analysis-mapping analysis-ref="GlobalProfile" default-ref="GlobalAffReader" />
+		</affinity-reader-segmentation>
+		<display-segmentation default-ref="Display" >
+			<display-analysis-mapping analysis-ref="GlobalProfile" default-ref="GlobalDisplay" />
+		</display-segmentation>
+	</segmentation>
+</dictionary>

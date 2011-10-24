@@ -2,19 +2,18 @@
 
 <!DOCTYPE swatch SYSTEM "swatch.dtd">
 
-<swatch             name="WWW_NODE_CUR_NORM">
+<swatch             name="WWW_NODE_CUR_REF">
 
 <!-- Base -->
 	<sat	        shape="diskShp"
 					transfo="baseTrf"
 					hover="hoverEvt"
 					click="clickEvt"
-					dblClk="dblClkEvt" 
-					isSub="true"
-					isCur="true">
-		<slice		inCol="164 164 164"
-					outCol="100 100 100"/>
-		<slice		inCol="255 255 255">
+					dblClk="dblClkEvt">
+		<slice		inCol="86 178 255"
+					outCol="0 102 204"/>
+		<slice		inCol="255 255 255"
+					outCol="0 102 204">
 			<transfo scale=".87"/>
 		</slice>
 	</sat>
@@ -22,8 +21,8 @@
 <!-- Rest Spots -->
 	<sat	        shape="diskShp"
 					isSub="true">
-		<slice		inCol="100 100 100"
-					outCol="0 0 0"
+		<slice		inCol="37 137 235"
+					outCol="0 102 204"
 					transfo="spotTrf"/>
 	</sat>
 
@@ -32,8 +31,8 @@
 					isSub="true"
 					isRest="false"
 					isCur="true">
-		<slice		inCol="164 164 164"
-					outCol="100 100 100"
+		<slice		inCol="86 178 255"
+					outCol="0 102 204"
 					transfo="spotTrf"/>
 	</sat>
 
@@ -41,15 +40,15 @@
 	<sat	        shape="voidShp"
 					click="clickEvt"
 					dblClk="dblClkEvt"
-					isSub="true"
-					isTip="true">
+					isTip="true"
+					isSub="true">
 		<transfo    map="interpol">
 			<polar  dir="0" rad="1.3"/>
 		</transfo>
 		<slice>
 			<tip 	font="nameFnt"
 					label="@nameStr"
-					textCol="@blackCol"
+					textCol="37 137 235"
 					isCorner="true"/>
 		</slice>
 	</sat>
@@ -70,7 +69,7 @@
 					isCorner="true"/>
 		</slice>
 	</sat>
-
+	
 <!-- Cur Title -->
 	<sat	        shape="voidShp"
 					click="clickEvt"
@@ -84,13 +83,12 @@
 		<slice>
 			<tip 	font="nameFnt"
 					label="@nameStr"
-					inCol="100 100 100"
+					inCol="37 137 235"
 					textCol="@whiteCol"
 					rounded="10"
 					isCorner="true"/>
 		</slice>
 	</sat>
-
 <!-- References -->
 	<string         id="nameStr"        label="{sNAME}"/>
 
@@ -136,16 +134,16 @@
 					rad="1.4"/>
 	</transfo>
 
-	<tip 	    id="textTip"
-				font="nameFnt"
-				label="@nameStr"
-				textCol="@blackCol"
-				isCorner="true"/>
+	<tip 	    	id="textTip"
+					font="nameFnt"
+					label="@nameStr"
+					textCol="@blackCol"
+					isCorner="true"/>
+
 
 	<!-- Hover event -->
 	<event 	        id="hoverEvt">
 		<show       status="Cliquez pour afficher le menu de '{sNAME}'. Double-cliquez pour afficher sa fiche."/>
-		<!--pop        tooltip="tooltip"/-->
 	</event>
 
 	<!-- Click event -->
@@ -153,15 +151,16 @@
 		<popup      menu="menu"/>
 	</event>
 
-		<menu		    id="menu"
-						font="menuFnt">
-			<item 		label="Afficher"
-						font="nameFnt"
-						url="_self:http://www.social-computing.com/?p={sID}" />
+
+		<menu id="menu" font="menuFnt">
+			<item label="Afficher" font="nameFnt" url="_self:http://www.social-computing.com/?p={sID}" />
 			<separator />
-			<item 		label="[+80sPOSS_NAME]"
-						url="javascript:NewWin([sPOSS_ID],[sPOSS_NAME])"/>
+                        <menu id="submenu" font="menuFnt" label="[+80sPOSS_NAME]">
+		                <item label="Filtrer" url="javascript:Filter([sPOSS_ID],[sPOSS_NAME])" />
+                                <item label="Afficher" url="javascript:NewWin([sPOSS_ID],[sPOSS_NAME])" />
+                        </menu>
 		</menu>
+
 
 		<font		    id="menuFnt"
 						name="Monospaced"
@@ -171,6 +170,6 @@
 	<event 	        id="dblClkEvt">
 		<open       url="_self:http://www.social-computing.com/?p={sID}" />
 	</event>
-	
+
 </swatch>
 
