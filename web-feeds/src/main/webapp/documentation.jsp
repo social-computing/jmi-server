@@ -8,21 +8,11 @@
 	<meta name="keywords" content="documentation, rss, feeds, feed, map, cartography, visualization, social, blog, gadget, widget, social computing, category, representation, information" />
 	<meta name="author" content="Social Computing" /> 
 	<meta name="robots" content="all" /> 
-	<link rel=StyleSheet href="./mapyourfeeds.css" type="text/css" media="screen" />
+	<link rel=StyleSheet href="./mapyourfeeds-doc.css" type="text/css" media="screen" />
 </head>
 <body>
-<div id="header">
-<table id="bandeau" border="0">
-<tr>
-	<td id="logo" rowspan="3">
-		<a href="./" title="Map your feeds!"><img border="0" width="144" height="70" title="Map your feeds!" src="./images/logo-sc-white.jpg" /></a>
-	</td>
-	<td><h1>How to use the service</h1>
-	</td>
-</tr>
-</table>
-</div>
 <div id="documentation">
+<h1>How to use the service</h1>
 <h2>Overview</h2>
 Map your feeds! displays your feed(s) items on a map. 
 <h2>Kinds of URL(s)</h2>
@@ -32,9 +22,9 @@ Map your feeds! displays your feed(s) items on a map.
 <p>You want to map more than one feed? Just separate them with a comma. You can mix RSS, Atom or website URLs.</p>
 <h2>Add Map your feeds!</h2>
 <h3>Add Map your feeds! to your webpage</h3>
-You can place the map directly on any webpage. <a href="./integrate.jsp">Here it is</a>.
+You can place the map directly on any webpage. <a target="_blank" title="Add it to your webpage" href="./integrate.jsp">Add it to your webpage</a>.
 <h3>Add Map your feeds! to iGoogle</h3>
-<a href="http://www.google.com/ig/adde?moduleurl=http://www.mapyourfeeds.com/google/igoogle-social-computing-feeds.xml"><img src="http://buttons.googlesyndication.com/fusion/add.gif" style="width:104px; height:17px;border:0px;" alt="Add to iGoogle" /></a>
+<a target="_blank" title="Add it to iGoogle" href="http://www.google.com/ig/adde?moduleurl=http://www.mapyourfeeds.com/google/igoogle-social-computing-feeds.xml"><img src="http://buttons.googlesyndication.com/fusion/add.gif" style="width:104px; height:17px;border:0px;" alt="Add to iGoogle" /></a>
 <h3>Add Map your feeds! to Blogger</h3>
 <p>Click on 'Add a gadget', then on 'Add your own' and enter this URL:</p>
 <textarea readonly="true" style="width:100%">http://www.mapyourfeeds.com/google/blogger-social-computing-feeds.xml</textarea>
@@ -46,6 +36,5 @@ You can place the map directly on any webpage. <a href="./integrate.jsp">Here it
 <h3>Flash is not supported</h3>
 <p>The HTML5 client is coming soon...</p>
 </div>
-<jsp:include page="./footer.jsp" ></jsp:include>
 </body>
 </html>

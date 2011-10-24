@@ -15,13 +15,30 @@ if( feed == null) feed = "";%>
 <meta property="og:image" content="http://www.mapyourfeeds.com/images/thumbnail.png" />
 <link rel="shortcut icon" href="http://www.mapyourfeeds.com/favicon.ico" />
 <link rel=StyleSheet href="./mapyourfeeds.css" type="text/css" media="screen" />
-<%if( feed.length() > 0) {%>
+<script type="text/javascript" src="./	js/jquery-1.6.4.min.js"></script>
+<script type="text/javascript" src="./fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<link rel="stylesheet" type="text/css" href="./fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 <script type="text/javascript">
+$(document).ready(function() {
+	$("#howtouse").fancybox({
+		'width'				: '75%',
+		'height'			: '75%',
+		'autoScale'			: false,
+		'transitionIn'		: 'none',
+		'transitionOut'		: 'none',
+		'type'				: 'iframe'
+		});
+	});
+<%if( feed.length() > 0) {%>
   function ready() {
 	  var map = document.getElementById("wps-feeds");
 	  var titles = map.getArrayProperty( "$FEEDS_TITLES");
-	  if( titles)
+	  if( titles) {
 	  	document.title = 'Map your feeds! - ' + titles.join( ', ');
+		if( map.getProperty( "$analysisProfile") == "GlobalProfile") {
+			document.getElementById("message").innerHTML = titles.join( ', ');
+		}
+	  }
   }
   function empty() {
 	document.getElementById("message").innerHTML = "Sorry, the map is empty. Does the feed contains categories ?";
@@ -88,8 +105,8 @@ if( feed == null) feed = "";%>
         flashvars, params, attributes);
 <!-- JavaScript enabled so display the flashContent div in case it is not replaced with a swf object. -->
 swfobject.createCSS("#flashContent", "display:block;text-align:left;");
-</script>
 <%}%>
+</script>
 <jsp:include page="./js/ga.js" /> 
 </head>
 
@@ -117,7 +134,7 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 	<form method="get">
 		<input type="text" name="feed" title="URLs" size="80" value="<%=feed != null ? feed : "" %>" />
 		<input type="submit" value="Just Map It!" />
-		<span id="doc"><a href="./documentation.jsp">How to use the service</a></span>
+		<span id="doc"><a id="howtouse" title="How to use the service" href="./documentation.jsp">How to use the service</a></span>
 	</form>
 </td>
 <td rowspan="2">

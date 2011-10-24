@@ -96,7 +96,7 @@ div#footer a {
 	padding-left: 4px;
 	margin: 0;
 	text-align: left;
-	color: #c3372f;
+	color: #f59c23;
 	font-size: 14px;
 	font-weight: bold;
 }
@@ -152,10 +152,6 @@ h3 {
 	font-size: 16px;
 	font-weight: bold;
 	color: #bec840;
-}
-
-#documentation {
-	padding: 20px 40px 20px 40px;
 }
 
 #integrate {
