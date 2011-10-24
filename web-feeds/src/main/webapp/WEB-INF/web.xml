@@ -3,7 +3,7 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app id="web-feeds">
-	<display-name>Map your feeds!</display-name>
+	<display-name>Just Map It! Feeds</display-name>
 
 	<filter>
 		<filter-name>HibernateFilter</filter-name>

@@ -3,11 +3,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-<meta http-equiv="refresh" content="0; url=http://www.mapyourfeeds.com" />
+<meta http-equiv="refresh" content="0; url=http://feeds.just-map-it.com" />
 <title>Redirection</title>
 <meta name="robots" content="noindex,follow" />
 </head>
 <body>
-<p><a href="http://www.mapyourfeeds.com">Redirection</a></p>
+<p><a href="http://feeds.just-map-it.com">Redirection</a></p>
 </body>
 </html>

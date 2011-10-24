@@ -1,9 +1,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">	
 <head>
-<title>Add Map your feeds! to your webpage - Map your feeds!</title>
+<title>Add Just Map It! Feeds to your webpage - Just Map It! Feeds</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="content-language" content="en">
-<meta name="description" content="Add Map your feeds! to your webpage. by Social Computing" />
+<meta name="description" content="Add Just Map It! Feeds to your webpage. by Social Computing" />
 <meta name="author" content="Social Computing" /> 
 <meta name="robots" content="all" /> 
 <link rel=StyleSheet href="./mapyourfeeds.css" type="text/css" media="screen" />
@@ -14,9 +14,9 @@
 <table id="bandeau" border="0">
 <tr>
 	<td id="logo" rowspan="3">
-		<a href="./" title="Map your feeds!"><img border="0" width="144" height="70" title="Map your feeds!" src="./images/logo-sc-white.jpg" /></a>
+		<a href="./" title="Just Map It! Feeds"><img border="0" width="144" height="70" title="Just Map It! Feeds" src="./images/logo-sc-white.jpg" /></a>
 	</td>
-	<td style="vertical-align:bottom;"><h1>Add Map your feeds! to your webpage</h1>
+	<td style="vertical-align:bottom;"><h1>Add Just Map It! Feeds to your webpage</h1>
 	</td>
 </tr>
 </table>
@@ -55,7 +55,7 @@ if( h==null || h.length() == 0) h = "500";
 <tr><td colspan="2">
 <div id="code">
 	<h2>3 - Copy this code in your page</h2>
-	<textarea name="code" readonly="true" style="width:100%"><script type="text/javascript" src="http://www.mapyourfeeds.com/int.jsp?url=<%=java.net.URLEncoder.encode(feed)%>&m=<%=java.net.URLEncoder.encode(m)%>&w=<%=w%>&h=<%=h%>"></script></textarea> 
+	<textarea name="code" readonly="true" style="width:100%"><script type="text/javascript" src="http://feeds.just-map-it.com/int.jsp?url=<%=java.net.URLEncoder.encode(feed)%>&m=<%=java.net.URLEncoder.encode(m)%>&w=<%=w%>&h=<%=h%>"></script></textarea> 
 </div>
 </td></tr>
 </table>

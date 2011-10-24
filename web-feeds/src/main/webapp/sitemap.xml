@@ -5,17 +5,17 @@
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 <url>
-  <loc>http://www.mapyourfeeds.com/</loc>
+  <loc>http://feeds.just-map-it.com/</loc>
   <changefreq>weekly</changefreq>
   <priority>1.00</priority>
 </url>
 <url>
-  <loc>http://www.mapyourfeeds.com/documentation.jsp</loc>
+  <loc>http://feeds.just-map-it.com/documentation.jsp</loc>
   <changefreq>weekly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>http://www.mapyourfeeds.com/integrate.jsp</loc>
+  <loc>http://feeds.just-map-it.com/integrate.jsp</loc>
   <changefreq>weekly</changefreq>
   <priority>0.70</priority>
 </url>

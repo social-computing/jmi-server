@@ -1,19 +1,24 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb#" lang="en" xml:lang="en">	
 <%String feed = request.getParameter("feed");
-if( feed == null) feed = "";%>
+if( feed == null) feed = "";
+if( feed.length() > 0) {
+    if( !feed.startsWith( "http://") || !feed.startsWith( "http://")) {
+        feed = "http://" + feed;
+    }
+}%>
 <head>
-<title>Map your feeds!</title>
+<title>Just Map It! Feeds</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="content-language" content="en" />
 <meta name="description" content="View and navigate your feeds thru an interactive map! by Social Computing" />
 <meta name="keywords" content="rss, feeds, feed, map, cartography, visualization, social, blog, gadget, widget, social computing, category, representation, information" />
 <meta name="author" content="Social Computing" /> 
 <meta name="robots" content="all" /> 
-<meta property="og:title" content="Map your feeds!" />
+<meta property="og:title" content="Just Map It! Feeds" />
 <meta property="og:description" content="View and navigate your feeds thru an interactive map! by Social Computing" />
-<meta property="og:image" content="http://www.mapyourfeeds.com/images/thumbnail.png" />
-<link rel="shortcut icon" href="http://www.mapyourfeeds.com/favicon.ico" />
+<meta property="og:image" content="http://feeds.just-map-it.com/images/thumbnail.png" />
+<link rel="shortcut icon" href="http://feeds.just-map-it.com/favicon.ico" />
 <link rel=StyleSheet href="./mapyourfeeds.css" type="text/css" media="screen" />
 <script type="text/javascript" src="./	js/jquery-1.6.4.min.js"></script>
 <script type="text/javascript" src="./fancybox/jquery.fancybox-1.3.4.pack.js"></script>
@@ -34,7 +39,7 @@ $(document).ready(function() {
 	  var map = document.getElementById("wps-feeds");
 	  var titles = map.getArrayProperty( "$FEEDS_TITLES");
 	  if( titles) {
-	  	document.title = 'Map your feeds! - ' + titles.join( ', ');
+	  	document.title = 'Just Map It! Feeds - ' + titles.join( ', ');
 		if( map.getProperty( "$analysisProfile") == "GlobalProfile") {
 			document.getElementById("message").innerHTML = titles.join( ', ');
 		}
@@ -86,7 +91,7 @@ $(document).ready(function() {
     //flashvars.wpsserverurl = "http://localhost:8080/wps-server";
     //flashvars.track = "http://localhost:8080/web-feeds/services/feeds/record.json";
     flashvars.wpsserverurl = "http://map.social-computing.com/";
-    flashvars.track = "http://www.mapyourfeeds.com/services/feeds/record.json";
+    flashvars.track = "http://feeds.just-map-it.com/services/feeds/record.json";
     flashvars.wpsplanname = "Feeds";
     flashvars.analysisProfile = "GlobalProfile";
     flashvars.feed = "<%=java.net.URLEncoder.encode(feed)%>";
@@ -125,7 +130,7 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 <table id="bandeau" border="0">
 <tr>
 <td id="logo" rowspan="3">
-	<a href="./" title="Map your feeds!"><img border="0" width="144" height="70" title="Map your feeds!" src="./images/logo-sc-white.jpg" /></a>
+	<a href="./" title="Just Map It! Feeds"><img border="0" width="144" height="70" title="Just Map It! Feeds" src="./images/logo-sc-white.jpg" /></a>
 </td>
 <td class="label" ><b>Enter one or more URLs (comma separated):</b>
 </td>
@@ -141,8 +146,8 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 </td>
 <td rowspan="2">
 <table border="0"><tr>
-	<td class="social"><g:plusone size="medium" href="http://www.mapyourfeeds.com/"></g:plusone></td>
-	<!--td class="social"><a title="Post to Google Buzz" class="google-buzz-button" href="http://www.google.com/buzz/post" data-button-style="small-count" data-url="http://www.mapyourfeeds.com"></a><script type="text/javascript" src="http://www.google.com/buzz/api/button.js"></script></td-->
+	<td class="social"><g:plusone size="medium" href="http://feeds.just-map-it.com/"></g:plusone></td>
+	<!--td class="social"><a title="Post to Google Buzz" class="google-buzz-button" href="http://www.google.com/buzz/post" data-button-style="small-count" data-url="http://feeds.just-map-it.com"></a><script type="text/javascript" src="http://www.google.com/buzz/api/button.js"></script></td-->
 	<td class="social"><fb:like href="<%=request.getRequestURL().toString()+(request.getQueryString() != null? "?"+request.getQueryString() : "")%>" send="true" layout="button_count" width="450" show_faces="false" font="arial"></fb:like></td>
 </tr><tr>
 	<td class="social"><a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal">Tweet</a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script></td>
