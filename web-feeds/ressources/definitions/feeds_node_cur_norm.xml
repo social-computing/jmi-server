@@ -56,8 +56,8 @@
 					isBack="false" 
 					isTip="false" 
 					isNoSided="false">
-		<slice		inCol="245 158 35"
-					outCol="138 138 138"
+		<slice		inCol="190 196 64"
+					outCol="190 196 64"
 					transfo="spotTrf"
 					alpha="1"
 					linewidth="1"/>
@@ -81,7 +81,7 @@
 		<slice alpha="1" linewidth="1">
 			<tip 	font="nameFnt"
 					label="@nameStr"
-					inCol="138 138 138" 
+					inCol="55 176 227" 
 					textCol="@whiteCol" 
 					rounded="10"  
 					isCorner="true"
@@ -139,7 +139,7 @@
 		<slice alpha="1" linewidth="1">
 			<tip 	font="nameFnt"
 					label="{sNAME}"
-					inCol="249 162 36"
+					inCol="190 196 64"
 					textCol="@whiteCol"
 					isCorner="true"
 					rounded="10"

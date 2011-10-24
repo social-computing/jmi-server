@@ -7,8 +7,8 @@
 <!-- Base Satellite definition -->
 	<sat	        shape="edgeShp"
 					isBack="true">
-		<slice		inCol="195 39 47" 
-					outCol="195 39 47"/>
+		<slice		inCol="249 162 36" 
+					outCol="249 162 36"/>
 	</sat>
 
 <!-- General purpose Selection -->

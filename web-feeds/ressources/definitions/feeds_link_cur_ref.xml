@@ -9,8 +9,8 @@
 					hover="hoverEvt"
 					click="clickEvt"
 					isBack="true">
-		<slice		inCol="195 39 47"
-					outCol="138 138 138"/>
+		<slice		inCol="190 196 64"
+					outCol="190 196 64"/>
 	</sat>
 
 	<sat	        shape="edgeShp"
@@ -39,7 +39,7 @@
 		<tip 	font="tipFnt"
 				label="[/20sREC_NAME]"
 				inCol="255 255 255"
-				outCol="195 39 47"
+				outCol="190 196 64"
 				textCol="138 138 138"
 				rounded="10"
 				align="center"

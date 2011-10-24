@@ -7,20 +7,20 @@
 
 <!-- Base -->
     <sat shape="diskShp" transfo="baseTrf" isBack="true" isVisible="true" isSuper="true" isSub="false" isCur="false" isRest="true" isTip="false" isNoSided="false">
-        <slice inCol="195 39 47" outCol="195 39 47" alpha="1" linewidth="1" />
-        <slice inCol="255 255 255" outCol="195 39 47" alpha="1" linewidth="1">
+        <slice inCol="249 162 36" outCol="249 162 36" alpha="1" linewidth="1" />
+        <slice inCol="255 255 255" outCol="249 162 36" alpha="1" linewidth="1">
             <transfo scale=".87" map="absolute" />
         </slice>
     </sat>
 
 <!-- Sub Spots -->
     <sat shape="diskShp" isSub="true" isSuper="false" isVisible="true" isCur="false" isRest="true" isBack="false" isTip="false" isNoSided="false">
-        <slice inCol="195 39 47" outCol="138 138 138" transfo="spotTrf" alpha="1" linewidth="1" />
+        <slice inCol="249 162 36" outCol="138 138 138" transfo="spotTrf" alpha="1" linewidth="1" />
     </sat>
 
 <!-- Super Spot -->
     <sat shape="diskShp" isVisible="true" isSuper="true" isSub="false" isCur="false" isRest="true" isBack="false" isTip="false" isNoSided="false">
-        <slice inCol="195 39 47" outCol="138 138 138" transfo="spotTrf" alpha="1" linewidth="1" />
+        <slice inCol="249 162 36" outCol="138 138 138" transfo="spotTrf" alpha="1" linewidth="1" />
     </sat>
 
 <!-- Title -->
@@ -29,7 +29,7 @@
             <polar dir="0" rad="1.1" />
         </transfo>
         <slice alpha="1" linewidth="1">
-            <tip font="nameFnt" label="{+20.1sNAME}" inCol="195 39 47" textCol="@whiteCol" rounded="10" isCorner="true" blur="-1" dir="SW" align="left" isFloating="false" />
+            <tip font="nameFnt" label="{+20.1sNAME}" inCol="138 138 138" textCol="@whiteCol" rounded="10" isCorner="true" blur="-1" dir="SW" align="left" isFloating="false" />
         </slice>
     </sat>
 
