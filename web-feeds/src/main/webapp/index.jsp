@@ -3,7 +3,7 @@
 <%String feed = request.getParameter("feed");
 if( feed == null) feed = "";
 if( feed.length() > 0) {
-    if( !feed.startsWith( "http://") || !feed.startsWith( "http://")) {
+    if( !feed.startsWith( "http://") && !feed.startsWith( "http://")) {
         feed = "http://" + feed;
     }
 }%>
@@ -211,7 +211,9 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 	  </noscript>		
 <%} %>
 </div>
-<jsp:include page="./footer.jsp" ></jsp:include>
+<jsp:include page="./footer.jsp" >
+	<jsp:param name="feed" value="<%=feed%>" /> 
+</jsp:include>
 <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
 </body>
 </html>
