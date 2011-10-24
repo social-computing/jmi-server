@@ -129,6 +129,24 @@
 		<selection-swatch name="search" />
 	</display-profile>
 
+        <display-profile name="SimpleGlobalDisplay" display-empty-links="no" display-fake-links="no" in-color="ffffff" out-color="0" filter-color="56b2ff" display-entities="no">
+		<swatch-segmentation>
+			<attribute-swatch>
+				<norm-swatch default-ref="WWW_NODE_NORM" />
+				<ref-swatch default-ref="WWW_NODE_REF" />
+				<active-norm-swatch default-ref="WWW_NODE_CUR_NORM_SIMPLE" />
+				<active-ref-swatch default-ref="WWW_NODE_CUR_REF_SIMPLE" />
+			</attribute-swatch>
+			<link-swatch>
+				<norm-swatch default-ref="WWW_LINK_NORM" />
+				<ref-swatch default-ref="WWW_LINK_REF" />
+				<active-norm-swatch default-ref="WWW_LINK_CUR_NORM_SIMPLE" />
+				<active-ref-swatch default-ref="WWW_LINK_CUR_REF_SIMPLE" />
+			</link-swatch>
+		</swatch-segmentation>
+		<selection-swatch name="search" />
+	</display-profile>
+
 	<segmentation>
 		<analysis-segmentation  default-ref="Profile" />
 		<affinity-reader-segmentation default-ref="AffReader" >

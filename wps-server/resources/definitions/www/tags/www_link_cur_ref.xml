@@ -55,10 +55,8 @@
 		<popup      menu="menu"/>
 	</event>
 
-	<menu		    id="menu"
-					font="menuFnt" >
-		<item 		label="[sREC_NAME]"
-					url="javascript:NewWin([sREC_ID],[sREC_NAME])"/>
+	<menu id="menu" font="menuFnt">
+		<item label="[sREC_NAME]" url="javascript:NewWin([sREC_ID],[sREC_NAME])" />
 	</menu>
 
 
