@@ -14,8 +14,16 @@ package com.socialcomputing.wps.script
 			env.m_transfo = toTransfo(json.transfo);
 
 			env.m_props = new Array();
-			for(var i:String in json.props){
-				env.m_props[i] = json.props[i];
+			for(var i:Object in json.props){
+				if( json.props[i] is Array) {
+					env.m_props[i] = new Array();
+					for each (var z:Object in json.props[i]) { 
+						env.m_props[i].push( z);
+					} 
+				}
+				else {
+					env.m_props[i] = json.props[i];
+				}
 			}			
 			env.m_selections = new Array();
 			for(i in json.selections){

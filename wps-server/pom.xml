@@ -249,8 +249,7 @@
         </exclusion>
       </exclusions>
     </dependency>
-    <!-- Check if it is really needed or if there is a mistake in an hibernate
-    property or with annotations -->
+    <!-- Check if it is really needed or if there is a mistake in an hibernate property or with annotations -->
     <dependency>
       <groupId>org.javassist</groupId>
       <artifactId>javassist</artifactId>

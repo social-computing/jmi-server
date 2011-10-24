@@ -12,13 +12,8 @@
         diskPersistent="false"
         diskExpiryThreadIntervalSeconds="120"/>
     <cache
-        name="com.socialcomputing.wps.server.persistence.hibernate.DictionaryImpl"
+        name="com.socialcomputing.feeds.Feed"
         maxElementsInMemory="100"
-        eternal="false"
-        overflowToDisk="false" />
-    <cache
-        name="com.socialcomputing.wps.server.persistence.hibernate.SwatchImpl"
-        maxElementsInMemory="10000"
         eternal="false"
         overflowToDisk="false" />
 </ehcache>

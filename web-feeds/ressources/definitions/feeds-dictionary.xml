@@ -13,8 +13,6 @@
 		</Feeds-entities>
 	</entities>
 	
-	<env-property name="$web_context" value ="http://localhost:8080/wps-server/" />
-	
 	<affinity-reader-profile name="AffReader" affinity-reader-ref="*" threshold="100" />
 	<affinity-reader-profile name="DiscoveryAffReader" affinity-reader-ref="*" threshold="100" />
 	<affinity-reader-profile name="GlobalAffReader" affinity-reader-ref="*" threshold="100" />
