@@ -11,8 +11,8 @@ public long getLastModified(HttpServletRequest request) {
 
 <html>
 <head>
-<link rel="stylesheet" href="./wps.css">
-<link rel="stylesheet" href="./result.css">
+<link rel="stylesheet" href="../css/main.css"/>
+<link rel="stylesheet" href="../css/wps.css">
 <script type="text/javascript" src="../client/applet/jquery.js" ></script>
 <script type="text/javascript" src="./javascript/jquery.fancybox-1.3.4.pack.js"></script>
 <link rel="stylesheet" href="./css/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
@@ -38,7 +38,10 @@ public long getLastModified(HttpServletRequest request) {
     }
 </SCRIPT>
 </head>
-<body bgcolor=7f9fdf>
+<body>
+<div id="top"><jsp:include page="top.jsp" /></div>
+<div id="menu"><jsp:include page="menu.jsp" /></div>
+<div id="content">
 <script>
 $(document).ready(function() {
 
@@ -82,6 +85,6 @@ Swatch sw = manager.findByName(request.getParameter("swatch"), request.getParame
 <tr><td>&nbsp;</td></tr>
 </table>
 
-
+</div>
 </body>
 </html>
