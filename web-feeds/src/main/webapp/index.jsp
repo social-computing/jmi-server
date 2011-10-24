@@ -20,7 +20,7 @@ if( feed.length() > 0) {
 <meta property="og:image" content="http://feeds.just-map-it.com/images/thumbnail.png" />
 <link rel="shortcut icon" href="http://feeds.just-map-it.com/favicon.ico" />
 <link rel=StyleSheet href="./mapyourfeeds.css" type="text/css" media="screen" />
-<script type="text/javascript" src="./	js/jquery-1.6.4.min.js"></script>
+<script type="text/javascript" src="./js/jquery-1.6.4.min.js"></script>
 <script type="text/javascript" src="./fancybox/jquery.fancybox-1.3.4.pack.js"></script>
 <link rel="stylesheet" type="text/css" href="./fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 <script type="text/javascript">
@@ -79,7 +79,7 @@ $(document).ready(function() {
 <link rel="stylesheet" type="text/css" href="./client/history/history.css" />
 <script type="text/javascript" src="./client/history/history.js"></script>
 <!-- END Browser History required section -->  
-		
+
 <script type="text/javascript" src="./client/swfobject.js"></script>
 <script type="text/javascript">
     <!-- For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. --> 
@@ -112,11 +112,20 @@ $(document).ready(function() {
         flashvars, params, attributes);
 <!-- JavaScript enabled so display the flashContent div in case it is not replaced with a swf object. -->
 swfobject.createCSS("#flashContent", "display:block;text-align:left;");
+<%} else {%>
+$.getJSON( "./services/feeds/last.json", function( data){
+		var i = 0;
+		$( '#last-feed').html( '<a style="hidden" title="Just Map It!" href="./?' + jQuery.param({'feed':data[i].url}) + '">' + data[i].title + '</a>');
+		setInterval( function() {
+			i = (i+1) % data.length;
+			$( '#last-feed').html( '<a style="hidden" title="Just Map It!" href="./?' + jQuery.param({'feed':data[i].url}) + '">' + data[i].title + '</a>');
+		}, 5000);
+	  }
+	);
 <%}%>
 </script>
 <jsp:include page="./js/ga.js" /> 
 </head>
-
 <body>
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
@@ -165,7 +174,10 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 
 <div id="content" >
 <%if (feed.length() == 0) {%>
-<p class="slogan">View and navigate your feeds thru an interactive map!<p>
+<p class="slogan">View and navigate your feeds thru an interactive map!</p>
+<div id="last-feeds">
+<p>Last feeds viewed: <span id="last-feed"></span></p>
+</div>
 <%} else {%>
      <div id="flashContent">
      	<p>
