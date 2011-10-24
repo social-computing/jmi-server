@@ -14,7 +14,7 @@
 <table id="bandeau" border="0">
 <tr>
 	<td id="logo" rowspan="3">
-		<a href="./" title="Just Map It! Feeds"><img border="0" width="144" height="70" title="Just Map It! Feeds" src="./images/logo-sc-white.jpg" /></a>
+		<a href="./" title="Just Map It! Feeds"><img border="0" width="255" height="50" title="Just Map It! Feeds" src="./images/justmapit-feeds.png" /></a>
 	</td>
 	<td style="vertical-align:bottom;"><h1>Add Just Map It! Feeds to your webpage</h1>
 	</td>

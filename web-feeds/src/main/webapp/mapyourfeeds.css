@@ -70,6 +70,8 @@ div#footer a {
 
 #bandeau #logo {
 	width: 155px;
+	text-align: center;
+	padding-right: 20px;
 }
 
 #bandeau .label {
@@ -119,7 +121,7 @@ div#footer a {
 
 .slogan {
 	padding-top: 20px;
-	padding-left: 154px;
+	padding-left: 284px;
 	text-align: left;
 	color: #37b0e3;
 	font-size: 18px;

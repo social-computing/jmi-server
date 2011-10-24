@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,10 +81,21 @@ public class FeedManager {
             MultivaluedMap<String, String> params = ui.getQueryParameters();
             
             String smax = params.getFirst( "max");
-            int max = smax == null ? 100 : Math.min( Integer.parseInt( smax), 100);
-            feeds = session.createQuery( "from Feed as feed order by feed.count desc").list();
-            while( feeds.size() > max)
-                feeds.remove( feeds.size()-1);
+            int max = smax == null ? 100 : Math.min( Integer.parseInt( smax), 1000);
+            String success = params.getFirst( "success");
+            if( success == null)
+                success = "true";
+            Query query = null;
+            if( success == null || success.equals( "*")) {
+                query = session.createQuery( "from Feed as feed order by feed.updated desc");
+            }
+            else {
+                query = session.createQuery( "from Feed as feed where feed.success = :success order by feed.count desc");
+                query.setBoolean( "success", success.equalsIgnoreCase( "true"));
+            }
+            query.setFirstResult( 0);
+            query.setMaxResults( max);
+            feeds = query.list();
             Response.ok();
         }
         catch (HibernateException e) {
@@ -114,11 +126,21 @@ public class FeedManager {
             MultivaluedMap<String, String> params = ui.getQueryParameters();
             
             String smax = params.getFirst( "max");
-            int max = smax == null ? 100 : Math.min( Integer.parseInt( smax), 100);
-            feeds = session.createQuery( "from Feed as feed order by feed.updated desc").list();
-            while( feeds.size() > max)
-                feeds.remove( feeds.size()-1);
-
+            int max = smax == null ? 100 : Math.min( Integer.parseInt( smax), 1000);
+            String success = params.getFirst( "success");
+            if( success == null)
+                success = "true";
+            Query query = null;
+            if( success == null || success.equals( "*")) {
+                query = session.createQuery( "from Feed as feed order by feed.updated desc");
+            }
+            else {
+                query = session.createQuery( "from Feed as feed where feed.success = :success order by feed.updated desc");
+                query.setBoolean( "success", success.equalsIgnoreCase( "true"));
+            }
+            query.setFirstResult( 0);
+            query.setMaxResults( max);
+            feeds = query.list();
             Response.ok();
         }
         catch (HibernateException e) {
