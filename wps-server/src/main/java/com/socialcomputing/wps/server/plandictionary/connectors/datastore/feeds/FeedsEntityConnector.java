@@ -187,7 +187,7 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
     	
     private void track( Hashtable<String, Object> wpsparams, String url, String title, String count) {
         String track = ( String) wpsparams.get( "track");
-        if( track != null) {
+        if( track != null && track.length() > 0) {
             UrlHelper u = new UrlHelper( UrlHelper.Type.GET, track);
             u.addParameter( "url", url);
             u.addParameter( "title", title);

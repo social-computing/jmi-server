@@ -11,13 +11,12 @@
 </url>
 <url>
   <loc>http://www.mapyourfeeds.com/documentation.jsp</loc>
-  <lastmod>2011-10-20T23:37:11+00:00</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>http://www.mapyourfeeds.com/integrate.jsp</loc>
   <changefreq>weekly</changefreq>
-  <priority>0.64</priority>
+  <priority>0.70</priority>
 </url>
 </urlset>

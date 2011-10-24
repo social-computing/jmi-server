@@ -54,6 +54,7 @@ $(document).ready(function() {
 	var parameters = {};
 	parameters["entityId"] = args[0];
 	parameters["feed"] = args[2];
+	parameters["track"] = "";
 	document.getElementById("wps-feeds").compute( parameters);
 	document.getElementById("message").innerHTML = "<i>Focus on category:</i> " + args[1];
   }
@@ -63,6 +64,7 @@ $(document).ready(function() {
 	parameters["attributeId"] = args[0];
 	parameters["analysisProfile"] = "DiscoveryProfile";
 	parameters["feed"] = args[2];
+	parameters["track"] = "";
 	document.getElementById("wps-feeds").compute( parameters);
 	document.getElementById("message").innerHTML = "<i>Centered on item:</i> " + args[1];
   }
