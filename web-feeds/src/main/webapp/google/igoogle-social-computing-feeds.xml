@@ -29,7 +29,7 @@
    }
    var fv='';
    for (var prop in flashvars) {
-      if (fv) fv=fv+'&'
+      if (fv) fv=fv+'&';
       fv=fv + prop + '=' + flashvars[prop];
    }
    var params= {

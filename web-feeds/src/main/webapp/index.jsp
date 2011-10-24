@@ -13,7 +13,7 @@ if( feed == null) feed = "";%>
 <meta property="og:title" content="Map your feeds!" />
 <meta property="og:description" content="View and navigate your feeds thru an interactive map! by Social Computing" />
 <meta property="og:image" content="http://www.mapyourfeeds.com/images/thumbnail.png" />
-<link rel="shortcut icon" href="./favicon.ico" />
+<link rel="shortcut icon" href="http://www.mapyourfeeds.com/favicon.ico" />
 <link rel=StyleSheet href="./mapyourfeeds.css" type="text/css" media="screen" />
 <%if( feed.length() > 0) {%>
 <script type="text/javascript">
@@ -76,6 +76,7 @@ if( feed == null) feed = "";%>
     params.bgcolor = "#FFFFFF";
     params.allowscriptaccess = "always";
     params.allowfullscreen = "true";
+    params.wmode = "transparent";
     var attributes = {};
     attributes.id = "wps-feeds";
     attributes.name = "wps-feeds";
@@ -116,7 +117,7 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 	<form method="get">
 		<input type="text" name="feed" title="URLs" size="80" value="<%=feed != null ? feed : "" %>" />
 		<input type="submit" value="Just Map It!" />
-		<span id="doc"><a href="./documentation.html">How to use the service</a></span>
+		<span id="doc"><a href="./documentation.jsp">How to use the service</a></span>
 	</form>
 </td>
 <td rowspan="2">
@@ -138,7 +139,7 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 </table>
 </div>
 
-<div id="map" >
+<div id="content" >
 <%if (feed.length() == 0) {%>
 <p class="slogan">View and navigate your feeds thru an interactive map!<p>
 <%} else {%>
@@ -161,12 +162,14 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
              <param name="bgcolor" value="#FFFFFF" />
              <param name="allowScriptAccess" value="always" />
              <param name="allowFullScreen" value="true" />
+             <param name="wmode" value="transparent" />
              <!--[if !IE]>-->
              <object type="application/x-shockwave-flash" data="./client/wps-flex-1.0-SNAPSHOT.swf" width="100%" height="100%">
                  <param name="quality" value="high" />
                  <param name="bgcolor" value="#FFFFFF" />
                  <param name="allowScriptAccess" value="sameDomain" />
                  <param name="allowFullScreen" value="true" />
+             	 <param name="wmode" value="transparent" />
              <!--<![endif]-->
              <!--[if gte IE 6]>-->
              	<p> 
@@ -184,6 +187,7 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 	  </noscript>		
 <%} %>
 </div>
+<jsp:include page="./footer.jsp" ></jsp:include>
 <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
 </body>
 </html>

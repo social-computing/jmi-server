@@ -7,6 +7,18 @@
 	 <param name="username" value="feeds" />
 	 <param name="password" value="feeds" />
 	 <param name="url" value="jdbc:cloudbees://feeds-db" />
+	 
+	 <!-- Connection Pool settings -->
+	 <param name="maxActive" value="5" />
+	 <param name="maxIdle" value="2" />
+	 <param name="maxWait" value="10000" />
+	 <param name="removeAbandoned" value="true" />
+	 <param name="removeAbandonedTimeout" value="60" />
+	 <param name="logAbandoned" value="true" />	 
+
+	<!-- avoid idle connections -->
+	<param name="validationQuery" value="SELECT 1" />
+	<param name="testOnBorrow" value="true" />
 	</resource>
 
 </cloudbees-web-app>

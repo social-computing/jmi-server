@@ -60,5 +60,6 @@ if( h==null || h.length() == 0) h = "500";
 </td></tr>
 </table>
 </div>
+<jsp:include page="./footer.jsp" ></jsp:include>
 </body>
 </html>

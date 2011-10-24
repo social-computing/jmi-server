@@ -46,5 +46,6 @@ You can place the map directly on any webpage. <a href="./integrate.jsp">Here it
 <h3>Flash is not supported</h3>
 <p>The HTML5 client is coming soon...</p>
 </div>
+<jsp:include page="./footer.jsp" ></jsp:include>
 </body>
 </html>

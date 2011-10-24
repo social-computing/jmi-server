@@ -9,7 +9,7 @@
 					hover="hoverEvt"
 					click="clickEvt"
 					isBack="true">
-		<slice		inCol="245 158 35" outCol="138 138 138"/>
+		<slice		inCol="245 158 35" outCol="245 158 35"/>
 	</sat>
 
 	<sat	        shape="edgeShp"

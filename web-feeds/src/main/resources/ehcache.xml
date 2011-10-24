@@ -13,7 +13,7 @@
         diskExpiryThreadIntervalSeconds="120"/>
     <cache
         name="com.socialcomputing.feeds.Feed"
-        maxElementsInMemory="100"
+        maxElementsInMemory="500"
         eternal="false"
         overflowToDisk="false" />
 </ehcache>
