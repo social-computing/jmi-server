@@ -46,15 +46,15 @@ $(document).ready(function() {
 	  }
   }
   function empty() {
-	document.getElementById("message").innerHTML = "Sorry, the map is empty. Does the feed contains categories ?";
+	document.getElementById("message").innerHTML = "Sorry, the map is empty. Does the feed contains categories?";
   }
   function error( error) {
 	document.getElementById("message").innerHTML = "Sorry, an error occured. Is this URL correct? <span class='hidden-message'>" + error + "</span>";
   }
-  function Navigate( url) {
+  function JMIF_Navigate( url) {
  	 window.open( url, "_blank");
   }
-  function NewWin( args)
+  function JMIF_Focus( args)
   {
 	var parameters = {};
 	parameters["entityId"] = args[0];
@@ -63,7 +63,7 @@ $(document).ready(function() {
 	document.getElementById("wps-feeds").compute( parameters);
 	document.getElementById("message").innerHTML = "<i>Focus on category:</i> " + args[1];
   }
-  function Discover( args)
+  function JMIF_Center( args)
   {
 	var parameters = {};
 	parameters["attributeId"] = args[0];
@@ -114,14 +114,19 @@ $(document).ready(function() {
 swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 <%} else {%>
 $.getJSON( "./services/feeds/last.json", function( data){
+	if( data && data.length > 0) {
 		var i = 0;
-		$( '#last-feed').html( '<a style="hidden" title="Just Map It!" href="./?' + jQuery.param({'feed':data[i].url}) + '">' + data[i].title + '</a>');
+		$( '#last-feed').html( '<a title="Just Map It!" href="./?' + jQuery.param({'feed':data[i].url}) + '">' + data[i].title + '</a>');
 		setInterval( function() {
 			i = (i+1) % data.length;
-			$( '#last-feed').html( '<a style="hidden" title="Just Map It!" href="./?' + jQuery.param({'feed':data[i].url}) + '">' + data[i].title + '</a>');
+			$( '#last-feed').fadeOut( 'slow', function() {
+				$( '#last-feed').html( '<a title="Just Map It!" href="./?' + jQuery.param({'feed':data[i].url}) + '">' + data[i].title + '</a>');
+				$( '#last-feed').fadeIn( 'slow');
+			});
 		}, 5000);
-	  }
-	);
+	}
+  }
+);
 <%}%>
 </script>
 <jsp:include page="./js/ga.js" /> 
@@ -171,7 +176,6 @@ $.getJSON( "./services/feeds/last.json", function( data){
 </tr>
 </table>
 </div>
-
 <div id="content" >
 <%if (feed.length() == 0) {%>
 <p class="slogan">View and navigate your feeds thru an interactive map!</p>

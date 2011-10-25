@@ -60,7 +60,7 @@
 	<menu		    id="menu"
 					font="menuFnt" >
 		<item 		label="[sREC_NAME]"
-					url="javascript:NewWin([sREC_ID],[sREC_NAME],{s$feed})"/>
+					url="javascript:JMIF_Focus([sREC_ID],[sREC_NAME],{s$feed})"/>
 	</menu>
 
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
-  <ModulePrefs title="Just Map It! Feeds" title_url="http://feeds.just-map-it.com/" width="300" height="300" 
+  <ModulePrefs title="Just Map It! Feeds for Blogger" title_url="http://feeds.just-map-it.com/" width="300" height="300" 
 	  	author="Social Computing" author_email="mapyourfeeds@social-computing.com" author_link="http://www.social-computing.com"
 		description="View and navigate your posts thru an interactive map! by Social Computing" 
 		screenshot="http://feeds.just-map-it.com/images/screenshot.png" 
@@ -49,7 +49,7 @@
   }
     
   function empty() {
- 	 alert( "Sorry, map is empty");
+ 	 alert( "Sorry, the map is empty. Does the feed contains categories?");
   }
   function ready() {
    // do something here
@@ -58,19 +58,19 @@
    // do something here
   }
   function error( error) {
-   	alert( error);
+   	alert( "Sorry, an error occured. Is this URL correct? " + error);
   }
-  function Navigate( url) {
+  function JMIF_Navigate( url) {
  	 window.open( url, "_blank");
   }
-  function NewWin( args)
+  function JMIF_Focus( args)
   {
 	var parameters = {};
 	parameters["entityId"] = args[0];
 	parameters["feed"] = args[2];
 	getMap().compute( parameters);
   }
-  function Discover( args)
+  function JMIF_Center( args)
   {
 	var parameters = {};
 	parameters["attributeId"] = args[0];

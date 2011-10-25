@@ -16,15 +16,15 @@ else
 <%}%>
 }
 function empty() {
- display( "Sorry, the map is empty. Does the feed contains categories ?", true);
+ display( "Sorry, the map is empty. Does the feed contains categories?", true);
 }
 function error( error) {
  display( "Sorry, an error occured. Is this URL correct?", true);
 }
-function Navigate( url) {
+function JMIF_Navigate( url) {
 	window.open( url, "_blank");
 }
-function NewWin( args)
+function JMIF_Focus( args)
 {
 	var parameters = {};
 	parameters["entityId"] = args[0];
@@ -32,7 +32,7 @@ function NewWin( args)
 	document.getElementById(mapid).compute( parameters);
 	display( "<i>Focus on category:</i> " + args[1], false);
 }
- function Discover( args)
+ function JMIF_Center( args)
  {
 	var parameters = {};
 	parameters["attributeId"] = args[0];

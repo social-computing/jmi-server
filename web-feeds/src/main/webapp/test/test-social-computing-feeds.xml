@@ -55,17 +55,17 @@
   function error( error) {
    	alert( error);
   }
-  function Navigate( url) {
+  function JMIF_Navigate( url) {
  	 window.open( url, "_blank");
   }
-  function NewWin( args)
+  function JMIF_Focus( args)
   {
 	var parameters = {};
 	parameters["entityId"] = args[0];
 	parameters["feed"] = args[2];
 	getMap().compute( parameters);
   }
-  function Discover( args)
+  function JMIF_Center( args)
   {
 	var parameters = {};
 	parameters["attributeId"] = args[0];

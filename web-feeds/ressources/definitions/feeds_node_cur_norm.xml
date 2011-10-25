@@ -234,13 +234,13 @@
 						font="menuFnt">
 			<item 		label="{+sNAME}"
 						font="nameFnt"
-						url="javascript:Navigate({sID})" />
+						url="javascript:JMIF_Navigate({sID})" />
 			<item 		label="Center"
 						font="nameFnt"
-						url="javascript:Discover({sID},{sNAME},{s$feed})" />
+						url="javascript:JMIF_Center({sID},{sNAME},{s$feed})" />
 			<separator />
 			<item 		label="[+80sPOSS_NAME]"
-						url="javascript:NewWin([sPOSS_ID],[sPOSS_NAME],{s$feed})"/>
+						url="javascript:JMIF_Focus([sPOSS_ID],[sPOSS_NAME],{s$feed})"/>
 		</menu>
 
 		<font		    id="menuFnt"
@@ -249,7 +249,7 @@
 
 	<!-- DblClkEvt event -->
 	<event 	        id="dblClkEvt">
-		<open       url="javascript:Navigate({sID})" />
+		<open       url="javascript:JMIF_Navigate({sID})" />
 	</event>
 	
 </swatch>
