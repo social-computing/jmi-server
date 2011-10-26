@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
-  <ModulePrefs title="Just Map It! Feeds for Blogger" title_url="http://feeds.just-map-it.com/" width="300" height="300" 
+  <ModulePrefs title="Just Map It! Feeds" title_url="http://feeds.just-map-it.com/" width="300" height="300" 
 	  	author="Social Computing" author_email="mapyourfeeds@social-computing.com" author_link="http://www.social-computing.com"
 		description="View and navigate your posts thru an interactive map! by Social Computing" 
 		screenshot="http://feeds.just-map-it.com/images/screenshot.png" 

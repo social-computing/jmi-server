@@ -12,7 +12,7 @@ if( feed.length() > 0) {
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="content-language" content="en" />
 <meta name="description" content="View and navigate your feeds thru an interactive map! by Social Computing" />
-<meta name="keywords" content="rss, feeds, feed, map, cartography, visualization, social, blog, gadget, widget, social computing, category, representation, information" />
+<meta name="keywords" content="rss, netvibes, google, blogger, feeds, feed, map, cartography, visualization, social, blog, gadget, widget, social computing, category, representation, information" />
 <meta name="author" content="Social Computing" /> 
 <meta name="robots" content="all" /> 
 <meta property="og:title" content="Just Map It! Feeds" />

@@ -2,19 +2,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:widget="http://www.netvibes.com/ns/">
 <head>
-<title>Just Map It! Feeds for Netvibes</title>
+<title>Just Map It! Feeds</title>
 <meta name="author" content="Social Computing" />
 <meta name="email" content="mapyourfeeds@social-computing.com" />
 <meta name="website" content="http://www.social-computing.com" />
 <meta name="description" content="View and navigate your feeds thru an interactive map! by Social Computing" />
-<meta name="keywords" content="rss, feeds, feed, map, cartography, visualization, social, blog, gadget, widget, social computing, category, representation, information" />
+<meta name="keywords" content="rss, netvibes, google, blogger, feeds, feed, map, cartography, visualization, social, blog, gadget, widget, social computing, category, representation, information" />
 <meta name="version" content="1.0 alpha" />
 <meta name="screenshot" content="http://feeds.just-map-it.com/images/screenshot.png" />
 <meta name="thumbnail" content="http://feeds.just-map-it.com/images/thumbnail.png" />
 <meta name="autoRefresh" content="120" />
 <link rel="shortcut icon" href="http://feeds.just-map-it.com/favicon.ico" />
-<link rel="stylesheet" type="text/css"  href="http://www.netvibes.com/themes/uwa/style.css" />
-<script type="text/javascript"  src="http://www.netvibes.com/js/UWA/load.js.php?env=Standalone"></script>
 <widget:preferences>
 	<preference name="feed" type="text" label="Feed" defaultValue="http://www.social-computing.com/feed/" />
 </widget:preferences>
@@ -32,46 +30,65 @@ widget.onLoad = function() {
 		if (fv) fv=fv+String.fromCharCode(38);
 		fv=fv + prop + '=' + flashvars[prop];
 	}
-	var contentHtml = '';
-	contentHtml = contentHtml + '<div id="map" style="margin: 0 auto;text-align:center;">';
-	contentHtml += '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" id="wps-feeds" name="wps-feeds" align="middle"';
-	contentHtml += 'width="' + widget.body.getDimensions().width '" height="' + widget.body.getDimensions().width + '" >';
-    <!--[if !IE]>-->
-	contentHtml += '<object type="application/x-shockwave-flash" id="wps-feeds" name="wps-feeds"';
-	contentHtml += 'width="' + widget.body.getDimensions().width '" height="' + widget.body.getDimensions().width + '">';
-    <!--<![endif]-->
-	contentHtml += '<param name="movie" value="http://feeds.just-map-it.com/client/wps-flex-1.0-SNAPSHOT.swf"/>';
-	contentHtml += '<param name="quality" value="high"/>';
-	contentHtml += '<param name="bgcolor" value="#FFFFFF"/>';
-	contentHtml += '<param name="allowscriptaccess" value="always"/>';
-	contentHtml += '<param name="allowfullscreen" value="true"/>';
-	contentHtml += '<param name="flashvars" value="'+ fv +'"/>';
-	//contentHtml += '<param name="wmode" value="opaque" />';
-	contentHtml += '</object>';
-    <!--[if !IE]>-->
-	contentHtml += '</object>';
-    <!--<![endif]-->
-	contentHtml = contentHtml + '</div>';
-
-	widget.setBody(contentHtml);
+	var div = widget.createElement( 'div',  { 'style': 'margin: 0 auto;text-align:center;'} );	
+	var object = widget.createElement( 'object',  
+		{ 	'classid': 'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000',
+			'id': 'wps-feeds',
+			'name': 'wps-feeds',
+			'align': 'middle',
+			'width': widget.body.getDimensions().width-20,
+			'height': widget.body.getDimensions().width-20
+		 });
+	addParams( object, fv);
+<!--[if !IE]>-->
+	var notIeObject = widget.createElement( 'object',  
+		{ 	'type': 'application/x-shockwave-flash',
+			'id': 'wps-feeds',
+			'name': 'wps-feeds',
+			'width': widget.body.getDimensions().width-20,
+			'height': widget.body.getDimensions().width-20
+		 });
+	addParams( notIeObject, fv);
+	object.appendChild( notIeObject);
+<!--<![endif]-->
+	div.appendChild( object);
+	widget.setBody( div);
 	//widget.onResize();
 }
 
-function getMap() {
-	return document.getElementById('wps-feeds').childNodes[0];
+function addParams( parent, flashvars) {
+	parent.appendChild( widget.createElement( 'param', { 'name':'movie', 'value':'http://feeds.just-map-it.com/client/wps-flex-1.0-SNAPSHOT.swf'}));
+	parent.appendChild( widget.createElement( 'param', { 'name':'quality', 'value':'high'}));
+	parent.appendChild( widget.createElement( 'param', { 'name':'bgcolor', 'value':'#FFFFFF'}));
+	parent.appendChild( widget.createElement( 'param', { 'name':'allowscriptaccess', 'value':'always'}));
+	parent.appendChild( widget.createElement( 'param', { 'name':'allowfullscreen', 'value':'true'}));
+	parent.appendChild( widget.createElement( 'param', { 'name':'flashvars', 'value':flashvars}));
+	//widget.createElement( 'param', { 'wmode': 'opaque'} };
 }
-
-function empty() {
-	alert( "Sorry, map is empty");
+function getMap() {
+	var elements = widget.body.getElementsByTagName("object");
+	return elements[0];
 }
 function ready() {
-// do something here
+  var map = getMap();
+  var titles = map.getArrayProperty( "$FEEDS_TITLES");
+  if( map.getProperty( "$analysisProfile") == "GlobalProfile" && titles) {
+	widget.setTitle( 'Just Map It! Feeds - ' + titles.join( ', '));
+  }
+  else {
+	widget.setTitle( 'Just Map It! Feeds');
+  }
 }
 function status( status) {
 // do something here
 }
+function empty() {
+	widget.setTitle( 'Just Map It! Feeds');
+	widget.setBody( "Sorry, the map is empty. Does the feed contains categories?");
+}
 function error( error) {
-	alert( error);
+	widget.setTitle( 'Just Map It! Feeds');
+	widget.setBody( "Sorry, an error occured. Is this URL correct?");
 }
 function JMIF_Navigate( url) {
 	window.open( url, "_blank");

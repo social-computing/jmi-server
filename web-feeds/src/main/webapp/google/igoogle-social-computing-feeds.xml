@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
-  <ModulePrefs title="Just Map It! Feeds for iGoogle" title_url="http://feeds.just-map-it.com/" width="300" height="300" 
+  <ModulePrefs title="Just Map It! Feeds" title_url="http://feeds.just-map-it.com/" width="300" height="300" 
 	  	author="Social Computing" author_email="mapyourfeeds@social-computing.com" author_link="http://www.social-computing.com"
 		description="View and navigate your feeds thru an interactive map! by Social Computing" 
 		screenshot="http://feeds.just-map-it.com/images/screenshot.png" 
 		thumbnail="http://feeds.just-map-it.com/images/thumbnail.png">
     <Icon>http://www.social-computing.com/favicon.ico</Icon>
     <Require feature="flash" />
+    <Require feature="settitle"/>
   </ModulePrefs>
   <UserPref name="feed" display_name="Feed" datatype="string" required="true" default_value="http://www.social-computing.com/feed/"/>
   <Content type="html" view="home,profile,canvas">
@@ -43,16 +44,25 @@
   	 return document.getElementById('wps-feeds').childNodes[0];
   }
     
-  function empty() {
- 	 alert( "Sorry, the map is empty. Does the feed contains categories?");
-  }
   function ready() {
-   // do something here
+    var map = getMap();
+    var titles = map.getArrayProperty( "$FEEDS_TITLES");
+	if( map.getProperty( "$analysisProfile") == "GlobalProfile" && titles) {
+		gadgets.window.setTitle( 'Just Map It! Feeds - ' + titles.join( ', '));
+	}
+    else {
+ 	 widget.setTitle( 'Just Map It! Feeds');
+    }
   }
   function status( status) {
    // do something here
   }
+  function empty() {
+  	 gadgets.window.setTitle( 'Just Map It! Feeds');
+ 	 alert( "Sorry, the map is empty. Does the feed contains categories?");
+  }
   function error( error) {
+  	gadgets.window.setTitle( 'Just Map It! Feeds');
    	alert( "Sorry, an error occured. Is this URL correct?");
   }
   function JMIF_Navigate( url) {
