@@ -40,9 +40,11 @@ widget.onLoad = function() {
 			'height': widget.body.getDimensions().width-20
 		 });
 	addParams( object, fv);
+	object.appendChild( widget.createElement( 'param', { 'name':'movie', 'value':'http://feeds.just-map-it.com/client/wps-flex-1.0-SNAPSHOT.swf'}));
 <!--[if !IE]>-->
 	var notIeObject = widget.createElement( 'object',  
 		{ 	'type': 'application/x-shockwave-flash',
+			'data': 'http://feeds.just-map-it.com/client/wps-flex-1.0-SNAPSHOT.swf',
 			'id': 'wps-feeds',
 			'name': 'wps-feeds',
 			'width': widget.body.getDimensions().width-20,
@@ -57,7 +59,6 @@ widget.onLoad = function() {
 }
 
 function addParams( parent, flashvars) {
-	parent.appendChild( widget.createElement( 'param', { 'name':'movie', 'value':'http://feeds.just-map-it.com/client/wps-flex-1.0-SNAPSHOT.swf'}));
 	parent.appendChild( widget.createElement( 'param', { 'name':'quality', 'value':'high'}));
 	parent.appendChild( widget.createElement( 'param', { 'name':'bgcolor', 'value':'#FFFFFF'}));
 	parent.appendChild( widget.createElement( 'param', { 'name':'allowscriptaccess', 'value':'always'}));
