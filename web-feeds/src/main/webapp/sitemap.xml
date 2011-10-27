@@ -19,4 +19,14 @@
   <changefreq>weekly</changefreq>
   <priority>0.70</priority>
 </url>
+<url>
+  <loc>http://feeds.just-map-it.com/top-feeds.html</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://feeds.just-map-it.com/last-feeds.html</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
 </urlset>
