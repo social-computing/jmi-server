@@ -130,23 +130,29 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
 	private void parseAtom( Element feed, List<String> titles, List<String> counts) {
 	    String title = "";
 	    int count = 0;
-        for( Element item : (List<Element>)feed.getContent()) {
-            if( item.getName().equalsIgnoreCase( "title")) {
-                title = getAtomContent( item);;
-            }
-            if( item.getName().equalsIgnoreCase( "entry")) {
-                List<Element> content = item.getContent();
-                Attribute attribute = addAttribute( getAtomId( content));
-                for( Element contentItem : content) {
-                    if( contentItem.getName().equalsIgnoreCase( "title"))
-                        attribute.addProperty( "name", getAtomContent( contentItem));
-                    
-                    if( contentItem.getName().equalsIgnoreCase( "category")) {
-                        Entity entity = addEntity( contentItem.getAttributeValue( "term"));
-                        String label = contentItem.getAttributeValue( "label");
-                        entity.addProperty( "name", label != null ? label : entity.getId());
-                        entity.addAttribute( attribute, 1);
-                        ++count;
+        for( Object o : (List<Object>)feed.getContent()) {
+            if( o instanceof Element) {
+                Element item = (Element) o;
+                if( item.getName().equalsIgnoreCase( "title")) {
+                    title = getAtomContent( item);;
+                }
+                if( item.getName().equalsIgnoreCase( "entry")) {
+                    List<Object> lo = item.getContent();
+                    Attribute attribute = addAttribute( getAtomId( lo));
+                    for( Object co : lo) {
+                        if( co instanceof Element) {
+                            Element contentItem = (Element) co;
+                            if( contentItem.getName().equalsIgnoreCase( "title"))
+                                attribute.addProperty( "name", getAtomContent( contentItem));
+                            
+                            if( contentItem.getName().equalsIgnoreCase( "category")) {
+                                Entity entity = addEntity( contentItem.getAttributeValue( "term"));
+                                String label = contentItem.getAttributeValue( "label");
+                                entity.addProperty( "name", label != null ? label : entity.getId());
+                                entity.addAttribute( attribute, 1);
+                                ++count;
+                            }
+                        }
                     }
                 }
             }
@@ -155,10 +161,13 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
         titles.add( title);
 	}
 
-	private String getAtomId( List<Element> content) {
-        for( Element item : content) {
-            if( item.getName().equalsIgnoreCase( "link") && item.getAttributeValue( "rel").equalsIgnoreCase( "alternate"))
-                return item.getAttributeValue( "href");
+	private String getAtomId( List<Object> content) {
+        for( Object o : content) {
+            if( o instanceof Element) {
+                Element item = (Element) o;
+                if( item.getName().equalsIgnoreCase( "link") && item.getAttributeValue( "rel").equalsIgnoreCase( "alternate"))
+                    return item.getAttributeValue( "href");
+            }
         }
         return null;
 	}
