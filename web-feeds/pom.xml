@@ -12,7 +12,7 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>Feeds Webapp</name>
-  <url>http://mapyourfeeds.com</url>
+  <url>http://www.justmapit.com</url>
   
   <dependencies>
     <dependency>

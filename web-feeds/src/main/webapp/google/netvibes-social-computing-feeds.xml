@@ -4,7 +4,7 @@
 <head>
 <title>Just Map It! Feeds</title>
 <meta name="author" content="Social Computing" />
-<meta name="email" content="mapyourfeeds@social-computing.com" />
+<meta name="email" content="justmapit@social-computing.com" />
 <meta name="website" content="http://www.social-computing.com" />
 <meta name="description" content="View and navigate your feeds thru an interactive map! by Social Computing" />
 <meta name="keywords" content="rss, netvibes, google, blogger, feeds, feed, map, cartography, visualization, social, blog, gadget, widget, social computing, category, representation, information" />
@@ -16,7 +16,7 @@
 <widget:preferences>
 	<preference name="feed" type="text" label="Feed" defaultValue="http://www.social-computing.com/feed/" />
 </widget:preferences>
-<script type="text/javascript" language="javascript">
+ <script type="text/javascript" language="javascript">
 widget.onLoad = function() {
 	var flashvars = {
 		allowDomain: "*",
@@ -32,17 +32,6 @@ widget.onLoad = function() {
 	}
 	var div = widget.createElement( 'div',  { 'style': 'margin: 0 auto;text-align:center;'} );	
 	var object = widget.createElement( 'object',  
-		{ 	'classid': 'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000',
-			'id': 'wps-feeds',
-			'name': 'wps-feeds',
-			'align': 'middle',
-			'width': widget.body.getDimensions().width-20,
-			'height': widget.body.getDimensions().width-20
-		 });
-	addParams( object, fv);
-	object.appendChild( widget.createElement( 'param', { 'name':'movie', 'value':'http://feeds.just-map-it.com/client/wps-flex-1.0-SNAPSHOT.swf'}));
-<!--[if !IE]>-->
-	var notIeObject = widget.createElement( 'object',  
 		{ 	'type': 'application/x-shockwave-flash',
 			'data': 'http://feeds.just-map-it.com/client/wps-flex-1.0-SNAPSHOT.swf',
 			'id': 'wps-feeds',
@@ -50,14 +39,23 @@ widget.onLoad = function() {
 			'width': widget.body.getDimensions().width-20,
 			'height': widget.body.getDimensions().width-20
 		 });
-	addParams( notIeObject, fv);
-	object.appendChild( notIeObject);
-<!--<![endif]-->
+	addParams( object, fv);
+	object.appendChild( widget.createElement( 'param', { 'name':'movie', 'value':'http://feeds.just-map-it.com/client/wps-flex-1.0-SNAPSHOT.swf'}));
+	var embed = widget.createElement( 'embed',  
+		{ 	'type': 'application/x-shockwave-flash',
+			'src': 'http://feeds.just-map-it.com/client/wps-flex-1.0-SNAPSHOT.swf',
+			'id': 'wps-feeds',
+			'name': 'wps-feeds',
+			'align': 'middle',
+			'width': widget.body.getDimensions().width-20,
+			'height': widget.body.getDimensions().width-20
+		 });
+	addParams( embed, fv);
+	object.appendChild( embed);
 	div.appendChild( object);
 	widget.setBody( div);
 	//widget.onResize();
 }
-
 function addParams( parent, flashvars) {
 	parent.appendChild( widget.createElement( 'param', { 'name':'quality', 'value':'high'}));
 	parent.appendChild( widget.createElement( 'param', { 'name':'bgcolor', 'value':'#FFFFFF'}));
@@ -66,18 +64,12 @@ function addParams( parent, flashvars) {
 	parent.appendChild( widget.createElement( 'param', { 'name':'flashvars', 'value':flashvars}));
 	//widget.createElement( 'param', { 'wmode': 'opaque'} };
 }
-function getMap() {
-	var elements = widget.body.getElementsByTagName("object");
-	return elements[0];
-}
 function ready() {
-  var map = getMap();
+  var elements = widget.body.getElementsByTagName("object");
+  var map = elements[elements.length-1];
   var titles = map.getArrayProperty( "$FEEDS_TITLES");
-  if( map.getProperty( "$analysisProfile") == "GlobalProfile" && titles) {
+  if( map.getProperty( "$analysisProfile") == "GlobalProfile"){ // and titles) {
 	widget.setTitle( 'Just Map It! Feeds - ' + titles.join( ', '));
-  }
-  else {
-	widget.setTitle( 'Just Map It! Feeds');
   }
 }
 function status( status) {
@@ -99,7 +91,8 @@ function JMIF_Focus( args)
 	var parameters = {};
 	parameters["entityId"] = args[0];
 	parameters["feed"] = args[2];
-	getMap().compute( parameters);
+	var elements = widget.body.getElementsByTagName("object");
+	elements[elements.length-1].compute( parameters);
 }
 function JMIF_Center( args)
 {
@@ -107,11 +100,12 @@ function JMIF_Center( args)
 	parameters["attributeId"] = args[0];
 	parameters["analysisProfile"] = "DiscoveryProfile";
 	parameters["feed"] = args[2];
-	getMap().compute( parameters);
+	var elements = widget.body.getElementsByTagName("object");
+	elements[elements.length-1].compute( parameters);
 }
 widget.onResize = function() {
 	var elements = widget.body.getElementsByTagName("object");
-	var flash = elements[0];
+	var flash = elements[elements.length-1];
 	if (flash) {
 		flash.width = widget.body.getDimensions().width;
 		flash.height = widget.body.getDimensions().height;

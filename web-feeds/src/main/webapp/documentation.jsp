@@ -28,8 +28,10 @@ You can place the map directly on any webpage. <a target="_blank" title="Add it 
 <h3>Add Just Map It! Feeds to Blogger</h3>
 <p>Click on 'Add a gadget', then on 'Add your own' and enter this URL:</p>
 <textarea readonly="true" style="width:100%">http://feeds.just-map-it.com/google/blogger-social-computing-feeds.xml</textarea>
+<h3>Add Just Map It! Feeds to Netvibes</h3>
+<p><a target="_blank" title="Add it to Netvibes" href="http://eco.netvibes.com/widgets/470252/just-map-it-feeds">Add it to Netvibes</a></p>
 <h3>You need more customization?</h3>
-<p>Contact us: <a href="mailto:mapyourfeeds at social-computing.com">mapyourfeeds at social-computing.com</a></p>
+<p>Contact us: <a href="mailto:justmapit at social-computing.com">justmapit at social-computing.com</a></p>
 <h2>Troubleshooting</h2>
 <h3>The map is empty</h3>
 <p>Verify the feed contains items with categories.</p>
