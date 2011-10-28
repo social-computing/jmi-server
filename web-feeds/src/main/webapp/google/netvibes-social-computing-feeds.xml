@@ -62,7 +62,7 @@ function addParams( parent, flashvars) {
 	parent.appendChild( widget.createElement( 'param', { 'name':'allowscriptaccess', 'value':'always'}));
 	parent.appendChild( widget.createElement( 'param', { 'name':'allowfullscreen', 'value':'true'}));
 	parent.appendChild( widget.createElement( 'param', { 'name':'flashvars', 'value':flashvars}));
-	parent.appendChild( widget.createElement( 'param', { 'wmode': 'opaque'}));
+	parent.appendChild( widget.createElement( 'param', { 'name':'wmode', 'value':'opaque'}));
 }
 function ready() {
   var elements = widget.body.getElementsByTagName("object");
