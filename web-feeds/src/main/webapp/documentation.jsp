@@ -1,10 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">	
 <head>
-    <title>Documentation - Just Map It! Feeds</title>
+    <title>How to use the service - Just Map It! Feeds</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta http-equiv="content-language" content="en" />
-	<meta name="description" content="Just Map It! Feeds documentation" />
+	<meta name="description" content="How to use the service Just Map It! Feeds" />
 	<meta name="keywords" content="documentation, rss, feeds, feed, map, cartography, visualization, social, blog, gadget, widget, social computing, category, representation, information" />
 	<meta name="author" content="Social Computing" /> 
 	<meta name="robots" content="all" /> 

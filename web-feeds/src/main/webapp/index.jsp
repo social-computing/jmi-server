@@ -144,7 +144,7 @@ $.getJSON( "./services/feeds/last.json", function( data){
 <table id="bandeau" border="0">
 <tr>
 <td id="logo" rowspan="3">
-	<a href="./" title="Just Map It! Feeds"><img border="0" width="255" height="50" title="Just Map It! Feeds" src="./images/justmapit-feeds.png" /></a>
+	<a href="./" title="Just Map It! Feeds"><img border="0" width="255" height="50" alt="Just Map It! Feeds" src="./images/justmapit-feeds.png" /></a>
 </td>
 <td class="label" ><b>Enter one or more URLs (comma separated):</b>
 </td>
