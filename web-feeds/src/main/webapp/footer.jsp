@@ -1,4 +1,4 @@
-<div id="footer">
+﻿<div id="footer">
 <table><tr>
 <td><a title="Social Computing" href="http://www.social-computing.com" target="_blank">Powered by Social Computing</a></td>
 <!--  td><a href=".">Privacy Policies</a></td-->
