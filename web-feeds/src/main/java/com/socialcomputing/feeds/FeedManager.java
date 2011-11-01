@@ -64,25 +64,24 @@ public class FeedManager {
     @Path("top.json")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Feed> topJson( @Context UriInfo ui) {
-        return top( ui);
+        MultivaluedMap<String, String> params = ui.getQueryParameters();
+        return top( params.getFirst( "max"), params.getFirst( "success"));
     }
     
     @GET
     @Path("top.xml")
     @Produces(MediaType.APPLICATION_XML)
     public List<Feed> topXml( @Context UriInfo ui) {
-        return top( ui);
+        MultivaluedMap<String, String> params = ui.getQueryParameters();
+        return top( params.getFirst( "max"), params.getFirst( "success"));
     }
     
-    private List<Feed> top( @Context UriInfo ui) {
+    public List<Feed> top( String smax, String success) {
         List<Feed> feeds = null;
         try {
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            MultivaluedMap<String, String> params = ui.getQueryParameters();
             
-            String smax = params.getFirst( "max");
             int max = smax == null ? 100 : Math.min( Integer.parseInt( smax), 1000);
-            String success = params.getFirst( "success");
             if( success == null)
                 success = "true";
             Query query = null;
@@ -109,25 +108,24 @@ public class FeedManager {
     @Path("last.json")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Feed> lastJson( @Context UriInfo ui) {
-        return last( ui);
+        MultivaluedMap<String, String> params = ui.getQueryParameters();
+        return top( params.getFirst( "max"), params.getFirst( "success"));
     }
 
     @GET
     @Path("last.xml")
     @Produces(MediaType.APPLICATION_XML)
     public List<Feed> lastXml( @Context UriInfo ui) {
-        return last( ui);
+        MultivaluedMap<String, String> params = ui.getQueryParameters();
+        return top( params.getFirst( "max"), params.getFirst( "success"));
     }
     
-    private List<Feed> last( @Context UriInfo ui) {
+    public List<Feed> last( String smax, String success) {
         List<Feed> feeds = null;
         try {
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            MultivaluedMap<String, String> params = ui.getQueryParameters();
             
-            String smax = params.getFirst( "max");
             int max = smax == null ? 100 : Math.min( Integer.parseInt( smax), 1000);
-            String success = params.getFirst( "success");
             if( success == null)
                 success = "true";
             Query query = null;

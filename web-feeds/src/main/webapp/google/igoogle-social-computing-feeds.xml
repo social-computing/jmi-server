@@ -2,7 +2,7 @@
 <Module>
   <ModulePrefs title="Just Map It! Feeds" title_url="http://feeds.just-map-it.com/" width="300" height="300" 
 	  	author="Social Computing" author_email="justmapit@social-computing.com" author_link="http://www.social-computing.com"
-		description="View and navigate your feeds thru an interactive map! by Social Computing" 
+		description="Just Map It! Feeds lets you view and navigate your feeds thru an interactive map! by Social Computing" 
 		screenshot="http://feeds.just-map-it.com/images/screenshot.png" 
 		thumbnail="http://feeds.just-map-it.com/images/thumbnail.png">
     <Icon>http://www.social-computing.com/favicon.ico</Icon>

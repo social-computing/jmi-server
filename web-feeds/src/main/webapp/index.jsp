@@ -11,7 +11,7 @@ if( feed.length() > 0) {
 <title>Just Map It! Feeds</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="content-language" content="en" />
-<meta name="description" content="View and navigate your feeds thru an interactive map! by Social Computing" />
+<meta name="description" content="Just Map It! Feeds lets you view and navigate your feeds thru an interactive map! by Social Computing" />
 <meta name="keywords" content="rss, netvibes, google, blogger, feeds, feed, map, cartography, visualization, social, blog, gadget, widget, social computing, category, representation, information" />
 <meta name="author" content="Social Computing" /> 
 <meta name="robots" content="all" /> 
@@ -115,7 +115,7 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 <%} else {%>
 $.getJSON( "./services/feeds/last.json", function( data){
 	if( data && data.length > 0) {
-		var i = 0;
+		var i = Math.ceil( Math.random() * data.length);
 		$( '#last-feed').html( '<a title="Just Map It!" href="./?' + jQuery.param({'feed':data[i].url}) + '">' + data[i].title + '</a>');
 		setInterval( function() {
 			i = (i+1) % data.length;
@@ -178,7 +178,7 @@ $.getJSON( "./services/feeds/last.json", function( data){
 </div>
 <div id="content" >
 <%if (feed.length() == 0) {%>
-<p class="slogan">View and navigate your feeds thru an interactive map!</p>
+<p class="slogan">Just Map It! Feeds lets you view and navigate your feeds thru an interactive map!</p>
 <div id="last-feeds">
 <p>Last feeds viewed: <span id="last-feed"></span></p>
 </div>
