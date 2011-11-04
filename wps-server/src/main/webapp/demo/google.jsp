@@ -36,7 +36,7 @@ if( code == null) { %>
 		setMap( {analysisProfile:'DiscoveryProfile',attributeId:id});
 		$('#titre').html( name);
 	}
-</SCRIPT>
+</script>
 </HEAD>
 <BODY bgcolor=7f9fdf topmargin=0 leftmargin=0 marginheight=0 marginwidth=0>
 	<script type="text/javascript"> 

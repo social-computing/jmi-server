@@ -18,7 +18,7 @@ PlanMaker planmaker = new BeanPlanMaker();
 <title>View <%=request.getParameter( "dictionary")%> plan</title>
 <link rel="stylesheet" href="../css/wps.css">
 </HEAD>
-<BODY bgcolor=7f9fdf topmargin=0 leftmargin=0 marginheight=0 marginwidth=0>
+<BODY topmargin=0 leftmargin=0 marginheight=0 marginwidth=0>
 <%
 boolean error = request.getParameter( "error") != null;
 if( error)
@@ -50,7 +50,7 @@ if( error)
 <%}
 else if( request.getParameter( "internal")!= null && request.getParameter( "internal").equals( "y"))
 {	
-	Hashtable params = new Hashtable();
+	Hashtable<String, Object> params = new Hashtable<String, Object>();
 	params.put( "planName", request.getParameter( "dictionary"));
 	java.util.StringTokenizer st = new java.util.StringTokenizer( request.getParameter( "appletparams"), "&");
 	while( st.hasMoreTokens())
@@ -72,7 +72,7 @@ else if( request.getParameter( "internal")!= null && request.getParameter( "inte
 		<tr><td valign="top" width="20%"><span class="texblanc"><%=name%></span></td><td><span class="texblanc"><%=value%></span></td></tr>
 	<%}
 	%></table><br><br><%
-	Hashtable results = null;
+	Hashtable<String, Object> results = null;
 	try {
 		results = planmaker.createPlan( params);
 	}
@@ -108,7 +108,7 @@ else
 	appletParams.append( "&");
 	appletParams.append( request.getParameter( "appletparams"));
 	%>	
-	<APPLET name="WPSApplet" archive="WPSApplet<%=APPLET_VERSION%>.jar" code="com.socialcomputing.wps.client.applet.WPSApplet.class" codebase="../client/applet/" MAYSCRIPT="" align="absmiddle" hspace="0" vspace="0" width="100%" height="100%">
+	<APPLET name="WPSApplet" archive="WPSApplet<%=APPLET_VERSION%>.jar" code="com.socialcomputing.wps.client.applet.WPSApplet.class" codebase="../client/applet/" MAYscript="" align="absmiddle" hspace="0" vspace="0" width="100%" height="100%">
 		<PARAM NAME="WPSParameters"		VALUE="<%=appletParams.toString()%>" />
 		<PARAM NAME="ServletUrl"		VALUE="../maker" />
 		<PARAM NAME="VoidPlanUrl"    	VALUE="../view-applet.jsp?error=nodata&<%=appletParams.toString()%>" />

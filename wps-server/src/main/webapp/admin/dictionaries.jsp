@@ -22,17 +22,24 @@ if (request.getParameter("confirmdelete") != null && request.getParameter("confi
 		}
 	}
 }
+// UPLOAD DICTIONARY
+if( request.getParameter( "openresults") != null && session.getAttribute( "UploadDefinitionFileResults") != null)
+{%>	
+	<script language="javascript">
+		var win = window.open( 'upload_results.jsp', 'mpstadminresults', 'width=600,height=600,scrollbars=yes,resizable=yes,dependent=yes');
+		win.focus();
+	</script>
+<%}	
 Collection<Dictionary> dics = manager.findAll();
 %>
 
 <html>
 	<head>
 		<title>WPS Administration</title>
-		<META http-equiv="content-type" content="text/html;charset=ISO-8859-1">
-		<META http-equiv="content-language" content="fr-FX">
+		<meta http-equiv="content-type" content="text/html;charset=ISO-8859-1">
 		<link rel="stylesheet" href="../css/main.css"/>
 		<link rel="stylesheet" href="../css/wps.css">
-		<SCRIPT LANGUAGE="JavaScript1.2" > 
+		<script type="text/javascript" > 
 			function SubmitForm(resetStart) {
 				if (resetStart)
 					ResetStart();
@@ -54,7 +61,7 @@ Collection<Dictionary> dics = manager.findAll();
 				document.test.submit();
 				return false;
 			}
-		</SCRIPT>
+		</script>
 	</head>
 	<body>
 	<div id="top"><jsp:include page="top.jsp" /></div>
@@ -79,7 +86,6 @@ Collection<Dictionary> dics = manager.findAll();
 		  <th width="8%" ><span class="subTitleBlue">#</span></th>
 		  <th width="8%" ><a href="" title="Delete selected dictionaries" onclick="javascript:return Delete()">delete</a></th>
 		  <th width="60%" ><span class="subTitleBlue">name</span></th>
-		  <th width="24%" ><span class="subTitleBlue">next filtering date</span></th>
 		 </tr>
 		<%	
 			Iterator<Dictionary> it = dics.iterator();
@@ -89,7 +95,6 @@ Collection<Dictionary> dics = manager.findAll();
 				<td align="center" nowrap><span class="texblanc"><%=i+1%></span></td>
 				<td align="center" valign="top"><input type="checkbox" name="delete<%=i%>" value="<%=dic.getName()%>" /></td>
 				<td nowrap><span class="texblanc"><a href="dictionary-detail.jsp?dictionary=<%=java.net.URLEncoder.encode(dic.getName(),"UTF-8")%>" ><%=dic.getName()%></a></span></td>
-				<td nowrap><span class="texblanc"><%=(dic.getNextFilteringDate()==null ? "&nbsp;" : dic.getNextFilteringDate().toString())%></span></td>
 				</tr><%
 			}
 		%>	
@@ -97,6 +102,23 @@ Collection<Dictionary> dics = manager.findAll();
 		</td></tr>
 		</table>
 		</form>
+<br/><br/>
+
+<form name="uploadForm" enctype="multipart/form-data" method="POST" action="upload">
+	<input type="hidden" name="action" value="uploadDictionaryFile" />
+	<input type="hidden" name="redirect" value="./dictionaries.jsp?openresults=1" />
+	<table width="100%" align="center" border="0" cellpadding="0" cellspacing="0" >
+	<tr>
+	<td><span class="subTitleBlue">Load a dictionary file (*.xml, *.zip) : </span></td> 
+	<td><input type="file" name="definitionFile" size="50" ></td>
+	</tr>
+	<tr>
+	<td />
+	<td><input type="submit" value="Load" /></td>
+	</tr>
+	</table>
+</form>
+
 </div>
 </body>
 </html>

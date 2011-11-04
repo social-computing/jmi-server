@@ -17,10 +17,10 @@ DatabaseMetaData meta = connection.getMetaData();
 <table width="100%" cellpadding="0" cellspacing="0" width="100%" >
 <tr>
 <td align="left" valign="middle">
-	<a href="../index.jsp" ><img border="0" title="Social Computing" src="../images/logo-sc-white.jpg" /></a>
+	<a title="Just Map It!" href="../index.jsp" ><img alt="Just Map It!" width="" height="" src="../images/justmapit.png" style="text-align:left" /></a>
 </td>
 <td align="left" valign="middle" >
-	<h1><b>Web Positioning System Administration <span class="texblanc"> - <%=meta.getDatabaseProductName()%> - v. <%=meta.getDatabaseProductVersion()%></span></b></h1>
+	<h1><b>Just Map It! Administration <span class="texblanc"> - <%=meta.getDatabaseProductName()%> - v. <%=meta.getDatabaseProductVersion()%></span></b></h1>
 </td>
 <td align="right" valign="middle" >
 	<!-- <span class="texblanc"><%=meta.getDatabaseProductName()%> - v. <%=meta.getDatabaseProductVersion()%></span>-->

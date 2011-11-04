@@ -31,7 +31,7 @@ public long getLastModified(HttpServletRequest request) {
 <span class="subTitleBlue" >WPS Applet template</span>
 <table width="100%" border=0>
 <tr><td>ServletURL and WPSParameters are mandatory, others are optional</td></tr>
-<tr><td>&lt;APPLET name="WPSApplet" archive="WPSApplet.jar" code="com.socialcomputing.wps.client.WPSApplet.class" codebase="/applet/" MAYSCRIPT align="absmiddle" hspace="0" vspace="0" width="100%" height="100%"&gt;</td></tr>
+<tr><td>&lt;APPLET name="WPSApplet" archive="WPSApplet.jar" code="com.socialcomputing.wps.client.WPSApplet.class" codebase="/applet/" MAYscript align="absmiddle" hspace="0" vspace="0" width="100%" height="100%"&gt;</td></tr>
 <tr><td>
 	<table width="90%" align="center" border=1>
 	<tr><td nowrap>&lt;PARAM NAME="ServletURL"</td><td>VALUE="WPS server computation URL" /&gt;</td></tr>

@@ -14,10 +14,10 @@ public long getLastModified(HttpServletRequest request) {
 <link rel="stylesheet" href="../css/main.css"/>
 <link rel="stylesheet" href="../css/wps.css">
 <script type="text/javascript" src="../client/applet/jquery.js" ></script>
-<script type="text/javascript" src="./javascript/jquery.fancybox-1.3.4.pack.js"></script>
-<link rel="stylesheet" href="./css/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
+<script type="text/javascript" src="./fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<link rel="stylesheet" href="./fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
 <base target="main">
-<SCRIPT LANGUAGE="JavaScript1.2" > 
+<script type="text/javascript" > 
     function SubmitForm(resetStart) {
         if( resetStart) ResetStart();
         document.test.submit();
@@ -36,7 +36,7 @@ public long getLastModified(HttpServletRequest request) {
         document.test.submit();
         return false;
     }
-</SCRIPT>
+</script>
 </head>
 <body>
 <div id="top"><jsp:include page="top.jsp" /></div>

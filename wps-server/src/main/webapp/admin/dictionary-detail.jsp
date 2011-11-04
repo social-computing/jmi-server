@@ -30,9 +30,9 @@ List<Swatch> ls = dic.getSwatchs();
 		<link rel="stylesheet" href="../css/main.css"/>
 		<link rel="stylesheet" href="../css/wps.css">
 		<script type="text/javascript" src="../client/applet/jquery.js" ></script>
-		<script type="text/javascript" src="./javascript/jquery.fancybox-1.3.4.pack.js"></script>
-		<link rel="stylesheet" href="./css/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
-		<SCRIPT LANGUAGE="JavaScript1.2" > 
+		<script type="text/javascript" src="./fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+		<link rel="stylesheet" href="./fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
+		<script type="text/javascript" > 
 			function SubmitForm(resetStart)
 			{
 				if( resetStart)
@@ -56,7 +56,7 @@ List<Swatch> ls = dic.getSwatchs();
 				document.test.submit();
 				return false;
 			}
-		</SCRIPT>
+		</script>
 	</head>
 	<body>
 	<div id="top"><jsp:include page="top.jsp" /></div>
@@ -113,8 +113,7 @@ if (request.getParameter("confirmdelete") != null && request.getParameter("confi
 <tr>
 <td><a class="iframe" href="edit_def.jsp?dictionary=<%=java.net.URLEncoder.encode(dictionaryName,"UTF-8")%>"><span class="texblanc">Edit definition</span></a></td>
 </tr>
-<tr><td>&nbsp;</td></tr>
-<tr><td>
+<!-- tr><td>
 	<form name="test" method="GET" action="view-applet.jsp" target="_blank">
 	<input type="hidden" name="dictionary" value="<%=dictionaryName%>" >
 	<input type="hidden" name="internal" value="n" >
@@ -131,7 +130,7 @@ if (request.getParameter("confirmdelete") != null && request.getParameter("confi
 	 </tr>
 	</table>
 	</form>
-</td></tr>
+</td></tr-->
 </table>
 
 <br/><br/>

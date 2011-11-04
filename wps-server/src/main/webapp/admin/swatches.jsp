@@ -15,7 +15,7 @@ public long getLastModified(HttpServletRequest request) {
 <link rel="stylesheet" href="../css/wps.css">
 <link rel="stylesheet" href="../css/result.css">
 <base target="main">
-<SCRIPT LANGUAGE="JavaScript1.2" > 
+<script type="text/javascript" > 
 	function SubmitForm(resetStart)
 	{
 		if( resetStart)
@@ -39,7 +39,7 @@ public long getLastModified(HttpServletRequest request) {
 		document.test.submit();
 		return false;
 	}
-</SCRIPT>
+</script>
 </head>
 <body bgcolor=7f9fdf>
 <!--iframe height="0" width="0" src="../exportrequest.jsp"></iframe-->
