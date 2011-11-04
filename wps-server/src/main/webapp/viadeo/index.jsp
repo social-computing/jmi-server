@@ -8,7 +8,7 @@ String code = request.getParameter("code");
 if( code == null) { %>
 <title>Redirection</title>
 <meta name="robots" content="noindex,follow" />
-<meta http-equiv="refresh" content="0; url=https://secure.viadeo.com/oauth-provider/authorize2?response_type=code&display=popup&lang=en&client_id=SocialComputingMapViTBUC&redirect_uri=http://wps.wps.cloudbees.net/viadeo/welcome.jsp" />
+<meta http-equiv="refresh" content="0; url=https://secure.viadeo.com/oauth-provider/authorize2?response_type=code&display=popup&lang=en&client_id=SocialComputingMapViTBUC&redirect_uri=http://wps.wps.cloudbees.net/viadeo/index.jsp" />
 </head>
 <body>
 </body>

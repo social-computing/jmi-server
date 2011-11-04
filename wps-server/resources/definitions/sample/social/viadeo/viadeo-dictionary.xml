@@ -13,7 +13,7 @@
 				<url-parameter name="grant_type">authorization_code</url-parameter>
 				<url-parameter name="client_id">SocialComputingMapViTBUC</url-parameter>
 				<url-parameter name="client_secret">bDKYAIKwD1Lys</url-parameter>
-				<url-parameter name="redirect_uri">http://wps.wps.cloudbees.net/viadeo/welcome.jsp</url-parameter>
+				<url-parameter name="redirect_uri">http://wps.wps.cloudbees.net/viadeo/index.jsp</url-parameter>
 			</URL-connection>
 			<Viadeo-property id="poss_id" entity="id" />
 			<Viadeo-property id="poss_name" entity="name" />

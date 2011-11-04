@@ -9,7 +9,7 @@
 	<description>WPS Server</description>
 	<welcome-file-list>
 		<welcome-file>
-			/welcome.jsp
+			/index.jsp
 		</welcome-file>
 	</welcome-file-list>
 

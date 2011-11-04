@@ -8,10 +8,10 @@ String code = request.getParameter("code");
 if( code == null) { %>
 <title>Redirection</title>
 <meta name="robots" content="noindex,follow" />
-<meta http-equiv="refresh" content="0; url=https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/welcome.jsp&scope=friends_likes,friends_groups,friends_activities,friends_events,publish_stream,user_photos" />
+<meta http-equiv="refresh" content="0; url=https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/index.jsp&scope=friends_likes,friends_groups,friends_activities,friends_events,publish_stream,user_photos" />
 </head>
 <body>
-<!--script> top.location.href='https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/welcome.jsp&scope=friends_likes,friends_groups,friends_activities,friends_events,publish_stream,user_photos'</script-->
+<!--script> top.location.href='https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/index.jsp&scope=friends_likes,friends_groups,friends_activities,friends_events,publish_stream,user_photos'</script-->
 <!-- script> top.location.href='https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://apps.facebook.com/social-computing/&scope=friends_likes,friends_groups,friends_activities,friends_events,publish_stream,user_photos'</script-->
 </body>
 </html>

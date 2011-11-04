@@ -12,7 +12,7 @@
 				<url-parameter name="code">{$fbauthcode}</url-parameter>
 				<url-parameter name="client_id">108710779211353</url-parameter>
 				<url-parameter name="client_secret">e155ed50ccf90de8d9c7dafbd88bb92d</url-parameter>
-				<url-parameter name="redirect_uri">http://wps.wps.cloudbees.net/facebook/welcome.jsp</url-parameter>
+				<url-parameter name="redirect_uri">http://wps.wps.cloudbees.net/facebook/index.jsp</url-parameter>
 			</URL-connection>
 			<Facebook-property id="poss_id" entity="id" />
 			<Facebook-property id="poss_name" entity="name" />
