@@ -16,7 +16,7 @@ public class Users {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     int id;
 
     @Column(name = "username", columnDefinition = "varchar(255)")
