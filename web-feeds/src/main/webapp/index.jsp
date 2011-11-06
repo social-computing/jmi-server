@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb#" lang="en" xml:lang="en">	
 <%String feed = request.getParameter("feed");
 if( feed == null) feed = "";
@@ -6,8 +6,7 @@ if( feed.length() > 0) {
     if( !feed.startsWith( "http://") && !feed.startsWith( "http://")) {
         feed = "http://" + feed;
     }
-}%>
-<head>
+}%><head>
 <title>Just Map It! Feeds</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="content-language" content="en" />
@@ -165,20 +164,21 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 <%if (feed.length() == 0) {%>
 <p class="slogan">Just Map It! Feeds lets you view and navigate your feeds thru an interactive map!</p>
 <div id="last-feeds">
-<p>Last feeds mapped: <span id="last-feed"></span></p>
+<p><a href="./last-feeds.jsp">Last feeds mapped:</a> <span id="last-feed-cloud"></span></p>
 </div>
-<div id="top-feeds"><p>Most mapped feeds:</p></div>
+<div id="top-feeds"><p><a href="./top-feeds.jsp">Most mapped feeds:</a></p></div>
 <div id="top-feeds-cloud"></div>
 <script type="text/javascript">
 $.getJSON( "./services/feeds/last.json", function( data){
 	if( data && data.length > 0) {
 		var i = Math.ceil( Math.random() * data.length);
-		$( '#last-feed').html( '<a title="Just Map It!" href="./?' + jQuery.param({'feed':data[i].url}) + '">' + data[i].title + '</a>');
+		var lastFeed = $( '#last-feed-cloud');
+		lastFeed.html( '<a title="Just Map It! Feed: ' + data[i].url + '" href="./?' + jQuery.param({'feed':data[i].url}) + '">' + data[i].title + '</a>');
 		setInterval( function() {
 			i = (i+1) % data.length;
-			$( '#last-feed').fadeOut( 'slow', function() {
-				$( '#last-feed').html( '<a title="Just Map It!" href="./?' + jQuery.param({'feed':data[i].url}) + '">' + data[i].title + '</a>');
-				$( '#last-feed').fadeIn( 'slow');
+			lastFeed.fadeOut( 'slow', function() {
+				lastFeed.html( '<a title="Just Map It! Feed: ' + data[i].url + '" href="./?' + jQuery.param({'feed':data[i].url}) + '">' + data[i].title + '</a>');
+				lastFeed.fadeIn( 'slow');
 			});
 		}, 5000);
 	}

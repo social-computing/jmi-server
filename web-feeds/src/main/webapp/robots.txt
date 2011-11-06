@@ -1,5 +1,5 @@
 User-agent: *
 Disallow: /google
-Disallow: /client
+Disallow: /fancybox
 Disallow: /test
 Allow: /

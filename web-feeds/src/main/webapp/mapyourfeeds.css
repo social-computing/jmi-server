@@ -144,10 +144,18 @@ div#last-feeds {
 }
 
 div#last-feeds a {
+	color: #f59c23;
+}
+
+span#last-feed-cloud {
 	padding-left: 50px;
 	text-align: left;
 	color: #f59c23;
 	font-size: 18px;
+}
+
+span#last-feed-cloud a {
+	color: #f59c23;
 }
 
 div#top-feeds {
@@ -156,6 +164,10 @@ div#top-feeds {
 	text-align: left;
 	color: #f59c23;
 	font-size: 18px;
+}
+
+div#top-feeds a {
+	color: #f59c23;
 }
 
 div#top-feeds-cloud {

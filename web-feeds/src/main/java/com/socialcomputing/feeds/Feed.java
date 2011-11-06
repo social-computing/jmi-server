@@ -64,5 +64,9 @@ public class Feed {
     public String getUrl() {
         return url;
     }
+
+    public int getCount() {
+        return count;
+    }
     
 }

@@ -1,4 +1,4 @@
-﻿<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">	
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">	
 <head>
 <title>Add Just Map It! Feeds to your webpage - Just Map It! Feeds</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -13,7 +13,7 @@
 <div id="header">
 <table id="bandeau" border="0">
 <tr>
-	<td id="logo" rowspan="3">
+	<td id="logo" rowspan="1">
 		<a href="./" title="Just Map It! Feeds"><img border="0" width="255" height="50" alt="Just Map It! Feeds" src="./images/justmapit-feeds.png" /></a>
 	</td>
 	<td style="vertical-align:bottom;"><h1>Add Just Map It! Feeds to your webpage</h1>
