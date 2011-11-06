@@ -150,6 +150,26 @@ div#last-feeds a {
 	font-size: 18px;
 }
 
+div#top-feeds {
+	padding-top: 20px;
+	padding-left: 284px;
+	text-align: left;
+	color: #f59c23;
+	font-size: 18px;
+}
+
+div#top-feeds-cloud {
+	text-align: center;
+	color: #f59c23;
+	width: 100%;
+}
+
+div#top-feeds-cloud a {
+	color: #f59c23;
+	white-space: nowrap;
+	padding: 0px 20px 0px 20px;
+}
+
 h1 {
 	font-size: 36px;
 	font-weight: bold;

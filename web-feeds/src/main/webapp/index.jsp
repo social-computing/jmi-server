@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb#" lang="en" xml:lang="en">	
 <%String feed = request.getParameter("feed");
 if( feed == null) feed = "";
@@ -112,21 +112,6 @@ $(document).ready(function() {
         flashvars, params, attributes);
 <!-- JavaScript enabled so display the flashContent div in case it is not replaced with a swf object. -->
 swfobject.createCSS("#flashContent", "display:block;text-align:left;");
-<%} else {%>
-$.getJSON( "./services/feeds/last.json", function( data){
-	if( data && data.length > 0) {
-		var i = Math.ceil( Math.random() * data.length);
-		$( '#last-feed').html( '<a title="Just Map It!" href="./?' + jQuery.param({'feed':data[i].url}) + '">' + data[i].title + '</a>');
-		setInterval( function() {
-			i = (i+1) % data.length;
-			$( '#last-feed').fadeOut( 'slow', function() {
-				$( '#last-feed').html( '<a title="Just Map It!" href="./?' + jQuery.param({'feed':data[i].url}) + '">' + data[i].title + '</a>');
-				$( '#last-feed').fadeIn( 'slow');
-			});
-		}, 5000);
-	}
-  }
-);
 <%}%>
 </script>
 <jsp:include page="./js/ga.js" /> 
@@ -180,8 +165,44 @@ $.getJSON( "./services/feeds/last.json", function( data){
 <%if (feed.length() == 0) {%>
 <p class="slogan">Just Map It! Feeds lets you view and navigate your feeds thru an interactive map!</p>
 <div id="last-feeds">
-<p>Last feeds viewed: <span id="last-feed"></span></p>
+<p>Last feeds mapped: <span id="last-feed"></span></p>
 </div>
+<div id="top-feeds"><p>Most mapped feeds:</p></div>
+<div id="top-feeds-cloud"></div>
+<script type="text/javascript">
+$.getJSON( "./services/feeds/last.json", function( data){
+	if( data && data.length > 0) {
+		var i = Math.ceil( Math.random() * data.length);
+		$( '#last-feed').html( '<a title="Just Map It!" href="./?' + jQuery.param({'feed':data[i].url}) + '">' + data[i].title + '</a>');
+		setInterval( function() {
+			i = (i+1) % data.length;
+			$( '#last-feed').fadeOut( 'slow', function() {
+				$( '#last-feed').html( '<a title="Just Map It!" href="./?' + jQuery.param({'feed':data[i].url}) + '">' + data[i].title + '</a>');
+				$( '#last-feed').fadeIn( 'slow');
+			});
+		}, 5000);
+	}
+  }
+);
+$.getJSON( "./services/feeds/top.json", { max:50}, function( data){
+	if( data && data.length > 0) {
+		out = jQuery('#top-feeds-cloud');
+		out.empty();
+		var max = data[0].count;
+		for (var i = data.length-1; i > 0; i = i-2) {
+			var size = (Math.log((data[i].count / max * (Math.E-1)) + 1)); // ln scale
+			size = Math.ceil( (size * 20) + 10);
+			out.append('<a title="Just Map It! Feed: ' + data[i].url + '" href="./?feed=' + data[i].url + '" style="font-size: ' + size + 'px">' + data[i].title + '</a>  ');
+		}
+		for (var i = 0; i < data.length-1; i = i+2) {
+			var size = (Math.log((data[i].count / max * (Math.E-1)) + 1)); // ln scale
+			size = Math.ceil( (size * 20) + 10);
+			out.append('<a title="Just Map It! Feed: ' + data[i].url + '" href="./?feed=' + data[i].url + '" style="font-size: ' + size + 'px">' + data[i].title + '</a>  ');
+		}
+	}
+  }
+);
+</script>
 <%} else {%>
      <div id="flashContent">
      	<p>
