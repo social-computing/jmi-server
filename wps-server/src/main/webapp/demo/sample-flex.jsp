@@ -2,7 +2,7 @@
 <!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">	
     <head>
-        <title>WPS Administration - Flex demo client</title>
+        <title>Just Map It! Administration - Flex demo client</title>
         <meta name="google" value="notranslate">         
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<!-- Include CSS to eliminate any default margins/padding and set the height of the html element and 
@@ -36,8 +36,9 @@
             var xiSwfUrlStr = "../client/flex/playerProductInstall.swf";
             var flashvars = {};
             flashvars.wpsserverurl = "http://localhost:8080/wps-server";
-            flashvars.wpsplanname = "Xml_sample";
+            flashvars.wpsplanname = "Json_sample";
             flashvars.analysisProfile = "GlobalProfile";
+            flashvars.invert = "false";
             flashvars.entitiesName = "Organizations";
             flashvars.attributesName = "Countries";
             var params = {};

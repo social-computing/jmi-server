@@ -16,7 +16,7 @@
 <widget:preferences>
 	<preference name="feed" type="text" label="Feed" defaultValue="http://www.social-computing.com/feed/" />
 </widget:preferences>
- <script type="text/javascript" language="javascript">
+ <script type="text/javascript" >
 widget.onLoad = function() {
 	var flashvars = {
 		allowDomain: "*",

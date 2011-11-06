@@ -110,7 +110,7 @@ else
 	%>	
 	<APPLET name="WPSApplet" archive="WPSApplet<%=APPLET_VERSION%>.jar" code="com.socialcomputing.wps.client.applet.WPSApplet.class" codebase="../client/applet/" MAYscript="" align="absmiddle" hspace="0" vspace="0" width="100%" height="100%">
 		<PARAM NAME="WPSParameters"		VALUE="<%=appletParams.toString()%>" />
-		<PARAM NAME="ServletUrl"		VALUE="../maker" />
+		<PARAM NAME="ServletUrl"		VALUE="../engine/0/<%=request.getParameter( "dictionary")%>.java" />
 		<PARAM NAME="VoidPlanUrl"    	VALUE="../view-applet.jsp?error=nodata&<%=appletParams.toString()%>" />
 		<PARAM NAME="NoScriptUrl"     	VALUE="../view-applet.jsp?error=noscript" />
 		<PARAM NAME="ErrorPlanUrl"    	VALUE="../view-applet.jsp?error=internal&<%=appletParams.toString()%>" />

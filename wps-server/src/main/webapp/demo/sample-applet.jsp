@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>WPS Administration</title>
+		<title> Administration - Applet demo client</title>
 		<meta http-equiv="content-type" content="text/html;charset=ISO-8859-1" />
 		<meta http-equiv="content-language" content="fr-FX" />
 		<link rel="stylesheet" href="../css/main.css"/>
@@ -138,6 +138,7 @@
 				
 				// Uncomment to switch to XML based dictionary
 				params['planName'] = 'Json_sample';
+				params['invert'] = 'false';
 				params['wpsserverurl'] = 'http://localhost:8080/wps-server';
 		
 				$("#map").wpsmap({
@@ -163,10 +164,6 @@
 <%-- 	<div id="top"><jsp:include page="top.jsp" /></div> --%>
 <%-- 	<div id="menu"><jsp:include page="menu.jsp" /></div> --%>
 	<div id="content">
-
-
-
-
 	<script type="text/javascript"> 
 		$(document).ready(function(){
 			$("#map").bind('ready', function(e) {

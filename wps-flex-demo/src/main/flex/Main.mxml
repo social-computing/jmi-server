@@ -54,6 +54,7 @@
 				if( event.action == "NewWin") {
 					//map.clear();
 					parameters["entityId"] = event.args[0];
+					parameters["invert"] = "false";
 					parameters["wpsserverurl"] = serverURL;
 					getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
 				}
@@ -61,6 +62,7 @@
 					//map.clear();
 					parameters["attributeId"] = event.args[0];
 					parameters["analysisProfile"] = "DiscoveryProfile";
+					parameters["invert"] = "false";
 					parameters["wpsserverurl"] = serverURL;
 					getPlanResult.token = planService.getPlan(planName, map.width, map.height, parameters);
 				}
