@@ -7,7 +7,7 @@ public long getLastModified(HttpServletRequest request) {
 
 <html>
 	<head>
-		<title>WPS Administration</title>
+		<title>Just Map It!  Administration</title>
 		<META http-equiv="content-type" content="text/html;charset=ISO-8859-1">
 		<META http-equiv="content-language" content="fr-FX">
 		<link rel="stylesheet" href="../css/main.css"/>

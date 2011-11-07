@@ -77,10 +77,10 @@ Swatch sw = manager.findByName(request.getParameter("swatch"), request.getParame
 <td><h1>swatch : <%=sw.getSwatchPk().getName()%></h1></td>
 </tr>
 <tr>
-<td><a class="iframe" href="view_def.jsp?dictionary=<%=request.getParameter("dictionary")%>&swatch=<%=java.net.URLEncoder.encode(sw.getSwatchPk().getName(), "UTF-8")%>" target="_blank"><span class="texblanc">View definition</span></a></td>
+<td><a class="iframe" href="view_def.jsp?dictionary=<%=request.getParameter("dictionary")%>&swatch=<%=java.net.URLEncoder.encode(sw.getSwatchPk().getName(), "UTF-8")%>" target="_blank">View definition</a></td>
 </tr>
 <tr>
-<td><a class="iframe" href="edit_def.jsp?dictionary=<%=request.getParameter("dictionary")%>&swatch=<%=java.net.URLEncoder.encode(sw.getSwatchPk().getName(), "UTF-8")%>" target="_blank"><span class="texblanc">Edit definition</span></a></td>
+<td><a class="iframe" href="edit_def.jsp?dictionary=<%=request.getParameter("dictionary")%>&swatch=<%=java.net.URLEncoder.encode(sw.getSwatchPk().getName(), "UTF-8")%>" target="_blank">Edit definition</a></td>
 </tr>
 <tr><td>&nbsp;</td></tr>
 </table>

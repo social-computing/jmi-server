@@ -19,13 +19,11 @@ DatabaseMetaData meta = connection.getMetaData();
 <td align="left" valign="middle">
 	<a title="Just Map It!" href="../index.jsp" ><img alt="Just Map It!" width="" height="" src="../images/justmapit.png" style="text-align:left" /></a>
 </td>
-<td align="left" valign="middle" >
+<td align="center" valign="middle" >
 	<h1><b>Just Map It! Administration <span class="texblanc"> - <%=meta.getDatabaseProductName()%> - v. <%=meta.getDatabaseProductVersion()%></span></b></h1>
 </td>
 <td align="right" valign="middle" >
-	<!-- <span class="texblanc"><%=meta.getDatabaseProductName()%> - v. <%=meta.getDatabaseProductVersion()%></span>-->
-	<!-- <span class="texblanc"><%=meta.getURL()%></span-->
-	<!-- <span class="texblanc"><%=meta.getDriverName()%> - v. <%=meta.getDriverVersion()%></span> -->
+	<a title="Social Computing" href="http://www.social-computing.com" target="_blank"><img alt="Social Computing" src="../images/logo-sc-white.jpg" style="text-align:right" /></a>
 </td>
 </tr>
 </table>

@@ -83,9 +83,9 @@ Collection<Swatch> sws = manager.findAll();
 	{
 		Swatch sw = (Swatch) it.next();
 		%><tr>
-		<td align="center" nowrap><span class="texblanc"><%=i+1%></span></td>
+		<td align="center" nowrap><%=i+1%></td>
 		<td align="center" valign="top"><input type="checkbox" name="delete<%=i%>" value="<%=sw.getName()%>" /></td>
-		<td nowrap><a href="swatch.jsp?swatch=<%=java.net.URLEncoder.encode(sw.getName(),"UTF-8")%>" ><span class="texblanc"><%=sw.getName()%></span></a></td>
+		<td nowrap><a href="swatch.jsp?swatch=<%=java.net.URLEncoder.encode(sw.getName(),"UTF-8")%>" ><%=sw.getName()%></a></td>
 		</tr><%
 	}
 %>	

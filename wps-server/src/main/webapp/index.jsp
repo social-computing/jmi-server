@@ -19,8 +19,8 @@ public long getLastModified(HttpServletRequest request) {
 <td>
 	<a title="Just Map It!" href="./" ><img alt="Just Map It!" src="./images/justmapit.png" style="text-align:left" /></a>
 </td>
-<td>
-	<a href="http://www.social-computing.com" target="_blank"><img alt="Social Computing" src="./images/logo-sc-white.jpg" style="text-align:right" /></a>
+<td align="right">
+	<a title="Social Computing" href="http://www.social-computing.com" target="_blank"><img alt="Social Computing" src="./images/logo-sc-white.jpg" style="text-align:right" /></a>
 </td>
 </tr>
 <tr>

@@ -38,32 +38,6 @@ input
 	font-family: 		"Arial Narrow", Helvetica, Geneva, Swiss, SunSans-Regular; 
 }
 
-.map, .stan
-{ 
-	font-weight:		bold; 
-	font-size:			13pt; 
-	font-family:		Tahoma, Arial, Helvetica, Geneva, Swiss, SunSans-Regular 
-}
-
-.map
-{ 
-	color:				black; 
-}
-
-.stan	
-{ 
-	color:				#ff8737
-}	
-
-.net	
-{ 
-	color: 				#2f7f1f; 
-	font-weight:		bold; 
-	font-size:			10pt;
-	font-style:			italic;
-	font-family:		Verdana, Arial, Helvetica, Geneva, Swiss, SunSans-Regular 
-}
-
 .smaller
 {
 	font-size:			smaller; 
@@ -119,7 +93,7 @@ a
 
 a:hover
 {
-	color:				#0066CC; 
+	color:				#FFFFFF; 
 	background: 		#1f0f5f; 
 	text-decoration: 	none 
 }

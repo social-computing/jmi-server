@@ -92,9 +92,9 @@ Collection<Dictionary> dics = manager.findAll();
 			for (int i = 0 ; it.hasNext() ; ++i) {
 				Dictionary dic = (Dictionary) it.next();
 				%><tr>
-				<td align="center" nowrap><span class="texblanc"><%=i+1%></span></td>
+				<td align="center" nowrap><%=i+1%></td>
 				<td align="center" valign="top"><input type="checkbox" name="delete<%=i%>" value="<%=dic.getName()%>" /></td>
-				<td nowrap><span class="texblanc"><a href="dictionary-detail.jsp?dictionary=<%=java.net.URLEncoder.encode(dic.getName(),"UTF-8")%>" ><%=dic.getName()%></a></span></td>
+				<td nowrap><a href="dictionary-detail.jsp?dictionary=<%=java.net.URLEncoder.encode(dic.getName(),"UTF-8")%>" ><%=dic.getName()%></a></td>
 				</tr><%
 			}
 		%>	

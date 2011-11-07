@@ -108,10 +108,10 @@ if (request.getParameter("confirmdelete") != null && request.getParameter("confi
 <td><h1>Dictionary : <%=dictionaryName %></h1></td>
 </tr>
 <tr>
-<td><a class="iframe" href="view_def.jsp?type=plan&dictionary=<%=java.net.URLEncoder.encode(dictionaryName,"UTF-8")%>"><span class="texblanc">View definition</span></a></td>
+<td><a class="iframe" href="view_def.jsp?type=plan&dictionary=<%=java.net.URLEncoder.encode(dictionaryName,"UTF-8")%>">View definition</a></td>
 </tr>
 <tr>
-<td><a class="iframe" href="edit_def.jsp?dictionary=<%=java.net.URLEncoder.encode(dictionaryName,"UTF-8")%>"><span class="texblanc">Edit definition</span></a></td>
+<td><a class="iframe" href="edit_def.jsp?dictionary=<%=java.net.URLEncoder.encode(dictionaryName,"UTF-8")%>">Edit definition</a></td>
 </tr>
 <!-- tr><td>
 	<form name="test" method="GET" action="view-applet.jsp" target="_blank">
@@ -164,7 +164,7 @@ if (request.getParameter("confirmdelete") != null && request.getParameter("confi
 		<td align="center" nowrap><span class="texblanc"><%=i+1%></span></td>
 		<input type="hidden" name="dico<%=i%>" value="<%=dicoName%>" />
 		<td align="center" valign="top"><input type="checkbox" name="swatch<%=i%>" value="<%=swatchName%>" /></td>
-		<td nowrap><a href="swatch.jsp?dictionary=<%=dicoName %>&swatch=<%=java.net.URLEncoder.encode(swatchName,"UTF-8")%>" ><span class="texblanc"><%=swatchName%></span></a></td>
+		<td nowrap><a href="swatch.jsp?dictionary=<%=dicoName %>&swatch=<%=java.net.URLEncoder.encode(swatchName,"UTF-8")%>" ><%=swatchName%></a></td>
 		</tr><%
 		i++;
 	}
