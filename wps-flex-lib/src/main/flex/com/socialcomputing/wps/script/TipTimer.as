@@ -46,6 +46,11 @@ package com.socialcomputing.wps.script
 			return _zone;
 		}
 
+		public function get started():Boolean
+		{
+			return _started;
+		}
+		
 		public function interrupt():void {
 			if( timer != null) {
 				timer.stop();

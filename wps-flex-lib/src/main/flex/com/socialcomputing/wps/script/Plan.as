@@ -367,7 +367,8 @@ package com.socialcomputing.wps.script  {
 					tipTimer.interrupt()
 				}
 				else {
-					return;
+					if( tipTimer.started)
+						return;
 				}
 			}
 			
