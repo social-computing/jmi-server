@@ -18,6 +18,10 @@ h2
 	font-family: Arial, Helvetica, Geneva, Swiss, "SunSans-Regular";
 	color: #0066CC; 
 }
+img 
+{
+	border: 0;
+}
 </style>
 </head>
 <body>
