@@ -17,7 +17,7 @@ DatabaseMetaData meta = connection.getMetaData();
 <table width="100%" cellpadding="0" cellspacing="0" width="100%" >
 <tr>
 <td align="left" valign="middle">
-	<a title="Just Map It!" href="../index.jsp" ><img alt="Just Map It!" width="" height="" src="../images/justmapit.png" style="text-align:left" /></a>
+	<a title="Just Map It!" href="./index.jsp" ><img alt="Just Map It! Administration" src="../images/justmapit_admin.png" /></a>
 </td>
 <td align="center" valign="middle" >
 	<h1><b>Just Map It! Administration <span class="texblanc"> - <%=meta.getDatabaseProductName()%> - v. <%=meta.getDatabaseProductVersion()%></span></b></h1>

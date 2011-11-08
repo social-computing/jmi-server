@@ -15,9 +15,7 @@ Collection<Dictionary> dics = dManager.findAll();
 %>
 <table>
 <tr><td height=20 >&nbsp;</td></tr>
-<tr><td height=20 ><a href="index.jsp">Home</a></td></tr>
-<tr><td height=20 >&nbsp;</td></tr>
-<tr><td align="left" nowrap><a href="dictionaries.jsp" >Dictionaries (<%=dics.size()%>)</a></td></tr>
+<tr><td align="left" nowrap><a title="<%=dics.size()%> dictionaries" href="dictionaries.jsp" >Dictionaries</a></td></tr>
 <tr>
 	<td>
 		<ul>
@@ -27,14 +25,6 @@ Collection<Dictionary> dics = dManager.findAll();
 		</ul>
 	</td>
 </tr>
-<!-- 
-<tr><td height=20 >&nbsp;</td></tr>
-<tr><td align="left" nowrap><a href="swatches.jsp" >Swatches</a></td></tr>
- -->
-<!-- 
-<tr><td height=20 >&nbsp;</td></tr>
-<tr><td align="left" nowrap><a href="upload.jsp" >Upload</a></td></tr>
--->
 <tr><td height=20 >&nbsp;</td></tr>
 <tr><td height=20 ><hr noshade align="center" width="50%" size="1"></td></tr>
 <tr><td height=20 >&nbsp;</td></tr>

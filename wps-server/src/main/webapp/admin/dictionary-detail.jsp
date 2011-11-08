@@ -23,46 +23,44 @@ List<Swatch> ls = dic.getSwatchs();
 
 
 <html>
-	<head>
-		<title>WPS Administration</title>
-		<META http-equiv="content-type" content="text/html;charset=ISO-8859-1">
-		<META http-equiv="content-language" content="fr-FX">
-		<link rel="stylesheet" href="../css/main.css"/>
-		<link rel="stylesheet" href="../css/wps.css">
-		<script type="text/javascript" src="../client/applet/jquery.js" ></script>
-		<script type="text/javascript" src="./fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-		<link rel="stylesheet" href="./fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
-		<script type="text/javascript" > 
-			function SubmitForm(resetStart)
+<head>
+	<title>Just Map It! Administration</title>
+	<meta http-equiv="content-language" content="en">
+	<link rel="stylesheet" href="../css/main.css"/>
+	<link rel="stylesheet" href="../css/wps.css">
+	<script type="text/javascript" src="../client/applet/jquery.js" ></script>
+	<script type="text/javascript" src="./fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+	<link rel="stylesheet" href="./fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
+	<script type="text/javascript" > 
+		function SubmitForm(resetStart)
+		{
+			if( resetStart)
+				ResetStart();
+			document.test.submit();
+			return true;
+		}
+		function Delete()
+		{
+			if( confirm("Are you sure you want to delete selected swatches ?"))
 			{
-				if( resetStart)
-					ResetStart();
-				document.test.submit();
-				return true;
+				document.del.confirmdelete.value = 'y';
+				document.del.submit();
 			}
-			function Delete()
-			{
-				if( confirm("Are you sure you want to delete selected swatches ?"))
-				{
-					document.del.confirmdelete.value = 'y';
-					document.del.submit();
-				}
-				return false;
-			}
-			function OnExport( content, contentType)
-			{
-				document.test.content.value = content;
-				document.test.contentType.value = contentType;
-				document.test.submit();
-				return false;
-			}
-		</script>
-	</head>
-	<body>
-	<div id="top"><jsp:include page="top.jsp" /></div>
-	<div id="menu"><jsp:include page="menu.jsp" /></div>
-	<div id="content">
-
+			return false;
+		}
+		function OnExport( content, contentType)
+		{
+			document.test.content.value = content;
+			document.test.contentType.value = contentType;
+			document.test.submit();
+			return false;
+		}
+	</script>
+</head>
+<body>
+<div id="top"><jsp:include page="top.jsp" /></div>
+<div id="menu"><jsp:include page="menu.jsp" /></div>
+<div id="content">
 <script>
 $(document).ready(function() {
 
@@ -105,13 +103,11 @@ if (request.getParameter("confirmdelete") != null && request.getParameter("confi
 
 <table width="100%">
 <tr>
-<td><h1>Dictionary : <%=dictionaryName %></h1></td>
+<td colspan="2"><h1><%=dictionaryName %></h1></td>
 </tr>
 <tr>
-<td><a class="iframe" href="view_def.jsp?type=plan&dictionary=<%=java.net.URLEncoder.encode(dictionaryName,"UTF-8")%>">View definition</a></td>
-</tr>
-<tr>
-<td><a class="iframe" href="edit_def.jsp?dictionary=<%=java.net.URLEncoder.encode(dictionaryName,"UTF-8")%>">Edit definition</a></td>
+<td><a class="iframe" href="view_def.jsp?type=plan&dictionary=<%=java.net.URLEncoder.encode(dictionaryName,"UTF-8")%>">View</a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="iframe" href="edit_def.jsp?dictionary=<%=java.net.URLEncoder.encode(dictionaryName,"UTF-8")%>">Edit</a></td>
 </tr>
 <!-- tr><td>
 	<form name="test" method="GET" action="view-applet.jsp" target="_blank">

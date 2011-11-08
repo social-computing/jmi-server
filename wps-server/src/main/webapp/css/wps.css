@@ -97,3 +97,9 @@ a:hover
 	background: 		#1f0f5f; 
 	text-decoration: 	none 
 }
+
+a:hover img
+{
+    background-color : none;
+	background: #ffffff; 
+}

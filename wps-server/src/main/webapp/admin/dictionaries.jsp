@@ -34,35 +34,35 @@ Collection<Dictionary> dics = manager.findAll();
 %>
 
 <html>
-	<head>
-		<title>WPS Administration</title>
-		<meta http-equiv="content-type" content="text/html;charset=ISO-8859-1">
-		<link rel="stylesheet" href="../css/main.css"/>
-		<link rel="stylesheet" href="../css/wps.css">
-		<script type="text/javascript" > 
-			function SubmitForm(resetStart) {
-				if (resetStart)
-					ResetStart();
+<head>
+	<title>Just Map It! Administration</title>
+	<meta http-equiv="content-language" content="en">
+	<link rel="stylesheet" href="../css/main.css"/>
+	<link rel="stylesheet" href="../css/wps.css">
+	<script type="text/javascript" > 
+		function SubmitForm(resetStart) {
+			if (resetStart)
+				ResetStart();
+			document.test.submit();
+			return true;
+		}
+		
+		function Delete() {
+			if( confirm("Are you sure you want to delete selected dictionnaires ?")) {
+				document.test.confirmdelete.value = 'y';
 				document.test.submit();
-				return true;
 			}
-			
-			function Delete() {
-				if( confirm("Are you sure you want to delete selected dictionnaires ?")) {
-					document.test.confirmdelete.value = 'y';
-					document.test.submit();
-				}
-				return false;
-			}
-			
-			function OnExport(content, contentType){
-				document.test.content.value = content;
-				document.test.contentType.value = contentType;
-				document.test.submit();
-				return false;
-			}
-		</script>
-	</head>
+			return false;
+		}
+		
+		function OnExport(content, contentType){
+			document.test.content.value = content;
+			document.test.contentType.value = contentType;
+			document.test.submit();
+			return false;
+		}
+	</script>
+</head>
 	<body>
 	<div id="top"><jsp:include page="top.jsp" /></div>
 	<div id="menu"><jsp:include page="menu.jsp" /></div>
