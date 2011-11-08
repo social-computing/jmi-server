@@ -4,7 +4,11 @@
 <%@page import="com.socialcomputing.wps.server.persistence.Swatch"%>
 <%@page import="com.socialcomputing.wps.server.persistence.SwatchManager"%>
 <%@page import="com.socialcomputing.wps.server.persistence.hibernate.SwatchManagerImpl"%>
-
+<%!
+// return current time to proxy server request
+public long getLastModified(HttpServletRequest request) {
+	return System.currentTimeMillis();
+}%>
 
 <html>
 <head>
@@ -12,15 +16,12 @@
 <link rel="stylesheet" href="../css/main.css" />
 <style type="text/css">
 textarea {
-	width: 75%;
-	height: 75%;
+	width: 92%;
+	height: 92%;
 }
 </style>
-
 </head>
-
 <body>
-
 <form name="upload" enctype="multipart/form-data" method="POST" action="upload">
 <%
 String dictionaryName = request.getParameter( "dictionary");
@@ -51,7 +52,7 @@ if (dictionaryName != null) {
 }
 %>
 </textarea>
-<input type="submit"/>
+<input type="submit" value="Save"/>
 </form>
 </body>
 </html>

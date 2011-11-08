@@ -107,3 +107,27 @@ a:hover img
     background-color : none;
 	background: #ffffff; 
 }
+table.tableau {
+	border-width: 1px;
+	border-spacing: 2px;
+	border-style: outset;
+	border-color: gray;
+	border-collapse: collapse;
+	background-color: white;
+}
+table.tableau th {
+	border-width: 1px;
+	padding: 2px 1px 2px 10px;
+	border-style: dashed;
+	border-color: gray;
+	background-color: white;
+	-moz-border-radius: ;
+}
+table.tableau td {
+	border-width: 1px;
+	padding: 2px 1px 2px 10px;
+	border-style: dashed;
+	border-color: gray;
+	background-color: white;
+	-moz-border-radius: ;
+}

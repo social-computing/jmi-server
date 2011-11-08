@@ -4,15 +4,12 @@ import java.util.Collection;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.socialcomputing.utils.database.DatabaseHelper;
 import com.socialcomputing.utils.database.HibernateUtil;
 import com.socialcomputing.wps.server.persistence.Dictionary;
 import com.socialcomputing.wps.server.persistence.DictionaryManager;
-import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 
 public class DictionaryManagerImpl implements DictionaryManager {
 
@@ -23,7 +20,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
         Collection<Dictionary> results = null;
         try {
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            results = session.createQuery("from DictionaryImpl").list();
+            results = session.createQuery("from DictionaryImpl as dico order by upper(dico.name)").list();
         }
         catch (HibernateException e) {
             LOG.error(e.getMessage(), e);

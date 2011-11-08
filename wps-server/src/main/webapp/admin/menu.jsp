@@ -20,7 +20,7 @@ Collection<Dictionary> dics = dManager.findAll();
 	<td>
 		<ul>
 			<% for(Dictionary d :dics) { %>
-			<li><a href="dictionary-detail.jsp?dictionary=<%=d.getName() %>"><%=d.getName() %></a></li>
+			<li><a title="View dictionary details" href="dictionary-detail.jsp?dictionary=<%=d.getName() %>"><%=d.getName() %></a></li>
 			<%} %>
 		</ul>
 	</td>

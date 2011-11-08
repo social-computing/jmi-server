@@ -11,6 +11,8 @@ public long getLastModified(HttpServletRequest request) {
 
 <html>
 <head>
+<title>Just Map It! Administration</title>
+<meta http-equiv="content-language" content="en">
 <link rel="stylesheet" href="../css/main.css"/>
 <link rel="stylesheet" href="../css/wps.css">
 <script type="text/javascript" src="../client/applet/jquery.js" ></script>

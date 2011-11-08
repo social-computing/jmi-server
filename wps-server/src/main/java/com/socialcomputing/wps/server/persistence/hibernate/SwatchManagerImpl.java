@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +22,7 @@ public class SwatchManagerImpl implements SwatchManager {
         Collection<Swatch> results = null;
         try {
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            results = session.createQuery("from SwatchImpl").list();
+            results = session.createQuery("from SwatchImpl as sw order by sw.name").list();
         }
         catch (HibernateException e) {
             LOG.error(e.getMessage(), e);

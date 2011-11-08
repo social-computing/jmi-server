@@ -63,45 +63,39 @@ Collection<Dictionary> dics = manager.findAll();
 		}
 	</script>
 </head>
-	<body>
-	<div id="top"><jsp:include page="top.jsp" /></div>
-	<div id="menu"><jsp:include page="menu.jsp" /></div>
-	<div id="content">
+<body>
+<div id="top"><jsp:include page="top.jsp" /></div>
+<div id="menu"><jsp:include page="menu.jsp" /></div>
+<div id="content">
+
+	<form name="test" method="GET" action="dictionaries.jsp">
+	<input type="hidden" name="confirmdelete" value="n" />
 	
-		<form name="test" method="GET" action="dictionaries.jsp">
-		<input type="hidden" name="confirmdelete" value="n" />
-		
-		<!-- For export -->
-		<input type="hidden" name="content" value="" />
-		<input type="hidden" name="contentType" value="" />
-		
-		<input type="hidden" name="maxdelete" value="<%=dics.size()%>" />
-		 
-		<br>
-		<table width="100%" >
-		<tr><td colspan="4" >
-		<table border=1 width="100%">
-		
-		 <tr>
-		  <th width="8%" ><span class="subTitleBlue">#</span></th>
-		  <th width="8%" ><a href="" title="Delete selected dictionaries" onclick="javascript:return Delete()">delete</a></th>
-		  <th width="60%" ><span class="subTitleBlue">name</span></th>
-		 </tr>
-		<%	
-			Iterator<Dictionary> it = dics.iterator();
-			for (int i = 0 ; it.hasNext() ; ++i) {
-				Dictionary dic = (Dictionary) it.next();
-				%><tr>
-				<td align="center" nowrap><%=i+1%></td>
-				<td align="center" valign="top"><input type="checkbox" name="delete<%=i%>" value="<%=dic.getName()%>" /></td>
-				<td nowrap><a href="dictionary-detail.jsp?dictionary=<%=java.net.URLEncoder.encode(dic.getName(),"UTF-8")%>" ><%=dic.getName()%></a></td>
-				</tr><%
-			}
-		%>	
-		</table>
-		</td></tr>
-		</table>
-		</form>
+	<!-- For export -->
+<input type="hidden" name="content" value="" />
+<input type="hidden" name="contentType" value="" />
+
+<input type="hidden" name="maxdelete" value="<%=dics.size()%>" />
+ 
+<br>
+
+<table class="tableau" width="100%">
+ <tr>
+  <th width="8%" ><a href="" title="Delete selected dictionaries" onclick="javascript:return Delete()">delete</a></th>
+  <th width="60%" align="left"><span class="subTitleBlue">Name</span></th>
+ </tr>
+<%	
+	Iterator<Dictionary> it = dics.iterator();
+	for (int i = 0 ; it.hasNext() ; ++i) {
+		Dictionary dic = (Dictionary) it.next();
+		%><tr>
+		<td align="center" valign="top"><input type="checkbox" name="delete<%=i%>" value="<%=dic.getName()%>" /></td>
+		<td nowrap><a title="View dictionary details" href="dictionary-detail.jsp?dictionary=<%=java.net.URLEncoder.encode(dic.getName(),"UTF-8")%>" ><%=dic.getName()%></a></td>
+		</tr><%
+	}
+%>	
+</table>
+</form>
 <br/><br/>
 
 <form name="uploadForm" enctype="multipart/form-data" method="POST" action="upload">
