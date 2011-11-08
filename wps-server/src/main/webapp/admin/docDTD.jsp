@@ -5,9 +5,8 @@
 
 <html>
 <head>
-<title>WPS Administration</title>
-<meta http-equiv="content-type" content="text/html;charset=ISO-8859-1" />
-<meta http-equiv="content-language" content="fr-FX" />
+<title>Just Map It! Administration</title>
+<meta http-equiv="content-language" content="en">
 <link rel="stylesheet" href="../css/main.css" />
 <link rel="stylesheet" href="../css/wps.css">
 </head>
