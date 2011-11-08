@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<%@page import="com.socialcomputing.feeds.*"%><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb#" lang="en" xml:lang="en">	
 <%String feed = request.getParameter("feed");
 if( feed == null) feed = "";
@@ -93,7 +93,7 @@ $(document).ready(function() {
     flashvars.track = "http://feeds.just-map-it.com/services/feeds/record.json";
     flashvars.wpsplanname = "Feeds";
     flashvars.analysisProfile = "GlobalProfile";
-    flashvars.feed = "<%=java.net.URLEncoder.encode(feed)%>";
+    flashvars.feed = "<%=java.net.URLEncoder.encode(feed, "UTF-8")%>";
     var params = {};
     params.quality = "high";
     params.bgcolor = "#FFFFFF";
@@ -167,7 +167,23 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 <p><a href="./last-feeds.jsp">Last feeds mapped:</a> <span id="last-feed-cloud"></span></p>
 </div>
 <div id="top-feeds"><p><a href="./top-feeds.jsp">Most mapped feeds:</a></p></div>
-<div id="top-feeds-cloud"></div>
+<div id="top-feeds-cloud">
+<%FeedManager feedManager = new FeedManager();
+java.util.List<Feed> feeds = feedManager.top( "50", "true");
+float max = feeds.size() > 0 ? feeds.get(0).getCount() : 1;
+for (int i = feeds.size()-1; i > 0; i = i-2) {
+    Feed f = feeds.get( i);
+	double dsize = (java.lang.Math.log(( f.getCount() / max * (java.lang.Math.E-1)) + 1)); // ln scale
+	long size = java.lang.Math.round( (dsize * 20) + 10);%>
+<a title="Just Map It! Feed: <%=f.getUrl()%>" href='./?feed=<%=f.getUrl()%>' style="font-size: <%=size%>px"><%=f.getTitle()%></a>	
+<%}
+for (int i = 0; i < feeds.size()-1; i = i+2) {
+    Feed f = feeds.get( i);
+	double dsize = (java.lang.Math.log(( f.getCount() / max * (java.lang.Math.E-1)) + 1)); // ln scale
+	long size = java.lang.Math.round( (dsize * 20) + 10);%>
+<a title="Just Map It! Feed: <%=f.getUrl()%>" href='./?feed=<%=f.getUrl()%>' style="font-size: <%=size%>px"><%=f.getTitle()%></a>	
+<%}%>
+</div>
 <script type="text/javascript">
 $.getJSON( "./services/feeds/last.json", function( data){
 	if( data && data.length > 0) {
@@ -184,69 +200,50 @@ $.getJSON( "./services/feeds/last.json", function( data){
 	}
   }
 );
-$.getJSON( "./services/feeds/top.json", { max:50}, function( data){
-	if( data && data.length > 0) {
-		out = jQuery('#top-feeds-cloud');
-		out.empty();
-		var max = data[0].count;
-		for (var i = data.length-1; i > 0; i = i-2) {
-			var size = (Math.log((data[i].count / max * (Math.E-1)) + 1)); // ln scale
-			size = Math.ceil( (size * 20) + 10);
-			out.append('<a title="Just Map It! Feed: ' + data[i].url + '" href="./?feed=' + data[i].url + '" style="font-size: ' + size + 'px">' + data[i].title + '</a>  ');
-		}
-		for (var i = 0; i < data.length-1; i = i+2) {
-			var size = (Math.log((data[i].count / max * (Math.E-1)) + 1)); // ln scale
-			size = Math.ceil( (size * 20) + 10);
-			out.append('<a title="Just Map It! Feed: ' + data[i].url + '" href="./?feed=' + data[i].url + '" style="font-size: ' + size + 'px">' + data[i].title + '</a>  ');
-		}
-	}
-  }
-);
 </script>
 <%} else {%>
-     <div id="flashContent">
-     	<p>
-      	To view this page ensure that Adobe Flash Player version 
-		10.0.0 or greater is installed. 
-		</p>
-		<script type="text/javascript"> 
-		var pageHost = ((document.location.protocol == "https:") ? "https://" :	"http://"); 
-		document.write("<a href='http://www.adobe.com/go/getflashplayer'><img src='" 
-						+ pageHost + "www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' /></a>" ); 
-		</script> 
-	 </div>
-	
-	 <noscript>
-         <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%" id="wps-feeds">
-             <param name="movie" value="./client/wps-flex-1.0-SNAPSHOT.swf" />
-             <param name="quality" value="high" />
-             <param name="bgcolor" value="#FFFFFF" />
-             <param name="allowScriptAccess" value="always" />
-             <param name="allowFullScreen" value="true" />
-             <param name="wmode" value="transparent" />
-             <!--[if !IE]>-->
-             <object type="application/x-shockwave-flash" data="./client/wps-flex-1.0-SNAPSHOT.swf" width="100%" height="100%">
-                 <param name="quality" value="high" />
-                 <param name="bgcolor" value="#FFFFFF" />
-                 <param name="allowScriptAccess" value="sameDomain" />
-                 <param name="allowFullScreen" value="true" />
-             	 <param name="wmode" value="transparent" />
-             <!--<![endif]-->
-             <!--[if gte IE 6]>-->
-             	<p> 
-             		Either scripts and active content are not permitted to run or Adobe Flash Player version
-             		10.0.0 or greater is not installed.
-             	</p>
-             <!--<![endif]-->
-                 <a href="http://www.adobe.com/go/getflashplayer">
-                     <img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash Player" />
-                 </a>
-             <!--[if !IE]>-->
-             </object>
-             <!--<![endif]-->
-         </object>
-	  </noscript>		
-<%} %>
+    <div id="flashContent">
+    	<p>
+     	To view this page ensure that Adobe Flash Player version 
+	10.0.0 or greater is installed. 
+	</p>
+	<script type="text/javascript"> 
+	var pageHost = ((document.location.protocol == "https:") ? "https://" :	"http://"); 
+	document.write("<a href='http://www.adobe.com/go/getflashplayer'><img src='" 
+					+ pageHost + "www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' /></a>" ); 
+	</script> 
+ </div>
+ <noscript>
+   <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%" id="wps-feeds">
+       <param name="movie" value="./client/wps-flex-1.0-SNAPSHOT.swf" />
+       <param name="quality" value="high" />
+       <param name="bgcolor" value="#FFFFFF" />
+       <param name="allowScriptAccess" value="always" />
+       <param name="allowFullScreen" value="true" />
+       <param name="wmode" value="transparent" />
+       <!--[if !IE]>-->
+       <object type="application/x-shockwave-flash" data="./client/wps-flex-1.0-SNAPSHOT.swf" width="100%" height="100%">
+           <param name="quality" value="high" />
+           <param name="bgcolor" value="#FFFFFF" />
+           <param name="allowScriptAccess" value="sameDomain" />
+           <param name="allowFullScreen" value="true" />
+       	 <param name="wmode" value="transparent" />
+       <!--<![endif]-->
+       <!--[if gte IE 6]>-->
+       	<p> 
+       		Either scripts and active content are not permitted to run or Adobe Flash Player version
+       		10.0.0 or greater is not installed.
+       	</p>
+       <!--<![endif]-->
+           <a href="http://www.adobe.com/go/getflashplayer">
+               <img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash Player" />
+           </a>
+       <!--[if !IE]>-->
+       </object>
+       <!--<![endif]-->
+   </object>
+</noscript>		
+<%}%>
 </div>
 <jsp:include page="./footer.jsp" >
 	<jsp:param name="feed" value="<%=feed%>" /> 

@@ -38,7 +38,7 @@ for( Feed feed : feeds) {
 	double dsize = (java.lang.Math.log(( feed.getCount() / max * (java.lang.Math.E-1)) + 1)); // ln scale
 	long size = java.lang.Math.round( (dsize * 20) + 10);
 %>
-<a title="Just Map It! Feed: <%=feed.getUrl()%>" href='./?feed=<%=feed.getUrl()%>' title='Just Map It! Feeds' style="font-size: <%=size%>px"><%=feed.getTitle()%></a>	
+<a title="Just Map It! Feed: <%=feed.getUrl()%>" href='./?feed=<%=feed.getUrl()%>' style="font-size: <%=size%>px"><%=feed.getTitle()%></a>	
 <%}%>
 </div>
 </div>
