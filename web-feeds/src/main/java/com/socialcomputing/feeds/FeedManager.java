@@ -86,7 +86,7 @@ public class FeedManager {
                 success = "true";
             Query query = null;
             if( success == null || success.equals( "*")) {
-                query = session.createQuery( "from Feed as feed order by feed.updated desc");
+                query = session.createQuery( "from Feed as feed order by feed.count desc");
             }
             else {
                 query = session.createQuery( "from Feed as feed where feed.success = :success order by feed.count desc");
