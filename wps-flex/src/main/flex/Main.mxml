@@ -25,6 +25,9 @@
             private var planName:String;
             private var planService:PlanService;
 			
+			// JS Callbacks
+			private var readyCallback:String, emptyCallback:String, errorCallback:String, statusCallback:String, navigateCallback:String;
+			
             protected function onCreationComplete(event:FlexEvent):void {
 				
 				// Reading application properties
@@ -36,6 +39,28 @@
 				if( FlexGlobals.topLevelApplication.parameters.hasOwnProperty( "allowDomain")) {
 					Security.allowDomain( FlexGlobals.topLevelApplication.parameters["allowDomain"]);
 				}
+				
+				// CallBacks
+				if( FlexGlobals.topLevelApplication.parameters.hasOwnProperty( "readyCallback")) 
+					readyCallback = FlexGlobals.topLevelApplication.parameters["readyCallback"];
+				else
+					readyCallback = "ready";
+				if( FlexGlobals.topLevelApplication.parameters.hasOwnProperty( "emptyCallback")) 
+					emptyCallback = FlexGlobals.topLevelApplication.parameters["emptyCallback"];
+				else
+					emptyCallback = "empty";
+				if( FlexGlobals.topLevelApplication.parameters.hasOwnProperty( "errorCallback")) 
+					errorCallback = FlexGlobals.topLevelApplication.parameters["errorCallback"];
+				else
+					errorCallback = "error";
+				if( FlexGlobals.topLevelApplication.parameters.hasOwnProperty( "statusCallback")) 
+					statusCallback = FlexGlobals.topLevelApplication.parameters["statusCallback"];
+				else
+					statusCallback = "status";
+				if( FlexGlobals.topLevelApplication.parameters.hasOwnProperty( "navigateCallback")) 
+					navigateCallback = FlexGlobals.topLevelApplication.parameters["navigateCallback"];
+				else
+					navigateCallback = "navigate";
 				
 				// for js calls
 				ExternalInterface.addCallback( "compute", compute);
@@ -71,16 +96,16 @@
         <s:CallResponder id="getPlanResult"
 						 fault="ExternalInterface.call('error', event.fault.faultString);" />
     </fx:Declarations>
-    
+
 	<wps:Map id="map"
 			backgroundColor="{this.getStyle('contentBackgroundColor')}"
 			dataProvider="{getPlanResult.lastResult}" 
-			ready="ExternalInterface.call('ready');"
-			empty="ExternalInterface.call('empty');"
-			error="ExternalInterface.call('error', event.status);"
-			status="ExternalInterface.call('status', event.status);"
+			ready="ExternalInterface.call(readyCallback);"
+			empty="ExternalInterface.call(emptyCallback);"
+			error="ExternalInterface.call(errorCallback, event.status);"
+			status="ExternalInterface.call(statusCallback, event.status);"
 			action="ExternalInterface.call(event.action, event.args);" 
-			navigate="ExternalInterface.call('navigate', event.url, event.btarget);"
+			navigate="ExternalInterface.call(navigateCallback, event.url, event.btarget);"
 			percentWidth="100"
 			percentHeight="100"
 	/>

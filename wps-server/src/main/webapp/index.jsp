@@ -1,11 +1,12 @@
 <%!// return current time to proxy server request
     public long getLastModified(HttpServletRequest request) {
         return System.currentTimeMillis();
-    }%>
-<html>
+}%><html>
 <head>
 <title>Just Map It! Server</title>
-<META http-equiv="content-language" content="en">
+<meta http-equiv="content-language" content="en">
+<meta name="author" content="Social Computing" /> 
+<meta name="robots" content="noindex,nofollow" /> 
 <link rel="shortcut icon" href="./favicon.ico" />
 <style type="text/css">
 h1
@@ -32,9 +33,9 @@ img
 			alt="Social Computing" src="./images/logo-sc-white.jpg" /></a></td>
 	</tr>
 </table>
-<table width="100%" border="0" style="padding-top: 60px">
+<table width="100%" border="0" style="padding-top: 100px">
 	<tr>
-		<td align="center"><h2>Administrate Just Map It! Server</h2>
+		<td align="center">
 		<a title="Just Map It! Administration" href="./admin"><img alt="Just Map It! Administration" src="./images/justmapit_admin.png" /></a></td>
 	</tr>
 </table>
