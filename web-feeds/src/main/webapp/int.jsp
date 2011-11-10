@@ -44,7 +44,7 @@ function JMIF_Focus( args)
 <%if(request.getParameter("url") != null && request.getParameter("url").length()>0){ %>
 var flashvars = {};
 flashvars.allowDomain = "*";
-flashvars.wpsserverurl = "http://map.social-computing.com/";
+flashvars.wpsserverurl = "http://server.just-map-it.com/";
 flashvars.wpsplanname = "Feeds";
 flashvars.analysisProfile = "GlobalProfile";
 flashvars.feed = "<%=java.net.URLEncoder.encode(request.getParameter("url")) %>";

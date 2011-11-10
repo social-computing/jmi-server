@@ -19,7 +19,7 @@
   function getFeedUrl() {
 	  var flashvars = {
 		allowDomain: "*",
-		wpsserverurl: "http%3A%2F%2Fmap.social-computing.com%2F",
+		wpsserverurl: "http%3A%2F%2Fserver.just-map-it.com%2F",
 		wpsplanname: "Feeds",
 		analysisProfile: "GlobalProfile",
 		feed: viewFeeds.getPostsFeedUrl()

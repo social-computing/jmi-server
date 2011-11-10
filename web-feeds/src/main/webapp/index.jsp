@@ -89,7 +89,7 @@ $(document).ready(function() {
     flashvars.allowDomain = "*";
     //flashvars.wpsserverurl = "http://localhost:8080/wps-server";
     //flashvars.track = "http://localhost:8080/web-feeds/services/feeds/record.json";
-    flashvars.wpsserverurl = "http://map.social-computing.com/";
+    flashvars.wpsserverurl = "http://server.just-map-it.com/";
     flashvars.track = "http://feeds.just-map-it.com/services/feeds/record.json";
     flashvars.wpsplanname = "Feeds";
     flashvars.analysisProfile = "GlobalProfile";
