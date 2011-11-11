@@ -101,13 +101,10 @@ if (request.getParameter("confirmdelete") != null && request.getParameter("confi
 }
 %>
 
-<table width="100%">
+<table >
 <tr>
-<td colspan="2"><h1><%=dictionaryName %></h1></td>
-</tr>
-<tr>
-<td><a class="iframe" title="View dictionary" href="view_def.jsp?type=plan&dictionary=<%=java.net.URLEncoder.encode(dictionaryName,"UTF-8")%>">View</a>
-&nbsp;&nbsp;&nbsp;&nbsp;<a class="iframe" title="Edit dictionary" href="edit_def.jsp?dictionary=<%=java.net.URLEncoder.encode(dictionaryName,"UTF-8")%>">Edit</a></td>
+<td><a class="iframe" title="View dictionary" href="view_def.jsp?type=plan&dictionary=<%=java.net.URLEncoder.encode(dictionaryName,"UTF-8")%>"><h1><%=dictionaryName %></h1></a></td>
+<td style="padding-left:20px"><a class="iframe" title="Edit dictionary" href="edit_def.jsp?dictionary=<%=java.net.URLEncoder.encode(dictionaryName,"UTF-8")%>">Edit</a></td>
 </tr>
 <!-- tr><td>
 	<form name="test" method="GET" action="view-applet.jsp" target="_blank">
@@ -144,7 +141,6 @@ if (request.getParameter("confirmdelete") != null && request.getParameter("confi
   <th width="8%" ><a href="" title="Delete selected swatches" onclick="javascript:return Delete()">delete</a></th>
   <th width="60%" align="left"><span class="subTitleBlue">Name</span></th>
   <th></th>
-  <th></th>
  </tr>
 <%	
 int i = 0;
@@ -155,8 +151,7 @@ for(Swatch sw : ls)
 	%><tr>
 	<input type="hidden" name="dico<%=i%>" value="<%=dicoName%>" />
 	<td align="center" valign="top"><input type="checkbox" name="swatch<%=i%>" value="<%=swatchName%>" /></td>
-	<td nowrap><span class="subTitleBlue"><%=swatchName%></span></td>
-	<td><a title="View Swatch" class="iframe" href="view_def.jsp?dictionary=<%=dicoName%>&swatch=<%=java.net.URLEncoder.encode(swatchName, "UTF-8")%>" target="_blank">View</a></td>
+	<td><a title="View Swatch" class="iframe" href="view_def.jsp?dictionary=<%=dicoName%>&swatch=<%=java.net.URLEncoder.encode(swatchName, "UTF-8")%>" target="_blank"><%=swatchName%></a></td>
 	<td><a title="Edit Swatch" class="iframe" href="edit_def.jsp?dictionary=<%=dicoName%>&swatch=<%=java.net.URLEncoder.encode(swatchName, "UTF-8")%>" target="_blank">Edit</a></td>
 	</tr><%
 	i++;

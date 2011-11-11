@@ -22,7 +22,7 @@ public long getLastModified(HttpServletRequest request) {
 <div id="top"><jsp:include page="top.jsp" /></div>
 <div id="menu"><jsp:include page="menu.jsp" /></div>
 <div id="content">
-<span class="subTitleBlue" >Just Map It! Applet template</span>
+<span class="subTitleBlue" >Just Map It! Java Applet client</span><br/><br/>
 <table width="100%" border=0>
 <tr><td>ServletURL and WPSParameters are mandatory, others are optional</td></tr>
 <tr><td>&lt;APPLET name="WPSApplet" archive="WPSApplet.jar" code="com.socialcomputing.wps.client.WPSApplet.class" codebase="/applet/" MAYscript align="absmiddle" hspace="0" vspace="0" width="100%" height="100%"&gt;</td></tr>

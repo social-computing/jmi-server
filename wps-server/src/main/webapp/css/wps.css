@@ -70,13 +70,11 @@ p
 {
 	margin: 			0px 0px 5px 5px;
 }
-
 li
 {
 	margin-top:			10px;
-}
-
-
+ 	list-style-type: none;
+ }
 .working, .greenCol	
 { 
 	color:				#2f7f1f
@@ -126,4 +124,8 @@ table.tableau td {
 	border-color: gray;
 	background-color: white;
 	-moz-border-radius: ;
+}
+div.documentation a {
+	font-weight: bold;
+	text-decoration: underline;
 }

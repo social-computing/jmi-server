@@ -3,15 +3,12 @@
 <%@page import="com.socialcomputing.wps.server.persistence.Dictionary"%>
 <%@page import="com.socialcomputing.wps.server.persistence.DictionaryManager"%>
 <%@page import="com.socialcomputing.wps.server.persistence.hibernate.DictionaryManagerImpl"%>
-
 <%!
 // return current time to proxy server request
 public long getLastModified(HttpServletRequest request) {
 	return System.currentTimeMillis();
 }
-%>
-
-<%
+%><%
 DictionaryManager manager = new DictionaryManagerImpl();
 
 if (request.getParameter("confirmdelete") != null && request.getParameter("confirmdelete").equalsIgnoreCase("y")) {
@@ -67,18 +64,13 @@ Collection<Dictionary> dics = manager.findAll();
 <div id="top"><jsp:include page="top.jsp" /></div>
 <div id="menu"><jsp:include page="menu.jsp" /></div>
 <div id="content">
-
-	<form name="test" method="GET" action="dictionaries.jsp">
-	<input type="hidden" name="confirmdelete" value="n" />
-	
-	<!-- For export -->
+<form name="test" method="GET" action="dictionaries.jsp">
+<input type="hidden" name="confirmdelete" value="n" />
+<!-- For export -->
 <input type="hidden" name="content" value="" />
 <input type="hidden" name="contentType" value="" />
-
 <input type="hidden" name="maxdelete" value="<%=dics.size()%>" />
- 
-<br>
-
+ <h1>Dictionaries</h1>
 <table class="tableau" width="100%">
  <tr>
   <th width="8%" ><a href="" title="Delete selected dictionaries" onclick="javascript:return Delete()">delete</a></th>
