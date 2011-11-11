@@ -22,7 +22,7 @@ if (request.getParameter("confirmdelete") != null && request.getParameter("confi
 // UPLOAD DICTIONARY
 if( request.getParameter( "openresults") != null && session.getAttribute( "UploadDefinitionFileResults") != null)
 {%>	
-	<script language="javascript">
+	<script type="text/javascript">
 		var win = window.open( 'upload_results.jsp', 'mpstadminresults', 'width=600,height=600,scrollbars=yes,resizable=yes,dependent=yes');
 		win.focus();
 	</script>

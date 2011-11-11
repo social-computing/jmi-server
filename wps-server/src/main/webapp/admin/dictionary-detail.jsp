@@ -165,7 +165,7 @@ for(Swatch sw : ls)
 <!-- UPLOAD SWATCHES -->
 <% if( request.getParameter( "openresults") != null && session.getValue( "UploadDefinitionFileResults") != null)
 {%>	
-	<script language="javascript">
+	<script type="text/javascript">
 		var win = window.open( 'upload_results.jsp', 'mpstadminresults', 'width=600,height=600,scrollbars=yes,resizable=yes,dependent=yes');
 		win.focus();
 	</script>
