@@ -20,14 +20,13 @@ DictionaryManager dManager = new DictionaryManagerImpl();
 Dictionary dic = dManager.findByName(dictionaryName); 
 List<Swatch> ls = dic.getSwatchs();
 %>
-
-
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 	<title>Just Map It! Administration</title>
-	<meta http-equiv="content-language" content="en">
+	<meta http-equiv="content-language" content="en" />
 	<link rel="stylesheet" href="../css/main.css"/>
-	<link rel="stylesheet" href="../css/wps.css">
+	<link rel="stylesheet" href="../css/wps.css" />
 	<script type="text/javascript" src="../client/applet/jquery.js" ></script>
 	<script type="text/javascript" src="./fancybox/jquery.fancybox-1.3.4.pack.js"></script>
 	<link rel="stylesheet" href="./fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
@@ -126,7 +125,7 @@ if (request.getParameter("confirmdelete") != null && request.getParameter("confi
 </td></tr-->
 </table>
 
-<form name="del" method="GET" action="dictionary-detail.jsp">
+<form name="del" method="get" action="dictionary-detail.jsp">
 <input type="hidden" name="dictionary" value="<%=dictionaryName%>" />
 <input type="hidden" name="confirmdelete" value="n" />
 
@@ -135,7 +134,7 @@ if (request.getParameter("confirmdelete") != null && request.getParameter("confi
 <input type="hidden" name="contentType" value="" />
 <input type="hidden" name="maxdelete" value="<%=ls.size()%>" />
 
-<br>
+<br/>
 <table class="tableau" width="100%">
  <tr>
   <th width="8%" ><a href="" title="Delete selected swatches" onclick="javascript:return Delete()">delete</a></th>
@@ -170,14 +169,14 @@ for(Swatch sw : ls)
 		win.focus();
 	</script>
 <%}%>	
-<form name="upload" enctype="multipart/form-data" method="POST" action="upload">
+<form name="upload" enctype="multipart/form-data" method="post" action="upload">
 	<input type="hidden" name="action" value="uploadSwatchFile" />
 	<input type="hidden" name="dictionary" value="<%=dictionaryName %>" />
 	<input type="hidden" name="redirect" value="./dictionary-detail.jsp?dictionary=<%=dictionaryName %>&openresults=1" />
 	<table width="100%" align="center" border="0" cellpadding="0" cellspacing="0" >
 		<tr>
 			<td><span class="subTitleBlue">Load a swatch file (*.xml, *.zip) : </span></td> 
-			<td><input type="file" name="definitionFile" size="50" ></td>
+			<td><input type="file" name="definitionFile" size="50" /></td>
 		</tr>
 		<tr>
 			<td><input type="submit" value="Load" /></td>

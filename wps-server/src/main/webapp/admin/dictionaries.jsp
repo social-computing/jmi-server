@@ -29,13 +29,13 @@ if( request.getParameter( "openresults") != null && session.getAttribute( "Uploa
 <%}	
 Collection<Dictionary> dics = manager.findAll();
 %>
-
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 	<title>Just Map It! Administration</title>
-	<meta http-equiv="content-language" content="en">
+	<meta http-equiv="content-language" content="en" />
 	<link rel="stylesheet" href="../css/main.css"/>
-	<link rel="stylesheet" href="../css/wps.css">
+	<link rel="stylesheet" href="../css/wps.css" />
 	<script type="text/javascript" > 
 		function SubmitForm(resetStart) {
 			if (resetStart)
@@ -64,7 +64,7 @@ Collection<Dictionary> dics = manager.findAll();
 <div id="top"><jsp:include page="top.jsp" /></div>
 <div id="menu"><jsp:include page="menu.jsp" /></div>
 <div id="content">
-<form name="test" method="GET" action="dictionaries.jsp">
+<form name="test" method="get" action="dictionaries.jsp">
 <input type="hidden" name="confirmdelete" value="n" />
 <!-- For export -->
 <input type="hidden" name="content" value="" />
@@ -90,13 +90,13 @@ Collection<Dictionary> dics = manager.findAll();
 </form>
 <br/><br/>
 
-<form name="uploadForm" enctype="multipart/form-data" method="POST" action="upload">
+<form name="uploadForm" enctype="multipart/form-data" method="post" action="upload">
 	<input type="hidden" name="action" value="uploadDictionaryFile" />
 	<input type="hidden" name="redirect" value="./dictionaries.jsp?openresults=1" />
 	<table width="100%" align="center" border="0" cellpadding="0" cellspacing="0" >
 	<tr>
 	<td><span class="subTitleBlue">Load a dictionary file (*.xml, *.zip) : </span></td> 
-	<td><input type="file" name="definitionFile" size="50" ></td>
+	<td><input type="file" name="definitionFile" size="50" /></td>
 	</tr>
 	<tr>
 	<td />

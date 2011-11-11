@@ -3,19 +3,12 @@
 public long getLastModified(HttpServletRequest request) {
 	return System.currentTimeMillis();
 }
-%><html>
+%><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 	<title>Just Map It! Administration</title>
 	<link rel="stylesheet" href="../css/main.css"/>
-	<link rel="stylesheet" href="../css/wps.css">
-	<script>
-		function Auth()
-		{
-			var win = window.open( 'Base64Credential.jsp', 'base64', 'width=700,height=200,scrollbars=yes,resizable=yes,dependent=yes');
-			win.focus();
-			return false;
-		}
-	</script>
+	<link rel="stylesheet" href="../css/wps.css"/>
 </head>
 <body>
 <div id="top"><jsp:include page="top.jsp" /></div>

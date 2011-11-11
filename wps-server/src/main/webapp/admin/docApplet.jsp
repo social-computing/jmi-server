@@ -3,13 +3,13 @@
 public long getLastModified(HttpServletRequest request) {
 	return System.currentTimeMillis();
 }
-%>
-<html>
+%><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 	<title>Just Map It! Administration</title>
 	<link rel="stylesheet" href="../css/main.css"/>
-	<link rel="stylesheet" href="../css/wps.css">
-	<script>
+	<link rel="stylesheet" href="../css/wps.css"/>
+	<script type="text/javascript">
 		function Auth()
 		{
 			var win = window.open( 'Base64Credential.jsp', 'base64', 'width=700,height=200,scrollbars=yes,resizable=yes,dependent=yes');
@@ -25,7 +25,7 @@ public long getLastModified(HttpServletRequest request) {
 <span class="subTitleBlue" >Just Map It! Java Applet client</span><br/><br/>
 <table width="100%" border=0>
 <tr><td>ServletURL and WPSParameters are mandatory, others are optional</td></tr>
-<tr><td>&lt;APPLET name="WPSApplet" archive="WPSApplet.jar" code="com.socialcomputing.wps.client.WPSApplet.class" codebase="/applet/" MAYscript align="absmiddle" hspace="0" vspace="0" width="100%" height="100%"&gt;</td></tr>
+<tr><td>&lt;applet name="WPSApplet" archive="WPSApplet.jar" code="com.socialcomputing.wps.client.WPSApplet.class" codebase="/applet/" MAYscript align="absmiddle" hspace="0" vspace="0" width="100%" height="100%"&gt;</td></tr>
 <tr><td>
 	<table width="90%" align="center" class="tableau" >
 	<tr><td nowrap>&lt;param name="ServletURL"</td><td>value="WPS server computation URL" /&gt;</td></tr>
@@ -47,9 +47,9 @@ public long getLastModified(HttpServletRequest request) {
 	<tr><td nowrap>&lt;param name="<a href="#appletheader" >HTTPHeaderAddValue0-9</a>"</td><td>value="HTTP header value to add to existing" /&gt;</td></tr>
 	</table>
 </td></tr>
-<tr><td>&lt;/APPLET&gt;</tr>
+<tr><td>&lt;/applet&gt;</td></tr>
 </table>
-<br>
+<br/>
 <a name="wpsparameters" ></a><span class="subTitleBlue" >Just Map It! parameters (refer to WPS-dictionary.dtd)</span>
 <table width="100%" class="tableau" >
 <tr>
@@ -83,7 +83,7 @@ public long getLastModified(HttpServletRequest request) {
 <tr><td colspan=2>Any other parameters are forwarded to Just Map It! Server as global parameters.</td></tr>
 <tr><td colspan=2>(*) optional</td></tr>
 </table>
-<br>
+<br/>
 <a name="appletready" ></a><span class="subTitleBlue" >OnAppletReadyFunc</span>
 <table width=100% class="tableau" >
 	<tr><td colspan=2>the url or function arguments may contain global plan parameters (starting with '$')</td></tr>
@@ -93,17 +93,17 @@ public long getLastModified(HttpServletRequest request) {
 	<tr><td>javascript:_target:function(args)</td><td>function(args) is called in 'target' window(*)</td></tr>
 	<tr><td colspan=2>(*) if Liveconnect (java-javascript bridge) doesn't work : if target is '_null' nothing is done, else see <a href="#noscript" >NoScriptUrl</a></td></tr>
 </table>
-<br>
+<br/>
 <a name="appletheader" ></a><span class="subTitleBlue" >HTTP headers parameters</span>
 <table width=100% class="tableau" >
 <tr><td colspan=2>Add HTTP header values to WPS server request. Samples :</td></tr>
 <tr><td><a href="." onclick="return Auth();">Basic authentication</a></td><td>For basic authentication</td></tr>
-<tr><td>Relay session cookie<br>(workaround bug Mozilla 0.9.1)</td><td>For Orion Application Server<br>
-	  &lt;param name="HTTPHeaderName0" value="COOKIE" /&gt;<br>
+<tr><td>Relay session cookie<br/>(workaround bug Mozilla 0.9.1)</td><td>For Orion Application Server<br/>
+	  &lt;param name="HTTPHeaderName0" value="COOKIE" /&gt;<br/>
 	  &lt;param name="HTTPHeaderSetValue0" value="JSESSIONID=<i>sessionid</i>" /&gt;
 </td></tr>
 </table>
-<br>
+<br/>
 <a name="appleterror" ></a><span class="subTitleBlue" >Error url</span>
 <table width=100% class="tableau" >
 	<tr><td colspan=2>url called when an error occured. Additional parameters are provided :</td></tr>
@@ -121,7 +121,7 @@ public long getLastModified(HttpServletRequest request) {
 	<tr><td>arch</td><td>OS architecture</td></tr>
 	<tr><td>java</td><td>Java version number : "45.3" for JDK 1.1, "46.0" for JDK 1.2, "47.0" for JDK 1.3, "48.0" for JDK 1.4</td></tr>
 </table>
-<br>
+<br/>
 <span class="subTitleBlue" >Just Map It! Applet javascript API (if Liveconnect is alive)</span>
 <table width="100%" class="tableau" >
 <tr>

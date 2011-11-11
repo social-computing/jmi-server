@@ -9,8 +9,8 @@
 public long getLastModified(HttpServletRequest request) {
 	return System.currentTimeMillis();
 }%>
-
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <link rel="stylesheet" href="../css/wps.css" />
 <link rel="stylesheet" href="../css/main.css" />
@@ -22,7 +22,7 @@ textarea {
 </style>
 </head>
 <body>
-<form name="upload" enctype="multipart/form-data" method="POST" action="upload">
+<form name="upload" enctype="multipart/form-data" method="post" action="upload">
 <%
 String dictionaryName = request.getParameter( "dictionary");
 String swatchName = request.getParameter("swatch");
@@ -37,7 +37,6 @@ if (dictionaryName != null) {
 		DictionaryManager managerD = new DictionaryManagerImpl();
 		Dictionary dic = managerD.findByName(dictionaryName);
 		out.print(dic.getDefinition());
-
     } else {
 %>
 <input type="hidden" name="dictionary" value="<%=dictionaryName %>" />
