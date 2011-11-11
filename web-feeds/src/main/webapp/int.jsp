@@ -10,15 +10,15 @@ if( m != null && m.length() > 0) {%>
 if( document.getElementById('<%=m%>'))
  document.getElementById('<%=m%>').innerHTML = message;
 else
- if( error) alert( message);
+; //if( error) alert( message);
 <%} else { %>
- if( error) alert( message);
+ ;//if( error) alert( message);
 <%}%>
 }
-function empty() {
+function JMIF_empty() {
  display( "Sorry, the map is empty. Does the feed contains categories?", true);
 }
-function error( error) {
+function JMIF_error( error) {
  display( "Sorry, an error occured. Is this URL correct?", true);
 }
 function JMIF_Navigate( url) {
@@ -47,6 +47,8 @@ flashvars.allowDomain = "*";
 flashvars.wpsserverurl = "http://server.just-map-it.com/";
 flashvars.wpsplanname = "Feeds";
 flashvars.analysisProfile = "GlobalProfile";
+flashvars.emptyCallback = "JMIF_empty";
+flashvars.errorCallback = "JMIF_error";
 flashvars.feed = "<%=java.net.URLEncoder.encode(request.getParameter("url")) %>";
 var params = {};
 params.quality = "high";
