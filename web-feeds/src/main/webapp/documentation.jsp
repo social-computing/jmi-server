@@ -4,7 +4,7 @@
     <title>How to use the service - Just Map It! Feeds</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta http-equiv="content-language" content="en" />
-	<meta name="description" content="How to use the service Just Map It! Feeds" />
+	<meta name="description" content="How to use the service Just Map It! Feeds. Kind of feeds, how to integrate, ..." />
 	<meta name="keywords" content="documentation, rss, feeds, feed, map, cartography, visualization, social, blog, gadget, widget, social computing, category, representation, information" />
 	<meta name="author" content="Social Computing" /> 
 	<meta name="robots" content="all" /> 
@@ -16,7 +16,7 @@
 <h2>Overview</h2>
 Just Map It! Feeds displays your feed(s) items on a map. 
 <h2>Kinds of URL(s)</h2>
-<p>RSS 2.0 and Atom feeds are supported. The feeds items MUST contain categories; otherwise we won't be able to produce a map.</p>
+<p>RSS 2.0 and Atom feeds are supported. The feeds items MUST contain categories; otherwise Just Map It! Feeds won't be able to produce a map.</p>
 <p>You also can give directly a website URL. All the feeds described in it will be mapped.</p>
 <h3>One URL, two URL(s), ...</h3>
 <p>You want to map more than one feed? Just separate them with a comma. You can mix RSS, Atom or website URLs.</p>
