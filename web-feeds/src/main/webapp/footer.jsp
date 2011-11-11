@@ -5,7 +5,7 @@
 <%String feed = request.getParameter("feed");
 if( feed == null) feed = "";
 if( feed.length() > 0) { %>
-<td align="right"><a title="Add it to my webpage" href="./integrate.jsp?feed=<%=java.net.URLEncoder.encode(feed)%>">Add it to my webpage</a></td>
+<td align="right"><a title="Add it to my webpage" href="./integrate.jsp?feed=<%=java.net.URLEncoder.encode(feed, "UTF-8")%>">Add it to my webpage</a></td>
 <%} else { %>
 <td align="right"><a title="Add it to my webpage" href="./integrate.jsp">Add it to my webpage</a></td>
 <%}%>

@@ -49,7 +49,7 @@ flashvars.wpsplanname = "Feeds";
 flashvars.analysisProfile = "GlobalProfile";
 flashvars.emptyCallback = "JMIF_empty";
 flashvars.errorCallback = "JMIF_error";
-flashvars.feed = "<%=java.net.URLEncoder.encode(request.getParameter("url")) %>";
+flashvars.feed = "<%=java.net.URLEncoder.encode(request.getParameter("url"), "UTF-8") %>";
 var params = {};
 params.quality = "high";
 params.bgcolor = "#FFFFFF";
