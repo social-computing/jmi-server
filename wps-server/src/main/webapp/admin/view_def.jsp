@@ -22,7 +22,7 @@ textarea {
 </style>
 </head>
 <body>
-<textarea name="definition" readonly="true">
+<textarea name="definition" readonly="readonly">
 <%
 String dictionaryName = request.getParameter( "dictionary");
 String swatchName = request.getParameter("swatch");

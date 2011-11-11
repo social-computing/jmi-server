@@ -27,7 +27,7 @@ You can place the map directly on any webpage. <a target="_blank" title="Add it 
 <a target="_blank" title="Add it to iGoogle" href="http://www.google.com/ig/adde?moduleurl=http://feeds.just-map-it.com/google/igoogle-social-computing-feeds.xml"><img src="http://buttons.googlesyndication.com/fusion/add.gif" style="width:104px; height:17px;border:0px;" alt="Add to iGoogle" /></a>
 <h3>Add Just Map It! Feeds to Blogger</h3>
 <p>Click on 'Add a gadget', then on 'Add your own' and enter this URL:</p>
-<textarea readonly="true" style="width:100%">http://feeds.just-map-it.com/google/blogger-social-computing-feeds.xml</textarea>
+<textarea readonly="readonly" style="width:100%">http://feeds.just-map-it.com/google/blogger-social-computing-feeds.xml</textarea>
 <h3>Add Just Map It! Feeds to Netvibes</h3>
 <p><a target="_blank" title="Add it to Netvibes" href="http://eco.netvibes.com/widgets/470252/just-map-it-feeds">Add it to Netvibes</a></p>
 <h3>You need more customization?</h3>

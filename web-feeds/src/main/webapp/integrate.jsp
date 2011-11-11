@@ -45,17 +45,18 @@ if( h==null || h.length() == 0) h = "500";
 	<tr><td></td><td><input type="submit" value="Get code"></td></tr>
 	</table>	
 	</form>
+</div>
 </td><td  style="vertical-align:top;">
 <div id="preview">
 	<h2>2 - Preview - 500 * 300px</h2>
 	<div id="message"><i>Here is a div with id='message'</i></div>
-	<script type="text/javascript" src="./int.jsp?url=<%=java.net.URLEncoder.encode(feed)%>&m=message&w=500&h=300"></script>
+	<script type="text/javascript" src="./int.jsp?url=<%=java.net.URLEncoder.encode(feed, "UTF-8")%>&m=message&w=500&h=300"></script>
 </div>
 </td></tr>
 <tr><td colspan="2">
 <div id="code">
 	<h2>3 - Copy this code in your page</h2>
-	<textarea name="code" readonly="true" style="width:100%"><script type="text/javascript" src="http://feeds.just-map-it.com/int.jsp?url=<%=java.net.URLEncoder.encode(feed)%>&m=<%=java.net.URLEncoder.encode(m)%>&w=<%=w%>&h=<%=h%>"></script></textarea> 
+	<textarea name="code" readonly="readonly" style="width:100%">&lt;script type="text/javascript" src="http://feeds.just-map-it.com/int.jsp?url=<%=java.net.URLEncoder.encode(feed, "UTF-8")%>&amp;m=<%=java.net.URLEncoder.encode(m, "UTF-8")%>&amp;w=<%=w%>&amp;h=<%=h%>"&gt;&lt;/script&gt;</textarea> 
 </div>
 </td></tr>
 </table>
