@@ -56,12 +56,14 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
         
 		m_inverted =  UrlHelper.ReplaceParameter( m_InvertedDef, wpsparams).equalsIgnoreCase( "true");
 		for( UrlHelper feed : m_feeds) {
-            for( String url : UrlHelper.ReplaceParameter( feed.getUrl(), wpsparams).split( ",")) {
+		    String urlLst = UrlHelper.ReplaceParameter( feed.getUrl(), wpsparams);
+            for( String url : urlLst.split( ",")) {
                 feed.setUrl( url);
     		    feed.openConnections( planType, wpsparams);
     	        read( feed, planType, wpsparams, titles, urls, counts);
                 feed.closeConnections();
             }
+            trackSite( wpsparams, urlLst);
 		}
 		wpsparams.put( "FEEDS_TITLES",  titles.toArray());
         wpsparams.put( "FEEDS_URLS",    urls.toArray());
@@ -201,6 +203,23 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
             u.addParameter( "url", url);
             u.addParameter( "title", title);
             u.addParameter( "count", count);
+            try {
+                u.openConnections( 0, wpsparams);
+                u.closeConnections();
+            }
+            catch (WPSConnectorException e) {
+                //e.printStackTrace();
+            }
+        }
+    }
+    
+    private void trackSite( Hashtable<String, Object> wpsparams, String feed) {
+        String track = ( String) wpsparams.get( "trackUrl");
+        String site = ( String) wpsparams.get( "site");
+        if( track != null && track.length() > 0 && site != null && site.length() > 0) {
+            UrlHelper u = new UrlHelper( UrlHelper.Type.GET, track);
+            u.addParameter( "url", site);
+            u.addParameter( "feed", feed);
             try {
                 u.openConnections( 0, wpsparams);
                 u.closeConnections();

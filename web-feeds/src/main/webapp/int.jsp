@@ -49,7 +49,9 @@ flashvars.wpsplanname = "Feeds";
 flashvars.analysisProfile = "GlobalProfile";
 flashvars.emptyCallback = "JMIF_empty";
 flashvars.errorCallback = "JMIF_error";
-flashvars.feed = "<%=java.net.URLEncoder.encode(request.getParameter("url"), "UTF-8") %>";
+flashvars.feed = "<%=java.net.URLEncoder.encode(request.getParameter("url"), "UTF-8")%>";
+flashvars.trackUrl = "http://feeds.just-map-it.com/services/sites/record.json";
+flashvars.site = window.location.href;
 var params = {};
 params.quality = "high";
 params.bgcolor = "#FFFFFF";
@@ -60,7 +62,6 @@ swfobject.embedSWF(
     "<%=request.getParameter("w")%>", "<%=request.getParameter("h")%>", 
     "10.0.0", "http://feeds.just-map-it.com/client/playerProductInstall.swf", 
     flashvars, params);
-
 document.write( "<div id='" + mapid + "'>");
 var pageHost = ((document.location.protocol == "https:") ? "https://" :	"http://"); 
 document.write("<a href='http://www.adobe.com/go/getflashplayer'><img src='" 

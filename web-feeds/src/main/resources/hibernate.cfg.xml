@@ -26,5 +26,6 @@
 		<property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
 		<property name="current_session_context_class">thread</property>
 		<mapping class="com.socialcomputing.feeds.Feed"/>
+		<mapping class="com.socialcomputing.feeds.Site"/>
 	</session-factory>
 </hibernate-configuration>

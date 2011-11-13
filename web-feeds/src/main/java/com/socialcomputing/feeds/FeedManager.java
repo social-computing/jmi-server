@@ -59,7 +59,6 @@ public class FeedManager {
         return feed;
     }
     
-
     @GET
     @Path("top.json")
     @Produces(MediaType.APPLICATION_JSON)
