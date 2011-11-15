@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='ISO-8859-1'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 
 <!-- A Swatch describes how a specifique WPS object is displayed and respond to events.<br>
 	Nearly every elements includes an optional unique 'id' attribute. Its purpose is to identify an element so it can be referenced somewhere else.  -->

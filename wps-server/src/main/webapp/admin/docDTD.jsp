@@ -26,12 +26,12 @@ $(document).ready(function() {
     /* Apply fancybox to multiple items */
     parent.$.fancybox.close();
     $("a.iframe").fancybox({
-        'width'                : '75%',
-        'height'            : '75%',
+        'width'             : '90%',
+        'height'            : '80%',
         'autoScale'         : false,
-        'transitionIn'        : 'none',
-        'transitionOut'        : 'none',
-        'type'                : 'iframe'
+        'transitionIn'      : 'none',
+        'transitionOut'     : 'none',
+        'type'              : 'iframe'
     });
 });
 </script>

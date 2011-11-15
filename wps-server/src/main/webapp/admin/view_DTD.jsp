@@ -6,8 +6,8 @@ public long getLastModified(HttpServletRequest request) {
 <head>
 <style type="text/css">
 textarea {
-	width: 92%;
-	height: 92%;
+	width: 99%;
+	height: 99%;
 }
 </style>
 </head>
