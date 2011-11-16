@@ -29,7 +29,7 @@ function JMIF_Focus( args)
 	var parameters = {};
 	parameters["entityId"] = args[0];
 	parameters["feed"] = args[2];
- 	parameters["trackUrl] = "";
+ 	parameters["trackUrl"] = "";
 	document.getElementById(mapid).compute( parameters);
 	display( "<i>Focus on category:</i> " + args[1], false);
 }
@@ -39,7 +39,7 @@ function JMIF_Focus( args)
 	parameters["attributeId"] = args[0];
 	parameters["analysisProfile"] = "DiscoveryProfile";
 	parameters["feed"] = args[2];
- 	parameters["trackUrl] = "";
+ 	parameters["trackUrl"] = "";
  	document.getElementById(mapid).compute( parameters);
 	display( "<i>Centered on item:</i> " + args[1], false);
  }
