@@ -1,12 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@page import="com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.portablecontacts.FacebookEntityConnector"%>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">	
 <head>
     <title>Just Map It! Facebook</title>
 <%String code = request.getParameter("code");
-if( code == null) { %>
+String oauth_token = FacebookEntityConnector.GetProperty( request.getParameter("signed_request"), "oauth_token");
+if( code == null && oauth_token == null) { %>
 <title>Redirection</title>
 <meta name="robots" content="noindex,follow" />
-<meta http-equiv="refresh" content="0; url=https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/index.jsp&scope=friends_likes,friends_groups,friends_activities,friends_events,publish_stream,user_photos" />
+<!--meta http-equiv="refresh" content="0; url=https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/index.jsp&scope=friends_likes,friends_groups,friends_activities,friends_events,publish_stream,user_photos" /-->
+<meta http-equiv="refresh" content="0; url=https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://apps.facebook.com/just-map-it/&scope=friends_likes,friends_groups,friends_activities,friends_events,publish_stream,user_photos" />
 </head>
 <body>
 <!--script> top.location.href='https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/index.jsp&scope=friends_likes,friends_groups,friends_activities,friends_events,publish_stream,user_photos'</script-->
@@ -55,6 +58,7 @@ if( code == null) { %>
            flashvars.wpsserverurl = "http://wps.wps.cloudbees.net/";
            flashvars.wpsplanname = "Facebook_sample";
            flashvars.fbauthcode = '<%=code%>';
+           flashvars.fbtoken = '<%=oauth_token%>';
            flashvars.analysisProfile = "GlobalProfile";
            flashvars.kind = "friends";
            var params = {};

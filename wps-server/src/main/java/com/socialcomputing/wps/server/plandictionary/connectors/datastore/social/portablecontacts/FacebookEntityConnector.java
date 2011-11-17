@@ -1,5 +1,6 @@
 package com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.portablecontacts;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -10,6 +11,8 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
 import org.jdom.Element;
+
+import sun.misc.BASE64Decoder;
 
 import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Attribute;
@@ -49,15 +52,18 @@ public class FacebookEntityConnector extends SocialEntityConnector {
     @Override
     public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
         super.openConnections( planType, wpsparams);
-        oAuth2Helper.openConnections( planType, wpsparams);
-        String token = "";
-        for( String p : oAuth2Helper.getResult().split("&")) {
-            if( p.startsWith( "access_token=")) {
-                token = p.substring( p.indexOf( '=') + 1);
-                break;
+        String token = (String)wpsparams.get("fbtoken");
+        if( token == null) {
+            oAuth2Helper.openConnections( planType, wpsparams);
+            for( String p : oAuth2Helper.getResult().split("&")) {
+                if( p.startsWith( "access_token=")) {
+                    token = p.substring( p.indexOf( '=') + 1);
+                    break;
+                }
             }
         }
-        
+        if( token == null) token = "";
+    
         wpsparams.put( "$access_token", token);
         try {
             String kind = ( String)wpsparams.get("kind");
@@ -190,6 +196,21 @@ public class FacebookEntityConnector extends SocialEntityConnector {
     public void closeConnections() throws WPSConnectorException {
         super.closeConnections();
         oAuth2Helper.closeConnections();
+    }
+    
+    public static String GetProperty( String signed_request, String property) throws IOException {
+        String ret = null;
+        if( signed_request != null) {
+            int pos = signed_request.indexOf( '.');
+            if( pos > 0) {
+                BASE64Decoder decoder = new BASE64Decoder();
+                String json = new String( decoder.decodeBuffer( signed_request.substring( pos+1)));
+                JsonNode node = mapper.readTree( json);
+                if( node.get( property) != null)
+                    ret = node.get( property).getTextValue();
+            }
+        }
+        return ret;
     }
     
 }
