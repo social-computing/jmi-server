@@ -24,7 +24,6 @@
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			import mx.graphics.codec.PNGEncoder;
-			import mx.messaging.channels.StreamingAMFChannel;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			
@@ -199,7 +198,7 @@
 						photo.enabled = true;
 					});
 				mploader.addVariable( "access_token", map.getProperty( "$access_token"));
-				mploader.addFile( bphoto, "social-computing.png", "filedata", "image/png");
+				mploader.addFile( bphoto, "just-map-it.png", "filedata", "image/png");
 				mploader.load( "https://graph.facebook.com/" + map.getProperty("$MY_FB_ID") + "/photos");
 			}
 			

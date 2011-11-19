@@ -23,7 +23,7 @@
 
 	<servlet-mapping>
 		<servlet-name>Jersey</servlet-name>
-		<url-pattern>/services/*</url-pattern>
+		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
 
 	<session-config>

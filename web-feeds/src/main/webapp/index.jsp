@@ -43,7 +43,21 @@ $(document).ready(function() {
 			document.getElementById("message").innerHTML = titles.join( ', ');
 		}
 	  }
-  }
+	  var urls = map.getArrayProperty( "$FEEDS_URLS");
+	  if( urls && urls.length == 1) {
+		var data = {};
+		data["url"] = urls[0];
+		$.getJSON( "./rest/feeds/feed.json", data, function( feed){
+			var date = new Date();
+			if( !feed.thumbnail_date)
+				feed.thumbnail_date = 0;
+			var delta = date.getTime() - feed.thumbnail_date;
+			if( delta > 7 * 24 * 3600 * 1000) {
+				map.uploadAsImage( 'http://feeds.just-map-it.com/rest/feeds/feed/thumbnail.png', 'preview', 'image/png', 150, 100, true, data);
+			}
+		});
+	  }
+}
   function empty() {
 	document.getElementById("message").innerHTML = "Sorry, the map is empty. Does the feed contains categories?";
   }
@@ -81,16 +95,14 @@ $(document).ready(function() {
 
 <script type="text/javascript" src="./client/swfobject.js"></script>
 <script type="text/javascript">
-    <!-- For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. --> 
     var swfVersionStr = "10.0.0";
-    <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
     var xiSwfUrlStr = "./client/playerProductInstall.swf";
     var flashvars = {};
     flashvars.allowDomain = "*";
     //flashvars.wpsserverurl = "http://localhost:8080/wps-server";
-    //flashvars.track = "http://localhost:8080/web-feeds/services/feeds/record.json";
+    //flashvars.track = "http://localhost:8080/web-feeds/rest/feeds/record.json";
     flashvars.wpsserverurl = "http://server.just-map-it.com/";
-    flashvars.track = "http://feeds.just-map-it.com/services/feeds/record.json";
+    flashvars.track = "http://feeds.just-map-it.com/rest/feeds/record.json";
     flashvars.wpsplanname = "Feeds";
     flashvars.analysisProfile = "GlobalProfile";
     flashvars.feed = "<%=java.net.URLEncoder.encode(feed, "UTF-8")%>";
@@ -109,7 +121,6 @@ $(document).ready(function() {
         "100%", "100%", 
         swfVersionStr, xiSwfUrlStr, 
         flashvars, params, attributes);
-<!-- JavaScript enabled so display the flashContent div in case it is not replaced with a swf object. -->
 swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 <%}%>
 </script>
@@ -139,7 +150,6 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 	<form method="get">
 		<input type="text" name="feed" title="URLs" size="80" value="<%=feed != null ? feed : "" %>" />
 		<input type="submit" value="Just Map It!" />
-		<span id="doc"><a id="howtouse" title="How to use the service" href="./documentation.jsp">How to use the service</a></span>
 	</form>
 </td>
 <td rowspan="2">
@@ -155,52 +165,22 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 </tr>
 <tr>
 	<td nowrap colspan="1">
-		<p id="message">&nbsp;</p>
+		<p id="message">Just Map It! Feeds lets you view and navigate your feeds thru an interactive map!</p>
 	</td>
 </tr>
 </table>
 </div>
 <div id="content" >
 <%if (feed.length() == 0) {%>
-<p class="slogan">Just Map It! Feeds lets you view and navigate your feeds thru an interactive map!</p>
-<div id="last-feeds">
-<p><a href="./last-feeds.jsp">Last feeds mapped:</a> <span id="last-feed-cloud"></span></p>
-</div>
-<div id="top-feeds"><p><a href="./top-feeds.jsp">Most mapped feeds:</a></p></div>
-<div id="top-feeds-cloud">
+<div id="last-feeds"><p><a href="./top-feeds.jsp">Last mapped feeds:</a></p></div>
+<div class="grid">
 <%FeedManager feedManager = new FeedManager();
-java.util.List<Feed> feeds = feedManager.top( "50", "true");
-float max = feeds.size() > 0 ? feeds.get(0).getCount() : 1;
-for (int i = feeds.size()-1; i > 0; i = i-2) {
-    Feed f = feeds.get( i);
-	double dsize = (java.lang.Math.log(( f.getCount() / max * (java.lang.Math.E-1)) + 1)); // ln scale
-	long size = java.lang.Math.round( (dsize * 20) + 10);%>
-<a title="Just Map It! Feed: <%=f.getUrl()%>" href='./?feed=<%=f.getUrl()%>' style="font-size: <%=size%>px"><%=f.getTitle()%></a>	
-<%}
-for (int i = 0; i < feeds.size()-1; i = i+2) {
-    Feed f = feeds.get( i);
-	double dsize = (java.lang.Math.log(( f.getCount() / max * (java.lang.Math.E-1)) + 1)); // ln scale
-	long size = java.lang.Math.round( (dsize * 20) + 10);%>
-<a title="Just Map It! Feed: <%=f.getUrl()%>" href='./?feed=<%=f.getUrl()%>' style="font-size: <%=size%>px"><%=f.getTitle()%></a>	
-<%}%>
+java.util.List<Feed> feeds = feedManager.last( 25, "true");
+for (Feed f : feeds) {%>
+<div class="vignette">
+<a title="Just Map It! Feed: <%=f.getUrl()%>" href='./?feed=<%=java.net.URLEncoder.encode(f.getUrl(),"UTF-8")%>'><img border="0" width="150" height="100" src="./rest/feeds/feed/thumbnail.png?url=<%=java.net.URLEncoder.encode(f.getUrl(),"UTF-8")%>" /><%=f.getTitle()%></a>	
 </div>
-<script type="text/javascript">
-$.getJSON( "./services/feeds/last.json", function( data){
-	if( data && data.length > 0) {
-		var i = Math.ceil( Math.random() * data.length);
-		var lastFeed = $( '#last-feed-cloud');
-		lastFeed.html( '<a title="Just Map It! Feed: ' + data[i].url + '" href="./?' + jQuery.param({'feed':data[i].url}) + '">' + data[i].title + '</a>');
-		setInterval( function() {
-			i = (i+1) % data.length;
-			lastFeed.fadeOut( 'slow', function() {
-				lastFeed.html( '<a title="Just Map It! Feed: ' + data[i].url + '" href="./?' + jQuery.param({'feed':data[i].url}) + '">' + data[i].title + '</a>');
-				lastFeed.fadeIn( 'slow');
-			});
-		}, 5000);
-	}
-  }
-);
-</script>
+<%}%></div>
 <%} else {%>
     <div id="flashContent">
     	<p>

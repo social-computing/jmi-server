@@ -1,6 +1,7 @@
 ﻿<div id="footer">
 <table><tr>
 <td><a title="Social Computing" href="http://www.social-computing.com" target="_blank">Powered by Social Computing</a></td>
+<td><a id="howtouse" title="How to use the service" href="./documentation.jsp">How to use the service</a></td>
 <!--  td><a href=".">Privacy Policies</a></td-->
 <%String feed = request.getParameter("feed");
 if( feed == null) feed = "";
