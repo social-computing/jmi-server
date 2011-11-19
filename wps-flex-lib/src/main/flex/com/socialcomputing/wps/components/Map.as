@@ -193,6 +193,10 @@ package com.socialcomputing.wps.components
 			_curPos = pos;
 		}
 		
+		public function get dataProvider():Object
+		{
+			return this._dataProvider;	
+		}
 		public function set dataProvider(value:Object):void
 		{
 			//Alert.show( unescape( flash.display.LoaderInfo(this.root.loaderInfo).url));
