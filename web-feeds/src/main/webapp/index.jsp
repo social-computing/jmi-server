@@ -172,7 +172,7 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 </div>
 <div id="content" >
 <%if (feed.length() == 0) {%>
-<div id="last-feeds"><p><a href="./top-feeds.jsp">Last mapped feeds:</a></p></div>
+<div id="last-feeds"><p>Last mapped feeds:</p></div>
 <div class="grid">
 <%FeedManager feedManager = new FeedManager();
 java.util.List<Feed> feeds = feedManager.last( 25, "true");
