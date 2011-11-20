@@ -25,13 +25,14 @@ div#footer {
 	height: 30px;
 	position: absolute;
 	bottom: 0;
-	left: 0;
+	left: 20;
 	background-color: #FFFFFF;
 }
 
 div#footer table {
 	width: 100%;
 	white-space: nowrap;
+	padding: 0 20px 0 20px;
 }
 
 div#footer {
