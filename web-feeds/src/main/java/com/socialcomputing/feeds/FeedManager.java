@@ -65,6 +65,35 @@ public class FeedManager {
     }
     
     @GET
+    @Path("count.json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public long countJson( @DefaultValue("true") @QueryParam("success") String success) {
+        return count( success);
+    }
+    
+    public long count ( String success) {
+        long count = 0;
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Query query = null;
+            if( success == null || success.equals( "*")) {
+                query = session.createQuery( "select count(*) from Feed");
+            }
+            else {
+                query = session.createQuery( "select count(*) from Feed as feed where feed.success = :success");
+                query.setBoolean( "success", success.equalsIgnoreCase( "true"));
+            }
+            count = ( Long)query.uniqueResult();
+            Response.ok();
+        }
+        catch (HibernateException e) {
+            LOG.error(e.getMessage(), e);
+            Response.status( HttpServletResponse.SC_BAD_REQUEST);
+        }
+        return count;
+    }
+    
+    @GET
     @Path("top.json")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Feed> topJson( @DefaultValue("0") @QueryParam("start") int start, @DefaultValue("-1") @QueryParam("max") int max, @DefaultValue("true") @QueryParam("success") String success) {

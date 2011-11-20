@@ -6,7 +6,10 @@ if( feed.length() > 0) {
     if( !feed.startsWith( "http://") && !feed.startsWith( "http://")) {
         feed = "http://" + feed;
     }
-}%><head>
+}
+int numpage = 0;
+String spage = request.getParameter("page");
+if( spage != null) numpage = Integer.parseInt( spage);%><head>
 <title>Just Map It! Feeds</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="content-language" content="en" />
@@ -175,7 +178,7 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 <div id="last-feeds"><p>Last mapped feeds:</p></div>
 <div class="grid">
 <%FeedManager feedManager = new FeedManager();
-java.util.List<Feed> feeds = feedManager.last( 0, 25, "true");
+java.util.List<Feed> feeds = feedManager.last( numpage*10, 10, "true");
 for (Feed f : feeds) {%>
 <div class="vignette">
 <div class="thumbnail">
@@ -185,6 +188,15 @@ for (Feed f : feeds) {%>
 <a href='./?feed=<%=java.net.URLEncoder.encode(f.getUrl(),"UTF-8")%>'><%=f.getTitle()%></a>	
 </div></div>
 <%}%></div>
+<div class="pagination"><ul>
+<%long max = (feedManager.count( "true") / 10) + 1;
+for( long i = 0; i < max; ++i) { %>
+<li <%=(numpage==i? "class='active'": "")%>><a href=".<%=(i==0? "" : "/?page=" + i)%>"><%=i+1%></a></li>
+<%}
+for( long i = max+1; i < 20; ++i) { %>
+<li class='disabled'><a ><%=i+1%></a></li>
+<%}%>
+</ul></div>
 <%} else {%>
     <div id="flashContent">
     	<p>
