@@ -1,14 +1,14 @@
 ﻿<div id="footer">
 <table><tr>
-<td><a title="Social Computing" href="http://www.social-computing.com" target="_blank">Powered by Social Computing</a></td>
-<td><a id="howtouse" title="How to use the service" href="./documentation.jsp">How to use the service</a></td>
 <!--  td><a href=".">Privacy Policies</a></td-->
 <%String feed = request.getParameter("feed");
 if( feed == null) feed = "";
 if( feed.length() > 0) { %>
-<td align="right"><a title="Add it to my webpage" href="./integrate.jsp?feed=<%=java.net.URLEncoder.encode(feed, "UTF-8")%>">Add it to my webpage</a></td>
+<td><a title="Add it to my webpage" href="./integrate.jsp?feed=<%=java.net.URLEncoder.encode(feed, "UTF-8")%>">Add it to my webpage</a></td>
 <%} else { %>
-<td align="right"><a title="Add it to my webpage" href="./integrate.jsp">Add it to my webpage</a></td>
+<td><a title="Add it to my webpage" href="./integrate.jsp">Add it to my webpage</a></td>
 <%}%>
 <!-- td><a href="./documentation.jsp#igoogle">Add it to iGoogle</a></td-->
+<td align="center"><a id="howtouse" title="How to use the service" href="./documentation.jsp">How to use the service</a></td>
+<td align="right">Powered by <a title="Just Map It!" href="http://www.social-computing.com/offre/cartographie-just-map-it/" target="_blank">Just Map It!</a>- &copy; 2011 <a title="Social Computing" href="http://www.social-computing.com" target="_blank">Social Computing</a></td>
 </tr></table></div>

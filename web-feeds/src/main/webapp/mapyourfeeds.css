@@ -34,12 +34,15 @@ div#footer table {
 	white-space: nowrap;
 }
 
-div#footer a {
-	padding: 0 20px 0 20px;
+div#footer {
 	text-align: left;
 	color: #37b0e3;
 	font-size: 14px;
 	font-weight: bold;
+}
+
+div#footer a {
+	color: #37b0e3;
 }
 
 @media screen {

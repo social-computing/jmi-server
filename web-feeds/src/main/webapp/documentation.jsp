@@ -8,7 +8,7 @@
 	<meta name="keywords" content="documentation, rss, feeds, feed, map, cartography, visualization, social, blog, gadget, widget, social computing, category, representation, information" />
 	<meta name="author" content="Social Computing" /> 
 	<meta name="robots" content="all" /> 
-	<link rel=StyleSheet href="./mapyourfeeds-doc.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="./mapyourfeeds-doc.css" type="text/css" media="screen" />
 </head>
 <body>
 <div id="documentation">

@@ -21,7 +21,7 @@ if( spage != null) numpage = Integer.parseInt( spage);%><head>
 <meta property="og:description" content="View and navigate your feeds thru an interactive map! by Social Computing" />
 <meta property="og:image" content="http://feeds.just-map-it.com/images/thumbnail.png" />
 <link rel="shortcut icon" href="http://feeds.just-map-it.com/favicon.ico" />
-<link rel=StyleSheet href="./mapyourfeeds.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="./mapyourfeeds.css" type="text/css" media="screen" />
 <script type="text/javascript" src="./js/jquery-1.6.4.min.js"></script>
 <script type="text/javascript" src="./fancybox/jquery.fancybox-1.3.4.pack.js"></script>
 <link rel="stylesheet" type="text/css" href="./fancybox/jquery.fancybox-1.3.4.css" media="screen" />
