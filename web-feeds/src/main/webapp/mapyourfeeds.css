@@ -236,7 +236,7 @@ h3 {
 
 .vignette {
     background-color: #ffffff;
-    border: 2px solid #000000;
+    border: 2px solid #37b0e3;
     border-radius: 6px 6px 6px 6px;
     box-shadow: 3px 3px 10px rgba(50, 50, 50, 0.48);
     float: left;
@@ -246,14 +246,15 @@ h3 {
     text-align: center;
     width: 160px;
     padding-top: 5px;
+    padding-bottom: 20px;
 }
 
-.vignette:hover {border:2px solid #37b0e3;}
+.vignette:hover {border:2px solid #f59c23;}
 
-.vignette a {
+.thumbnail-title, .thumbnail-title a {
+    padding-top: 15px;
 	color: #37b0e3;
 }
-
 .vignette .play {
 	background:url('./images/play.png');
 	position:absolute;
@@ -262,3 +263,12 @@ h3 {
 	width:22px;
 	height:24px;
 }
+
+#play {background-color:#000; text-align:center;border-bottom:3px solid #BFBFBF;padding-top:10px;}
+#play, #play .description {display:none;}
+#play .pagination {display:none;}
+.pagination{margin:18px 0 50px 50px;}
+.pagination a:hover, .pagination .active a {background-color:#eee;}
+
+.vignette *, .pagination * {cursor:pointer;}
+

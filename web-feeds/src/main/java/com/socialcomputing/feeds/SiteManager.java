@@ -64,24 +64,24 @@ public class SiteManager {
     @GET
     @Path("top.json")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Site> topJson( @DefaultValue("-1") @QueryParam("max") int max) {
-        return top( max);
+    public List<Site> topJson( @DefaultValue("0") @QueryParam("start") int start, @DefaultValue("-1") @QueryParam("max") int max) {
+        return top( start, max);
     }
     
     @GET
     @Path("top.xml")
     @Produces(MediaType.APPLICATION_XML)
-    public List<Site> topXml( @DefaultValue("-1") @QueryParam("max") int max) {
-        return top( max);
+    public List<Site> topXml( @DefaultValue("0") @QueryParam("start") int start, @DefaultValue("-1") @QueryParam("max") int max) {
+        return top( start, max);
     }
     
-    public List<Site> top( int max) {
+    public List<Site> top( int start, int max) {
         List<Site> sites = null;
         try {
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             max = max == -1 ? 100 : Math.min( max, 1000);
             Query query = session.createQuery( "from Site as site order by site.count desc");
-            query.setFirstResult( 0);
+            query.setFirstResult( start);
             query.setMaxResults( max);
             sites = query.list();
             Response.ok();

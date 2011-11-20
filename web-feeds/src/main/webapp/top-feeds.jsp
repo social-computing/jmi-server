@@ -28,7 +28,7 @@
 </div><br/><br/><br/>
 <div id="top-feeds-cloud">
 <%FeedManager feedManager = new FeedManager();
-java.util.List<Feed> feeds = feedManager.top( 100, "true");
+java.util.List<Feed> feeds = feedManager.top( 0, 100, "true");
 float max = feeds.size() > 0 ? feeds.get(0).getCount() : 1;
 for( Feed feed : feeds) {
 	double dsize = (java.lang.Math.log(( feed.getCount() / max * (java.lang.Math.E-1)) + 1)); // ln scale

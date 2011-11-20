@@ -175,11 +175,15 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 <div id="last-feeds"><p>Last mapped feeds:</p></div>
 <div class="grid">
 <%FeedManager feedManager = new FeedManager();
-java.util.List<Feed> feeds = feedManager.last( 25, "true");
+java.util.List<Feed> feeds = feedManager.last( 0, 25, "true");
 for (Feed f : feeds) {%>
 <div class="vignette">
-<a title="Just Map It! Feed: <%=f.getUrl()%>" href='./?feed=<%=java.net.URLEncoder.encode(f.getUrl(),"UTF-8")%>'><img border="0" width="150" height="100" src="./rest/feeds/feed/thumbnail.png?url=<%=java.net.URLEncoder.encode(f.getUrl(),"UTF-8")%>" /><%=f.getTitle()%></a>	
-</div>
+<div class="thumbnail">
+<a title="Just Map It! Feed: <%=f.getUrl()%>" href='./?feed=<%=java.net.URLEncoder.encode(f.getUrl(),"UTF-8")%>'><img border="0" width="150" height="100" src="./rest/feeds/feed/thumbnail.png?url=<%=java.net.URLEncoder.encode(f.getUrl(),"UTF-8")%>" /></a>
+<!--span class="play"/-->
+</div><div class="thumbnail-title">
+<a href='./?feed=<%=java.net.URLEncoder.encode(f.getUrl(),"UTF-8")%>'><%=f.getTitle()%></a>	
+</div></div>
 <%}%></div>
 <%} else {%>
     <div id="flashContent">

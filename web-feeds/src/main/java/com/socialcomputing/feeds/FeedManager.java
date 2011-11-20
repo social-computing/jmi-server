@@ -14,11 +14,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -70,18 +67,18 @@ public class FeedManager {
     @GET
     @Path("top.json")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Feed> topJson( @DefaultValue("-1") @QueryParam("max") int max, @DefaultValue("true") @QueryParam("success") String success) {
-        return top( max, success);
+    public List<Feed> topJson( @DefaultValue("0") @QueryParam("start") int start, @DefaultValue("-1") @QueryParam("max") int max, @DefaultValue("true") @QueryParam("success") String success) {
+        return top( start, max, success);
     }
     
     @GET
     @Path("top.xml")
     @Produces(MediaType.APPLICATION_XML)
-    public List<Feed> topXml( @DefaultValue("-1") @QueryParam("max") int max, @DefaultValue("true") @QueryParam("success") String success) {
-        return top( max, success);
+    public List<Feed> topXml( @DefaultValue("0") @QueryParam("start") int start, @DefaultValue("-1") @QueryParam("max") int max, @DefaultValue("true") @QueryParam("success") String success) {
+        return top( start, max, success);
     }
     
-    public List<Feed> top( int max, String success) {
+    public List<Feed> top( int start, int max, String success) {
         List<Feed> feeds = null;
         try {
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -94,7 +91,7 @@ public class FeedManager {
                 query = session.createQuery( "from Feed as feed where feed.success = :success order by feed.count desc");
                 query.setBoolean( "success", success.equalsIgnoreCase( "true"));
             }
-            query.setFirstResult( 0);
+            query.setFirstResult( start);
             query.setMaxResults( max);
             feeds = query.list();
             Response.ok();
@@ -109,18 +106,18 @@ public class FeedManager {
     @GET
     @Path("last.json")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Feed> lastJson( @DefaultValue("-1") @QueryParam("max") int max, @DefaultValue("true") @QueryParam("success") String success) {
-        return last( max, success);
+    public List<Feed> lastJson( @DefaultValue("0") @QueryParam("start") int start, @DefaultValue("-1") @QueryParam("max") int max, @DefaultValue("true") @QueryParam("success") String success) {
+        return last( start, max, success);
     }
 
     @GET
     @Path("last.xml")
     @Produces(MediaType.APPLICATION_XML)
-    public List<Feed> lastXml( @DefaultValue("-1") @QueryParam("max") int max, @DefaultValue("true") @QueryParam("success") String success) {
-        return last( max, success);
+    public List<Feed> lastXml( @DefaultValue("0") @QueryParam("start") int start, @DefaultValue("-1") @QueryParam("max") int max, @DefaultValue("true") @QueryParam("success") String success) {
+        return last( start, max, success);
     }
     
-    public List<Feed> last( int max, String success) {
+    public List<Feed> last( int start, int max, String success) {
         List<Feed> feeds = null;
         try {
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -133,7 +130,7 @@ public class FeedManager {
                 query = session.createQuery( "from Feed as feed where feed.success = :success order by feed.updated desc");
                 query.setBoolean( "success", success.equalsIgnoreCase( "true"));
             }
-            query.setFirstResult( 0);
+            query.setFirstResult( start);
             query.setMaxResults( max);
             feeds = query.list();
             Response.ok();
