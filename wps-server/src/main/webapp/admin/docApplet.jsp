@@ -50,7 +50,7 @@ public long getLastModified(HttpServletRequest request) {
 <tr><td>&lt;/applet&gt;</td></tr>
 </table>
 <br/>
-<a name="wpsparameters" ></a><span class="subTitleBlue" >Just Map It! parameters (refer to WPS-dictionary.dtd)</span>
+<a name="wpsparameters" ></a><span class="subTitleBlue" >Just Map It! parameters (refer to dictionary DTD)</span>
 <table width="100%" class="tableau" >
 <tr>
 	<td width="30%" >planName</td>
