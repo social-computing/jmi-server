@@ -175,28 +175,24 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 </div>
 <div id="content" >
 <%if (feed.length() == 0) {%>
-<div id="last-feeds"><p>Last mapped feeds:</p></div>
+<div id="last-feeds"><h1>Last mapped feeds:</h1></div>
 <div class="grid">
 <%FeedManager feedManager = new FeedManager();
 java.util.List<Feed> feeds = feedManager.last( numpage*10, 10, "true");
-for (Feed f : feeds) {%>
-<div class="vignette">
+for (Feed f : feeds) {%><div class="vignette">
 <div class="thumbnail">
-<a title="Just Map It! Feed: <%=f.getUrl()%>" href='./?feed=<%=java.net.URLEncoder.encode(f.getUrl(),"UTF-8")%>'><img border="0" width="150" height="100" src="./rest/feeds/feed/thumbnail.png?url=<%=java.net.URLEncoder.encode(f.getUrl(),"UTF-8")%>" /></a>
+<a title="Just Map It! Feed: <%=f.getUrl()%>" href='./?feed=<%=java.net.URLEncoder.encode(f.getUrl(),"UTF-8")%>'><img border="0" width="150" height="100" alt="<%=f.getTitle().replaceAll("\"","&quot;")%>" src="./rest/feeds/feed/thumbnail.png?url=<%=java.net.URLEncoder.encode(f.getUrl(),"UTF-8")%>" /></a>
 <!--span class="play"/-->
 </div><div class="thumbnail-title">
-<a href='./?feed=<%=java.net.URLEncoder.encode(f.getUrl(),"UTF-8")%>'><%=f.getTitle()%></a>	
-</div></div>
-<%}%></div>
+<h2><a href='./?feed=<%=java.net.URLEncoder.encode(f.getUrl(),"UTF-8")%>'><%=f.getTitle()%></a></h2>
+</div></div><%}%></div>
 <div class="pagination"><ul>
 <%long max = (feedManager.count( "true") / 10) + 1;
 for( long i = 0; i < max; ++i) { %>
 <li <%=(numpage==i? "class='active'": "")%>><a href=".<%=(i==0? "" : "/?page=" + i)%>"><%=i+1%></a></li>
-<%}
-for( long i = max+1; i < 20; ++i) { %>
+<%} for( long i = max+1; i < 20; ++i) { %>
 <li class='disabled'><a ><%=i+1%></a></li>
-<%}%>
-</ul></div>
+<%}%></ul></div>
 <%} else {%>
     <div id="flashContent">
     	<p>

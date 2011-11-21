@@ -139,9 +139,8 @@ object:focus {
 	outline: none;
 }
 
-div#last-feeds {
-	padding-top: 20px;
-	padding-left: 15px;
+div#last-feeds h1 {
+	padding: 20px 0 20px 15px;
 	text-align: left;
 	color: #f59c23;
 	font-size: 18px;
@@ -262,9 +261,10 @@ h3 {
 	color: #f59c23;
 }
 
-.thumbnail-title, .thumbnail-title a {
-    padding-top: 15px;
+.thumbnail-title, .thumbnail-title h2, .thumbnail-title a {
+    padding-top: 5px;
 	color: #37b0e3;
+	font-size: 12px;
 }
 
 .vignette .play {
