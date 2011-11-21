@@ -1,0 +1,54 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+
+
+s|Button:up,
+s|Button:over,
+s|Button:down,
+s|Button:disabled {
+	chromeColor: #FFFFFF;
+	color: #335595;
+}
+
+s|Button
+{
+	color: #FFFFFF;
+	chrome-color: #335595;
+	font-size:11;
+	font-family:Verdana;
+}
+
+s|ButtonBar s|ButtonBarButton:upAndSelected,
+s|ButtonBar s|ButtonBarButton:overAndSelected,
+s|ButtonBar s|ButtonBarButton:downAndSelected,
+s|ButtonBar s|ButtonBarButton:disabledAndSelected {
+	chromeColor: #FFFFFF;
+	color: #335595;
+}
+
+s|ButtonBar
+{
+	color: #FFFFFF;
+	chrome-color: #335595;
+	font-family:Verdana;
+	font-size:11;
+}
+
+
+s|DropDownList
+{
+	chromeColor: #FFFFFF;
+	color: #335595;
+	font-family:Verdana;
+	font-size:11;	
+}
+
+
+#friendsLabel, #itemsLabel, #viewMapOf
+{
+	color: #335595;
+	font-size:11;
+	font-family:Verdana;
+	padding-top:6;
+}
