@@ -10,5 +10,5 @@ if( feed.length() > 0) { %>
 <%}%>
 <!-- td><a href="./documentation.jsp#igoogle">Add it to iGoogle</a></td-->
 <td align="center"><a id="howtouse" title="How to use the service" href="./documentation.jsp">How to use the service</a></td>
-<td align="right">Powered by <a title="Just Map It!" href="http://www.social-computing.com/offre/cartographie-just-map-it/" target="_blank">Just Map It!</a> by <a title="Social Computing" href="http://www.social-computing.com" target="_blank">Social Computing</a> &copy; 2011</td>
+<td align="right">Powered by <a title="Just Map It!" href="http://www.social-computing.com/offre/cartographie-just-map-it/" target="_blank">Just Map It!</a> - <a title="Social Computing" href="http://www.social-computing.com" target="_blank">Social Computing</a> &copy; 2011</td>
 </tr></table></div>
