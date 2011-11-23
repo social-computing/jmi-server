@@ -19,9 +19,12 @@
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
+			import mx.graphics.codec.PNGEncoder;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			
+			import ru.inspirit.net.MultipartURLLoader;
+	
             private var planName:String;
             private var planService:PlanService;
 			
@@ -66,6 +69,7 @@
 				ExternalInterface.addCallback( "compute", compute);
 				ExternalInterface.addCallback( "getProperty", getProperty);
 				ExternalInterface.addCallback( "getArrayProperty", getArrayProperty);
+				ExternalInterface.addCallback( "uploadAsImage", uploadAsImage);
 				
 				// Initialising service
 				this.planService = new PlanService(serverURL);
@@ -88,6 +92,40 @@
 			}
 			public function getArrayProperty( name:String):Array {
 				return this.map.getProperty( name) as Array;
+			}
+			public function uploadAsImage( url:String, name:String, mime:String, width:int, height:int, keepProportions:Boolean, params:Object):void {
+				var encoder:PNGEncoder  = new PNGEncoder();
+				var dummyMap:BitmapData = new BitmapData(width, height);
+				var matrix:Matrix = new Matrix();
+				if( keepProportions) {
+					var dx:Number = width / map.width;
+					var dy:Number = height / map.height;
+					if( dx > dy) {
+						matrix.scale( dx, dx);
+						matrix.translate( 0, -((map.height * dx) - height) / 2);
+					}
+					else {
+						matrix.scale( dy, dy);
+						matrix.translate( -((map.width * dy) - width) / 2, 0);
+					}
+				}
+				else
+					matrix.scale( width / map.width, height / map.height);
+				dummyMap.draw( map.bitmapData, matrix);
+				var bphoto:ByteArray = encoder.encode( dummyMap);
+				var mploader:MultipartURLLoader = new MultipartURLLoader();
+				/*mploader.addEventListener(
+					Event.COMPLETE, function onComplete(e:Event):void {
+					}
+				);*/
+				mploader.addFile( bphoto, name, "filedata", "image/png");
+				mploader.addVariable( "width", width);
+				mploader.addVariable( "height", height);
+				mploader.addVariable( "mime", "image/png");
+				for(var p:String in params){
+					mploader.addVariable( p, params[p]);
+				}
+				mploader.load( url);
 			}
 	]]>
     </fx:Script>

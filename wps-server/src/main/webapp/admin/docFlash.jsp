@@ -24,7 +24,7 @@ For object and embed tag or for any other method (such as the <a href="http://co
 <tr><td nowrap>&lt;param name="..."</td><td>value="..." /&gt;</td></tr>
 </table>
 <br/>
-<a name="jmiparameters" ></a><span class="subTitleBlue" >Just Map It! parameters (refer to WPS-dictionary.dtd)</span>
+<a name="jmiparameters" ></a><span class="subTitleBlue" >Just Map It! parameters (refer to dictionary DTD)</span>
 <table width="100%" class="tableau" >
 <tr>
 	<td width="30%" >allowDomain</td>
@@ -95,6 +95,10 @@ For object and embed tag or for any other method (such as the <a href="http://co
 <tr>
 	<td width="30%" >String getProperty( name)</td>
 	<td>returns a global property</td>
+</tr>
+<tr>
+	<td width="30%" >void uploadAsImage( url, name, 'image/png', width, height, true, extraParameters)</td>
+	<td>Post the map as an image to a server. Image is streched to the new size, but if keepProportions is true the image is centered on the axis clipped</td>
 </tr>
 </table>
 </div>

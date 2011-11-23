@@ -6,7 +6,10 @@ if( feed.length() > 0) {
     if( !feed.startsWith( "http://") && !feed.startsWith( "http://")) {
         feed = "http://" + feed;
     }
-}%><head>
+}
+int numpage = 0;
+String spage = request.getParameter("page");
+if( spage != null) numpage = Integer.parseInt( spage);%><head>
 <title>Just Map It! Feeds</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="content-language" content="en" />
@@ -18,7 +21,7 @@ if( feed.length() > 0) {
 <meta property="og:description" content="View and navigate your feeds thru an interactive map! by Social Computing" />
 <meta property="og:image" content="http://feeds.just-map-it.com/images/thumbnail.png" />
 <link rel="shortcut icon" href="http://feeds.just-map-it.com/favicon.ico" />
-<link rel=StyleSheet href="./mapyourfeeds.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="./mapyourfeeds.css" type="text/css" media="screen" />
 <script type="text/javascript" src="./js/jquery-1.6.4.min.js"></script>
 <script type="text/javascript" src="./fancybox/jquery.fancybox-1.3.4.pack.js"></script>
 <link rel="stylesheet" type="text/css" href="./fancybox/jquery.fancybox-1.3.4.css" media="screen" />
@@ -43,7 +46,21 @@ $(document).ready(function() {
 			document.getElementById("message").innerHTML = titles.join( ', ');
 		}
 	  }
-  }
+	  var urls = map.getArrayProperty( "$FEEDS_URLS");
+	  if( urls && urls.length == 1) {
+		var data = {};
+		data["url"] = urls[0];
+		$.getJSON( "./rest/feeds/feed.json", data, function( feed){
+			var date = new Date();
+			if( !feed.thumbnail_date)
+				feed.thumbnail_date = 0;
+			var delta = date.getTime() - feed.thumbnail_date;
+			if( delta > 7 * 24 * 3600 * 1000) {
+				map.uploadAsImage( 'http://feeds.just-map-it.com/rest/feeds/feed/thumbnail.png', 'preview', 'image/png', 150, 100, true, data);
+			}
+		});
+	  }
+}
   function empty() {
 	document.getElementById("message").innerHTML = "Sorry, the map is empty. Does the feed contains categories?";
   }
@@ -81,16 +98,14 @@ $(document).ready(function() {
 
 <script type="text/javascript" src="./client/swfobject.js"></script>
 <script type="text/javascript">
-    <!-- For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. --> 
     var swfVersionStr = "10.0.0";
-    <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
     var xiSwfUrlStr = "./client/playerProductInstall.swf";
     var flashvars = {};
     flashvars.allowDomain = "*";
     //flashvars.wpsserverurl = "http://localhost:8080/wps-server";
-    //flashvars.track = "http://localhost:8080/web-feeds/services/feeds/record.json";
+    //flashvars.track = "http://localhost:8080/web-feeds/rest/feeds/record.json";
     flashvars.wpsserverurl = "http://server.just-map-it.com/";
-    flashvars.track = "http://feeds.just-map-it.com/services/feeds/record.json";
+    flashvars.track = "http://feeds.just-map-it.com/rest/feeds/record.json";
     flashvars.wpsplanname = "Feeds";
     flashvars.analysisProfile = "GlobalProfile";
     flashvars.feed = "<%=java.net.URLEncoder.encode(feed, "UTF-8")%>";
@@ -109,7 +124,6 @@ $(document).ready(function() {
         "100%", "100%", 
         swfVersionStr, xiSwfUrlStr, 
         flashvars, params, attributes);
-<!-- JavaScript enabled so display the flashContent div in case it is not replaced with a swf object. -->
 swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 <%}%>
 </script>
@@ -139,7 +153,6 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 	<form method="get">
 		<input type="text" name="feed" title="URLs" size="80" value="<%=feed != null ? feed : "" %>" />
 		<input type="submit" value="Just Map It!" />
-		<span id="doc"><a id="howtouse" title="How to use the service" href="./documentation.jsp">How to use the service</a></span>
 	</form>
 </td>
 <td rowspan="2">
@@ -155,52 +168,31 @@ swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 </tr>
 <tr>
 	<td nowrap colspan="1">
-		<p id="message">&nbsp;</p>
+		<p id="message">Just Map It! Feeds lets you view and navigate your feeds thru an interactive map!</p>
 	</td>
 </tr>
 </table>
 </div>
 <div id="content" >
 <%if (feed.length() == 0) {%>
-<p class="slogan">Just Map It! Feeds lets you view and navigate your feeds thru an interactive map!</p>
-<div id="last-feeds">
-<p><a href="./last-feeds.jsp">Last feeds mapped:</a> <span id="last-feed-cloud"></span></p>
-</div>
-<div id="top-feeds"><p><a href="./top-feeds.jsp">Most mapped feeds:</a></p></div>
-<div id="top-feeds-cloud">
+<div id="last-feeds"><h1>Last mapped feeds:</h1></div>
+<div class="grid">
 <%FeedManager feedManager = new FeedManager();
-java.util.List<Feed> feeds = feedManager.top( "50", "true");
-float max = feeds.size() > 0 ? feeds.get(0).getCount() : 1;
-for (int i = feeds.size()-1; i > 0; i = i-2) {
-    Feed f = feeds.get( i);
-	double dsize = (java.lang.Math.log(( f.getCount() / max * (java.lang.Math.E-1)) + 1)); // ln scale
-	long size = java.lang.Math.round( (dsize * 20) + 10);%>
-<a title="Just Map It! Feed: <%=f.getUrl()%>" href='./?feed=<%=f.getUrl()%>' style="font-size: <%=size%>px"><%=f.getTitle()%></a>	
-<%}
-for (int i = 0; i < feeds.size()-1; i = i+2) {
-    Feed f = feeds.get( i);
-	double dsize = (java.lang.Math.log(( f.getCount() / max * (java.lang.Math.E-1)) + 1)); // ln scale
-	long size = java.lang.Math.round( (dsize * 20) + 10);%>
-<a title="Just Map It! Feed: <%=f.getUrl()%>" href='./?feed=<%=f.getUrl()%>' style="font-size: <%=size%>px"><%=f.getTitle()%></a>	
-<%}%>
-</div>
-<script type="text/javascript">
-$.getJSON( "./services/feeds/last.json", function( data){
-	if( data && data.length > 0) {
-		var i = Math.ceil( Math.random() * data.length);
-		var lastFeed = $( '#last-feed-cloud');
-		lastFeed.html( '<a title="Just Map It! Feed: ' + data[i].url + '" href="./?' + jQuery.param({'feed':data[i].url}) + '">' + data[i].title + '</a>');
-		setInterval( function() {
-			i = (i+1) % data.length;
-			lastFeed.fadeOut( 'slow', function() {
-				lastFeed.html( '<a title="Just Map It! Feed: ' + data[i].url + '" href="./?' + jQuery.param({'feed':data[i].url}) + '">' + data[i].title + '</a>');
-				lastFeed.fadeIn( 'slow');
-			});
-		}, 5000);
-	}
-  }
-);
-</script>
+java.util.List<Feed> feeds = feedManager.last( numpage*10, 10, "true");
+for (Feed f : feeds) {%><div class="vignette">
+<div class="thumbnail">
+<a title="Just Map It! Feed: <%=f.getUrl()%>" href='./?feed=<%=java.net.URLEncoder.encode(f.getUrl(),"UTF-8")%>'><img border="0" width="150" height="100" alt="<%=f.getTitle().replaceAll("\"","&quot;")%>" src="./rest/feeds/feed/thumbnail.png?url=<%=java.net.URLEncoder.encode(f.getUrl(),"UTF-8")%>" /></a>
+<!--span class="play"/-->
+</div><div class="thumbnail-title">
+<h2><a href='./?feed=<%=java.net.URLEncoder.encode(f.getUrl(),"UTF-8")%>'><%=f.getTitle()%></a></h2>
+</div></div><%}%></div>
+<div class="pagination"><ul>
+<%long max = (feedManager.count( "true") / 10) + 1;
+for( long i = 0; i < max; ++i) { %>
+<li <%=(numpage==i? "class='active'": "")%>><a href=".<%=(i==0? "" : "/?page=" + i)%>"><%=i+1%></a></li>
+<%} for( long i = max+1; i < 20; ++i) { %>
+<li class='disabled'><a ><%=i+1%></a></li>
+<%}%></ul></div>
 <%} else {%>
     <div id="flashContent">
     	<p>

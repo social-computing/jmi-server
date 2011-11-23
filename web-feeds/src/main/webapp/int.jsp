@@ -52,7 +52,7 @@ flashvars.analysisProfile = "GlobalProfile";
 flashvars.emptyCallback = "JMIF_empty";
 flashvars.errorCallback = "JMIF_error";
 flashvars.feed = "<%=java.net.URLEncoder.encode(request.getParameter("url"), "UTF-8")%>";
-flashvars.trackUrl = "http://feeds.just-map-it.com/services/sites/record.json";
+flashvars.trackUrl = "http://feeds.just-map-it.com/rest/sites/record.json";
 flashvars.site = window.location.href;
 var params = {};
 params.quality = "high";

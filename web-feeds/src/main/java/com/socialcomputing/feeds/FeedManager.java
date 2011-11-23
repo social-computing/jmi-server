@@ -1,16 +1,21 @@
 package com.socialcomputing.feeds;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -19,6 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.socialcomputing.feeds.utils.HibernateUtil;
+import com.sun.jersey.api.Responses;
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataParam;
 
 
 @Path("/feeds")
@@ -31,22 +39,19 @@ public class FeedManager {
     @GET
     @Path("record.json")
     @Produces(MediaType.APPLICATION_JSON)
-    public Feed record( @Context UriInfo ui) {
+    public Feed record( @QueryParam("url") String url, @QueryParam("title") String title, @QueryParam("count") int count) {
         Feed feed = null;
         try {
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            MultivaluedMap<String, String> params = ui.getQueryParameters();
-            
-            String url = params.getFirst( "url");
             if( url != null) {
                 url = url.trim();
                 feed = (Feed) session.get(Feed.class, url);
                 if( feed == null) {
-                    feed = new Feed( url, params.getFirst( "title"), Integer.parseInt( params.getFirst( "count")) > 0);
+                    feed = new Feed( url, title, count > 0);
                     session.save( feed);
                 }
                 else {
-                    feed.incrementUpdate(params.getFirst( "title"), Integer.parseInt( params.getFirst( "count")) > 0);
+                    feed.incrementUpdate( title, count > 0);
                     session.update( feed);
                 }
             }
@@ -60,29 +65,53 @@ public class FeedManager {
     }
     
     @GET
+    @Path("count.json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public long countJson( @DefaultValue("true") @QueryParam("success") String success) {
+        return count( success);
+    }
+    
+    public long count ( String success) {
+        long count = 0;
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Query query = null;
+            if( success == null || success.equals( "*")) {
+                query = session.createQuery( "select count(*) from Feed");
+            }
+            else {
+                query = session.createQuery( "select count(*) from Feed as feed where feed.success = :success");
+                query.setBoolean( "success", success.equalsIgnoreCase( "true"));
+            }
+            count = ( Long)query.uniqueResult();
+            Response.ok();
+        }
+        catch (HibernateException e) {
+            LOG.error(e.getMessage(), e);
+            Response.status( HttpServletResponse.SC_BAD_REQUEST);
+        }
+        return count;
+    }
+    
+    @GET
     @Path("top.json")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Feed> topJson( @Context UriInfo ui) {
-        MultivaluedMap<String, String> params = ui.getQueryParameters();
-        return top( params.getFirst( "max"), params.getFirst( "success"));
+    public List<Feed> topJson( @DefaultValue("0") @QueryParam("start") int start, @DefaultValue("-1") @QueryParam("max") int max, @DefaultValue("true") @QueryParam("success") String success) {
+        return top( start, max, success);
     }
     
     @GET
     @Path("top.xml")
     @Produces(MediaType.APPLICATION_XML)
-    public List<Feed> topXml( @Context UriInfo ui) {
-        MultivaluedMap<String, String> params = ui.getQueryParameters();
-        return top( params.getFirst( "max"), params.getFirst( "success"));
+    public List<Feed> topXml( @DefaultValue("0") @QueryParam("start") int start, @DefaultValue("-1") @QueryParam("max") int max, @DefaultValue("true") @QueryParam("success") String success) {
+        return top( start, max, success);
     }
     
-    public List<Feed> top( String smax, String success) {
+    public List<Feed> top( int start, int max, String success) {
         List<Feed> feeds = null;
         try {
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            
-            int max = smax == null ? 100 : Math.min( Integer.parseInt( smax), 1000);
-            if( success == null)
-                success = "true";
+            max = max == -1 ? 100 : Math.min( max, 1000);
             Query query = null;
             if( success == null || success.equals( "*")) {
                 query = session.createQuery( "from Feed as feed order by feed.count desc");
@@ -91,7 +120,7 @@ public class FeedManager {
                 query = session.createQuery( "from Feed as feed where feed.success = :success order by feed.count desc");
                 query.setBoolean( "success", success.equalsIgnoreCase( "true"));
             }
-            query.setFirstResult( 0);
+            query.setFirstResult( start);
             query.setMaxResults( max);
             feeds = query.list();
             Response.ok();
@@ -106,27 +135,22 @@ public class FeedManager {
     @GET
     @Path("last.json")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Feed> lastJson( @Context UriInfo ui) {
-        MultivaluedMap<String, String> params = ui.getQueryParameters();
-        return top( params.getFirst( "max"), params.getFirst( "success"));
+    public List<Feed> lastJson( @DefaultValue("0") @QueryParam("start") int start, @DefaultValue("-1") @QueryParam("max") int max, @DefaultValue("true") @QueryParam("success") String success) {
+        return last( start, max, success);
     }
 
     @GET
     @Path("last.xml")
     @Produces(MediaType.APPLICATION_XML)
-    public List<Feed> lastXml( @Context UriInfo ui) {
-        MultivaluedMap<String, String> params = ui.getQueryParameters();
-        return top( params.getFirst( "max"), params.getFirst( "success"));
+    public List<Feed> lastXml( @DefaultValue("0") @QueryParam("start") int start, @DefaultValue("-1") @QueryParam("max") int max, @DefaultValue("true") @QueryParam("success") String success) {
+        return last( start, max, success);
     }
     
-    public List<Feed> last( String smax, String success) {
+    public List<Feed> last( int start, int max, String success) {
         List<Feed> feeds = null;
         try {
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            
-            int max = smax == null ? 100 : Math.min( Integer.parseInt( smax), 1000);
-            if( success == null)
-                success = "true";
+            max = max == -1 ? 100 : Math.min( max, 1000);
             Query query = null;
             if( success == null || success.equals( "*")) {
                 query = session.createQuery( "from Feed as feed order by feed.updated desc");
@@ -135,7 +159,7 @@ public class FeedManager {
                 query = session.createQuery( "from Feed as feed where feed.success = :success order by feed.updated desc");
                 query.setBoolean( "success", success.equalsIgnoreCase( "true"));
             }
-            query.setFirstResult( 0);
+            query.setFirstResult( start);
             query.setMaxResults( max);
             feeds = query.list();
             Response.ok();
@@ -145,5 +169,88 @@ public class FeedManager {
             Response.status( HttpServletResponse.SC_BAD_REQUEST);
         }
         return feeds;
+    }
+
+    @GET
+    @Path("feed.json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Feed feedJson(  @QueryParam("url") String url) {
+        return feed( url);
+    }
+    
+    @GET
+    @Path("feed.xml")
+    @Produces(MediaType.APPLICATION_XML)
+    public Feed feedXml( @QueryParam("url") String url) {
+        return feed( url);
+    }
+    
+    public Feed feed( String url) {
+        Feed feed = null;
+        try {
+            if( url != null) {
+                Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+                url = url.trim();
+                feed = (Feed) session.get(Feed.class, url);
+                Response.ok();
+            }
+            else
+                Response.status( Responses.NOT_FOUND);
+        }
+        catch (HibernateException e) {
+            LOG.error(e.getMessage(), e);
+            Response.status( HttpServletResponse.SC_BAD_REQUEST);
+        }
+        return feed;
+    }
+    
+    @GET
+    @Path("/feed/thumbnail.png")
+    @Produces( "image/png") 
+    public Response getThumbnail( @QueryParam("url") String url) {
+        Feed feed = feed( url); 
+        if( feed != null) {
+            return Response.ok( feed.getThumbnail()).build();
+        }
+        else
+            Response.status( Responses.NOT_FOUND);
+        return null;
+    }
+    
+    @POST
+    @Path("/feed/thumbnail.png")
+    @Consumes( MediaType.MULTIPART_FORM_DATA) 
+    public void putThumbnail( 
+                   @FormDataParam("url") String url,
+                   @FormDataParam("filedata") InputStream uploadedInputStream,
+                   @FormDataParam("filedata") FormDataContentDisposition fileDetail,
+                   @FormDataParam("width") int width,
+                   @FormDataParam("width") int height,
+                   @FormDataParam("width") String mime
+                   ) {
+        Feed feed = feed( url); 
+        try {
+            if( feed != null) {
+                Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                int b;
+                    b = uploadedInputStream.read();
+                while( b != -1) {
+                    baos.write( b);
+                    b = uploadedInputStream.read();
+                }
+                feed.setThumbnail( baos.toByteArray());
+                feed.setThumbnail_date( new Date());
+                feed.setThumbnail_height( height);
+                feed.setThumbnail_width( width);
+                feed.setThumbnail_mime( mime);
+                session.update( feed);
+            }
+            else
+                Response.status( Responses.NOT_FOUND);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

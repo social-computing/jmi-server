@@ -85,9 +85,9 @@
             var xiSwfUrlStr = "${expressInstallSwf}";
             var flashvars = {};
             flashvars.wpsserverurl = "http://localhost:8080/wps-server";
-            flashvars.wpsplanname = "Feeds";
+            flashvars.wpsplanname = "Json_sample";
+            flashvars.invert = "false";
             flashvars.analysisProfile = "GlobalProfile";
-            flashvars.feed = "http://www.social-computing.com/feed/";
             var params = {};
             params.quality = "high";
             params.bgcolor = "#7F9FDF";
@@ -111,6 +111,14 @@
 			 JavaScript and Flash plug-in support is available. The div is initially hidden so that it doesn't show
 			 when JavaScript is disabled.
 		-->
+		<script>
+		function Go() {
+			var parameters = {};
+			parameters["url"] = "http://blog-jamespot.com/feed/";
+			document.getElementById('${application}').uploadAsImage( 'http://localhost:8080/web-feeds/rest/feeds/feed/thumbnail.png', 'preview', 'image/png', 300, 300, true, parameters);
+		}
+		</script>
+        <input type="button" value="Upload" onclick="jaavascript:Go();"></input>
         <div id="flashContent">
         	<p>
 	        	To view this page ensure that Adobe Flash Player version 

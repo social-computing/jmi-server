@@ -123,7 +123,7 @@ package com.socialcomputing.wps.components
 			
 			var wpsMenu:ContextMenu = new ContextMenu();
 			wpsMenu.hideBuiltInItems();
-			var menuItem:ContextMenuItem = new ContextMenuItem("powered by Social Computing");
+			var menuItem:ContextMenuItem = new ContextMenuItem("powered by Just Map It! - Social Computing");
 			menuItem.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, openSoCom);
 			wpsMenu.customItems.push( menuItem);
 			this.contextMenu = wpsMenu;
@@ -193,6 +193,10 @@ package com.socialcomputing.wps.components
 			_curPos = pos;
 		}
 		
+		public function get dataProvider():Object
+		{
+			return this._dataProvider;	
+		}
 		public function set dataProvider(value:Object):void
 		{
 			//Alert.show( unescape( flash.display.LoaderInfo(this.root.loaderInfo).url));

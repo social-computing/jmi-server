@@ -28,7 +28,7 @@
 </div><br/><br/><br/>
 <div id="top-feeds-cloud">
 <%FeedManager feedManager = new FeedManager();
-java.util.List<Feed> feeds = feedManager.last( "100", "true");
+java.util.List<Feed> feeds = feedManager.last( 0, 100, "true");
 float max = 1;
 for( Feed feed : feeds) {
     if( feed.getCount() > max)

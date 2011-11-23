@@ -1,3 +1,4 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">	
 <head>
 <title>Add Just Map It! Feeds to your webpage - Just Map It! Feeds</title>
@@ -6,10 +7,25 @@
 <meta name="description" content="Add Just Map It! Feeds to your webpage. by Social Computing" />
 <meta name="author" content="Social Computing" /> 
 <meta name="robots" content="all" /> 
-<link rel=StyleSheet href="./mapyourfeeds.css" type="text/css" media="screen" />
+<script type="text/javascript" src="./js/jquery-1.6.4.min.js"></script>
+<script type="text/javascript" src="./fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<link rel="stylesheet" type="text/css" href="./fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+<link rel="stylesheet" href="./mapyourfeeds.css" type="text/css" media="screen" />
 <jsp:include page="./js/ga.js" /> 
 </head>
 <body>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#howtouse").fancybox({
+		'width'				: '75%',
+		'height'			: '75%',
+		'autoScale'			: false,
+		'transitionIn'		: 'none',
+		'transitionOut'		: 'none',
+		'type'				: 'iframe'
+		});
+});
+</script>
 <div id="header">
 <table id="bandeau" border="0">
 <tr>

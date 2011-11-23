@@ -2,7 +2,7 @@
 
 <!DOCTYPE dictionary SYSTEM "WPS-dictionary.dtd" >
 
-<dictionary name="Facebook_sample" >
+<dictionary name="Facebook" >
 	<comment>Sample Facebook friends Plan Dictionary</comment>
 
 	<entities>
