@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	id="wps-server" version="2.5">
 
-	<!-- Configuration générale de l'application -->
+	<!-- General application settings -->
 	<display-name>WPS</display-name>
 	<description>WPS Server</description>
 	<welcome-file-list>
@@ -13,12 +13,18 @@
 		</welcome-file>
 	</welcome-file-list>
 
-	<!-- Liste des servlets -->
+	<!-- Servlet filters declaration -->
 	<filter>
 		<filter-name>HibernateFilter</filter-name>
 		<filter-class>com.socialcomputing.wps.server.web.HibernateSessionRequestFilter</filter-class>
 	</filter>
+	<filter>
+		<filter-name>LogContextResetFilter</filter-name>
+		<filter-class>com.socialcomputing.wps.server.web.LogContextResetFilter</filter-class>
+	</filter>
 
+
+    <!-- Servlets declaration -->
 	<servlet>
 		<servlet-name>WPSPlanMakerServlet</servlet-name>
 		<servlet-class>com.socialcomputing.wps.server.web.WPSPlanMakerServlet</servlet-class>
@@ -40,12 +46,18 @@
 		<load-on-startup></load-on-startup>
 	</servlet>
 
-	<!-- Servlet mapping configuration -->
+	<!-- Servlet filters mapping configuration -->
 	<filter-mapping>
 		<filter-name>HibernateFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+		<filter-mapping>
+		<filter-name>LogContextResetFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
 
+	<!-- Servlets mapping configuration -->
 	<servlet-mapping>
 		<servlet-name>WPSPlanMakerServlet</servlet-name>
 		<url-pattern>/maker</url-pattern>
@@ -105,6 +117,4 @@
 		<filter-name>Guice Filter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-
-
 </web-app>

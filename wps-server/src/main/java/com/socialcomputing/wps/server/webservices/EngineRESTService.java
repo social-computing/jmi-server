@@ -22,8 +22,10 @@ import javax.ws.rs.core.UriInfo;
 import org.codehaus.jackson.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import com.socialcomputing.wps.server.generator.json.PlanJSONProvider;
+import com.socialcomputing.wps.server.utils.log.DiagnosticContext;
 import com.socialcomputing.wps.server.webservices.maker.BeanPlanMaker;
 import com.socialcomputing.wps.server.webservices.maker.PlanMaker;
 
@@ -52,7 +54,7 @@ public class EngineRESTService {
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getBinaryPlan(@HeaderParam("User-Agent") String userAgent, @PathParam("account") String account,
                                   @PathParam("map") String planName, @Context UriInfo ui) {
-        LOG.info("Plan name = {}", planName);
+        MDC.put(DiagnosticContext.ENTRY_POINT_CTX.name, "GET /engine/" + account + "/" + planName + ".java");
         PlanMaker planMaker = new BeanPlanMaker();
         Hashtable<String, Object> planParameters = this.getQueryParameters(userAgent, ui);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -76,6 +78,9 @@ public class EngineRESTService {
             }
             catch (IOException e1) {}
         }
+        finally {
+            MDC.remove(DiagnosticContext.ENTRY_POINT_CTX.name);
+        }
         return Response.ok(baos.toByteArray(), MediaType.APPLICATION_OCTET_STREAM).build();
     }
 
@@ -93,7 +98,7 @@ public class EngineRESTService {
     @Produces(MediaType.APPLICATION_JSON)
     public String getJSonPlan(@HeaderParam("User-Agent") String userAgent, @PathParam("account") String account,
                               @PathParam("map") String planName, @Context UriInfo ui) {
-        LOG.info("Plan name = {}", planName);
+        MDC.put(DiagnosticContext.ENTRY_POINT_CTX.name, "GET /engine/" + account + "/" + planName + ".json");
         PlanMaker planMaker = new BeanPlanMaker();
         Hashtable<String, Object> planParameters = this.getQueryParameters(userAgent, ui);
         ObjectNode jsonResults = PlanJSONProvider.GetMapper().createObjectNode();
@@ -110,6 +115,9 @@ public class EngineRESTService {
             LOG.error(e.getMessage(), e);
             jsonResults.put("name", planName);
             jsonResults.put("error", e.getMessage());
+        }
+        finally {
+            MDC.remove(DiagnosticContext.ENTRY_POINT_CTX.name);
         }
         return PlanJSONProvider.planToString(jsonResults);
     }
