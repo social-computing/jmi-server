@@ -53,7 +53,7 @@ public class FacebookEntityConnector extends SocialEntityConnector {
     public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
         super.openConnections( planType, wpsparams);
         String token = (String)wpsparams.get("fbtoken");
-        if( token == null) {
+        if( token == null || token.length() == 0) {
             oAuth2Helper.openConnections( planType, wpsparams);
             for( String p : oAuth2Helper.getResult().split("&")) {
                 if( p.startsWith( "access_token=")) {

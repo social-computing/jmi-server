@@ -5,6 +5,7 @@
     <title>Just Map It! Facebook</title>
 <%String code = request.getParameter("code");
 String oauth_token = FacebookEntityConnector.GetProperty( request.getParameter("signed_request"), "oauth_token");
+String user_id = FacebookEntityConnector.GetProperty( request.getParameter("signed_request"), "user_id");
 if( code == null && oauth_token == null) { %>
 <title>Redirection</title>
 <meta name="robots" content="noindex,follow" />
@@ -50,15 +51,14 @@ if( code == null && oauth_token == null) { %>
 	    
        <script type="text/javascript" src="../client/flex/swfobject.js"></script>
        <script type="text/javascript">
-           <!-- For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. --> 
            var swfVersionStr = "10.0.0";
-           <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
            var xiSwfUrlStr = "../client/flex/playerProductInstall.swf";
            var flashvars = {};
            flashvars.wpsserverurl = "http://wps.wps.cloudbees.net/";
            flashvars.wpsplanname = "Facebook_sample";
            flashvars.fbauthcode = '<%=code%>';
            flashvars.fbtoken = '<%=oauth_token%>';
+           flashvars.fbuserid = '<%=user_id%>';
            flashvars.analysisProfile = "GlobalProfile";
            flashvars.kind = "friends";
            var params = {};
@@ -76,13 +76,10 @@ if( code == null && oauth_token == null) { %>
                "100%", "100%", 
                swfVersionStr, xiSwfUrlStr, 
                flashvars, params, attributes);
-		<!-- JavaScript enabled so display the flashContent div in case it is not replaced with a swf object. -->
 		swfobject.createCSS("#flashContent", "display:block;text-align:left;");
        </script>
    </head>
    <body>
-<%--     	<div id="top"><jsp:include page="top.jsp" /></div> --%>
-<%-- 	    <div id="menu"><jsp:include page="menu.jsp" /></div> --%>
         <!-- SWFObject's dynamic embed method replaces this alternative HTML content with Flash content when enough 
 			 JavaScript and Flash plug-in support is available. The div is initially hidden so that it doesn't show
 			 when JavaScript is disabled.
