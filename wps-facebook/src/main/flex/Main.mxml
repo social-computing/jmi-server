@@ -155,7 +155,7 @@
 			
             private function selectType(event:IndexChangeEvent):void { 
 				if( !type.selectedItem) return;
-				if( type.selectedItem.type != "friends" && map.getProperty("$MY_FB_ID")) {
+				if( false) {//type.selectedItem.type != "friends" && map.getProperty("$MY_FB_ID")) {
 					parameters["attributeId"] = map.getProperty("$MY_FB_ID");
 					parameters["analysisProfile"] = "DiscoveryProfile";
 				}
