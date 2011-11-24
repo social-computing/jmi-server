@@ -32,6 +32,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
     public Dictionary findByName(String name) {
         Dictionary result = null;
         try {
+            LOG.info("lookin for {} dictionary in databse", name);
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             result = (Dictionary) session.get(DictionaryImpl.class, name);
         }
