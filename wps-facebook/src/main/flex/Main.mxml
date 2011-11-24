@@ -195,7 +195,7 @@
 						if( jso && jso.hasOwnProperty( "link"))
 							link = jso[ "link"] as String;
 						else
-							link = "http://www.facebook.com";
+							link = "http://www.facebook.com/profile.php?id=" + id;
 						//navigateToURL( new URLRequest( link), "_blank");
 						ExternalInterface.call('navigate', link, "_blank");
 					});
