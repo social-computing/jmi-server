@@ -25,7 +25,7 @@
 	<affinity-reader-profile name="DiscoveryAffReader" affinity-reader-ref="*" threshold="100" />
 	<affinity-reader-profile name="GlobalAffReader" affinity-reader-ref="*" threshold="100" />
 
-	<analysis-profile name="Profile" attributes-ref="*" type="personal" attribute-size="frequency" attributes-max="300" attributes-base-max="1000">
+	<analysis-profile name="Profile" attributes-ref="*" type="personal" attribute-size="frequency" attributes-max="80" attributes-base-max="1000">
 		<props-mapping>
 			<entity-props-mapping>
 				<mapping key="ID" 	value="id" />

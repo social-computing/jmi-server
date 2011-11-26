@@ -36,7 +36,7 @@
 		</entities-recommendation>
 	</analysis-profile>
 
-	<analysis-profile name="DiscoveryProfile" attributes-ref="JDBC_Profile" type="discovery" attribute-size="frequency" attributes-max="300" >
+	<analysis-profile name="DiscoveryProfile" attributes-ref="JDBC_Profile" type="discovery" attribute-size="frequency" attributes-max="60"  >
 		<props-mapping>
 			<entity-props-mapping>
 				<mapping key="ID" 	value="id" />
@@ -55,7 +55,7 @@
 		</entities-recommendation>
 	</analysis-profile>
 
-	<analysis-profile name="GlobalProfile" attributes-ref="JDBC_Profile" type="global" attribute-size="same" attributes-max="60" >
+	<analysis-profile name="GlobalProfile" attributes-ref="JDBC_Profile" type="global" attribute-size="same" attributes-max="60" cluster-threshold="40">
 		<props-mapping>
 			<entity-props-mapping>
 				<mapping key="ID" 	value="id" />
