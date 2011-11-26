@@ -98,7 +98,7 @@ if( code == null && oauth_token == null) { %>
        </div>
    	
       	<noscript>
-           <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%" id="wps-flex-demo">
+           <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%" id="wps-facebook">
                <param name="movie" value="../client/flex/wps-facebook-1.0-SNAPSHOT.swf" />
                <param name="quality" value="high" />
                <param name="bgcolor" value="#FFFFFF" />
