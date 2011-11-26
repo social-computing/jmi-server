@@ -2,11 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb#" lang="en" xml:lang="en">	
 <%String feed = request.getParameter("feed");
 if( feed == null) feed = "";
-if( feed.length() > 0) {
-    if( !feed.startsWith( "http://") && !feed.startsWith( "http://")) {
-        feed = "http://" + feed;
-    }
-}
 int numpage = 0;
 String spage = request.getParameter("page");
 if( spage != null) numpage = Integer.parseInt( spage);%><head>

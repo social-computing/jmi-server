@@ -58,6 +58,9 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
 		for( UrlHelper feed : m_feeds) {
 		    String urlLst = UrlHelper.ReplaceParameter( feed.getUrl(), wpsparams);
             for( String url : urlLst.split( ",")) {
+                if( !url.startsWith( "http://") && !url.startsWith( "http://")) {
+                    url = "http://" + url;
+                }
                 feed.setUrl( url);
     		    feed.openConnections( planType, wpsparams);
     	        read( feed, planType, wpsparams, titles, urls, counts);
