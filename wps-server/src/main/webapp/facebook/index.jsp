@@ -60,7 +60,7 @@ if( code == null && oauth_token == null) { %>
            flashvars.fbtoken = '<%=oauth_token%>';
            flashvars.fbuserid = '<%=user_id%>';
            flashvars.analysisProfile = "GlobalProfile";
-           flashvars.kind = "friends";
+           flashvars.kind = "likes";
            var params = {};
            params.quality = "high";
            params.bgcolor = "#FFFFFF";
