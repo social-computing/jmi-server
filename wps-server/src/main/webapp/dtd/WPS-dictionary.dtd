@@ -33,10 +33,13 @@
 <!ELEMENT comment 			(#PCDATA)>
 
 <!-- an URL connection -->
-<!ELEMENT URL-connection 	(url,basic-authentication?,url-parameter*)>
+<!ELEMENT URL-connection 	(url,basic-authentication?,url-header*,url-parameter*)>
 <!ATTLIST URL-connection 	type	CDATA    "GET">
 
 <!ELEMENT url 				(#PCDATA)>
+
+<!ELEMENT url-header 	(#PCDATA)>
+<!ATTLIST url-header name NMTOKEN 	#REQUIRED>
 
 <!ELEMENT url-parameter 	(#PCDATA)>
 <!ATTLIST url-parameter name NMTOKEN 	#REQUIRED>

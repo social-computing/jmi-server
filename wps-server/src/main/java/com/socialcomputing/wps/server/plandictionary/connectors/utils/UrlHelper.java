@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import org.apache.commons.httpclient.NameValuePair;
 import org.jdom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +31,22 @@ public class UrlHelper extends ConnectorHelper {
     
     public enum Type {
         POST, GET;
+    }
+    
+    protected class NameValuePair {
+        private String name = null;
+        private String value = null;
+        
+        public NameValuePair(String name, String value) {
+            this.name = name;
+            this.value = value;
+        }
+        public String getName() {
+            return name;
+        }
+        public String getValue() {
+            return value;
+        }
     }
     
     protected Type type = Type.GET;
@@ -60,6 +75,9 @@ public class UrlHelper extends ConnectorHelper {
         url = connection.getChildText("url");
         if( connection.getAttributeValue( "type") != null && connection.getAttributeValue( "type").equalsIgnoreCase( "POST"))
             type = Type.POST;
+        for( Element elem : (List<Element>)connection.getChildren( "url-header")) {
+            defParams.add( new UrlHelper.NameValuePair( elem.getAttributeValue( "name"), elem.getText()));
+        }
         for( Element elem : (List<Element>)connection.getChildren( "url-parameter")) {
             defParams.add( new NameValuePair( elem.getAttributeValue( "name"), elem.getText()));
         }
@@ -104,7 +122,7 @@ public class UrlHelper extends ConnectorHelper {
                 connection.setRequestProperty( "Authorization", "Basic " + encodedAuthorization);
             }
             for( NameValuePair header : headerParams) {
-                connection.setRequestProperty( header.getName(), header.getValue());
+                connection.setRequestProperty( header.getName(), super.ReplaceParameter( header.getValue(), wpsparams));
             }
             if( type == Type.POST && connection instanceof HttpURLConnection) {
                 HttpURLConnection httpConnection = ( HttpURLConnection) connection;
@@ -124,7 +142,6 @@ public class UrlHelper extends ConnectorHelper {
             throw new WPSConnectorException("openConnections: ", e);
         }
     }
-
     
     @Override
     public void closeConnections() throws WPSConnectorException {

@@ -11,8 +11,8 @@
   <artifactId>web-feeds</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
-  <name>Feeds Webapp</name>
-  <url>http://www.justmapit.com</url>
+  <name>Just Map It! Feeds</name>
+  <url>http://feeds.just-map-it.com</url>
   
   <dependencies>
     <dependency>
