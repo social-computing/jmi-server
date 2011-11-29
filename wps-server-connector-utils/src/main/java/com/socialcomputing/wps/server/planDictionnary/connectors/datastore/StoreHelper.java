@@ -93,8 +93,15 @@ public class StoreHelper {
     }
 
    public String toJson() {
-       StringBuilder sb = new StringBuilder();
-       sp.a
-       return "";
+       StringBuilder sb = new StringBuilder( "{\"entities\":[");
+       for( Entity entity : getEntities().values()) {
+           entity.toJson(sb);
+       }
+       sb.append("],\"attributes\" : [");
+       for( Attribute attribute : getAttributes().values()) {
+           attribute.toJson(sb);
+       }
+       sb.append("]}");
+       return sb.toString();
    }
 }

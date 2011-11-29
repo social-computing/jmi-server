@@ -5,26 +5,33 @@ import java.util.List;
 
 public class Attribute extends Data {
 
-	protected List<String> m_Entities = new ArrayList<String>();
-	
-	public Attribute(String id) {
-		super(id);
-	}
+    protected List<String> m_Entities = new ArrayList<String>();
 
-	public List<String> getEntities() {
-	    return m_Entities;
-	}
-	
-	public void addProperty(PropertyDefinition definition, Object value) {
-		addProperty(definition.getName(), value);
-	}
+    public Attribute(String id) {
+        super(id);
+    }
 
-	public void addEntity(Entity entity) {
-		m_Entities.add(entity.getId());
-	}
-	
-	@Override
-	public String toString() {
-	    return "Attribute: " + super.toString();
-	}
+    public List<String> getEntities() {
+        return m_Entities;
+    }
+
+    public void addProperty(PropertyDefinition definition, Object value) {
+        addProperty(definition.getName(), value);
+    }
+
+    public void addEntity(Entity entity) {
+        m_Entities.add(entity.getId());
+    }
+
+    @Override
+    public String toString() {
+        return "Attribute: " + super.toString();
+    }
+
+    public StringBuilder toJson(StringBuilder sb) {
+        sb.append("{");
+        super.toJson(sb);
+        sb.append("}");
+        return sb;
+    }
 }

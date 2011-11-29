@@ -31,6 +31,7 @@
     <module>wps-viadeo</module>
     <module>wps-server</module>
     <module>web-feeds</module>
+    <module>web-facebook</module>
   </modules>
 
   <repositories>

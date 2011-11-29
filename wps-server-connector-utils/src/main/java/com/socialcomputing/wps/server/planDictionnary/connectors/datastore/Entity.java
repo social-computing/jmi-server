@@ -2,6 +2,7 @@ package com.socialcomputing.wps.server.planDictionnary.connectors.datastore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import com.socialcomputing.wps.server.planDictionnary.connectors.AttributeEnumeratorItem;
 
@@ -41,4 +42,18 @@ public class Entity extends Data {
     public String toString() {
         return "Entity: " + super.toString();
     }
+   
+   public StringBuilder toJson( StringBuilder sb) {
+       sb.append( "{");
+       super.toJson(sb);
+       sb.append( ",\"attributes\": [");
+       boolean first = true;
+       for (AttributeEnumeratorItem item : this.m_Attributes) {
+           if( first) first = false;
+           else sb.append(',');
+           sb.append( "{\"id\":\"").append(item.m_Id).append("\"}");
+       }
+       sb.append("]}");
+       return sb;
+   }
 }
