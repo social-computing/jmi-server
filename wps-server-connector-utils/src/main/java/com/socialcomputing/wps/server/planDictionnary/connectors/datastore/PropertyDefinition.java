@@ -1,4 +1,4 @@
-package com.socialcomputing.wps.server.plandictionary.connectors.datastore;
+package com.socialcomputing.wps.server.planDictionnary.connectors.datastore;
 
 /**
  * 

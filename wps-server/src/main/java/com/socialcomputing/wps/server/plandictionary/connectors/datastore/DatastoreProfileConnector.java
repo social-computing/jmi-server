@@ -5,9 +5,9 @@ import java.util.Hashtable;
 
 import org.jdom.Element;
 
+import com.socialcomputing.wps.server.planDictionnary.connectors.AttributeEnumeratorItem;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
-import com.socialcomputing.wps.server.plandictionary.connectors.AttributeEnumeratorItem;
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 import com.socialcomputing.wps.server.plandictionary.connectors.iProfileConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iSelectionConnector;
@@ -45,13 +45,13 @@ public class DatastoreProfileConnector implements iProfileConnector {
 	public iEnumerator<AttributeEnumeratorItem> getEnumerator(String entityId) throws WPSConnectorException {
         if( m_entityConnector.isInverted()) {
             DataEnumerator<AttributeEnumeratorItem> e = new DataEnumerator<AttributeEnumeratorItem>();
-            for( String id : m_entityConnector.getAttribute(entityId).m_Entities) {
+            for( String id : m_entityConnector.getAttribute(entityId).getEntities()) {
                 e.m_Collection.add( new AttributeEnumeratorItem( id, 1));
             }
             return e;
         }
         else {
-            return new DataEnumerator<AttributeEnumeratorItem>( m_entityConnector.getEntity(entityId).m_Attributes);
+            return new DataEnumerator<AttributeEnumeratorItem>( m_entityConnector.getEntity(entityId).getAttributes());
         }
 	}
 

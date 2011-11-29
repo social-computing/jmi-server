@@ -1,9 +1,9 @@
-package com.socialcomputing.wps.server.plandictionary.connectors.datastore;
+package com.socialcomputing.wps.server.planDictionnary.connectors.datastore;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.AttributeEnumeratorItem;
+import com.socialcomputing.wps.server.planDictionnary.connectors.AttributeEnumeratorItem;
 
 public class Entity extends Data {
 

@@ -103,7 +103,7 @@ public class PlanGenerator {
 	 *            True to display the relaxation GUI.
 	 */
 	public void generatePlan(ProtoPlan plan, boolean isVisual)
-			throws com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException {
+			throws com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException {
 		if (plan.init()) {
 			plan.evalBounds();
 			m_mapper = isVisual ? new VisualMapper(plan) : new Mapper(plan);
@@ -133,7 +133,7 @@ public class PlanGenerator {
 	 * @return A new ProtoPlan defined by planPrm.
 	 */
 	public ProtoPlan preGenerate(PlanParams planPrm)
-			throws com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException {
+			throws com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException {
 		EZTimer timer = new EZTimer();
 
 		planPrm.init();
@@ -490,7 +490,7 @@ class PlanParams {
 	 * 
 	 * @return True if the connection to the WPS Server is opened.
 	 */
-	protected void init() throws com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException {
+	protected void init() throws com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException {
 		m_params = getParams();
 		m_connection = getConnection();
 		m_dico = getDictionnary();

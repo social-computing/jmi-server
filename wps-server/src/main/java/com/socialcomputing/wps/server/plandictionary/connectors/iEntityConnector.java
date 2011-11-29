@@ -3,6 +3,8 @@ package com.socialcomputing.wps.server.plandictionary.connectors;
 import java.util.Collection;
 import java.util.Hashtable;
 
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+
 public interface iEntityConnector {
 
     /**

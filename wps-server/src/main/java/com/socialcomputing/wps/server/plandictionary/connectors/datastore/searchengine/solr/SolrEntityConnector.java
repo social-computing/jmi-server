@@ -22,10 +22,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.socialcomputing.utils.http.BasicAuthHttpClient;
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Attribute;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Entity;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.PropertyDefinition;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.Attribute;
+import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.Entity;
+import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.PropertyDefinition;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.searchengine.SearchengineEntityConnector;
 
 /**

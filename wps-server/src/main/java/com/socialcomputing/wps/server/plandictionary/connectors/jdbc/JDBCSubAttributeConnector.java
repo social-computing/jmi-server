@@ -5,8 +5,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Hashtable;
 
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.SubAttributeEnumeratorItem;
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iSubAttributeConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 

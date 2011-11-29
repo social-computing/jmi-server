@@ -3,6 +3,7 @@ package com.socialcomputing.wps.server.plandictionary.connectors;
 import java.io.Serializable;
 import java.util.StringTokenizer;
 
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.utils.StringAndFloat;
 
 /**

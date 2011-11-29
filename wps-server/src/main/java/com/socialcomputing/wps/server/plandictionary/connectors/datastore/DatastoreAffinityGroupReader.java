@@ -11,9 +11,9 @@ import org.jdom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.socialcomputing.wps.server.planDictionnary.connectors.AttributeEnumeratorItem;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.AnalysisProfile;
-import com.socialcomputing.wps.server.plandictionary.connectors.AttributeEnumeratorItem;
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iAffinityGroupReader;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.file.FileEntityConnector;
 import com.socialcomputing.wps.server.utils.StringAndFloat;
@@ -47,14 +47,14 @@ public class DatastoreAffinityGroupReader implements iAffinityGroupReader {
 			case AnalysisProfile.GLOBAL_PLAN:
 			    LOG.debug("global plan");
 			    if( m_entityConnector.isInverted()) {
-                    result = new StringAndFloat[  m_entityConnector.m_Attributes.size()];
-                    for( String id2 : m_entityConnector.m_Attributes.keySet()) {
+                    result = new StringAndFloat[  m_entityConnector.getAttributes().size()];
+                    for( String id2 : m_entityConnector.getAttributes().keySet()) {
                         result[i++] = new StringAndFloat( id2, 1);
                     }
 			    }
 			    else {
-    				result = new StringAndFloat[  m_entityConnector.m_Entities.size()];
-    				for( String id2 : m_entityConnector.m_Entities.keySet()) {
+    				result = new StringAndFloat[  m_entityConnector.getEntities().size()];
+    				for( String id2 : m_entityConnector.getEntities().keySet()) {
     					result[i++] = new StringAndFloat( id2, 1);
     				}
 			    }
@@ -64,10 +64,10 @@ public class DatastoreAffinityGroupReader implements iAffinityGroupReader {
 			    LOG.debug("Personal plan with id = {}", id);
 				Map<String, Integer> set = new HashMap<String, Integer> ();
                 if( m_entityConnector.isInverted()) {
-                    if( m_entityConnector.m_Attributes.get(id) == null) 
+                    if( m_entityConnector.getAttribute(id) == null) 
                         throw new WPSConnectorException( "Unknonwn entity id " + id);
-                    for(String entityId2 : m_entityConnector.m_Attributes.get(id).m_Entities) {
-                        for( AttributeEnumeratorItem attributeItem : m_entityConnector.m_Entities.get( entityId2).m_Attributes) {
+                    for(String entityId2 : m_entityConnector.getAttribute(id).getEntities()) {
+                        for( AttributeEnumeratorItem attributeItem : m_entityConnector.getEntity(entityId2).getAttributes()) {
                             if( set.containsKey( attributeItem.m_Id)) {
                                 int pond = set.get( attributeItem.m_Id) + 1;
                                 set.put( attributeItem.m_Id, pond);
@@ -83,10 +83,10 @@ public class DatastoreAffinityGroupReader implements iAffinityGroupReader {
                     }
                 }
                 else {
-    				if( m_entityConnector.m_Entities.get(id) == null) 
+    				if( m_entityConnector.getEntity(id) == null) 
     				    throw new WPSConnectorException( "Unknonwn entity id " + id);
-    				for(AttributeEnumeratorItem attributeItem : m_entityConnector.m_Entities.get(id).m_Attributes) {
-    					for( String entityId2 : m_entityConnector.m_Attributes.get( attributeItem.m_Id).m_Entities) {
+    				for(AttributeEnumeratorItem attributeItem : m_entityConnector.getEntity(id).getAttributes()) {
+    					for( String entityId2 : m_entityConnector.getAttribute(attributeItem.m_Id).getEntities()) {
     						if( set.containsKey( entityId2)) {
     							int pond = set.get( entityId2) + 1;
     							set.put( entityId2, pond);
@@ -111,9 +111,9 @@ public class DatastoreAffinityGroupReader implements iAffinityGroupReader {
 			    LOG.debug("discovery plan with id = {}", id);
 				Map<String,Integer> set2 = new HashMap<String,Integer>();
                 if( m_entityConnector.isInverted()) {
-                    if( m_entityConnector.m_Entities.get(id) == null) 
+                    if( m_entityConnector.getEntity(id) == null) 
                         throw new WPSConnectorException( "Unknonwn attribute id " + id);
-                    for(AttributeEnumeratorItem attributeItem : m_entityConnector.m_Entities.get(id).m_Attributes) {
+                    for(AttributeEnumeratorItem attributeItem : m_entityConnector.getEntity(id).getAttributes()) {
                         if( set2.containsKey( attributeItem.m_Id)) {
                             int pond = set2.get( attributeItem.m_Id) + 1;
                             set2.put( attributeItem.m_Id, pond);
@@ -128,9 +128,9 @@ public class DatastoreAffinityGroupReader implements iAffinityGroupReader {
                     }
                 }
                 else {
-    				if( m_entityConnector.m_Attributes.get( id) == null) 
+    				if( m_entityConnector.getAttribute(id) == null) 
     				    throw new WPSConnectorException( "Unknonwn attribute id " + id);
-    				for( String entityId : m_entityConnector.m_Attributes.get( id).m_Entities) {
+    				for( String entityId : m_entityConnector.getAttribute(id).getEntities()) {
     					if( set2.containsKey( entityId)) {
     						int pond = set2.get( entityId) + 1;
     						set2.put( entityId, pond);

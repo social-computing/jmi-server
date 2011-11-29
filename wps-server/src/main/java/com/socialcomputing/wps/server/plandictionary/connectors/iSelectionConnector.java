@@ -1,5 +1,7 @@
 package com.socialcomputing.wps.server.plandictionary.connectors;
 
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+
 /**
  * Title:        WPS Connectors
  * Description:

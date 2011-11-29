@@ -11,8 +11,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 
 /**
  * Title: WPS Connectors Description: Copyright: Copyright (c) 2000 Company:

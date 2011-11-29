@@ -5,8 +5,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.AttributeEnumeratorItem;
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.AttributeEnumeratorItem;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 /**
   *  describes a Map which permits to store (attributeId/ponderation) and to compute set fonctions

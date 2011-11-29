@@ -1,11 +1,11 @@
-package com.socialcomputing.wps.server.plandictionary.connectors.utils;
+package com.socialcomputing.wps.server.planDictionnary.connectors.utils;
 
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 
 import org.jdom.Element;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
 
 public abstract class ConnectorHelper {
 

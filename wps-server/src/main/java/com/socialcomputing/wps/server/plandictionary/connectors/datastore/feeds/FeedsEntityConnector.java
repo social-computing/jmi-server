@@ -11,12 +11,12 @@ import au.id.jericho.lib.html.Segment;
 import au.id.jericho.lib.html.Source;
 import au.id.jericho.lib.html.StartTag;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Attribute;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.Attribute;
+import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.Entity;
+import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.PropertyDefinition;
+import com.socialcomputing.wps.server.planDictionnary.connectors.utils.UrlHelper;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.DatastoreEntityConnector;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Entity;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.PropertyDefinition;
-import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper;
 
 public class FeedsEntityConnector extends DatastoreEntityConnector {
     protected   String m_InvertedDef = null;

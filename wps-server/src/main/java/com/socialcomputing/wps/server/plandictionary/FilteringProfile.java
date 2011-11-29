@@ -1,6 +1,6 @@
 package com.socialcomputing.wps.server.plandictionary;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEntityConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iProfileConnector;
 /**

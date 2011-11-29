@@ -9,7 +9,7 @@
   </parent>
   <groupId>com.social-computing.feeds</groupId>
   <artifactId>web-feeds</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>Just Map It! Feeds</name>
   <url>http://feeds.just-map-it.com</url>

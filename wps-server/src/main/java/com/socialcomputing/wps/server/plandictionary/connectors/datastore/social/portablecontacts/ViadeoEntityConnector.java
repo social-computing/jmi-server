@@ -13,13 +13,13 @@ import org.jdom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Attribute;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.PropertyDefinition;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Entity;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.Person;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.Attribute;
+import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.Entity;
+import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.PropertyDefinition;
+import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.social.Person;
+import com.socialcomputing.wps.server.planDictionnary.connectors.utils.UrlHelper;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.SocialEntityConnector;
-import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper;
 
 public class ViadeoEntityConnector extends SocialEntityConnector {
 
@@ -71,7 +71,7 @@ public class ViadeoEntityConnector extends SocialEntityConnector {
             ArrayNode friends = (ArrayNode)node.get( "data");
             do {
                 for( JsonNode friend : friends) {
-                    Person person = addPerson( friend.get("id").getTextValue());
+                    Person person = socialHelper.addPerson( friend.get("id").getTextValue());
                     person.addProperty("name", friend.get("name").getTextValue());
                     person.addProperty("url", friend.get("link").getTextValue());
                     friendslist.add( person.getId());
@@ -108,7 +108,7 @@ public class ViadeoEntityConnector extends SocialEntityConnector {
                     friends = (ArrayNode)node.get( "data");
                     while( friends != null) {
                         for( JsonNode friendJson : friends) {
-                            setFriendShip( friend, friendJson.get("id").getTextValue());
+                            socialHelper.setFriendShip( friend, friendJson.get("id").getTextValue());
                         }
                         friends = null;
                         String next = node.get( "paging").get( "next").getTextValue();
@@ -137,7 +137,7 @@ public class ViadeoEntityConnector extends SocialEntityConnector {
                 }
                 
                 // AJout des propriétés d'entités sur les attributs
-                setEntityProperities();
+                socialHelper.setEntityProperities();
             }
             else {
                 // My self

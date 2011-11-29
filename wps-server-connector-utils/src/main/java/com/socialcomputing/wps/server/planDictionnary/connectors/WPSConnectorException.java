@@ -1,4 +1,4 @@
-package com.socialcomputing.wps.server.plandictionary.connectors;
+package com.socialcomputing.wps.server.planDictionnary.connectors;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;

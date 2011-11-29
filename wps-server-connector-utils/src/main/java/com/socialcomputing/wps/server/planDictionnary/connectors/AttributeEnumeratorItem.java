@@ -1,4 +1,4 @@
-package com.socialcomputing.wps.server.plandictionary.connectors;
+package com.socialcomputing.wps.server.planDictionnary.connectors;
 
 /**
  * Title:        WPS Connectors

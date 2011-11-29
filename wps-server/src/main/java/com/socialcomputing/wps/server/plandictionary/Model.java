@@ -5,7 +5,7 @@ import java.util.Hashtable;
 
 import com.socialcomputing.wps.client.applet.ColorX;
 import com.socialcomputing.wps.client.applet.Env;
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEntityConnector;
 import com.socialcomputing.wps.server.webservices.RequestingClassifyId;
 

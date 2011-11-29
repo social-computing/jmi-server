@@ -3,7 +3,7 @@ package com.socialcomputing.wps.server.plandictionary.connectors.jdbc;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
 
 /**
  * <p>Title: WPS Connectors</p>

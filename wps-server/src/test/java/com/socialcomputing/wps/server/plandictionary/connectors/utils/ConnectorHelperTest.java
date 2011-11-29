@@ -5,7 +5,8 @@ import java.util.Hashtable;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.utils.ConnectorHelper;
 
 
 public class ConnectorHelperTest {

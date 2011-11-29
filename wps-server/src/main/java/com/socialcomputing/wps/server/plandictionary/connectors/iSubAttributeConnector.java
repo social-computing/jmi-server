@@ -2,6 +2,8 @@ package com.socialcomputing.wps.server.plandictionary.connectors;
 
 import java.util.Hashtable;
 
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+
 public interface iSubAttributeConnector
 {
    public abstract  String getName(  );

@@ -10,11 +10,11 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.PropertyDefinition;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.PropertyDefinition;
+import com.socialcomputing.wps.server.planDictionnary.connectors.utils.UrlHelper;
+import com.socialcomputing.wps.server.planDictionnary.connectors.utils.UrlHelper.Type;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.SocialEntityConnector;
-import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper;
-import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper.Type;
 
 public class TurbulencesEntityConnector extends SocialEntityConnector {
 
@@ -65,7 +65,7 @@ public class TurbulencesEntityConnector extends SocialEntityConnector {
         //for (int i = 0 ; i < 112 ; i++) {
             JSONObject user = (JSONObject) array.get(i);
             //System.out.println(user.get("id") + "=>" + user.get("name"));
-            addPerson((String)user.get("id")).addProperty("name", user.get("name"));
+            socialHelper.addPerson((String)user.get("id")).addProperty("name", user.get("name"));
             friendslist.add((String)user.get("id"));
         }
         
@@ -101,7 +101,7 @@ public class TurbulencesEntityConnector extends SocialEntityConnector {
                 JSONObject rs = (JSONObject) r.get(k);
                 //System.out.println(rs.get("uid1") + "=>" + rs.get("uid2") + "=>" + rs.get("are_friends"));
                 if ( (Boolean)rs.get("are_friends"))
-                    setFriendShip(((Long)rs.get("uid1")).toString(), ((Long)rs.get("uid2")).toString());
+                    socialHelper.setFriendShip(((Long)rs.get("uid1")).toString(), ((Long)rs.get("uid2")).toString());
             }
         }
         
@@ -110,7 +110,7 @@ public class TurbulencesEntityConnector extends SocialEntityConnector {
         //setFriendShip((String)me.get("id"), friendslist);
         
         // AJout des propriétés d'entités sur les attributs
-        setEntityProperities();
+        socialHelper.setEntityProperities();
     }
 
 

@@ -14,13 +14,13 @@ import org.jdom.Element;
 
 import sun.misc.BASE64Decoder;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Attribute;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.PropertyDefinition;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Entity;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.Attribute;
+import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.Entity;
+import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.PropertyDefinition;
+import com.socialcomputing.wps.server.planDictionnary.connectors.utils.UrlHelper;
+import com.socialcomputing.wps.server.planDictionnary.connectors.utils.UrlHelper.Type;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.SocialEntityConnector;
-import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper;
-import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper.Type;
 
 public class FacebookEntityConnector extends SocialEntityConnector {
 
@@ -78,7 +78,7 @@ public class FacebookEntityConnector extends SocialEntityConnector {
                 List<String> friendslist = new ArrayList<String>();
                 ArrayNode friends = (ArrayNode)node.get( "data");
                 for( JsonNode friend : friends) {
-                    addPerson(friend.get("id").getTextValue()).addProperty("name", friend.get("name").getTextValue());
+                    socialHelper.addPerson(friend.get("id").getTextValue()).addProperty("name", friend.get("name").getTextValue());
                     friendslist.add(friend.get("id").getTextValue());
                 }
                 
@@ -111,7 +111,7 @@ public class FacebookEntityConnector extends SocialEntityConnector {
                     for (JsonNode rs : r) {
                         //System.out.println(rs.get("uid1") + "=>" + rs.get("uid2") + "=>" + rs.get("are_friends"));
                         if ( rs.get("are_friends").getBooleanValue())
-                            setFriendShip(String.valueOf(rs.get("uid1").getLongValue()), String.valueOf(rs.get("uid2").getLongValue()).toString());
+                            socialHelper.setFriendShip(String.valueOf(rs.get("uid1").getLongValue()), String.valueOf(rs.get("uid2").getLongValue()).toString());
                     }
                 }
                 
@@ -130,7 +130,7 @@ public class FacebookEntityConnector extends SocialEntityConnector {
                 }
                 
                 // AJout des propriétés d'entités sur les attributs
-                setEntityProperities();
+                socialHelper.setEntityProperities();
             }
             else {
                 UrlHelper urlHelper = new UrlHelper();

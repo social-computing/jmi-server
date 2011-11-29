@@ -1,5 +1,6 @@
 package com.socialcomputing.wps.server.plandictionary.connectors;
 
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.utils.StringAndFloat;
 
 /**

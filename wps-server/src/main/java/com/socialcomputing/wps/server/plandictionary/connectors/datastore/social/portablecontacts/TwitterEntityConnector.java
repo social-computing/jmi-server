@@ -11,12 +11,12 @@ import org.json.simple.JSONValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.PropertyDefinition;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.PropertyDefinition;
+import com.socialcomputing.wps.server.planDictionnary.connectors.utils.UrlHelper;
+import com.socialcomputing.wps.server.planDictionnary.connectors.utils.UrlHelper.Type;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.SocialEntityConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.utils.OAuthHelper;
-import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper;
-import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper.Type;
 
 public class TwitterEntityConnector extends SocialEntityConnector {
     private static final Logger LOG = LoggerFactory.getLogger(TwitterEntityConnector.class);
@@ -76,7 +76,7 @@ public class TwitterEntityConnector extends SocialEntityConnector {
                 screen_name = s.substring(s.indexOf('=') + 1);
             }
         }
-        addPerson(user_id).addProperty("name", screen_name);
+        socialHelper.addPerson(user_id).addProperty("name", screen_name);
 
         try {
             String secret = oauthConsumerSecret + "&" + oauth_token_secret;
@@ -89,7 +89,7 @@ public class TwitterEntityConnector extends SocialEntityConnector {
                 sb.append(jobj.get(i).toString());
                 if (i != jobj.size() -1 )
                     sb.append(",");
-                setFriendShip(user_id, jobj.get(i).toString());
+                socialHelper.setFriendShip(user_id, jobj.get(i).toString());
             }
             
             
@@ -113,7 +113,7 @@ public class TwitterEntityConnector extends SocialEntityConnector {
             for (int i = 0 ; i < jobj2.size() ; i++) {
                 JSONObject user = (JSONObject) jobj2.get(i);
                 String id = user.get("id").toString();
-                addPerson(id).addProperty("name", (String) user.get("name"));
+                socialHelper.addPerson(id).addProperty("name", (String) user.get("name"));
             }
             
         }

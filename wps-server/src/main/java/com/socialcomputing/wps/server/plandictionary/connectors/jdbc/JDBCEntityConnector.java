@@ -8,10 +8,10 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.TreeMap;
 
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.wps.server.plandictionary.connectors.MultiAffinityGroupReader;
 import com.socialcomputing.wps.server.plandictionary.connectors.MultiProfileConnector;
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iAffinityGroupReader;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierRuleConnector;

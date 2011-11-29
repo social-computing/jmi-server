@@ -3,7 +3,7 @@ package com.socialcomputing.wps.server.plandictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
 
 /**
  * Title:        Plan Dictionary

@@ -9,10 +9,10 @@ import java.util.Map;
 import java.util.TreeSet;
 
 import com.socialcomputing.wps.server.generator.RecommendationGroup;
+import com.socialcomputing.wps.server.planDictionnary.connectors.AttributeEnumeratorItem;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.AnalysisProfile;
-import com.socialcomputing.wps.server.plandictionary.connectors.AttributeEnumeratorItem;
 import com.socialcomputing.wps.server.plandictionary.connectors.SubAttributeEnumeratorItem;
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 import com.socialcomputing.wps.server.plandictionary.connectors.iProfileConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iSubAttributeConnector;

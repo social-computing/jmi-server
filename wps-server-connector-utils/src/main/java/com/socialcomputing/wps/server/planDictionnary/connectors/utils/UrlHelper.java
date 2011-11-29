@@ -1,4 +1,4 @@
-package com.socialcomputing.wps.server.plandictionary.connectors.utils;
+package com.socialcomputing.wps.server.planDictionnary.connectors.utils;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -20,9 +20,9 @@ import org.jdom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import sun.misc.BASE64Encoder;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
+import sun.misc.BASE64Encoder;
 
 public class UrlHelper extends ConnectorHelper {
     private static final Logger LOG = LoggerFactory.getLogger(UrlHelper.class);
@@ -76,7 +76,7 @@ public class UrlHelper extends ConnectorHelper {
         if( connection.getAttributeValue( "type") != null && connection.getAttributeValue( "type").equalsIgnoreCase( "POST"))
             type = Type.POST;
         for( Element elem : (List<Element>)connection.getChildren( "url-header")) {
-            defParams.add( new UrlHelper.NameValuePair( elem.getAttributeValue( "name"), elem.getText()));
+            headerParams.add( new UrlHelper.NameValuePair( elem.getAttributeValue( "name"), elem.getText()));
         }
         for( Element elem : (List<Element>)connection.getChildren( "url-parameter")) {
             defParams.add( new NameValuePair( elem.getAttributeValue( "name"), elem.getText()));
@@ -89,6 +89,10 @@ public class UrlHelper extends ConnectorHelper {
         }
     }
 
+    public void openConnections() throws WPSConnectorException {
+        openConnections( 0, null);
+    }
+    
     @Override
     public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
         StringBuilder parameters = new StringBuilder();

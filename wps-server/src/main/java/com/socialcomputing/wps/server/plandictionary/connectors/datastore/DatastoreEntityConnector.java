@@ -7,8 +7,12 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.AttributeEnumeratorItem;
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.AttributeEnumeratorItem;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.Attribute;
+import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.Entity;
+import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.PropertyDefinition;
+import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.StoreHelper;
 import com.socialcomputing.wps.server.plandictionary.connectors.iAffinityGroupReader;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEntityConnector;
@@ -16,7 +20,7 @@ import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 import com.socialcomputing.wps.server.plandictionary.connectors.iProfileConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iSelectionConnector;
 
-public abstract class DatastoreEntityConnector implements iEntityConnector {
+public abstract class DatastoreEntityConnector extends StoreHelper implements iEntityConnector {
 
     private final String m_Name;
 
@@ -25,12 +29,6 @@ public abstract class DatastoreEntityConnector implements iEntityConnector {
     protected int m_planType;
     
     protected boolean m_inverted = false;
-
-    protected Hashtable<String, Entity> m_Entities = new Hashtable<String, Entity>();
-    protected Hashtable<String, Attribute> m_Attributes = new Hashtable<String, Attribute>();
-
-    protected Set<PropertyDefinition> entityProperties = new HashSet<PropertyDefinition>();
-    protected Set<PropertyDefinition> attributeProperties = new HashSet<PropertyDefinition>();
 
     protected List<DatastoreAffinityGroupReader> affinityGroupReaders = new ArrayList<DatastoreAffinityGroupReader>();
     protected List<DatastoreProfileConnector> profileConnectors = new ArrayList<DatastoreProfileConnector>();
@@ -137,74 +135,4 @@ public abstract class DatastoreEntityConnector implements iEntityConnector {
         return m_inverted;
     }
 
-    protected Entity getEntity(String id) {
-        return m_Entities.get(id);
-    }
-
-    protected Entity addEntity(String id) {
-        Entity entity = getEntity(id);
-        if (entity == null) {
-            entity = new Entity(id);
-            m_Entities.put(id, entity);
-        }
-        return entity;
-    }
-
-    protected void removeEntity(String id) {
-        if( id != null) {
-            for( Attribute attribute : m_Attributes.values()) {
-                if( attribute.m_Entities.contains( id)) {
-                    attribute.m_Entities.remove( id);
-                }
-            }
-            m_Entities.remove( id);
-        }
-    }
-    
-    protected Attribute getAttribute(String id) {
-        return m_Attributes.get(id);
-    }
-
-    protected Attribute addAttribute(String id) {
-        Attribute attribute = getAttribute(id);
-        if (attribute == null) {
-            attribute = new Attribute(id);
-            m_Attributes.put(id, attribute);
-        }
-        return attribute;
-    }
-
-    public void addAttributeProperties(Entity entity) {
-        for (PropertyDefinition propDefinition : entityProperties) {
-            if (!propDefinition.isSimple()) {
-                ArrayList<String> property = new ArrayList<String>();
-                for (AttributeEnumeratorItem attributeItem : entity.m_Attributes) {
-                    Attribute attribute = m_Attributes.get(attributeItem.m_Id);
-                    if( attribute != null) {
-                        String value = (String) attribute.getProperties().get(propDefinition.getId());
-                        if (value != null)
-                            property.add(value);
-                    }
-                }
-                entity.addProperty(propDefinition.getName(), property.toArray(new String[property.size()]));
-            }
-        }
-    }
-        
-   public void addEntityProperties(Attribute attribute) {
-        for (PropertyDefinition propDefinition : attributeProperties) {
-            if (!propDefinition.isSimple()) {
-                ArrayList<String> property = new ArrayList<String>();
-                for (String entityId : attribute.m_Entities) {
-                    Entity entity = m_Entities.get(entityId);
-                    if( entity != null) {
-                        String value = (String) entity.getProperties().get(propDefinition.getId());
-                        if (value != null)
-                            property.add(value);
-                    }
-                }
-                attribute.addProperty(propDefinition, property.toArray(new String[property.size()]));
-            }
-        }
-    }
 }

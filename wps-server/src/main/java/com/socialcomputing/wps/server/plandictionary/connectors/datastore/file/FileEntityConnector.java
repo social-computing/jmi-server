@@ -2,9 +2,9 @@ package com.socialcomputing.wps.server.plandictionary.connectors.datastore.file;
 
 import java.util.Hashtable;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.utils.UrlHelper;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.DatastoreEntityConnector;
-import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper;
 
 public abstract class FileEntityConnector extends DatastoreEntityConnector {
 

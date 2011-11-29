@@ -3,7 +3,7 @@ package com.socialcomputing.wps.server.plandictionary.connectors.jdbc;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.AttributeEnumeratorItem;
+import com.socialcomputing.wps.server.planDictionnary.connectors.AttributeEnumeratorItem;
 
 public class JDBCAttributeEnumerator extends JDBCEnumerator<AttributeEnumeratorItem>
 {

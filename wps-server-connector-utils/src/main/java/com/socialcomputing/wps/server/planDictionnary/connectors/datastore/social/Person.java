@@ -1,7 +1,7 @@
-package com.socialcomputing.wps.server.plandictionary.connectors.datastore.social;
+package com.socialcomputing.wps.server.planDictionnary.connectors.datastore.social;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Attribute;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.Entity;
+import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.Attribute;
+import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.Entity;
 
 public class Person {
     

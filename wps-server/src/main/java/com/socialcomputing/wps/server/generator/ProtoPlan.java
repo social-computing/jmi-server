@@ -433,7 +433,7 @@ public class ProtoPlan {
 	 *         one, no cluster without link).
 	 */
 	protected boolean init()
-			throws com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException {
+			throws com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException {
 		int i, n = m_attributes.length, clustered = 0, nullLinks = 0, voidLinks = 0, extraLinks = 0, extraChild = 0, extraBase = 0, refNodes = 0, nodeLinks = 0;
 		boolean isInBase = true, isBase;
 		ProtoAttribute att;
@@ -840,7 +840,7 @@ public class ProtoPlan {
 	 * @return A server node swatch matching the specified style.
 	 */
 	protected XSwatch getNodeSwatch(int style)
-			throws com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException {
+			throws com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException {
 		return m_planReq.getSwatch(XSwatch.NODE_TYP, style);
 	}
 
@@ -858,7 +858,7 @@ public class ProtoPlan {
 	 * @return A server link swatch matching the specified style.
 	 */
 	protected XSwatch getLinkSwatch(int style)
-			throws com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException {
+			throws com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException {
 		return m_planReq.getSwatch(XSwatch.LINK_TYP, style);
 	}
 

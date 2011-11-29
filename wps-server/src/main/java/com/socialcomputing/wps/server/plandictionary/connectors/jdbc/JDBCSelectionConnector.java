@@ -6,8 +6,8 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Hashtable;
 
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iSelectionConnector;
 
 /**

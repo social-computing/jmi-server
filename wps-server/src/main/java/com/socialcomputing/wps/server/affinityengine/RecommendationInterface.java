@@ -5,10 +5,10 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import com.socialcomputing.wps.server.generator.RecommendationGroup;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.AffinityReaderProfile;
 import com.socialcomputing.wps.server.plandictionary.AnalysisProfile;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.utils.StringAndFloat;
 import com.socialcomputing.wps.server.webservices.PlanRequest;
 

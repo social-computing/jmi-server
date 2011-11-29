@@ -2,7 +2,7 @@ package com.socialcomputing.wps.server.plandictionary.connectors.jdbc;
 
 import org.junit.Test;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
 
 
 public class JDBCQuery2Test {

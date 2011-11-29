@@ -2,6 +2,8 @@ package com.socialcomputing.wps.server.plandictionary.connectors;
 
 import java.util.Collection;
 
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+
 public interface iClassifierConnector
 {
    public abstract  String getName();

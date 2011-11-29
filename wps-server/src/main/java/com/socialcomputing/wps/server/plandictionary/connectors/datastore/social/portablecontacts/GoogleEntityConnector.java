@@ -9,10 +9,10 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import com.socialcomputing.wps.server.plandictionary.connectors.WPSConnectorException;
-import com.socialcomputing.wps.server.plandictionary.connectors.datastore.PropertyDefinition;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.PropertyDefinition;
+import com.socialcomputing.wps.server.planDictionnary.connectors.utils.UrlHelper;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.SocialEntityConnector;
-import com.socialcomputing.wps.server.plandictionary.connectors.utils.UrlHelper;
 
 public class GoogleEntityConnector extends SocialEntityConnector {
 
@@ -63,7 +63,7 @@ public class GoogleEntityConnector extends SocialEntityConnector {
         for (int i = 0 ; i < array.size() ; i++) {
             JSONObject user = (JSONObject) array.get(i);
             JSONObject title = (JSONObject) user.get("title");
-            addPerson((String)title.get("$t")).addProperty("name", title.get("$t"));
+            socialHelper.addPerson((String)title.get("$t")).addProperty("name", title.get("$t"));
         }
         
     }

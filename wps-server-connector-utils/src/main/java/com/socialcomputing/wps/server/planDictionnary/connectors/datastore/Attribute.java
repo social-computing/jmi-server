@@ -1,4 +1,4 @@
-package com.socialcomputing.wps.server.plandictionary.connectors.datastore;
+package com.socialcomputing.wps.server.planDictionnary.connectors.datastore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,10 @@ public class Attribute extends Data {
 		super(id);
 	}
 
+	public List<String> getEntities() {
+	    return m_Entities;
+	}
+	
 	public void addProperty(PropertyDefinition definition, Object value) {
 		addProperty(definition.getName(), value);
 	}
