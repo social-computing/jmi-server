@@ -1,6 +1,7 @@
 package com.socialcomputing.wps.server.plandictionary.connectors.datastore.file.rest;
 
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.ws.rs.core.MediaType;
@@ -67,6 +68,13 @@ public class RESTEntityConnector extends FileEntityConnector {
         ObjectMapper mapper = new ObjectMapper();
         try {
             JsonNode node = mapper.readTree( urlHelper.getStream());
+            JsonNode globals = (JsonNode) node.get( "globals");
+            if( globals != null) {
+                for( Iterator<String> it = globals.getFieldNames(); it.hasNext(); ) {
+                    String key = it.next();
+                    wpsparams.put( key, globals.get(key).getTextValue());
+                }
+            }
             ArrayNode entities = (ArrayNode) node.get( m_EntityMarkup);
             if( entities != null) {
                 for( JsonNode jsonentity: entities) {
@@ -121,6 +129,9 @@ public class RESTEntityConnector extends FileEntityConnector {
 		} catch (Exception e) {
             throw new WPSConnectorException( "openConnections", e);
 		}
+        for( Element el: (List<Element>)root.getChildren( "globals")) {
+            wpsparams.put( el.getAttributeValue("id"), el.getText());
+        }
 		for( Element el: (List<Element>)root.getChildren( m_EntityMarkup)) {
 			Entity entity = addEntity( el.getAttributeValue( m_EntityId));
 	        for( PropertyDefinition property : entityProperties) {

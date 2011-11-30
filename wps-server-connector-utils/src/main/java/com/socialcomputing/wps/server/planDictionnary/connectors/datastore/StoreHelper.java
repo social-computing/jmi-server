@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import com.socialcomputing.wps.server.planDictionnary.connectors.AttributeEnumeratorItem;
 
@@ -15,6 +16,12 @@ public class StoreHelper {
     protected Set<PropertyDefinition> entityProperties = new HashSet<PropertyDefinition>();
     protected Set<PropertyDefinition> attributeProperties = new HashSet<PropertyDefinition>();
 
+    protected Hashtable<String, String> m_Globals = new Hashtable<String, String>();
+
+    public void addGlobal(String id, String value) {
+        m_Globals.put( id, value);
+    }
+    
     public Hashtable<String, Entity> getEntities() {
         return m_Entities;
     }
@@ -94,14 +101,27 @@ public class StoreHelper {
 
    public String toJson() {
        StringBuilder sb = new StringBuilder( "{\"entities\":[");
+       boolean first = true;
        for( Entity entity : getEntities().values()) {
+           if( first) first = false;
+           else sb.append(',');
            entity.toJson(sb);
        }
        sb.append("],\"attributes\" : [");
+       first = true;
        for( Attribute attribute : getAttributes().values()) {
+           if( first) first = false;
+           else sb.append(',');
            attribute.toJson(sb);
        }
-       sb.append("]}");
+       sb.append("],\"globals\" : {");
+       first = true;
+       for( Entry<String, String> global : m_Globals.entrySet()) {
+           if( first) first = false;
+           else sb.append(',');
+           sb.append( "\"").append(Data.toJson(global.getKey())).append("\":\"").append(Data.toJson(global.getValue())).append("\"");
+       }
+       sb.append("}}");
        return sb.toString();
    }
 }

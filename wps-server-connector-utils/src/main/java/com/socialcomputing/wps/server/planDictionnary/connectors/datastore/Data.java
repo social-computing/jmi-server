@@ -88,8 +88,12 @@ public abstract class Data {
         for (Entry<String, Object> p : this.m_Properties.entrySet()) {
             if( first) first = false;
             else sb.append(',');
-            sb.append( "\"").append(p.getKey()).append("\":\"").append(p.getValue()).append("\"");
+            sb.append( "\"").append(Data.toJson(p.getKey())).append("\":\"").append(Data.toJson((String)p.getValue())).append("\"");
         }
         return sb;
+    }
+    public static String toJson( String str) {
+        String newsstr = str.replace("\\", "\\\\");
+        return newsstr.replace("\"", "\\\"");
     }
 }
