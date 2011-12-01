@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='ISO-8859-1'?>
+<?xml version='1.0' encoding='UTF-8'?>
 
 <!DOCTYPE swatch SYSTEM "swatch.dtd">
 
@@ -6,20 +6,20 @@
 
 <!-- Base -->
     <sat shape="diskShp" transfo="baseTrf" hover="hoverEvt" click="clickEvt" dblClk="dblClkEvt" isVisible="true" isSuper="true" isSub="false" isCur="false" isRest="true" isBack="false" isTip="false" isNoSided="false">
-        <slice inCol="86 178 255" outCol="0 102 204" alpha="1" linewidth="1" />
-        <slice inCol="255 255 255" outCol="0 102 204" alpha="1" linewidth="1">
+        <slice inCol="238 242 245" outCol="189 172 164" alpha="1" linewidth="1" />
+        <slice inCol="90 78 88" outCol="189 172 164" alpha="1" linewidth="1">
             <transfo scale=".87" map="absolute" />
         </slice>
     </sat>
 
 <!-- Rest Spots -->
     <sat shape="diskShp" isSub="true" isVisible="true" isSuper="true" isCur="false" isRest="true" isBack="false" isTip="false" isNoSided="false">
-        <slice inCol="37 137 235" outCol="0 102 204" transfo="spotTrf" alpha="1" linewidth="1" />
+        <slice inCol="239 33 37" outCol="189 172 164" transfo="spotTrf" alpha="1" linewidth="1" />
     </sat>
 
 <!-- Cur Spot -->
     <sat shape="diskShp" isSub="true" isRest="false" isCur="true" isVisible="true" isSuper="true" isBack="false" isTip="false" isNoSided="false">
-        <slice inCol="86 178 255" outCol="0 102 204" transfo="spotTrf" alpha="1" linewidth="1" />
+        <slice inCol="239 33 37" outCol="189 172 164" transfo="spotTrf" alpha="1" linewidth="1" />
     </sat>
 
 <!-- Rest Titles -->
@@ -39,7 +39,7 @@
             <polar dir="0" rad="1.2" />
         </transfo>
         <slice alpha="1" linewidth="1">
-            <tip font="selFnt" label="{sNAME}" inCol="255 0 0" textCol="@whiteCol" isCorner="true" blur="-1" rounded="-1" dir="SW" align="left" isFloating="false" />
+            <tip font="selFnt" label="{sNAME}" inCol="241 27 63" textCol="@whiteCol" isCorner="true" blur="-1" rounded="-1" dir="SW" align="left" isFloating="false" />
         </slice>
     </sat>
     
@@ -49,7 +49,7 @@
             <polar dir="0" rad="1.2" />
         </transfo>
         <slice alpha="1" linewidth="1">
-            <tip font="nameFnt" label="@nameStr" inCol="37 137 235" textCol="@whiteCol" rounded="10" isCorner="true" blur="-1" dir="SW" align="left" isFloating="false" />
+            <tip font="nameFnt" label="@nameStr" inCol="180 20 32" textCol="@whiteCol" rounded="10" isCorner="true" blur="-1" dir="SW" align="left" isFloating="false" />
         </slice>
     </sat>
 <!-- References -->
@@ -94,8 +94,8 @@
     </event>
 
 	<menu id="menu" font="menuFnt">
-		<item label="Afficher" font="nameFnt" url="javascript:Display({sID})" />
-		<item label="Centrer" font="nameFnt" url="javascript:Discover({sID},{sNAME})" />
+		<item label="Display" font="nameFnt" url="javascript:Display({sID})" />
+		<item label="Center" font="nameFnt" url="javascript:Discover({sID},{sNAME})" />
 		<separator />
 		<item label="[+30sPOSS_NAME]" url="javascript:Display([sPOSS_ID])" />
 	</menu>

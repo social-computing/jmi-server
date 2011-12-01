@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='ISO-8859-1'?>
+<?xml version='1.0' encoding='UTF-8'?>
 
 <!DOCTYPE swatch SYSTEM "swatch.dtd">
 
@@ -6,13 +6,13 @@
 
 <!-- Base Satellite definition -->
     <sat shape="edgeShp" transfo="noTrf" isBack="true" isVisible="true" isSuper="true" isSub="false" isCur="false" isRest="true" isTip="false" isNoSided="false">
-        <slice inCol="100 100 100" outCol="56 56 56" alpha="1" linewidth="1" />
+        <slice inCol="20 169 251" outCol="238 242 245" alpha="1" linewidth="1" />
     </sat>
 
 <!-- General purpose Selection -->
 <!-- Sel sats must be declared before the ones they should hides when they'll be activated -->
     <sat shape="edgeShp" linkDarkCol="128 0 0" linkNormCol="255 0 0" linkLitCol="255 143 143" selection="search" transfo="noTrf" isVisible="true" isSuper="true" isSub="false" isCur="false" isRest="true" isBack="false" isTip="false" isNoSided="false">
-        <slice inCol="255 0 0" alpha="1" linewidth="1" />
+        <slice inCol="238 242 245" outCol="239 33 37" alpha="1" linewidth="1" />
     </sat>
 
 <!-- References -->
@@ -34,4 +34,3 @@
     <transfo id="noTrf" scale="0" map="absolute" />
 
 </swatch>
-

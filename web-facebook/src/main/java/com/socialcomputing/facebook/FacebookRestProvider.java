@@ -32,8 +32,8 @@ import com.socialcomputing.wps.server.planDictionnary.connectors.utils.UrlHelper
 
 @Path("/maps")
 public class FacebookRestProvider {
-    public static final String CLIENT_ID = "108710779211353";
-    public static final String CLIENT_SECRET = "e155ed50ccf90de8d9c7dafbd88bb92d";
+    public static final String CLIENT_ID = "136353756473765";
+    public static final String CLIENT_SECRET = "67118f943664c3cb42d3cfa053ce4bed";
     private static final ObjectMapper mapper = new ObjectMapper();
 
     @GET
@@ -43,7 +43,7 @@ public class FacebookRestProvider {
                        @QueryParam("access_token") String token) {
         HttpSession session = request.getSession(true);
         String result = ( String)session.getAttribute(kind);
-        if (true) {//result == null || result.length() == 0) {
+        if (result == null || result.length() == 0) {
             result = kind(kind, token);
             session.setAttribute(kind, result);
         }
@@ -75,8 +75,8 @@ public class FacebookRestProvider {
                 uh.setUrl("https://graph.facebook.com/me");
                 uh.addParameter("access_token", token);
                 uh.openConnections();
-                //JsonNode me = mapper.readTree(uh.getStream());
-                //wpsparams.put("$MY_FB_ID", me.get("id").getTextValue());
+                JsonNode me = mapper.readTree(uh.getStream());
+                storeHelper.addGlobal("$MY_FB_ID", me.get("id").getTextValue());
 
                 // Les amis entre eux
                 for (int i = 0; i < friendslist.size() - 1; i++) {
@@ -137,7 +137,7 @@ public class FacebookRestProvider {
                 uh.addParameter("access_token", token);
                 uh.openConnections();
                 JsonNode me = mapper.readTree(uh.getStream());
-                //wpsparams.put("$MY_FB_ID", me.get("id").getTextValue());
+                storeHelper.addGlobal("$MY_FB_ID", me.get("id").getTextValue());
                 friends.add(me);
 
                 for (JsonNode friend : friends) {
@@ -200,12 +200,14 @@ public class FacebookRestProvider {
         UrlHelper urlHelper = new UrlHelper();
         urlHelper.setUrl("https://graph.facebook.com/oauth/access_token");
         urlHelper.addParameter( "client_id", FacebookRestProvider.CLIENT_ID);
-        urlHelper.addParameter( "redirect_uri", "http://facebook.just-map-it.com");
+        //urlHelper.addParameter( "redirect_uri", "http://apps.facebook.com/jmi-test");
+        urlHelper.addParameter( "redirect_uri", "http://facebook.just-map-it.com/postinstall.jsp");
         urlHelper.addParameter( "client_secret", FacebookRestProvider.CLIENT_SECRET);
         urlHelper.addParameter( "code", code);
         try {
             urlHelper.openConnections();
-            for( String p : urlHelper.getResult().split("&")) {
+            String response = urlHelper.getResult(); 
+            for( String p : response.split("&")) {
                 if( p.startsWith( "access_token=")) {
                     token = p.substring( p.indexOf( '=') + 1);
                     break;

@@ -4,18 +4,22 @@
 <head>
 <title>Just Map It! Facebook</title>
 <%String code = request.getParameter("code");
+String error = request.getParameter("error");
 String oauth_token = FacebookRestProvider.GetProperty( request.getParameter("signed_request"), "oauth_token");
 String user_id = FacebookRestProvider.GetProperty( request.getParameter("signed_request"), "user_id");
-if( code == null && oauth_token == null) { %>
+if( error != null) {%>
+</head><body>
+Sorry...
+</body>
+<%} else if( code == null && oauth_token == null) { %>
 <meta name="robots" content="noindex,follow" />
 <!--meta http-equiv="refresh" content="0; url=https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/index.jsp&scope=friends_likes,friends_groups,friends_activities,friends_events,publish_stream,user_photos" /-->
-<meta http-equiv="refresh" content="0; url=https://www.facebook.com/dialog/oauth?client_id=<%=FacebookRestProvider.CLIENT_ID%>&redirect_uri=http://apps.facebook.com/just-map-it/&scope=friends_likes,friends_groups,friends_activities,friends_events,publish_stream,user_photos" />
+<meta http-equiv="refresh" content="0; url=https://www.facebook.com/dialog/oauth?client_id=<%=FacebookRestProvider.CLIENT_ID%>&redirect_uri=<%=java.net.URLEncoder.encode("http://facebook.just-map-it.com/postinstall.jsp", "UTF-8")%>&scope=friends_likes,friends_groups,friends_activities,friends_events,publish_stream,user_photos" />
 </head>
 <body>
 <!--script> top.location.href='https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://wps.wps.cloudbees.net/facebook/index.jsp&scope=friends_likes,friends_groups,friends_activities,friends_events,publish_stream,user_photos'</script-->
 <!-- script> top.location.href='https://www.facebook.com/dialog/oauth?client_id=108710779211353&redirect_uri=http://apps.facebook.com/social-computing/&scope=friends_likes,friends_groups,friends_activities,friends_events,publish_stream,user_photos'</script-->
 </body>
-</html>
 <%} else {%>
       <meta name="google" value="notranslate">         
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -25,15 +29,14 @@ if( code == null && oauth_token == null) { %>
 	 Firefox 3.6 focus border issues.  Initially, don't display flashContent div so it won't show 
 	 if JavaScript disabled.
 -->
-      <style type="text/css" media="screen"> 
+     <style type="text/css" media="screen"> 
 	html, body	{ height:100%; }
-	body { margin:0; padding:0; overflow:auto; text-align:center; 
-	       background-color: #FFFFFF; }   
+	body { margin:0; padding:0; overflow:auto; text-align:center; background-color: #FFFFFF; }   
 	object:focus { outline:none; }
 	#flashContent { display:none; }
       </style>
 
-<!-- Enable Browser History by replacing useBrowserHistory tokens with two hyphens -->
+	<!-- Enable Browser History by replacing useBrowserHistory tokens with two hyphens -->
       <!-- BEGIN Browser History required section -->
       <link rel="stylesheet" type="text/css" href="./client/history/history.css" />
       <script type="text/javascript" src="./client/history/history.js"></script>
@@ -55,8 +58,8 @@ if( code == null && oauth_token == null) { %>
           flashvars.wpsplanname = "Facebook";
           //flashvars.fbserverurl = "http://localhost:8080/web-facebook";
           flashvars.fbserverurl = "http://facebook.just-map-it.com";
-          flashvars.jsessionid = '<%=request.getRequestedSessionId()%>';
-          flashvars.access_token = '<%=FacebookRestProvider.GetAccessToken(code)%>';
+          flashvars.jsessionid = '<%=session.getId()%>';
+          flashvars.access_token = '<%=code != null ? FacebookRestProvider.GetAccessToken(code) : oauth_token%>';
           flashvars.fbuserid = '<%=user_id%>';
           flashvars.analysisProfile = "GlobalProfile";
           flashvars.kind = "likes";
@@ -79,7 +82,6 @@ if( code == null && oauth_token == null) { %>
       </script>
   </head>
   <body>
-<div id="content">
       <div id="flashContent">
       	<p>
        	To view this page ensure that Adobe Flash Player version 
@@ -120,7 +122,6 @@ if( code == null && oauth_token == null) { %>
               <!--<![endif]-->
           </object>
    </noscript>		
-   </div>
  </body>
+<%}%>
 </html>
-<%} %>
