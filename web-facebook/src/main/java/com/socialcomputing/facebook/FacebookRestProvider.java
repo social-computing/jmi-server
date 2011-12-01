@@ -32,8 +32,13 @@ import com.socialcomputing.wps.server.planDictionnary.connectors.utils.UrlHelper
 
 @Path("/maps")
 public class FacebookRestProvider {
-    public static final String CLIENT_ID = "136353756473765";
-    public static final String CLIENT_SECRET = "67118f943664c3cb42d3cfa053ce4bed";
+   // JMI Test
+//    public static final String CLIENT_ID = "136353756473765";
+//    public static final String CLIENT_SECRET = "67118f943664c3cb42d3cfa053ce4bed";
+//    public static final String APP_URL = "http://apps.facebook.com/jmi-test/";
+    public static final String CLIENT_ID = "108710779211353";
+    public static final String CLIENT_SECRET = "e155ed50ccf90de8d9c7dafbd88bb92d";
+    public static final String APP_URL = "http://apps.facebook.com/just-map-it/";
     private static final ObjectMapper mapper = new ObjectMapper();
 
     @GET
