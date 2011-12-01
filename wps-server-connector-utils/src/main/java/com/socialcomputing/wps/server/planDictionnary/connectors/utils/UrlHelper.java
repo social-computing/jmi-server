@@ -121,7 +121,7 @@ public class UrlHelper extends ConnectorHelper {
             connection.setDoInput(true);
             if( basicAuth) {
                 BASE64Encoder enc = new BASE64Encoder();
-                String userpassword = user + ":" + password;
+                String userpassword = super.ReplaceParameter( user, wpsparams) + ":" + super.ReplaceParameter( password, wpsparams);
                 String encodedAuthorization = enc.encode( userpassword.getBytes());
                 connection.setRequestProperty( "Authorization", "Basic " + encodedAuthorization);
             }
