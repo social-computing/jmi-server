@@ -92,8 +92,8 @@ public abstract class Data {
         }
         return sb;
     }
+    
     public static String toJson( String str) {
-        String newsstr = str.replace("\\", "\\\\");
-        return newsstr.replace("\"", "\\\"");
+        return str.replace("\\", "\\\\").replace("\"", "\\\"");
     }
 }
