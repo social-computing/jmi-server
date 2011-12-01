@@ -1,8 +1,8 @@
 package com.socialcomputing.wps.server.planDictionnary.connectors.utils;
 
 public class NameValuePair {
-    private String name = null;
-    private String value = null;
+    private final String name;
+    private final String value;
 
     public NameValuePair(String name, String value) {
         this.name = name;
