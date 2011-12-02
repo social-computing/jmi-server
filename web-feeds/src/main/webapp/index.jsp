@@ -197,7 +197,7 @@ for( long i = 0; i < max; ++i) { %>
 <li class='disabled'><a ><%=i+1%></a></li>
 <%}%></ul></div>
 <div class="slogan">
-<h2>Adding Just Map It! Feeds to your webpage is easy: <a href="./integrate.jsp">do it in 3 steps</a></h2>
+<h2>Adding Just Map It! Feeds to your webpage is easy and free: <a href="./integrate.jsp">do it in 3 steps</a></h2>
 You can also add Just Map It! Feeds to: <h3><a href="http://www.google.com/ig/adde?moduleurl=feeds.just-map-it.com/google/igoogle-social-computing-feeds.xml" title="Add Just Map It! Feeds to iGoogle" target="_blank">iGoogle</a></h3><h3><a href="http://eco.netvibes.com/widgets/470252/just-map-it-feeds" title="Add Just Map It! Feeds to Netvibes" target="_blank">Netvibes</a></h3><h3><a id="howtoblogger" href="./documentation.jsp" title="Add Just Map It! Feeds to Blogger" target="_blank">Blogger</a></h3>
 </div>
 <%} else {%>
