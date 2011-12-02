@@ -9,6 +9,7 @@
 	<meta name="author" content="Social Computing" /> 
 	<meta name="robots" content="all" /> 
 	<link rel="stylesheet" href="./mapyourfeeds-doc.css" type="text/css" media="screen" />
+	<jsp:include page="./js/ga.js" /> 
 </head>
 <body>
 <div id="documentation">
@@ -20,12 +21,12 @@ Just Map It! Feeds displays your feed(s) items on a map.
 <p>You also can give directly a website URL. All the feeds described in it will be mapped.</p>
 <h3>One URL, two URL(s), ...</h3>
 <p>You want to map more than one feed? Just separate them with a comma. You can mix RSS, Atom or website URLs.</p>
-<h2>Add Just Map It! Feeds</h2>
+<h2><a name="addjmif">Add Just Map It! Feeds</h2>
 <h3>Add Just Map It! Feeds to your webpage</h3>
 You can place the map directly on any webpage. <a target="_blank" title="Add it to your webpage" href="./integrate.jsp">Add it to your webpage</a>.
 <h3>Add Just Map It! Feeds to iGoogle</h3>
 <a target="_blank" title="Add it to iGoogle" href="http://www.google.com/ig/adde?moduleurl=http://feeds.just-map-it.com/google/igoogle-social-computing-feeds.xml"><img src="http://buttons.googlesyndication.com/fusion/add.gif" style="width:104px; height:17px;border:0px;" alt="Add to iGoogle" /></a>
-<h3>Add Just Map It! Feeds to Blogger</h3>
+<h3></a>Add Just Map It! Feeds to Blogger</h3>
 <p>Click on 'Add a gadget', then on 'Add your own' and enter this URL:</p>
 <textarea readonly="readonly" style="width:100%">http://feeds.just-map-it.com/google/blogger-social-computing-feeds.xml</textarea>
 <h3>Add Just Map It! Feeds to Netvibes</h3>
