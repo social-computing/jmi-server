@@ -17,22 +17,23 @@
 --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.socialcomputing.wps</groupId>
-  <artifactId>wps</artifactId>
+  <groupId>com.socialcomputing.jmi.jmi</groupId>
+  <artifactId>jmi</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <url>http://www.social-computing.com/</url>
+  <name>Just Map It</name>
+  <url>http://www.just-map-it.com/</url>
   
   <modules>
-    <module>wps-flex-lib</module>
-    <module>wps-flex</module>
-    <module>wps-flex-demo</module>
-    <module>wps-facebook</module>
-    <module>wps-viadeo</module>
-    <module>wps-server</module>
-    <module>wps-server-connector-utils</module>
-    <module>web-feeds</module>
-    <module>web-facebook</module>
+    <!-- Clients -->
+    <module>jmi-flex-lib</module>
+    <module>jmi-flex</module>
+    <module>jmi-flex-demo</module>
+    <module>jmi-viadeo</module>
+    
+    <!-- Server -->
+    <module>jmi-server</module>
+    <module>jmi-server-connector-utils</module>
   </modules>
 
   <repositories>

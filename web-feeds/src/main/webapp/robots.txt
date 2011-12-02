@@ -1,5 +1,0 @@
-User-agent: *
-Disallow: /fancybox
-Disallow: /test
-Allow: /
-Sitemap: http://feeds.just-map-it.com/sitemap.xml

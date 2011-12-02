@@ -1,1 +1,0 @@
-Profile: <img width="300" height="300" id="facebook" src="http://graph.facebook.com/<%=request.getParameter("id") %>/picture" checkPolicyFile="true"/><br/>nom<br/>prenom<br/>descriptif<br/>
