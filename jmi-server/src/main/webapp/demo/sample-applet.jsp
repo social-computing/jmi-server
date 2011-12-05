@@ -139,7 +139,7 @@
 				// Uncomment to switch to XML based dictionary
 				params['planName'] = 'Json_sample';
 				params['invert'] = 'false';
-				params['wpsserverurl'] = 'http://localhost:8080/wps-server';
+				params['wpsserverurl'] = 'http://localhost:8080/jmi-server';
 		
 				$("#map").wpsmap({
 					wps: params, 
