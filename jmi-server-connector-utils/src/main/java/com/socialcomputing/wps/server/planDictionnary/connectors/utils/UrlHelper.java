@@ -64,6 +64,11 @@ public class UrlHelper extends ConnectorHelper {
         super();
     }
     
+    public UrlHelper(String url) {
+        super();
+        this.url = url;
+    }
+    
     public UrlHelper(Type type, String url) {
         super();
         this.type = type;
