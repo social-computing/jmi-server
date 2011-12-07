@@ -547,12 +547,14 @@ package com.socialcomputing.wps.components
 				position = new Point(0, 0);
 			}
 			
-			// Transforming the offscreen back display to a BitmapData
-			this._offScreen.draw(sprite, new Matrix());
-			
-			// Copying the content of the back buffer on screen
-			var sourceZone:Rectangle = new Rectangle(position.x, position.y, width, height);
-			_onScreen.copyPixels(this._offScreen, sourceZone, position);
+			if( _offScreen != null && _onScreen != null && width > 0 && height > 0) { 
+				// Transforming the offscreen back display to a BitmapData
+				this._offScreen.draw(sprite, new Matrix());
+				
+				// Copying the content of the back buffer on screen
+				var sourceZone:Rectangle = new Rectangle(position.x, position.y, width, height);
+				_onScreen.copyPixels(this._offScreen, sourceZone, position);
+			}
 		}
 	}
 }
