@@ -5,6 +5,7 @@ package com.socialcomputing.wps.script  {
     import com.socialcomputing.wps.util.URLHelper;
     import com.socialcomputing.wps.util.controls.ImageUtil;
     import com.socialcomputing.wps.util.shapes.RectangleUtil;
+	import com.socialcomputing.wps.components.Map;
     
     import flash.display.Bitmap;
     import flash.display.Graphics;
@@ -423,11 +424,10 @@ package com.socialcomputing.wps.script  {
          * @param transfo		A transformation of this shape to put the image inside.
          * @param center		This shape center before the transformation.
          */
-        public function drawImage(env:Env, s:Sprite, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
+        public function drawImage(applet:Map, s:Sprite, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
 			// Else it is just a void frame
 			if (isDefined(SCALE_VAL)) {
 				var image:Bitmap;
-                var scaledImg:Image;
 				var imageUrl:String;
 
 				if( imageNam.search( "embedded:") == 0) {
@@ -444,7 +444,7 @@ package com.socialcomputing.wps.script  {
 						imageUrl = URLHelper.getFullURL(ApplicationUtil.getSwfRoot(), imageNam);
 					}
 					
-					var imageLoader:BulkLoader = env.loader;
+					var imageLoader:BulkLoader = applet.env.loader;
 					image = imageLoader.getBitmap(imageNam);
 				}
 
@@ -456,43 +456,53 @@ package com.socialcomputing.wps.script  {
                     }
 					imageLoader.add(imageUrl, {id: imageNam});
                     imageLoader.get(imageUrl).addEventListener(BulkLoader.ERROR, loaderError);
+					imageLoader.get(imageUrl).addEventListener(BulkLoader.COMPLETE, function loaderComplete(e:Event):void {
+						    image = imageLoader.getBitmap(imageNam);
+							drawLoadedImage(applet, image, s, zone, imageNam, transfo, center);
+						}
+					);
                 }
 
 				// Draw the image if it has already been loaded
 				else {
-					// Create a new bitmap with the reference of the previously loaded bitmapData in memory (bulkLoader)
-					// Not cloning the bitmapData itself
-					var imageClone:Bitmap = new Bitmap(image.bitmapData);
-					
-					var p:Point        = getCenter(zone);
-					var shapePos:Point = new Point();
-					var scale:Number   = getShapePos(zone, transfo, center, p, shapePos);
-					var imageWidth:int = imageClone.width;
-					var imageScale:int = imageWidth;
-					
-					// Disk
-					if (scale > 0.0) {
-						imageScale = int(1.414 * scale);
-					}
-					
-					// Rescale image
-					if (imageWidth != imageScale) {
-						if (scaledImg == null) {
-							imageClone.scaleX = imageScale / imageClone.width;
-							imageClone.scaleY = imageScale / imageClone.height;
-						}
-					}
-					
-					// Upadate image coordinates after rescale
-					imageScale >>= 1;
-					imageClone.x = p.x + shapePos.x - imageScale;
-					imageClone.y = p.y + shapePos.y - imageScale;
-
-					ImageUtil.drawBitmap(imageClone, s.graphics);
+					drawLoadedImage(applet, image, s, zone, imageNam, transfo, center);
                 }
             }
         }
         
+		protected function drawLoadedImage(applet:Map, image:Bitmap, s:Sprite, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
+			// Create a new bitmap with the reference of the previously loaded bitmapData in memory (bulkLoader)
+			// Not cloning the bitmapData itself
+			var scaledImg:Image;
+			var imageClone:Bitmap = new Bitmap(image.bitmapData);
+			
+			var p:Point        = getCenter(zone);
+			var shapePos:Point = new Point();
+			var scale:Number   = getShapePos(zone, transfo, center, p, shapePos);
+			var imageWidth:int = imageClone.width;
+			var imageScale:int = imageWidth;
+			
+			// Disk
+			if (scale > 0.0) {
+				imageScale = int(1.414 * scale);
+			}
+			
+			// Rescale image
+			if (imageWidth != imageScale) {
+				if (scaledImg == null) {
+					imageClone.scaleX = imageScale / imageClone.width;
+					imageClone.scaleY = imageScale / imageClone.height;
+				}
+			}
+			
+			// Upadate image coordinates after rescale
+			imageScale >>= 1;
+			imageClone.x = p.x + shapePos.x - imageScale;
+			imageClone.y = p.y + shapePos.y - imageScale;
+			
+			ImageUtil.drawBitmap(imageClone, s.graphics);
+			applet.renderShape( applet.restDrawingSurface, imageClone.width, imageClone.height, new Point( imageClone.x, imageClone.y));
+		}
         
         
         /**

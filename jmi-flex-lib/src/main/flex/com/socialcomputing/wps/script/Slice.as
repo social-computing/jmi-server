@@ -114,7 +114,7 @@ package com.socialcomputing.wps.script  {
             if(isDefined(IMAGE_VAL)) {
 				var imageNam:String = parseString(IMAGE_VAL, zone.m_props )[0];
                 if (imageNam != null) {
-                    satShp.drawImage(applet.env, s, supZone, imageNam, transfo, satCtr);
+                    satShp.drawImage(applet, s, supZone, imageNam, transfo, satCtr);
                 }
 				
             }
