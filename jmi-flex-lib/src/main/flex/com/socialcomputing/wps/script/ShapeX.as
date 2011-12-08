@@ -1,11 +1,11 @@
 package com.socialcomputing.wps.script  {
     import br.com.stimuli.loading.BulkLoader;
     
+    import com.socialcomputing.wps.components.Map;
     import com.socialcomputing.wps.util.ApplicationUtil;
     import com.socialcomputing.wps.util.URLHelper;
     import com.socialcomputing.wps.util.controls.ImageUtil;
     import com.socialcomputing.wps.util.shapes.RectangleUtil;
-	import com.socialcomputing.wps.components.Map;
     
     import flash.display.Bitmap;
     import flash.display.Graphics;
@@ -14,8 +14,8 @@ package com.socialcomputing.wps.script  {
     import flash.geom.ColorTransform;
     import flash.geom.Point;
     import flash.geom.Rectangle;
-	import flash.utils.getDefinitionByName;
-	
+    import flash.utils.getDefinitionByName;
+    
     import mx.controls.Image;
     import mx.utils.URLUtil;
     
@@ -451,26 +451,24 @@ package com.socialcomputing.wps.script  {
 				// Check if the image has already been loaded
 			    // If it isn't add the image url to the bulkloader and catch the event when done.
                 if (image == null) {
-                    function loaderError(e:Event):void {
-                        trace('Load image ' + imageUrl + ' failed');
-                    }
 					imageLoader.add(imageUrl, {id: imageNam});
-                    imageLoader.get(imageUrl).addEventListener(BulkLoader.ERROR, loaderError);
+                    imageLoader.get(imageUrl).addEventListener(BulkLoader.ERROR, function loaderError(e:Event):void {
+						trace('Load image ' + imageUrl + ' failed');
+					});
 					imageLoader.get(imageUrl).addEventListener(BulkLoader.COMPLETE, function loaderComplete(e:Event):void {
 						    image = imageLoader.getBitmap(imageNam);
-							drawLoadedImage(applet, image, s, zone, imageNam, transfo, center);
-						}
-					);
+							drawLoadedImage(applet, image, s, zone, imageNam, transfo, center, true);
+					});
                 }
 
 				// Draw the image if it has already been loaded
 				else {
-					drawLoadedImage(applet, image, s, zone, imageNam, transfo, center);
+					drawLoadedImage(applet, image, s, zone, imageNam, transfo, center, false);
                 }
             }
         }
         
-		protected function drawLoadedImage(applet:Map, image:Bitmap, s:Sprite, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
+		protected function drawLoadedImage(applet:Map, image:Bitmap, s:Sprite, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point, draw:Boolean):void {
 			// Create a new bitmap with the reference of the previously loaded bitmapData in memory (bulkLoader)
 			// Not cloning the bitmapData itself
 			var scaledImg:Image;
@@ -501,7 +499,9 @@ package com.socialcomputing.wps.script  {
 			imageClone.y = p.y + shapePos.y - imageScale;
 			
 			ImageUtil.drawBitmap(imageClone, s.graphics);
-			applet.renderShape( applet.restDrawingSurface, imageClone.width, imageClone.height, new Point( imageClone.x, imageClone.y));
+			if( draw) {
+				applet.renderShape( s, imageClone.width, imageClone.height, new Point( imageClone.x, imageClone.y));
+			}
 		}
         
         
