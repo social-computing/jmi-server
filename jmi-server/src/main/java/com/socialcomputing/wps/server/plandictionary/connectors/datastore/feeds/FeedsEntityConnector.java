@@ -5,6 +5,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 import org.jdom.Element;
+import org.jdom.Namespace;
 import org.jdom.Text;
 
 import au.id.jericho.lib.html.Segment;
@@ -188,9 +189,19 @@ public class FeedsEntityConnector extends DatastoreEntityConnector {
             Attribute attribute = addAttribute( item.getChildText( "link"));
             attribute.addProperty( "name", item.getChildText( "title"));
             
+            // RSS2
             for( Element category : (List<Element>)item.getChildren( "category")) {
                 Entity entity = addEntity( category.getText());
                 entity.addProperty( "name", entity.getId());
+                entity.addAttribute( attribute, 1);
+                ++ count;
+            }
+            // DC
+            Namespace ns = Namespace.getNamespace( "dc", "http://purl.org/dc/elements/1.1/");
+            for( Element subject : (List<Element>)item.getChildren( "subject", ns)) {
+                String sbj = subject.getText();
+                Entity entity = addEntity( sbj);
+                entity.addProperty( "name", sbj);
                 entity.addAttribute( attribute, 1);
                 ++ count;
             }
