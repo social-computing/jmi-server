@@ -100,7 +100,9 @@ public class RESTEntityConnector extends FileEntityConnector {
                     Attribute attribute = addAttribute( jsonattribute.get( m_AttributeId).getTextValue());
                     for( PropertyDefinition property : attributeProperties) {
                         if( property.isSimple()) {
-                            attribute.addProperty( property, jsonattribute.get( property.getName()).getTextValue());
+                            JsonNode p = jsonattribute.get( property.getName());
+                            if( p!= null)
+                                attribute.addProperty( property, p.getTextValue());
                         }
                     }
                     if( !isInverted())
