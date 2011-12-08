@@ -396,6 +396,6 @@
          our generated sources so the compiler will pick them up -->
     <!-- <sourceDirectory>target/filtered-sources/java</sourceDirectory> -->
 
-    <finalName>wps</finalName>
+    <finalName>jmi</finalName>
   </build>
 </project>
