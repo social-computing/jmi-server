@@ -44,8 +44,6 @@
 		    }
 		    
         	function ready() {
-        		// do something here
-        		alert( getMap().getArrayProperty( "$FEEDS_TITLES").join( ", "));
         	}
         	function empty() {
         		// do something here
@@ -67,12 +65,18 @@
             	parameters["wpsserverurl"] = "http://localhost:8080/wps-server";
         		getMap().compute( parameters);
 			}
-			function Discover( args)
+			function center( args)
 			{
 				var parameters = {};
+            	parameters["allowDomain"] = "*";
+            	parameters["jsessionid"] = "";
+            	parameters["invert"] = "false";
+            	parameters["wpsplanname"] = "Allocine";
 				parameters["attributeId"] = args[0];
 				parameters["analysisProfile"] = "DiscoveryProfile";
-            	parameters["wpsserverurl"] = "http://localhost:8080/wps-server";
+            	parameters["wpsserverurl"] = "http://localhost:8080/jmi-server";
+     			parameters["allocineserverur"] = "http://localhost:8080/web-labs";
+     			parameters["kind"] = "film_gender";
         		getMap().compute( parameters);
 			}
         </script>
@@ -84,13 +88,17 @@
             <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
             var xiSwfUrlStr = "${expressInstallSwf}";
             var flashvars = {};
-            flashvars.wpsserverurl = "http://localhost:8080/wps-server";
-            flashvars.wpsplanname = "Json_sample";
-            flashvars.invert = "false";
+            flashvars.allowDomain = "*";
+     		flashvars.allocineserverurl = "http://localhost:8080/web-labs";
+            flashvars.wpsserverurl = "http://localhost:8080/jmi-server";
+            flashvars.wpsplanname = "Allocine";//
+     		flashvars.invert="false";
             flashvars.analysisProfile = "GlobalProfile";
+     		flashvars.kind="film_gender";
+     		flashvars.jsessionid= "";
             var params = {};
             params.quality = "high";
-            params.bgcolor = "#7F9FDF";
+            params.bgcolor = "${bgcolor}";
             params.allowscriptaccess = "sameDomain";
             params.allowfullscreen = "true";
             var attributes = {};
@@ -111,14 +119,6 @@
 			 JavaScript and Flash plug-in support is available. The div is initially hidden so that it doesn't show
 			 when JavaScript is disabled.
 		-->
-		<script>
-		function Go() {
-			var parameters = {};
-			parameters["url"] = "http://blog-jamespot.com/feed/";
-			document.getElementById('${application}').uploadAsImage( 'http://localhost:8080/web-feeds/rest/feeds/feed/thumbnail.png', 'preview', 'image/png', 300, 300, true, parameters);
-		}
-		</script>
-        <input type="button" value="Upload" onclick="jaavascript:Go();"></input>
         <div id="flashContent">
         	<p>
 	        	To view this page ensure that Adobe Flash Player version 
@@ -130,20 +130,18 @@
 								+ pageHost + "www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' /></a>" ); 
 			</script> 
         </div>
-        <div id="status">
-        </div>
 	   	
        	<noscript>
             <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="${width}" height="${height}" id="${application}">
                 <param name="movie" value="${swf}.swf" />
                 <param name="quality" value="high" />
-                <param name="bgcolor" value="#FFFFFF" />
+                <param name="bgcolor" value="${bgcolor}" />
                 <param name="allowScriptAccess" value="sameDomain" />
                 <param name="allowFullScreen" value="true" />
                 <!--[if !IE]>-->
                 <object type="application/x-shockwave-flash" data="${swf}.swf" width="${width}" height="${height}">
                     <param name="quality" value="high" />
-                    <param name="bgcolor" value="#7F9FDF" />
+                    <param name="bgcolor" value="${bgcolor}" />
                     <param name="allowScriptAccess" value="sameDomain" />
                     <param name="allowFullScreen" value="true" />
                 <!--<![endif]-->

@@ -16,8 +16,8 @@ package com.socialcomputing.wps.components
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
-	import flash.events.Event;
 	import flash.events.ContextMenuEvent;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
@@ -28,8 +28,6 @@ package com.socialcomputing.wps.components
 	import flash.ui.ContextMenuItem;
 	
 	import mx.collections.ArrayCollection;
-	import mx.controls.Alert;
-	import mx.controls.Menu;
 	import mx.core.UIComponent;
 	import mx.events.MenuEvent;
 	import mx.events.ResizeEvent;
@@ -203,6 +201,11 @@ package com.socialcomputing.wps.components
 			
 			// Set component status to "not ready"
 			this._ready = false;
+
+			// Stop loaders
+			if( this._dataProvider && this._dataProvider.env) {
+				this._dataProvider.env.close();
+			}
 			
 			// Clear current
 			if( this.plan != null) {
@@ -259,7 +262,6 @@ package com.socialcomputing.wps.components
 					plan.init();
 					plan.resize(size);
 					plan.init();
-	                plan.m_applet.env.loader.start();
 				    for each( var zone:ActiveZone in plan.m_nodes) {
 						this.attributes.addItem( new Attribute( env, zone));
 					}

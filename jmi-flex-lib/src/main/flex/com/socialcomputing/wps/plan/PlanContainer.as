@@ -1,8 +1,6 @@
 package com.socialcomputing.wps.plan
 {
-	import com.socialcomputing.wps.script.Env;
 	import com.socialcomputing.wps.script.JSONToWPSDecoder;
-	import com.socialcomputing.wps.script.Plan;
 
 	dynamic public class PlanContainer
 	{

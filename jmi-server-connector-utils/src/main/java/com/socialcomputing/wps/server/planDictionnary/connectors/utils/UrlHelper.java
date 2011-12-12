@@ -43,6 +43,7 @@ public class UrlHelper extends ConnectorHelper {
 
     protected InputStream stream = null;
     protected String contentType = null;
+    protected URLConnection connection = null;
 
     public UrlHelper() {
         super();
@@ -94,7 +95,6 @@ public class UrlHelper extends ConnectorHelper {
         LOG.debug("UrlHelper open connections");
         StringBuilder parameters = new StringBuilder();
         
-        
         try {
             String realUrl = super.ReplaceParameter(url, wpsparams);
             boolean first = true;
@@ -120,7 +120,7 @@ public class UrlHelper extends ConnectorHelper {
             String parametersString = parameters.toString();
             LOG.debug("url = {}, params = {}", realUrl, parametersString);
             URL u = new URL(type == Type.POST || (type == Type.GET && parameters.length() == 0) ? realUrl : realUrl + "?" + parametersString);
-            URLConnection connection = u.openConnection();
+            connection = u.openConnection();
             connection.setUseCaches(false);
             connection.setDoInput(true);
             if(basicAuth) {
@@ -191,6 +191,10 @@ public class UrlHelper extends ConnectorHelper {
         return contentType;
     }
 
+    public URLConnection getConnection() {
+        return connection ;
+    }
+    
     public String getResult() throws WPSConnectorException {
         Writer writer = new StringWriter();
         Reader reader = new BufferedReader(new InputStreamReader(stream));

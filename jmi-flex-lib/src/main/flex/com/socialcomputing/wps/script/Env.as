@@ -1,9 +1,7 @@
 package com.socialcomputing.wps.script  {
-    import br.com.stimuli.loading.BulkLoader;
-    
     import com.socialcomputing.wps.components.Map;
+    import com.socialcomputing.wps.util.LoaderEx;
     
-    import flash.events.Event;
     import flash.geom.ColorTransform;
 
 /**
@@ -84,18 +82,19 @@ public class Env
 	 * Table containing icons and sounds.
 	 * This buffer stores all media object using a unique key to load them asynchronously during init.
 	 */
-    //[transient]
-	// public var m_medias:Array = null;
+	public var m_medias:Object = null;
 
+	/**
+	 * Table containing media loders.
+	 */
+	public var m_loaders:Object = null;
 
-	public var loader: BulkLoader;
 	/**
 	 * A simple reference to the Applet.
 	 * This is necessary because the Thread must know the Applet.
 	 * But it is launch by run() that don't have any arguments.
 	 */
-    /*[transient]
-	private var m_applet:WPSApplet = null;*/
+	private var m_applet:Map = null;
 
 	/**
 	 * If a selection has this flag set, it can be displayed by an external UI
@@ -112,98 +111,46 @@ public class Env
 	 * @param applet
 	 * @param needPrint
 	 */
-	public function init(component:Map, needPrint:Boolean):void {
+	public function init(applet:Map, needPrint:Boolean):void {
         var bkWhite:ColorTransform = new ColorTransform();
         bkWhite.color = 0xFFFFFF;
 		var bkCol:ColorTransform= needPrint ? bkWhite : m_inCol.getColor();
-		//m_applet        = applet;
-		// m_medias        = new Array();
-		this.loader = new BulkLoader();
-		this.loader.addEventListener(
-			BulkLoader.COMPLETE,
-			function(event:Event):void {
-                component.plan.init();
-				component.invalidateDisplayList();
-			});
+		this.m_applet        = applet;
+		this.m_medias        = new Object();
+		this.m_loaders      = new Object();
 	}
 
-	/**
-	 * This try to load asynchronously the known medias (icons) during the Applet initialisation.
-	 * As java 1.1 API is a bit simple, they didn't thought we want to load media without displaying them.
-	 * And MS JVM forgot to totaly implement MediaTracker class so we can't know when a media is fully loaded!
-	 * That's why this is a big horrible patch:<br>
-	 * First check all images so they should load (but they don't).
-	 * Then test their flags to know if they are really loaded.
-	 * Then initialize the plan so it tries to display the images.
-	 * Restart checking the images, and so on until all images are loaded.<br>
-	 * It is important to displayed images because else they will never be loaded!
-	 */
-	public function run():void {
-		/*var tracker:MediaTracker= new MediaTracker( m_applet );
-		var enumvar:Enumeration;
-		var image:Image;
-		var media:Object;
-		var i:int, flags;
-		var needLoading:Boolean= true,
-						isFirst = true,
-						isAlive = true;
-
-		while ( needLoading && isAlive )
-		{
-			enumvar        = m_medias.elements();
-			needLoading = false;
-			i           = 0;
-
-			while ( enumvar.hasMoreElements())
-			{
-				media = enumvar.nextElement();
-
-				if ( media is Image )
-				{
-					image   = Image(media);
-					flags   = m_applet.checkImage( image, m_applet );
-					tracker.addImage(Image(media), i );
-					tracker.checkID( i, true );
-					i ++;
-
-					needLoading = needLoading ||(( flags & ImageObserver.ALLBITS )== 0&&( flags & ImageObserver.ERROR )== 0);
-				}
+	public function getMedia(name:String):Object {
+		return this.m_medias[name];
+	}
+	
+	public function putMedia(name:String, media:Object):void {
+		this.m_medias[name] = media;
+	}
+	
+	public function addLoader(name:String, loader:LoaderEx):void {
+		this.m_loaders[name] = loader;
+	}
+	
+	public function getLoader(name:String):LoaderEx {
+		return this.m_loaders[name];
+	}
+	
+	public function removeLoader(name:String):void {
+		if( this.m_loaders[name])
+			delete this.m_loaders[name];
+	}
+	
+	public function close():void {
+		for( var name:String in m_loaders) {
+			var loader:LoaderEx = this.m_loaders[name] as LoaderEx;
+			try {
+				loader.close();
+			} catch( err:Error) {
+				trace( err);
 			}
-
-			try
-			{
-				tracker.waitForAll( 5000);
-				isAlive = m_applet.m_plan != null;
-
-				if ( isFirst && isAlive ) m_applet.m_plan.init();
-			}
-			catch ( e:InterruptedException){}
+			delete this.m_loaders[name];
 		}
-
-		if ( isAlive )
-		{
-			m_applet.m_plan.init();
-			m_applet.repaint();
-			m_applet.m_isMediaReady	= true;
-		}*/
 	}
-
-	/**
-	 * Flush all medias and clear remove them from the table.
-	 * This is needed to reload images when the plan is resized.
-	 */
-	protected function clearMedias():void {
-		/*
-		for(var media:Object in m_medias){
-			if ( media is Loader )
-			{
-				(media as Loader).unload();
-			}
-		}
-		m_medias.length = 0;
-		*/
-		this.loader.removeAll();
-	}
-
  }
 }

@@ -363,7 +363,7 @@ package com.socialcomputing.wps.script{
          * @param size	Size of the Window to draw in.
          * @param pos	Where to draw this.
          */
-        protected function drawText3( s:Sprite, size:Dimension, pos:Point):void {
+        public function drawText3( s:Sprite, size:Dimension, pos:Point):void {
 			var borderWidth:int = 0;
 			if ( m_outCol != null )
 				borderWidth = 2;

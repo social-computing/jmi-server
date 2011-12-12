@@ -1,19 +1,21 @@
 package com.socialcomputing.wps.script  {
-    import br.com.stimuli.loading.BulkLoader;
-    
     import com.socialcomputing.wps.components.Map;
     import com.socialcomputing.wps.util.ApplicationUtil;
+    import com.socialcomputing.wps.util.LoaderEx;
     import com.socialcomputing.wps.util.URLHelper;
     import com.socialcomputing.wps.util.controls.ImageUtil;
     import com.socialcomputing.wps.util.shapes.RectangleUtil;
     
     import flash.display.Bitmap;
     import flash.display.Graphics;
+    import flash.display.LoaderInfo;
     import flash.display.Sprite;
     import flash.events.Event;
+    import flash.events.IOErrorEvent;
     import flash.geom.ColorTransform;
     import flash.geom.Point;
     import flash.geom.Rectangle;
+    import flash.net.URLRequest;
     import flash.utils.getDefinitionByName;
     
     import mx.controls.Image;
@@ -444,21 +446,40 @@ package com.socialcomputing.wps.script  {
 						imageUrl = URLHelper.getFullURL(ApplicationUtil.getSwfRoot(), imageNam);
 					}
 					
-					var imageLoader:BulkLoader = applet.env.loader;
-					image = imageLoader.getBitmap(imageNam);
+					image = applet.env.getMedia(imageNam) as Bitmap;
 				}
 
 				// Check if the image has already been loaded
-			    // If it isn't add the image url to the bulkloader and catch the event when done.
                 if (image == null) {
-					imageLoader.add(imageUrl, {id: imageNam});
-                    imageLoader.get(imageUrl).addEventListener(BulkLoader.ERROR, function loaderError(e:Event):void {
+					var loader:LoaderEx = new LoaderEx();
+					var env:Env = applet.env;
+					env.addLoader( imageUrl, loader);
+					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function (e:Event):void {
+						loader = env.getLoader( imageUrl);
+						if( loader && !loader.stop) {
+							image = Bitmap( LoaderInfo(e.target).content);
+							drawLoadedImage(applet, image, s, zone, imageNam, transfo, center, true);
+							env.putMedia(imageNam, image);
+						}
+						env.removeLoader( imageUrl);
+					});
+					loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function (e:Event):void {
 						trace('Load image ' + imageUrl + ' failed');
 					});
-					imageLoader.get(imageUrl).addEventListener(BulkLoader.COMPLETE, function loaderComplete(e:Event):void {
-						    image = imageLoader.getBitmap(imageNam);
-							drawLoadedImage(applet, image, s, zone, imageNam, transfo, center, true);
+					var fileRequest:URLRequest = new URLRequest( imageUrl);
+					loader.load(fileRequest);
+/*					imageLoader.add(imageUrl, {id: imageNam});
+                    imageLoader.get(imageUrl).addEventListener(BulkLoader.ERROR, function loaderError(e:Event):void {
+						Alert('Load image ' + imageUrl + ' failed');
 					});
+					imageLoader.get(imageUrl).addEventListener(BulkLoader.SECURITY_ERROR, function loaderSecError(e:Event):void {
+						Alert('Load image ' + imageUrl + ' failed:' + e.toString());
+					});
+					imageLoader.get(imageUrl).addEventListener(BulkLoader.COMPLETE, function loaderComplete(e:Event):void {
+						image = imageLoader.getBitmap(imageNam);
+						if( image != null)
+							drawLoadedImage(applet, image, s, zone, imageNam, transfo, center, true);
+					});*/
                 }
 
 				// Draw the image if it has already been loaded
@@ -468,8 +489,7 @@ package com.socialcomputing.wps.script  {
             }
         }
         
-		protected function drawLoadedImage(applet:Map, image:Bitmap, s:Sprite, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point, draw:Boolean):void {
-			// Create a new bitmap with the reference of the previously loaded bitmapData in memory (bulkLoader)
+		protected function drawLoadedImage(applet:Map, image:Bitmap, s:Sprite, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point, render:Boolean):void {
 			// Not cloning the bitmapData itself
 			var scaledImg:Image;
 			var imageClone:Bitmap = new Bitmap(image.bitmapData);
@@ -499,7 +519,7 @@ package com.socialcomputing.wps.script  {
 			imageClone.y = p.y + shapePos.y - imageScale;
 			
 			ImageUtil.drawBitmap(imageClone, s.graphics);
-			if( draw) {
+			if( render) {
 				applet.renderShape( s, imageClone.width, imageClone.height, new Point( imageClone.x, imageClone.y));
 			}
 		}
