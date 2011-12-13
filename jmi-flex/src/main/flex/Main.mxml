@@ -7,26 +7,19 @@
     <fx:Style source="Main.css"/>
     <fx:Script>
         <![CDATA[
-			import com.adobe.serialization.json.JSON;
-			import com.socialcomputing.wps.components.Attribute;
-			import com.socialcomputing.wps.components.events.ActionEvent;
 			import com.socialcomputing.wps.services.planservice.PlanService;
 			
-			import flash.external.ExternalInterface;
-			import flash.system.Security;
-			
-			import mx.collections.ArrayCollection;
-			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			import mx.graphics.codec.PNGEncoder;
-			import mx.rpc.events.FaultEvent;
-			import mx.rpc.events.ResultEvent;
 			
 			import ru.inspirit.net.MultipartURLLoader;
+			
+			import spark.effects.Fade;
 	
             private var planName:String;
             private var planService:PlanService;
+			private var waiterUrl:String;
 			
 			// JS Callbacks
 			private var readyCallback:String, emptyCallback:String, errorCallback:String, statusCallback:String, navigateCallback:String;
@@ -37,6 +30,7 @@
 				var serverURL:String = this.checkApplicationParameter("wpsserverurl");
 				this.planName = this.checkApplicationParameter("wpsplanname");
 				var parameters:Object = FlexGlobals.topLevelApplication.parameters;
+				this.waiterUrl = FlexGlobals.topLevelApplication.parameters["waiterurl"]
 
 				// Security Sandbox
 				if( FlexGlobals.topLevelApplication.parameters.hasOwnProperty( "allowDomain")) {
@@ -73,7 +67,7 @@
 				
 				// Initialising service
 				this.planService = new PlanService(serverURL);
-                getPlanResult.token = this.planService.getPlan(planName, map.width, map.height, parameters);
+				computeMap( true, parameters);
             }
 			
 			private function checkApplicationParameter(paramName:String):String {
@@ -84,8 +78,13 @@
 			}
 			
 			public function compute(parameters:Object):void {
-				getPlanResult.token = this.planService.getPlan(planName, map.width, map.height, parameters);
+				computeMap( false, parameters);
  			}
+			
+			private function computeMap(initial:Boolean, parameters:Object):void {
+				showWaiter( initial);
+				getPlanResult.token = this.planService.getPlan(planName, map.width, map.height, parameters);
+			}
 			
 			public function getProperty( name:String):String {
 				return this.map.getProperty( name) as String;
@@ -127,6 +126,44 @@
 				}
 				mploader.load( url);
 			}
+			protected function showWaiter( initial:Boolean):void
+			{
+				if( waiterUrl) {
+					if( initial) {
+						var imageLoader:Loader = new Loader();
+						imageLoader.load(  new URLRequest(waiterUrl));	
+						imageLoader.alpha = 1;
+						imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function (e:Event):void {     
+							waiter.source = e.currentTarget.content;
+							_showWaiter();
+						});
+					}
+					else {
+						var fade:Fade = new Fade();
+						fade.alphaTo = 0;
+						fade.target = map;
+						fade.play();
+						_showWaiter();
+					}
+				}
+			}
+			protected function _showWaiter():void {
+				var fade:Fade = new Fade();
+				fade.alphaTo = 1;
+				fade.target = waiter;
+				fade.play();
+				waiter.x = (map.width/2) - (waiter.source.width/2) + map.x;
+				waiter.y = (map.height/2) - (waiter.source.height/2) + map.y;
+				if( waiter.x < 0 ) waiter.x = 0;
+				if( waiter.y < 0 ) waiter.y = 0;
+			}
+			protected function hideWaiter():void
+			{
+				var fade:Fade = new Fade();
+				fade.alphaTo = 1
+				fade.target = map;
+				fade.play();
+			}
 	]]>
     </fx:Script>
     
@@ -135,16 +172,19 @@
 						 fault="ExternalInterface.call('error', event.fault.faultString);" />
     </fx:Declarations>
 
-	<wps:Map id="map"
-			backgroundColor="{this.getStyle('contentBackgroundColor')}"
-			dataProvider="{getPlanResult.lastResult}" 
-			ready="ExternalInterface.call(readyCallback);"
-			empty="ExternalInterface.call(emptyCallback);"
-			error="ExternalInterface.call(errorCallback, event.status);"
-			status="ExternalInterface.call(statusCallback, event.status);"
-			action="ExternalInterface.call(event.action, event.args);" 
-			navigate="ExternalInterface.call(navigateCallback, event.url, event.btarget);"
-			percentWidth="100"
-			percentHeight="100"
-	/>
+	<mx:Canvas id="main" width="100%" height="100%">
+		<mx:Image id="waiter" alpha="1" />
+		<wps:Map id="map" alpha="0"
+				backgroundColor="{this.getStyle('contentBackgroundColor')}"
+				dataProvider="{getPlanResult.lastResult}" 
+				ready="hideWaiter();ExternalInterface.call(readyCallback);"
+				empty="hideWaiter();ExternalInterface.call(emptyCallback);"
+				error="hideWaiter();ExternalInterface.call(errorCallback, event.status);"
+				status="ExternalInterface.call(statusCallback, event.status);"
+				action="ExternalInterface.call(event.action, event.args);" 
+				navigate="ExternalInterface.call(navigateCallback, event.url, event.btarget);"
+				percentWidth="100"
+				percentHeight="100"
+		/>
+	</mx:Canvas>
 </s:Application>

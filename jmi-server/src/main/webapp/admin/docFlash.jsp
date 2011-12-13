@@ -31,12 +31,16 @@ For object and embed tag or for any other method (such as the <a href="http://co
 	<td>Just Map It! Server domain or * in order to bypass flash security sandbox</td>
 </tr>
 <tr>
-	<td width="30%" >wpsserverurl *</td>
+	<td>wpsserverurl *</td>
 	<td>Just Map It! Server URL</td>
 </tr>
 <tr>
-	<td width="30%" >wpsplanname *</td>
+	<td>wpsplanname *</td>
 	<td>dictionary name</td>
+</tr>
+<tr>
+	<td>waiterurl</td>
+	<td>Image or swf played during map computation</td>
 </tr>
 <tr>
 	<td>entityId</td>
