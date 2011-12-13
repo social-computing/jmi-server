@@ -1,20 +1,23 @@
 package com.socialcomputing.wps.script  {
-    import br.com.stimuli.loading.BulkLoader;
-    
+    import com.socialcomputing.wps.components.Map;
     import com.socialcomputing.wps.util.ApplicationUtil;
+    import com.socialcomputing.wps.util.LoaderEx;
     import com.socialcomputing.wps.util.URLHelper;
     import com.socialcomputing.wps.util.controls.ImageUtil;
     import com.socialcomputing.wps.util.shapes.RectangleUtil;
     
     import flash.display.Bitmap;
     import flash.display.Graphics;
+    import flash.display.LoaderInfo;
     import flash.display.Sprite;
     import flash.events.Event;
+    import flash.events.IOErrorEvent;
     import flash.geom.ColorTransform;
     import flash.geom.Point;
     import flash.geom.Rectangle;
-	import flash.utils.getDefinitionByName;
-	
+    import flash.net.URLRequest;
+    import flash.utils.getDefinitionByName;
+    
     import mx.controls.Image;
     import mx.utils.URLUtil;
     
@@ -423,11 +426,10 @@ package com.socialcomputing.wps.script  {
          * @param transfo		A transformation of this shape to put the image inside.
          * @param center		This shape center before the transformation.
          */
-        public function drawImage(env:Env, s:Sprite, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
+        public function drawImage(applet:Map, s:Sprite, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point):void {
 			// Else it is just a void frame
 			if (isDefined(SCALE_VAL)) {
 				var image:Bitmap;
-                var scaledImg:Image;
 				var imageUrl:String;
 
 				if( imageNam.search( "embedded:") == 0) {
@@ -444,55 +446,83 @@ package com.socialcomputing.wps.script  {
 						imageUrl = URLHelper.getFullURL(ApplicationUtil.getSwfRoot(), imageNam);
 					}
 					
-					var imageLoader:BulkLoader = env.loader;
-					image = imageLoader.getBitmap(imageNam);
+					image = applet.env.getMedia(imageNam) as Bitmap;
 				}
 
 				// Check if the image has already been loaded
-			    // If it isn't add the image url to the bulkloader and catch the event when done.
                 if (image == null) {
-                    function loaderError(e:Event):void {
-                        trace('Load image ' + imageUrl + ' failed');
-                    }
-					imageLoader.add(imageUrl, {id: imageNam});
-                    imageLoader.get(imageUrl).addEventListener(BulkLoader.ERROR, loaderError);
+					var loader:LoaderEx = new LoaderEx();
+					var env:Env = applet.env;
+					env.addLoader( imageUrl, loader);
+					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function (e:Event):void {
+						loader = env.getLoader( imageUrl);
+						if( loader && !loader.stop) {
+							image = Bitmap( LoaderInfo(e.target).content);
+							drawLoadedImage(applet, image, s, zone, imageNam, transfo, center, true);
+							env.putMedia(imageNam, image);
+						}
+						env.removeLoader( imageUrl);
+					});
+					loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function (e:Event):void {
+						trace('Load image ' + imageUrl + ' failed');
+					});
+					var fileRequest:URLRequest = new URLRequest( imageUrl);
+					loader.load(fileRequest);
+/*					imageLoader.add(imageUrl, {id: imageNam});
+                    imageLoader.get(imageUrl).addEventListener(BulkLoader.ERROR, function loaderError(e:Event):void {
+						Alert('Load image ' + imageUrl + ' failed');
+					});
+					imageLoader.get(imageUrl).addEventListener(BulkLoader.SECURITY_ERROR, function loaderSecError(e:Event):void {
+						Alert('Load image ' + imageUrl + ' failed:' + e.toString());
+					});
+					imageLoader.get(imageUrl).addEventListener(BulkLoader.COMPLETE, function loaderComplete(e:Event):void {
+						image = imageLoader.getBitmap(imageNam);
+						if( image != null)
+							drawLoadedImage(applet, image, s, zone, imageNam, transfo, center, true);
+					});*/
                 }
 
 				// Draw the image if it has already been loaded
 				else {
-					// Create a new bitmap with the reference of the previously loaded bitmapData in memory (bulkLoader)
-					// Not cloning the bitmapData itself
-					var imageClone:Bitmap = new Bitmap(image.bitmapData);
-					
-					var p:Point        = getCenter(zone);
-					var shapePos:Point = new Point();
-					var scale:Number   = getShapePos(zone, transfo, center, p, shapePos);
-					var imageWidth:int = imageClone.width;
-					var imageScale:int = imageWidth;
-					
-					// Disk
-					if (scale > 0.0) {
-						imageScale = int(1.414 * scale);
-					}
-					
-					// Rescale image
-					if (imageWidth != imageScale) {
-						if (scaledImg == null) {
-							imageClone.scaleX = imageScale / imageClone.width;
-							imageClone.scaleY = imageScale / imageClone.height;
-						}
-					}
-					
-					// Upadate image coordinates after rescale
-					imageScale >>= 1;
-					imageClone.x = p.x + shapePos.x - imageScale;
-					imageClone.y = p.y + shapePos.y - imageScale;
-
-					ImageUtil.drawBitmap(imageClone, s.graphics);
+					drawLoadedImage(applet, image, s, zone, imageNam, transfo, center, false);
                 }
             }
         }
         
+		protected function drawLoadedImage(applet:Map, image:Bitmap, s:Sprite, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point, render:Boolean):void {
+			// Not cloning the bitmapData itself
+			var scaledImg:Image;
+			var imageClone:Bitmap = new Bitmap(image.bitmapData);
+			
+			var p:Point        = getCenter(zone);
+			var shapePos:Point = new Point();
+			var scale:Number   = getShapePos(zone, transfo, center, p, shapePos);
+			var imageWidth:int = imageClone.width;
+			var imageScale:int = imageWidth;
+			
+			// Disk
+			if (scale > 0.0) {
+				imageScale = int(1.414 * scale);
+			}
+			
+			// Rescale image
+			if (imageWidth != imageScale) {
+				if (scaledImg == null) {
+					imageClone.scaleX = imageScale / imageClone.width;
+					imageClone.scaleY = imageScale / imageClone.height;
+				}
+			}
+			
+			// Upadate image coordinates after rescale
+			imageScale >>= 1;
+			imageClone.x = p.x + shapePos.x - imageScale;
+			imageClone.y = p.y + shapePos.y - imageScale;
+			
+			ImageUtil.drawBitmap(imageClone, s.graphics);
+			if( render) {
+				applet.renderShape( s, imageClone.width, imageClone.height, new Point( imageClone.x, imageClone.y));
+			}
+		}
         
         
         /**

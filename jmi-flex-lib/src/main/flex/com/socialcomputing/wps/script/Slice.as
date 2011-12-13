@@ -1,5 +1,4 @@
 package com.socialcomputing.wps.script  {
-	import br.com.stimuli.loading.BulkLoader;
 	
 	import com.socialcomputing.wps.components.Map;
 	import com.socialcomputing.wps.util.shapes.RectangleUtil;
@@ -7,9 +6,10 @@ package com.socialcomputing.wps.script  {
 	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import flash.geom.ColorTransform;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
 	    
     /**
      * <p>Title: Slice</p>
@@ -97,12 +97,6 @@ package com.socialcomputing.wps.script  {
         public function paint(applet:Map, s:Sprite, supZone:ActiveZone, zone:ActiveZone, satShp:ShapeX, satCtr:Point, supCtr:Point):void {
 			var text:HTMLText= getText( TEXT_VAL, zone.m_props );
             
-            // Patch for IE old JVM JIT bug (build < 3000).
-            /*ON if ( satShp == null )
-            {	// Very interesting do-nothing instruction that will never be called!
-            try{ Thread.sleep( 0 );} catch ( InterruptedException e ){}
-            }*/
-            
             var transfo:Transfo= getTransfo( TRANSFO_VAL, zone.m_props );
             
 			// Draw a satellite with primitives
@@ -114,56 +108,40 @@ package com.socialcomputing.wps.script  {
             if(isDefined(IMAGE_VAL)) {
 				var imageNam:String = parseString(IMAGE_VAL, zone.m_props )[0];
                 if (imageNam != null) {
-                    satShp.drawImage(applet.env, s, supZone, imageNam, transfo, satCtr);
+                    satShp.drawImage(applet, s, supZone, imageNam, transfo, satCtr);
                 }
-				
             }
             
             if(text != null) {
                 if ( HTMLText.isEnabled( text.getFlags( zone.m_props ), HTMLText.URL_BIT ))
                 {
+					m_htmlTxt = null;
                     var textUrls:Vector.<String> = text.parseString( HTMLText.TEXT_VAL, zone.m_props );
                     var t:String, hTxt:String = "";
-                    
-                    try
-                    {
-						var loader:BulkLoader = new BulkLoader();
-						loader.addEventListener(
-							BulkLoader.COMPLETE,
-							function(event:Event):void {
-								for each ( url in textUrls)
-								{
-									t = loader.getText( url);
-									if( t!= null) 
-										hTxt = hTxt + t;
-								}
-								if ( hTxt.length > 0)
-								{
-									m_htmlTxt = new HTMLText();
-									m_htmlTxt.m_text = hTxt;
-/*									var white:ColorTransform = new ColorTransform();
-									white.color = 0xFFFFFF;
-									var black:ColorTransform = new ColorTransform();
-									black.color = 0x000000;
-									m_htmlTxt.initValues(white, black, 0, 12, 0, "SansSerif", -1, -1, 0, new Insets( 0, 4, 0, 4));
-*/									m_htmlTxt.init( text, zone);
-									m_htmlTxt.updateBounds( applet);
-									supCtr	= supZone.m_restSwh.m_satellites[0].m_shape.getCenter( supZone );
-									m_htmlTxt.setTextBnds( applet.size, getFlags( zone.m_props), zone.m_flags ,transfo, satCtr, supCtr );
-									m_htmlTxt.drawText2( s, applet.size);// text.getFlags( zone.m_props )>> 16);//HTMLText.SOUTH_WEST );
-									applet.renderShape( applet.curDrawingSurface, m_htmlTxt.m_bounds.width, m_htmlTxt.m_bounds.height, new Point(m_htmlTxt.m_bounds.x, m_htmlTxt.m_bounds.y));
-								}
-							});
-						for each ( var url:String in textUrls)
+                    var i:int = 0;
+					var textLoader:URLLoader = new URLLoader();
+					textLoader.addEventListener(Event.COMPLETE, function(e:Event):void {
+						t = textLoader.data as String;
+						if( t!= null) 
+							hTxt = hTxt + t;
+						++i;
+						if ( hTxt.length > 0 && i == textUrls.length)
 						{
-							loader.add( url, {type:"text"});
+							m_htmlTxt = new HTMLText();
+							m_htmlTxt.m_text = hTxt;
+							m_htmlTxt.init( text, zone);
+							m_htmlTxt.updateBounds( applet);
+							supCtr	= supZone.m_restSwh.m_satellites[0].m_shape.getCenter( supZone );
+							m_htmlTxt.setTextBnds( applet.size, getFlags( zone.m_props), zone.m_flags ,transfo, satCtr, supCtr );
+							m_htmlTxt.drawText( s, applet.size, text.getFlags( zone.m_props )>> 16);//HTMLText.SOUTH_WEST );
+							applet.renderShape( s, m_htmlTxt.m_bounds.width, m_htmlTxt.m_bounds.height, new Point(m_htmlTxt.m_bounds.x, m_htmlTxt.m_bounds.y));
 						}
-						loader.start();
-						return;
-                    }
-                    catch ( e:Error){}
-                    
-                    m_htmlTxt = null;
+					});
+					for each ( var url:String in textUrls)
+					{
+						var textReq:URLRequest = new URLRequest(url);
+						textLoader.load(textReq);
+					}
                 }
                 else
                 {

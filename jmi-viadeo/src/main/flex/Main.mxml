@@ -22,8 +22,6 @@
 	</fx:Style>
 	<fx:Script>
 		<![CDATA[
-			import br.com.stimuli.loading.BulkLoader;
-			
 			import com.adobe.serialization.json.JSON;
 			import com.brokenfunction.json.decodeJson;
 			import com.socialcomputing.wps.components.Attribute;
@@ -48,7 +46,6 @@
 			
 			private var planName:String;
 			private var planService:PlanService;
-			private var loader:BulkLoader; 
 
 			[Embed(source="images/logo-sc-white.jpg")] [Bindable] public var LogoSoCom:Class; 
 			 
@@ -70,9 +67,7 @@
 				// Initialising service
 				this.planService = new PlanService(serverURL);
 				computeMap();
-				
-				this.loader = new BulkLoader();
-			}
+							}
 			
 			private function checkApplicationParameter(paramName:String):String {
 				if(!FlexGlobals.topLevelApplication.parameters.hasOwnProperty(paramName)) {
