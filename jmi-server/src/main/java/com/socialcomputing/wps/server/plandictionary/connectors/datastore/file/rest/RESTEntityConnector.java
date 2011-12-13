@@ -119,8 +119,10 @@ public class RESTEntityConnector extends FileEntityConnector {
                 }
             }
             ArrayNode entities = (ArrayNode) node.get(m_EntityMarkup);
+            LOG.debug("Getting entities for json node with name = {}", this.m_EntityMarkup);
             if (entities != null) {
                 for (JsonNode jsonentity : entities) {
+
                     Entity entity = addEntity(jsonentity.get(m_EntityId).getTextValue());
                     for (PropertyDefinition property : entityProperties) {
                         if (property.isSimple()) {
@@ -135,6 +137,7 @@ public class RESTEntityConnector extends FileEntityConnector {
                             entity.addAttribute(attribute, 1);
                         }
                     }
+                    LOG.debug("Entity added : {}", entity);
                 }
             }
             ArrayNode attributes = (ArrayNode) node.get(m_AttributeMarkup);
@@ -148,8 +151,8 @@ public class RESTEntityConnector extends FileEntityConnector {
                                 attribute.addProperty( property, p.getTextValue());
                         }
                     }
-                    if (!isInverted())
-                        addEntityProperties(attribute);
+                    LOG.debug("Attribute added : {}", attribute);
+                    if (!isInverted()) addEntityProperties(attribute);
                 }
             }
             if (isInverted()) {

@@ -40,7 +40,13 @@ public class Entity extends Data {
 	
    @Override
     public String toString() {
-        return "Entity: " + super.toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Entity: ")
+          .append(super.toString());
+        for(AttributeEnumeratorItem attribute: this.m_Attributes) {
+            sb.append("\n").append("id=").append(attribute.m_Id);
+        }
+        return sb.toString();
     }
    
    public StringBuilder toJson( StringBuilder sb) {
