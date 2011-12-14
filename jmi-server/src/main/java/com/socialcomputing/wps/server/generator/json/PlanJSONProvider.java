@@ -171,8 +171,14 @@ public class PlanJSONProvider {
                 props.put(key, (String) val);
             else if( val instanceof Object[]) {
                 ArrayNode a = props.putArray( key);
-                for( Object v : (Object[])val)
-                    a.add( (String)v);
+                for( Object v : (Object[])val) {
+                    if( v instanceof Integer)
+                        a.add( (Integer)v);
+                    else if( v instanceof Double)
+                        a.add( (Double)v);
+                    else
+                        a.add( (String)v);
+                }
             }
         }
         ObjectNode sel = node.putObject("selections");

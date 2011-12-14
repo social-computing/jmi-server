@@ -1,5 +1,6 @@
 package com.socialcomputing.wps.server.plandictionary.connectors.datastore.file.rest;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -27,19 +28,22 @@ public class RESTEntityConnector extends FileEntityConnector {
     protected String m_EntityId = null, m_EntityMarkup = null, m_AttributeId = null, m_AttributeMarkup = null;
 
     private static final Logger LOG = LoggerFactory.getLogger(RESTEntityConnector.class);
-    
+
     /**
      * <p>
-     * Construct a <code>RESTEntityConnector</code> from the XML configuration stored in the database
+     * Construct a <code>RESTEntityConnector</code> from the XML configuration
+     * stored in the database
      * </p>
      * 
-     * @param element  a <code>org.jdom.Element</code> containing the root of the connector configuration
+     * @param element
+     *            a <code>org.jdom.Element</code> containing the root of the
+     *            connector configuration
      * @return an initialised instance of <code>RESTEntityConnector</code>
      */
     public static RESTEntityConnector readObject(org.jdom.Element element) {
         LOG.info("Reading REST entity connector configuration");
         RESTEntityConnector connector = new RESTEntityConnector(element.getAttributeValue("name"));
-     
+
         connector._readObject(element);
         connector.contentType = element.getAttributeValue("type");
         connector.invert = element.getAttributeValue("invert");
@@ -48,66 +52,69 @@ public class RESTEntityConnector extends FileEntityConnector {
         connector.m_EntityMarkup = entity.getAttributeValue("markup");
         connector.m_EntityId = entity.getAttributeValue("id");
         for (Element property : (List<Element>) entity.getChildren("REST-property")) {
-            connector.entityProperties.add(new PropertyDefinition(property.getAttributeValue("id"),
-                                                                  property.getAttributeValue("attribute")));
+            connector.entityProperties.add(new PropertyDefinition(property.getAttributeValue("id"), property
+                    .getAttributeValue("attribute")));
         }
 
         Element attribute = element.getChild("REST-attribute");
         connector.m_AttributeMarkup = attribute.getAttributeValue("markup");
         connector.m_AttributeId = attribute.getAttributeValue("id");
         for (Element property : (List<Element>) attribute.getChildren("REST-property")) {
-            connector.attributeProperties.add(new PropertyDefinition(property.getAttributeValue("id"), 
-                                                                     property.getAttributeValue("entity")));
+            connector.attributeProperties.add(new PropertyDefinition(property.getAttributeValue("id"), property
+                    .getAttributeValue("entity")));
         }
-        LOG.debug("(type = {}, invert = {}, entity=({}), attribute=({}))", new Object[]{connector.contentType, connector.invert, connector.entityProperties});
+        LOG.debug("(type = {}, invert = {}, entity=({}), attribute=({}))", new Object[] { connector.contentType,
+                                                                                         connector.invert,
+                                                                                         connector.entityProperties });
         return connector;
     }
 
     /**
      * Default constructor
      * 
-     * @param name  the name of the connector as specified in the dictionary
+     * @param name
+     *            the name of the connector as specified in the dictionary
      */
     public RESTEntityConnector(String name) {
         super(name);
     }
 
     @Override
-    public void openConnections(int planType, Hashtable<String, Object> wpsparams)
-            throws WPSConnectorException {
+    public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
         super.openConnections(planType, wpsparams);
-        
-        // If the content type is specified in the connector configuration, 
-        // force the mime type to that value instead of relying on the mime type detected when the connection opens
+
+        // If the content type is specified in the connector configuration,
+        // force the mime type to that value instead of relying on the mime type
+        // detected when the connection opens
         String contentType = (this.contentType != null) ? this.contentType : urlHelper.getContentType();
         LOG.debug("content type = {}", contentType);
-      
-        // TODO : do this once in the object creation static method : readObject
+
         m_inverted = UrlHelper.ReplaceParameter(invert, wpsparams).equalsIgnoreCase("true");
-        
-        // TODO : create from javax.ws.rs.core.MediaType instead of String values
-        if (contentType != null && (contentType.equalsIgnoreCase("json") || contentType.equalsIgnoreCase(MediaType.APPLICATION_JSON))) {
-            readJSON(wpsparams);            
+
+        if (contentType != null
+                && (contentType.equalsIgnoreCase("json") || contentType.equalsIgnoreCase(MediaType.APPLICATION_JSON))) {
+            readJSON(wpsparams);
         }
-        else if (contentType != null && (contentType.equalsIgnoreCase("xml") || contentType.equalsIgnoreCase(MediaType.APPLICATION_XML))) {
-            readXml(wpsparams);            
+        else if (contentType != null
+                && (contentType.equalsIgnoreCase("xml") || contentType.equalsIgnoreCase(MediaType.APPLICATION_XML))) {
+            readXml(wpsparams);
         }
         else {
-            throw new WPSConnectorException("Unsupported content type: " + this.contentType + ". Only " +  MediaType.APPLICATION_JSON 
-                                                                         + " and " + MediaType.APPLICATION_XML + " are available for now");
+            throw new WPSConnectorException("Unsupported content type: " + this.contentType + ". Only "
+                    + MediaType.APPLICATION_JSON + " and " + MediaType.APPLICATION_XML + " are available for now");
         }
     }
 
     /**
      * <p>
-     * Read the entities and attributes to construct the map from JSON formatted data
-     * <p> 
+     * Read the entities and attributes to construct the map from JSON formatted
+     * data
+     * <p>
      * 
      * @param wpsparams
      * @throws WPSConnectorException
      */
-    private void readJSON(Hashtable<String, Object> wpsparams)
-            throws WPSConnectorException {
+    private void readJSON(Hashtable<String, Object> wpsparams) throws WPSConnectorException {
         ObjectMapper mapper = new ObjectMapper();
         try {
             JsonNode node = mapper.readTree(urlHelper.getStream());
@@ -115,7 +122,7 @@ public class RESTEntityConnector extends FileEntityConnector {
             if (globals != null) {
                 for (Iterator<String> it = globals.getFieldNames(); it.hasNext();) {
                     String key = it.next();
-                    wpsparams.put(key, globals.get(key).getTextValue());
+                    wpsparams.put( key, readJSONValue( globals.get(key)));
                 }
             }
             ArrayNode entities = (ArrayNode) node.get(m_EntityMarkup);
@@ -126,14 +133,14 @@ public class RESTEntityConnector extends FileEntityConnector {
                     Entity entity = addEntity(jsonentity.get(m_EntityId).getTextValue());
                     for (PropertyDefinition property : entityProperties) {
                         if (property.isSimple()) {
-                            entity.addProperty(property.getName(), jsonentity.get(property.getName()).getTextValue());
+                            entity.addProperty(property.getName(), readJSONValue( jsonentity.get(property.getName())));
                         }
                     }
 
                     ArrayNode attributes = (ArrayNode) jsonentity.get(m_AttributeMarkup);
                     if (attributes != null) {
                         for (JsonNode jsonattribute : attributes) {
-                            Attribute attribute = addAttribute(jsonattribute.get(m_AttributeId).getTextValue());
+                            Attribute attribute = addAttribute( jsonattribute.get(m_AttributeId).getTextValue());
                             entity.addAttribute(attribute, 1);
                         }
                     }
@@ -146,13 +153,14 @@ public class RESTEntityConnector extends FileEntityConnector {
                     Attribute attribute = addAttribute(jsonattribute.get(m_AttributeId).getTextValue());
                     for (PropertyDefinition property : attributeProperties) {
                         if (property.isSimple()) {
-                            JsonNode p = jsonattribute.get( property.getName());
-                            if( p!= null)
-                                attribute.addProperty( property, p.getTextValue());
+                            JsonNode p = jsonattribute.get(property.getName());
+                            if (p != null)
+                                attribute.addProperty(property, readJSONValue( p));
                         }
                     }
                     LOG.debug("Attribute added : {}", attribute);
-                    if (!isInverted()) addEntityProperties(attribute);
+                    if (!isInverted())
+                        addEntityProperties(attribute);
                 }
             }
             if (isInverted()) {
@@ -167,11 +175,31 @@ public class RESTEntityConnector extends FileEntityConnector {
         }
     }
 
+    private Object readJSONValue(JsonNode node) {
+        if( node == null)
+            return null;
+        if( node.isArray()) {
+            ArrayNode tab = ( ArrayNode) node;
+            List<Object> lst = new ArrayList<Object>(tab.size());
+            for( JsonNode t : tab) {
+                lst.add( readJSONValue( t));
+            }
+            return lst.toArray();
+        }
+        else if( node.isInt()) {
+            return node.getIntValue();
+        }
+        else if ( node.isDouble()) {
+            return node.getDoubleValue();
+        }
+        return node.getTextValue();
+    }
     
     /**
      * <p>
-     * Read the entities and attributes to construct the map from XML formatted data
-     * <p> 
+     * Read the entities and attributes to construct the map from XML formatted
+     * data
+     * <p>
      * 
      * @param wpsparams
      * @throws WPSConnectorException

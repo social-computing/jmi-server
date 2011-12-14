@@ -16,9 +16,9 @@ public class StoreHelper {
     protected Set<PropertyDefinition> entityProperties = new HashSet<PropertyDefinition>();
     protected Set<PropertyDefinition> attributeProperties = new HashSet<PropertyDefinition>();
 
-    protected Hashtable<String, String> m_Globals = new Hashtable<String, String>();
+    protected Hashtable<String, Object> m_Globals = new Hashtable<String, Object>();
 
-    public void addGlobal(String id, String value) {
+    public void addGlobal(String id, Object value) {
         m_Globals.put( id, value);
     }
     
@@ -116,10 +116,11 @@ public class StoreHelper {
        }
        sb.append("],\"globals\" : {");
        first = true;
-       for( Entry<String, String> global : m_Globals.entrySet()) {
+       for( Entry<String, Object> global : m_Globals.entrySet()) {
            if( first) first = false;
            else sb.append(',');
-           sb.append( "\"").append(Data.toJson(global.getKey())).append("\":\"").append(Data.toJson(global.getValue())).append("\"");
+           sb.append( "\"").append(Data.toJson( global.getKey())).append("\":");
+           Data.toJson( sb, global.getValue());
        }
        sb.append("}}");
        return sb.toString();

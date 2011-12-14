@@ -88,7 +88,32 @@ public abstract class Data {
         for (Entry<String, Object> p : this.m_Properties.entrySet()) {
             if( first) first = false;
             else sb.append(',');
-            sb.append( "\"").append(Data.toJson(p.getKey())).append("\":\"").append(Data.toJson((String)p.getValue())).append("\"");
+            sb.append( "\"").append(Data.toJson(p.getKey())).append("\":");
+            Data.toJson(sb, p.getValue());
+            sb.append("");
+        }
+        return sb;
+    }
+    
+    public static StringBuilder toJson( StringBuilder sb, Object o) {
+        if( o instanceof String) {
+            sb.append('\"').append( Data.toJson( ( String) o)).append('\"');
+        }
+        else if( o instanceof Integer) {
+            sb.append( String.valueOf( ( Integer) o));
+        }
+        else if( o instanceof Object[]) {
+            boolean first = true;
+            sb.append( '[');
+            for( Object s : (Object[]) o) {
+                if( first) first = false;
+                else sb.append(',');
+                Data.toJson( sb, s);
+            }
+            sb.append( ']');
+        }
+        else {
+            Data.toJson( sb, o.toString());
         }
         return sb;
     }
@@ -96,4 +121,5 @@ public abstract class Data {
     public static String toJson( String str) {
         return str.replace("\\", "\\\\").replace("\"", "\\\"");
     }
+    
 }
