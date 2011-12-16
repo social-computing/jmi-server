@@ -6,7 +6,7 @@
     <artifactId>jmi</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-
+  
   <groupId>com.socialcomputing.jmi.jmi</groupId>
   <artifactId>jmi-canvas</artifactId>
   <packaging>js</packaging>
@@ -14,6 +14,32 @@
   <name>Just Map It - Canvas client</name>
   <url>http://www.just-map-it.com</url>
   
+  <repositories>
+    <repository>
+      <id>Codehaus Snapshots</id>
+      <url>http://nexus.codehaus.org/snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
+  </repositories>
+  
+  <pluginRepositories>
+    <pluginRepository>
+      <id>Codehaus Snapshots</id>
+      <url>http://nexus.codehaus.org/snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>  <!-- Workaround for MNG-2974, see note below -->
+      </releases>
+    </pluginRepository>
+  </pluginRepositories>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -27,5 +53,4 @@
       </extension>
     </extensions>
   </build>
-  
 </project>
