@@ -15,6 +15,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 import org.jdom.Element;
 import org.slf4j.Logger;
@@ -43,6 +44,7 @@ public class UrlHelper extends ConnectorHelper {
 
     protected InputStream stream = null;
     protected String contentType = null;
+    protected String contentEncoding = null;
     protected URLConnection connection = null;
 
     public UrlHelper() {
@@ -130,6 +132,7 @@ public class UrlHelper extends ConnectorHelper {
                 connection.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
                 LOG.debug("Setting basic authentication header = {}", encodedAuthorization);
             }
+            connection.setRequestProperty( "Accept-Encoding", "gzip");
             for (NameValuePair header : headerParams) {
                 String paramValue = super.ReplaceParameter(header.getValue(), wpsparams);
                 connection.setRequestProperty(header.getName(), paramValue);
@@ -149,6 +152,7 @@ public class UrlHelper extends ConnectorHelper {
             }
             stream = connection.getInputStream();
             contentType = connection.getContentType();
+            contentEncoding = connection.getContentEncoding();
         }
         catch (IOException e) {
             LOG.error(e.getMessage(), e);
@@ -183,24 +187,33 @@ public class UrlHelper extends ConnectorHelper {
         return defParams;
     }
 
-    public InputStream getStream() {
-        return stream;
+    public InputStream getStream() throws WPSConnectorException {
+        try {
+            return contentEncoding != null && contentEncoding.equalsIgnoreCase("gzip") ? new GZIPInputStream( stream) : stream;
+        }
+        catch (IOException e) {
+            throw new WPSConnectorException("UrlHelper read failed", e);
+        }
     }
 
     public String getContentType() {
         return contentType;
     }
 
+    public String getContentEncoding() {
+        return contentEncoding;
+    }
+    
     public URLConnection getConnection() {
         return connection ;
     }
     
     public String getResult() throws WPSConnectorException {
         Writer writer = new StringWriter();
-        Reader reader = new BufferedReader(new InputStreamReader(stream));
-        char[] buffer = new char[1024];
-        int n;
         try {
+            Reader reader = new BufferedReader( new InputStreamReader( contentEncoding != null && contentEncoding.equalsIgnoreCase("gzip") ? new GZIPInputStream( stream): stream));
+            char[] buffer = new char[1024];
+            int n;
             while ((n = reader.read(buffer)) != -1) {
                 writer.write(buffer, 0, n);
             }
