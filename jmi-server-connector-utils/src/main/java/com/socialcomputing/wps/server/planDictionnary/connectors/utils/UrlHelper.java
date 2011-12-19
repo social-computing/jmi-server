@@ -231,4 +231,11 @@ public class UrlHelper extends ConnectorHelper {
     public void addHeader(String name, String value) {
         headerParams.add(new NameValuePair(name, value));
     }
+    
+    public void setBasicAuth( String user, String password) throws WPSConnectorException {
+        basicAuth = true;
+        this.user = user;
+        this.password = password;
+    }
+
 }
