@@ -1,5 +1,21 @@
-package com.socialcomputing.wps.components
-{
+var JMI_MAP = JMI_MAP || {}
+
+JMI_MAP.namespace = function(ns_string) {
+	var parts = ns_string.split('.'),
+		parent = JMI_MAP,
+		i;
+	if( parts[0] === "JMI_MAP") {
+		parts = parts.slice(1);
+	}
+	for( i = 0; i < parts.length; i+=1)  {
+		if( typeof parent[parts[i]] === "undefined") {
+			parent[parts[i]] = {};
+		}
+		parent = parent[parts[i]];
+	}
+	return parent;
+};
+
 	import com.socialcomputing.wps.components.events.ActionEvent;
 	import com.socialcomputing.wps.components.events.AttributeEvent;
 	import com.socialcomputing.wps.components.events.NavigateEvent;
@@ -50,6 +66,12 @@ package com.socialcomputing.wps.components
 	[Event(name="attribute_hover", type="com.socialcomputing.wps.components.events.AttributeEvent")]
 	//[Event(name="link_click",      type="com.socialcomputing.wps.components.events.LinkClickEvent")]
 	
+	JMI_MAP.namespace("com.socialcomputing.wps.components.Map");
+
+	var Map = function() {
+		
+	}
+
 	public class Map extends UIComponent {
 		public static var version:String = "1.0-SNAPSHOT";
 
