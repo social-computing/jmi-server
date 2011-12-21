@@ -1,4 +1,4 @@
-JMI_MAP.namespace("com.socialcomputing.wps.script.ActiveZone");
+JMI_MAP.namespace("JMI_MAP.com.socialcomputing.jmi.script.ActiveZone");
 
 /*
  * <p>Title: ActiveZone</p>
@@ -7,7 +7,7 @@ JMI_MAP.namespace("com.socialcomputing.wps.script.ActiveZone");
  * through BagZone it can also be a parent zone (superZone).
  * This kind of zone doesn't contains any graphical informations.</p>
  */
-com.socialcomputing.wps.script.ActiveZone = (function() {
+JMI_MAP.com.socialcomputing.jmi.script.ActiveZone = (function() {
 	// Private methods
 	
     	// Swatch used to render this zone at rest.
@@ -37,24 +37,24 @@ com.socialcomputing.wps.script.ActiveZone = (function() {
          */
         m_curData, //:Vector.<SatData>;
          // HTMLText dictionary to avoid unnecessary calcs.
-        m_datas, //:Dictionary;
+        m_datas; //:Dictionary;
 
-		getRestSwatch = function () {
+		this.prototype.getRestSwatch = function () {
             return m_restSwh;
-        },
-        getCurSwatch = function () {
+        };
+       this.prototype.getCurSwatch = function () {
             return m_curSwh;
-        },
+        };
         /*
          * Sets the two swatchs of this zone.
          * This is used in PlanGenerator to setup this zone's swatchs.
          * @param restSwh   Swatch used to render this when it is at rest.
          * @param curSwh    Swatch used to render this when it is hovered.
          */
-        setSwatchs = function ( restSwh, curSwh) {
+        this.prototype.setSwatchs = function ( restSwh, curSwh) {
             m_restSwh   = restSwh;
             m_curSwh    = curSwh;
-        },
+        };
         /*
          * Perform basic buffer initialization to enhance real time performance.
          * This include transforming selection prop to an int flag,
@@ -66,13 +66,13 @@ com.socialcomputing.wps.script.ActiveZone = (function() {
          * @param g         A graphics compatible with the one that will be used for painting.
          * @param isFirst   True if init called for the first time.
          */
-        init = function (applet, s, isFirst) {
+        this.prototype.init = function (applet, s, isFirst) {
             if ( isFirst )  // One time init
             {
                 var sel = m_props["SELECTION"];
                 if ( sel != null )
                 {
-                    m_selection = int(sel);// TODO portage ?
+                    m_selection = sel;
                 }
                 
                 // Quick access to Env props
@@ -88,7 +88,7 @@ com.socialcomputing.wps.script.ActiveZone = (function() {
             {
                 m_curData   = m_curSwh.evalSatData( applet, this, isSuper );
             }
-        },
+        };
         /*
          * Draw this zone on a specified Graphics using the rest or cur swatch.
          * @param applet    WPSApplet owning this zone.
@@ -98,17 +98,17 @@ com.socialcomputing.wps.script.ActiveZone = (function() {
          * @param showTyp   The type of Satellite to show (SEL, TIP, BASE, ALL). See Satellite.XXXX_TYP.
          * @param showLinks True if we only wants to paint links.
          */
-        paint = function (applet, s, isCur, isFront, showTyp, showLinks) {
+        this.prototype.paint = function (applet, s, isCur, isFront, showTyp, showLinks) {
             if( (m_flags & INVISIBLE_BIT) != 0) return;
             var swatch = isCur ? m_curSwh : m_restSwh;
             
             swatch.paint( applet, s, this, isCur, isFront, showTyp, showLinks );
-        },
+        };
          /*
          * Get this parent zone if it exists.
          * @return	The BagZone holding this or null if this is a BagZone.
          */
-        getParent = function ( ) {
+        this.prototype.getParent = function ( ) {
             return m_parent == null ? this : m_parent;
         };
         // end var
@@ -120,7 +120,7 @@ com.socialcomputing.wps.script.ActiveZone = (function() {
 		setSwatchs: setSwatchs,
 		init: init,
 		paint: paint,
-		getParent: getParent;
+		getParent: getParent
 	}
 }());
 
