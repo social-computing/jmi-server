@@ -1,50 +1,50 @@
-JMI_MAP.namespace("JMI_MAP.com.socialcomputing.jmi.script.ActiveZone");
+JMI.namespace("JMI_MAP.com.socialcomputing.jmi.script.ActiveZone") = (function() {
+    // Private methods
 
-/*
- * <p>Title: ActiveZone</p>
- * <p>Description: A graphical zone holding properties.<br>
- * This base class can be a clusterized zone (subZone) and
- * through BagZone it can also be a parent zone (superZone).
- * This kind of zone doesn't contains any graphical informations.</p>
- */
-JMI_MAP.com.socialcomputing.jmi.script.ActiveZone = (function() {
-	// Private methods
-	
-    	// Swatch used to render this zone at rest.
+    // Swatch used to render this zone at rest.
     var m_restSwh = com.socialcomputing.wps.script.Swatch,
-     	//Swatch used to render this zone when it is current (hovered).
-    	m_curSwh = com.socialcomputing.wps.script.Swatch,
+    
+        //Swatch used to render this zone when it is current (hovered).
+        m_curSwh = com.socialcomputing.wps.script.Swatch,
+    
         // Flags holding the previously defined bits (XXX_BIT).
-        m_flags,
-		m_props, //Array
+        m_flags, m_props, //Array
+    
         /*
          * Bounding-Box of this zone including its subZones.
          * The BBox is the union of the rest and current swatch BBoxs and a small margin.
          */
         m_bounds, //Rectangle;
-         //Flag indicating which of the 32 possible selections are active for this zone.
+    
+        //Flag indicating which of the 32 possible selections are active for this zone.
         m_selection,
-         //Parent of this zone if it is clusterized or null if this is already a BagZone.
+        
+        //Parent of this zone if it is clusterized or null if this is already a BagZone.
         m_parent, //:ActiveZone;
+        
         /*
          * Fast graphical data lookup for the rest Swatch Satellites.
          * Not used enough, could improve the performance if more was stored here...
          */
         m_restData, //:Vector.<SatData>;
+
         /*
          * Fast graphical data lookup for the current Swatch Satellites.
          * Not used enough, could improve the performance if more was stored here...
          */
         m_curData, //:Vector.<SatData>;
-         // HTMLText dictionary to avoid unnecessary calcs.
+
+        // HTMLText dictionary to avoid unnecessary calcs.
         m_datas; //:Dictionary;
 
+        // Class functions
 		this.prototype.getRestSwatch = function () {
             return m_restSwh;
         };
-       this.prototype.getCurSwatch = function () {
+        this.prototype.getCurSwatch = function () {
             return m_curSwh;
         };
+        
         /*
          * Sets the two swatchs of this zone.
          * This is used in PlanGenerator to setup this zone's swatchs.
@@ -55,6 +55,7 @@ JMI_MAP.com.socialcomputing.jmi.script.ActiveZone = (function() {
             m_restSwh   = restSwh;
             m_curSwh    = curSwh;
         };
+        
         /*
          * Perform basic buffer initialization to enhance real time performance.
          * This include transforming selection prop to an int flag,
@@ -80,7 +81,7 @@ JMI_MAP.com.socialcomputing.jmi.script.ActiveZone = (function() {
                 m_datas = new Dictionary();// TODO portage ?
             }
             
-            var isSuper:Boolean = this is BagZone;// TODO portage ?
+            //var isSuper:Boolean = this is BagZone;// TODO portage ?
             
             m_restData = m_restSwh.evalSatData( applet, this, isSuper);
             
@@ -89,6 +90,7 @@ JMI_MAP.com.socialcomputing.jmi.script.ActiveZone = (function() {
                 m_curData   = m_curSwh.evalSatData( applet, this, isSuper );
             }
         };
+        
         /*
          * Draw this zone on a specified Graphics using the rest or cur swatch.
          * @param applet    WPSApplet owning this zone.
@@ -104,6 +106,7 @@ JMI_MAP.com.socialcomputing.jmi.script.ActiveZone = (function() {
             
             swatch.paint( applet, s, this, isCur, isFront, showTyp, showLinks );
         };
+        
          /*
          * Get this parent zone if it exists.
          * @return	The BagZone holding this or null if this is a BagZone.
@@ -121,7 +124,7 @@ JMI_MAP.com.socialcomputing.jmi.script.ActiveZone = (function() {
 		init: init,
 		paint: paint,
 		getParent: getParent
-	}
+	};
 }());
 
 // Constantes
