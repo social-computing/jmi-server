@@ -1,4 +1,4 @@
-JMI.namespace("JMI_MAP.com.socialcomputing.jmi.script.ActiveZone") = (function() {
+JMI.namespace("com.socialcomputing.jmi.script.ActiveZone") = (function() {
     // Private methods
 
     // Swatch used to render this zone at rest.
