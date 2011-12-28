@@ -127,7 +127,7 @@ JMI.namespace("com.socialcomputing.jmi.script.ActiveZone") = (function() {
 	};
 }());
 
-// Constantes
+// Constants
 // Bit indicating that subnodes of this are located on one side.
 com.socialcomputing.wps.script.ActiveZone.SIDE_BIT = 0x04;
 // Bit indicating that subnodes are located on the left side.
