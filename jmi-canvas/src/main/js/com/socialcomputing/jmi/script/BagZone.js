@@ -1,5 +1,3 @@
-JMI_MAP.namespace("JMI_MAP.com.socialcomputing.jmi.script.BagZone");
-
 /*
  * <p>Title: BagZone</p>
  * <p>Description: A graphical Place holding properties.<br>
@@ -9,7 +7,7 @@ JMI_MAP.namespace("JMI_MAP.com.socialcomputing.jmi.script.BagZone");
  * @author flugue@mapstan.com
  * @version 1.0
  */
-JMI_MAP.com.socialcomputing.jmi.script.BagZone = (function() {
+JMI.namespace("com.socialcomputing.wps.script.BagZone") = (function() {
 	 // Clusterized subZones table.
 	var m_subZones, //:Array = null;
 
@@ -38,7 +36,7 @@ JMI_MAP.com.socialcomputing.jmi.script.BagZone = (function() {
 		m_subZones  = subs;
 	}
 	Constr.prototype = {
-		constructor: JMI_MAP.com.socialcomputing.jmi.script.BagZone,
+		constructor: com.socialcomputing.jmi.script.BagZone,
 		version: "2.0"
 	}
 	return Constr;
@@ -53,7 +51,7 @@ JMI_MAP.com.socialcomputing.jmi.script.BagZone = (function() {
  * @param g         A Graphics on which this must be painted.
  * @param isFirst	True if this init is the first one. False if this is a "refresh" init.
  */
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.init = function (applet, s, isFirst) {
+com.socialcomputing.jmi.script.BagZone.prototype.init = function (applet, s, isFirst) {
 	var i,
 	 	nbSubZones = m_subZones != null ? m_subZones.length : 0;
 	// TODO super.init(applet, s, isFirst);
@@ -140,7 +138,7 @@ JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.init = function (applet
  * @param applet    WPSApplet owning this zone.
  * @param g         A Graphics on which this must be painted.
  */
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.paintCur = function (applet) {
+com.socialcomputing.jmi.script.BagZone.prototype.paintCur = function (applet) {
 		/*
 	bufGfx.drawImage( applet.m_backImg, 0, 0, m_bounds.width, m_bounds.height, m_bounds.x, m_bounds.y, m_bounds.x + m_bounds.width, m_bounds.y + m_bounds.height, null );
 	bufGfx.translate( -m_bounds.x, -m_bounds.y );*/
@@ -162,18 +160,18 @@ JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.paintCur = function (ap
 		applet.renderShape( applet.curDrawingSurface, m_bounds.width, m_bounds.height, new Point(m_bounds.x, m_bounds.y));
 }
 
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.get_m_dir = function () {
+com.socialcomputing.jmi.script.BagZone.prototype.get_m_dir = function () {
     return _m_dir;
 }
 
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.set_m_dir = function (value) {
+com.socialcomputing.jmi.script.BagZone.prototype.set_m_dir = function (value) {
     _m_dir = value;
 }
 
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.get_m_stp = function () {
+com.socialcomputing.jmi.script.BagZone.prototype.get_m_stp = function () {
     return _m_stp;
 }
 
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.set_m_stp = function (value) {
+com.socialcomputing.jmi.script.BagZone.prototype.set_m_stp = function (value) {
 	_m_stp = value;
 }

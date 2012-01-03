@@ -1,5 +1,3 @@
-JMI_MAP.namespace("JMI_MAP.com.socialcomputing.jmi.script.ColorX");
-
 /*
  * <p>Title: ColorX</p>
  * <p>Description: A wrapper for the java.awt.Color class.<br>
@@ -9,7 +7,7 @@ JMI_MAP.namespace("JMI_MAP.com.socialcomputing.jmi.script.ColorX");
  * @author flugue@mapstan.com
  * @version 1.0
  */
-JMI_MAP.com.socialcomputing.jmi.script.ColorX = (function() {
+JMI.namespace("com.socialcomputing.wps.script.ColorX") = (function() {
 /*
  * A 32 bit int that hold Color invormation in ARGB format.
  * Each component is a 8 bits value:
@@ -31,7 +29,7 @@ JMI_MAP.com.socialcomputing.jmi.script.ColorX = (function() {
     	m_color = color;
 	}
 	Constr.prototype = {
-		constructor: JMI_MAP.com.socialcomputing.jmi.script.ColorX,
+		constructor: com.socialcomputing.jmi.script.ColorX,
 		version: "2.0"
 	}
 	return Constr;
@@ -62,13 +60,13 @@ JMI_MAP.com.socialcomputing.jmi.script.ColorX = (function() {
  * Convert this ColorX to a java.awt.Color.
  * @return	a new Color equivalent to this.
  */
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.getColor = function() {
+com.socialcomputing.jmi.script.BagZone.prototype.getColor = function() {
     var color = new ColorTransform();
 	color.color = m_color;
 	return color;
 }
 
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.getColor2 = function( props) {
+com.socialcomputing.jmi.script.BagZone.prototype.getColor2 = function( props) {
 	var color = new ColorTransform();
     if( m_scolor == null) { 
 		color.color = m_color;

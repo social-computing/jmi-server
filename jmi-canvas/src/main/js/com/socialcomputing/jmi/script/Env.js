@@ -1,5 +1,3 @@
-JMI_MAP.namespace("JMI_MAP.com.socialcomputing.jmi.script.Env");
-
 /*
  * <p>Title: Env</p>
  * <p>Description: A place to store the "environment" datas and a media loader.
@@ -10,7 +8,7 @@ JMI_MAP.namespace("JMI_MAP.com.socialcomputing.jmi.script.Env");
  * @author flugue@mapstan.com
  * @version 1.0
  */
-JMI_MAP.com.socialcomputing.jmi.script.Env = (function() {
+JMI.namespace("com.socialcomputing.wps.script.Env") = (function() {
 	
 /*
  * Contains XXX_BIT(s).
@@ -18,22 +16,22 @@ JMI_MAP.com.socialcomputing.jmi.script.Env = (function() {
  */
 	var m_flags,
 	// Plan background Color.
-	 m_inCol = JMI_MAP.com.socialcomputing.jmi.script.ColorX,
+	 m_inCol = com.socialcomputing.jmi.script.ColorX,
 	/*
 	 * Plan border Color.
 	 * This is not used, it should be deprecated, but first removed from Model.java
 	 */
-	m_outCol = JMI_MAP.com.socialcomputing.jmi.script.ColorX,
+	m_outCol = com.socialcomputing.jmi.script.ColorX,
 	/*
 	 * Plan filter color.
 	 * This color will apeared dimmed under the current zone and over the background, showing the actual BBox.
 	 */
-	m_filterCol = JMI_MAP.com.socialcomputing.jmi.script.ColorX,
+	m_filterCol = com.socialcomputing.jmi.script.ColorX,
 	/*
 	 * Applet size & scale.
 	 * This is used by the Server to retrieve the Applet size and then give a well sized plan to the client.
 	 */
-	m_transfo = JMI_MAP.com.socialcomputing.jmi.script.Transfo,
+	m_transfo = com.socialcomputing.jmi.script.Transfo,
 	/*
 	 * Global properties.
 	 * Properties that don't appear in Zones because they are global to the plan.<br>
@@ -59,9 +57,17 @@ JMI_MAP.com.socialcomputing.jmi.script.Env = (function() {
 	 * This is necessary because the Thread must know the Applet.
 	 * But it is launch by run() that don't have any arguments.
 	 */
-	m_applet = JMI_MAP.com.socialcomputing.jmi.components.Map,
+	m_applet = com.socialcomputing.jmi.components.Map,
 
-	return 
+	Constr;
+	
+	Constr = function() {
+	}
+	Constr.prototype = {
+		constructor: com.socialcomputing.jmi.script.BagZone,
+		version: "2.0"
+	}
+	return Constr;
 }());
 
 /*
@@ -69,7 +75,7 @@ JMI_MAP.com.socialcomputing.jmi.script.Env = (function() {
  * @param applet
  * @param needPrint
  */
-JMI_MAP.com.socialcomputing.jmi.script.Dimension.prototype.init = function(applet, needPrint) {
+com.socialcomputing.jmi.script.Dimension.prototype.init = function(applet, needPrint) {
     var bkWhite = new ColorTransform();
     bkWhite.color = 0xFFFFFF;
 	var bkCol = needPrint ? bkWhite : m_inCol.getColor();
@@ -78,29 +84,30 @@ JMI_MAP.com.socialcomputing.jmi.script.Dimension.prototype.init = function(apple
 	m_loaders  = new Object();
 }
 
-JMI_MAP.com.socialcomputing.jmi.script.Dimension.prototype.getMedia = function(name) {
+com.socialcomputing.jmi.script.Dimension.prototype.getMedia = function(name) {
 	return this.m_medias[name];
 }
 
-JMI_MAP.com.socialcomputing.jmi.script.Dimension.prototype.putMedia = function (name, media) {
+com.socialcomputing.jmi.script.Dimension.prototype.putMedia = function (name, media) {
 	this.m_medias[name] = media;
 }
 
-JMI_MAP.com.socialcomputing.jmi.script.Dimension.prototype.addLoader = function (name, loader) {
+com.socialcomputing.jmi.script.Dimension.prototype.addLoader = function (name, loader) {
 	this.m_loaders[name] = loader;
 }
 
-JMI_MAP.com.socialcomputing.jmi.script.Dimension.prototype.getLoader = function (name) {
+com.socialcomputing.jmi.script.Dimension.prototype.getLoader = function (name) {
 	return this.m_loaders[name];
 }
 
-JMI_MAP.com.socialcomputing.jmi.script.Dimension.prototype.removeLoader = function(name) {
+com.socialcomputing.jmi.script.Dimension.prototype.removeLoader = function(name) {
 	if( this.m_loaders[name])
 		delete this.m_loaders[name];
 }
 
-JMI_MAP.com.socialcomputing.jmi.script.Dimension.prototype.close = function() {
-	for( var name:String in m_loaders) {
+com.socialcomputing.jmi.script.Dimension.prototype.close = function() {
+	// TODO
+/*	for( var name:String in m_loaders) {
 		var loader:LoaderEx = this.m_loaders[name] as LoaderEx;
 		try {
 			loader.close();
@@ -108,10 +115,9 @@ JMI_MAP.com.socialcomputing.jmi.script.Dimension.prototype.close = function() {
 			trace( err);
 		}
 		delete this.m_loaders[name];
-	}
+	}*/
 }
- }
-}
+
 
 	/**
 	 * True if this Plan is sound enabled.
@@ -123,7 +129,7 @@ JMI_MAP.com.socialcomputing.jmi.script.Dimension.prototype.close = function() {
 	 * True if this Plan displays Entities (Groups and Clusters)
 	 * This is not used, it should be deprecated...
 	 */
-	public static const GROUP_BIT:int= 0x02;
+//	public static const GROUP_BIT:int= 0x02; TODO portage
 
 	/**
 	 * True if this Plan can be accessed using JavaScript.

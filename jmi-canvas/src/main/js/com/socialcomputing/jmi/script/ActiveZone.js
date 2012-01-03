@@ -1,5 +1,3 @@
-JMI_MAP.namespace("JMI_MAP.com.socialcomputing.jmi.script.ActiveZone");
-
 /*
  * <p>Title: ActiveZone</p>
  * <p>Description: A graphical zone holding properties.<br>
@@ -7,7 +5,7 @@ JMI_MAP.namespace("JMI_MAP.com.socialcomputing.jmi.script.ActiveZone");
  * through BagZone it can also be a parent zone (superZone).
  * This kind of zone doesn't contains any graphical informations.</p>
  */
-JMI_MAP.com.socialcomputing.jmi.script.ActiveZone = (function() {
+JMI.namespace("com.socialcomputing.wps.script.ActiveZone") = (function() {
 	// Private methods
 	
     	// Swatch used to render this zone at rest.
@@ -45,16 +43,16 @@ JMI_MAP.com.socialcomputing.jmi.script.ActiveZone = (function() {
 
 // Constantes
 // Bit indicating that subnodes of this are located on one side.
-JMI_MAP.com.socialcomputing.wps.script.ActiveZone.SIDE_BIT = 0x04;
+com.socialcomputing.wps.script.ActiveZone.SIDE_BIT = 0x04;
 // Bit indicating that subnodes are located on the left side.
-JMI_MAP.com.socialcomputing.wps.script.ActiveZone.LEFT_BIT = 0x08;
+com.socialcomputing.wps.script.ActiveZone.LEFT_BIT = 0x08;
 // Bit indicating invisibility.
-JMI_MAP.com.socialcomputing.wps.script.ActiveZone.INVISIBLE_BIT = 0x10;
+com.socialcomputing.wps.script.ActiveZone.INVISIBLE_BIT = 0x10;
 
-JMI_MAP.com.socialcomputing.jmi.script.ActiveZone.prototype.getRestSwatch = function () {
+com.socialcomputing.jmi.script.ActiveZone.prototype.getRestSwatch = function () {
     return m_restSwh;
 };
-JMI_MAP.com.socialcomputing.jmi.script.ActiveZone.prototype.getCurSwatch = function () {
+com.socialcomputing.jmi.script.ActiveZone.prototype.getCurSwatch = function () {
     return m_curSwh;
 };
 /*
@@ -63,7 +61,7 @@ JMI_MAP.com.socialcomputing.jmi.script.ActiveZone.prototype.getCurSwatch = funct
  * @param restSwh   Swatch used to render this when it is at rest.
  * @param curSwh    Swatch used to render this when it is hovered.
  */
-JMI_MAP.com.socialcomputing.jmi.script.ActiveZone.prototype.setSwatchs = function ( restSwh, curSwh) {
+com.socialcomputing.jmi.script.ActiveZone.prototype.setSwatchs = function ( restSwh, curSwh) {
     m_restSwh   = restSwh;
     m_curSwh    = curSwh;
 };
@@ -78,7 +76,7 @@ JMI_MAP.com.socialcomputing.jmi.script.ActiveZone.prototype.setSwatchs = functio
  * @param g         A graphics compatible with the one that will be used for painting.
  * @param isFirst   True if init called for the first time.
  */
-JMI_MAP.com.socialcomputing.jmi.script.ActiveZone.prototype.init = function (applet, s, isFirst) {
+com.socialcomputing.jmi.script.ActiveZone.prototype.init = function (applet, s, isFirst) {
     if ( isFirst )  // One time init
     {
         var sel = m_props["SELECTION"];
@@ -110,7 +108,7 @@ JMI_MAP.com.socialcomputing.jmi.script.ActiveZone.prototype.init = function (app
  * @param showTyp   The type of Satellite to show (SEL, TIP, BASE, ALL). See Satellite.XXXX_TYP.
  * @param showLinks True if we only wants to paint links.
  */
-JMI_MAP.com.socialcomputing.jmi.script.ActiveZone.prototype.paint = function (applet, s, isCur, isFront, showTyp, showLinks) {
+com.socialcomputing.jmi.script.ActiveZone.prototype.paint = function (applet, s, isCur, isFront, showTyp, showLinks) {
     if( (m_flags & INVISIBLE_BIT) != 0) return;
     var swatch = isCur ? m_curSwh : m_restSwh;
     
@@ -120,6 +118,6 @@ JMI_MAP.com.socialcomputing.jmi.script.ActiveZone.prototype.paint = function (ap
  * Get this parent zone if it exists.
  * @return	The BagZone holding this or null if this is a BagZone.
  */
-JMI_MAP.com.socialcomputing.jmi.script.ActiveZone.prototype.getParent = function () {
+com.socialcomputing.jmi.script.ActiveZone.prototype.getParent = function () {
     return m_parent == null ? this : m_parent;
 };

@@ -1,6 +1,5 @@
-JMI_MAP.namespace("JMI_MAP.com.socialcomputing.jmi.script.Dimension");
 
-JMI_MAP.com.socialcomputing.jmi.script.Dimension = (function() {
+JMI.namespace("com.socialcomputing.wps.script.Dimension") = (function() {
 	
 	var width, height,
 		Constr;
@@ -10,13 +9,13 @@ JMI_MAP.com.socialcomputing.jmi.script.Dimension = (function() {
 		height = h;
 	}
 	Constr.prototype = {
-		constructor: JMI_MAP.com.socialcomputing.jmi.script.Dimension,
+		constructor: com.socialcomputing.jmi.script.Dimension,
 		version: "2.0"
 	}
 	return Constr;
 }());
 
-JMI_MAP.com.socialcomputing.jmi.script.Dimension.prototype.resize = function(d) {
+com.socialcomputing.jmi.script.Dimension.prototype.resize = function(d) {
 	return new Dimension(Math.max(this.width, d.width), 
 					     Math.max(this.height, d.height));
 }
@@ -25,7 +24,7 @@ JMI_MAP.com.socialcomputing.jmi.script.Dimension.prototype.resize = function(d) 
 /**
  * Create a <code>Rectangle</code> instance with height and width of the current Dimension
  */
-JMI_MAP.com.socialcomputing.jmi.script.Dimension.toRectangle = function(){
+com.socialcomputing.jmi.script.Dimension.toRectangle = function(){
 	return new Rectangle(0, 0, this._width, this._height);
 }
 
@@ -34,7 +33,7 @@ JMI_MAP.com.socialcomputing.jmi.script.Dimension.toRectangle = function(){
  * 	It is done this way instead of a specific constructor because of ActionScript3
  * contructor overload limitations : on class can only have one constructor signature. 
  */
-JMI_MAP.com.socialcomputing.jmi.script.Dimension.fromRectangle = function( rect) {
+com.socialcomputing.jmi.script.Dimension.fromRectangle = function( rect) {
 	return new Dimension(rect.width, rect.height);
 }
 		

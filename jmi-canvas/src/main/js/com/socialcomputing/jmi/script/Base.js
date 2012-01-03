@@ -1,5 +1,3 @@
-JMI_MAP.namespace("JMI_MAP.com.socialcomputing.jmi.script.Base");
-
 /*
  * <p>Title: Base</p>
  * <p>Description: Base class of all the Swatch types. It holds field of those class in a VContainer array.
@@ -12,7 +10,7 @@ JMI_MAP.namespace("JMI_MAP.com.socialcomputing.jmi.script.Base");
  * @author flugue@mapstan.com
  * @version 1.0
  */
-JMI_MAP.com.socialcomputing.jmi.script.Base = (function() {
+JMI.namespace("com.socialcomputing.wps.script.Base") = (function() {
 
      // Containers table holding the values of all inheriting class fields.
     var m_containers; //:Array;
@@ -23,7 +21,7 @@ JMI_MAP.com.socialcomputing.jmi.script.Base = (function() {
 		m_subZones  = subs;
 	}
 	Constr.prototype = {
-		constructor: JMI_MAP.com.socialcomputing.jmi.script.Base,
+		constructor: com.socialcomputing.jmi.script.Base,
 		version: "2.0"
 	}
 	return Constr;
@@ -36,7 +34,7 @@ JMI_MAP.com.socialcomputing.jmi.script.Base = (function() {
  * @param prop  Index of the property
  * @return True if prop exists.
  */
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.isDefined = function( prop) {
+com.socialcomputing.jmi.script.Base.prototype.isDefined = function( prop) {
 	//trace("is defined: " + this.m_containers[prop]);
     return m_containers[prop] != null;
 }
@@ -46,7 +44,7 @@ JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.isDefined = function( p
  * @param	props	Props table
  * @return	an int containing the bits of the flag.
  */
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.getFlags = function( props) {
+com.socialcomputing.jmi.script.Base.prototype.getFlags = function( props) {
     return getInt( FLAGS_VAL, props );
 }
 
@@ -56,7 +54,7 @@ JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.getFlags = function( pr
  * @param	props	If this contains a referenced property, props is the table that hold the property.
  * @return	the Object corresponding to the field whose index is prop or null if the property doesn't exists or is void.
  */
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.getValue = function( prop, props) {
+com.socialcomputing.jmi.script.Base.prototype.getValue = function( prop, props) {
     var container = m_containers[prop];
     return container != null ?( container.m_isBound ? props[ container.m_value] : container.m_value ): null;
 }
@@ -67,7 +65,7 @@ JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.getValue = function( pr
  * @param	props	If this contains a referenced property, props is the table that hold the property.
  * @return	the boolean corresponding to the field whose index is prop or null if the property doesn't exists or is void.
  */
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.getBool = function( prop, props) {
+com.socialcomputing.jmi.script.Base.prototype.getBool = function( prop, props) {
 	return getValue( prop, props );
 }
 
@@ -78,7 +76,7 @@ JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.getBool = function( pro
  * @param	props	If this contains a referenced property, props is the table that hold the property.
  * @return	the int corresponding to the field whose index is prop or null if the property doesn't exists or is void.
  */
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.getInt = function( prop, props) {
+com.socialcomputing.jmi.script.Base.prototype.getInt = function( prop, props) {
     return getValue( prop, props );
 }
 
@@ -89,7 +87,7 @@ JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.getInt = function( prop
  * @param	props	If this contains a referenced property, props is the table that hold the property.
  * @return	the float corresponding to the field whose index is prop or null if the property doesn't exists or is void.
  */
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.getFloat = function( prop, props) {
+com.socialcomputing.jmi.script.Base.prototype.getFloat = function( prop, props) {
     return getValue( prop, props );
 }
 
@@ -100,7 +98,7 @@ JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.getFloat = function( pr
  * @param	props	If this contains a referenced property, props is the table that hold the property.
  * @return	the String corresponding to the field whose index is prop or null if the property doesn't exists or is void.
  */
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.getString = function( prop, props) {
+com.socialcomputing.jmi.script.Base.prototype.getString = function( prop, props) {
     return getValue( prop, props );
 }
 
@@ -111,7 +109,7 @@ JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.getString = function( p
  * @param	props	If this contains a referenced property, props is the table that hold the property.
  * @return	the HTMLText corresponding to the field whose index is prop or null if the property doesn't exists or is void.
  */
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.getText = function( prop, props) {
+com.socialcomputing.jmi.script.Base.prototype.getText = function( prop, props) {
     return getValue( prop, props );
 }
 
@@ -122,7 +120,7 @@ JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.getText = function( pro
  * @param	props	If this contains a referenced property, props is the table that hold the property.
  * @return	the FontX corresponding to the field whose index is prop or null if the property doesn't exists or is void.
  */
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.getFont = function( prop, props) {
+com.socialcomputing.jmi.script.Base.prototype.getFont = function( prop, props) {
     return getValue( prop, props );
 }
 
@@ -136,9 +134,9 @@ JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.getFont = function( pro
  * @return	the Color corresponding to the ColorX field whose index is prop or null if the property doesn't exists or is void.
  * @throws UnsupportedEncodingException 
  */
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.getColor = function(prop, props) {
+com.socialcomputing.jmi.script.Base.prototype.getColor = function(prop, props) {
 	var value = getValue(prop, props);
-	if( value is ColorX) { // TODO portage
+	if( value instanceof com.socialcomputing.wps.script.ColorX) { 
 		return value.getColor2(props);
 	}
 	return null;	
@@ -151,11 +149,11 @@ JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.getColor = function(pro
  * @param	props	If this contains a referenced property, props is the table that hold the property.
  * @return	the Transfo corresponding to the field whose index is prop or null if the property doesn't exists or is void.
  */
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.getTransfo = function( prop, props) {
+com.socialcomputing.jmi.script.Base.prototype.getTransfo = function( prop, props) {
 	var res = getValue( prop, props );
-    if ( res is Transfo )
+    if ( res instanceof com.socialcomputing.wps.script.Transfo )
     {
-		return res as Transfo;
+		return res;
     }
 	return null;
 }
@@ -168,7 +166,7 @@ JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.getTransfo = function( 
  * @return			True if the property exist and has a value. False Otherwise.
  * @throws UnsupportedEncodingException 
  */
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.setColor = function( s, prop, props) {
+com.socialcomputing.jmi.script.Base.prototype.setColor = function( s, prop, props) {
     var color = getColor( prop, props );
     if ( color != null )
     {
@@ -187,7 +185,7 @@ JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.setColor = function( s,
  * @return			An array of String or null if the property doesn't exists or is void.
  * @throws UnsupportedEncodingException 
  */
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.parseString = function(prop, props) {
+com.socialcomputing.jmi.script.Base.prototype.parseString = function(prop, props) {
     var text = getString( prop, props );
     return text != undefined ? parseString3( text, props ) : null;
 }
@@ -205,7 +203,7 @@ JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.parseString = function(
  */
 //protected function parseString(prop:int, props:Hashtable, isHtm:Boolean):String // throws UnsupportedEncodingException
 // Renommage nom fonction
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.parseString2 = function(prop, props, isHtm) {
+com.socialcomputing.jmi.script.Base.prototype.parseString2 = function(prop, props, isHtm) {
     var text = getString( prop, props );
     return text != undefined ? parseString4( text, props, isHtm ) : undefined;
 }
@@ -221,12 +219,12 @@ JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.parseString2 = function
  */
 //protected function parseString(text:String, props:Hashtable):Array
 // Renommage nom fonction
-JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.parseString3 = function(text, props) {
+com.socialcomputing.jmi.script.Base.prototype.parseString3 = function(text, props) {
 	// Bug fix : javascript
-	var javascript:Boolean = text.substr( 0, 10) == "javascript";
-    var tokens:Vector.<Token> = parseTokens( text );
-    var j:int, n:int, max:int = 0;
-	for each( var token:Token in tokens)
+	var javascript = text.substr( 0, 10) == "javascript";
+    var tokens = parseTokens( text );
+    var j, n, max = 0;
+	for ( var token in tokens)
     {
         n       = token.getListSize( props );
         if ( n == 0)
@@ -236,14 +234,13 @@ JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.parseString3 = function
         }
         max     = Math.max( n, max );
     }
-    var dst:Vector.<String> = new Vector.<String>();
-    var prop:String;
-    
+    var dst = new Array();
+    var prop;
     for ( j = 0; j < max; j ++ )
     {
         dst[j] = "";
         
-		for each( token in tokens)
+		for ( token in tokens)
 		{
 			if( javascript) {
 				token.m_buffer = token.m_buffer.split( ",").join( String.fromCharCode( 0xFFFC));
@@ -273,11 +270,11 @@ JMI_MAP.com.socialcomputing.jmi.script.BagZone.prototype.parseString3 = function
  * @return			A String containing <br> between each lines.
  * @throws UnsupportedEncodingException 
  */
-static public function parseString4( text:String, props:Array, isHtm:Boolean):String {
+com.socialcomputing.jmi.script.Base.parseString4 = function( text, props, isHtm) {
     var tokens = parseTokens( text ),
     	j, n, max = 0;
     
-	for each( var token:Token in tokens)
+	for ( var token in tokens)
     {
         n       = token.getListSize( props );
         if ( n == 0)
@@ -287,12 +284,12 @@ static public function parseString4( text:String, props:Array, isHtm:Boolean):St
         }
         max     = Math.max( n, max );
     }
-    var dst:String= "";
-    var prop:String;
+    var dst= "";
+    var prop;
     
     for ( j = 0; j < max; j ++ )
     {
-		for each( token in tokens)
+		for( token in tokens)
         {
             prop    = token.toString( j, props );
             
@@ -308,7 +305,7 @@ static public function parseString4( text:String, props:Array, isHtm:Boolean):St
  * getNextTokenProp( tokens )       => getNextTokenProp( tokens, token.PROP_BIT, token.SUB_BIT )
  * getNextSubTokenProp( tokens )    => getNextTokenProp( tokens, token.SUB_BIT, 0 )
  */
-/**
+/*
  * Gets the next token String representation matching some flags.
  * This is used only by PlanGenerator to sort "database" and "analysis" properties.
  * The tokens remaining are the ones that include some bits and exclude others.
@@ -324,10 +321,10 @@ static public function parseString4( text:String, props:Array, isHtm:Boolean):St
  * @param excludeBit	The Token to retreive must exclude those bits (Token.XXX_BIT).
  * @return				A String representation of the next matching Token.
  */
-public static function getNextTokenProp( tokens:Vector, includeBit:int, excludeBit:int):String {
+com.socialcomputing.jmi.script.Base.getNextTokenProp = function( tokens, includeBit, excludeBit) {
 	while( tokens.length > 0)
     {
-        var token:Token = tokens.shift();
+        var token = tokens.shift();
         
         if (( token.m_flags & includeBit )!= 0&& ( token.m_flags & excludeBit )== 0)
         {
@@ -337,7 +334,7 @@ public static function getNextTokenProp( tokens:Vector, includeBit:int, excludeB
     return null;
 }
 
-/**
+/*
  * Parse a text String to extract the Tokens inside.
  * A token can be of 3 kinds:
  * <ul>
@@ -348,12 +345,12 @@ public static function getNextTokenProp( tokens:Vector, includeBit:int, excludeB
  * @param text	a text String containing or not properties.
  * @return		a Vector of Tokens matching text.
  */
-public static function parseTokens( text:String):Vector.<Token> {
-    var i:int, j:int = 0, len:int = text.length;
-    var c:String = '0';
-    var isAfterBS:Boolean= false;
-    var token:Token= null;
-    var tokens:Vector.<Token>= new Vector.<Token>();
+com.socialcomputing.jmi.script.Base.parseTokens = function( text) {
+    var i, j = 0, len = text.length,
+		c = '0';
+    var isAfterBS = false;
+    var token = null;
+    var tokens = new Array();
     
     for ( i = 0; i < len; i ++ )
     {
@@ -426,13 +423,13 @@ public static function parseTokens( text:String):Vector.<Token> {
         //			System.out.println( "add Token: " + token.m_buffer );
         //token.m_buffer.setLength( j );
         tokens.push( token );        // store the previous token
-        }
-        
-        return tokens;
     }
     
-private static function setCharAt(str:String, char:String,index:int):String {
-    return str.substr(0,index).concat(char, str.substr(index + 1));
+    return tokens;
+}
+   
+com.socialcomputing.jmi.script.Base.setCharAt = function(str, c,index) {
+    return str.substr(0,index).concat(c, str.substr(index + 1));
 }
 
 /*
@@ -441,7 +438,7 @@ private static function setCharAt(str:String, char:String,index:int):String {
  * @param bit	Index of the bit in [0,31]
  * @return		true if the bit is 1, false otherwise.
  */
-public static function isEnabled( flags:int, bit:int):Boolean {
+com.socialcomputing.jmi.script.Base.isEnabled = function( flags, bits) {
     return ( flags & bit )!= 0;
 }
 
@@ -450,21 +447,21 @@ public static function isEnabled( flags:int, bit:int):Boolean {
  * String representation of a new-line.
  * Separator used by Swatchs to separate URL/Track in "menu, event, item"
  */
-public static const SEP:String= "" + '\n';
+com.socialcomputing.jmi.script.Base.SEP = "\n";
 
 /**
  * String representation of a tab.
  * Separator used by Swatchs to separate URL/Track in "open page"
  */
-public static const SUBSEP:String= "" + '\t';
+com.socialcomputing.jmi.script.Base.SUBSEP = "\t";
 
 /**
  * 2 Pi
  */
-public static const Pi2:Number= 6.2831853;
+com.socialcomputing.jmi.script.Base.Pi2 = 6.2831853;
 
 /**
  * Index of the bit flag prop in VContainer table.
  */
-public static const FLAGS_VAL:int= 0;
+com.socialcomputing.jmi.script.Base.FLAGS_VAL = 0;
 
