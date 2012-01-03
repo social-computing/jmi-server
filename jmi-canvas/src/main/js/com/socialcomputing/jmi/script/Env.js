@@ -64,7 +64,7 @@ JMI.namespace("com.socialcomputing.wps.script.Env") = (function() {
 	Constr = function() {
 	}
 	Constr.prototype = {
-		constructor: com.socialcomputing.jmi.script.BagZone,
+		constructor: com.socialcomputing.jmi.script.Env,
 		version: "2.0"
 	}
 	return Constr;

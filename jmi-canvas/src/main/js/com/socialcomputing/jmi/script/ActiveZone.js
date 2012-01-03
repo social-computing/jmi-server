@@ -35,10 +35,15 @@ JMI.namespace("com.socialcomputing.wps.script.ActiveZone") = (function() {
          */
         m_curData, //:Vector.<SatData>;
          // HTMLText dictionary to avoid unnecessary calcs.
-        m_datas; //:Dictionary;
-	        // end var
+        m_datas, //:Dictionary;
 
-	    return { };
+		Constr = function() {
+		}
+		Constr.prototype = {
+			constructor: com.socialcomputing.jmi.script.ActiveZone,
+			version: "2.0"
+		}
+		return Constr;
 }());
 
 // Constantes
@@ -87,10 +92,10 @@ com.socialcomputing.jmi.script.ActiveZone.prototype.init = function (applet, s, 
         
         // Quick access to Env props
 		m_props["ENV"] = applet.env.m_props;
-        m_datas = new Dictionary();// TODO portage ?
+        m_datas = new Object();
     }
     
-    var isSuper = null; //this is BagZone;// TODO portage ?
+    var isSuper = this instanceof com.socialcomputing.jmi.script.BagZone;
     
     m_restData = m_restSwh.evalSatData( applet, this, isSuper);
     
