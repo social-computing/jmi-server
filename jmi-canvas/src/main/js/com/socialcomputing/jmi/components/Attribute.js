@@ -1,7 +1,7 @@
-package com.socialcomputing.wps.components
+package com.socialcomputing.jmi.components
 {
-	import com.socialcomputing.wps.script.ActiveZone;
-	import com.socialcomputing.wps.script.Env;
+	import com.socialcomputing.jmi.script.ActiveZone;
+	import com.socialcomputing.jmi.script.Env;
 
 	dynamic public class Attribute
 	{

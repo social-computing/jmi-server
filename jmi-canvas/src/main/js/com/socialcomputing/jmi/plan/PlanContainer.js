@@ -1,6 +1,6 @@
-package com.socialcomputing.wps.plan
+package com.socialcomputing.jmi.plan
 {
-	import com.socialcomputing.wps.script.JSONToWPSDecoder;
+	import com.socialcomputing.jmi.script.JSONToWPSDecoder;
 
 	dynamic public class PlanContainer
 	{

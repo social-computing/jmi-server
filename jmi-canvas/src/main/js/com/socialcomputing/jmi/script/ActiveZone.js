@@ -5,13 +5,13 @@
  * through BagZone it can also be a parent zone (superZone).
  * This kind of zone doesn't contains any graphical informations.</p>
  */
-JMI.namespace("com.socialcomputing.wps.script.ActiveZone") = (function() {
+JMI.namespace("com.socialcomputing.jmi.script.ActiveZone") = (function() {
 	// Private methods
 	
     	// Swatch used to render this zone at rest.
-    var m_restSwh = com.socialcomputing.wps.script.Swatch,
+    var m_restSwh = com.socialcomputing.jmi.script.Swatch,
      	//Swatch used to render this zone when it is current (hovered).
-    	m_curSwh = com.socialcomputing.wps.script.Swatch,
+    	m_curSwh = com.socialcomputing.jmi.script.Swatch,
         // Flags holding the previously defined bits (XXX_BIT).
         m_flags,
 		m_props, //Array
@@ -19,7 +19,7 @@ JMI.namespace("com.socialcomputing.wps.script.ActiveZone") = (function() {
          * Bounding-Box of this zone including its subZones.
          * The BBox is the union of the rest and current swatch BBoxs and a small margin.
          */
-        m_bounds = com.socialcomputing.wps.script.Rectangle, 
+        m_bounds = com.socialcomputing.jmi.script.Rectangle, 
          //Flag indicating which of the 32 possible selections are active for this zone.
         m_selection,
          //Parent of this zone if it is clusterized or null if this is already a BagZone.
@@ -48,11 +48,11 @@ JMI.namespace("com.socialcomputing.wps.script.ActiveZone") = (function() {
 
 // Constantes
 // Bit indicating that subnodes of this are located on one side.
-com.socialcomputing.wps.script.ActiveZone.SIDE_BIT = 0x04;
+com.socialcomputing.jmi.script.ActiveZone.SIDE_BIT = 0x04;
 // Bit indicating that subnodes are located on the left side.
-com.socialcomputing.wps.script.ActiveZone.LEFT_BIT = 0x08;
+com.socialcomputing.jmi.script.ActiveZone.LEFT_BIT = 0x08;
 // Bit indicating invisibility.
-com.socialcomputing.wps.script.ActiveZone.INVISIBLE_BIT = 0x10;
+com.socialcomputing.jmi.script.ActiveZone.INVISIBLE_BIT = 0x10;
 
 com.socialcomputing.jmi.script.ActiveZone.prototype.getRestSwatch = function () {
     return m_restSwh;

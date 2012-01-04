@@ -10,7 +10,7 @@
  * @author flugue@mapstan.com
  * @version 1.0
  */
-JMI.namespace("com.socialcomputing.wps.script.Base") = (function() {
+JMI.namespace("com.socialcomputing.jmi.script.Base") = (function() {
 
      // Containers table holding the values of all inheriting class fields.
     var m_containers; //:Array;
@@ -136,7 +136,7 @@ com.socialcomputing.jmi.script.Base.prototype.getFont = function( prop, props) {
  */
 com.socialcomputing.jmi.script.Base.prototype.getColor = function(prop, props) {
 	var value = getValue(prop, props);
-	if( value instanceof com.socialcomputing.wps.script.ColorX) { 
+	if( value instanceof com.socialcomputing.jmi.script.ColorX) { 
 		return value.getColor2(props);
 	}
 	return null;	
@@ -151,7 +151,7 @@ com.socialcomputing.jmi.script.Base.prototype.getColor = function(prop, props) {
  */
 com.socialcomputing.jmi.script.Base.prototype.getTransfo = function( prop, props) {
 	var res = getValue( prop, props );
-    if ( res instanceof com.socialcomputing.wps.script.Transfo )
+    if ( res instanceof com.socialcomputing.jmi.script.Transfo )
     {
 		return res;
     }

@@ -1,4 +1,4 @@
-JMI.namespace("com.socialcomputing.wps.script.Point") = (function() {
+JMI.namespace("com.socialcomputing.jmi.script.Point") = (function() {
 	var x, y, width, height,
 		Constr;
 	
@@ -13,12 +13,12 @@ JMI.namespace("com.socialcomputing.wps.script.Point") = (function() {
 	return Constr;
 }());
 
-com.socialcomputing.wps.script.Point.prototype.add = function( p) {
+com.socialcomputing.jmi.script.Point.prototype.add = function( p) {
 	this.x = this.x + p.x;
 	this.y = this.y + p.y;
 }
 
-com.socialcomputing.wps.script.Point.prototype.substract = function( p) {
+com.socialcomputing.jmi.script.Point.prototype.substract = function( p) {
 	this.x = this.x > p.x ? this.x - p.x : p.x - this.x;
 	this.y = this.y > p.y ? this.y - p.y : p.y - this.y;
 }

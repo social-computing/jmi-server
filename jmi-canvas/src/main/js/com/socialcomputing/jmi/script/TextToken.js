@@ -7,7 +7,7 @@
  * @author flugue@mapstan.com
  * @version 1.0
  */
-JMI.namespace("com.socialcomputing.wps.script.TextToken") = (function() {
+JMI.namespace("com.socialcomputing.jmi.script.TextToken") = (function() {
 
     /**
      * Text to write.
@@ -19,7 +19,7 @@ JMI.namespace("com.socialcomputing.wps.script.TextToken") = (function() {
          * Bounding box of this text.
          * This is used to locate the text and to draw it's background color if it has.
          */
-        m_bounds = com.socialcomputing.wps.script.Rectangle,
+        m_bounds = com.socialcomputing.jmi.script.Rectangle,
     
         /**
          * A Font object describing the size, style and name of the typeFace or null to use the current one.

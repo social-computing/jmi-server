@@ -10,7 +10,7 @@
  * @author flugue@mapstan.com
  * @version 1.0
  */
-JMI.namespace("com.socialcomputing.wps.script.FontX") = (function() {
+JMI.namespace("com.socialcomputing.jmi.script.FontX") = (function() {
 
 	Constr;
 	
@@ -30,7 +30,7 @@ JMI.namespace("com.socialcomputing.wps.script.FontX") = (function() {
  * @param props		A property table that should hold props referenced by this containers.
  * @return			a new Font equivalent to this.
  */
-com.socialcomputing.wps.script.FontX.prototype.getTextFormat = function( props) {
+com.socialcomputing.jmi.script.FontX.prototype.getTextFormat = function( props) {
     var flags = getFlags( props ),
         size = getInt( SIZE_VAL, props );
     var name = getString( NAME_VAL, props ),
@@ -59,15 +59,15 @@ com.socialcomputing.wps.script.FontX.prototype.getTextFormat = function( props) 
 /**
  * Index of the Font name prop in VContainer table
  */
-com.socialcomputing.wps.script.NAME_VAL = 1;
+com.socialcomputing.jmi.script.NAME_VAL = 1;
 
 /**
  * Index of the Font size prop in VContainer table
  */
-com.socialcomputing.wps.script.SIZE_VAL = 2;
+com.socialcomputing.jmi.script.SIZE_VAL = 2;
     
 /**
  * A Font Buffer to reduce temporary Font object creation.
  */
-com.socialcomputing.wps.script.s_fontBuf = new Object();
+com.socialcomputing.jmi.script.s_fontBuf = new Object();
     

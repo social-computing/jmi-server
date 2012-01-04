@@ -5,7 +5,7 @@
  * of the super-class. 
  **/
  
-package com.socialcomputing.wps.services.planservice
+package com.socialcomputing.jmi.services.planservice
 {
 	import com.socialcomputing.serializers.RESTSerializationFilter;
 	import com.socialcomputing.serializers.json.JSONSerializationFilter;

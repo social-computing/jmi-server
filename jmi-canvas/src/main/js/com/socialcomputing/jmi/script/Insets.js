@@ -11,7 +11,7 @@
  * @see         java.awt.Container
  * @since       JDK1.0
  */
-JMI.namespace("com.socialcomputing.wps.script.Insets") = (function() {
+JMI.namespace("com.socialcomputing.jmi.script.Insets") = (function() {
 /*
  * The inset from the top.
  * This value is added to the Top of the rectangle

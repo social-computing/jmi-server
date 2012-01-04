@@ -1,4 +1,4 @@
-package com.socialcomputing.wps.util
+package com.socialcomputing.jmi.util
 {
 	import mx.utils.URLUtil;
 

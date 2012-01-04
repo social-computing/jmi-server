@@ -1,4 +1,4 @@
-package com.socialcomputing.wps.script  {
+package com.socialcomputing.jmi.script  {
     import flash.text.TextFormat;
     
     import mx.collections.ArrayCollection;

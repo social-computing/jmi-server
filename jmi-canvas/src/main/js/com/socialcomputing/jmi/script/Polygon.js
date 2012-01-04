@@ -1,10 +1,10 @@
-JMI.namespace("com.socialcomputing.wps.script.Polygon") = (function() {
+JMI.namespace("com.socialcomputing.jmi.script.Polygon") = (function() {
 
 	var npoints, //:int;
 		xpoints, //:Vector.<int>;
 		ypoints, //:Vector.<int>;
 
-		bounds = com.socialcomputing.wps.script.Rectangle,
+		bounds = com.socialcomputing.jmi.script.Rectangle,
 		Constr;
 	
 	Constr = function() {
@@ -111,7 +111,7 @@ com.socialcomputing.jmi.script.Polygon.prototype.addPoint = function(x, y) {
  */
 com.socialcomputing.jmi.script.Polygon.prototype.getBounds = function() {
     if (npoints == 0) {
-        return new com.socialcomputing.wps.script.Rectangle( 0, 0, 0, 0);
+        return new com.socialcomputing.jmi.script.Rectangle( 0, 0, 0, 0);
     }
     if (bounds == null) {
         this.calculateBounds(xpoints, ypoints, npoints);
@@ -174,8 +174,8 @@ com.socialcomputing.jmi.script.Polygon.prototype.containsCrossing = function(p) 
  * @param npoints the total number of points
  */
 com.socialcomputing.jmi.script.Polygon.prototype.calculateBounds = function(xpoints, ypoints, npoints) {
-	var minPoint = new com.socialcomputing.wps.script.Point(xpoints[0], ypoints[0]);
-	var maxPoint = new com.socialcomputing.wps.script.Point(xpoints[0], ypoints[0]);
+	var minPoint = new com.socialcomputing.jmi.script.Point(xpoints[0], ypoints[0]);
+	var maxPoint = new com.socialcomputing.jmi.script.Point(xpoints[0], ypoints[0]);
 	
 	for (var i = 1 ; i < npoints ; i++) {
 		minPoint.x = Math.min(minPoint.x, xpoints[i]);

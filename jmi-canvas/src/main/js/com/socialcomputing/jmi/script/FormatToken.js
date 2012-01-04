@@ -7,11 +7,11 @@
  * @author flugue@mapstan.com
  * @version 1.0
  */
-JMI.namespace("com.socialcomputing.wps.script.FormatToken") = (function() {
+JMI.namespace("com.socialcomputing.jmi.script.FormatToken") = (function() {
     /**
      * Current line margins.
      */
-    var m_margin = com.socialcomputing.wps.script.Insets,
+    var m_margin = com.socialcomputing.jmi.script.Insets,
     
     /**
      * Current line maximum ascent (Top of the highest letter)

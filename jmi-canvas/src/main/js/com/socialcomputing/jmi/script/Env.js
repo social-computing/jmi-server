@@ -8,7 +8,7 @@
  * @author flugue@mapstan.com
  * @version 1.0
  */
-JMI.namespace("com.socialcomputing.wps.script.Env") = (function() {
+JMI.namespace("com.socialcomputing.jmi.script.Env") = (function() {
 	
 /*
  * Contains XXX_BIT(s).

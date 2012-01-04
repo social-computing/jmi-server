@@ -1,4 +1,4 @@
-/**
+/*
  * <p>Title: SatData</p>
  * <p>Description: Bufferized satellites data of the swatchs.<vr>
  * Each satellite have its SatData buffer.
@@ -11,7 +11,7 @@
  * @author flugue@mapstan.com
  * @version 1.0
  */
-JMI.namespace("com.socialcomputing.wps.script.SatData") = (function() {
+JMI.namespace("com.socialcomputing.jmi.script.SatData") = (function() {
 
     // :int;
     var _m_flags, 

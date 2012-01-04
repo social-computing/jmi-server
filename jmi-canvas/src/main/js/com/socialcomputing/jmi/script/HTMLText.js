@@ -1,7 +1,7 @@
-package com.socialcomputing.wps.script{
-    import com.socialcomputing.wps.components.Map;
-    import com.socialcomputing.wps.util.controls.ImageUtil;
-    import com.socialcomputing.wps.util.shapes.RectangleUtil;
+package com.socialcomputing.jmi.script{
+    import com.socialcomputing.jmi.components.Map;
+    import com.socialcomputing.jmi.util.controls.ImageUtil;
+    import com.socialcomputing.jmi.util.shapes.RectangleUtil;
     
     import flash.display.Sprite;
     import flash.filters.BlurFilter;

@@ -7,15 +7,15 @@
      * @author flugue@mapstan.com
      * @version 1.0
      */
-JMI.namespace("com.socialcomputing.wps.script.LinkZone") = (function() {
+JMI.namespace("com.socialcomputing.jmi.script.LinkZone") = (function() {
     /*
      * The Place from which the link start.
      */
-    var m_from = com.socialcomputing.wps.script.BagZone,
+    var m_from = com.socialcomputing.jmi.script.BagZone,
     /*
      * The Place to which the link end.
      */
-    	m_to = com.socialcomputing.wps.script.BagZone,
+    	m_to = com.socialcomputing.jmi.script.BagZone,
     
 	/*
 	 * Index of Bagzone (temporary during JSON desrialization).
@@ -116,7 +116,7 @@ com.socialcomputing.jmi.script.LinkZone.prototype.paintCur = function(applet){
 	/*bufGfx.translate( m_bounds.x, m_bounds.y );
 	g.setClip( m_bounds.x, m_bounds.y, m_bounds.width, m_bounds.height );
 	g.drawImage( applet.m_plan.m_blitBuf, m_bounds.x, m_bounds.y, null );*/
-	applet.renderShape( applet.curDrawingSurface, m_bounds.width, m_bounds.height, new com.socialcomputing.wps.script.Point(m_bounds.x, m_bounds.y));
+	applet.renderShape( applet.curDrawingSurface, m_bounds.width, m_bounds.height, new com.socialcomputing.jmi.script.Point(m_bounds.x, m_bounds.y));
 	
 
 	// Get the image buffer used as blit buffer 

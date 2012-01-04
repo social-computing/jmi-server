@@ -9,7 +9,7 @@
  * @author flugue@mapstan.com
  * @version 1.0
  */
-JMI.namespace("com.socialcomputing.wps.script.Transfo") = (function() {
+JMI.namespace("com.socialcomputing.jmi.script.Transfo") = (function() {
 
     // Class variables
     /**
@@ -75,7 +75,7 @@ JMI.namespace("com.socialcomputing.wps.script.Transfo") = (function() {
      * @return		A new Point holding the coordinates of the translation. // :Point 
      */
     this.prototype.getCart = function() {
-        return new com.socialcomputing.wps.script.Point(m_dir, m_pos);  
+        return new com.socialcomputing.jmi.script.Point(m_dir, m_pos);  
     };
 
     // Public API
@@ -91,16 +91,16 @@ JMI.namespace("com.socialcomputing.wps.script.Transfo") = (function() {
  * True if this translation use cartesian coordinates or false if they are polar.
  * Cartesian are used for bitmaps (font, images) and polar for subzone positioning around the Place.
  */
-com.socialcomputing.wps.script.Transfo.CART_BIT = 0x01;
+com.socialcomputing.jmi.script.Transfo.CART_BIT = 0x01;
 
 /**
  * True if the translation is in absolute units(pixels), false if it is relative to the shape center.
  * ABS_BIT is used to locate font at the exact pixel and thus make useful masks.
  */
-com.socialcomputing.wps.script.Transfo.ABS_BIT = 0x02;
+com.socialcomputing.jmi.script.Transfo.ABS_BIT = 0x02;
 
 /**
  * True if the position is bilineary interpolated.
  * In this case the position depends on the shape who use this Transfo.
  */
-com.socialcomputing.wps.script.Transfo.INTER_BIT = 0x04;
+com.socialcomputing.jmi.script.Transfo.INTER_BIT = 0x04;

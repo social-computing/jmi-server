@@ -1,4 +1,4 @@
-package com.socialcomputing.wps.util {
+package com.socialcomputing.jmi.util {
     
 
     public class StringTokenizer 

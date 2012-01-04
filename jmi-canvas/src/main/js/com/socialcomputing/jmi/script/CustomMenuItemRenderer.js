@@ -1,4 +1,4 @@
-package com.socialcomputing.wps.script {
+package com.socialcomputing.jmi.script {
     import mx.controls.menuClasses.MenuItemRenderer;
     
     [Bindable]

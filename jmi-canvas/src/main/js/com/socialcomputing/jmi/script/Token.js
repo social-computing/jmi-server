@@ -7,7 +7,7 @@
  * @author flugue@mapstan.com
  * @version 1.0
  */
-JMI.namespace("com.socialcomputing.wps.script.Token") = (function() {
+JMI.namespace("com.socialcomputing.jmi.script.Token") = (function() {
 
     /**
      * The label of the Token.
@@ -361,41 +361,41 @@ JMI.namespace("com.socialcomputing.wps.script.Token") = (function() {
  * This lookup mecanism is also used in swatchs and find the properties in Zones table.
  */ 
  // :int
-com.socialcomputing.wps.script.Token.PROP_BIT = 0x0001;
+com.socialcomputing.jmi.script.Token.PROP_BIT = 0x0001;
         
 /**
  * True if this is a list property.
  * A list property is an Array of Objects used to create multi-lines GUI like menus or tips.
  */
  // :int
-com.socialcomputing.wps.script.Token.LIST_BIT = 0x0002;
+com.socialcomputing.jmi.script.Token.LIST_BIT = 0x0002;
 
 /**
  * True if this is a numerical property.
  * Sometimes a property is retrieved as a Number (int, float...) so we need to convert it to a String.
  */
  // :int
-com.socialcomputing.wps.script.Token.NUM_BIT = 0x0004;
+com.socialcomputing.jmi.script.Token.NUM_BIT = 0x0004;
 
 /**
  * True if this is a floating point property.
  */
  // :int
-com.socialcomputing.wps.script.Token.FLOAT_BIT = 0x0008;
+com.socialcomputing.jmi.script.Token.FLOAT_BIT = 0x0008;
 
 /**
  * True if this is right justificated.
  * Default text alignment in list properties is left.
  */
  // :int
-com.socialcomputing.wps.script.Token.RIGHT_BIT = 0x0010;
+com.socialcomputing.jmi.script.Token.RIGHT_BIT = 0x0010;
 
 /**
  * True if this length is bound.
  * That means the number of characters of the property is limited.
  */
  // :int
-com.socialcomputing.wps.script.Token.BOUND_BIT = 0x0020;
+com.socialcomputing.jmi.script.Token.BOUND_BIT = 0x0020;
 
 /**
  * True if this is a SubProp.
@@ -404,21 +404,21 @@ com.socialcomputing.wps.script.Token.BOUND_BIT = 0x0020;
  * @see         RecommendationGroup
  */
  // :int
-com.socialcomputing.wps.script.Token.SUB_BIT = 0x0040;
+com.socialcomputing.jmi.script.Token.SUB_BIT = 0x0040;
 
 /**
  * True if this must be URLEncoded.
  * Usefull for creating CGI URLs using props.
  */
  // :int
-com.socialcomputing.wps.script.Token.URLCOD_BIT = 0x0080;
+com.socialcomputing.jmi.script.Token.URLCOD_BIT = 0x0080;
 
 /**
  * True if this property is global for the Plan.
  * This means the property should be retrieved from the Env table.
  */
  // :int
-com.socialcomputing.wps.script.Token.GLOBAL_BIT = 0x0100;
+com.socialcomputing.jmi.script.Token.GLOBAL_BIT = 0x0100;
 
 /**
  * True if this list property is required.
@@ -426,4 +426,4 @@ com.socialcomputing.wps.script.Token.GLOBAL_BIT = 0x0100;
  * This is usefull to avoid displaying empty submenus or tips.
  */
  // :int
-com.socialcomputing.wps.script.Token.NEEDED_BIT = 0x0200;
+com.socialcomputing.jmi.script.Token.NEEDED_BIT = 0x0200;

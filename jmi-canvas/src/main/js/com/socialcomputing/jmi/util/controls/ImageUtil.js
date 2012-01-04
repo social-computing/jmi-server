@@ -1,6 +1,6 @@
-package com.socialcomputing.wps.util.controls
+package com.socialcomputing.jmi.util.controls
 {
-	import com.socialcomputing.wps.script.Dimension;
+	import com.socialcomputing.jmi.script.Dimension;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;

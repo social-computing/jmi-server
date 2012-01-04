@@ -1,4 +1,4 @@
-JMI.namespace("com.socialcomputing.wps.script.Rectangle") = (function() {
+JMI.namespace("com.socialcomputing.jmi.script.Rectangle") = (function() {
 	var x, y, width, height,
 		Constr;
 	
@@ -22,7 +22,7 @@ JMI.namespace("com.socialcomputing.wps.script.Rectangle") = (function() {
  * @param dst	Destination Rectangle that will hold its union with src.
  * @param src	Source Rectangle.
  */
-com.socialcomputing.wps.script.Rectangle.prototype.merge = function(src) {
+com.socialcomputing.jmi.script.Rectangle.prototype.merge = function(src) {
 	if(this.width * this.height != 0) {
 		this.union( src);
 	}
@@ -31,7 +31,7 @@ com.socialcomputing.wps.script.Rectangle.prototype.merge = function(src) {
 	}
 }
 
-com.socialcomputing.wps.script.Rectangle.prototype.union = function(src) {
+com.socialcomputing.jmi.script.Rectangle.prototype.union = function(src) {
 	this.x = Math.min( this.x, src.x);
 	this.y = Math.min( this.y, src.y);
 	this.width = this.width + src.width - Math.min( this.x + this.width - src.x, src.x + src.width - this.x);
@@ -45,7 +45,7 @@ com.socialcomputing.wps.script.Rectangle.prototype.union = function(src) {
  * @param src Source Rectangle to copy the values from
  * 
  */
-com.socialcomputing.wps.script.Rectangle.prototype.copy = function(src) {
+com.socialcomputing.jmi.script.Rectangle.prototype.copy = function(src) {
 	this.x = src.x;
 	this.y = src.y
 	this.width = src.width;

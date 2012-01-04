@@ -1,7 +1,7 @@
-package com.socialcomputing.wps.script  {
+package com.socialcomputing.jmi.script  {
 	
-	import com.socialcomputing.wps.components.Map;
-	import com.socialcomputing.wps.util.shapes.RectangleUtil;
+	import com.socialcomputing.jmi.components.Map;
+	import com.socialcomputing.jmi.util.shapes.RectangleUtil;
 	
 	import flash.display.Graphics;
 	import flash.display.Sprite;

@@ -7,7 +7,7 @@
  * @author flugue@mapstan.com
  * @version 1.0
  */
-JMI.namespace("com.socialcomputing.wps.script.ColorX") = (function() {
+JMI.namespace("com.socialcomputing.jmi.script.ColorX") = (function() {
 /*
  * A 32 bit int that hold Color invormation in ARGB format.
  * Each component is a 8 bits value:
