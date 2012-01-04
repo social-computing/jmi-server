@@ -558,7 +558,7 @@
 				this._offScreen.draw(sprite, new Matrix());
 				
 				// Copying the content of the back buffer on screen
-				var sourceZone:Rectangle = new Rectangle(position.x, position.y, width, height);
+				var sourceZone = new com.socialcomputing.wps.script.Rectangle(position.x, position.y, width, height);
 				_onScreen.copyPixels(this._offScreen, sourceZone, position);
 			}
 		}

@@ -239,7 +239,7 @@ package com.socialcomputing.wps.script  {
                 if ( HTMLText.isEnabled( text.getFlags( zone.m_props), HTMLText.URL_BIT ))
                 {
                     if ( m_htmlTxt != null )
-						RectangleUtil.copy( bounds, m_htmlTxt.m_bounds );
+						bounds.copy( m_htmlTxt.m_bounds );
                 }
                 else
                 {
@@ -250,7 +250,7 @@ package com.socialcomputing.wps.script  {
                     htmlTxt = text.getHText( applet, null, zone, transfo, satCtr, supCtr, text);
                     if ( htmlTxt != null && htmlTxt.m_text.length > 0)
                     {
-                        RectangleUtil.merge( bounds, htmlTxt.m_bounds );
+                        bounds.merge( htmlTxt.m_bounds );
                     }
                     
                 }

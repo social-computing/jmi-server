@@ -60,8 +60,7 @@ package com.socialcomputing.wps.script  {
         /**
          * Bounding box of the Plan before resizing (pixels).
          */
-        [transient]
-        public var m_prevBox:Rectangle;
+        m_prevBox = com.socialcomputing.wps.script.Rectangle;
         
         /**
          * Maximum bounding box of all zones. This is also the m_blitBuf size.
@@ -116,7 +115,7 @@ package com.socialcomputing.wps.script  {
             var dim:Dimension = m_applet.size;
             
             // Reset the BBOX of the biggest zone
-            m_prevBox = new Rectangle(dim.width >> 1, dim.height >> 1, 1, 1);
+            m_prevBox = new com.socialcomputing.wps.script.Rectangle(dim.width >> 1, dim.height >> 1, 1, 1);
             
             if (zones == m_links) m_maxBox = new Dimension(0, 0);
             
@@ -445,9 +444,7 @@ package com.socialcomputing.wps.script  {
                     zone.m_props["_SCALE"] = s * scale;
                     zone.m_datas.length=0;
                 }
-                m_prevBox = new Rectangle();
-				m_prevBox.height = dim.height;
-				m_prevBox.width = dim.width; 
+                m_prevBox = new com.socialcomputing.wps.script.Rectangle(0, 0, dim.height, dim.width);
             }
         }
         

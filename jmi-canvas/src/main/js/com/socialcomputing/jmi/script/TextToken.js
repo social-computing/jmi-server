@@ -19,8 +19,7 @@ JMI.namespace("com.socialcomputing.wps.script.TextToken") = (function() {
          * Bounding box of this text.
          * This is used to locate the text and to draw it's background color if it has.
          */
-        // :Rectangle
-        m_bounds,
+        m_bounds = com.socialcomputing.wps.script.Rectangle,
     
         /**
          * A Font object describing the size, style and name of the typeFace or null to use the current one.

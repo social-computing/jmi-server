@@ -46,7 +46,7 @@ JMI.namespace("com.socialcomputing.wps.script.TipTimer") = (function() {
 		this._zone = zone;
 		this._slice = slice;
 		this._key = key;
-		this._bounds = new Rectangle(); 
+		this._bounds = new Rectanglecom.socialcomputing.wps.script.Rectangle(0, 0, 0, 0);
 		this._started = false;
 		
 		this.start = start;
@@ -94,7 +94,7 @@ JMI.namespace("com.socialcomputing.wps.script.TipTimer") = (function() {
 					// Asynchronous URL content loaded (bounds not set)
 					slice.setBounds( _plan.m_applet, _plan.m_applet.curDrawingSurface.graphics, zone.getParent(), zone, null, null, null, _bounds );
 				}
-				_plan.m_applet.renderShape( _plan.m_applet.restDrawingSurface, _bounds.width, _bounds.height, new Point( _bounds.x, _bounds.y));
+				_plan.m_applet.renderShape( _plan.m_applet.restDrawingSurface, _bounds.width, _bounds.height, new com.socialcomputing.wps.script.Point( _bounds.x, _bounds.y));
 				if( full) _plan.paintCurZone();
 			}
 			// TODO : portage : delete keyword in javascript ?
@@ -113,7 +113,7 @@ JMI.namespace("com.socialcomputing.wps.script.TipTimer") = (function() {
 			var pos = _plan.m_applet.curPos;
 			slice.paint( _plan.m_applet, _plan.m_applet.curDrawingSurface, zone.getParent(), zone, null, pos, null );
 			slice.setBounds( _plan.m_applet, _plan.m_applet.curDrawingSurface.graphics, zone.getParent(), zone, null, pos, null, _bounds );
-			_plan.m_applet.renderShape( _plan.m_applet.curDrawingSurface, _bounds.width, _bounds.height, new Point( _bounds.x, _bounds.y));
+			_plan.m_applet.renderShape( _plan.m_applet.curDrawingSurface, _bounds.width, _bounds.height, new com.socialcomputing.wps.script.Point( _bounds.x, _bounds.y));
 		}
 		if( duration != -1) {
 		    // TODO portage : timer in javascript

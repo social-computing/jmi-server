@@ -90,7 +90,7 @@ package com.socialcomputing.wps.script  {
                 x = p.x + int(scale * Math.cos(transfo.m_dir));
                 y = p.y + int(scale * Math.sin(transfo.m_dir));
 				
-                return new Point(x, y);
+                return new com.socialcomputing.wps.script.Point(x, y);
             }
             
             return null;
@@ -104,7 +104,7 @@ package com.socialcomputing.wps.script  {
         public function getCenter(zone:ActiveZone):Point {
             var points:Array     = getValue(POLYGON_VAL, zone.m_props) as Array;
             var p:Point;
-            var c:Point = new Point(points[0].x,  points[0].y);
+            var c:Point = new com.socialcomputing.wps.script.Point(points[0].x,  points[0].y);
             var i:int;
             var n:int     = points.length;
             
@@ -139,7 +139,7 @@ package com.socialcomputing.wps.script  {
             
             var points:Array = getValue(POLYGON_VAL, zone.m_props) as Array;
             var shapeCenter:Point   = this.getCenter(zone);
-            var shapePosition:Point = new Point();
+            var shapePosition:Point = new com.socialcomputing.wps.script.Point(0,0);
             var size:Number = int(this.getShapePos(zone, transfo, center, shapeCenter, shapePosition));
             var nbPoint:int = points.length;
             var ret:Boolean;
@@ -156,8 +156,8 @@ package com.socialcomputing.wps.script  {
                     
                     // 2 points = segment => Street
                 case 2:     
-                    var fromPoint:Point = (points[0] as Point).add(shapePosition);
-                    var toPoint:Point = (points[1] as Point).add(shapePosition);
+                    var fromPoint:Point = points[0].add(shapePosition);
+                    var toPoint:Point = points[1].add(shapePosition);
                     var poly:Polygon = getLinkPoly(zone, fromPoint, toPoint, size);
                     
                     // DEBUG
@@ -191,8 +191,8 @@ package com.socialcomputing.wps.script  {
             if (isDefined(SCALE_VAL)) {
                 var points:Array = getValue(POLYGON_VAL, zone.m_props) as Array;
                 var shapeCenter:Point = getCenter(zone);
-                var shapePos:Point = new Point();
-                var rect:Rectangle = null;
+                var shapePos:Point = new com.socialcomputing.wps.script.Point(0, 0);
+                var rect = com.socialcomputing.wps.script.Rectangle;
                 var n:int          = points.length;
                 var size:Number    = int(getShapePos(zone, transfo, center, shapeCenter, shapePos));
                 
@@ -201,7 +201,7 @@ package com.socialcomputing.wps.script  {
                     case 1:     
                         // var width:int = size << 1;
                         size = size * 2;
-                        rect = new Rectangle(shapeCenter.x + shapePos.x - size / 2 ,
+                        rect = new com.socialcomputing.wps.script.Rectangle(shapeCenter.x + shapePos.x - size / 2 ,
                             shapeCenter.y + shapePos.y - size / 2 ,
                             size,
                             size);
@@ -213,8 +213,8 @@ package com.socialcomputing.wps.script  {
                     
                     // 2 points = segment => Street
                     case 2:     
-                        var A:Point = (points[0] as Point).add(shapePos);
-                        var B:Point = (points[1] as Point).add(shapePos);
+                        var A:Point = points[0].add(shapePos);
+                        var B:Point = points[1].add(shapePos);
                         rect = getLinkPoly(zone, A, B, size).getBounds();
                         
                         // DEBUG
@@ -225,7 +225,7 @@ package com.socialcomputing.wps.script  {
                         break;
                 }
                 
-                RectangleUtil.merge(bounds, rect);
+                bounds.merge( rect);
             }
         }
         
@@ -261,7 +261,7 @@ package com.socialcomputing.wps.script  {
                 
                 var points:Array = getValue(POLYGON_VAL, supZone.m_props) as Array;
                 var p:Point = points[0] as Point;
-                var shapePos:Point = new Point();
+                var shapePos:Point = new com.socialcomputing.wps.script.Point( 0, 0);
                 var n:int = points.length;
                 var i:int;
                 var size:Number = int(getShapePos(supZone, transfo, center, p, shapePos));
@@ -306,8 +306,8 @@ package com.socialcomputing.wps.script  {
                         /*composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f;					
                         g.setComposite(composite);*/
                         
-						var fromPoint:Point = (points[0] as Point).add(shapePos);
-                        var toPoint:Point = (points[1] as Point).add(shapePos);
+						var fromPoint:Point = points[0].add(shapePos);
+                        var toPoint:Point = points[1].add(shapePos);
                         var poly:Polygon = getLinkPoly(supZone, fromPoint, toPoint, (((size + 3) / 2)));
 						
 						color = slice.getColor(Slice.OUT_COL_VAL, supZone.m_props);
@@ -364,7 +364,7 @@ package com.socialcomputing.wps.script  {
             
             poly    = new Polygon();
             
-            var N:Point= new Point( B.x - A.x, B.y - A.y );
+            var N:Point= new com.socialcomputing.wps.script.Point( B.x - A.x, B.y - A.y );
             var len:int= int(Math.sqrt( N.x * N.x + N.y * N.y ));
             
             if ( len != 0)
@@ -495,7 +495,7 @@ package com.socialcomputing.wps.script  {
 			var imageClone:Bitmap = new Bitmap(image.bitmapData);
 			
 			var p:Point        = getCenter(zone);
-			var shapePos:Point = new Point();
+			var shapePos:Point = new com.socialcomputing.wps.script.Point(0, 0);
 			var scale:Number   = getShapePos(zone, transfo, center, p, shapePos);
 			var imageWidth:int = imageClone.width;
 			var imageScale:int = imageWidth;
@@ -538,7 +538,7 @@ package com.socialcomputing.wps.script  {
         private function getShapePos(zone:ActiveZone, transfo:Transfo, center:Point, p0:Point, pos:Point):Number {
             var scale:Number = getFloat(SCALE_VAL, zone.m_props);
             
-            var p:Point;
+            var p = com.socialcomputing.wps.script.Point;
             
             // We are drawing a real Sat!
             if(center != null) {
@@ -565,7 +565,7 @@ package com.socialcomputing.wps.script  {
          * @return		a new Point that is len x P unnormailzed.
          */
         protected static function scalePnt( P:Point, len:int):Point {
-            return new Point(( P.x * len )>> 16, ( P.y * len )>> 16);
+            return new com.socialcomputing.wps.script.Point(( P.x * len )>> 16, ( P.y * len )>> 16);
         }
         
         /**

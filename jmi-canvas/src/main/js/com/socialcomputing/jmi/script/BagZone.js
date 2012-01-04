@@ -157,7 +157,7 @@ com.socialcomputing.jmi.script.BagZone.prototype.paintCur = function (applet) {
 		g.setClip( m_bounds.x, m_bounds.y, m_bounds.width, m_bounds.height );
 		g.drawImage( applet.m_plan.m_blitBuf, m_bounds.x, m_bounds.y, null );
 */
-		applet.renderShape( applet.curDrawingSurface, m_bounds.width, m_bounds.height, new Point(m_bounds.x, m_bounds.y));
+		applet.renderShape( applet.curDrawingSurface, m_bounds.width, m_bounds.height, new com.socialcomputing.wps.script.Point(m_bounds.x, m_bounds.y));
 }
 
 com.socialcomputing.jmi.script.BagZone.prototype.get_m_dir = function () {

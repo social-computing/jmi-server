@@ -19,7 +19,7 @@ JMI.namespace("com.socialcomputing.wps.script.ActiveZone") = (function() {
          * Bounding-Box of this zone including its subZones.
          * The BBox is the union of the rest and current swatch BBoxs and a small margin.
          */
-        m_bounds, //Rectangle;
+        m_bounds = com.socialcomputing.wps.script.Rectangle, 
          //Flag indicating which of the 32 possible selections are active for this zone.
         m_selection,
          //Parent of this zone if it is clusterized or null if this is already a BagZone.

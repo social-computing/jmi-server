@@ -312,8 +312,8 @@ package com.socialcomputing.wps.script{
 				 textField.htmlText = this.m_text;
 				 textField.autoSize = TextFieldAutoSize.LEFT;
 				 textField.antiAliasType = AntiAliasType.ADVANCED;
-				 this.m_bounds = new Rectangle();
-				 RectangleUtil.copy( this.m_bounds, textField.getBounds( applet));
+				 this.m_bounds = new com.socialcomputing.jmi.script.Rectangle();
+				 this.m_bounds.copy( textField.getBounds( applet));
 				 if( this.m_outCol != null) {
 					 this.m_bounds.width += (BORDER_WIDTH*2);
 					 this.m_bounds.height += (BORDER_WIDTH*2);

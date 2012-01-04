@@ -200,7 +200,7 @@ package com.socialcomputing.wps.script  {
          * @return				This swatch bounding box for zone.
          */
          public function getBounds(applet:Map, g:Graphics, zone:ActiveZone, isCurZone:Boolean):Rectangle {
-            var bounds:Rectangle = new Rectangle();
+            var bounds:Rectangle = new com.socialcomputing.wps.script.Rectangle(0, 0, 0, 0);
             var sat:Satellite    = m_satellites[0];
             var shape:ShapeX     = sat.m_shape;
             var isBag:Boolean    = zone is BagZone;

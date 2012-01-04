@@ -75,10 +75,7 @@ JMI.namespace("com.socialcomputing.wps.script.Transfo") = (function() {
      * @return		A new Point holding the coordinates of the translation. // :Point 
      */
     this.prototype.getCart = function() {
-        //TODO : Portage
-        // return new Point(int(m_dir), int(m_pos));
-        // TODO : portage, add namespace prefix
-        return new Point(m_dir, m_pos);  
+        return new com.socialcomputing.wps.script.Point(m_dir, m_pos);  
     };
 
     // Public API
