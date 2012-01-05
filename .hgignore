@@ -8,6 +8,7 @@ syntax: glob
 .flexProperties
 .flexConfig.xml
 .actionScriptProperties
+.class
 target
 bin-debug
 bin-release
@@ -20,6 +21,5 @@ syntax: regexp
 
 .orig
 .metadata
-.class
 .jar
 .war
