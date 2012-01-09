@@ -31,6 +31,7 @@ TestCase("JMITestCase", {
         var ns = JMI.namespace("com");
         assertEquals({}, ns);
         assertEquals({}, JMI.com);
+        assertEquals(JMI.com, ns);
         
         // Calling the namespace with an empty argument again
         // should return the new root namespace with com as subname

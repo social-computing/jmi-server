@@ -1,3 +1,5 @@
+JMI.namespace("script.Transfo");
+
 /**
  * <p>Title: Transfo</p>
  * <p>Description: A geometric transformation<br>
@@ -9,7 +11,7 @@
  * @author flugue@mapstan.com
  * @version 1.0
  */
-JMI.namespace("script.Transfo") = (function() {
+JMI.script.Transfo = (function() {
 
     /**
      * Constructor
@@ -28,7 +30,7 @@ JMI.namespace("script.Transfo") = (function() {
     };
 
     Transfo.prototype = {
-        constructor: jmi.script.Transfo,
+        constructor: JMI.script.Transfo,
         /**
          * Transform an already defined Transfo using this one.
          * 
@@ -41,10 +43,10 @@ JMI.namespace("script.Transfo") = (function() {
         transform: function(transfo, isForward) {
             // TODO : portage, add namespace prefix
             if (transfo == null || this._flags != transfo._flags) {
-                return new jmi.script.Transfo(this._direction, this._position, this._scale, this._flags);
+                return new JMI.script.Transfo(this._direction, this._position, this._scale, this._flags);
             }
             else {
-                return new jmi.script.Transfo(this._direction + transfo._direction, this._position * transfo._position,
+                return new JMI.script.Transfo(this._direction + transfo._direction, this._position * transfo._position,
                                               this._scale * transfo._scale, this._flags);
             }
         },
@@ -55,7 +57,7 @@ JMI.namespace("script.Transfo") = (function() {
          * @return A new Point holding the coordinates of the translation. // :Point 
          */
         getCart: function() {
-            return new jmi.script.Point(this._direction, this._position);  
+            return new JMI.script.Point(this._direction, this._position);  
         }
     };
     
@@ -67,16 +69,16 @@ JMI.namespace("script.Transfo") = (function() {
  * True if this translation use cartesian coordinates or false if they are polar.
  * Cartesian are used for bitmaps (font, images) and polar for subzone positioning around the Place.
  */
-jmi.script.Transfo.CART_BIT = 0x01;
+JMI.script.Transfo.CART_BIT = 0x01;
 
 /**
  * True if the translation is in absolute units(pixels), false if it is relative to the shape center.
  * ABS_BIT is used to locate font at the exact pixel and thus make useful masks.
  */
-jmi.script.Transfo.ABS_BIT = 0x02;
+JMI.script.Transfo.ABS_BIT = 0x02;
 
 /**
  * True if the position is bilineary interpolated.
  * In this case the position depends on the shape who use this Transfo.
  */
-jmi.script.Transfo.INTER_BIT = 0x04;
+JMI.script.Transfo.INTER_BIT = 0x04;
