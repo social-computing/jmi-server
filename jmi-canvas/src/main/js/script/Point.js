@@ -1,24 +1,28 @@
-JMI.namespace("com.socialcomputing.jmi.script.Point") = (function() {
-	var x, y, width, height,
-		Constr;
+JMI.namespace("script.Point");
+
+JMI.script.Point = (function() {
+    
+    var Point = function(x, y) {
+	    this._x = x;
+	    this._y = y;
+	};
 	
-	Constr = function( x, y) {
-	    this.x = x;
-	    this.y = y;
-	}
-	Constr.prototype = {
-		constructor: com.socialcomputing.jmi.script.Point,
-		version: "2.0"
-	}
-	return Constr;
+	Point.prototype = {
+		constructor: JMI.script.Point,
+		
+        add: function(p) {
+            this._x = this._x + p._x;
+            this._y = this._y + p._y;
+            return this;
+        },
+        
+        substract: function(p) {
+            this._x = this._x > p._x ? this._x - p._x : p._x - this._x;
+            this._y = this._y > p._y ? this._y - p._y : p._y - this._y;
+            return this;
+        },
+	};
+	
+	return Point;
 }());
 
-com.socialcomputing.jmi.script.Point.prototype.add = function( p) {
-	this.x = this.x + p.x;
-	this.y = this.y + p.y;
-}
-
-com.socialcomputing.jmi.script.Point.prototype.substract = function( p) {
-	this.x = this.x > p.x ? this.x - p.x : p.x - this.x;
-	this.y = this.y > p.y ? this.y - p.y : p.y - this.y;
-}
