@@ -4,6 +4,7 @@
 
 /**
  * Animal class definition
+ * Using the prototype javascript 'native' method
  */
 var Animal = function(name, age){
     this.name = name;
@@ -18,18 +19,20 @@ Animal.prototype.sleep = function() {
 
 /**
  * Create a class Cat that inherits from Animal
+ * Using #3 classical pattern method - Rent and Set prototype 
  */
-// Redefine constructor 
+// Child constuctor   
 var Cat = function(name, age, weight) {
-    // call the parent class constructor
-    Animal.call(this, name, age);
+    // Call the parent class constructor
+    Animal.apply(this, arguments);
     this.weight = weight;
 };
 
-
-// Inherit from Animal methods 
-Cat.prototype = new Animal();
-Cat.prototype.constructor = Animal;
+// Inherit from Animal methods
+// Calling the animal constuctor with empty parameters 
+Cat.prototype = new Animal(); 
+// Redefine constructor : usefull for runtime instrospection
+Cat.prototype.constructor = Cat;
 
 
 // Override talk method
