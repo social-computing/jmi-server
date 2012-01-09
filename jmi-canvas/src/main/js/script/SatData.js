@@ -1,3 +1,5 @@
+JMI.namespace("script.SatData");
+
 /*
  * <p>Title: SatData</p>
  * <p>Description: Bufferized satellites data of the swatchs.<vr>
@@ -6,50 +8,27 @@
  * This avoid CPU overhead when accessing to props.
  * Initally the goal was to store much more properties and graphical values.
  * As the Applet is not that slow, optimization was quickly stoped...</p>
+ * 
  * <p>Copyright: Copyright (c) 2001-2003</p>
  * 
  * @author flugue@mapstan.com
  * @version 1.0
  */
-JMI.namespace("com.socialcomputing.jmi.script.SatData") = (function() {
-
-    // :int;
-    var _m_flags, 
-         //:Boolean
-        _m_isVisible;
-
-    /**
-     * Flags of the Satellite after they were retieved using properties.
-     */
-    // public function get m_flags():int
-    this.prototype.getFlags = function() {
-        return _m_flags;
+JMI.script.SatData = (function() {
+    
+    // Jonathan Dray 2012.01.09
+    // TODO : Voir comment sont faits les appels au constructeur
+    // et modifier en conséquence 
+    var SatData = function () {
+        // :int;
+        this._flags = null;
+        //:Boolean
+        this._isVisible = false;
     };
 
-    // public function set m_flags(value:int):void
-    this.prototype.setFlags = function(value) {
-        _m_flags = value;
-    };
-
-    /**
-     * True if this Satellite is visible.
-     */
-    // public function get m_isVisible():Boolean
-    this.prototype.isVisible = function() {
-        return _m_isVisible;
-    };
-
-
-    // public function set m_isVisible(value:Boolean):void
-    this.prototype.setVisible = function(value) {
-        _m_isVisible = value;
+    SatData.prototype = {
+        constructor: JMI.script.SatData
     };
     
-    // Public API
-    return  {
-        getFlags: getFlags,
-        setFlags: setFlags,
-        isVisible: isVisible,
-        setVisible: setVisible
-    };
+    return SatData;
 }());
