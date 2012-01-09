@@ -1,53 +1,55 @@
-JMI.namespace("com.socialcomputing.jmi.script.Rectangle") = (function() {
-	var x, y, width, height,
-		Constr;
+JMI.namespace("script.Rectangle");
+
+JMI.script.Rectangle = (function() {
+	var Rectangle = function(x, y, width, height) {
+	    this._x = x;
+	    this._y = y;
+	    this._width = width;
+	    this._height = height;
+	};
 	
-	Constr = function( x, y, width, height) {
-	    this.x = x;
-	    this.y = y;
-	    this.width = width;
-	    this.height = height;
-	}
-	Constr.prototype = {
-		constructor: com.socialcomputing.jmi.script.Rectangle,
-		version: "2.0"
-	}
-	return Constr;
+	Rectangle.prototype = {
+		constructor: JMI.script.Rectangle,
+		
+		/*
+         * Merge 2 Rectangles.
+         * If the dest Rectangle has one null dimension then copy the source on it.
+         * 
+         * @param src   Source Rectangle.
+         */
+        merge: function(src) {
+            if(this._width * this._height != 0) {
+                this.union(src);
+            }
+            else {
+                this.copy(src);
+            }
+            return this;
+        },
+        
+        union: function(src) {
+            this._x = Math.min(this._x, src._x);
+            this._y = Math.min(this._y, src._y);
+            this._width = this._width + src._width - Math.min(this._x + this._width - src._x, src._x + src._width - this._x);
+            this._height = this._height + src._height - Math.min(this._y + this._height - src._y, src._y + src._height - this._y);
+            return this;
+        },
+        
+        /*
+         * Copy the source <code>Rectangle</code> properties to the destination <code>Rectangle</code>
+         * 
+         * @param src Source Rectangle to copy the values from
+         * 
+         */
+        copy: function(src) {
+            this._x = src._x;
+            this._y = src._y;
+            this._width = src._width;
+            this._height = src._height;
+            return this;
+        }
+        		
+	};
+	
+	return Rectangle;
 }());
-
-/*
- * Merge 2 Rectangles.
- * If the dest Rectangle has one null dimension then copy the source on it.
- * 
- * @param dst	Destination Rectangle that will hold its union with src.
- * @param src	Source Rectangle.
- */
-com.socialcomputing.jmi.script.Rectangle.prototype.merge = function(src) {
-	if(this.width * this.height != 0) {
-		this.union( src);
-	}
-	else {
-		this.copy( src);
-	}
-}
-
-com.socialcomputing.jmi.script.Rectangle.prototype.union = function(src) {
-	this.x = Math.min( this.x, src.x);
-	this.y = Math.min( this.y, src.y);
-	this.width = this.width + src.width - Math.min( this.x + this.width - src.x, src.x + src.width - this.x);
-	this.height = this.height + src.height - Math.min( this.y + this.height - src.y, src.y + src.height - this.y);
-}
-
-/*
- * Copy the source <code>Rectangle</code> properties to the destination <code>Rectangle</code>
- * 
- * @param dst Destination Rectangle to copy the values to 
- * @param src Source Rectangle to copy the values from
- * 
- */
-com.socialcomputing.jmi.script.Rectangle.prototype.copy = function(src) {
-	this.x = src.x;
-	this.y = src.y
-	this.width = src.width;
-	this.height = src.height;
-}
