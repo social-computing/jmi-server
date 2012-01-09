@@ -1,3 +1,6 @@
+/**
+ * JMI application global context
+ */
 var JMI = JMI || {}
 
 /**

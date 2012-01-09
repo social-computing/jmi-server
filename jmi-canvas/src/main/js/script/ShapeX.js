@@ -83,7 +83,7 @@ com.socialcomputing.jmi.script.ShapeX.prototype.transformOut = function( zone, t
     }
     
     return null;
-}
+};
 
 /*
  * Returns the center of this shape.
@@ -110,7 +110,7 @@ com.socialcomputing.jmi.script.ShapeX.prototype.getCenter = function(zone) {
         c.y /= n;
     }
     return c;
-}
+};
 
 /*
  * Return wether a point is inside this shape after it has been transformed
@@ -168,7 +168,7 @@ com.socialcomputing.jmi.script.ShapeX.prototype.contains = function(g, zone, tra
         default:
             throw new Error("Should never happen, a shape can only have 1 or 2 points");
     }
-}
+};
 
 /*
  * Sets this bounds by updating an already created Rectangle.
@@ -221,20 +221,20 @@ com.socialcomputing.jmi.script.ShapeX.prototype.setBounds = function(g , zone , 
         
         bounds.merge( rect);
     }
-}
+};
 
 /*
- * Draws this shape on a Graphics.
+ * Draws this shape on a canevas
  * It's position and size is evaluated using a transfo and a center point.
  * The polygon case is not handled. Only disks (1 point) and links (2 points) are drawn.
- * @param g			A graphics to draw this in.
+ * 
+ * @param canevas	A canevas to draw the shape in.
  * @param zone		The zone that holds the properties used by this shape.
  * @param slice		The slice that use this shape.
- * @param transfo	A transformation to scale or translate this shape.
- * @param center	The center of the shape before the transformation.
- * @throws UnsupportedEncodingException 
+ * @param transfo	A transformation to apply to this shape.
+ * @param center	The center of the shape before the transformation. 
  */
-com.socialcomputing.jmi.script.ShapeX.prototype.paint = function(s, supZone, zone, slice, transfo, center) {
+com.socialcomputing.jmi.script.ShapeX.prototype.paint = function(canevas, supZone, zone, slice, transfo, center) {
     
     // else it is just a void frame
     if(isDefined(SCALE_VAL)) {
@@ -258,8 +258,11 @@ com.socialcomputing.jmi.script.ShapeX.prototype.paint = function(s, supZone, zon
         var shapePos = new com.socialcomputing.jmi.script.Point( 0, 0);
         var n = points.length;
         var i ;
-        var size = Math.round(getShapePos(supZone, transfo, center, p, shapePos));
+        var radius = Math.round(getShapePos(supZone, transfo, center, p, shapePos));
         var color; //:ColorTransform;
+        
+        // Get canevas drawing context
+        var gDrawingContext = canevas.getContext("2d");
         
         // Manage each case of number of points to draw for this shape
         switch(n) {
@@ -268,17 +271,25 @@ com.socialcomputing.jmi.script.ShapeX.prototype.paint = function(s, supZone, zon
             {
                 //composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0);
                 //g.setComposite(composite);
-                var x = p.x + shapePos.x - size;
-                var y = p.y + shapePos.y - size;
+                
+                // Jonathan Dray : I removed the size offset, as drawing a circle on canevas starts at the middle 
+                var x = p.x + shapePos.x;
+                var y = p.y + shapePos.y;
                 
                 // Doubling size value : needed because we are using the  
                 // drawEllipse method that needs a height and width from the top,left starting point
                 // which means we have to double the radius value.
-                size = size * 2;
+                // Jonathan Dray : do not double the size anymore, the arc drawing method takes the radius
+                // size = size * 2;
                 
-                color = slice.getColor( Slice.OUT_COL_VAL, zone.m_props);
+                color = slice.getColor(Slice.OUT_COL_VAL, zone.m_props);
+
+                /*
+                 * TODO : replace this with canevas line style equivalent 
+                 *
                 if(color != null) {
                     s.graphics.lineStyle(1, color.color);
+                    
                 }
                 else {
                     // Set an empty line style
@@ -289,8 +300,12 @@ com.socialcomputing.jmi.script.ShapeX.prototype.paint = function(s, supZone, zon
                 if(color != null) {
                     s.graphics.beginFill(color.color);
                 }
-                s.graphics.drawEllipse(x, y, size, size);
-                s.graphics.endFill();
+                */
+                gDrawingContext.beginPath();
+                gDrawingContext.arc(x, y, radius, 0, Math.PI * 2, false);
+                gDrawingContext.closePath();
+                gDrawingContext.strokeStyle = color.color;
+                gDrawingContext.stroke();
                 break;
             }
                 
@@ -311,17 +326,21 @@ com.socialcomputing.jmi.script.ShapeX.prototype.paint = function(s, supZone, zon
 					s.graphics.lineStyle(1, color.color);
 				}
                 color = slice.getColor(Slice.IN_COL_VAL, supZone.m_props);
+				
 				if (color != null) s.graphics.beginFill(color.color);
+				
+				
 				s.graphics.moveTo( poly.xpoints[poly.npoints-1], poly.ypoints[poly.npoints-1]);
 				for( i = 0 ; i < poly.npoints; ++i) {
 					s.graphics.lineTo( poly.xpoints[i], poly.ypoints[i]);
 				}
+				
 				if (color != null) s.graphics.endFill();
                 break;
             }
         }
     }
-}
+};
 
 /*
  * Creates a Polygon corresponding to a Link.
@@ -386,7 +405,7 @@ com.socialcomputing.jmi.script.ShapeX.prototype.getLinkPoly = function( zone, A,
     }
     
     return poly;
-}
+};
 
 /*
  * Adds a new Point to a polygon using UV bilinear coordinates.
@@ -408,7 +427,7 @@ com.socialcomputing.jmi.script.ShapeX.prototype.addLinkPoint = function( poly, u
     poly.graphics.moveTo(Number( center.x + u * U.x + v * V.x ), Number( center.y + u * U.y + v * V.y ));
     else
     poly.graphics.lineTo(Number( center.x + u * U.x + v * V.x ), Number( center.y + u * U.y + v * V.y ));*/
-}
+};
 
 /*
  * Draws an Image in a shape using a transformation to locate and scale it inside.
@@ -471,7 +490,7 @@ com.socialcomputing.jmi.script.ShapeX.prototype.drawImage = function(applet, s, 
 			drawLoadedImage(applet, image, s, zone, imageNam, transfo, center, false);
         }
     }
-}
+};
 
 com.socialcomputing.jmi.script.ShapeX.prototype.drawLoadedImage = function(applet , image, s, zone, imageNam, transfo, center, render) {
 	// Not cloning the bitmapData itself
@@ -506,7 +525,7 @@ com.socialcomputing.jmi.script.ShapeX.prototype.drawLoadedImage = function(apple
 	if( render) {
 		applet.renderShape( s, imageClone.width, imageClone.height, new Point( imageClone.x, imageClone.y));
 	}
-}
+};
 
 
 /*
@@ -538,7 +557,7 @@ com.socialcomputing.jmi.script.ShapeX.prototype.getShapePos = function(zone, tra
         scale *= transfo.m_scl;
     }
     return scale;
-}
+};
 
 /**
  * Scales a Point previously normalized to 2^16.
@@ -549,7 +568,7 @@ com.socialcomputing.jmi.script.ShapeX.prototype.getShapePos = function(zone, tra
  */
 com.socialcomputing.jmi.script.ShapeX.scalePnt = function( P, len) {
     return new com.socialcomputing.jmi.script.Point(( P.x * len )>> 16, ( P.y * len )>> 16);
-}
+};
 
 /**
  * Rotates a Vector 90°C CCW.
@@ -560,4 +579,4 @@ com.socialcomputing.jmi.script.ShapeX.pivotPnt = function( P) {
     P.x  -= P.y;
     P.y  += P.x;
     P.x  -= P.y;
-}
+};

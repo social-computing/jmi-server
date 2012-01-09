@@ -7,69 +7,77 @@
  * @author flugue@mapstan.com
  * @version 1.0
  */
-JMI.namespace("com.socialcomputing.jmi.script.Token") = (function() {
+JMI.namespace("jmi.script.Token") = (function() {
+
 
     /**
-     * The label of the Token.
-     * It can be a simple text or the name of a property.
+     * Constructor
      */
-    //:String = null;
-    var m_buffer, 
+    var Token = function() {
+        /**
+         * The label of the Token.
+         * It can be a simple text or the name of a property.
+         * //:String = null;
+         */
+        this._buffer = "";
         
         /**
          * A bit table holding all the XXX_BITs.
          */
         // :int 
-        m_flags = 0, 
+        this._flags = 0, 
         
         /**
          * Number of digit of the integer part if this is a number property.
          */
         // :int
-        m_intSize = 0,
+        this._intSize = 0,
         
         /**
          * Number of digit of the fractional part if this is a float number property.
          */
         // :int
-        m_floatSize = 0,
+        this._floatSize = 0,
         
         /**
          * Maximum nuber of lines in a list property.
          */
         // :int
-        m_lineMax = 0;
-        
-        
-    // Constructor
-	this.prototype.init = function() {
-		m_buffer = "";
-		m_flags = 0;
-	};
-		
-    /**
-     * Gets the number of line of a list property.
-     * If this is not a list property returns 1.
-     * If the list property starts with '/N' then N is the maximum line count.
-     * 
-     * @param props		Table that holds this property (if it is one). // :Array
-     * @return			The size of the property list array or the maximum line number. //:int
-     */
-    this.prototype.getListSize = function(props) {
-        // :int
-        var size = 1;
-        
-        // TODO portage : namespace prefix function Base.isEnabled 
-        if (Base.isEnabled(m_flags, LIST_BIT)) {
-            // :Array
-            var list = props[m_buffer];
-            
-            // TODO portage : see if the ternary operator works as expected
-            size = list != null ? list.length : 0;
-            if (m_lineMax > 0 && size > m_lineMax) size = m_lineMax;
-        }
-        return size;
+        this._lineMax = 0;
     };
+        
+    Token.prototype = {
+        contructor: jmi.script.Token,
+        
+        /**
+         * Gets the number of line of a list property.
+         * If this is not a list property returns 1.
+         * If the list property starts with '/N' then N is the maximum line count.
+         * 
+         * @param props     Table that holds this property (if it is one). // :Array
+         * @return          The size of the property list array or the maximum line number. //:int
+         */
+        getListSize: function(props) {
+            // :int
+            var size = 1;
+            
+            // TODO portage : namespace prefix function Base.isEnabled 
+            if (Base.isEnabled(this._flags, LIST_BIT)) {
+                // :Array
+                var list = props[m_buffer];
+                
+                // TODO portage : see if the ternary operator works as expected
+                size = list != null ? list.length : 0;
+                if (this._lineMax > 0 && size > this._lineMax) size = this._lineMax;
+            }
+            return size;
+        }
+    };
+    
+    return Token;
+
+		
+    
         
     /**
      * Creates a textual representation of this Token.
@@ -342,13 +350,6 @@ JMI.namespace("com.socialcomputing.jmi.script.Token") = (function() {
                 prop + wsStr;       // Right justificated
     };
    
-    // Public API
-    return  {
-        init: init,
-        paint: paint,
-        toString: toString,
-        findFlags: findFlags
-    };
 }());
 
 
@@ -361,41 +362,41 @@ JMI.namespace("com.socialcomputing.jmi.script.Token") = (function() {
  * This lookup mecanism is also used in swatchs and find the properties in Zones table.
  */ 
  // :int
-com.socialcomputing.jmi.script.Token.PROP_BIT = 0x0001;
+jmi.script.Token.PROP_BIT = 0x0001;
         
 /**
  * True if this is a list property.
  * A list property is an Array of Objects used to create multi-lines GUI like menus or tips.
  */
  // :int
-com.socialcomputing.jmi.script.Token.LIST_BIT = 0x0002;
+jmi.script.Token.LIST_BIT = 0x0002;
 
 /**
  * True if this is a numerical property.
  * Sometimes a property is retrieved as a Number (int, float...) so we need to convert it to a String.
  */
  // :int
-com.socialcomputing.jmi.script.Token.NUM_BIT = 0x0004;
+jmi.script.Token.NUM_BIT = 0x0004;
 
 /**
  * True if this is a floating point property.
  */
  // :int
-com.socialcomputing.jmi.script.Token.FLOAT_BIT = 0x0008;
+jmi.script.Token.FLOAT_BIT = 0x0008;
 
 /**
  * True if this is right justificated.
  * Default text alignment in list properties is left.
  */
  // :int
-com.socialcomputing.jmi.script.Token.RIGHT_BIT = 0x0010;
+jmi.script.Token.RIGHT_BIT = 0x0010;
 
 /**
  * True if this length is bound.
  * That means the number of characters of the property is limited.
  */
  // :int
-com.socialcomputing.jmi.script.Token.BOUND_BIT = 0x0020;
+jmi.script.Token.BOUND_BIT = 0x0020;
 
 /**
  * True if this is a SubProp.
@@ -404,21 +405,21 @@ com.socialcomputing.jmi.script.Token.BOUND_BIT = 0x0020;
  * @see         RecommendationGroup
  */
  // :int
-com.socialcomputing.jmi.script.Token.SUB_BIT = 0x0040;
+jmi.script.Token.SUB_BIT = 0x0040;
 
 /**
  * True if this must be URLEncoded.
  * Usefull for creating CGI URLs using props.
  */
  // :int
-com.socialcomputing.jmi.script.Token.URLCOD_BIT = 0x0080;
+jmi.script.Token.URLCOD_BIT = 0x0080;
 
 /**
  * True if this property is global for the Plan.
  * This means the property should be retrieved from the Env table.
  */
  // :int
-com.socialcomputing.jmi.script.Token.GLOBAL_BIT = 0x0100;
+jmi.script.Token.GLOBAL_BIT = 0x0100;
 
 /**
  * True if this list property is required.
@@ -426,4 +427,4 @@ com.socialcomputing.jmi.script.Token.GLOBAL_BIT = 0x0100;
  * This is usefull to avoid displaying empty submenus or tips.
  */
  // :int
-com.socialcomputing.jmi.script.Token.NEEDED_BIT = 0x0200;
+jmi.script.Token.NEEDED_BIT = 0x0200;
