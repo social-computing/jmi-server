@@ -1,3 +1,5 @@
+JMI.namespace("script.ColorX");
+
 /*
  * <p>Title: ColorX</p>
  * <p>Description: A wrapper for the java.awt.Color class.<br>
@@ -7,7 +9,7 @@
  * @author flugue@mapstan.com
  * @version 1.0
  */
-JMI.namespace("com.socialcomputing.jmi.script.ColorX") = (function() {
+JMI.script.ColorX = (function() {
 /*
  * A 32 bit int that hold Color invormation in ARGB format.
  * Each component is a 8 bits value:
@@ -23,16 +25,37 @@ JMI.namespace("com.socialcomputing.jmi.script.ColorX") = (function() {
 		m_scolor = null;
 
 	// default constructor
-	Constr;
-	
-	Constr = function( color) {
+	var ColorX = function(color) {
     	m_color = color;
+	};
+	
+    ColorX.prototype = {
+        contructor: JMI.script.ColorX,
+        
+	/**
+	 * Convert this ColorX to a java.awt.Color.
+	 * @return	a new Color equivalent to this.
+	 */
+	getColor: function() {
+	    var color = new ColorTransform();
+		color.color = m_color;
+		return color;
+	},
+	
+	getColor2: function( props) {
+		var color = new ColorTransform();
+	    if( m_scolor == null) { 
+			color.color = m_color;
+		}
+		else {
+	        var str = Base.parseString4( m_scolor, props, false);
+	        color.color = str == null ? 0 : parseInt( str);
+		}
+		return color;
 	}
-	Constr.prototype = {
-		constructor: com.socialcomputing.jmi.script.ColorX,
-		version: "2.0"
-	}
-	return Constr;
+	};
+        
+	return ColorX;
 }());
 
 
@@ -56,24 +79,3 @@ JMI.namespace("com.socialcomputing.jmi.script.ColorX") = (function() {
     m_color = ( red << 16)|( green << 8)| blue;
 }*/
 
-/**
- * Convert this ColorX to a java.awt.Color.
- * @return	a new Color equivalent to this.
- */
-com.socialcomputing.jmi.script.BagZone.prototype.getColor = function() {
-    var color = new ColorTransform();
-	color.color = m_color;
-	return color;
-}
-
-com.socialcomputing.jmi.script.BagZone.prototype.getColor2 = function( props) {
-	var color = new ColorTransform();
-    if( m_scolor == null) { 
-		color.color = m_color;
-	}
-	else {
-        var str = Base.parseString4( m_scolor, props, false);
-        color.color = str == null ? 0 : parseInt( str);
-	}
-	return color;
-}

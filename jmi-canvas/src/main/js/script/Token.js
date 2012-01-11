@@ -48,7 +48,7 @@ JMI.script.Token = (function() {
     };
         
     Token.prototype = {
-        contructor: jmi.script.Token,
+        contructor: JMI.script.Token,
         
         /**
          * Gets the number of line of a list property.

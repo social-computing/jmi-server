@@ -1,30 +1,31 @@
+JMI.namespace("script.Dimension");
 
-JMI.namespace("com.socialcomputing.jmi.script.Dimension") = (function() {
+JMI.script.Dimension = (function() {
 	
-	var width, height,
-		Constr;
+	var width, height;
 	
-	Constr = function( w, h) {
+	var Dimension = function(w, h) {
 		width = w;
 		height = h;
-	}
-	Constr.prototype = {
-		constructor: com.socialcomputing.jmi.script.Dimension,
-		version: "2.0"
-	}
-	return Constr;
+	};
+	
+    Dimension.prototype = {
+        contructor: JMI.script.Dimension,
+		
+		resize: function( d) {
+			return new JMI.script.Dimension(Math.max(this.width, d.width), Math.max(this.height, d.height));
+		}
+	};
+	
+	return Dimension;
 }());
 
-com.socialcomputing.jmi.script.Dimension.prototype.resize = function(d) {
-	return new com.socialcomputing.jmi.script.Dimension(Math.max(this.width, d.width), Math.max(this.height, d.height));
-}
-		
 // static
 /**
  * Create a <code>Rectangle</code> instance with height and width of the current Dimension
  */
 com.socialcomputing.jmi.script.Dimension.toRectangle = function(){
-	return new com.socialcomputing.jmi.script.Rectangle(0, 0, this._width, this._height);
+	return new JMI.script.Rectangle(0, 0, this._width, this._height);
 }
 
 /**
@@ -33,6 +34,6 @@ com.socialcomputing.jmi.script.Dimension.toRectangle = function(){
  * contructor overload limitations : on class can only have one constructor signature. 
  */
 com.socialcomputing.jmi.script.Dimension.fromRectangle = function( rect) {
-	return new com.socialcomputing.jmi.script.Dimension(rect.width, rect.height);
+	return new JMI.script.Dimension(rect.width, rect.height);
 }
 		

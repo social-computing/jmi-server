@@ -1,3 +1,5 @@
+JMI.namespace("script.Env");
+
 /*
  * <p>Title: Env</p>
  * <p>Description: A place to store the "environment" datas and a media loader.
@@ -8,7 +10,7 @@
  * @author flugue@mapstan.com
  * @version 1.0
  */
-JMI.namespace("com.socialcomputing.jmi.script.Env") = (function() {
+JMI.script.Env = (function() {
 	
 /*
  * Contains XXX_BIT(s).
@@ -16,22 +18,22 @@ JMI.namespace("com.socialcomputing.jmi.script.Env") = (function() {
  */
 	var m_flags,
 	// Plan background Color.
-	 m_inCol = com.socialcomputing.jmi.script.ColorX,
+	 m_inCol = JMI.script.ColorX,
 	/*
 	 * Plan border Color.
 	 * This is not used, it should be deprecated, but first removed from Model.java
 	 */
-	m_outCol = com.socialcomputing.jmi.script.ColorX,
+	m_outCol = JMI.script.ColorX,
 	/*
 	 * Plan filter color.
 	 * This color will apeared dimmed under the current zone and over the background, showing the actual BBox.
 	 */
-	m_filterCol = com.socialcomputing.jmi.script.ColorX,
+	m_filterCol = JMI.script.ColorX,
 	/*
 	 * Applet size & scale.
 	 * This is used by the Server to retrieve the Applet size and then give a well sized plan to the client.
 	 */
-	m_transfo = com.socialcomputing.jmi.script.Transfo,
+	m_transfo = JMI.script.Transfo,
 	/*
 	 * Global properties.
 	 * Properties that don't appear in Zones because they are global to the plan.<br>
@@ -52,72 +54,71 @@ JMI.namespace("com.socialcomputing.jmi.script.Env") = (function() {
 	m_medias,
  	//Table containing media loders.
 	m_loaders,
+	
 	/**
 	 * A simple reference to the Applet.
 	 * This is necessary because the Thread must know the Applet.
 	 * But it is launch by run() that don't have any arguments.
 	 */
-	m_applet = com.socialcomputing.jmi.components.Map,
+	m_applet = JMI.components.Map;
 
-	Constr;
+	var Env = function() {
+	};
 	
-	Constr = function() {
+    Env.prototype = {
+        contructor: JMI.script.Env,
+		
+	/*
+	 * Initialize transient fields and set Applet background color.
+	 * @param applet
+	 * @param needPrint
+	 */
+	init: function(applet, needPrint) {
+	    var bkWhite = new ColorTransform();
+	    bkWhite.color = 0xFFFFFF;
+		var bkCol = needPrint ? bkWhite : m_inCol.getColor();
+		m_applet   = applet;
+		m_medias   = new Object();
+		m_loaders  = new Object();
+	},
+	
+	getMedia: function(name) {
+		return this.m_medias[name];
+	},
+	
+	putMedia: function (name, media) {
+		this.m_medias[name] = media;
+	},
+	
+	addLoader: function (name, loader) {
+		this.m_loaders[name] = loader;
+	},
+	
+	getLoader: function (name) {
+		return this.m_loaders[name];
+	},
+	
+	removeLoader: function(name) {
+		if( this.m_loaders[name])
+			delete this.m_loaders[name];
+	},
+	
+	close: function() {
+		// TODO
+	/*	for( var name:String in m_loaders) {
+			var loader:LoaderEx = this.m_loaders[name] as LoaderEx;
+			try {
+				loader.close();
+			} catch( err:Error) {
+				trace( err);
+			}
+			delete this.m_loaders[name];
+		}*/
 	}
-	Constr.prototype = {
-		constructor: com.socialcomputing.jmi.script.Env,
-		version: "2.0"
-	}
-	return Constr;
+	};
+	
+	return Env;
 }());
-
-/*
- * Initialize transient fields and set Applet background color.
- * @param applet
- * @param needPrint
- */
-com.socialcomputing.jmi.script.Dimension.prototype.init = function(applet, needPrint) {
-    var bkWhite = new ColorTransform();
-    bkWhite.color = 0xFFFFFF;
-	var bkCol = needPrint ? bkWhite : m_inCol.getColor();
-	m_applet   = applet;
-	m_medias   = new Object();
-	m_loaders  = new Object();
-}
-
-com.socialcomputing.jmi.script.Dimension.prototype.getMedia = function(name) {
-	return this.m_medias[name];
-}
-
-com.socialcomputing.jmi.script.Dimension.prototype.putMedia = function (name, media) {
-	this.m_medias[name] = media;
-}
-
-com.socialcomputing.jmi.script.Dimension.prototype.addLoader = function (name, loader) {
-	this.m_loaders[name] = loader;
-}
-
-com.socialcomputing.jmi.script.Dimension.prototype.getLoader = function (name) {
-	return this.m_loaders[name];
-}
-
-com.socialcomputing.jmi.script.Dimension.prototype.removeLoader = function(name) {
-	if( this.m_loaders[name])
-		delete this.m_loaders[name];
-}
-
-com.socialcomputing.jmi.script.Dimension.prototype.close = function() {
-	// TODO
-/*	for( var name:String in m_loaders) {
-		var loader:LoaderEx = this.m_loaders[name] as LoaderEx;
-		try {
-			loader.close();
-		} catch( err:Error) {
-			trace( err);
-		}
-		delete this.m_loaders[name];
-	}*/
-}
-
 
 	/**
 	 * True if this Plan is sound enabled.
