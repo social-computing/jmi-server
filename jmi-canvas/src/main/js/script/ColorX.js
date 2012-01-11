@@ -1,60 +1,27 @@
 JMI.namespace("script.ColorX");
 
-/*
- * <p>Title: ColorX</p>
- * <p>Description: A wrapper for the java.awt.Color class.<br>
- * Because Serializtion is not compatible between client and server for the original class.</p>
- * <p>Copyright: Copyright (c) 2001-2003</p>
- * <p>Company: MapStan (Voyez Vous)</p>
- * @author flugue@mapstan.com
- * @version 1.0
- */
-JMI.script.ColorX = (function() {
-/*
- * A 32 bit int that hold Color invormation in ARGB format.
- * Each component is a 8 bits value:
- * <ul>
- * <li>Alpha	from bit 31 to bit 24.</li>
- * <li>Red		from bit 23 to bit 16.</li>
- * <li>Green	from bit 15 to bit 8.</li>
- * <li>Blue		from bit 7 to bit 0.</li>
- * </ul>
- * Warning! Alpha is no more used.
- */
-	var m_color, 
-		m_scolor = null;
 
+JMI.script.ColorX = (function() {
 	// default constructor
 	var ColorX = function(color) {
-    	m_color = color;
+	    this._color = color;
+	    this._scolor = null;
 	};
 	
     ColorX.prototype = {
-        contructor: JMI.script.ColorX,
-        
-	/**
-	 * Convert this ColorX to a java.awt.Color.
-	 * @return	a new Color equivalent to this.
-	 */
-	getColor: function() {
-	    var color = new ColorTransform();
-		color.color = m_color;
-		return color;
-	},
-	
-	getColor2: function( props) {
-		var color = new ColorTransform();
-	    if( m_scolor == null) { 
-			color.color = m_color;
-		}
-		else {
-	        var str = Base.parseString4( m_scolor, props, false);
-	        color.color = str == null ? 0 : parseInt( str);
-		}
-		return color;
-	}
-	};
-        
+        contructor : JMI.script.ColorX,
+
+        getColor2 : function(props) {
+            if(this._scolor == null) {
+                return this._color;
+            } else {
+                var str = JMI.script.Base.parseString4(this._scolor, props, false);
+                // TODO : portage, supprimer parseInt et renvoyer un code couleur hexadecimal
+                return (str == null) ? 0 : parseInt(str);
+            }
+        }
+    };
+
 	return ColorX;
 }());
 
