@@ -6,7 +6,7 @@ JMI.script.PlanContainer = (function() {
 	};
 	
 	PlanContainer.prototype = {
-		constructor: JMI.script.PlanContainer,
+		constructor: JMI.script.PlanContainer
 	};
 	
 	return PlanContainer;

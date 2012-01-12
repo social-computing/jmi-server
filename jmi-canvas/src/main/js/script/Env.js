@@ -66,7 +66,7 @@ JMI.script.Env = (function() {
 	};
 	
     Env.prototype = {
-        contructor: JMI.script.Env,
+        constructor: JMI.script.Env,
 		
 	/*
 	 * Initialize transient fields and set Applet background color.

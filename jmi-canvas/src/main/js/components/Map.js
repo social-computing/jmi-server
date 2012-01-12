@@ -12,8 +12,8 @@ JMI.namespace("components.Map");
 */	
 JMI.components.Map = (function() {
 
-var _dataProvider = JMI.script.PlanContainer;
-	_curPos = new JMI.script.Point();
+var _dataProvider = JMI.script.PlanContainer,
+	_curPos = new JMI.script.Point(),
 	_ready = false,
 
 /*
@@ -94,8 +94,12 @@ var _dataProvider = JMI.script.PlanContainer;
 	};
 	
     Map.prototype = {
-        contructor: JMI.components.Map
+        constructor: JMI.components.Map,
 		
+		openSoCom: function ( e) {
+			//TODO portage
+			navigateToURL( new URLRequest( "http://www.social-computing.com"), "_blank");
+		}
 	};
 	
 	return Map;
@@ -105,10 +109,6 @@ JMI.components.Map.version = "1.0-SNAPSHOT";
 JMI.components.Map.EMPTY = "empty";
 JMI.components.Map.READY = "ready";
 
-com.socialcomputing.jmi.components.Map.prototype.openSoCom = function ( e) {
-	//TODO portage
-	navigateToURL( new URLRequest( "http://www.social-computing.com"), "_blank");
-}
 
 /*public function get ready():Boolean {
 	return plan != null && _ready;

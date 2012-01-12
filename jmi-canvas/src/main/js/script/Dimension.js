@@ -8,7 +8,7 @@ JMI.script.Dimension = (function() {
 	};
 	
     Dimension.prototype = {
-        contructor: JMI.script.Dimension,
+        constructor: JMI.script.Dimension,
 		
 		resize: function(d) {
 			return new JMI.script.Dimension(Math.max(this._width, d._width), Math.max(this._height, d._height));
