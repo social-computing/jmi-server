@@ -1,3 +1,5 @@
+JMI.namespace("script.FormatToken");
+
 /*
  * <p>Title: FormatToken</p>
  * <p>Description: A simple container to hold the current format of the tokens.<br>
@@ -7,39 +9,39 @@
  * @author flugue@mapstan.com
  * @version 1.0
  */
-JMI.namespace("com.socialcomputing.jmi.script.FormatToken") = (function() {
-    /**
-     * Current line margins.
-     */
-    var m_margin = com.socialcomputing.jmi.script.Insets,
-    
-    /**
-     * Current line maximum ascent (Top of the highest letter)
-     */
-    m_aMax,
-    
-    /**
-     * Current line maximum descent (Bottom of the lowest letter)
-     */
-    m_dMax,
-    
-    /**
-     * Current line text alignment flags.
-     */
-    m_flags,
-    
-    /**
-     * Current line width.
-     */
-    m_width,
-    	
-	Constr;
+JMI.script.FormatToken = (function() {
+	var FormatToken = function() {
+        /**
+         * Current line margins.
+         * :Jmi.script.Insets
+         */
+        this._margin = null;
+        
+        /**
+         * Current line maximum ascent (Top of the highest letter)
+         */
+        this._aMax = null;
+        
+        /**
+         * Current line maximum descent (Bottom of the lowest letter)
+         */
+        this._dMax = null;
+        
+        /**
+         * Current line text alignment flags.
+         */
+        this._flags = null;
+        
+        /**
+         * Current line width.
+         */
+        this._width = null;
+	    
+	};
 	
-	Constr = function() {
-	}
-	Constr.prototype = {
-		constructor: com.socialcomputing.jmi.script.Dimension,
-		version: "2.0"
-	}
-	return Constr;
+	FormatToken.prototype = {
+		constructor: JMI.script.FormatToken
+	};
+	
+	return FormatToken;
 }());
