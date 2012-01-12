@@ -48,7 +48,11 @@ $.get(
 		var jmiData = jsonParse( jmiJson, function (key, value) {
 	        if (value && typeof value === 'object') {
 	        	if( 'env' === key) {
-	        		return new JMI.script.Env();
+	        		var env = new JMI.script.Env();
+	        		for (var attr in value) {
+	        			env[attr] = value[attr];
+    				}
+    				return env;
 	        	}
 	        	else if( 'plan' === key) {
 	        		return new JMI.script.Plan();
@@ -64,7 +68,11 @@ $.get(
 	        	}
 	        	else if( 'ColorX' === value.cls) {
 	        		return new JMI.script.ColorX( value.color);
+	        	}
+	        	else if( 'ShapeX' === value.cls) {
+	        		return new JMI.script.ShapeX( value.color);
 		       	} else {
+		       		aptana.log( key + ' unconverted');
 		         	return value;
 		       	}
 	       	} else {
