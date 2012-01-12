@@ -1,7 +1,7 @@
-JMI.namespace("util.controls.Transfo");
+JMI.namespace("util.Transfo");
 
 
-JMI.util.controls.Transfo = (function () {
+JMI.util.Transfo = (function () {
 
     
 })();
@@ -22,7 +22,7 @@ JMI.util.controls.Transfo = (function () {
 // TODO portage : voir si on garde la classe
 //              : essayer de mettre les methodes directement dans le module
 //              : equivalent de URLUtil à mettre en place 
-JMI.util.controls.Transfo.getFullURL = function(rootURL, url) {
+JMI.util.Transfo.getFullURL = function(rootURL, url) {
 	if (url != null && !URLUtil.isHttpURL(url) && !URLHelper.isFileURL(url)) {
 		if (url.indexOf("./") == 0) {
 			url = url.substring(2);
@@ -56,7 +56,7 @@ JMI.util.controls.Transfo.getFullURL = function(rootURL, url) {
  *  @param url The URL to analyze. //:String
  *  @return <code>true</code> if the URL starts with "file://", false otherwise. //:Boolean
  */
-JMI.util.controls.Transfo.isFileURL = function(url) {
+JMI.util.Transfo.isFileURL = function(url) {
     url = url || "";
 	return url.indexOf("file://") === 0;
 };

@@ -1,122 +1,119 @@
-package com.socialcomputing.jmi.util {
-    
+JMI.namespace("util.StringTokenizer");
 
-    public class StringTokenizer 
-		
-    {
+JMI.util.StringTokenizer = (function () {
+    
+    var tokenizeDelimiter = function(source, pos, delimiters) {
+        var car = source.charAt(pos);
+        var i;
+        for(i = 0; i < delimiters.length; ++i) {
+            if( car == delimiters.charAt(i)) {
+                return delimiters.charAt(i);
+            }
+        }
+        return null;
+    };    
+    
+    var tokenize = function(source, delimiters) {
+        var start = 0;
+        var i;
+        for (i = 0 ; i < source.length ; ++i) {
+            var token = tokenizeDelimiter(source, i, delimiters);
+            if(token != null) {
+                if(start <= i) {
+                    this.tokens.push(source.slice(start, i)); 
+                }
+                this.tokens.push(token); 
+                start = i + 1;
+            }
+        }
+        if(start < source.length) {
+            this.tokens.push(source.slice(start, source.length)); 
+        }
+    };
+        
+
+    
+    /**
+     *
+     * Creates a new instance of <code>StringTokenizer</code> and
+     * processes the source String into an array of tokens based
+     * on the specified delimiter
+     *
+     * @example
+     * <listing version="3.0">
+     *
+     * var tokens:StringTokenizer = new StringTokenizer("This is a test", " ");
+     *
+     * trace( tokens.countTokens() );
+     *
+     * </listing>
+     *
+     * @param the source String from which the tokens are to be extracted :String
+     * @param the delimiter on which the tokens are extracted :String
+     *
+     */
+    var StringTokenizer = function(source, delimiters) {
         /**
          *
          * The source <code>String</code> from which tokens are extracted
          * from based on the specified delimiter
-         *
+         * :String;
          */
-        protected var source:String;
+        this.source = source;
         
         /**
          *
          * Defines the delimiter from which the <code>source</code> String
          * tokens are to be extracted
-         *
+         * :String;
          */
-        protected var delimiters:String;
+        this.delimiters = delimiters;
+        
         
         /**
          *
          * Defines the token <code>Array</code> which contains each token
          * String extracted by the <code>StringTokenizer</code> instance
-         *
-         */
-        protected var tokens:Vector.<String>;
+         * :Vector.<String>;
+         */  
+        // this.tokens  = new Vector.<String>();
+        this.tokens = [];
+            
         
         /**
          *
          * Stores the current position (cursor) in the tokens array from
          * which calls to <code>nextToken();</code> are based on
-         *
+         * :int;
          */
-        protected var cursor:int;
-        
-        /**
-         *
-         * Creates a new instance of <code>StringTokenizer</code> and
-         * processes the source String into an array of tokens based
-         * on the specified delimiter
-         *
-         * @example
-         * <listing version="3.0">
-         *
-         * var tokens:StringTokenizer = new StringTokenizer("This is a test", " ");
-         *
-         * trace( tokens.countTokens() );
-         *
-         * </listing>
-         *
-         * @param the source String from which the tokens are to be extracted
-         * @param the delimiter on which the tokens are extracted
-         *
-         */
-        public function StringTokenizer(source:String, delimiters:String)
-        {
-            this.source = source;
-            this.delimiters = delimiters;
-            
-			this.tokens  = new Vector.<String>();
-			tokenize( source, delimiters);
-        }
+        this.cursor = 0;
+        tokenize(source, delimiters);
+    };
+    
+    StringTokenizer.prototype = {
+        constructor: JMI.util.StringTokenizer,
 
-		private function tokenize(source:String, delimiters:String):void
-		{
-			var start:int = 0;
-			for( var i:int = 0; i < source.length; ++i) {
-				var token:String = tokenizeDelimiter( source, i, delimiters);
-				if( token != null) {
-					if( start <= i) {
-						this.tokens.push( source.slice( start, i)); 
-					}
-					this.tokens.push( token); 
-					start = i+1;
-				}
-			}
-			if( start < source.length) {
-				this.tokens.push( source.slice( start, source.length)); 
-			}
-		}
-		
-		private function tokenizeDelimiter(source:String, pos:int, delimiters:String):String {
-			var car:String = source.charAt( pos);
-			for( var i:int = 0; i < delimiters.length; ++i) {
-				if( car == delimiters.charAt( i)) {
-					return delimiters.charAt( i);
-				}
-			}
-			return null;
-		}
-		
         /**
-         *
          * Retrieves the length of tokens extracted from the source
          * String
          *
-         * @return the length of tokens in the source
+         * @return the length of tokens in the source :int
          *
          */
-        public function countTokens() : int
-        {
-            return tokens.length;
-        }
+        countTokens: function() {
+            return this.tokens.length;
+        },
         
         /**
-         *
          * Determines if there are more tokens which have yet to be
          * retrieved via calls to <code>nextToken</code>
          *
-         * @return true if more tokens remain, otherwise false
+         * @return true if more tokens remain, otherwise false :Boolean
          *
          */
-        public function hasMoreTokens() : Boolean
-        {
-            return cursor < tokens.length;
-        }
+        hasMoreTokens: function()  {
+            return this.cursor < this.tokens.length;
+        },
         
         /**
          *
@@ -129,20 +126,19 @@ package com.socialcomputing.jmi.util {
          * a null value is returned
          * </p>
          *
-         * @return the next token in the source String
+         * @return the next token in the source String :String
          *
          */
-        public function nextToken() : String
-        {
-            var token:String;
-            
-            if ( hasMoreTokens() )
-            {
-                token = tokens[cursor];
-                cursor++;
+         nextToken: function() {
+            // :String
+            var token = null;
+            if (this.hasMoreTokens()) {
+                token = tokens[this.cursor];
+                this.cursor++;
             }
-            
             return token;
         }
-	}        
-}
+    };
+    
+    return StringTokenizer;
+})();
