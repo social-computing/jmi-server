@@ -16,51 +16,51 @@ JMI.script.Env = (function() {
  * Contains XXX_BIT(s).
  * This is not used, it should be deprecated, but first removed from Model.java
  */
-	var m_flags,
+	var flags,
 	// Plan background Color.
-	 m_inCol = JMI.script.ColorX,
+	 inCol = JMI.script.ColorX,
 	/*
 	 * Plan border Color.
 	 * This is not used, it should be deprecated, but first removed from Model.java
 	 */
-	m_outCol = JMI.script.ColorX,
+	outCol = JMI.script.ColorX,
 	/*
 	 * Plan filter color.
 	 * This color will apeared dimmed under the current zone and over the background, showing the actual BBox.
 	 */
-	m_filterCol = JMI.script.ColorX,
+	filterCol = JMI.script.ColorX,
 	/*
 	 * Applet size & scale.
 	 * This is used by the Server to retrieve the Applet size and then give a well sized plan to the client.
 	 */
-	m_transfo = JMI.script.Transfo,
+	transfo = JMI.script.Transfo,
 	/*
 	 * Global properties.
 	 * Properties that don't appear in Zones because they are global to the plan.<br>
 	 * ex : paths of icons, name of user...
 	 * Those props are copied in Zones table during init.
 	 */
-	m_props,
+	props,
 	/*
 	 * Table of the 32 selection name.
 	 * This is used by swatchs because they only know the selection name, not the ID.
 	 * It should be used by Javascript...but it isn't.
 	 */
-	m_selections,
+	selections,
 	/*
 	 * Table containing icons and sounds.
 	 * This buffer stores all media object using a unique key to load them asynchronously during init.
 	 */
-	m_medias,
+	medias,
  	//Table containing media loders.
-	m_loaders,
+	loaders,
 	
 	/**
 	 * A simple reference to the Applet.
 	 * This is necessary because the Thread must know the Applet.
 	 * But it is launch by run() that don't have any arguments.
 	 */
-	m_applet;
+	applet;
 
 	var Env = function() {
 	};
@@ -76,43 +76,43 @@ JMI.script.Env = (function() {
 	init: function(applet, needPrint) {
 	    var bkWhite = new ColorTransform();
 	    bkWhite.color = 0xFFFFFF;
-		var bkCol = needPrint ? bkWhite : m_inCol.getColor();
-		m_applet   = applet;
-		m_medias   = new Object();
-		m_loaders  = new Object();
+		var bkCol = needPrint ? bkWhite : inCol.getColor();
+		applet   = applet;
+		medias   = new Object();
+		loaders  = new Object();
 	},
 	
 	getMedia: function(name) {
-		return this.m_medias[name];
+		return this.medias[name];
 	},
 	
 	putMedia: function (name, media) {
-		this.m_medias[name] = media;
+		this.medias[name] = media;
 	},
 	
 	addLoader: function (name, loader) {
-		this.m_loaders[name] = loader;
+		this.loaders[name] = loader;
 	},
 	
 	getLoader: function (name) {
-		return this.m_loaders[name];
+		return this.loaders[name];
 	},
 	
 	removeLoader: function(name) {
-		if( this.m_loaders[name])
-			delete this.m_loaders[name];
+		if( this.loaders[name])
+			delete this.loaders[name];
 	},
 	
 	close: function() {
 		// TODO
-	/*	for( var name:String in m_loaders) {
-			var loader:LoaderEx = this.m_loaders[name] as LoaderEx;
+	/*	for( var name:String in loaders) {
+			var loader:LoaderEx = this.loaders[name] as LoaderEx;
 			try {
 				loader.close();
 			} catch( err:Error) {
 				trace( err);
 			}
-			delete this.m_loaders[name];
+			delete this.loaders[name];
 		}*/
 	}
 	};

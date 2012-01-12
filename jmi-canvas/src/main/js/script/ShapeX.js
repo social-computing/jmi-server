@@ -19,7 +19,6 @@ JMI.namespace("script.ShapeX");
 
 JMI.script.ShapeX = (function() {
 	
-	
 	var ShapeX = function() {
 	};
 	

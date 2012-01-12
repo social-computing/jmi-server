@@ -88,17 +88,17 @@ JMI.namespace("com.socialcomputing.jmi.script.TipTimer") = (function() {
 	this.prototype.clean = function(full) {
 		if (this._started) {
 			this._started = false;
-			if ( _plan.m_applet.plan != null) {
+			if ( _plan.applet.plan != null) {
 				 
 				if(_bounds.width == 0 && _bounds.height == 0) {
 					// Asynchronous URL content loaded (bounds not set)
-					slice.setBounds( _plan.m_applet, _plan.m_applet.curDrawingSurface.graphics, zone.getParent(), zone, null, null, null, _bounds );
+					slice.setBounds( _plan.applet, _plan.applet.curDrawingSurface.graphics, zone.getParent(), zone, null, null, null, _bounds );
 				}
-				_plan.m_applet.renderShape( _plan.m_applet.restDrawingSurface, _bounds.width, _bounds.height, new com.socialcomputing.jmi.script.Point( _bounds.x, _bounds.y));
+				_plan.applet.renderShape( _plan.applet.restDrawingSurface, _bounds.width, _bounds.height, new com.socialcomputing.jmi.script.Point( _bounds.x, _bounds.y));
 				if( full) _plan.paintCurZone();
 			}
 			// TODO : portage : delete keyword in javascript ?
-			delete _plan.m_tipTimers[_key];
+			delete _plan.tipTimers[_key];
 		}
 	};
 	
@@ -110,10 +110,10 @@ JMI.namespace("com.socialcomputing.jmi.script.TipTimer") = (function() {
 		if( !this._started) {
 			this._started = true;
 			// :Point
-			var pos = _plan.m_applet.curPos;
-			slice.paint( _plan.m_applet, _plan.m_applet.curDrawingSurface, zone.getParent(), zone, null, pos, null );
-			slice.setBounds( _plan.m_applet, _plan.m_applet.curDrawingSurface.graphics, zone.getParent(), zone, null, pos, null, _bounds );
-			_plan.m_applet.renderShape( _plan.m_applet.curDrawingSurface, _bounds.width, _bounds.height, new com.socialcomputing.jmi.script.Point( _bounds.x, _bounds.y));
+			var pos = _plan.applet.curPos;
+			slice.paint( _plan.applet, _plan.applet.curDrawingSurface, zone.getParent(), zone, null, pos, null );
+			slice.setBounds( _plan.applet, _plan.applet.curDrawingSurface.graphics, zone.getParent(), zone, null, pos, null, _bounds );
+			_plan.applet.renderShape( _plan.applet.curDrawingSurface, _bounds.width, _bounds.height, new com.socialcomputing.jmi.script.Point( _bounds.x, _bounds.y));
 		}
 		if( duration != -1) {
 		    // TODO portage : timer in javascript

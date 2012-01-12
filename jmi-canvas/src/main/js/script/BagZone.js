@@ -106,7 +106,7 @@ JMI.script.BagZone = (function() {
             
             /*
             this.m_bounds = this.m_restSwh.getBounds(applet, s.graphics, this, false);
-            var win:Rectangle = applet.plan.m_prevBox.union(m_bounds);
+            var win:Rectangle = applet.plan.prevBox.union(m_bounds);
             this.m_bounds = this.m_bounds.union(m_curSwh.getBounds(applet, s.graphics, this, true));
             */
             
@@ -154,7 +154,7 @@ JMI.script.BagZone = (function() {
             /*
                 bufGfx.translate( m_bounds.x, m_bounds.y );
                 g.setClip( m_bounds.x, m_bounds.y, m_bounds.width, m_bounds.height );
-                g.drawImage( applet.m_plan.m_blitBuf, m_bounds.x, m_bounds.y, null );
+                g.drawImage( applet.m_plan.blitBuf, m_bounds.x, m_bounds.y, null );
             */
             applet.renderShape(applet.curDrawingSurface, this._bounds.width, this._bounds.height, 
                                new JMI.script.Point(this._bounds.x, this._bounds.y));

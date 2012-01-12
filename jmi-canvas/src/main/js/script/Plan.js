@@ -10,74 +10,74 @@ JMI.namespace("script.Plan");
 JMI.script.Plan = (function() {
 /*
  * The table of links (streets). This include the fakes one (those who get out of the screen).
- * The first m_linksCnt links are the real ones.
+ * The first linksCnt links are the real ones.
  */
-	var m_links, //:Array;
+	var links, //:Array;
 /**
  * Number of real Links (the ones that are linked to nodes at both sides).
  */
-	m_linksCnt,//:int;
+	linksCnt,//:int;
 /**
  * The table of nodes (places). This include the clusterized ones (those who only apears when a zone is hovered).
- * The first m_nodesCnt are the cluster(BagZone) ones.
+ * The first nodesCnt are the cluster(BagZone) ones.
  */
-	m_nodes, //:Array;
+	nodes, //:Array;
 
 /**
  * Number of cluster Nodes (the ones that are always visible).
  */
-	m_nodesCnt,//:int;
+	nodesCnt,//:int;
 
 /**
  * Id of the current active selection (only one at a time).
  * This id is between [0, 31]
  * If there is no current s�lection, this index is -1
  */
-	m_curSel, //:int;
+	curSel, //:int;
 
 /**
  * Current Satellite (the one that is active).
  * If there is no current Satellite, it should be null.
  */
-	m_curSat = JMI.script.Satellite,
+	curSat = JMI.script.Satellite,
 
 /**
  * Bounding box of the Plan before resizing (pixels).
  */
-	m_prevBox = JMI.script.Rectangle,
+	prevBox = JMI.script.Rectangle,
 
 /**
- * Maximum bounding box of all zones. This is also the m_blitBuf size.
+ * Maximum bounding box of all zones. This is also the blitBuf size.
  */
-	m_maxBox = JMI.script.Dimension,
+	maxBox = JMI.script.Dimension,
 
 /**
- * Temporary buffer for zone blitting operations.Its size is m_maxBox.
+ * Temporary buffer for zone blitting operations.Its size is maxBox.
  */
 // [transient]
-//public var m_blitBuf:Shape;
+//public var blitBuf:Shape;
 
 /**
  * Current super BagZone (the one that is active).
  * If there is no current ActiveZone, it should be null.
  */
-	m_curZone = JMI.script.ActiveZone,
+	curZone = JMI.script.ActiveZone,
 
 /**
- * Current ActiveZone (the one that is active). This can be a subZone, different from m_curZone.
+ * Current ActiveZone (the one that is active). This can be a subZone, different from curZone.
  * If there is no current ActiveZone, it should be null.
  */
-	m_newZone = JMI.script.ActiveZone,
+	newZone = JMI.script.ActiveZone,
 
 /**
  * The Applet holding this Plan.
  */
-	m_applet = JMI.component.Map,
+	applet,
 
 /**
  * Table of waiters to manage tooltips.
  */
-	m_tipTimers; //:Object;
+	tipTimers; //:Object;
 
 	var Plan = function() {
 	};
@@ -88,31 +88,31 @@ JMI.script.Plan = (function() {
 	/*
 	 * Initialize an array of zones (Nodes or Links).
 	 * This call the init method of the zones.
-	 * It also evaluate the bounding box of each zone and then allocate the m_blitBuf image buffer.
+	 * It also evaluate the bounding box of each zone and then allocate the blitBuf image buffer.
 	 * @param g			A graphics to get the font metrics.
-	 * @param zones		An array of zones (m_nodes or m_links).
+	 * @param zones		An array of zones (nodes or links).
 	 * @param isFirst	True if this is the first call of the session (optimisation).
 	 */
 	initZones: function(s, zones, isFirst) {
 	    var i,
 			n = zones.length,
-	    	dim = m_applet.size;
+	    	dim = applet.size;
 	    
 	    // Reset the BBOX of the biggest zone
-	    m_prevBox = new com.socialcomputing.jmi.script.Rectangle(dim.width >> 1, dim.height >> 1, 1, 1);
+	    prevBox = new JMI.script.Rectangle(dim.width >> 1, dim.height >> 1, 1, 1);
 	    
-	    if (zones == m_links) 
-	    	m_maxBox = new com.socialcomputing.jmi.script.Dimension(0, 0);
+	    if (zones == links) 
+	    	maxBox = new JMI.script.Dimension(0, 0);
 	    
 	    // Reversed order so subZones are initialized before supZones!
 		for (i = n - 1 ; i >= 0 ; i --) {
-	        zones[i].init( m_applet, s, isFirst );
+	        zones[i].init( applet, s, isFirst );
 	    }
 		
 	    // Allocate a temporary bitmap to dblBuffer curZone rendering using the biggest Zone BBox
-	    // if ( zones == m_nodes )
+	    // if ( zones == nodes )
 	    // {
-		//    m_blitBuf  = new Shape(); //size  m_maxBox);
+		//    blitBuf  = new Shape(); //size  maxBox);
 	    // }
 	},
 	
@@ -128,15 +128,15 @@ JMI.script.Plan = (function() {
 	 * @param isRev		True if the array is drawn from in reversed order. That means from n-1 to 0.
 	 */
 	paintZones: function( s, zones, n, isFront, showTyp, showLinks, isRev) {
-		//zones[0].paint(m_applet, s, false, isFront, showTyp, showLinks);
+		//zones[0].paint(applet, s, false, isFront, showTyp, showLinks);
 	    if (isRev) {
 	        for (var i = n - 1 ; i >= 0 ; i --) {
-	            zones[i].paint(m_applet, s, false, isFront, showTyp, showLinks);
+	            zones[i].paint(applet, s, false, isFront, showTyp, showLinks);
 	        }
 	    }
 	    else {
 	        for (i = 0 ; i < n ; i++) {
-	            zones[i].paint(m_applet, s, false, isFront, showTyp, showLinks);
+	            zones[i].paint(applet, s, false, isFront, showTyp, showLinks);
 	        }
 	    }
 	},
@@ -145,45 +145,45 @@ JMI.script.Plan = (function() {
 	 * Prepare the Plan by initializing zones, allocating and filling the image buffers and repainting the Applet.
 	 */
 	init: function() {
-		this.m_tipTimers = new Object()
-	    var dim = m_applet.size;
-	    var restDrawingSurface = m_applet.restDrawingSurface;
-		var curDrawingSurface  = m_applet.curDrawingSurface;
-		var backDrawingSurface = m_applet.backDrawingSurface;
+		this.tipTimers = new Object()
+	    var dim = applet.size;
+	    var restDrawingSurface = applet.restDrawingSurface;
+		var curDrawingSurface  = applet.curDrawingSurface;
+		var backDrawingSurface = applet.backDrawingSurface;
 	
 	    // If there is any background image, load it
-	    //if (m_applet.backImgUrl != null)
-	        //renderBitmap( restGfx, m_applet.m_backImgUrl, 0, 0, null );
+	    //if (applet.backImgUrl != null)
+	        //renderBitmap( restGfx, applet.backImgUrl, 0, 0, null );
 		
 		ImageUtil.clear(restDrawingSurface);
-		restDrawingSurface.graphics.beginFill( this.m_applet.env.m_inCol.m_color);
-		restDrawingSurface.graphics.drawRect(0, 0, this.m_applet.width, this.m_applet.height);
+		restDrawingSurface.graphics.beginFill( this.applet.env.inCol.color);
+		restDrawingSurface.graphics.drawRect(0, 0, this.applet.width, this.applet.height);
 		restDrawingSurface.graphics.endFill();
 	
 	    // Init Links, Nodes and subNodes.
-		initZones(restDrawingSurface, m_links, false);
-		initZones(restDrawingSurface, m_nodes, false);	
+		initZones(restDrawingSurface, links, false);
+		initZones(restDrawingSurface, nodes, false);	
 			
 	    // Init backImg and restImg with background, links and places parts that are "ghostable"
-		paintZones(restDrawingSurface, m_links, m_links.length, false, Satellite.ALL_TYP, true, false );
-		paintZones(restDrawingSurface, m_nodes, m_nodesCnt, false, Satellite.ALL_TYP, true, true );
+		paintZones(restDrawingSurface, links, links.length, false, Satellite.ALL_TYP, true, false );
+		paintZones(restDrawingSurface, nodes, nodesCnt, false, Satellite.ALL_TYP, true, true );
 	    
 	    // Filters backImg so it looks ghosted
-		if( this.m_applet.env.m_filterCol != null) {
+		if( this.applet.env.filterCol != null) {
 			ImageUtil.copy( restDrawingSurface, backDrawingSurface);
-			ImageUtil.filterImage( backDrawingSurface, dim, this.m_applet.env.m_filterCol.getColor().color);
-			// m_applet.renderShape( m_applet.restDrawingSurface, 0, 0); // ??? size
-			//m_applet.env.filterImage(m_applet.backDrawingSurface, dim);
+			ImageUtil.filterImage( backDrawingSurface, dim, this.applet.env.filterCol.getColor().color);
+			// applet.renderShape( applet.restDrawingSurface, 0, 0); // ??? size
+			//applet.env.filterImage(applet.backDrawingSurface, dim);
 		}
 	    
 	    // Finish drawing restImg with places parts that are allways visible (tip, sel...)
-		paintZones(restDrawingSurface, m_links, m_links.length, true, Satellite.BASE_TYP, true, false );
-		paintZones(restDrawingSurface, m_links, m_links.length, true, Satellite.TIP_TYP, false, false );
-		paintZones(restDrawingSurface, m_links, m_links.length, true, Satellite.SEL_TYP, false, false );
+		paintZones(restDrawingSurface, links, links.length, true, Satellite.BASE_TYP, true, false );
+		paintZones(restDrawingSurface, links, links.length, true, Satellite.TIP_TYP, false, false );
+		paintZones(restDrawingSurface, links, links.length, true, Satellite.SEL_TYP, false, false );
 		
-		paintZones(restDrawingSurface, m_nodes, m_nodesCnt, true, Satellite.BASE_TYP, true, true );
-		paintZones(restDrawingSurface, m_nodes, m_nodesCnt, true, Satellite.TIP_TYP, false, true );
-		paintZones(restDrawingSurface, m_nodes, m_nodesCnt, true, Satellite.SEL_TYP, false, true );
+		paintZones(restDrawingSurface, nodes, nodesCnt, true, Satellite.BASE_TYP, true, true );
+		paintZones(restDrawingSurface, nodes, nodesCnt, true, Satellite.TIP_TYP, false, true );
+		paintZones(restDrawingSurface, nodes, nodesCnt, true, Satellite.SEL_TYP, false, true );
 	},
 	
 	/*
@@ -195,14 +195,14 @@ JMI.script.Plan = (function() {
 	 * @return True if the current satellite has changed. 
 	 */
 	updateZoneAt: function(p) {
-		var curSat = com.socialcomputing.jmi.script.Satellite,
-			zone = com.socialcomputing.jmi.script.ActiveZone,
-	    	parent = m_curZone != null ? m_curZone.getParent() : null,
+		var curSat = JMI.script.Satellite,
+			zone = JMI.script.ActiveZone,
+	    	parent = curZone != null ? curZone.getParent() : null,
 	        i;
 	    
 		// Check if there is a current Active Zone (Satellite ?)
-	    if(m_curSat != null) {
-	        curSat = m_curZone.m_curSwh.getSatAt(m_applet, m_applet.curDrawingSurface.graphics, parent, p, true);
+	    if(curSat != null) {
+	        curSat = curZone.curSwh.getSatAt(applet, applet.curDrawingSurface.graphics, parent, p, true);
 	        
 			// The cursor is in the current Zone
 	        if (curSat != null) {
@@ -212,12 +212,12 @@ JMI.script.Plan = (function() {
 	    }
 	    
 	    // The cursor is in not in the current Zone, it can be in another one...
-	    for(i = 0 ; i < m_nodesCnt ; i++) {
-	        zone = m_nodes[i];
+	    for(i = 0 ; i < nodesCnt ; i++) {
+	        zone = nodes[i];
 	        
 			// We know p is not in curZone so don't test it!
 	        if (zone != parent) {
-	            curSat = zone.m_restSwh.getSatAt(m_applet, m_applet.curDrawingSurface.graphics, zone, p, false);
+	            curSat = zone.restSwh.getSatAt(applet, applet.curDrawingSurface.graphics, zone, p, false);
 	            
 				// The cursor is on this node
 	            if(curSat != null) {
@@ -229,14 +229,14 @@ JMI.script.Plan = (function() {
 		
 	    // The cursor is not in a Node, it can be in a Link...
 		//i = 0;
-	    for(i = m_linksCnt - 1 ; i >= 0 ; i --) {
-	        zone = m_links[i];
+	    for(i = linksCnt - 1 ; i >= 0 ; i --) {
+	        zone = links[i];
 			
 			// We know p is not in curZone so don't test it!
-	        if (zone != parent && zone.m_curSwh != null) {                                                
+	        if (zone != parent && zone.curSwh != null) {                                                
 				
 				// If this zone has no current Swatch, it can't be current.
-	            curSat = zone.m_restSwh.getSatAt(m_applet, m_applet.curDrawingSurface.graphics, zone, p, false );
+	            curSat = zone.restSwh.getSatAt(applet, applet.curDrawingSurface.graphics, zone, p, false );
 	            
 				// The cursor is on this link
 	            if (curSat != null) {
@@ -247,7 +247,7 @@ JMI.script.Plan = (function() {
 	    }
 	    
 	    // Last case, the cursor is not in a Zone
-	    this.m_newZone = null;
+	    this.newZone = null;
 	    return updateCurrentZone( null, p);
 	},
 	
@@ -265,45 +265,45 @@ JMI.script.Plan = (function() {
 	 */
 	updateCurrentZone: function( curSat, p) {
 	
-		if ( m_curZone != m_newZone )//|| m_curSat != curSat)           // The current Satellite has changed
+		if ( curZone != newZone )//|| curSat != curSat)           // The current Satellite has changed
 	    {
-	        for each ( var waiter in m_tipTimers)
+	        for each ( var waiter in tipTimers)
 	        {
 	         	waiter.interrupt();
 	        }
 	    }
 	    
 		// The current Satellite has changed
-	    if (m_curZone != m_newZone || m_curSat != curSat) {
+	    if (curZone != newZone || curSat != curSat) {
 			// If flying over background reset to default arrow
 	        var cursTyp = MouseCursor.AUTO;    
 			
-	        if (m_curZone != null &&
-				(m_newZone == null || m_curZone.getParent() != m_newZone.getParent())) {
+	        if (curZone != null &&
+				(newZone == null || curZone.getParent() != newZone.getParent())) {
 				// Restore its rest image
 	            //ON rollover non active zone => redraw
-				var curZoneBounds = m_curZone.getParent().m_bounds;
-				ImageUtil.clear( this.m_applet.curDrawingSurface);
-				this.m_applet.renderShape(this.m_applet.restDrawingSurface, curZoneBounds.width, curZoneBounds.height, new Point(curZoneBounds.x, curZoneBounds.y));
-	            this.m_applet.toolTip = null;
+				var curZoneBounds = curZone.getParent().bounds;
+				ImageUtil.clear( this.applet.curDrawingSurface);
+				this.applet.renderShape(this.applet.restDrawingSurface, curZoneBounds.width, curZoneBounds.height, new Point(curZoneBounds.x, curZoneBounds.y));
+	            this.applet.toolTip = null;
 	        }
 	        
-	        m_curSat = curSat;
+	        curSat = curSat;
 	        
 			// A new Zone is hovered, let's paint it!
-	        if (m_curSat != null && (m_curZone != m_newZone)) {
-	            m_curZone = m_newZone;
-			    ImageUtil.clear( this.m_applet.curDrawingSurface);
+	        if (curSat != null && (curZone != newZone)) {
+	            curZone = newZone;
+			    ImageUtil.clear( this.applet.curDrawingSurface);
 	            paintCurZone();              
-	            m_curSat.execute( m_applet, m_curZone, p, Satellite.HOVER_VAL);
+	            curSat.execute( applet, curZone, p, Satellite.HOVER_VAL);
 	            cursTyp = MouseCursor.HAND;   // Sets the cursor to a hand if the mouse entered a Zone
 	        }
 	        else {
-	            m_curZone = m_newZone;
-	            if (m_curSat == null) m_applet.showStatus("");
+	            curZone = newZone;
+	            if (curSat == null) applet.showStatus("");
 	        }
 	        // TODO ???
-	        //m_applet.setCursor( Cursor.getPredefinedCursor( cursTyp ));
+	        //applet.setCursor( Cursor.getPredefinedCursor( cursTyp ));
 	        //g.dispose();
 	        
 	        return true;
@@ -319,8 +319,8 @@ JMI.script.Plan = (function() {
 	 */
 	paintCurZone: function() {
 		// A new Zone is hovered, let's paint it!
-		if (m_curZone != null) {
-	        m_curZone.getParent().paintCur( m_applet);
+		if (curZone != null) {
+	        curZone.getParent().paintCur( applet);
 	    }
 	},
 	
@@ -334,7 +334,7 @@ JMI.script.Plan = (function() {
 	 * @param key		A unique ID for each slices of the same kind (tooltip != infoTip).
 	 */
 	popSlice: function( zone, slice, delay, length, key) {
-		var tipTimer = m_tipTimers[key];
+		var tipTimer = tipTimers[key];
 		
 		if ( tipTimer != null )
 		{
@@ -348,7 +348,7 @@ JMI.script.Plan = (function() {
 		}
 		
 		tipTimer = new TipTimer( this, zone, slice, key, delay, length );
-		m_tipTimers[key] = tipTimer;
+		tipTimers[key] = tipTimer;
 	},
 	
 	/**
@@ -356,8 +356,8 @@ JMI.script.Plan = (function() {
 	 * @param dim	New size of the Applet.
 	 */
 	resize: function(dim) {
-	    if (m_prevBox != null
-	            && ((m_prevBox.width != dim.width) || ( m_prevBox.height != dim.height ))
+	    if (prevBox != null
+	            && ((prevBox.width != dim.width) || ( prevBox.height != dim.height ))
 				&& dim.width > 100 && dim.height > 100 )
 	    {
 			var i;
@@ -373,49 +373,49 @@ JMI.script.Plan = (function() {
 	        var isFakeTo; //:Boolean;
 	        
 			// too few places, lets reduce their size
-	        if (this.m_nodesCnt < 8) {
-	            scale	= 1.0 + (2.0 / this.m_nodesCnt);
-	            m_prevBox.x += Math.round(0.5 * (m_prevBox.width * (1.0 - scale)));
-	            m_prevBox.y += Math.round(0.5 * (m_prevBox.height * (1.0 - scale)));
-	            m_prevBox.width = Math.round(m_prevBox.width * scale);
-	            m_prevBox.height = Math.round(m_prevBox.height * scale);
+	        if (this.nodesCnt < 8) {
+	            scale	= 1.0 + (2.0 / this.nodesCnt);
+	            prevBox.x += Math.round(0.5 * (prevBox.width * (1.0 - scale)));
+	            prevBox.y += Math.round(0.5 * (prevBox.height * (1.0 - scale)));
+	            prevBox.width = Math.round(prevBox.width * scale);
+	            prevBox.height = Math.round(prevBox.height * scale);
 	        }
 	        
-	        sx  = (dim.width  - margin) / m_prevBox.width;
-	        sy  = (dim.height - margin) / m_prevBox.height;
-	        dx  = m_prevBox.x - (margin >> 1);
-	        dy  = m_prevBox.y - (margin >> 1);
+	        sx  = (dim.width  - margin) / prevBox.width;
+	        sy  = (dim.height - margin) / prevBox.height;
+	        dx  = prevBox.x - (margin >> 1);
+	        dy  = prevBox.y - (margin >> 1);
 			//s	= sx > sy ? sy : sx;
 	        s = (sx + sy)/2;
 	        
 			// Iterate through all "real" nodes 
-			for (i = 0 ; i < this.m_nodesCnt ; i++) {
-				zone = this.m_nodes[i];
+			for (i = 0 ; i < this.nodesCnt ; i++) {
+				zone = this.nodes[i];
 	            resizePoint(zone, 0, dx, dy, sx, sy);
-	            scale = zone.m_props["_SCALE"];
-	            zone.m_props["_SCALE"] = s * scale;
-	            zone.m_datas.length=0;
+	            scale = zone.props["_SCALE"];
+	            zone.props["_SCALE"] = s * scale;
+	            zone.datas.length=0;
 	        }
 	        
 			// Iterate through remaining nodes (fake ones ??)
-	        while (i < this.m_nodes.length) {
-	            m_nodes[i++].m_datas = new Dictionary();
+	        while (i < this.nodes.length) {
+	            nodes[i++].datas = new Dictionary();
 	        }
 	
 			// Iterate through all links (real and fakes)
-			for each (zone in m_links) {
+			for each (zone in links) {
 				LinkZone.FAKEFROM_BIT;
-	            isFakeFrom  = Base.isEnabled(zone.m_flags, LinkZone.FAKEFROM_BIT);
-	            isFakeTo    = Base.isEnabled(zone.m_flags, LinkZone.FAKETO_BIT);
+	            isFakeFrom  = Base.isEnabled(zone.flags, LinkZone.FAKEFROM_BIT);
+	            isFakeTo    = Base.isEnabled(zone.flags, LinkZone.FAKETO_BIT);
 	            
 	            if (isFakeFrom)    resizePoint(zone, 0, dx, dy, sx, sy);
 	            else if (isFakeTo) resizePoint(zone, 1, dx, dy, sx, sy);
 	            
-	            scale = zone.m_props["_SCALE"];
-	            zone.m_props["_SCALE"] = s * scale;
-	            zone.m_datas.length=0;
+	            scale = zone.props["_SCALE"];
+	            zone.props["_SCALE"] = s * scale;
+	            zone.datas.length=0;
 	        }
-	        m_prevBox = new JMI.script.Rectangle(0, 0, dim.height, dim.width);
+	        prevBox = new JMI.script.Rectangle(0, 0, dim.height, dim.width);
 	    }
 	},
 	
@@ -431,7 +431,7 @@ JMI.script.Plan = (function() {
 	 * @param sy	Vertical scaling after translation.
 	 */
 	resizePoint: function(zone, i, dx, dy, sx, sy) {
-	    var p = zone.m_props["_VERTICES"][i];
+	    var p = zone.props["_VERTICES"][i];
 	    p.x = Math.round(sx * (p.x - dx));
 	    p.y = Math.round(sy * (p.y - dy));
 	},
@@ -443,7 +443,7 @@ JMI.script.Plan = (function() {
 	 * @param bounds	Bounds of the image part to copy into g.
 	 */
 	blitImage: function (g, shape, bounds) {
-	    var dim = m_applet.size;
+	    var dim = applet.size;
 	    var x1 = bounds.x < 0? 0: bounds.x,
 	        y1 = bounds.y < 0? 0: bounds.y,
 	        x2 = bounds.x + bounds.width + 1,

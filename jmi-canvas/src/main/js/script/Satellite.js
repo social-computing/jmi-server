@@ -220,7 +220,7 @@ JMI.script.Satellite = (function() {
          * @param actionId      Type of event that triggers the action.[HOVER_VAL,CLICK_VAL,DBLCLICK_VAL].
          */
         execute: function(applet, zone, pos, actionId) {
-            var firstSat = zone._curSwh._satellites[0];
+            var firstSat = zone._curSwh.satellites[0];
             var isExe = isDefined(actionId);
         
             // Events
@@ -228,7 +228,7 @@ JMI.script.Satellite = (function() {
             if (zone != null) {
                 // TODO : portage instanceof et héritage
                 if (zone instanceof JMI.script.LinkZone) {
-                    //dispatchEvent( new LinkClickEvent( plan.m_curZone as LinkZone));
+                    //dispatchEvent( new LinkClickEvent( plan.curZone as LinkZone));
                 }
                 else { 
                     var event = null;
@@ -312,13 +312,13 @@ JMI.script.Satellite = (function() {
                         
                         // TODO :  Plays a sound 
                         else if (func == ("play")) {
-                            /*var clip:AudioClip= AudioClip(applet.m_env.m_medias[ args ]);
+                            /*var clip:AudioClip= AudioClip(applet.m_env.medias[ args ]);
                             
                             if ( clip == null )
                             {
                                 clip = applet.getAudioClip( applet.getCodeBase(), args );
                                 clip.play();
-                                applet.m_env.m_medias.put( args, clip );
+                                applet.m_env.medias.put( args, clip );
                             }*/
                         }
                         

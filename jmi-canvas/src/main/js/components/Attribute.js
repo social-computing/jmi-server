@@ -22,7 +22,7 @@ package com.socialcomputing.jmi.components
 		}
 
 		public function select( selection:String):void {
-			var selId:int   = env.m_selections[selection];
+			var selId:int   = env.selections[selection];
 			if ( selId != -1 )
 			{
 				selId = 1 << selId;

@@ -6,8 +6,7 @@ JMI.script.Polygon = (function() {
         this._xpoints = []; //:Vector.<int>;
         this._ypoints = []; //:Vector.<int>;
         this._npoints = 0;  //:int;
-        //bounds = com.socialcomputing.jmi.script.Rectangle, 
-        this._bounds = null;
+        this._bounds = JMI.script.Rectangle;
     };
 	
 	Polygon.prototype = {

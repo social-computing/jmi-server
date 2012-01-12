@@ -174,8 +174,8 @@ public function get dataProvider():Object
 	
 	// Clear current
 	if( this.plan != null) {
-		this.plan.m_curSat = null;
-		this.plan.m_curZone = null;
+		this.plan.curSat = null;
+		this.plan.curZone = null;
 	}
 	
 	// Clear all drawing surfaces
@@ -219,15 +219,15 @@ public function get dataProvider():Object
 
 		try {
 			this._dataProvider.env.init(this, needPrint);
-			plan.m_applet = this;
-			plan.m_curSel = -1;
-			plan.initZones(this.restDrawingSurface, plan.m_links, true);
-            plan.initZones(this.restDrawingSurface, plan.m_nodes, true);
+			plan.applet = this;
+			plan.curSel = -1;
+			plan.initZones(this.restDrawingSurface, plan.links, true);
+            plan.initZones(this.restDrawingSurface, plan.nodes, true);
 			plan.resize(size);
 			plan.init();
 			plan.resize(size);
 			plan.init();
-		    for each( var zone:ActiveZone in plan.m_nodes) {
+		    for each( var zone:ActiveZone in plan.nodes) {
 				this.attributes.addItem( new Attribute( env, zone));
 			}
 			this._ready = true;
@@ -282,13 +282,13 @@ public function mouseMoveHandler(event:MouseEvent):void {
 }
 
 public function mouseClickHandler(event:MouseEvent):void {
-	if ( ready && plan.m_curSat != null )
+	if ( ready && plan.curSat != null )
 	{
 		var point:Point = new Point();
 		point.x = event.localX;
 		point.y = event.localY;
 		plan.updateZoneAt( point);
-		plan.m_curSat.execute( this, plan.m_curZone, point, Satellite.CLICK_VAL);
+		plan.curSat.execute( this, plan.curZone, point, Satellite.CLICK_VAL);
 	}
 }
 
@@ -305,13 +305,13 @@ private function findLink( zone:ActiveZone):Link {
 }
 
 public function mouseDoubleClickHandler(event:MouseEvent):void {
-	if ( ready && plan.m_curSat != null )
+	if ( ready && plan.curSat != null )
 	{
 		var point:Point = new Point();
 		point.x = event.localX;
 		point.y = event.localY;
 		plan.updateZoneAt( point);
-		plan.m_curSat.execute( this, plan.m_curZone, point, Satellite.DBLCLICK_VAL);
+		plan.curSat.execute( this, plan.curZone, point, Satellite.DBLCLICK_VAL);
 	}
 }
 
@@ -319,7 +319,7 @@ public function resizeHandler(event:ResizeEvent):void {
 	//trace("resize, new size = (" + this.width + ", " + this.height + ")");
 	this.clear();
 	
-	this._restDrawingSurface.graphics.beginFill(this._ready ? this.env.m_inCol.m_color : this._backgroundColor);
+	this._restDrawingSurface.graphics.beginFill(this._ready ? this.env.inCol.m_color : this._backgroundColor);
 	this._restDrawingSurface.graphics.drawRect(0, 0, this.width, this.height);
 	this._restDrawingSurface.graphics.endFill();
 		
@@ -407,8 +407,8 @@ public function actionPerformed( actionStr:String ):void {
 }
 
 public function getProperty( name:String):Object {
-	if( env != null && env.m_props.hasOwnProperty( name))
-		return env.m_props[name];
+	if( env != null && env.props.hasOwnProperty( name))
+		return env.props[name];
 	return null;
 }
 
@@ -416,7 +416,7 @@ public function defineEntities( nodeFields:Array, nodeId:String="POSS_ID", linkI
 	
 	// Extraction des entités
 	var ents:Object = new Object();
-	for each( var zone:ActiveZone in plan.m_nodes) {
+	for each( var zone:ActiveZone in plan.nodes) {
 		var ids:Array = zone.m_props[nodeId] as Array;
 		for( var i:int = 0; i < ids.length; ++i) {
 			if( !ents.hasOwnProperty( ids[i])) {
@@ -430,7 +430,7 @@ public function defineEntities( nodeFields:Array, nodeId:String="POSS_ID", linkI
 			}
 		}
 	}
-	for each( var link:LinkZone in plan.m_links) {
+	for each( var link:LinkZone in plan.links) {
 		ids = link.m_props[linkId] as Array;
 		for each( var id:String in ids) {
 			ents[id].addLink( link);
@@ -452,14 +452,14 @@ public function defineEntities( nodeFields:Array, nodeId:String="POSS_ID", linkI
 /*public function setSelection( selection:String):void
 {
 	var selId:int   = getSelId( selection );
-	plan.m_curSel = selId;
+	plan.curSel = selId;
 	plan.init();
 	this.invalidateDisplayList();
 }
 
 public function clearSelection( selection:String):void {
-	clearZoneSelection( selection, plan.m_nodes, plan.m_nodes.length );
-	clearZoneSelection( selection, plan.m_links, plan.m_linksCnt );
+	clearZoneSelection( selection, plan.nodes, plan.nodes.length );
+	clearZoneSelection( selection, plan.links, plan.linksCnt );
 }*/
 
 /**
@@ -489,9 +489,9 @@ public function clearSelection( selection:String):void {
  */
 /*private function getSelId( selection:String):int
 {
-	if( env.m_selections[selection] == null)
+	if( env.selections[selection] == null)
 		return -1;
-	return  env.m_selections[selection];
+	return  env.selections[selection];
 }
 
 com.socialcomputing.jmi.components.Map.prototype.renderShape = function(sprite, width, height, position) {

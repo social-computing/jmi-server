@@ -12,20 +12,20 @@ JMI.namespace("script.Swatch");
  * @version 1.0
  */
 JMI.script.Swatch = (function() {
-	var Swatch = function(satellites) {
+	var Swatch = function() {
 	    /**
          * Layers of satellites that describes this.
          * Satellites are where the real information of this is.
          * :Vector.<Satellite>;
          */
-    	this._satellites = satellites;
+    	this.satellites,// = satellites;
 
         /**
          * Objects references (MenuX, Slice...) created by the server side.
          * This is used by the events to find menu or slices to pop.
          * :Array;
          */
-    	this._refs = []; 
+    	this._refs; 
 	};
 	
 	Swatch.prototype = {
@@ -42,7 +42,7 @@ JMI.script.Swatch = (function() {
          * @param showLinks     True if links between satelites should be drawn. False for the opposite.
          */
         paint: function(applet, s, zone, isCur, isFront, showTyp, showLinks) {
-            var sat = this._satellites[0];
+            var sat = this.satellites[0];
             var shape = sat._shape;
             var flags = getFlags(zone._props);
             var transfo = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone._props);
@@ -78,10 +78,10 @@ JMI.script.Swatch = (function() {
             var zones = isBag ? supZone._subZones : null;
             var curZone= applet.plan._curZone,
                 subZone;
-            var sat = this._satellites[0];
+            var sat = this.satellites[0];
             var satData = isCur ? zone._curData[0] : zone._restData[0];
             var satRelTrf, satTrf;
-            var i, n = this._satellites.length,
+            var i, n = this.satellites.length,
                 flags;
             var hasRestBit, hasCurBit, isCurSub;
             var satCtr,
@@ -93,7 +93,7 @@ JMI.script.Swatch = (function() {
             }
             
             for (i = 1 ; i < n ; i++) {
-                sat     = this._satellites[i];
+                sat     = this.satellites[i];
                 satData = isCur ? zone._curData[i] : zone._restData[i];
                 flags   = satData._flags;
                 
@@ -166,7 +166,7 @@ JMI.script.Swatch = (function() {
          */
         getBounds: function(applet, g, zone, isCurZone) {
             var bounds = new JMI.script.Rectangle(0, 0, 0, 0);
-            var sat = this._satellites[0];
+            var sat = this.satellites[0];
             var shape = sat._shape;
             // TODO : portage, instanceof et heritage
             var isBag = zone instanceof JMI.script.BagZone;
@@ -175,7 +175,7 @@ JMI.script.Swatch = (function() {
             var subZone;
             var satRelTrf, satTrf,
                 transfo = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone._props);
-            var i, n = this._satellites.length,
+            var i, n = this.satellites.length,
                 flags;
             //boolean         hasRestBit, hasCurBit, hasLinkBit, isCur;
             var satData;
@@ -187,7 +187,7 @@ JMI.script.Swatch = (function() {
             
             // Iterate through the swatch satellite list
             for (i = 1 ; i < n ; i ++) {
-                sat         = this._satellites[i];
+                sat         = this.satellites[i];
                 satData     = isCurZone ? zone._curData[i] : zone._restData[i];
                 flags       = satData._flags;
                 
@@ -252,7 +252,7 @@ JMI.script.Swatch = (function() {
             var parentzone = zone.getParent();      
                         
             if(parentzone._bounds.contains(pos._x, pos._y)) {
-                var sat     = this._satellites[0];
+                var sat     = this.satellites[0];
                 var shape   = sat._shape;
                 var isBag   = zone instanceof JMI.script.BagZone;
                 var supZone = isBag ? zone : null;
@@ -262,7 +262,7 @@ JMI.script.Swatch = (function() {
                 var satRelTrf, satTrf;
                 var transfo= sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone._props);
                 var i;
-                var n = this._satellites.length;
+                var n = this.satellites.length;
                 var flags;
                 var hasRestBit;
                 var hasCurBit;
@@ -274,7 +274,7 @@ JMI.script.Swatch = (function() {
                 
                 // Iterate throw all this swatch's satellites to test if the cursor is positionned in one of them
                 for(i = n - 1 ; i > 0 ; i--) {
-                    sat     = this._satellites[i];
+                    sat     = this.satellites[i];
                     satData = isCurZone ? zone._curData[i] : zone._restData[i];
                     flags   = satData._flags;
                     
@@ -349,7 +349,7 @@ JMI.script.Swatch = (function() {
                 
                 // Tests if the cursor is located in the place itself
                 // TODO : portage instanceof et héritage
-                sat = this._satellites[0];
+                sat = this.satellites[0];
                 if(sat.contains(planComponent, g, zone, null, null, transfo, pos, zones != null, true) 
                     || (isCurZone && !(zone instanceof JMI.script.LinkZone))) {
                     return sat;
@@ -374,7 +374,7 @@ JMI.script.Swatch = (function() {
             var isTip, isSel;
             
             // TODO : portage boulce for, iteration sur les éléments d'un tableau
-            for (var sat in this._satellites) {
+            for (var sat in this.satellites) {
                 satData = new JMI.script.SatData();
                 flags   = sat.getFlags(zone._props);
                 satData._flags = flags;

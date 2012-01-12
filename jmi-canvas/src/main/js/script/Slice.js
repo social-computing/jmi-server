@@ -77,7 +77,7 @@ JMI.script.Slice =  (function() {
                             m_htmlTxt.m_text = hTxt;
                             m_htmlTxt.init( text, zone);
                             m_htmlTxt.updateBounds( applet);
-                            supCtr  = supZone.m_restSwh.m_satellites[0].m_shape.getCenter( supZone );
+                            supCtr  = supZone.m_restSwh.satellites[0].m_shape.getCenter( supZone );
                             m_htmlTxt.setTextBnds( applet.size, getFlags( zone.m_props), zone.m_flags ,transfo, satCtr, supCtr );
                             m_htmlTxt.drawText( s, applet.size, text.getFlags( zone.m_props )>> 16);//HTMLText.SOUTH_WEST );
                             applet.renderShape( s, m_htmlTxt.m_bounds.width, m_htmlTxt.m_bounds.height, new Point(m_htmlTxt.m_bounds.x, m_htmlTxt.m_bounds.y));
@@ -90,7 +90,7 @@ JMI.script.Slice =  (function() {
                     }*/
                 }
                 else {
-                    supCtr = supZone._restSwh._satellites[0]._shape.getCenter(supZone);
+                    supCtr = supZone._restSwh.satellites[0]._shape.getCenter(supZone);
                     var htmlTxt = text.getHText(applet, s, zone, transfo, satCtr, supCtr, text);
                     
                     if (htmlTxt != null && htmlTxt._text.length > 0) {
@@ -178,7 +178,7 @@ JMI.script.Slice =  (function() {
                     if (this._htmlTxt != null) bounds.copy(this._htmlTxt._bounds);
                 }
                 else {
-                    supCtr = supZone._restSwh._satellites[0]._shape.getCenter(supZone);
+                    supCtr = supZone._restSwh.satellites[0]._shape.getCenter(supZone);
                     var htmlTxt;
                     
                     // TODO null à remplacer par Sprite

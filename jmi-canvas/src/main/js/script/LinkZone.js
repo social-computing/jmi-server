@@ -57,7 +57,7 @@ JMI.script.LinkZone = (function() {
                 
                 var w = this._bounds.width,
                     h = this._bounds.height;
-                var maxBox = applet.plan.m_maxBox;
+                var maxBox = applet.plan.maxBox;
                 
                 if (w > maxBox.width)     maxBox.width    = w;
                 if (h > maxBox.height)    maxBox.height   = h;

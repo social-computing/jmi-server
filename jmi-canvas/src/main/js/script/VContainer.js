@@ -21,18 +21,13 @@ JMI.script.VContainer = (function() {
      */
     var VContainer = function(value, isBound) {
         //Object this container hold or name (String) of the property.
-        //:Object;
-        this._value = value;
+        this.value = value;
 
         // True if this is a reference. So the container hold a property name.
-        //:Boolean;
-        this._isBound = isBound || false;
+        this.isBound = isBound || false;
     };
     VContainer.prototype = {
-        constructor: JMI.script.VContainer,
-        isBound: function() {
-            return this._isBound;    
-        }
+        constructor: JMI.script.VContainer
     };
     return VContainer;
 }());
