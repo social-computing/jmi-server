@@ -10,12 +10,12 @@
 
 <script type="text/javascript" src="/jmi-canvas/src/main/js/script/ActiveZone.js"></script>
 <script type="text/javascript" src="/jmi-canvas/src/main/js/script/BagZone.js"></script>
-<!--script type="text/javascript" src="/jmi-canvas/src/main/js/script/Base.js"></script>
-<script type="text/javascript" src="/jmi-canvas/src/main/js/script/ColorX.js"></script-->
+<!--script type="text/javascript" src="/jmi-canvas/src/main/js/script/Base.js"></script-->
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/ColorX.js"></script>
 <!--script type="text/javascript" src="/jmi-canvas/src/main/js/script/CustomMenuItemRenderer.js"></script-->
-<!--script type="text/javascript" src="/jmi-canvas/src/main/js/script/Dimension.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/Dimension.js"></script>
 <script type="text/javascript" src="/jmi-canvas/src/main/js/script/Env.js"></script>
-<script type="text/javascript" src="/jmi-canvas/src/main/js/script/FontX.js"></script>
+<!--script type="text/javascript" src="/jmi-canvas/src/main/js/script/FontX.js"></script>
 <script type="text/javascript" src="/jmi-canvas/src/main/js/script/FormatToken.js"></script>
 <script type="text/javascript" src="/jmi-canvas/src/main/js/script/HTMLText.js"></script>
 <script type="text/javascript" src="/jmi-canvas/src/main/js/script/Insets.js"></script-->
@@ -36,6 +36,8 @@
 <script type="text/javascript" src="/jmi-canvas/src/main/js/script/Token.js"></script-->
 <script type="text/javascript" src="/jmi-canvas/src/main/js/script/Transfo.js"></script>
 <script type="text/javascript" src="/jmi-canvas/src/main/js/script/VContainer.js"></script>
+
+<script type="text/javascript" src="/jmi-canvas/src/main/js/components/Map.js"></script>
 
 </head>
 <body>
@@ -59,9 +61,9 @@ $.get(
 	        	}
 	        	else if( 'Point' === value.cls) {
 	        		return new JMI.script.Point( value.x, value.y);
-/*	        	}
+	        	}
 	        	else if( 'ColorX' === value.cls) {
-	        		return new JMI.script.ColorX( value.color);*/
+	        		return new JMI.script.ColorX( value.color);
 		       	} else {
 		         	return value;
 		       	}

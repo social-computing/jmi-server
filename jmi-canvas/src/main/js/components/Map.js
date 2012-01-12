@@ -1,43 +1,5 @@
-/*	import com.socialcomputing.jmi.components.events.ActionEvent;
-	import com.socialcomputing.jmi.components.events.AttributeEvent;
-	import com.socialcomputing.jmi.components.events.NavigateEvent;
-	import com.socialcomputing.jmi.components.events.StatusEvent;
-	import com.socialcomputing.jmi.plan.PlanContainer;
-	import com.socialcomputing.jmi.script.ActiveZone;
-	import com.socialcomputing.jmi.script.Dimension;
-	import com.socialcomputing.jmi.script.Env;
-	import com.socialcomputing.jmi.script.LinkZone;
-	import com.socialcomputing.jmi.script.Plan;
-	import com.socialcomputing.jmi.script.Satellite;
-	import com.socialcomputing.jmi.util.controls.ImageUtil;
-	
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import flash.display.Sprite;
-	import flash.events.ContextMenuEvent;
-	import flash.events.Event;
-	import flash.events.MouseEvent;
-	import flash.geom.Matrix;
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
-	import flash.net.URLRequest;
-	import flash.net.navigateToURL;
-	import flash.ui.ContextMenu;
-	import flash.ui.ContextMenuItem;
-	
-	import mx.collections.ArrayCollection;
-	import mx.core.UIComponent;
-	import mx.events.MenuEvent;
-	import mx.events.ResizeEvent;
-	import mx.managers.CursorManager;
-	
-	import spark.core.SpriteVisualElement;
-	
-	[DefaultBindingProperty(destination="dataProvider")]
-	
-	[IconFile("Map.png")]
-	
-	[Event(name="ready",    type="flash.events.Event")]
+JMI.namespace("components.Map");
+/*	[Event(name="ready",    type="flash.events.Event")]
 	[Event(name="empty",    type="flash.events.Event")]
 	[Event(name="error",    type="com.socialcomputing.jmi.components.events.StatusEvent")]
 	[Event(name="action",   type="com.socialcomputing.jmi.components.events.ActionEvent")]
@@ -48,10 +10,10 @@
 	[Event(name="attribute_hover", type="com.socialcomputing.jmi.components.events.AttributeEvent")]
 	//[Event(name="link_click",      type="com.socialcomputing.jmi.components.events.LinkClickEvent")]
 */	
-JMI.namespace("com.socialcomputing.jmi.components.Map") = (function() {
+JMI.components.Map = (function() {
 
-var _dataProvider, //:PlanContainer = null;
-	_curPos = new com.socialcomputing.jmi.script.Point();
+var _dataProvider = JMI.script.PlanContainer;
+	_curPos = new JMI.script.Point();
 	_ready = false,
 
 /*
@@ -79,10 +41,9 @@ var _dataProvider, //:PlanContainer = null;
  * API
  */
 	attributes, //:ArrayCollection;
-	entities, //:ArrayCollection;
-	Constr;
+	entities; //:ArrayCollection;
 	
-	Constr = function( id) {
+	var Map = function(id) {
 		attributes = new Array();
 		entities = new Array();
 		
@@ -130,39 +91,26 @@ var _dataProvider, //:PlanContainer = null;
 		menuItem.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, openSoCom);
 		wpsMenu.customItems.push( menuItem);
 		this.contextMenu = wpsMenu;*/
-	}
-	Constr.prototype = {
-		constructor: com.socialcomputing.jmi.script.Base,
-		version: "2.0"
-	}
-	return Constr;
+	};
+	
+    Map.prototype = {
+        contructor: JMI.components.Map
+		
+	};
+	
+	return Map;
 }());
 
-com.socialcomputing.jmi.components.Map.version = "1.0-SNAPSHOT";
-com.socialcomputing.jmi.components.Map.EMPTY = "empty";
-com.socialcomputing.jmi.components.Map.READY = "ready";
+JMI.components.Map.version = "1.0-SNAPSHOT";
+JMI.components.Map.EMPTY = "empty";
+JMI.components.Map.READY = "ready";
 
 com.socialcomputing.jmi.components.Map.prototype.openSoCom = function ( e) {
 	//TODO portage
 	navigateToURL( new URLRequest( "http://www.social-computing.com"), "_blank");
 }
 
-public function get backDrawingSurface():Sprite
-{
-	return _backDrawingSurface;
-}
-
-public function get backgroundColor():int
-{
-	return _backgroundColor;
-}
-
-public function set backgroundColor(value:int):void
-{
-	_backgroundColor = value;
-}
-
-public function get ready():Boolean {
+/*public function get ready():Boolean {
 	return plan != null && _ready;
 }			
 
@@ -210,8 +158,9 @@ public function set curPos(pos:Point):void {
 public function get dataProvider():Object
 {
 	return this._dataProvider;	
-}
-public function set dataProvider(value:Object):void
+}*/
+
+/*public function set dataProvider(value:Object):void
 {
 	//Alert.show( unescape( flash.display.LoaderInfo(this.root.loaderInfo).url));
 	
@@ -291,13 +240,6 @@ public function set dataProvider(value:Object):void
 		}
 		CursorManager.removeBusyCursor();
 		
-		/*
-		 * Don't redraw immediately, because maybe the code that's calling us is
-		 * going to change several settings, and we don't want to redraw for each 
-		 * setting change. Instead, tell the flex framework that
-		 * we need to be redrawn; the framework will ensure that updateDisplayList
-		 * is invoked after all scripts have finished executing.
-		 */
 		this.invalidateProperties();
 		this.invalidateDisplayList();
 		if(this._ready)
@@ -392,9 +334,6 @@ public function navigateHandler(event:NavigateEvent):void {
 	navigateToURL( new URLRequest( event.url), event.btarget);
 }
 
-/**
- * @inheritDoc
- */
 override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 	super.updateDisplayList(unscaledWidth, unscaledHeight);
 	//trace("Update graphic display");
@@ -402,19 +341,14 @@ override protected function updateDisplayList(unscaledWidth:Number, unscaledHeig
 		this.renderShape(this._restDrawingSurface, this.width, this.height);
 }
 
-/**
- * Wrapper for a menu item
- **/
 public function menuHandler( evt:MenuEvent):void {
 	performAction( evt.item.action);
 }
 
-/**
- * Wrapper for a menu item that call performAction with the ActionCommand String as argument.
- **/
+
 public function actionPerformed( actionStr:String ):void {
 	performAction( actionStr);
-}
+}*/
 
 /**
  * Perform an URL action.
@@ -429,7 +363,7 @@ public function actionPerformed( actionStr:String ):void {
  * @param actionStr		An URL like string describing what action to do.
  * @throws UnsupportedEncodingException 
  */
-public function performAction( actionStr:String):void {
+/*public function performAction( actionStr:String):void {
 	var jsStr:String  = "javascript";
 	var target:String = "_blank";
 	var sep:int       = actionStr.indexOf( ':' ),
@@ -508,14 +442,14 @@ public function defineEntities( nodeFields:Array, nodeId:String="POSS_ID", linkI
 			ents[ids[i]].addAttribute( attribute);
 		}
 	}
-}
+}*/
 
 /**
  * Sets the currently displayed selection.
  * Called by JavaScript.
  * @param selNam	A selection name as defined in the Dictionary.
  */
-public function setSelection( selection:String):void
+/*public function setSelection( selection:String):void
 {
 	var selId:int   = getSelId( selection );
 	plan.m_curSel = selId;
@@ -526,7 +460,7 @@ public function setSelection( selection:String):void
 public function clearSelection( selection:String):void {
 	clearZoneSelection( selection, plan.m_nodes, plan.m_nodes.length );
 	clearZoneSelection( selection, plan.m_links, plan.m_linksCnt );
-}
+}*/
 
 /**
  * Remove zones from a selection.
@@ -535,7 +469,7 @@ public function clearSelection( selection:String):void {
  * @param zones		An array of Zones (Nodes or Links).
  * @param n			Number of zone to remove from selection in the array, starting from index 0.
  */
-private function clearZoneSelection( selection:String, zones:Array, n:int):void
+/*private function clearZoneSelection( selection:String, zones:Array, n:int):void
 {
 	var selId:int   = getSelId( selection );
 	if ( selId != -1 )
@@ -546,14 +480,14 @@ private function clearZoneSelection( selection:String, zones:Array, n:int):void
 			zones[i].m_selection &= unselBit;
 		}
 	}
-}
+}*/
 
 /**
  * Gets the id of a selection, knowing its name.
  * @param selNam	A selection name as defined in the Dictionary.
  * @return			An ID in [0,31] or -1 if the selection name is unknown.
  */
-private function getSelId( selection:String):int
+/*private function getSelId( selection:String):int
 {
 	if( env.m_selections[selection] == null)
 		return -1;
@@ -576,4 +510,4 @@ com.socialcomputing.jmi.components.Map.prototype.renderShape = function(sprite, 
 		//var sourceZone = new com.socialcomputing.jmi.script.Rectangle(position.x, position.y, width, height);
 		//_onScreen.copyPixels(this._offScreen, sourceZone, position);
 	}
-}
+}*/

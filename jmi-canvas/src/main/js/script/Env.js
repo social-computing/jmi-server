@@ -60,7 +60,7 @@ JMI.script.Env = (function() {
 	 * This is necessary because the Thread must know the Applet.
 	 * But it is launch by run() that don't have any arguments.
 	 */
-	m_applet = JMI.components.Map;
+	m_applet;
 
 	var Env = function() {
 	};
