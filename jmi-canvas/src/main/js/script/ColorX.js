@@ -4,18 +4,18 @@ JMI.namespace("script.ColorX");
 JMI.script.ColorX = (function() {
 	// default constructor
 	var ColorX = function(color) {
-	    this._color = color;
-	    this._scolor = null;
+	    this.color = color;
+	    this.scolor = null;
 	};
 	
     ColorX.prototype = {
         constructor : JMI.script.ColorX,
 
         getColor2 : function(props) {
-            if(this._scolor == null) {
-                return this._color;
+            if(this.scolor == null) {
+                return this.color;
             } else {
-                var str = JMI.script.Base.parseString4(this._scolor, props, false);
+                var str = JMI.script.Base.parseString4(this.scolor, props, false);
                 // TODO : portage, supprimer parseInt et renvoyer un code couleur hexadecimal
                 return (str == null) ? 0 : parseInt(str);
             }

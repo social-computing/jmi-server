@@ -3,10 +3,10 @@ JMI.namespace("script.Polygon");
 JMI.script.Polygon = (function() {
 
     var Polygon = function() {
-        this._xpoints = []; //:Vector.<int>;
-        this._ypoints = []; //:Vector.<int>;
-        this._npoints = 0;  //:int;
-        this._bounds = JMI.script.Rectangle;
+        this.xpoints = []; //:Vector.<int>;
+        this.ypoints = []; //:Vector.<int>;
+        this.npoints = 0;  //:int;
+        this.bounds = JMI.script.Rectangle;
     };
 	
 	Polygon.prototype = {
@@ -30,8 +30,8 @@ JMI.script.Polygon = (function() {
          * @since 1.4
          */
         reset: function() {
-            this._npoints = 0;
-            this._bounds = null;
+            this.npoints = 0;
+            this.bounds = null;
             return this;
         },
         
@@ -48,7 +48,7 @@ JMI.script.Polygon = (function() {
          * @since 1.4
          */
         invalidate: function() {
-            this._bounds = null;
+            this.bounds = null;
             return this;
         },
         
@@ -57,21 +57,21 @@ JMI.script.Polygon = (function() {
          * @param x,&nbsp;y the specified coordinates
          */
         updateBounds: function(x, y) {
-            if (x < this._bounds.x) {
-                this._bounds.width = this._bounds.width + (this._bounds.x - x);
-                this._bounds.x = x;
+            if (x < this.bounds.x) {
+                this.bounds.width = this.bounds.width + (this.bounds.x - x);
+                this.bounds.x = x;
             }
             else {
-                this._bounds.width = Math.max(this._bounds.width, x - this._bounds.x);
+                this.bounds.width = Math.max(this.bounds.width, x - this.bounds.x);
                 // bounds.x = bounds.x;
             }
         
-            if (y < this._bounds.y) {
-                this._bounds.height = this._bounds.height + (this._bounds.y - y);
-                this._bounds.y = y;
+            if (y < this.bounds.y) {
+                this.bounds.height = this.bounds.height + (this.bounds.y - y);
+                this.bounds.y = y;
             }
             else {
-                this._bounds.height = Math.max(this._bounds.height, y - this._bounds.y);
+                this.bounds.height = Math.max(this.bounds.height, y - this.bounds.y);
                 // bounds.y = bounds.y;
             }
             
@@ -91,10 +91,10 @@ JMI.script.Polygon = (function() {
          * @see java.awt.Polygon#contains
          */
         addPoint: function(x, y) {
-            this._xpoints[this._npoints] = x;
-            this._ypoints[this._npoints] = y;
-            this._npoints++;
-            if (this._bounds != null) {
+            this.xpoints[this.npoints] = x;
+            this.ypoints[this.npoints] = y;
+            this.npoints++;
+            if (this.bounds != null) {
                 this.updateBounds(x, y);
             }
             
@@ -110,13 +110,13 @@ JMI.script.Polygon = (function() {
          * @return a <code>Rectangle</code> that defines the bounds of this <code>Polygon</code>.
          */
         getBounds: function() {
-            if (this._npoints == 0) {
+            if (this.npoints == 0) {
                 return new JMI.script.Rectangle(0, 0, 0, 0);
             }
             if (this_bounds == null) {
-                this.calculateBounds(this._xpoints, this._ypoints, this._npoints);
+                this.calculateBounds(this.xpoints, this.ypoints, this.npoints);
             }
-            return this._bounds;
+            return this.bounds;
         },
         
         
@@ -147,17 +147,17 @@ JMI.script.Polygon = (function() {
             var cn = 0;
             
             // Loop through all edges of the polygon
-            for (var i = 0 ; i < this._npoints ; i++) {
+            for (var i = 0 ; i < this.npoints ; i++) {
                 
-                var i2 = ((i + 1) == this._npoints) ? 0 : i + 1;
+                var i2 = ((i + 1) == this.npoints) ? 0 : i + 1;
                 
                 // Edge from p[i] to p[i+1]
-                if (((this._ypoints[i] <= p._y) && (this._ypoints[i2] > p._y))    // An upward crossing
-                    || ((this._ypoints[i] > p._y) && (this._ypoints[i2] <= p._y))) {      // Or a downward crossing
+                if (((this.ypoints[i] <= p._y) && (this.ypoints[i2] > p._y))    // An upward crossing
+                    || ((this.ypoints[i] > p._y) && (this.ypoints[i2] <= p._y))) {      // Or a downward crossing
                     
                     // Compute the actual edge-ray intersect x-coordinate
-                    var vt = (p._y - this._ypoints[i]) / (this._ypoints[i2] - this._ypoints[i]);
-                    if (p._x < this._xpoints[i] + vt * (this._xpoints[i2] - this._xpoints[i])) // p.x < intersect
+                    var vt = (p._y - this.ypoints[i]) / (this.ypoints[i2] - this.ypoints[i]);
+                    if (p._x < this.xpoints[i] + vt * (this.xpoints[i2] - this.xpoints[i])) // p.x < intersect
                         ++cn;   // a valid crossing of y = p.y right of p.x
                 }
             }
@@ -184,7 +184,7 @@ JMI.script.Polygon = (function() {
                 maxPoint.y = Math.max(maxPoint._y, ypoints[i]);
             }
             
-            this._bounds = new Rectangle(minPoint._x, minPoint._y,
+            this.bounds = new Rectangle(minPoint._x, minPoint._y,
                                         maxPoint._x - minPoint._x,
                                         maxPoint._y - minPoint._y);
             return this;

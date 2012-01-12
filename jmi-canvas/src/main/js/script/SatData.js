@@ -21,9 +21,9 @@ JMI.script.SatData = (function() {
     // et modifier en conséquence 
     var SatData = function () {
         // :int;
-        this._flags = null;
+        this.flags = null;
         //:Boolean
-        this._isVisible = false;
+        this.isVisible = false;
     };
 
     SatData.prototype = {

@@ -16,22 +16,17 @@ JMI.script.LinkZone = (function() {
      * @param from  The Place to start from.
      * @param to    The Place to end to.
      */
-	var LinkZone = function(from, to) {
+	var LinkZone = function() {
 	    /*
          * The Place from which the link start.
          * JMI.script.BagZone
          */
-		this._from = null;
+		this.from = JMI.script.BagZone;
 		/*
          * The Place to which the link end.
          * JMI.script.BagZone
          */
-		this._to = null;
-		/*
-         * Index of Bagzone (temporary during JSON desrialization).
-         */
-		this._fromIndex  = from;
-		this._toIndex    = to;
+		this.to = JMI.script.BagZone;
 	};
 	
 	LinkZone.prototype = {
@@ -45,24 +40,24 @@ JMI.script.LinkZone = (function() {
          * @param isFirst   True if init called for the first time.
          */
         init: function(applet, s, isFirst) {
-            super.init(applet, s, isFirst );// TODO portage
+            //super.init(applet, s, isFirst );// TODO portage
             
-            this._parent = null;
-            if (!Base.isEnabled(this._flags, FAKEFROM_BIT | FAKETO_BIT)) {
-                this._bounds = this._restSwh.getBounds(applet, s.graphics, this, false);
-                if (this._curSwh != null) {
-                    this._bounds = this._bounds.union(this._curSwh.getBounds(applet, s.graphics, this, true));
+            this.parent = null;
+            if (!Base.isEnabled(this.flags, FAKEFROM_BIT | FAKETO_BIT)) {
+                this.bounds = this.restSwh.getBounds(applet, s.graphics, this, false);
+                if (this.curSwh != null) {
+                    this.bounds = this.bounds.union(this.curSwh.getBounds(applet, s.graphics, this, true));
                 }
-                this._bounds.inflate(2, 2);
+                this.bounds.inflate(2, 2);
                 
-                var w = this._bounds.width,
-                    h = this._bounds.height;
+                var w = this.bounds.width,
+                    h = this.bounds.height;
                 var maxBox = applet.plan.maxBox;
                 
                 if (w > maxBox.width)     maxBox.width    = w;
                 if (h > maxBox.height)    maxBox.height   = h;
                 
-                this._bounds = this._bounds.intersection(applet.size.toRectangle());
+                this.bounds = this.bounds.intersection(applet.size.toRectangle());
             }
         },
         
@@ -76,17 +71,17 @@ JMI.script.LinkZone = (function() {
          * @param applet    WPSApplet owning this zone.
          */
         paintCur: function(applet){
-            if((this._flags & INVISIBLE_BIT) != 0) return;
+            if((this.flags & INVISIBLE_BIT) != 0) return;
             
             ImageUtil.clear(applet.curDrawingSurface);
-            this._curSwh.paint(applet, applet.curDrawingSurface, this, true, true, Satellite.BASE_TYP, true);
+            this.curSwh.paint(applet, applet.curDrawingSurface, this, true, true, Satellite.BASE_TYP, true);
             
-            this._from.paint(applet, applet.curDrawingSurface, false, true, Satellite.ALL_TYP, true);
-            this._to.paint(applet, applet.curDrawingSurface, false, true, Satellite.ALL_TYP, true);
-            this._curSwh.paint(applet, applet.curDrawingSurface, this, true, true, Satellite.TIP_TYP, true);
-            this._curSwh.paint(applet, applet.curDrawingSurface, this, true, true, Satellite.SEL_TYP, true);
+            this.from.paint(applet, applet.curDrawingSurface, false, true, Satellite.ALL_TYP, true);
+            this.to.paint(applet, applet.curDrawingSurface, false, true, Satellite.ALL_TYP, true);
+            this.curSwh.paint(applet, applet.curDrawingSurface, this, true, true, Satellite.TIP_TYP, true);
+            this.curSwh.paint(applet, applet.curDrawingSurface, this, true, true, Satellite.SEL_TYP, true);
         
-            applet.renderShape(applet.curDrawingSurface, this._bounds.width, this._bounds.height, new JMI.script.Point(this._bounds.x, this._bounds.y));
+            applet.renderShape(applet.curDrawingSurface, this.bounds.width, this.bounds.height, new JMI.script.Point(this.bounds.x, this.bounds.y));
         }
 	};
 	return LinkZone;

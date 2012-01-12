@@ -229,12 +229,12 @@ package com.socialcomputing.jmi.script{
 			m_blur		= blur;
 			m_rounded   = rounded;
 			
-			this._m_font = new TextFormat();
-			this._m_font.font = fontNam;
-			this._m_font.size = fontSiz;
-			this._m_font.color = textCol;
-			if (( fontStl & BOLD )!= 0)  this._m_font.bold = true;
-			if (( fontStl & ITALIC )!= 0) this._m_font.italic = true;
+			this.m_font = new TextFormat();
+			this.m_font.font = fontNam;
+			this.m_font.size = fontSiz;
+			this.m_font.color = textCol;
+			if (( fontStl & BOLD )!= 0)  this.m_font.bold = true;
+			if (( fontStl & ITALIC )!= 0) this.m_font.italic = true;
 			
 			this.m_font.leftMargin = margin.left;
 			this.m_font.rightMargin = margin.right;
@@ -250,7 +250,7 @@ package com.socialcomputing.jmi.script{
 			this.m_rounded = base.getInt(ROUNDED_COL_VAL, zone.m_props);
 			var color:ColorX = base.getValue( HTMLText.TEXT_COL_VAL, zone.m_props) as ColorX;
 			if( color != null)
-				this._m_font.color = color.m_color;
+				this.m_font.color = color.m_color;
 		}
         
         /**

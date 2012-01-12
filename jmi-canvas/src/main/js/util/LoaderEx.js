@@ -9,16 +9,16 @@ package com.socialcomputing.jmi.util
 		public function LoaderEx()
 		{
 			super();
-			this._stop = false;
+			this.stop = false;
 		}
 		
 		public override function close():void {
-			this._stop = true;
+			this.stop = true;
 			super.close();
 		}
 		
 		public function get stop():Boolean {
-			return this._stop;
+			return this.stop;
 		}
 	}
 }

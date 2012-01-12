@@ -3,22 +3,22 @@ JMI.namespace("script.Point");
 JMI.script.Point = (function() {
     
     var Point = function(x, y) {
-	    this._x = x;
-	    this._y = y;
+	    this.x = x;
+	    this.y = y;
 	};
 	
 	Point.prototype = {
 		constructor: JMI.script.Point,
 		
         add: function(p) {
-            this._x = this._x + p._x;
-            this._y = this._y + p._y;
+            this.x = this.x + p._x;
+            this.y = this.y + p._y;
             return this;
         },
         
         substract: function(p) {
-            this._x = this._x > p._x ? this._x - p._x : p._x - this._x;
-            this._y = this._y > p._y ? this._y - p._y : p._y - this._y;
+            this.x = this.x > p._x ? this.x - p._x : p._x - this.x;
+            this.y = this.y > p._y ? this.y - p._y : p._y - this.y;
             return this;
         },
 	};

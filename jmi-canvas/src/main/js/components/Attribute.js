@@ -10,9 +10,9 @@ package com.socialcomputing.jmi.components
 		
 		public function Attribute( env:Env, ref:ActiveZone) {
 			this.env = env;
-			this._zone = ref;
-			for( var o : * in this._zone.m_props) {
-				this[o] = this._zone.m_props[o];
+			this.zone = ref;
+			for( var o : * in this.zone.m_props) {
+				this[o] = this.zone.m_props[o];
 			}
 		}
 		

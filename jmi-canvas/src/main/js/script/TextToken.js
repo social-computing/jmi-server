@@ -16,32 +16,32 @@ JMI.script.TextToken = (function() {
          * Text to write.
          */
         // :String 
-        this._text = null;
+        this.text = null;
     
         /**
          * Bounding box of this text.
          * This is used to locate the text and to draw it's background color if it has.
          */
         // JMI.script.Rectangle,
-        this._bounds = null;
+        this.bounds = null;
     
         /**
          * A Font object describing the size, style and name of the typeFace or null to use the current one.
          */
         //:TextFormat
-        this._font = null;
+        this.font = null;
         
         /**
          * The color of the text or null to use the current one.
          */
         //:ColorTransform
-        this._color = null;
+        this.color = null;
         
         /**
          * The color of the backgroud or null if there is none.
          */
         //:ColorTransform
-        this._bkCol = null;
+        this.bkCol = null;
     };
 
     TextToken.prototype = {
@@ -57,8 +57,8 @@ JMI.script.TextToken = (function() {
          */
         paint: function(s, pos, blur) {
             // x:int, y:int
-            var x = this._bounds.x + pos.x,
-                y = this._bounds.y + pos.y;
+            var x = this.bounds.x + pos.x,
+                y = this.bounds.y + pos.y;
             
             // TODO : portage, find a javascript equivalent to TextField
             // :TextField
@@ -70,19 +70,19 @@ JMI.script.TextToken = (function() {
                 //g.setColor( m_bkCol );
                 //g.fillRect( x, y - g.getFontMetrics().getAscent(), m_bounds.width, m_bounds.height );
                 text.background = true;
-                text.backgroundColor = this._bkCol.color;
+                text.backgroundColor = this.bkCol.color;
             }
             
             /*g.beginFill( m_color );
             if ( m_font != null )   g.setFont( m_font );
             g.drawString( m_text, x, y );*/
-            text.text = this._text;
+            text.text = this.text;
             text.x = x;
-            text.y = y - this._bounds.y;
-            if (this._color != null) {
-                this._font.color = this._color.color;
+            text.y = y - this.bounds.y;
+            if (this.color != null) {
+                this.font.color = this.color.color;
             }
-            text.setTextFormat(this._font);
+            text.setTextFormat(this.font);
             text.autoSize = TextFieldAutoSize.LEFT;
             text.antiAliasType = AntiAliasType.ADVANCED;
             text.border = false;

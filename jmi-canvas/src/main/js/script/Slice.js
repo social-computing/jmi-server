@@ -16,7 +16,7 @@ JMI.script.Slice =  (function() {
          * A buffer to store the HTMLText associated with this if it has one.
          * //:HTMLText;
          */
-	    this._htmlTxt = null;
+	    this.htmlTxt = null;
 	};
 	
 	Slice.prototype = {
@@ -175,7 +175,7 @@ JMI.script.Slice =  (function() {
             var text = getText( TEXT_VAL, zone._props);
             if (text != null) {
                 if (HTMLText.isEnabled(text.getFlags(zone._props), HTMLText.URL_BIT)) {
-                    if (this._htmlTxt != null) bounds.copy(this._htmlTxt._bounds);
+                    if (this.htmlTxt != null) bounds.copy(this.htmlTxt._bounds);
                 }
                 else {
                     supCtr = supZone._restSwh.satellites[0]._shape.getCenter(supZone);

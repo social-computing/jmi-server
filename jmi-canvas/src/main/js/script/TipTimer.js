@@ -40,14 +40,14 @@ JMI.namespace("com.socialcomputing.jmi.script.TipTimer") = (function() {
 	 * @param duration // :int //default value -1
 	 */
 	this.prototype.init = function(plan, zone, slice, key, start, duration) {
-		this._isInterrupted = false;
+		this.isInterrupted = false;
 		
-		this._plan = plan;
-		this._zone = zone;
-		this._slice = slice;
-		this._key = key;
-		this._bounds = new Rectanglecom.socialcomputing.jmi.script.Rectangle(0, 0, 0, 0);
-		this._started = false;
+		this.plan = plan;
+		this.zone = zone;
+		this.slice = slice;
+		this.key = key;
+		this.bounds = new Rectanglecom.socialcomputing.jmi.script.Rectangle(0, 0, 0, 0);
+		this.started = false;
 		
 		this.start = start;
 		this.duration = duration;
@@ -86,8 +86,8 @@ JMI.namespace("com.socialcomputing.jmi.script.TipTimer") = (function() {
 	 * @return //:void
 	 */
 	this.prototype.clean = function(full) {
-		if (this._started) {
-			this._started = false;
+		if (this.started) {
+			this.started = false;
 			if ( _plan.applet.plan != null) {
 				 
 				if(_bounds.width == 0 && _bounds.height == 0) {
@@ -107,8 +107,8 @@ JMI.namespace("com.socialcomputing.jmi.script.TipTimer") = (function() {
 	 * @return //:void
 	 */
 	this.prototype.startHandler = function(event) {
-		if( !this._started) {
-			this._started = true;
+		if( !this.started) {
+			this.started = true;
 			// :Point
 			var pos = _plan.applet.curPos;
 			slice.paint( _plan.applet, _plan.applet.curDrawingSurface, zone.getParent(), zone, null, pos, null );

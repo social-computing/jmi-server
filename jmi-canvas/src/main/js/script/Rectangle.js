@@ -2,10 +2,10 @@ JMI.namespace("script.Rectangle");
 
 JMI.script.Rectangle = (function() {
 	var Rectangle = function(x, y, width, height) {
-	    this._x = x;
-	    this._y = y;
-	    this._width = width;
-	    this._height = height;
+	    this.x = x;
+	    this.y = y;
+	    this.width = width;
+	    this.height = height;
 	};
 	
 	Rectangle.prototype = {
@@ -18,7 +18,7 @@ JMI.script.Rectangle = (function() {
          * @param src   Source Rectangle.
          */
         merge: function(src) {
-            if(this._width * this._height != 0) {
+            if(this.width * this.height != 0) {
                 this.union(src);
             }
             else {
@@ -28,10 +28,10 @@ JMI.script.Rectangle = (function() {
         },
         
         union: function(src) {
-            this._x = Math.min(this._x, src._x);
-            this._y = Math.min(this._y, src._y);
-            this._width = this._width + src._width - Math.min(this._x + this._width - src._x, src._x + src._width - this._x);
-            this._height = this._height + src._height - Math.min(this._y + this._height - src._y, src._y + src._height - this._y);
+            this.x = Math.min(this.x, src._x);
+            this.y = Math.min(this.y, src._y);
+            this.width = this.width + src._width - Math.min(this.x + this.width - src._x, src._x + src._width - this.x);
+            this.height = this.height + src._height - Math.min(this.y + this.height - src._y, src._y + src._height - this.y);
             return this;
         },
         
@@ -42,10 +42,10 @@ JMI.script.Rectangle = (function() {
          * 
          */
         copy: function(src) {
-            this._x = src._x;
-            this._y = src._y;
-            this._width = src._width;
-            this._height = src._height;
+            this.x = src._x;
+            this.y = src._y;
+            this.width = src._width;
+            this.height = src._height;
             return this;
         }
         		

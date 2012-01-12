@@ -14,28 +14,28 @@ JMI.script.BagZone = (function() {
 	var BagZone = function(subZones) {
 	    // Clusterized subZones table.
 	    //:Array = null;
-        this._subZones = []; 
+        this.subZones = []; 
     
         /*
          * Initial angular direction of Satellites.
          * It change depending on the distance to window borders.
          * The main zone will start at this angle. Evaluated during init.
          */
-        this._dir = null;
+        this.dir = null;
     
         /*
          * Angular step between two subZones.
          * Basicaly 2PI/subs, but in case of half circle (borders) it's PI/subs!
          * Evaluated during init.
          */
-        this._stp = null;
+        this.stp = null;
     
         /*
          * Creates a BagZone with its subZones.
          * Its size and position should be initialized by setting the "_SCALE" (float) and "_VERTICES" (Point[1]) properties;
          * @param subs  A subZone table whose parent is this.
          */
-		this._subZones = subZones;
+		this.subZones = subZones;
 	};
 	
 	BagZone.prototype = {
@@ -53,56 +53,56 @@ JMI.script.BagZone = (function() {
          */
         init: function(applet, s, isFirst) {
             var i,
-                nbSubZones = this._subZones != null ? this._subZones.length : 0;
+                nbSubZones = this.subZones != null ? this.subZones.length : 0;
             // TODO super.init(applet, s, isFirst);
             var restSwhBounds, curSwhBounds; 
             
             // First time init
             if (isFirst) {
-                this._parent = null;
+                this.parent = null;
         
-                if (nbSubZones > 0) this._stp = JMI.script.Base.Pi2 / (nbSubZones + 1);
-                this._dir = 10.0;
+                if (nbSubZones > 0) this.stp = JMI.script.Base.Pi2 / (nbSubZones + 1);
+                this.dir = 10.0;
         
                 for (i = 0 ; i < nbSubZones ; i ++) {
-                    this._subZones[i]._parent = this;
+                    this.subZones[i]._parent = this;
                 }
         
-                restSwhBounds = this._restSwh.getBounds(applet, s.graphics, this, false);          
-                curSwhBounds  = this._curSwh.getBounds(applet, s.graphics, this, true);
-                this._bounds = restSwhBounds.union(curSwhBounds);
+                restSwhBounds = this.restSwh.getBounds(applet, s.graphics, this, false);          
+                curSwhBounds  = this.curSwh.getBounds(applet, s.graphics, this, true);
+                this.bounds = restSwhBounds.union(curSwhBounds);
                 
-                var isLeft = this._bounds.x < 0;
+                var isLeft = this.bounds.x < 0;
         
                 if (nbSubZones > 0) {
                     // float dir = 0.f,
                     var stp = 0.25 * Base.Pi2;
                     // isLeft || isRight
-                    if (isLeft || (this._bounds.x + this._bounds.width > applet.width)) {
+                    if (isLeft || (this.bounds.x + this.bounds.width > applet.width)) {
                         // TODO : portage, regarder si le décalage de bit fonctionne avec le même opérateur
-                        this._stp = JMI.script.Base.Pi2 / (nbSubZones << 1);
+                        this.stp = JMI.script.Base.Pi2 / (nbSubZones << 1);
         
                         if (isLeft) {
-                            this._dir = -stp;
-                            this._subZones[nbSubZones - 1]._flags |= SIDE_BIT | LEFT_BIT;
+                            this.dir = -stp;
+                            this.subZones[nbSubZones - 1]._flags |= SIDE_BIT | LEFT_BIT;
                         }
                         else {
-                            this._dir = stp;
-                            this._subZones[nbSubZones - 1]._flags |= SIDE_BIT;
+                            this.dir = stp;
+                            this.subZones[nbSubZones - 1]._flags |= SIDE_BIT;
                         }
                     }
                 }
                 
                 // isLeft || isRight
-                if (isLeft || (this._bounds.x + this._bounds.width > applet.width)) {
-                    this._flags |= isLeft ? SIDE_BIT | LEFT_BIT : SIDE_BIT;
+                if (isLeft || (this.bounds.x + this.bounds.width > applet.width)) {
+                    this.flags |= isLeft ? SIDE_BIT | LEFT_BIT : SIDE_BIT;
                 }
             }
         
-            restSwhBounds     = this._restSwh.getBounds(applet, s.graphics, this, false);
+            restSwhBounds     = this.restSwh.getBounds(applet, s.graphics, this, false);
             var win           = applet.plan._prevBox.union(restSwhBounds);
-            curSwhBounds      = this._curSwh.getBounds(applet, s.graphics, this, true);
-            this._bounds     = restSwhBounds.union(curSwhBounds);
+            curSwhBounds      = this.curSwh.getBounds(applet, s.graphics, this, true);
+            this.bounds     = restSwhBounds.union(curSwhBounds);
             
             /*
             this.m_bounds = this.m_restSwh.getBounds(applet, s.graphics, this, false);
@@ -110,25 +110,25 @@ JMI.script.BagZone = (function() {
             this.m_bounds = this.m_bounds.union(m_curSwh.getBounds(applet, s.graphics, this, true));
             */
             
-            if (win.y > this._bounds.y) {
-                win.height += win.y - this._bounds.y;
-                win.y      = this._bounds.y;
+            if (win.y > this.bounds.y) {
+                win.height += win.y - this.bounds.y;
+                win.y      = this.bounds.y;
             }
-            else if (win.y + win.height < this._bounds.y + this._bounds.height) {
-                win.height  = this._bounds.y + this._bounds.height - win.y;
+            else if (win.y + win.height < this.bounds.y + this.bounds.height) {
+                win.height  = this.bounds.y + this.bounds.height - win.y;
             }
         
             applet.plan._prevBox = win;
-            this._bounds.inflate(2, 2);
+            this.bounds.inflate(2, 2);
         
-            var w = this._bounds.width;
-            var h = this._bounds.height;
+            var w = this.bounds.width;
+            var h = this.bounds.height;
             var maxBox = applet.plan._maxBox;
         
             if (w > maxBox.width)  maxBox.width  = w;
             if (h > maxBox.height) maxBox.height = h;
         
-            this._bounds = this._bounds.intersection(applet.size.toRectangle());
+            this.bounds = this.bounds.intersection(applet.size.toRectangle());
         },
         
         /**
@@ -142,22 +142,22 @@ JMI.script.BagZone = (function() {
         paintCur: function(applet) {
             // Copy backDrawingSurface hovered zone to curDrawingSurface
             // Use this method instead of ImageUtil.copy to improve performance  
-            var backBitmap = new BitmapData(this._bounds.width + this._bounds.x, this._bounds.height + this._bounds.y);
+            var backBitmap = new BitmapData(this.bounds.width + this.bounds.x, this.bounds.height + this.bounds.y);
             backBitmap.draw(applet.backDrawingSurface, null, null, null, 
-                            new JMI.script.Rectangle(this._bounds.x, this._bounds.y, 
-                                                     this._bounds.width + this._bounds.x, this._bounds.height + this._bounds.y));
+                            new JMI.script.Rectangle(this.bounds.x, this.bounds.y, 
+                                                     this.bounds.width + this.bounds.x, this.bounds.height + this.bounds.y));
             applet.curDrawingSurface.graphics.beginBitmapFill(backBitmap);
-            applet.curDrawingSurface.graphics.drawRect(this._bounds.x, this._bounds.y, this._bounds.width, this._bounds.height);
+            applet.curDrawingSurface.graphics.drawRect(this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height);
             applet.curDrawingSurface.graphics.endFill();
             
-            this._curSwh.paint(applet, applet.curDrawingSurface, this, true, true, JMI.script.Satellite.ALL_TYP, true);
+            this.curSwh.paint(applet, applet.curDrawingSurface, this, true, true, JMI.script.Satellite.ALL_TYP, true);
             /*
                 bufGfx.translate( m_bounds.x, m_bounds.y );
                 g.setClip( m_bounds.x, m_bounds.y, m_bounds.width, m_bounds.height );
                 g.drawImage( applet.m_plan.blitBuf, m_bounds.x, m_bounds.y, null );
             */
-            applet.renderShape(applet.curDrawingSurface, this._bounds.width, this._bounds.height, 
-                               new JMI.script.Point(this._bounds.x, this._bounds.y));
+            applet.renderShape(applet.curDrawingSurface, this.bounds.width, this.bounds.height, 
+                               new JMI.script.Point(this.bounds.x, this.bounds.y));
         }
 
 	};

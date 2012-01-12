@@ -16,8 +16,8 @@ JMI.script.Base = (function() {
 
     var Base = function(subZones) {
          // Containers table holding the values of all inheriting class fields.
-        this._containers = {}; //:Array; = > Object ?
-        this._subZones = subZones;
+        this.containers = {}; //:Array; = > Object ?
+        this.subZones = subZones;
     };
     
 
@@ -33,7 +33,7 @@ JMI.script.Base = (function() {
          * @return True if prop exists.
          */
         isDefined: function(property) {
-            return this._containers[property] != null;
+            return this.containers[property] != null;
         },
         
         /*
@@ -54,7 +54,7 @@ JMI.script.Base = (function() {
          * @return  the Object corresponding to the field whose index is prop or null if the property doesn't exists or is void.
          */
         getValue: function(property, props) {
-            var container = this._containers[property];
+            var container = this.containers[property];
             return container != null ? (container._isBound ? props[container._value]: container._value ): null;
         },
         

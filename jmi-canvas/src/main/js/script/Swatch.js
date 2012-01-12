@@ -25,7 +25,7 @@ JMI.script.Swatch = (function() {
          * This is used by the events to find menu or slices to pop.
          * :Array;
          */
-    	this._refs; 
+    	this.refs; 
 	};
 	
 	Swatch.prototype = {

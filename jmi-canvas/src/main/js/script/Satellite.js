@@ -24,14 +24,14 @@ JMI.script.Satellite = (function() {
          * This can be a simple dot, a disk, a rectangle or a polygon.
          * :JMI.script.ShapeX
          */
-         this._shape  = shape;
+         this.shape  = shape;
          
          /*
           * The elementary slices that are stacked to draw this satellite.
           * They describe how to fill the shape.
           * //:Vector.<Slice>;
           */
-	     this._slices = slices;
+	     this.slices = slices;
 	};
 	
 	Satellite.prototype = {
@@ -115,7 +115,7 @@ JMI.script.Satellite = (function() {
                     }
                     if (isShowable) {
                         // TODO : portage, iteration sur les éléments d'un tableau
-                        for(var slice in this._slices) {
+                        for(var slice in this.slices) {
                             slice.paint(applet, s, supZone, zone, m_shape, satCtr, supCtr);
                         }
                     }
@@ -139,13 +139,13 @@ JMI.script.Satellite = (function() {
          * @return                  True if the cursor's position is inside this satellite, false otherwise.
          */
         contains: function(planComponent, g, zone, satCtr, supCtr, transfo, pos, isPie, isFake) {
-            var i, n = this._slices.length;
+            var i, n = this.slices.length;
             // If the parent satellite center is not set, take this satellite's shape center as center
-            if(supCtr == null) supCtr = this._shape.getCenter(zone);
+            if(supCtr == null) supCtr = this.shape.getCenter(zone);
             
             // Iterate throw all this satellite's slices and check if one of them contains the cursor's position
             // Stop if it's the case 
-            for(i = 0 ; (i < n && !this._slices[i].contains(planComponent, g, zone.getParent(), zone, this._shape, satCtr, supCtr, pos)) ; i++){};
+            for(i = 0 ; (i < n && !this.slices[i].contains(planComponent, g, zone.getParent(), zone, this.shape, satCtr, supCtr, pos)) ; i++){};
             
             // if the cursor's position is in one of the slices
             if(i < n) {
@@ -155,7 +155,7 @@ JMI.script.Satellite = (function() {
                     var zones           = supZone._subZones;
                     var nbZones         = zones.length + 1;
                     
-                    var center = isFake ? this._shape.getCenter(supZone) : supCtr;
+                    var center = isFake ? this.shape.getCenter(supZone) : supCtr;
                     var dir = (supZone._dir != 10.) ? supZone._dir : transfo._dir,
                         step = supZone._stp,
                         m = .5 * (JMI.script.Base.Pi2 / step - nbZones),
@@ -196,8 +196,8 @@ JMI.script.Satellite = (function() {
          */
         setBounds: function(applet, g, zone, satCtr, supCtr, bounds) {
             // TODO : portage : iteration sur les éléments d'un tableau
-            for (var slice in this._slices) {
-                slice.setBounds(applet, g, zone.getParent(), zone, this._shape, satCtr, supCtr, bounds);
+            for (var slice in this.slices) {
+                slice.setBounds(applet, g, zone.getParent(), zone, this.shape, satCtr, supCtr, bounds);
             }
         },
 

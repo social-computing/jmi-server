@@ -15,21 +15,21 @@ JMI.script.Insets = (function() {
          * This value is added to the Top of the rectangle
          * to yield a new location for the Top.
          */
-	    this._top = top;
+	    this.top = top;
 
         /*
          * The inset from the left.
          * This value is added to the Left of the rectangle
          * to yield a new location for the Left edge.
          */
-	    this._left = left;
+	    this.left = left;
 
         /*
          * The inset from the bottom.
          * This value is subtracted from the Bottom of the rectangle
          * to yield a new location for the Bottom.
          */	    
-	    this._bottom = bottom;
+	    this.bottom = bottom;
 	    
 	    /*
          * The inset from the right.
@@ -37,7 +37,7 @@ JMI.script.Insets = (function() {
          * to yield a new location for the Right edge.
          *
          */
-	    this._right = right;
+	    this.right = right;
 	};
 	
 	Insets.prototype = {
@@ -53,10 +53,10 @@ JMI.script.Insets = (function() {
          * @param       right   the inset from the right.
          */
         init: function(top, left, bottom, right){
-            this._top    = top;
-            this._left   = left;
-            this._bottom = bottom;
-            this._right  = right;
+            this.top    = top;
+            this.left   = left;
+            this.bottom = bottom;
+            this.right  = right;
         },
         
         /*
@@ -69,10 +69,10 @@ JMI.script.Insets = (function() {
          * @since 1.5
          */
         set: function(top, left, bottom, right) {
-            this._top = top;
-            this._left = left;
-            this._bottom = bottom;
-            this._right = right;
+            this.top = top;
+            this.left = left;
+            this.bottom = bottom;
+            this.right = right;
         }
 	};
 	

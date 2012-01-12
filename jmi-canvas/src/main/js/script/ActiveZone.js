@@ -13,47 +13,47 @@ JMI.script.ActiveZone = (function() {
 	    
 	    // Swatch used to render this zone at rest.
 	    // :jmi.script.Swatch
-        this._restSwh = null;
+        this.restSwh = null;
         
         // Swatch used to render this zone when it is current (hovered).
         // :jmi.script.Swatch
-        this._curSwh = null;
+        this.curSwh = null;
         
         // Flags holding the previously defined bits (XXX_BIT).
-        this._flags = null;
-        this._props = null; //Array
+        this.flags = null;
+        this.props = null; //Array
         
         /*
          * Bounding-Box of this zone including its subZones.
          * The BBox is the union of the rest and current swatch BBoxs and a small margin.
          * :jmi.script.Rectangle
          */
-        this._bounds = null; 
+        this.bounds = null; 
         
         //Flag indicating which of the 32 possible selections are active for this zone.
-        this._selection = null;
+        this.selection = null;
         
         //Parent of this zone if it is clusterized or null if this is already a BagZone.
         //:ActiveZone;
-        this._parent = null; 
+        this.parent = null; 
         
         /*
          * Fast graphical data lookup for the rest Swatch Satellites.
          * Not used enough, could improve the performance if more was stored here...
          * :Vector.<SatData>;
          */
-        this._restData = null; 
+        this.restData = null; 
         
         /*
          * Fast graphical data lookup for the current Swatch Satellites.
          * Not used enough, could improve the performance if more was stored here...
          * :Vector.<SatData>;
          */
-        this._curData = null; 
+        this.curData = null; 
         
         // HTMLText dictionary to avoid unnecessary calcs.
         //:Dictionary;
-        this._datas = null; //:Dictionary;
+        this.datas = null; //:Dictionary;
 	};
 	
 	ActiveZone.prototype = {
@@ -73,23 +73,23 @@ JMI.script.ActiveZone = (function() {
         init: function (applet, s, isFirst) {
             // One time init
             if (isFirst) {
-                var sel = this._props["SELECTION"];
+                var sel = this.props["SELECTION"];
                 if (sel != null) {
-                    this._selection = sel;
+                    this.selection = sel;
                 }
                 
                 // Quick access to Env props
-                this._props["ENV"] = applet.env._props;
+                this.props["ENV"] = applet.env._props;
                 this.datas = {};
             }
             
             // TODO : portage instanceof et heritage
             var isSuper = this instanceof JMI.script.BagZone;
             
-            this._restData = this._restSwh.evalSatData(applet, this, isSuper);
+            this.restData = this.restSwh.evalSatData(applet, this, isSuper);
             
-            if (this._curSwh != null) {
-                this._curData = this._curSwh.evalSatData(applet, this, isSuper);
+            if (this.curSwh != null) {
+                this.curData = this.curSwh.evalSatData(applet, this, isSuper);
             }
         },
         
@@ -104,8 +104,8 @@ JMI.script.ActiveZone = (function() {
          * @param showLinks True if we only wants to paint links.
          */
         paint: function(applet, s, isCur, isFront, showTyp, showLinks) {
-            if ((this._flags & INVISIBLE_BIT) != 0) return;
-            var swatch = isCur ? this._curSwh : this._restSwh;
+            if ((this.flags & INVISIBLE_BIT) != 0) return;
+            var swatch = isCur ? this.curSwh : this.restSwh;
             
             swatch.paint(applet, s, this, isCur, isFront, showTyp, showLinks);
         },
@@ -116,7 +116,7 @@ JMI.script.ActiveZone = (function() {
          * @return  The BagZone holding this or null if this is a BagZone.
          */
         getParent: function () {
-            return this._parent == null ? this : this._parent;
+            return this.parent == null ? this : this.parent;
         }
 	};
 	

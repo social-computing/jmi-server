@@ -15,27 +15,27 @@ JMI.script.FormatToken = (function() {
          * Current line margins.
          * :Jmi.script.Insets
          */
-        this._margin = null;
+        this.margin = null;
         
         /**
          * Current line maximum ascent (Top of the highest letter)
          */
-        this._aMax = null;
+        this.aMax = null;
         
         /**
          * Current line maximum descent (Bottom of the lowest letter)
          */
-        this._dMax = null;
+        this.dMax = null;
         
         /**
          * Current line text alignment flags.
          */
-        this._flags = null;
+        this.flags = null;
         
         /**
          * Current line width.
          */
-        this._width = null;
+        this.width = null;
 	    
 	};
 	

@@ -54,26 +54,26 @@ var _dataProvider = JMI.script.PlanContainer,
 		drawingCanvas.width = mapDiv.width;
 		drawingCanvas.height = mapDiv.height;
 		mapDiv.appendChild( drawingCanvas);
-		this._drawingSurface = drawingCanvas.getContext( "2d");
+		this.drawingSurface = drawingCanvas.getContext( "2d");
 	
 		// Graphic zones
 		var curDrawingCanvas = document.createElement( "canvas");
 		curDrawingCanvas.width = mapDiv.width;
 		curDrawingCanvas.height = mapDiv.height;
 		curDrawingCanvas.style.visibility='hidden';
-		this._curDrawingSurface = curDrawingCanvas.getContext( "2d");
+		this.curDrawingSurface = curDrawingCanvas.getContext( "2d");
 
 		var restDrawingCanvas = document.createElement( "canvas");
 		restDrawingCanvas.width = mapDiv.width;
 		restDrawingCanvas.height = mapDiv.height;
 		restDrawingCanvas.style.visibility='hidden';
-		this._restDrawingSurface = restDrawingCanvas.getContext( "2d");
+		this.restDrawingSurface = restDrawingCanvas.getContext( "2d");
 
 		var backDrawingCanvas = document.createElement( "canvas");
 		backDrawingCanvas.width = mapDiv.width;
 		backDrawingCanvas.height = mapDiv.height;
 		backDrawingCanvas.style.visibility='hidden';
-		this._backDrawingSurface = backDrawingCanvas.getContext( "2d");
+		this.backDrawingSurface = backDrawingCanvas.getContext( "2d");
 		
 		// Event listeners
 		this.doubleClickEnabled = true;
@@ -116,7 +116,7 @@ JMI.components.Map.READY = "ready";
 
 public function get plan():Plan
 {
-	if(this._dataProvider == null) {
+	if(this.dataProvider == null) {
 		return null;
 	}
 	return _dataProvider.plan;
@@ -124,7 +124,7 @@ public function get plan():Plan
 
 public function get env():Env
 {
-	if(this._dataProvider == null) {
+	if(this.dataProvider == null) {
 		return null
 	}
 	return _dataProvider.env;
@@ -157,7 +157,7 @@ public function set curPos(pos:Point):void {
 
 public function get dataProvider():Object
 {
-	return this._dataProvider;	
+	return this.dataProvider;	
 }*/
 
 /*public function set dataProvider(value:Object):void
@@ -165,11 +165,11 @@ public function get dataProvider():Object
 	//Alert.show( unescape( flash.display.LoaderInfo(this.root.loaderInfo).url));
 	
 	// Set component status to "not ready"
-	this._ready = false;
+	this.ready = false;
 
 	// Stop loaders
-	if( this._dataProvider && this._dataProvider.env) {
-		this._dataProvider.env.close();
+	if( this.dataProvider && this.dataProvider.env) {
+		this.dataProvider.env.close();
 	}
 	
 	// Clear current
@@ -187,8 +187,8 @@ public function get dataProvider():Object
 	// If the given value is null 
 	// Reset all objects of this component
 	if(value == null) {
-		this._dataProvider = null;
-		//this._plan = null;
+		this.dataProvider = null;
+		//this.plan = null;
 		//this.
 		// TODO : If the local plancontainer is set, reset objects
 		this.invalidateProperties();
@@ -199,17 +199,17 @@ public function get dataProvider():Object
 	this.showStatus("");
 	CursorManager.setBusyCursor();
 	if(value is PlanContainer) {
-		this._dataProvider = value as PlanContainer;
+		this.dataProvider = value as PlanContainer;
 	}
 	else {
-		this._dataProvider = PlanContainer.fromJSON(value);
+		this.dataProvider = PlanContainer.fromJSON(value);
 	}
-	if( this._dataProvider.hasOwnProperty( "error")) {
+	if( this.dataProvider.hasOwnProperty( "error")) {
 		// Server error
 		CursorManager.removeBusyCursor();
-		dispatchEvent(new StatusEvent(StatusEvent.ERROR, this._dataProvider.error));
+		dispatchEvent(new StatusEvent(StatusEvent.ERROR, this.dataProvider.error));
 	}
-	else if( !this._dataProvider.hasOwnProperty( "plan")) {
+	else if( !this.dataProvider.hasOwnProperty( "plan")) {
 		// Empty map
 		CursorManager.removeBusyCursor();
 		dispatchEvent(new Event( Map.EMPTY));
@@ -218,7 +218,7 @@ public function get dataProvider():Object
 		var needPrint:Boolean = false; // Later
 
 		try {
-			this._dataProvider.env.init(this, needPrint);
+			this.dataProvider.env.init(this, needPrint);
 			plan.applet = this;
 			plan.curSel = -1;
 			plan.initZones(this.restDrawingSurface, plan.links, true);
@@ -230,7 +230,7 @@ public function get dataProvider():Object
 		    for each( var zone:ActiveZone in plan.nodes) {
 				this.attributes.addItem( new Attribute( env, zone));
 			}
-			this._ready = true;
+			this.ready = true;
 		}
 		catch(error:Error) {
 			// Client error
@@ -242,22 +242,22 @@ public function get dataProvider():Object
 		
 		this.invalidateProperties();
 		this.invalidateDisplayList();
-		if(this._ready)
+		if(this.ready)
 			dispatchEvent(new Event(Map.READY));
 	}
 }
 
 com.socialcomputing.jmi.components.Map.prototype.clear = function() {
-	ImageUtil.clear(this._backDrawingSurface);
-	ImageUtil.clear(this._restDrawingSurface);
-	ImageUtil.clear(this._curDrawingSurface);
-	ImageUtil.clear(this._drawingSurface);
+	ImageUtil.clear(this.backDrawingSurface);
+	ImageUtil.clear(this.restDrawingSurface);
+	ImageUtil.clear(this.curDrawingSurface);
+	ImageUtil.clear(this.drawingSurface);
 	
 	if(this.width != 0 && this.height !=  0) {
-		this._onScreen = context.createImageData(this.width, this.height);
-		this._offScreen = context.createImageData(this.width, this.height);
+		this.onScreen = context.createImageData(this.width, this.height);
+		this.offScreen = context.createImageData(this.width, this.height);
 		// TODO portage : devrait etre inutile
-		//this._drawingSurface.addChild(new Bitmap(this._onScreen));
+		//this.drawingSurface.addChild(new Bitmap(this.onScreen));
 	}
 }
 
@@ -319,11 +319,11 @@ public function resizeHandler(event:ResizeEvent):void {
 	//trace("resize, new size = (" + this.width + ", " + this.height + ")");
 	this.clear();
 	
-	this._restDrawingSurface.graphics.beginFill(this._ready ? this.env.inCol.m_color : this._backgroundColor);
-	this._restDrawingSurface.graphics.drawRect(0, 0, this.width, this.height);
-	this._restDrawingSurface.graphics.endFill();
+	this.restDrawingSurface.graphics.beginFill(this.ready ? this.env.inCol.m_color : this.backgroundColor);
+	this.restDrawingSurface.graphics.drawRect(0, 0, this.width, this.height);
+	this.restDrawingSurface.graphics.endFill();
 		
-	if(this._ready) {
+	if(this.ready) {
 		this.plan.resize(new Dimension(this.width, this.height));
 		this.plan.init();
 		this.invalidateSize();  
@@ -337,8 +337,8 @@ public function navigateHandler(event:NavigateEvent):void {
 override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 	super.updateDisplayList(unscaledWidth, unscaledHeight);
 	//trace("Update graphic display");
-	if( this._restDrawingSurface)
-		this.renderShape(this._restDrawingSurface, this.width, this.height);
+	if( this.restDrawingSurface)
+		this.renderShape(this.restDrawingSurface, this.width, this.height);
 }
 
 public function menuHandler( evt:MenuEvent):void {
@@ -503,11 +503,11 @@ com.socialcomputing.jmi.components.Map.prototype.renderShape = function(sprite, 
 	if( _offScreen != null && _onScreen != null && width > 0 && height > 0) { 
 		// Transforming the offscreen back display to a BitmapData
 		// TODO ??? portage
-		this._offScreen.draw(sprite, new Matrix());
+		this.offScreen.draw(sprite, new Matrix());
 		
 		// Copying the content of the back buffer on screen
 		context.putImageData(_onScreen, position.x, position.y, position.x, position.y, width, height);
 		//var sourceZone = new com.socialcomputing.jmi.script.Rectangle(position.x, position.y, width, height);
-		//_onScreen.copyPixels(this._offScreen, sourceZone, position);
+		//_onScreen.copyPixels(this.offScreen, sourceZone, position);
 	}
 }*/
