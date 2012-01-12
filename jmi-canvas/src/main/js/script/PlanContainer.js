@@ -13,7 +13,7 @@ JMI.script.PlanContainer = (function() {
 }());
 
 
-script.PlanContainer.fromJSON = function ( jsonString) {
+JMI.script.PlanContainer.fromJSON = function ( jsonString) {
 	var planContainer = new JMI.script.PlanContainer();
 	if(jsonString == null) {
 		planContainer.error = "the json data can't be null";
