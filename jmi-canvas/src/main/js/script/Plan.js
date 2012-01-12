@@ -83,7 +83,7 @@ JMI.script.Plan = (function() {
 	};
 	
     Plan.prototype = {
-        contructor: JMI.script.Plan,
+        constructor: JMI.script.Plan,
         
 	/*
 	 * Initialize an array of zones (Nodes or Links).
