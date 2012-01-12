@@ -1,3 +1,5 @@
+JMI.namespace("lib.jsonParse");
+
 // This source code is free for use in the public domain.
 // NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
 
@@ -55,7 +57,8 @@
  * @return {Object|Array}
  * @author Mike Samuel <mikesamuel@gmail.com>
  */
-var jsonParse = (function () {
+JMI.lib.jsonParse = (function() {
+
   var number
       = '(?:-?\\b(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\\b)';
   var oneChar = '(?:[^\\0-\\x08\\x0a-\\x1f\"\\\\]'
