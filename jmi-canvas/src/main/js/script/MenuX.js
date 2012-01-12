@@ -1,3 +1,5 @@
+JMI.namespace("script.MenuX");
+
 /*
  * <p>Title: MenuX</p>
  * <p>Description: A wrapper for the java.awt.Menu class.<br>
@@ -7,42 +9,18 @@
  * @author flugue@mapstan.com
  * @version 1.0
  */
-public class MenuX extends Base
-{
-    /**
-     * Index of the bit flag prop in VContainer table
-     */
-    //	public  static final int    FLAGS_VAL           = 0;
-    
-    /**
-     * Index of the font prop in VContainer table
-     */
-    public const FONT_VAL:int= 1;
-    
-    /**
-     * Index of the text prop in VContainer table
-     */
-    public const TEXT_VAL:int= 2;
-    
-    /**
-     * True if this menu is just an item.
-     */
-    public const ITEM_BIT:int= 0x01;
-    
+JMI.script.MenuX = (function() {
     /**
      * Items or subMenus
      */
-    public  var m_items:Vector.<MenuX> = null;
+    var items; //:Vector.<MenuX> = null;
     
-    /**
-     * Creates a new Menu filled with items.
-     * @param items	A MenuX table that holds items or submenus.
-     */
-    public function MenuX( items:Vector.<MenuX>)
-    {
-        m_items = items;
-    }
-    
+	var MenuX = function() {
+	};
+	
+	MenuX.prototype = {
+		constructor: JMI.script.MenuX,
+
     /**
      * Returns an AWT PopupMenu matching this abstract representation.
      * Each item of the menu adds zone as an ActionListener.
@@ -58,17 +36,17 @@ public class MenuX extends Base
      * @return			True if this menu is not empty. This is used in the recursive process and is useless for the main call.
      * @throws UnsupportedEncodingException 
      */
-    public function parseMenu( dst:ArrayCollection, zone:ActiveZone):Boolean {
-        var i:int;
-        var j:int;
-        var k:int	= -1;
-        var n:int		= 1;
-        var iCnt:int	= m_items.length;
-        var isEmpty:Boolean= true;
-        var subMenu:ArrayCollection;
-        var menuItm:Object;
-        var font:TextFormat= this.getTextFormat( zone.m_props);
-        var labels:Vector.<String> = null;
+    parseMenu: function( dst, zone) {
+        var i;
+        var j;
+        var k		= -1;
+        var n		= 1;
+        var iCnt	= m_items.length;
+        var isEmpty = true;
+        var subMenu;
+        var menuItm;
+        var font = this.getTextFormat( zone.m_props);
+        var labels = null;
         
         if ( isDefined( TEXT_VAL ))
         {
@@ -95,8 +73,8 @@ public class MenuX extends Base
             
             for ( i = 0; i < iCnt; i ++ )
             {
-                var menu:MenuX = m_items[i];
-                var flags:int = menu.getFlags( zone.m_props);
+                var menu = m_items[i];
+                var flags = menu.getFlags( zone.m_props);
                 
                 if ( isEnabled( flags, ITEM_BIT ))
                 {
@@ -112,13 +90,13 @@ public class MenuX extends Base
                     else
                     {
                         subMenu.removeItemAt( subMenu.length - 1);
-                        var subitems:Vector.<String> = menu.parseString( TEXT_VAL, zone.m_props);
+                        var subitems = menu.parseString( TEXT_VAL, zone.m_props);
                         if( subitems != null && subitems.length > 0)
                         {
                             menuItm = new Object;
 							menuItm.label = subitems[0];
                             // TODO menuItm.setFont( menu.getFont( zone ));
-                            var fontMenu:TextFormat = menu.getFont( FONT_VAL, zone.m_props).getTextFormat(zone.m_props);
+                            var fontMenu = menu.getFont( FONT_VAL, zone.m_props).getTextFormat(zone.m_props);
                             if ( fontMenu != null) {
                                 if (fontMenu.bold == true)
                                     menuItm.bold = "true";
@@ -134,7 +112,7 @@ public class MenuX extends Base
             }
         }
         return !isEmpty;
-    }
+    },
     
     /**
      * Parses this MenuX when it's an item (ITEM_BIT).
@@ -146,20 +124,20 @@ public class MenuX extends Base
      * @return			True if this item is not empty. This is used in the recursive process and is useless for the main call.
      * @throws UnsupportedEncodingException 
      */
-    private function parseItem( dst:ArrayCollection, zone:ActiveZone, j:int):Boolean {
-        var parts:Array 	= getString( TEXT_VAL, zone.m_props ).split( SEP);
-        var title:String	= parts[0];
-        var url:String      = parts.length > 1? parts[1] : null;
-        var redir:String    = parts.length > 2? parts[2] : null;
+    parseItem: function( dst, zone, j) {
+        var parts 	= getString( TEXT_VAL, zone.m_props ).split( SEP);
+        var title	= parts[0];
+        var url		= parts.length > 1? parts[1] : null;
+        var redir   = parts.length > 2? parts[2] : null;
         //itemStr;
-        var font:TextFormat= this.getTextFormat( zone.m_props);
-        var items:Vector.<String>	= parseString3( title, zone.m_props);
-        var urls:Vector.<String>   	= url != null ? parseString3( url, zone.m_props) : null;
-        var redirs:Vector.<String>  = redir != null ? parseString3( redir, zone.m_props) : urls;
+        var font = this.getTextFormat( zone.m_props);
+        var items = parseString3( title, zone.m_props);
+        var urls = url != null ? parseString3( url, zone.m_props) : null;
+        var redirs = redir != null ? parseString3( redir, zone.m_props) : urls;
         //MenuItem    item;
-        var i:int;
-        var n:int	= items.length;
-        var m:int		= redirs != null ? redirs.length : 0;
+        var i;
+        var n	= items.length;
+        var m	= redirs != null ? redirs.length : 0;
         
         if ( j == -1)
         {
@@ -177,7 +155,7 @@ public class MenuX extends Base
         }
         
         return n > 0;
-    }
+    },
     
     /**
      * Creates a new MenuItem, add it to a Menu and store the URL to call inside.
@@ -187,8 +165,8 @@ public class MenuX extends Base
      * @param url		Adress to go (including Javascript) when this is selected.
      * @param font		TypeFace of the label.
      */
-    private function addItem( menu:ArrayCollection, title:String, url:String, font:TextFormat):void {
-        var item:Object = new Object();
+    addItem: function( menu, title, url, font) {
+        var item = new Object();
         if( url == null && title == "-") {
 			item.type = "separator";	
 		} else {
@@ -204,15 +182,41 @@ public class MenuX extends Base
             }
 		}
 		menu.addItem( item );
-    }
+    },
     
     /**
      * Retrieve a java.awt.Font from this FontX propertie (FONT_VAL container).
      * @param props		A props table holding this FontX prop if it has one.
      * @return			the matching Font or null if the container is empty or the prop is null.
      */
-    public function getTextFormat(props:Array):TextFormat {
-        var font:FontX= getFont( FONT_VAL, props);
+    getTextFormat: function(props) {
+        var font = getFont( FONT_VAL, props);
         
         return font != null ? font.getTextFormat( props ): null;
     }
+	};
+	
+	return MenuX;
+}());		
+
+/**
+ * Index of the bit flag prop in VContainer table
+ */
+//	public  static final int    FLAGS_VAL           = 0;
+
+/**
+ * Index of the font prop in VContainer table
+ */
+JMI.script.MenuX.FONT_VAL = 1;
+
+/**
+ * Index of the text prop in VContainer table
+ */
+JMI.script.MenuX.TEXT_VAL = 2;
+
+/**
+ * True if this menu is just an item.
+ */
+JMI.script.MenuX.ITEM_BIT = 0x01;
+
+    

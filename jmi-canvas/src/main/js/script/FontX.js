@@ -1,3 +1,5 @@
+JMI.namespace("script.FontX");
+
 /*
  * <p>Title: FontX</p>
  * <p>Description: A wrapper for the java.awt.Font class.<br>
@@ -10,46 +12,36 @@
  * @author flugue@mapstan.com
  * @version 1.0
  */
-JMI.namespace("com.socialcomputing.jmi.script.FontX") = (function() {
+JMI.script.FontX = (function() {
 
-	Constr;
+	var FontX = function() {
+	};
 	
-	Constr = function( w, h) {
-		width = w;
-		height = h;
+	FontX.prototype = {
+		constructor: JMI.script.FontX,
+		
+		
+	/**
+	 * Convert this FontX to a java.awt.Font.
+	 * @param props		A property table that should hold props referenced by this containers.
+	 * @return			a new Font equivalent to this.
+	 */
+	getTextFormat: function( props) {
+		var font = new Object()
+	    var flags = getFlags( props );
+	    
+	    font.size = getInt( SIZE_VAL, props ),
+	    font.name = getString( NAME_VAL, props );
+		if (( flags & HTMLText.BOLD )!= 0)  font.bold = true;
+		if (( flags & HTMLText.ITALIC )!= 0) font.italic = true;
+	    
+	    return font;
 	}
-	Constr.prototype = {
-		constructor: com.socialcomputing.jmi.script.FontX,
-		version: "2.0"
-	}
-	return Constr;
+	};
+	
+	return FontX;
 }());
 
-/**
- * Convert this FontX to a java.awt.Font.
- * @param props		A property table that should hold props referenced by this containers.
- * @return			a new Font equivalent to this.
- */
-com.socialcomputing.jmi.script.FontX.prototype.getTextFormat = function( props) {
-    var flags = getFlags( props ),
-        size = getInt( SIZE_VAL, props );
-    var name = getString( NAME_VAL, props ),
-        key = name + flags + size;
-    
-	var font = s_fontBuf[ key ];
-    if ( font == null )
-    {
-        font = new TextFormat();// Portage
-        font.font = name;
-        font.size = size;
-
-        s_fontBuf[key] = font;
-    }
-	if (( flags & HTMLText.BOLD )!= 0)  font.bold = true;
-	if (( flags & HTMLText.ITALIC )!= 0) font.italic = true;
-    
-    return font;
-}
 
 /**
  * Index of the bit flag prop in VContainer table
@@ -59,15 +51,11 @@ com.socialcomputing.jmi.script.FontX.prototype.getTextFormat = function( props) 
 /**
  * Index of the Font name prop in VContainer table
  */
-com.socialcomputing.jmi.script.NAME_VAL = 1;
+JMI.script.NAME_VAL = 1;
 
 /**
  * Index of the Font size prop in VContainer table
  */
-com.socialcomputing.jmi.script.SIZE_VAL = 2;
+JMI.script.SIZE_VAL = 2;
     
-/**
- * A Font Buffer to reduce temporary Font object creation.
- */
-com.socialcomputing.jmi.script.s_fontBuf = new Object();
     

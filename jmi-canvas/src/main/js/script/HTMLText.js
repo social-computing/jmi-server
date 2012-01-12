@@ -1,216 +1,42 @@
-package com.socialcomputing.jmi.script{
-    import com.socialcomputing.jmi.components.Map;
-    import com.socialcomputing.jmi.util.controls.ImageUtil;
-    import com.socialcomputing.jmi.util.shapes.RectangleUtil;
-    
-    import flash.display.Sprite;
-    import flash.filters.BlurFilter;
-    import flash.geom.ColorTransform;
-    import flash.geom.Point;
-    import flash.geom.Rectangle;
-    import flash.text.AntiAliasType;
-    import flash.text.TextField;
-    import flash.text.TextFieldAutoSize;
-    import flash.text.TextFormat;
-    
-    /**
-     * <p>Title: HTMLText</p>
-     * <p>Description: A piece of text that can be single or multilined and hold basic HTML-like tags.<br>
-     * The supported tags are:
-     * <ul>
-     * <li>&lt;c|k=#RRGGBB&gt;	Sets the text typeface/background color.</li>
-     * <li>&lt;p t=px l=px b=px r=px a=l|c|r&gt; Starts a new paragraph with a margin at each borders.
-     * 						t, l, b, r are optional<br>
-     * 						a is the text alignment in this paragraph. Default is left.</li>
-     * <li>&lt;b> &lt;i&gt;	Sets font style to BOLD or ITALIC.</li>
-     * <li>&lt;br&gt;			Jumps to a new line. There's no need to close this Tag.</li>
-     * <li>&lt;f=name&gt;		Sets the font familly name.</li>
-     * <li>&lt;s=size&gt;		Sets the font size.</li>
-     * </ul>
-     * </p>
-     * <p>Copyright: Copyright (c) 2001-2003</p>
-     * <p>Company: MapStan (Voyez Vous)</p>
-     * @author flugue@mapstan.com
-     * @version 1.0
-     */
-    public class HTMLText extends Base
-    {
-		public static const BORDER_WIDTH:int= 2;
-        /**
-         * Index of the bit flag prop in VContainer table
-         */
-        //	public  static final int    FLAGS_VAL           = 0;
-        
-        /**
-         * Index of the font prop in VContainer table
-         */
-        public static const FONT_VAL:int= 1;
-        
-        /**
-         * Index of the text prop in VContainer table
-         */
-        public static const TEXT_VAL:int= 2;
-        
-        /**
-         * Index of the inside Color prop in VContainer table
-         */
-        public static const IN_COL_VAL:int= 3;
-        
-        /**
-         * Index of the border Color prop in VContainer table
-         */
-        public static const OUT_COL_VAL:int= 4;
-        
-        /**
-         * Index of the text Color prop in VContainer table
-         */
-        public static const TEXT_COL_VAL:int= 5;
-        
-		/**
-		 * Index of the Blur prop in VContainer table
-		 */
-		public static const BLUR_COL_VAL:int= 6;
+JMI.namespace("script.HTMLText");
+
+/**
+ * <p>Title: HTMLText</p>
+ * <p>Description: A piece of text that can be single or multilined and hold basic HTML-like tags.<br>
+ * The supported tags are:
+ * <ul>
+ * <li>&lt;c|k=#RRGGBB&gt;	Sets the text typeface/background color.</li>
+ * <li>&lt;p t=px l=px b=px r=px a=l|c|r&gt; Starts a new paragraph with a margin at each borders.
+ * 						t, l, b, r are optional<br>
+ * 						a is the text alignment in this paragraph. Default is left.</li>
+ * <li>&lt;b> &lt;i&gt;	Sets font style to BOLD or ITALIC.</li>
+ * <li>&lt;br&gt;			Jumps to a new line. There's no need to close this Tag.</li>
+ * <li>&lt;f=name&gt;		Sets the font familly name.</li>
+ * <li>&lt;s=size&gt;		Sets the font size.</li>
+ * </ul>
+ * </p>
+ * <p>Copyright: Copyright (c) 2001-2003</p>
+ * <p>Company: MapStan (Voyez Vous)</p>
+ * @author flugue@mapstan.com
+ * @version 1.0
+ */
+JMI.script.HTMLText = (function() {
+
+	var bound,//:Rectangle;
+		text, //:String;
+		inCol, //:ColorTransform;
+		font, //:TextFormat;
+		oneLine, //:Boolean;
+		outCol, //:ColorTransform;
+		blur, //:int;
+		rounded; //:int;
 		
-		/**
-		 * Index of the Rounded prop in VContainer table
-		 */
-		public static const ROUNDED_COL_VAL:int= 7;
+	var HTMLText = function() {
+	};
+	
+	HTMLText.prototype = {
+		constructor: JMI.script.HTMLText,
 		
-       /**
-         * True if this text is anchored by a corner.(like subZones tips).
-         */
-        public static const CORNER_BIT:int= 0x0100;	// Be carefull with this flags, they must not override Fonts ones (0x1, 0x2)!
-        
-        /**
-         * True if this text is right aligned (multiline).
-         */
-        public static const RIGHT_BIT:int= 0x0200;
-        
-        /**
-         * True if this text is centered (multiline).
-         */
-        public static const CENTER_BIT:int= 0x0400;
-        
-        /**
-         * True if this text is floating inside the window (tooltip).
-         */
-        public static const FLOAT_BIT:int= 0x0800;
-        
-        /**
-         * True if this text is read from an URL.
-         */
-        public static const URL_BIT:int= 0x1000;
-        
-        /**
-         * Cardinal orientation of the Tip on the screen        X x Y y
-         */
-        public static const NORTH:int= 0x4;  // 0 1 0 0;
-        public static const NORTH_EAST:int= 0x8;  // 1 0 0 0;
-        public static const EAST:int= 0x9;  // 1 0 0 1;
-        public static const SOUTH_EAST:int= 0xA;  // 1 0 1 0;
-        public static const SOUTH:int= 0x6;  // 0 1 1 0;
-        public static const SOUTH_WEST:int= 0x2;  // 0 0 1 0;
-        public static const WEST:int= 0x1;  // 0 0 0 1;
-        public static const NORTH_WEST:int= 0x0;  // 0 0 0 0;
-        
-        public static const BOLD:int= 0x1;  // 0 1 0 0;
-        public static const ITALIC:int= 0x2;  // 0 1 0 0;
-        
-        /**
-         * This bounding box, stored to avoid CPU overhead.
-         */
-        public var m_bounds:Rectangle;
-
-		private var _m_text:String;
-		private var _m_inCol:ColorTransform;
-		private var _m_font:TextFormat;
-		private var _m_oneLine:Boolean;
-		private var _m_outCol:ColorTransform;
-		private var _m_blur:int;
-		private var _m_rounded:int;
-		
-		
-		public function get m_rounded():int
-		{
-			return _m_rounded;
-		}
-
-		public function set m_rounded(value:int):void
-		{
-			_m_rounded = value;
-		}
-
-		public function get m_oneLine():Boolean
-		{
-			return _m_oneLine;
-		}
-
-		public function set m_oneLine(value:Boolean):void
-		{
-			_m_oneLine = value;
-		}
-
-		public function get m_font():TextFormat
-		{
-			return _m_font;
-		}
-
-		public function set m_font(value:TextFormat):void
-		{
-			_m_font = value;
-		}
-
-		public function get m_text():String
-		{
-			return _m_text;
-		}
-
-		public function set m_text(value:String):void
-		{
-			_m_text = value;
-		}
-
-		public function get m_blur():int
-		{
-			return _m_blur;
-		}
-
-		public function set m_blur(value:int):void
-		{
-			_m_blur = value;
-		}
-
-        public function get m_inCol():ColorTransform
-        {
-            return _m_inCol;
-        }
-        
-        /**
-         * Color of the bounding box background.
-         */
-        public function set m_inCol(value:ColorTransform):void
-        {
-            _m_inCol = value;
-        }
-        
-        public function get m_outCol():ColorTransform
-        {
-            return _m_outCol;
-        }
-        
-        /**
-         * Color of the bounding box border.
-         */
-        public function set m_outCol(value:ColorTransform):void
-        {
-            _m_outCol = value;
-        }
-        
-        /**
-         */
-        public function HTMLText(){
-		}
-        
         /**
          * Creates a new HTMLText and sets its default formatting properties.
          * @param inCol		Color of the bounding box background.
@@ -222,36 +48,35 @@ package com.socialcomputing.jmi.script{
          * @param flags		Default text alignment flags.
          * @param margin	Default margins size.
          */
-        public function initValues(inCol:ColorTransform, outCol:ColorTransform, textCol:int, fontSiz:int, fontStl:int, fontNam:String, blur:int, rounded:int, flags:int, margin:Insets):void
-        {
-            m_inCol     = inCol;
-            m_outCol    = outCol;
-			m_blur		= blur;
-			m_rounded   = rounded;
+        initValues: function(inCol, outCol, textCol, fontSiz, fontStl, fontNam, blur, rounded, flags, margin) {
+            this.inCol     = inCol;
+            this.outCol    = outCol;
+			this.blur		= blur;
+			this.rounded   = rounded;
 			
-			this.m_font = new TextFormat();
-			this.m_font.font = fontNam;
-			this.m_font.size = fontSiz;
-			this.m_font.color = textCol;
-			if (( fontStl & BOLD )!= 0)  this.m_font.bold = true;
-			if (( fontStl & ITALIC )!= 0) this.m_font.italic = true;
+			this.font = new Object();
+			this.font.font = fontNam;
+			this.font.size = fontSiz;
+			this.font.color = textCol;
+			if (( fontStl & BOLD )!= 0)  this.font.bold = true;
+			if (( fontStl & ITALIC )!= 0) this.font.italic = true;
 			
-			this.m_font.leftMargin = margin.left;
-			this.m_font.rightMargin = margin.right;
-        }
+			this.font.leftMargin = margin.left;
+			this.font.rightMargin = margin.right;
+        },
 		
-		public function init( base:Base, zone:ActiveZone ):void {
-			var font:FontX = base.getFont( FONT_VAL, zone.m_props);
-			this.m_font = font.getTextFormat( zone.m_props);
-			this.m_inCol = base.getColor( IN_COL_VAL, zone.m_props);
-			this.m_outCol = base.getColor( OUT_COL_VAL, zone.m_props);
-			//this.m_blur = base.getInt(BLUR_COL_VAL, zone.m_props);
-			this.m_blur = parseInt( base.parseString(BLUR_COL_VAL, zone.m_props )[0]);
-			this.m_rounded = base.getInt(ROUNDED_COL_VAL, zone.m_props);
-			var color:ColorX = base.getValue( HTMLText.TEXT_COL_VAL, zone.m_props) as ColorX;
+		init: function( base, zone) {
+			var font = base.getFont( FONT_VAL, zone.props);
+			this.font = font.getTextFormat( zone.props);
+			this.inCol = base.getColor( IN_COL_VAL, zone.props);
+			this.outCol = base.getColor( OUT_COL_VAL, zone.props);
+			//this.m_blur = base.getInt(BLUR_COL_VAL, zone.props);
+			this.blur = parseInt( base.parseString(BLUR_COL_VAL, zone.props )[0]);
+			this.rounded = base.getInt(ROUNDED_COL_VAL, zone.props);
+			var color = base.getValue( HTMLText.TEXT_COL_VAL, zone.props);
 			if( color != null)
-				this.m_font.color = color.m_color;
-		}
+				this.font.color = color.color;
+		},
         
         /**
          * Gets a new or existing HTMLText and initialize its bounding box.
@@ -267,33 +92,33 @@ package com.socialcomputing.jmi.script{
          * @return			A new or existing HTMLText whose bounds are initilized.
          * @throws UnsupportedEncodingException 
          */
-        public function getHText( applet:Map, s:Sprite, zone:ActiveZone, transfo:Transfo, center:Point, supCtr:Point, textKey:HTMLText):HTMLText // throws UnsupportedEncodingException
+        getHText: function( applet, s, zone, transfo, center, supCtr, textKey) // throws UnsupportedEncodingException
         {
-            var htmlTxt:HTMLText= null;
-            var data:Object= zone.m_datas[ textKey ];
+            var htmlTxt = null;
+            var data = zone.m_datas[ textKey ];
             
             if ( center == null )	center = supCtr;
             
             if ( data == null )
             {
-				htmlTxt = new HTMLText();
-				htmlTxt.m_text = parseString2( TEXT_VAL, zone.m_props, true );
+				htmlTxt = new JMI.script.HTMLText();
+				htmlTxt.text = parseString2( TEXT_VAL, zone.props, true );
                 
-                if ( htmlTxt.m_text.length> 0)
+                if ( htmlTxt.text.length> 0)
                 {
 					htmlTxt.init( this, zone);
                     htmlTxt.updateBounds( applet);
-                    htmlTxt.setTextBnds( applet.size, getFlags( zone.m_props), zone.m_flags ,transfo, supCtr, center );
+                    htmlTxt.setTextBnds( applet.size, getFlags( zone.props), zone.flags ,transfo, supCtr, center );
                 }
             }
             else
             {
-                htmlTxt = data as HTMLText;
-                htmlTxt.setTextBnds( applet.size, getFlags( zone.m_props), zone.m_flags, transfo, supCtr, center );
+                htmlTxt = data;
+                htmlTxt.setTextBnds( applet.size, getFlags( zone.props), zone.flags, transfo, supCtr, center );
             }
             
             return htmlTxt;
-        }
+        },
         
         /**
          * Evaluate this bounding box using margins.
@@ -301,22 +126,23 @@ package com.socialcomputing.jmi.script{
          * @param g			The graphics used to retrieve the font metrics.
          * @param htmlText	A string of text with or without HTML tags to parse.
          */
-        public function updateBounds( applet:Map):void {
+        updateBounds: function( applet) {
 			 // The text exists!
-			m_oneLine = true;
-			 if ( this.m_text.length > 0)
+			oneLine = true;
+			if ( this.text.length > 0)
 			 {
-				 var textField:TextField = new TextField();
+			 	// TODO portage
+/*				 var textField:TextField = new TextField();
 				 textField.defaultTextFormat = m_font;
 				 textField.multiline = true;
 				 textField.htmlText = this.m_text;
 				 textField.autoSize = TextFieldAutoSize.LEFT;
 				 textField.antiAliasType = AntiAliasType.ADVANCED;
-				 this.m_bounds = new com.socialcomputing.jmi.script.Rectangle();
-				 this.m_bounds.copy( textField.getBounds( applet));
+				 this.bounds = new com.socialcomputing.jmi.script.Rectangle();
+				 this.bounds.copy( textField.getBounds( applet));
 				 if( this.m_outCol != null) {
-					 this.m_bounds.width += (BORDER_WIDTH*2);
-					 this.m_bounds.height += (BORDER_WIDTH*2);
+					 this.bounds.width += (BORDER_WIDTH*2);
+					 this.bounds.height += (BORDER_WIDTH*2);
 				 }					 
 				 
 				 try {
@@ -324,9 +150,9 @@ package com.socialcomputing.jmi.script{
 					 m_oneLine = false;
 				 }catch( e : RangeError){
 					 m_oneLine = true;
-				 }
+				 }*/
 			 }
-        }
+       },
         
         /**
          * Draws this using a cardinal direction.
@@ -335,10 +161,10 @@ package com.socialcomputing.jmi.script{
          * @param dir	One of the following directions:<br>
          * NORTH, NORTH_EAST, EAST, SOUTH_EAST, SOUTH, SOUTH_WEST, WEST, NORTH_WEST.
          */
-        public function drawText( s:Sprite, size:Dimension, dir:int):void {
-            var pos:Point= new Point();
-            var xMax:int= size.width - m_bounds.width - 1,
-                yMax:int= size.height - m_bounds.height - 1;
+        drawText: function( s, size, dir) {
+            var pos = new JMI.script.Point();
+            var xMax = size.width - bounds.width - 1,
+                yMax = size.height - bounds.height - 1;
             
             if (( dir & 8)!= 0)         pos.x = xMax;
             else if (( dir & 4)!= 0)    pos.x = xMax >> 1;
@@ -346,16 +172,16 @@ package com.socialcomputing.jmi.script{
             else if (( dir & 1)!= 0)    pos.y = yMax >> 1;
             
             drawText3( s, size, pos );
-        }
+        },
         
         /**
          * Draws this using a previously evaluated position.
          * @param g		Graphics to draw in.
          * @param size	Size of the Window to draw in.
          */
-        public function drawText2( s:Sprite, size:Dimension):void {
-            drawText3( s, size, new Point( m_bounds.x, m_bounds.y ));
-        }
+        drawText2: function( s, size) {
+            drawText3( s, size, new JMI.script.Point( bounds.x, bounds.y ));
+        },
         
         /**
          * Draws this at a position.
@@ -363,8 +189,8 @@ package com.socialcomputing.jmi.script{
          * @param size	Size of the Window to draw in.
          * @param pos	Where to draw this.
          */
-        public function drawText3( s:Sprite, size:Dimension, pos:Point):void {
-			var borderWidth:int = 0;
+        drawText3: function( s, size, pos) {
+			var borderWidth = 0;
 			if ( m_outCol != null )
 				borderWidth = 2;
             if ( m_inCol != null )
@@ -374,9 +200,9 @@ package com.socialcomputing.jmi.script{
 					//s.graphics.lineStyle( 2, m_outCol.color);
 					s.graphics.beginFill(m_outCol.color);
 					if( m_rounded == -1)
-						s.graphics.drawRect(pos.x, pos.y, m_bounds.width, m_bounds.height);
+						s.graphics.drawRect(pos.x, pos.y, bounds.width, bounds.height);
 					else
-						s.graphics.drawRoundRect(pos.x, pos.y, m_bounds.width, m_bounds.height, m_rounded, m_rounded);
+						s.graphics.drawRoundRect(pos.x, pos.y, bounds.width, bounds.height, m_rounded, m_rounded);
 					s.graphics.endFill();
 				}
 				// TODO gérer le gradient dans les swatchs
@@ -384,13 +210,13 @@ package com.socialcomputing.jmi.script{
 				var alphas:Array = [1, 1];
 				var ratios:Array = [0x00, 0xFF];
 				var matr:Matrix = new Matrix();
-				matr.createGradientBox(m_bounds.width, m_bounds.height * 2, Math.PI / 2, pos.x, pos.y);
+				matr.createGradientBox(bounds.width, bounds.height * 2, Math.PI / 2, pos.x, pos.y);
                 s.graphics.beginGradientFill(GradientType.LINEAR, colors, alphas, ratios, matr, SpreadMethod.PAD);
 */				s.graphics.beginFill(m_inCol.color);
 				if( m_rounded == -1)
-					s.graphics.drawRect(pos.x+borderWidth, pos.y+borderWidth, m_bounds.width-2*borderWidth, m_bounds.height-2*borderWidth);
+					s.graphics.drawRect(pos.x+borderWidth, pos.y+borderWidth, bounds.width-2*borderWidth, bounds.height-2*borderWidth);
 				else
-                	s.graphics.drawRoundRect(pos.x+borderWidth, pos.y+borderWidth, m_bounds.width-2*borderWidth, m_bounds.height-2*borderWidth, m_rounded, m_rounded);
+                	s.graphics.drawRoundRect(pos.x+borderWidth, pos.y+borderWidth, bounds.width-2*borderWidth, bounds.height-2*borderWidth, m_rounded, m_rounded);
                 s.graphics.endFill();
            }
 			
@@ -398,16 +224,17 @@ package com.socialcomputing.jmi.script{
 
 			if ( m_oneLine && m_inCol == null) // draw reflection only for one line boxes
             {
-                var white:ColorTransform = new ColorTransform();
+            	// TODO portage
+/*                var white:ColorTransform = new ColorTransform();
                 white.color = 0xFFFFFF;
                 s.graphics.beginFill(white.color, 0.2);
 				s.graphics.lineStyle();
-                s.graphics.drawRoundRect(pos.x+borderWidth, pos.y+3+borderWidth, m_bounds.width-2*borderWidth, (m_bounds.height/3)-2*borderWidth, 5, 5);
-                s.graphics.endFill();
+                s.graphics.drawRoundRect(pos.x+borderWidth, pos.y+3+borderWidth, bounds.width-2*borderWidth, (bounds.height/3)-2*borderWidth, 5, 5);
+                s.graphics.endFill();*/
             }
-            m_bounds.x  = pos.x;
-            m_bounds.y  = pos.y;
-        }
+            bounds.x  = pos.x;
+            bounds.y  = pos.y;
+        },
         
 		/**
 		 * Paint this at a specified location.
@@ -415,20 +242,14 @@ package com.socialcomputing.jmi.script{
 		 * @param g		The graphics to draw in.
 		 * @param pos	The position where this should be drawn before its internal translation is added.
 		 */
-		public function paint( s:Sprite, pos:Point, borderWidth:int):void {
-			var textField:TextField = new TextField();
+		paint: function( s, pos, borderWidth) {
+			// TODO Portage
+			/*var textField:TextField = new TextField();
 			if( m_blur != -1) {
 				textField.filters = [new BlurFilter(m_blur, m_blur)];
-			}
-/*			if ( false && !m_oneLine && m_inCol != null )
-			{
-				text.background = true;
-				text.backgroundColor = m_inCol.color;
-			}
-*/			
-			//text.text = m_text;
-			if( m_font != null)
-				textField.defaultTextFormat = m_font;
+			}*/
+			if( font != null)
+				textField.defaultTextFormat = font;
 			textField.multiline = true;
 			textField.htmlText = m_text;
 			textField.x = pos.x + borderWidth;
@@ -438,7 +259,7 @@ package com.socialcomputing.jmi.script{
 			textField.border = false;
 			ImageUtil.drawTextField( textField, s.graphics);
 			//s.addChild(textField);
-		}
+		},
 		
         /**
          * Evaluate this bounds.
@@ -450,16 +271,16 @@ package com.socialcomputing.jmi.script{
          * @param supCtr	Center of the parent satellite (Place center).
          * @param center	Center of this before the transformation.
          */
-        public function setTextBnds( size:Dimension, flags:int, posFlags:int, transfo:Transfo, supCtr:Point, center:Point):void {
-            var isFloat:Boolean= Base.isEnabled( flags, FLOAT_BIT );
-            var dx:int= 0,
-                dy:int	= 0,
-                x:int   = center.x,
-                y:int   = center.y,
-                w:int   = m_bounds.width,
-                h:int   = m_bounds.height,
-                w2:int  = w >> 1,
-                h2:int  = h >> 1;
+        setTextBnds: function( size, flags, posFlags, transfo, supCtr, center) {
+            var isFloat = Base.isEnabled( flags, FLOAT_BIT );
+            var dx = 0,
+                dy	= 0,
+                x = center.x,
+                y = center.y,
+                w   = bounds.width,
+                h   = bounds.height,
+                w2  = w >> 1,
+                h2  = h >> 1;
             
             if ( supCtr != null )
             {
@@ -494,7 +315,7 @@ package com.socialcomputing.jmi.script{
             
             if ( transfo != null )
             {
-                var dp:Point= transfo.getCart();
+                var dp = transfo.getCart();
                 x += dp.x;
                 y += dp.y;
             }
@@ -511,17 +332,99 @@ package com.socialcomputing.jmi.script{
                 else if ( y + h > size.height )  y = size.height - 4- h;
             }
             
-            m_bounds.x = x;
-            m_bounds.y = y;
+            bounds.x = x;
+            bounds.y = y;
         }
-        
-       // static properties/methods aren't inherited in AS3
-        // http://help.adobe.com/en_US/ActionScript/3.0_ProgrammingAS3/WS5b3ccc516d4fbf351e63e3d118a9b90204-7fcd.html
-        // http://www.davidarno.org/2009/09/25/actionscript-3-inheritance-developers-beware/
-        public static function isEnabled( flags:int, bit:int):Boolean {
-            return Base.isEnabled(flags, bit);
-        }
-            
-    }
-    
+ 	};
+	
+	return HTMLText;
+}());
+		
+JMI.script.HTMLText.BORDER_WIDTH = 2;
+/**
+ * Index of the bit flag prop in VContainer table
+ */
+//	public  static final int    FLAGS_VAL           = 0;
+
+/**
+ * Index of the font prop in VContainer table
+ */
+JMI.script.HTMLText.FONT_VAL = 1;
+
+/**
+ * Index of the text prop in VContainer table
+ */
+JMI.script.HTMLText.TEXT_VAL = 2;
+
+/**
+ * Index of the inside Color prop in VContainer table
+ */
+JMI.script.HTMLText.IN_COL_VAL = 3;
+
+/**
+ * Index of the border Color prop in VContainer table
+ */
+JMI.script.HTMLText.OUT_COL_VAL = 4;
+
+/**
+ * Index of the text Color prop in VContainer table
+ */
+JMI.script.HTMLText.TEXT_COL_VAL = 5;
+
+/**
+ * Index of the Blur prop in VContainer table
+ */
+JMI.script.HTMLText.BLUR_COL_VAL = 6;
+
+/**
+ * Index of the Rounded prop in VContainer table
+ */
+JMI.script.HTMLText.ROUNDED_COL_VAL = 7;
+	
+   /**
+ * True if this text is anchored by a corner.(like subZones tips).
+ */
+JMI.script.HTMLText.CORNER_BIT = 0x0100;	// Be carefull with this flags, they must not override Fonts ones (0x1, 0x2)!
+
+/**
+ * True if this text is right aligned (multiline).
+ */
+JMI.script.HTMLText.RIGHT_BIT = 0x0200;
+
+/**
+ * True if this text is centered (multiline).
+ */
+JMI.script.HTMLText.CENTER_BIT = 0x0400;
+
+/**
+ * True if this text is floating inside the window (tooltip).
+ */
+JMI.script.HTMLText.FLOAT_BIT = 0x0800;
+
+/**
+ * True if this text is read from an URL.
+ */
+JMI.script.HTMLText.URL_BIT = 0x1000;
+
+/**
+ * Cardinal orientation of the Tip on the screen        X x Y y
+ */
+JMI.script.HTMLText.NORTH = 0x4;  // 0 1 0 0;
+JMI.script.HTMLText.NORTH_EAST = 0x8;  // 1 0 0 0;
+JMI.script.HTMLText.EAST = 0x9;  // 1 0 0 1;
+JMI.script.HTMLText.SOUTH_EAST = 0xA;  // 1 0 1 0;
+JMI.script.HTMLText.SOUTH = 0x6;  // 0 1 1 0;
+JMI.script.HTMLText.SOUTH_WEST = 0x2;  // 0 0 1 0;
+JMI.script.HTMLText.WEST = 0x1;  // 0 0 0 1;
+JMI.script.HTMLText.NORTH_WEST = 0x0;  // 0 0 0 0;
+
+JMI.script.HTMLText.BOLD = 0x1;  // 0 1 0 0;
+JMI.script.HTMLText.ITALIC = 0x2;  // 0 1 0 0;
+
+   // static properties/methods aren't inherited in AS3
+// http://help.adobe.com/en_US/ActionScript/3.0_ProgrammingAS3/WS5b3ccc516d4fbf351e63e3d118a9b90204-7fcd.html
+// http://www.davidarno.org/2009/09/25/actionscript-3-inheritance-developers-beware/
+JMI.script.HTMLText.isEnabled = function( flags, bit) {
+    return Base.isEnabled(flags, bit); // TODO portage
 }
+        

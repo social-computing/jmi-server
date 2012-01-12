@@ -18,20 +18,20 @@ JMI.script.Satellite = (function() {
      * @param shape		A shape that is filled by the slices.
      * @param slices	A table of slices used to render this.
      */
-	var Satellite = function(shape, slices) {
+	var Satellite = function() {
 	    /*
          * Shape used to draw this.
          * This can be a simple dot, a disk, a rectangle or a polygon.
          * :JMI.script.ShapeX
          */
-         this.shape  = shape;
+         this.shape;
          
          /*
           * The elementary slices that are stacked to draw this satellite.
           * They describe how to fill the shape.
           * //:Vector.<Slice>;
           */
-	     this.slices = slices;
+	     this.slices;
 	};
 	
 	Satellite.prototype = {
@@ -356,12 +356,12 @@ JMI.script.Satellite.HOVER_VAL = 2;
 /*
  * Index of the click event prop in VContainer table
  */
-JMI.jmi.script.Satellite.CLICK_VAL = 3;
+JMI.script.Satellite.CLICK_VAL = 3;
 
 /*
  * Index of the double click event prop in VContainer table.
  */
-JMI.jmi.script.Satellite.DBLCLICK_VAL = 4;
+JMI.script.Satellite.DBLCLICK_VAL = 4;
 
 /*
  * Index of the selection prop in VContainer table if this is a selection Satellite.

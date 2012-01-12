@@ -11,10 +11,10 @@ JMI.namespace("script.BagZone");
  */
 JMI.script.BagZone = (function() {
 	
-	var BagZone = function(subZones) {
+	var BagZone = function() {
 	    // Clusterized subZones table.
 	    //:Array = null;
-        this.subZones = []; 
+        this.subZones; 
     
         /*
          * Initial angular direction of Satellites.
@@ -35,7 +35,6 @@ JMI.script.BagZone = (function() {
          * Its size and position should be initialized by setting the "_SCALE" (float) and "_VERTICES" (Point[1]) properties;
          * @param subs  A subZone table whose parent is this.
          */
-		this.subZones = subZones;
 	};
 	
 	BagZone.prototype = {
