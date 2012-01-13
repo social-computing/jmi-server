@@ -12,7 +12,7 @@ JMI.namespace("components.Map");
 */	
 JMI.components.Map = (function() {
 
-var _dataProvider = JMI.script.PlanContainer,
+var _planContainer = JMI.script.PlanContainer,
 	_curPos = new JMI.script.Point(),
 	_ready = false,
 
@@ -77,14 +77,14 @@ var _dataProvider = JMI.script.PlanContainer,
 		
 		// Event listeners
 		this.doubleClickEnabled = true;
-		this.addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
+/*		this.addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
 		this.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 		this.addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
 		this.addEventListener(MouseEvent.CLICK, mouseClickHandler);
 		this.addEventListener(MouseEvent.DOUBLE_CLICK, mouseDoubleClickHandler);
 		this.addEventListener(ResizeEvent.RESIZE, resizeHandler);
 		this.addEventListener(NavigateEvent.NAVIGATE, navigateHandler);
-		
+*/		
 /*		var wpsMenu:ContextMenu = new ContextMenu();
 		wpsMenu.hideBuiltInItems();
 		var menuItem:ContextMenuItem = new ContextMenuItem("powered by Just Map It! - Social Computing");
@@ -95,6 +95,84 @@ var _dataProvider = JMI.script.PlanContainer,
 	
     Map.prototype = {
         constructor: JMI.components.Map,
+		
+		setData: function(value) {
+			// Set component status to "not ready"
+			this.ready = false;
+		
+			// Stop loaders
+			if( this.planContainer && this.planContainer.env) {
+				this.planContainer.env.close();
+			}
+			
+			// Clear current
+			if( this.planContainer && this.planContainer.plan) {
+				this.planContainer.plan.curSat = null;
+				this.planContainer.plan.curZone = null;
+			}
+			
+			// Clear all drawing surfaces
+			// TODO portage this.clear();
+			
+			this.attributes = [];
+			this.entities = [];
+			
+			// If the given value is null 
+			// Reset all objects of this component
+			if(value == null) {
+				this.planContainer = null;
+				//this.plan = null;
+				//this.
+				// TODO : If the local plancontainer is set, reset objects
+				this.invalidateProperties();
+				this.invalidateDisplayList();
+				return;
+			}
+			
+			// TODO this.showStatus("");
+			// TODO CursorManager.setBusyCursor();
+			if(value instanceof JMI.script.PlanContainer) {
+				this.planContainer = value;
+			}
+			else {
+				this.planContainer = JMI.script.PlanContainer.fromJSON( value);
+			}
+			if( this.planContainer.hasOwnProperty( "error")) {
+				// Server error
+				CursorManager.removeBusyCursor();
+				dispatchEvent(new StatusEvent(StatusEvent.ERROR, this.planContainer.error));
+			}
+			else if( !this.planContainer.hasOwnProperty( "plan")) {
+				// Empty map
+				// TODO
+				/*CursorManager.removeBusyCursor();
+				dispatchEvent(new Event( Map.EMPTY));*/
+			}
+			else {
+				var needPrint = false; // Later
+		
+				this.planContainer.env.init(this, needPrint);
+				this.planContainer.plan.applet = this;
+				this.planContainer.plan.curSel = -1;
+				this.planContainer.plan.initZones(this.restDrawingSurface, plan.links, true);
+	            this.planContainer.plan.initZones(this.restDrawingSurface, plan.nodes, true);
+				this.planContainer.plan.resize(size);
+				this.planContainer.plan.init();
+				this.planContainer.plan.resize(size);
+				this.planContainer.plan.init();
+			    for ( var zone in plan.nodes) {
+					this.attributes.addItem( new Attribute( this.planContainer.env, zone));
+				}
+				this.ready = true;
+
+				// TODOCursorManager.removeBusyCursor();
+				
+				this.invalidateProperties();
+				this.invalidateDisplayList();
+				/*TODO if(this.ready)
+					dispatchEvent(new Event(Map.READY));*/
+			}
+		},
 		
 		openSoCom: function ( e) {
 			//TODO portage
@@ -116,18 +194,18 @@ JMI.components.Map.READY = "ready";
 
 public function get plan():Plan
 {
-	if(this.dataProvider == null) {
+	if(this.planContainer == null) {
 		return null;
 	}
-	return _dataProvider.plan;
+	return _planContainer.plan;
 }
 
 public function get env():Env
 {
-	if(this.dataProvider == null) {
+	if(this.planContainer == null) {
 		return null
 	}
-	return _dataProvider.env;
+	return _planContainer.env;
 }
 
 public function get size():Dimension {
@@ -155,98 +233,12 @@ public function set curPos(pos:Point):void {
 	_curPos = pos;
 }
 
-public function get dataProvider():Object
+public function get planContainer():Object
 {
-	return this.dataProvider;	
+	return this.planContainer;	
 }*/
 
-/*public function set dataProvider(value:Object):void
-{
-	//Alert.show( unescape( flash.display.LoaderInfo(this.root.loaderInfo).url));
-	
-	// Set component status to "not ready"
-	this.ready = false;
-
-	// Stop loaders
-	if( this.dataProvider && this.dataProvider.env) {
-		this.dataProvider.env.close();
-	}
-	
-	// Clear current
-	if( this.plan != null) {
-		this.plan.curSat = null;
-		this.plan.curZone = null;
-	}
-	
-	// Clear all drawing surfaces
-	this.clear();
-	
-	this.attributes = new ArrayCollection();
-	this.entities = new ArrayCollection();
-	
-	// If the given value is null 
-	// Reset all objects of this component
-	if(value == null) {
-		this.dataProvider = null;
-		//this.plan = null;
-		//this.
-		// TODO : If the local plancontainer is set, reset objects
-		this.invalidateProperties();
-		this.invalidateDisplayList();
-		return;
-	}
-	
-	this.showStatus("");
-	CursorManager.setBusyCursor();
-	if(value is PlanContainer) {
-		this.dataProvider = value as PlanContainer;
-	}
-	else {
-		this.dataProvider = PlanContainer.fromJSON(value);
-	}
-	if( this.dataProvider.hasOwnProperty( "error")) {
-		// Server error
-		CursorManager.removeBusyCursor();
-		dispatchEvent(new StatusEvent(StatusEvent.ERROR, this.dataProvider.error));
-	}
-	else if( !this.dataProvider.hasOwnProperty( "plan")) {
-		// Empty map
-		CursorManager.removeBusyCursor();
-		dispatchEvent(new Event( Map.EMPTY));
-	}
-	else {
-		var needPrint:Boolean = false; // Later
-
-		try {
-			this.dataProvider.env.init(this, needPrint);
-			plan.applet = this;
-			plan.curSel = -1;
-			plan.initZones(this.restDrawingSurface, plan.links, true);
-            plan.initZones(this.restDrawingSurface, plan.nodes, true);
-			plan.resize(size);
-			plan.init();
-			plan.resize(size);
-			plan.init();
-		    for each( var zone:ActiveZone in plan.nodes) {
-				this.attributes.addItem( new Attribute( env, zone));
-			}
-			this.ready = true;
-		}
-		catch(error:Error) {
-			// Client error
-			CursorManager.removeBusyCursor();
-			dispatchEvent(new StatusEvent(StatusEvent.ERROR, error.message));
-			trace(error.getStackTrace());	
-		}
-		CursorManager.removeBusyCursor();
-		
-		this.invalidateProperties();
-		this.invalidateDisplayList();
-		if(this.ready)
-			dispatchEvent(new Event(Map.READY));
-	}
-}
-
+/*
 com.socialcomputing.jmi.components.Map.prototype.clear = function() {
 	ImageUtil.clear(this.backDrawingSurface);
 	ImageUtil.clear(this.restDrawingSurface);
@@ -277,7 +269,7 @@ public function mouseMoveHandler(event:MouseEvent):void {
 	this.curPos.x = event.localX;
 	this.curPos.y = event.localY;
 	if(ready) {
-		_dataProvider.plan.updateZoneAt(this.curPos);
+		_planContainer.plan.updateZoneAt(this.curPos);
 	}
 }
 
