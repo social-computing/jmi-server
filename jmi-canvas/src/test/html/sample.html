@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Test</title>
+
+<script type="text/javascript" src="/jmi-canvas/src/main/js/jmi.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/lib/json_sans_eval.js"></script>
+
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/ActiveZone.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/BagZone.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/Base.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/ColorX.js"></script>
+<!--script type="text/javascript" src="/jmi-canvas/src/main/js/script/CustomMenuItemRenderer.js"></script-->
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/Dimension.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/Env.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/FontX.js"></script>
+<!--script type="text/javascript" src="/jmi-canvas/src/main/js/script/FormatToken.js"></script-->
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/HTMLText.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/Insets.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/LinkZone.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/MenuX.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/Plan.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/PlanContainer.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/Point.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/Polygon.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/Rectangle.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/SatData.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/Satellite.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/ShapeX.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/Slice.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/Swatch.js"></script>
+<!--script type="text/javascript" src="/jmi-canvas/src/main/js/script/TextToken.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/TipTimer.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/Token.js"></script-->
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/Transfo.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/script/VContainer.js"></script>
+
+<script type="text/javascript" src="/jmi-canvas/src/main/js/components/Map.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/components/MapRequester.js"></script>
+
+<script>
+function GoMap() {
+	var map = new JMI.components.Map( 'map');
+	var requester = new JMI.components.MapRequester();
+	var parameters = [];
+	requester.getMap( 'Feeds', map.width, map.height, parameters, function( data) {
+		map.setData( data);
+	});
+};
+</script>
+</head>
+<body onload="GoMap()">
+<div id="map" width="500" height="500" ></div>	
+</body>
+</html>
