@@ -27,6 +27,8 @@ JMI.script.LinkZone = (function() {
          * JMI.script.BagZone
          */
 		this.to = JMI.script.BagZone;
+
+        JMI.script.ActiveZone.call( this);
 	};
 	
 	LinkZone.prototype = {
@@ -84,6 +86,12 @@ JMI.script.LinkZone = (function() {
             applet.renderShape(applet.curDrawingSurface, this.bounds.width, this.bounds.height, new JMI.script.Point(this.bounds.x, this.bounds.y));
         }
 	};
+	
+	// Héritage
+	for (var element in JMI.script.ActiveZone.prototype ) {
+		LinkZone.prototype[element] = JMI.script.ActiveZone.prototype[element];
+	}
+	
 	return LinkZone;
 }());
 

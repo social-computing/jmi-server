@@ -26,6 +26,8 @@ JMI.script.Swatch = (function() {
          * :Array;
          */
     	this.refs; 
+
+		JMI.script.Base.call( this);
 	};
 	
 	Swatch.prototype = {
@@ -44,12 +46,12 @@ JMI.script.Swatch = (function() {
         paint: function(applet, s, zone, isCur, isFront, showTyp, showLinks) {
             var sat = this.satellites[0];
             var shape = sat._shape;
-            var flags = getFlags(zone._props);
-            var transfo = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone._props);
+            var flags = getFlags(zone.props);
+            var transfo = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone.props);
             
             // Draws Satellites links first (if they exists)
             // so they can be partly covered by other sats
-            if (this.isEnabled(flags, JMI.script.LINK_BIT) && showLinks) {
+            if (JMI.script.Base.isEnabled(flags, JMI.script.Swatch.LINK_BIT) && showLinks) {
                 this.drawSats(applet, s, zone, shape, transfo, true, isCur, isFront, showTyp);
             }
           
@@ -76,7 +78,7 @@ JMI.script.Swatch = (function() {
             var isBag = zone instanceof JMI.script.BagZone;
             var supZone = isBag ? zone : null;
             var zones = isBag ? supZone._subZones : null;
-            var curZone= applet.plan._curZone,
+            var curZone= applet.planContainer.map.plan._curZone,
                 subZone;
             var sat = this.satellites[0];
             var satData = isCur ? zone._curData[0] : zone._restData[0];
@@ -97,22 +99,22 @@ JMI.script.Swatch = (function() {
                 satData = isCur ? zone._curData[i] : zone._restData[i];
                 flags   = satData._flags;
                 
-                if (((this.isLinkOnly && this.isEnabled(flags, JMI.script.Satellite.LINK_BIT)) || !this.isLinkOnly)
-                    && this.isEnabled(flags, JMI.script.Satellite.VISIBLE_BIT)
+                if (((this.isLinkOnly && JMI.script.Base.isEnabled(flags, JMI.script.Satellite.LINK_BIT)) || !this.isLinkOnly)
+                    && JMI.script.Base.isEnabled(flags, JMI.script.Satellite.VISIBLE_BIT)
                     // This Sat is visible
-                    && (isFront != this.isEnabled(flags, JMI.script.Satellite.BACK_BIT))) {
+                    && (isFront != JMI.script.Base.isEnabled(flags, JMI.script.Satellite.BACK_BIT))) {
                     
                     // Bags
                     if (isBag) {
-                        hasRestBit  = this.isEnabled(flags, JMI.script.Satellite.REST_BIT);
-                        hasCurBit   = this.isEnabled(flags, JMI.script.Satellite.CUR_BIT);
-                        satRelTrf   = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone._props);
+                        hasRestBit  = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.REST_BIT);
+                        hasCurBit   = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.CUR_BIT);
+                        satRelTrf   = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone.props);
                         satTrf      = transfo != null ? transfo.transform(satRelTrf, true) : null;
                         
                         if(supZone._dir != 10.) {
-                            if (!this.isEnabled(flags, JMI.script.Satellite.NOSIDED_BIT)) satTrf._dir = supZone._dir;
+                            if (!JMI.script.Base.isEnabled(flags, JMI.script.Satellite.NOSIDED_BIT)) satTrf._dir = supZone._dir;
                             else {
-                                if(this.isEnabled(supZone._flags, JMI.script.ActiveZone.LEFT_BIT)) satTrf._dir += (JMI.script.Base.Pi2 / 2);
+                                if(JMI.script.Base.isEnabled(supZone._flags, JMI.script.ActiveZone.LEFT_BIT)) satTrf._dir += (JMI.script.Base.Pi2 / 2);
                             }
                         }
                         
@@ -133,7 +135,7 @@ JMI.script.Swatch = (function() {
                         }
                         
                         // draws SuperZone
-                        if (this.isEnabled(flags, JMI.script.Satellite.SUPER_BIT)) {
+                        if (JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SUPER_BIT)) {
                             isCurSub = supZone == curZone;
                             satData  = isCur ? zone._curData[i] : zone._restData[i];
                             
@@ -167,14 +169,14 @@ JMI.script.Swatch = (function() {
         getBounds: function(applet, g, zone, isCurZone) {
             var bounds = new JMI.script.Rectangle(0, 0, 0, 0);
             var sat = this.satellites[0];
-            var shape = sat._shape;
+            var shape = sat.shapex;
             // TODO : portage, instanceof et heritage
             var isBag = zone instanceof JMI.script.BagZone;
             var supZone = isBag ? zone : null;
             var zones = isBag ? supZone._subZones : null;
             var subZone;
             var satRelTrf, satTrf,
-                transfo = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone._props);
+                transfo = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone.props);
             var i, n = this.satellites.length,
                 flags;
             //boolean         hasRestBit, hasCurBit, hasLinkBit, isCur;
@@ -198,13 +200,13 @@ JMI.script.Swatch = (function() {
                     if (isBag) {
                         //hasRestBit  = Base.isEnabled( flags, Satellite.REST_BIT );
                         //hasCurBit   = Base.isEnabled( flags, Satellite.CUR_BIT );
-                        satRelTrf   = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone._props);
+                        satRelTrf   = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone.props);
                         satTrf      = transfo.transform(satRelTrf, true);
                         
                         if (supZone._dir != 10.) satTrf._dir = supZone._dir;
                         
                         // Gets SuperZone bounds
-                        if ((!this.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData._isVisible)
+                        if ((!JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData._isVisible)
                             && Base.isEnabled(flags, JMI.script.Satellite.SUPER_BIT)) {
                             satCtr  = shape.transformOut(zone, satTrf);
                             sat.setBounds(applet, g, zone, satCtr, supCtr, bounds);
@@ -219,7 +221,7 @@ JMI.script.Swatch = (function() {
                                 satData        = isCurZone ? subZone._curData[i] : subZone._restData[i];
                                 flags          = satData._flags;
                                 
-                                if (!this.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData._isVisible) {
+                                if (!JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData._isVisible) {
                                     satCtr  = shape.transformOut(zone, satTrf);
                                     sat.setBounds(applet, g, subZone, satCtr, supCtr, bounds);
                                 }
@@ -260,7 +262,7 @@ JMI.script.Swatch = (function() {
                 var curZone= planComponent.plan._curZone;
                 var subZone;
                 var satRelTrf, satTrf;
-                var transfo= sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone._props);
+                var transfo= sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone.props);
                 var i;
                 var n = this.satellites.length;
                 var flags;
@@ -280,15 +282,15 @@ JMI.script.Swatch = (function() {
                     
                     // This Sat is visible and it's not a tip (avoid anoying place popup!)
                     if (isEnabled(flags, JMI.script.Satellite.VISIBLE_BIT) && 
-                       (isCurZone || !this.isEnabled(flags, JMI.script.Satellite.TIP_BIT))) {
+                       (isCurZone || !JMI.script.Base.isEnabled(flags, JMI.script.Satellite.TIP_BIT))) {
                         
-                        isVisible   = !this.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData._isVisible;
+                        isVisible   = !JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData._isVisible;
                         
                         // If it's a BagZone
                         if(isBag) {
-                            hasCurBit = this.isEnabled(flags, JMI.script.Satellite.CUR_BIT);
-                            hasSubBit = this.isEnabled(flags, JMI.script.Satellite.SUB_BIT);
-                            satRelTrf = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone._props);
+                            hasCurBit = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.CUR_BIT);
+                            hasSubBit = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SUB_BIT);
+                            satRelTrf = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone.props);
                             
                             if (zones != null && hasSubBit && hasCurBit && satRelTrf != null && satRelTrf._pos == 0.) {
                                 if (isVisible && sat.contains(planComponent, g, zone, null, null, transfo, pos, true, true)) {
@@ -300,7 +302,7 @@ JMI.script.Swatch = (function() {
                             }
                             
                             
-                            hasRestBit  = this.isEnabled(flags, JMI.script.Satellite.REST_BIT);
+                            hasRestBit  = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.REST_BIT);
                             satTrf      = transfo.transform(satRelTrf, true);
                             
                             if (isBag && supZone._dir != 10.) satTrf._dir = supZone._dir;
@@ -326,7 +328,7 @@ JMI.script.Swatch = (function() {
                                     isCur         = subZone == curZone;
                                     satData       = isCurZone ? subZone._curData[i] : subZone._restData[i];
                                     flags         = satData._flags;
-                                    isVisible     = !this.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData._isVisible;
+                                    isVisible     = !JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData._isVisible;
                                     
                                     if(isVisible 
                                        && ((hasRestBit && !isCur) || (hasCurBit && isCur))
@@ -373,25 +375,25 @@ JMI.script.Swatch = (function() {
             var flags;
             var isTip, isSel;
             
-            // TODO : portage boulce for, iteration sur les éléments d'un tableau
-            for (var sat in this.satellites) {
+            for (var isat in this.satellites) {
+            	var sat = this.satellites[isat];
                 satData = new JMI.script.SatData();
-                flags   = sat.getFlags(zone._props);
+                flags   = sat.getFlags(zone.props);
                 satData._flags = flags;
                 
-                isTip = this.isEnabled(flags, JMI.script.Satellite.TIP_BIT);
-                isSel = this.isEnabled(flags, JMI.script.Satellite.SEL_BIT);
+                isTip = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.TIP_BIT);
+                isSel = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT);
                 
                 if (isTip || isSel) {
-                    var sels  = sat.parseString(JMI.script.Satellite.SELECTION_VAL, zone._props);
+                    var sels  = sat.parseString(JMI.script.Satellite.SELECTION_VAL, zone.props);
                     var sel = -1;
                     
                     if (sels != null) {
-                        if(applet.env._selections[sels[0]] != null)
-                            sel = applet.env._selections[sels[0]];
+                        if(applet.planContainer.map.planContainer.map.env._selections[sels[0]] != null)
+                            sel = applet.planContainer.map.planContainer.map.env.selections[sels[0]];
                     }
                     
-                    satData._isVisible = sat.isVisible(zone, isTip, applet.plan._curSel, sel);
+                    satData._isVisible = sat.isVisible(zone, isTip, applet.planContainer.map.plan.curSel, sel);
                 }
                 else {
                     satData._isVisible = true;
@@ -403,6 +405,11 @@ JMI.script.Swatch = (function() {
             return satDatas;
         }		
 	};
+	
+	// Héritage
+	for (var element in JMI.script.Base.prototype ) {
+		Swatch.prototype[element] = JMI.script.Base.prototype[element];
+	}
 	
 	return Swatch;
 }());

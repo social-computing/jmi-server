@@ -35,6 +35,7 @@ JMI.script.BagZone = (function() {
          * Its size and position should be initialized by setting the "_SCALE" (float) and "_VERTICES" (Point[1]) properties;
          * @param subs  A subZone table whose parent is this.
          */
+        JMI.script.ActiveZone.call( this);
 	};
 	
 	BagZone.prototype = {
@@ -160,6 +161,11 @@ JMI.script.BagZone = (function() {
         }
 
 	};
+	
+	// Héritage
+	for (var element in JMI.script.ActiveZone.prototype ) {
+		BagZone.prototype[element] = JMI.script.ActiveZone.prototype[element];
+	}
 	
 	return BagZone;
 }());

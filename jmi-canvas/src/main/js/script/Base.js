@@ -55,7 +55,7 @@ JMI.script.Base = (function() {
          */
         getValue: function(property, props) {
             var container = this.containers[property];
-            return container != null ? (container._isBound ? props[container._value]: container._value ): null;
+            return container != null ? (container.isBound ? props[container.value]: container.value ): null;
         },
         
         /*
@@ -230,7 +230,7 @@ JMI.script.Base = (function() {
         parseString3: function(text, props) {
             // Bug fix : javascript
             var javascript = text.substr(0, 10) == "javascript";
-            var tokens = this.parseTokens(text);
+            var tokens = JMI.script.Base.parseTokens(text);
             var j, n, max = 0;
             for (var token in tokens) {
                 n = token.getListSize(props);

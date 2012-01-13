@@ -24,7 +24,7 @@ JMI.script.Satellite = (function() {
          * This can be a simple dot, a disk, a rectangle or a polygon.
          * :JMI.script.ShapeX
          */
-         this.shape;
+         this.shapex;
          
          /*
           * The elementary slices that are stacked to draw this satellite.
@@ -32,6 +32,8 @@ JMI.script.Satellite = (function() {
           * //:Vector.<Slice>;
           */
 	     this.slices;
+	     
+		 JMI.script.Base.call( this);
 	};
 	
 	Satellite.prototype = {
@@ -50,7 +52,7 @@ JMI.script.Satellite = (function() {
         // TODO : portage, décalage de bits
         isVisible: function(zone, isTip, curSel, sel) {
             var hasSel = curSel >= 0,
-                isSel  = this.isEnabled(zone._selection, 1 << curSel);
+                isSel  = JMI.script.Base.isEnabled(zone._selection, 1 << curSel);
             
             return isTip ? !hasSel || !isSel : hasSel && sel == curSel && isSel;
         },
@@ -71,8 +73,8 @@ JMI.script.Satellite = (function() {
          */
         paint: function(applet, s, zone, satCtr, supCtr, isLinkOnly, satData, showTyp) {
             var flags = satData._flags;
-            var isTip       = this.isEnabled(flags, JMI.script.Satellite.TIP_BIT),
-                isSel       = this.isEnabled(flags, JMI.script.Satellite.SEL_BIT),
+            var isTip       = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.TIP_BIT),
+                isSel       = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT),
                 isVisible   = isTip || isSel ? satData._isVisible : true;
             
             var supZone = zone.getParent();
@@ -81,7 +83,7 @@ JMI.script.Satellite = (function() {
                 // we must draw this Satellite Link if it exists
                 if (isLinkOnly) {
                     // This has a Link
-                    if (this.isEnabled(flags, JMI.script.Satellite.LINK_BIT)) {
+                    if (JMI.script.Base.isEnabled(flags, JMI.script.Satellite.LINK_BIT)) {
                         var x1 = supCtr._x,
                             y1 = supCtr._y,
                             x2 = satCtr._x,
@@ -338,6 +340,10 @@ JMI.script.Satellite = (function() {
         }
 	};
 	
+	// Héritage
+	for (var element in JMI.script.Base.prototype ) {
+		Satellite.prototype[element] = JMI.script.Base.prototype[element];
+	}
 	return Satellite;
 }());
 

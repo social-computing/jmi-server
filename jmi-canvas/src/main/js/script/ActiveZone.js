@@ -13,11 +13,11 @@ JMI.script.ActiveZone = (function() {
 	    
 	    // Swatch used to render this zone at rest.
 	    // :jmi.script.Swatch
-        this.restSwh = null;
+        this.restSwatch = null;
         
         // Swatch used to render this zone when it is current (hovered).
         // :jmi.script.Swatch
-        this.curSwh = null;
+        this.curSwatch = null;
         
         // Flags holding the previously defined bits (XXX_BIT).
         this.flags = null;
@@ -79,17 +79,17 @@ JMI.script.ActiveZone = (function() {
                 }
                 
                 // Quick access to Env props
-                this.props["ENV"] = applet.env._props;
+                this.props["ENV"] = applet.planContainer.map.env.props;
                 this.datas = {};
             }
             
             // TODO : portage instanceof et heritage
             var isSuper = this instanceof JMI.script.BagZone;
             
-            this.restData = this.restSwh.evalSatData(applet, this, isSuper);
+            this.restData = this.restSwatch.evalSatData(applet, this, isSuper);
             
-            if (this.curSwh != null) {
-                this.curData = this.curSwh.evalSatData(applet, this, isSuper);
+            if (this.curSwatch != null) {
+                this.curData = this.curSwatch.evalSatData(applet, this, isSuper);
             }
         },
         
@@ -105,7 +105,7 @@ JMI.script.ActiveZone = (function() {
          */
         paint: function(applet, s, isCur, isFront, showTyp, showLinks) {
             if ((this.flags & JMI.script.ActiveZone.INVISIBLE_BIT) != 0) return;
-            var swatch = isCur ? this.curSwh : this.restSwh;
+            var swatch = isCur ? this.curSwatch : this.restSwatch;
             
             swatch.paint(applet, s, this, isCur, isFront, showTyp, showLinks);
         },

@@ -59,9 +59,9 @@ JMI.script.Slice =  (function() {
             }
             
             if(text != null) {
-                if (HTMLText.isEnabled(text.getFlags(zone._props), HTMLText.URL_BIT)) {
+                if (JMI.script.HTMLText.isEnabled(text.getFlags(zone._props), JMI.script.HTMLText.URL_BIT)) {
                     m_htmlTxt = null;
-                    var textUrls  = text.parseString(HTMLText.TEXT_VAL, zone._props);
+                    var textUrls  = text.parseString(JMI.script.HTMLText.TEXT_VAL, zone._props);
                     var t , hTxt = "";
                     var i = 0;
                     // TODO portage
@@ -174,7 +174,7 @@ JMI.script.Slice =  (function() {
         
             var text = getText( TEXT_VAL, zone._props);
             if (text != null) {
-                if (HTMLText.isEnabled(text.getFlags(zone._props), HTMLText.URL_BIT)) {
+                if (JMI.script.HTMLText.isEnabled(text.getFlags(zone.props), JMI.script.HTMLText.URL_BIT)) {
                     if (this.htmlTxt != null) bounds.copy(this.htmlTxt._bounds);
                 }
                 else {

@@ -404,9 +404,9 @@ JMI.script.Plan = (function() {
 	
 			// Iterate through all links (real and fakes)
 			for each (zone in links) {
-				LinkZone.FAKEFROM_BIT;
-	            isFakeFrom  = Base.isEnabled(zone.flags, LinkZone.FAKEFROM_BIT);
-	            isFakeTo    = Base.isEnabled(zone.flags, LinkZone.FAKETO_BIT);
+				//LinkZone.FAKEFROM_BIT;
+	            isFakeFrom  = JMI.script.Base.isEnabled(zone.flags, LinkZone.FAKEFROM_BIT);
+	            isFakeTo    = JMI.script.Base.isEnabled(zone.flags, LinkZone.FAKETO_BIT);
 	            
 	            if (isFakeFrom)    resizePoint(zone, 0, dx, dy, sx, sy);
 	            else if (isFakeTo) resizePoint(zone, 1, dx, dy, sx, sy);

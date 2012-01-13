@@ -15,29 +15,33 @@ JMI.namespace("script.FontX");
 JMI.script.FontX = (function() {
 
 	var FontX = function() {
+		JMI.script.Base.call( this);
 	};
-	
 	FontX.prototype = {
 		constructor: JMI.script.FontX,
 		
-		
-	/**
-	 * Convert this FontX to a java.awt.Font.
-	 * @param props		A property table that should hold props referenced by this containers.
-	 * @return			a new Font equivalent to this.
-	 */
-	getTextFormat: function( props) {
-		var font = new Object()
-	    var flags = getFlags( props );
-	    
-	    font.size = getInt( SIZE_VAL, props ),
-	    font.name = getString( NAME_VAL, props );
-		if (( flags & HTMLText.BOLD )!= 0)  font.bold = true;
-		if (( flags & HTMLText.ITALIC )!= 0) font.italic = true;
-	    
-	    return font;
-	}
+		/**
+		 * Convert this FontX to a java.awt.Font.
+		 * @param props		A property table that should hold props referenced by this containers.
+		 * @return			a new Font equivalent to this.
+		 */
+		getTextFormat: function( props) {
+			var font = new Object()
+		    var flags = getFlags( props );
+		    
+		    font.size = getInt( JMI.script.FontX.SIZE_VAL, props ),
+		    font.name = getString( JMI.script.FontX.NAME_VAL, props );
+			if (( flags & JMI.script.HTMLText.BOLD )!= 0)  font.bold = true;
+			if (( flags & JMI.script.HTMLText.ITALIC )!= 0) font.italic = true;
+		    
+		    return font;
+		}
 	};
+	
+	// Héritage
+	for (var element in JMI.script.Base.prototype ) {
+		FontX.prototype[element] = JMI.script.Base.prototype[element];
+	}
 	
 	return FontX;
 }());
@@ -51,11 +55,11 @@ JMI.script.FontX = (function() {
 /**
  * Index of the Font name prop in VContainer table
  */
-JMI.script.NAME_VAL = 1;
+JMI.script.FontX.NAME_VAL = 1;
 
 /**
  * Index of the Font size prop in VContainer table
  */
-JMI.script.SIZE_VAL = 2;
+JMI.script.FontX.SIZE_VAL = 2;
     
     

@@ -76,7 +76,7 @@ JMI.script.MenuX = (function() {
                 var menu = m_items[i];
                 var flags = menu.getFlags( zone.m_props);
                 
-                if ( isEnabled( flags, ITEM_BIT ))
+                if ( JMI.script.Base.isEnabled( flags, ITEM_BIT ))
                 {
                     if ( menu.parseItem( subMenu, zone, k ))
                     {

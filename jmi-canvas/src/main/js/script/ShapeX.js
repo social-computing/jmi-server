@@ -20,6 +20,7 @@ JMI.namespace("script.ShapeX");
 JMI.script.ShapeX = (function() {
 	
 	var ShapeX = function() {
+		JMI.script.Base.call( this);
 	};
 	
 	ShapeX.prototype = {
@@ -262,11 +263,11 @@ JMI.script.ShapeX = (function() {
             var toOff = 0;
             
             if (from != null && to != null) {
-                if (this.isEnabled(flags, JMI.script.ShapeX.TAN_LNK_BIT | JMI.script.ShapeX.SEC_LNK_BIT)) {
+                if (JMI.script.Base.isEnabled(flags, JMI.script.ShapeX.TAN_LNK_BIT | JMI.script.ShapeX.SEC_LNK_BIT)) {
                     fromOff = from.props["_SCALE"];
                     toOff   = to.props["_SCALE"];
                 }
-                if (this.isEnabled(flags, JMI.script.ShapeX.SEC_LNK_BIT)) {
+                if (JMI.script.Base.isEnabled(flags, JMI.script.ShapeX.SEC_LNK_BIT)) {
                     var w2  = width * width;
                     fromOff = Math.round((.9 * Math.sqrt(fromOff * fromOff - w2)));
                     toOff   = Math.round((.9 * Math.sqrt(toOff * toOff - w2)));
@@ -450,6 +451,11 @@ JMI.script.ShapeX = (function() {
         },
         
 	};
+	
+	// Héritage
+	for (var element in JMI.script.Base.prototype ) {
+		ShapeX.prototype[element] = JMI.script.Base.prototype[element];
+	}
 	
 	return ShapeX;
 }());
