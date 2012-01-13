@@ -2,7 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>Test</title>
-<script type="text/javascript" src="/jmi-canvas/src/main/js/lib/jquery-1.7.1.min.js"></script>
 
 <script type="text/javascript" src="/jmi-canvas/src/main/js/jmi.js"></script>
 <script type="text/javascript" src="/jmi-canvas/src/main/js/lib/json_sans_eval.js"></script>
@@ -37,17 +36,20 @@
 <script type="text/javascript" src="/jmi-canvas/src/main/js/script/VContainer.js"></script>
 
 <script type="text/javascript" src="/jmi-canvas/src/main/js/components/Map.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/components/MapRequester.js"></script>
 
-</head>
-<body>
 <script>
-$.get(
-    "/jmi-canvas/src/main/resources/feeds.json",
-    function( jmiJson) { 
-		var planContainer = JMI.script.PlanContainer.fromJSON( jmiJson);
-		alert( 'done');
-    }
-);
-</script>	
+function GoMap() {
+	var map = new JMI.components.Map( 'map');
+	var requester = new JMI.components.MapRequester();
+	var parameters = [];
+	requester.getMap( 'Feeds', map.width, map.height, parameters, function( data) {
+		map.setData( data);
+	});
+};
+</script>
+</head>
+<body onload="GoMap()">
+<div id="map" width="500" height="500" ></div>	
 </body>
 </html>
