@@ -206,7 +206,7 @@ JMI.script.Swatch = (function() {
                         if (supZone._dir != 10.) satTrf._dir = supZone._dir;
                         
                         // Gets SuperZone bounds
-                        if ((!JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData._isVisible)
+                        if ((!JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData.isVisible)
                             && Base.isEnabled(flags, JMI.script.Satellite.SUPER_BIT)) {
                             satCtr  = shape.transformOut(zone, satTrf);
                             sat.setBounds(applet, g, zone, satCtr, supCtr, bounds);
@@ -221,7 +221,7 @@ JMI.script.Swatch = (function() {
                                 satData        = isCurZone ? subZone._curData[i] : subZone._restData[i];
                                 flags          = satData._flags;
                                 
-                                if (!JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData._isVisible) {
+                                if (!JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData.isVisible) {
                                     satCtr  = shape.transformOut(zone, satTrf);
                                     sat.setBounds(applet, g, subZone, satCtr, supCtr, bounds);
                                 }
@@ -284,7 +284,7 @@ JMI.script.Swatch = (function() {
                     if (isEnabled(flags, JMI.script.Satellite.VISIBLE_BIT) && 
                        (isCurZone || !JMI.script.Base.isEnabled(flags, JMI.script.Satellite.TIP_BIT))) {
                         
-                        isVisible   = !JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData._isVisible;
+                        isVisible   = !JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData.isVisible;
                         
                         // If it's a BagZone
                         if(isBag) {
@@ -328,7 +328,7 @@ JMI.script.Swatch = (function() {
                                     isCur         = subZone == curZone;
                                     satData       = isCurZone ? subZone._curData[i] : subZone._restData[i];
                                     flags         = satData._flags;
-                                    isVisible     = !JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData._isVisible;
+                                    isVisible     = !JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData.isVisible;
                                     
                                     if(isVisible 
                                        && ((hasRestBit && !isCur) || (hasCurBit && isCur))
@@ -389,14 +389,14 @@ JMI.script.Swatch = (function() {
                     var sel = -1;
                     
                     if (sels != null) {
-                        if(applet.planContainer.map.planContainer.map.env._selections[sels[0]] != null)
-                            sel = applet.planContainer.map.planContainer.map.env.selections[sels[0]];
+                        if(applet.planContainer.map.env.selections[sels[0]] != null)
+                            sel = applet.planContainer.map.env.selections[sels[0]];
                     }
                     
-                    satData._isVisible = sat.isVisible(zone, isTip, applet.planContainer.map.plan.curSel, sel);
+                    satData.isVisible = sat.isVisible(zone, isTip, applet.planContainer.map.plan.curSel, sel);
                 }
                 else {
-                    satData._isVisible = true;
+                    satData.isVisible = true;
                 }
                 
                 // TODO : portage, equivalent de push sur array

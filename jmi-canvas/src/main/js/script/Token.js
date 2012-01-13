@@ -62,8 +62,7 @@ JMI.script.Token = (function() {
             // :int
             var size = 1;
             
-            // TODO portage : namespace prefix function Base.isEnabled 
-            if (Base.isEnabled(this.flags, LIST_BIT)) {
+            if (JMI.script.Base.isEnabled(this.flags, JMI.script.Token.LIST_BIT)) {
                 // :Array
                 var list = props[this.buffer];
                 
@@ -101,7 +100,7 @@ JMI.script.Token = (function() {
                 }
                 
                 // List Properties
-                if (Base.isEnabled(this.flags, LIST_BIT)) {
+                if (Base.isEnabled(this.flags, JMI.script.Token.LIST_BIT)) {
                     rawProp = props[this.buffer];
                     
                     if (rawProp != null) {

@@ -229,10 +229,11 @@ JMI.script.Base = (function() {
         // TODO : portage voir si on peut refusionner avec la method parseString
         parseString3: function(text, props) {
             // Bug fix : javascript
-            var javascript = text.substr(0, 10) == "javascript";
+            var javascript = text.substring(0, 10) === "javascript";
             var tokens = JMI.script.Base.parseTokens(text);
             var j, n, max = 0;
-            for (var token in tokens) {
+            for (var itoken in tokens) {
+            	var token = tokens[itoken];
                 n = token.getListSize(props);
                 if (n == 0) {
                     max = 0;
@@ -248,7 +249,7 @@ JMI.script.Base = (function() {
                 for (token in tokens) {
                     if (javascript) {
                         // TODO portage : String.fromCharCode
-                        token._buffer = token._buffer.split( ",").join(String.fromCharCode(0xFFFC));
+                        token.buffer = token.buffer.split( ",").join(String.fromCharCode(0xFFFC));
                     }
                     prop = token.toString(j, props);
                     
@@ -357,7 +358,7 @@ JMI.script.Base.getNextTokenProp = function(tokens, includeBit, excludeBit) {
         var token = tokens.shift();
         
         if ((token._flags & includeBit) != 0 && (token._flags & excludeBit) == 0) {
-            return token._buffer;
+            return token.buffer;
         }
     }
     return null;
@@ -394,10 +395,8 @@ JMI.script.Base.parseTokens = function(text) {
                     token = new JMI.script.Token();
                     j = 0;
                 }
-                //token.m_buffer.setCharAt( j ++, c );
-                //Actionscript
-                // TODO : portage setCharAt
-                token._buffer = setCharAt(token._buffer, c, j++);
+
+                token.buffer = JMI.script.Base.setCharAt(token.buffer, c, j++);
                 isAfterBS = false;
             }
             else {
@@ -405,7 +404,7 @@ JMI.script.Base.parseTokens = function(text) {
                 if (c == '{' || c == '[') {
                     // there was a text Token previously,
                     if (token != null) {
-                        //token.m_buffer.setLength( j );
+                        //token.buffer.setLength( j );
                         // TODO : portage push
                         tokens.push(token);    // store it
                     }
@@ -419,7 +418,7 @@ JMI.script.Base.parseTokens = function(text) {
                 
                 // a new prop or list Token ends
                 else if (c == '}' || c == ']') {
-                    //token.m_buffer.setLength( j );
+                    //token.buffer.setLength( j );
                     // TODO : portage push
                     tokens.push(token);        // store the previous token
                     token = null;              // a new one must be created
@@ -432,10 +431,8 @@ JMI.script.Base.parseTokens = function(text) {
                         token = new JMI.script.Token();
                         j = 0;
                     }
-                    //token.m_buffer.setCharAt( j ++, c ); // copy this char in the current Token
-                    //Actionscript
-                    // TODO : portage setCharAt
-                    token._buffer = setCharAt(token._buffer, c, j++);
+
+                    token.buffer = JMI.script.Base.setCharAt(token.buffer, c, j++);
                 }
             }
         }
@@ -443,7 +440,7 @@ JMI.script.Base.parseTokens = function(text) {
     
     // don't forget the last one!
     if (c != '}' && c != ']') {
-        //token.m_buffer.setLength( j );
+        //token.buffer.setLength( j );
         // TODO : portage push
         // store the previous token
         tokens.push( token );        
@@ -454,9 +451,8 @@ JMI.script.Base.parseTokens = function(text) {
 
 
 JMI.script.Base.setCharAt = function(str, c, index) {
-    // TODO : portage string manipulation functions
-    return str.substr(0, index).concat(c, str.substr(index + 1));
-};
+    return str.substring(0, index)+ c + str.substring(index + 1);
+}
 
 /*
  * Convenient methode to check if a bit is enabled in a flag.
@@ -468,4 +464,4 @@ JMI.script.Base.setCharAt = function(str, c, index) {
  */
 JMI.script.Base.isEnabled = function(flags, bit) {
     return (flags & bit) != 0;
-};
+}

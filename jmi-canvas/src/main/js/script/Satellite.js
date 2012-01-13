@@ -75,7 +75,7 @@ JMI.script.Satellite = (function() {
             var flags = satData._flags;
             var isTip       = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.TIP_BIT),
                 isSel       = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT),
-                isVisible   = isTip || isSel ? satData._isVisible : true;
+                isVisible   = isTip || isSel ? satData.isVisible : true;
             
             var supZone = zone.getParent();
             
