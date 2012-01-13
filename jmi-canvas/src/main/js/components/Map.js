@@ -12,7 +12,7 @@ JMI.namespace("components.Map");
 */	
 JMI.components.Map = (function() {
 
-var _planContainer = JMI.script.PlanContainer,
+var planContainer = JMI.script.PlanContainer,
 	_curPos = new JMI.script.Point(),
 	_ready = false,
 
@@ -48,6 +48,7 @@ var _planContainer = JMI.script.PlanContainer,
 		entities = new Array();
 		
 		var mapDiv = document.getElementById( id);
+		this.size = new JMI.script.Dimension( mapDiv.width, mapDiv.height);
 		
 		// Drawing surface of the component
 		var drawingCanvas = document.createElement( "canvas");
@@ -101,14 +102,14 @@ var _planContainer = JMI.script.PlanContainer,
 			this.ready = false;
 		
 			// Stop loaders
-			if( this.planContainer && this.planContainer.env) {
-				this.planContainer.env.close();
+			if( this.planContainer && this.planContainer.map.env) {
+				this.planContainer.map.env.close();
 			}
 			
 			// Clear current
-			if( this.planContainer && this.planContainer.plan) {
-				this.planContainer.plan.curSat = null;
-				this.planContainer.plan.curZone = null;
+			if( this.planContainer && this.planContainer.map.plan) {
+				this.planContainer.map.plan.curSat = null;
+				this.planContainer.map.plan.curZone = null;
 			}
 			
 			// Clear all drawing surfaces
@@ -130,7 +131,7 @@ var _planContainer = JMI.script.PlanContainer,
 			}
 			
 			// TODO this.showStatus("");
-			// TODO CursorManager.setBusyCursor();
+			document.body.style.cursor = 'wait';
 			if(value instanceof JMI.script.PlanContainer) {
 				this.planContainer = value;
 			}
@@ -142,30 +143,30 @@ var _planContainer = JMI.script.PlanContainer,
 				CursorManager.removeBusyCursor();
 				dispatchEvent(new StatusEvent(StatusEvent.ERROR, this.planContainer.error));
 			}
-			else if( !this.planContainer.hasOwnProperty( "plan")) {
+			else if( !this.planContainer.hasOwnProperty( "map")) {
 				// Empty map
+				document.body.style.cursor = 'default';
 				// TODO
-				/*CursorManager.removeBusyCursor();
-				dispatchEvent(new Event( Map.EMPTY));*/
+				//dispatchEvent(new Event( Map.EMPTY));*/
 			}
 			else {
 				var needPrint = false; // Later
 		
-				this.planContainer.env.init(this, needPrint);
-				this.planContainer.plan.applet = this;
-				this.planContainer.plan.curSel = -1;
-				this.planContainer.plan.initZones(this.restDrawingSurface, plan.links, true);
-	            this.planContainer.plan.initZones(this.restDrawingSurface, plan.nodes, true);
-				this.planContainer.plan.resize(size);
-				this.planContainer.plan.init();
-				this.planContainer.plan.resize(size);
-				this.planContainer.plan.init();
-			    for ( var zone in plan.nodes) {
-					this.attributes.addItem( new Attribute( this.planContainer.env, zone));
+				this.planContainer.map.env.init(this, needPrint);
+				this.planContainer.map.plan.applet = this;
+				this.planContainer.map.plan.curSel = -1;
+				this.planContainer.map.plan.initZones(this.restDrawingSurface, this.planContainer.map.plan.links, true);
+	            this.planContainer.map.plan.initZones(this.restDrawingSurface, this.planContainer.map.plan.nodes, true);
+				this.planContainer.map.plan.resize(size);
+				this.planContainer.map.plan.init();
+				this.planContainer.map.plan.resize(size);
+				this.planContainer.map.plan.init();
+			    for ( var zone in this.planContainer.map.plan.nodes) {
+					this.attributes.addItem( new Attribute( this.planContainer.map.env, zone));
 				}
 				this.ready = true;
 
-				// TODOCursorManager.removeBusyCursor();
+				document.body.style.cursor = 'default';
 				
 				this.invalidateProperties();
 				this.invalidateDisplayList();
@@ -197,7 +198,7 @@ public function get plan():Plan
 	if(this.planContainer == null) {
 		return null;
 	}
-	return _planContainer.plan;
+	return planContainer.map.plan;
 }
 
 public function get env():Env
@@ -205,7 +206,7 @@ public function get env():Env
 	if(this.planContainer == null) {
 		return null
 	}
-	return _planContainer.env;
+	return planContainer.map.env;
 }
 
 public function get size():Dimension {
@@ -269,7 +270,7 @@ public function mouseMoveHandler(event:MouseEvent):void {
 	this.curPos.x = event.localX;
 	this.curPos.y = event.localY;
 	if(ready) {
-		_planContainer.plan.updateZoneAt(this.curPos);
+		planContainer.map.plan.updateZoneAt(this.curPos);
 	}
 }
 
@@ -316,7 +317,7 @@ public function resizeHandler(event:ResizeEvent):void {
 	this.restDrawingSurface.graphics.endFill();
 		
 	if(this.ready) {
-		this.plan.resize(new Dimension(this.width, this.height));
+		this.plan.resize( this.size);
 		this.plan.init();
 		this.invalidateSize();  
 	}

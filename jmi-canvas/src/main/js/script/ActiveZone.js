@@ -104,7 +104,7 @@ JMI.script.ActiveZone = (function() {
          * @param showLinks True if we only wants to paint links.
          */
         paint: function(applet, s, isCur, isFront, showTyp, showLinks) {
-            if ((this.flags & INVISIBLE_BIT) != 0) return;
+            if ((this.flags & JMI.script.ActiveZone.INVISIBLE_BIT) != 0) return;
             var swatch = isCur ? this.curSwh : this.restSwh;
             
             swatch.paint(applet, s, this, isCur, isFront, showTyp, showLinks);

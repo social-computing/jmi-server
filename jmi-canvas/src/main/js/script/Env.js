@@ -20,21 +20,21 @@ JMI.script.Env = (function() {
         
         // Plan background Color.
         // :JMI.script.ColorX
-        this.inCol = null; 
+        this.inColor = null; 
         
         /*
          * Plan border Color.
          * This is not used, it should be deprecated, but first removed from Model.java
          */
         // :JMI.script.ColorX
-        this.outCol = null;
+        this.outColor = null;
         
         /*
          * Plan filter color.
          * This color will apeared dimmed under the current zone and over the background, showing the actual BBox.
          * :JMI.script.ColorX
          */
-        this.filterCol = null;
+        this.filterColor = null;
         
         /*
          * Applet size & scale.
@@ -88,7 +88,7 @@ JMI.script.Env = (function() {
          */ 
         init: function(applet, needPrint) {
             var bkWhite = "0xFFFFFF";
-            var bkCol = needPrint ? bkWhite : inCol.getColor();
+            var bkCol = needPrint ? bkWhite : this.inColor.getColor();
             this.applet = applet;
             medias = {};
             loaders = {};

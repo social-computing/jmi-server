@@ -143,7 +143,7 @@ JMI.script.Base = (function() {
         getColor: function(property, props) {
             var value = this.getValue(property, props);
             if(value instanceof JMI.script.ColorX) { 
-                return value.getColor2(props);
+                return value.getColor(props);
             }
             return null;
         },

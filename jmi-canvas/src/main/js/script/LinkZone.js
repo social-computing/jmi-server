@@ -43,10 +43,10 @@ JMI.script.LinkZone = (function() {
             //super.init(applet, s, isFirst );// TODO portage
             
             this.parent = null;
-            if (!Base.isEnabled(this.flags, FAKEFROM_BIT | FAKETO_BIT)) {
-                this.bounds = this.restSwh.getBounds(applet, s.graphics, this, false);
-                if (this.curSwh != null) {
-                    this.bounds = this.bounds.union(this.curSwh.getBounds(applet, s.graphics, this, true));
+            if (!JMI.script.Base.isEnabled(this.flags, JMI.script.LinkZone.FAKEFROM_BIT | JMI.script.LinkZone.FAKETO_BIT)) {
+                this.bounds = this.restSwatch.getBounds(applet, s.graphics, this, false);
+                if (this.curSwatch != null) {
+                    this.bounds = this.bounds.union(this.curSwatch.getBounds(applet, s.graphics, this, true));
                 }
                 this.bounds.inflate(2, 2);
                 
@@ -71,15 +71,15 @@ JMI.script.LinkZone = (function() {
          * @param applet    WPSApplet owning this zone.
          */
         paintCur: function(applet){
-            if((this.flags & INVISIBLE_BIT) != 0) return;
+            if((this.flags & JMI.script.ActiveZone.INVISIBLE_BIT) != 0) return;
             
             ImageUtil.clear(applet.curDrawingSurface);
-            this.curSwh.paint(applet, applet.curDrawingSurface, this, true, true, Satellite.BASE_TYP, true);
+            this.curSwatch.paint(applet, applet.curDrawingSurface, this, true, true, Satellite.BASE_TYP, true);
             
             this.from.paint(applet, applet.curDrawingSurface, false, true, Satellite.ALL_TYP, true);
             this.to.paint(applet, applet.curDrawingSurface, false, true, Satellite.ALL_TYP, true);
-            this.curSwh.paint(applet, applet.curDrawingSurface, this, true, true, Satellite.TIP_TYP, true);
-            this.curSwh.paint(applet, applet.curDrawingSurface, this, true, true, Satellite.SEL_TYP, true);
+            this.curSwatch.paint(applet, applet.curDrawingSurface, this, true, true, Satellite.TIP_TYP, true);
+            this.curSwatch.paint(applet, applet.curDrawingSurface, this, true, true, Satellite.SEL_TYP, true);
         
             applet.renderShape(applet.curDrawingSurface, this.bounds.width, this.bounds.height, new JMI.script.Point(this.bounds.x, this.bounds.y));
         }

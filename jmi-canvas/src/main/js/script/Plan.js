@@ -70,7 +70,7 @@ JMI.script.Plan = (function() {
 	newZone = JMI.script.ActiveZone,
 
 /**
- * The Applet holding this Plan.
+ * The this.applet holding this Plan.
  */
 	applet,
 
@@ -96,7 +96,7 @@ JMI.script.Plan = (function() {
 	initZones: function(s, zones, isFirst) {
 	    var i,
 			n = zones.length,
-	    	dim = applet.size;
+	    	dim = this.applet.size;
 	    
 	    // Reset the BBOX of the biggest zone
 	    prevBox = new JMI.script.Rectangle(dim.width >> 1, dim.height >> 1, 1, 1);
@@ -106,7 +106,7 @@ JMI.script.Plan = (function() {
 	    
 	    // Reversed order so subZones are initialized before supZones!
 		for (i = n - 1 ; i >= 0 ; i --) {
-	        zones[i].init( applet, s, isFirst );
+	        zones[i].init( this.applet, s, isFirst );
 	    }
 		
 	    // Allocate a temporary bitmap to dblBuffer curZone rendering using the biggest Zone BBox
@@ -128,32 +128,32 @@ JMI.script.Plan = (function() {
 	 * @param isRev		True if the array is drawn from in reversed order. That means from n-1 to 0.
 	 */
 	paintZones: function( s, zones, n, isFront, showTyp, showLinks, isRev) {
-		//zones[0].paint(applet, s, false, isFront, showTyp, showLinks);
+		//zones[0].paint(this.applet, s, false, isFront, showTyp, showLinks);
 	    if (isRev) {
 	        for (var i = n - 1 ; i >= 0 ; i --) {
-	            zones[i].paint(applet, s, false, isFront, showTyp, showLinks);
+	            zones[i].paint(this.applet, s, false, isFront, showTyp, showLinks);
 	        }
 	    }
 	    else {
 	        for (i = 0 ; i < n ; i++) {
-	            zones[i].paint(applet, s, false, isFront, showTyp, showLinks);
+	            zones[i].paint(this.applet, s, false, isFront, showTyp, showLinks);
 	        }
 	    }
 	},
 	
 	/*
-	 * Prepare the Plan by initializing zones, allocating and filling the image buffers and repainting the Applet.
+	 * Prepare the Plan by initializing zones, allocating and filling the image buffers and repainting the this.applet.
 	 */
 	init: function() {
 		this.tipTimers = new Object()
-	    var dim = applet.size;
-	    var restDrawingSurface = applet.restDrawingSurface;
-		var curDrawingSurface  = applet.curDrawingSurface;
-		var backDrawingSurface = applet.backDrawingSurface;
+	    var dim = this.applet.size;
+	    var restDrawingSurface = this.applet.restDrawingSurface;
+		var curDrawingSurface  = this.applet.curDrawingSurface;
+		var backDrawingSurface = this.applet.backDrawingSurface;
 	
 	    // If there is any background image, load it
-	    //if (applet.backImgUrl != null)
-	        //renderBitmap( restGfx, applet.backImgUrl, 0, 0, null );
+	    //if (this.applet.backImgUrl != null)
+	        //renderBitmap( restGfx, this.applet.backImgUrl, 0, 0, null );
 		
 		ImageUtil.clear(restDrawingSurface);
 		restDrawingSurface.graphics.beginFill( this.applet.env.inCol.color);
@@ -172,8 +172,8 @@ JMI.script.Plan = (function() {
 		if( this.applet.env.filterCol != null) {
 			ImageUtil.copy( restDrawingSurface, backDrawingSurface);
 			ImageUtil.filterImage( backDrawingSurface, dim, this.applet.env.filterCol.getColor().color);
-			// applet.renderShape( applet.restDrawingSurface, 0, 0); // ??? size
-			//applet.env.filterImage(applet.backDrawingSurface, dim);
+			// this.applet.renderShape( this.applet.restDrawingSurface, 0, 0); // ??? size
+			//this.applet.env.filterImage(this.applet.backDrawingSurface, dim);
 		}
 	    
 	    // Finish drawing restImg with places parts that are allways visible (tip, sel...)
@@ -202,7 +202,7 @@ JMI.script.Plan = (function() {
 	    
 		// Check if there is a current Active Zone (Satellite ?)
 	    if(curSat != null) {
-	        curSat = curZone.curSwh.getSatAt(applet, applet.curDrawingSurface.graphics, parent, p, true);
+	        curSat = curZone.curSwh.getSatAt(this.applet, this.applet.curDrawingSurface.graphics, parent, p, true);
 	        
 			// The cursor is in the current Zone
 	        if (curSat != null) {
@@ -217,7 +217,7 @@ JMI.script.Plan = (function() {
 	        
 			// We know p is not in curZone so don't test it!
 	        if (zone != parent) {
-	            curSat = zone.restSwh.getSatAt(applet, applet.curDrawingSurface.graphics, zone, p, false);
+	            curSat = zone.restSwh.getSatAt(this.applet, this.applet.curDrawingSurface.graphics, zone, p, false);
 	            
 				// The cursor is on this node
 	            if(curSat != null) {
@@ -236,7 +236,7 @@ JMI.script.Plan = (function() {
 	        if (zone != parent && zone.curSwh != null) {                                                
 				
 				// If this zone has no current Swatch, it can't be current.
-	            curSat = zone.restSwh.getSatAt(applet, applet.curDrawingSurface.graphics, zone, p, false );
+	            curSat = zone.restSwh.getSatAt(this.applet, this.applet.curDrawingSurface.graphics, zone, p, false );
 	            
 				// The cursor is on this link
 	            if (curSat != null) {
@@ -295,15 +295,15 @@ JMI.script.Plan = (function() {
 	            curZone = newZone;
 			    ImageUtil.clear( this.applet.curDrawingSurface);
 	            paintCurZone();              
-	            curSat.execute( applet, curZone, p, Satellite.HOVER_VAL);
+	            curSat.execute( this.applet, curZone, p, Satellite.HOVER_VAL);
 	            cursTyp = MouseCursor.HAND;   // Sets the cursor to a hand if the mouse entered a Zone
 	        }
 	        else {
 	            curZone = newZone;
-	            if (curSat == null) applet.showStatus("");
+	            if (curSat == null) this.applet.showStatus("");
 	        }
 	        // TODO ???
-	        //applet.setCursor( Cursor.getPredefinedCursor( cursTyp ));
+	        //this.applet.setCursor( Cursor.getPredefinedCursor( cursTyp ));
 	        //g.dispose();
 	        
 	        return true;
@@ -320,7 +320,7 @@ JMI.script.Plan = (function() {
 	paintCurZone: function() {
 		// A new Zone is hovered, let's paint it!
 		if (curZone != null) {
-	        curZone.getParent().paintCur( applet);
+	        curZone.getParent().paintCur( this.applet);
 	    }
 	},
 	
@@ -353,7 +353,7 @@ JMI.script.Plan = (function() {
 	
 	/**
 	 * Evaluates the new position and size of the Places and Streets, and allocate the buffers accordingly to the new size.
-	 * @param dim	New size of the Applet.
+	 * @param dim	New size of the this.applet.
 	 */
 	resize: function(dim) {
 	    if (prevBox != null
@@ -443,7 +443,7 @@ JMI.script.Plan = (function() {
 	 * @param bounds	Bounds of the image part to copy into g.
 	 */
 	blitImage: function (g, shape, bounds) {
-	    var dim = applet.size;
+	    var dim = this.applet.size;
 	    var x1 = bounds.x < 0? 0: bounds.x,
 	        y1 = bounds.y < 0? 0: bounds.y,
 	        x2 = bounds.x + bounds.width + 1,

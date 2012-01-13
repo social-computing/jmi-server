@@ -13,9 +13,11 @@ JMI.components.MapRequester = (function() {
 		
 		// TODO gérer les erreurs
 		getMap: function(name, width, height, parameters, onReady) {
+			document.body.style.cursor = 'wait';
 			var client = new XMLHttpRequest(); 
 			client.onreadystatechange = function() {
 				if( this.readyState == XMLHttpRequest.DONE) {
+					document.body.style.cursor = 'default';
 					onReady( client.responseText);
 				}
 			}; 

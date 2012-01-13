@@ -11,7 +11,7 @@ JMI.script.ColorX = (function() {
     ColorX.prototype = {
         constructor : JMI.script.ColorX,
 
-        getColor2 : function(props) {
+        getColor : function(props) {
             if(this.scolor == null) {
                 return this.color;
             } else {
