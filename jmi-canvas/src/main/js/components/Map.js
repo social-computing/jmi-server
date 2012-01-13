@@ -101,7 +101,7 @@ var _planContainer = JMI.script.PlanContainer,
 			this.ready = false;
 		
 			// Stop loaders
-			if( this.data && this.planContainer.env) {
+			if( this.planContainer && this.planContainer.env) {
 				this.planContainer.env.close();
 			}
 			
