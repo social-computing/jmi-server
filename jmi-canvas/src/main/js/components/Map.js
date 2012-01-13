@@ -157,9 +157,9 @@ var planContainer = JMI.script.PlanContainer,
 				this.planContainer.map.plan.curSel = -1;
 				this.planContainer.map.plan.initZones(this.restDrawingSurface, this.planContainer.map.plan.links, true);
 	            this.planContainer.map.plan.initZones(this.restDrawingSurface, this.planContainer.map.plan.nodes, true);
-				this.planContainer.map.plan.resize(size);
+				this.planContainer.map.plan.resize(this.size);
 				this.planContainer.map.plan.init();
-				this.planContainer.map.plan.resize(size);
+				this.planContainer.map.plan.resize(this.size);
 				this.planContainer.map.plan.init();
 			    for ( var zone in this.planContainer.map.plan.nodes) {
 					this.attributes.addItem( new Attribute( this.planContainer.map.env, zone));
