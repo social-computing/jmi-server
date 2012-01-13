@@ -82,10 +82,9 @@ JMI.script.ShapeX = (function() {
          * @param transfo   A transformation to scale or translate this shape.
          * @param center    The center of the shape before the transformation.
          * @param pos       A point position to test.
-         * 
          * @return          True if this contains pos, false otherwise
          */
-        contains: function(g, zone, transfo, center, pos) {
+        contains: function(zone, transfo, center, pos) {
             // it is just a void frame
             if(!this.isDefined(JMI.script.ShapeX.SCALE_VAL)) return false;
             
@@ -172,13 +171,13 @@ JMI.script.ShapeX = (function() {
          * It's position and size is evaluated using a transfo and a center point.
          * The polygon case is not handled. Only disks (1 point) and links (2 points) are drawn.
          * 
-         * @param canevas   A canevas to draw the shape in.
-         * @param zone      The zone that holds the properties used by this shape.
-         * @param slice     The slice that use this shape.
-         * @param transfo   A transformation to apply to this shape.
-         * @param center    The center of the shape before the transformation. 
+         * @param gDrawingContext  A 2d graphic context to draw the shape in.
+         * @param zone             The zone that holds the properties used by this shape.
+         * @param slice            The slice that use this shape.
+         * @param transfo          A transformation to apply to this shape.
+         * @param center           The center of the shape before the transformation. 
          */
-        paint: function(canevas, supZone, zone, slice, transfo, center) {
+        paint: function(gDrawingContext, supZone, zone, slice, transfo, center) {
             // else it is just a void frame
             if(this.isDefined(JMI.script.ShapeX.SCALE_VAL)) {
                 var points = this.getValue(JMI.script.ShapeX.POLYGON_VAL, supZone._props);
@@ -189,9 +188,6 @@ JMI.script.ShapeX = (function() {
                 var radius = Math.round(this.getShapePos(supZone, transfo, center, p, shapePos));
                 var color; //:ColorTransform;
                 
-                // Get canevas drawing context
-                var gDrawingContext = canevas.getContext("2d");
-                
                 // Manage each case of number of points to draw for this shape
                 switch(n) {
                     // dot => Place ??
@@ -200,7 +196,7 @@ JMI.script.ShapeX = (function() {
                         //composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0);
                         //g.setComposite(composite);
                         
-                        // Jonathan Dray : I removed the size offset, as drawing a circle on canevas starts at the middle 
+                        // Jonathan Dray : I removed the size offset, as drawing a circle on canevas starts from the shape center 
                         var x = p._x + shapePos._x;
                         var y = p._y + shapePos._y;
                         
@@ -209,7 +205,6 @@ JMI.script.ShapeX = (function() {
                         // which means we have to double the radius value.
                         // Jonathan Dray : do not double the size anymore, the arc drawing method takes the radius
                         // size = size * 2;
-                        
                         color = slice.getColor(JMI.script.Slice.OUT_COL_VAL, zone._props);
         
                         /*
@@ -232,7 +227,7 @@ JMI.script.ShapeX = (function() {
                         gDrawingContext.beginPath();
                         gDrawingContext.arc(x, y, radius, 0, Math.PI * 2, false);
                         gDrawingContext.closePath();
-                        gDrawingContext.strokeStyle = color.color;
+                        gDrawingContext.strokeStyle = color;
                         gDrawingContext.stroke();
                         break;
                     }
@@ -251,19 +246,27 @@ JMI.script.ShapeX = (function() {
                         
                         color = slice.getColor(JMI.script.Slice.OUT_COL_VAL, supZone._props);
                         if (color != null) {
-                            s.graphics.lineStyle(1, color.color);
+                            // s.graphics.lineStyle(1, color.color);
+                            gDrawingContext.strokeStyle = color;
                         }
                         color = slice.getColor(JMI.script.Slice.IN_COL_VAL, supZone._props);
                         
-                        if (color != null) s.graphics.beginFill(color.color);
+                        //if (color != null) s.graphics.beginFill(color.color);
+                        if (color != null) gDrawingContext.fillStyle = color;
                         
-                        
-                        s.graphics.moveTo(poly.xpoints[poly.npoints-1], poly.ypoints[poly.npoints-1]);
-                        for( i = 0 ; i < poly.npoints; ++i) {
-                            s.graphics.lineTo( poly.xpoints[i], poly.ypoints[i]);
+                        // Drawing the polygon
+                        gDrawingContext.beginPath();
+                        //s.graphics.moveTo(poly.xpoints[poly.npoints-1], poly.ypoints[poly.npoints-1]);
+                        gDrawingContext.moveTo(poly.xpoints[poly.npoints-1], poly.ypoints[poly.npoints-1]);
+                        for(i = 0 ; i < poly.npoints; ++i) {
+                            //s.graphics.lineTo( poly.xpoints[i], poly.ypoints[i]);
+                            gDrawingContext.lineTo(poly.xpoints[i], poly.ypoints[i]);
                         }
+                        gDrawingContext.closePath();
+                        gDrawingContext.stroke();
                         
-                        if (color != null) s.graphics.endFill();
+                        // if (color != null) s.graphics.endFill();
+                        if (color != null) gDrawingContext.fill();
                         break;
                     }
                 }
@@ -313,12 +316,11 @@ JMI.script.ShapeX = (function() {
                 N._y = (N._y << 16) / len;
                 len  = (len - fromOff - toOff) >> 1;
                 
-                var C = JMI.script.ShapeX.ScalePnt(N, fromOff + len);
-                var U = JMI.script.ShapeX.ScalePnt(N, len);
-                var V = JMI.script.ShapeX.ScalePnt(N, width);
+                var C = JMI.script.Point.Scale(N, fromOff + len);
+                var U = JMI.script.Point.Scale(N, len);
+                var V = JMI.script.Point.Scale(N, width).pivot();
                 
                 C.offset(A._x, A._y);
-                JMI.script.ShapeX.PivotPnt(V);
                 this.addLinkPoint(poly, -1., -1., C, U, V);
                 this.addLinkPoint(poly, -1., 1., C, U, V);
                 this.addLinkPoint(poly, 1., 1., C, U, V);
@@ -516,31 +518,3 @@ JMI.script.ShapeX.SEC_LNK_BIT = 0x002;
  * This is useless because the links are drawn under the place now.
  */
 JMI.script.ShapeX.TAN_LNK_BIT = 0x004;
-
-
-// Public static methods
-// TODO : move this section to the point class
-/**
- * Scales a Point previously normalized to 2^16.
- * This is usefull to avoid using floats when scaling Vectors.
- * 
- * @param P		A Point already normalized.
- * @param len	The scale factor.
- * 
- * @return		a new Point that is len x P unnormailzed.
- */
-JMI.script.ShapeX.ScalePnt = function(P, len) {
-    return new JMI.script.Point((P._x * len) >> 16, (P._y * len) >> 16);
-};
-
-/**
- * Rotates a Vector 90°C CCW.
- * Useful to create a 2D ortho basis of vectors.
- * 
- * @param P		A Point to rotate in-place.
- */
-JMI.script.ShapeX.PivotPnt = function(P) {
-    P._x  -= P._y;
-    P._y  += P._x;
-    P._x  -= P._y;
-};
