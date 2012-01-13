@@ -3,8 +3,22 @@ JMI.namespace("script.Point");
 JMI.script.Point = (function() {
     
     var Point = function(x, y) {
-	    this.x = x;
-	    this.y = y;
+        
+        if (typeof y === "undefined") {
+            
+            if (typeof x === "undefined") {
+                this.x = 0;
+                this.y = 0;
+            }
+            else if (typeof x === JMI.script.Point) {
+                this.x = x.x;
+                this.y = x.y;  
+            }
+        }
+        else {
+            this.x = x;
+            this.y = y;
+        }
 	};
 	
 	Point.prototype = {
@@ -32,6 +46,10 @@ JMI.script.Point = (function() {
             this.x -= this.y;
             return this;            
         },
+        
+        clone: function() {
+            return new JMI.script.Point(this.x, this.y);
+        }
 	};
 	
 	return Point;

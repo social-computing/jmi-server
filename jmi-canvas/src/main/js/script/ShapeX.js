@@ -34,16 +34,16 @@ JMI.script.ShapeX = (function() {
          * 
          * @return          The Point translation produced by the transfo on this.
          */
-        // TODO portage : methodes de la lib Math et gestion des nombres à virgule flottante
+        // TODO portage : gestion des nombres à virgule flottante
         transformOut: function(zone, transfo) {
             // else it is just a void frame
             if (this.isDefined(JMI.script.ShapeX.SCALE_VAL)) {
-                var scale = this.getFloat(JMI.script.ShapeX.SCALE_VAL, zone._props);
+                var scale = this.getFloat(JMI.script.ShapeX.SCALE_VAL, zone.props);
                 var p     = this.getCenter(zone);
-                scale *= transfo._pos;
+                scale *= transfo.position;
                 
-                var x = p._x + Math.round(scale * Math.cos(transfo._dir));
-                var y = p._y + Math.round(scale * Math.sin(transfo._dir));
+                var x = p.x + Math.round(scale * Math.cos(transfo.direction));
+                var y = p.y + Math.round(scale * Math.sin(transfo.direction));
                 
                 return new JMI.script.Point(x, y);
             }
@@ -57,20 +57,20 @@ JMI.script.ShapeX = (function() {
          * @return      The barycentric center of all points.
          */
         getCenter: function(zone) {
-            var points = this.getValue(JMI.script.ShapeX.POLYGON_VAL, zone._props);
+            var points = this.getValue(JMI.script.ShapeX.POLYGON_VAL, zone.props);
             var p;
-            var c = new JMI.script.Point(points[0]._x,  points[0]._y);
+            var c = new JMI.script.Point(points[0].x,  points[0].y);
             var i;
             var n = points.length;
             
             if (n > 1) {
                 for (i = 1; i < n; i++) {
-                    p   = points[i];
-                    c._x += p._x;
-                    c._y += p._y;
+                    p    = points[i];
+                    c.x += p.x;
+                    c.y += p.y;
                 }
-                c._x /= n;
-                c._y /= n;
+                c.x /= n;
+                c.y /= n;
             }
             return c;
         },
@@ -88,34 +88,26 @@ JMI.script.ShapeX = (function() {
             // it is just a void frame
             if(!this.isDefined(JMI.script.ShapeX.SCALE_VAL)) return false;
             
-            var points = this.getValue(JMI.script.ShapeX.POLYGON_VAL, zone._props);
+            var points = this.getValue(JMI.script.ShapeX.POLYGON_VAL, zone.props);
             var shapeCenter = this.getCenter(zone);
-            var shapePosition = new JMI.script.Point(0,0);
+            var shapePosition = new JMI.script.Point();
             var size = Math.round(this.getShapePos(zone, transfo, center, shapeCenter, shapePosition));
-            var nbPoint = points.length;
-            var ret;
             
-            switch(nbPoint) {
+            switch(points.length) {
                 // 1 point = circle => Place
                 case 1: 
-                    var distance = JMI.script.Point(shapeCenter._x, shapeCenter._y);
-                    distance.add(shapePosition);
-                    distance.subtract(pos);
+                    var distance = shapeCenter.clone().add(shapePosition).subtract(pos);
                     
                     // We check if the position is located inside the circle
                     // Another way to express it : is the distance between the circle center and the position < circle radius
-                    ret = (distance._x * distance._x) + (distance._y * distance._y) < (size * size);
-                    return ret;
+                    return (distance._x * distance._x) + (distance._y * distance._y) < (size * size);
                     
                 // 2 points = segment => Street
                 case 2:     
-                    var fromPoint = new JMI.script.Point(points[0]._x, points[0]._y);
-                    fromPoint.add(shapePosition);
-                    var toPoint = new JMI.script.Point(points[1]._x, points[1]._y);
-                    toPoint.add(shapePosition);
+                    var fromPoint = new JMI.script.Point(points[0].x, points[0].y).add(shapePosition);
+                    var toPoint = new JMI.script.Point(points[1].x, points[1].y).add(shapePosition);
                     var poly = this.getLinkPoly(zone, fromPoint, toPoint, size);
-                    ret = poly.contains(pos); 
-                    return ret;
+                    return poly.contains(pos);
                 default:
                     throw new Error("Should never happen, a shape can only have 1 or 2 points");
             }
@@ -133,21 +125,19 @@ JMI.script.ShapeX = (function() {
         setBounds: function(zone , transfo , center, bounds) {
             // else it is just a void frame
             if (this.isDefined(JMI.script.ShapeX.SCALE_VAL)) {
-                var points = this.getValue(JMI.script.ShapeX.POLYGON_VAL, zone._props);
+                var points = this.getValue(JMI.script.ShapeX.POLYGON_VAL, zone.props);
                 var shapeCenter = this.getCenter(zone);
-                var shapePos = new JMI.script.Point(0, 0);
-                // :JMI.script.Rectangle
-                var rect;
-                var n = points.length;
+                var shapePos = new JMI.script.Point();
+                var rect; // :JMI.script.Rectangle
                 var size = Math.round(this.getShapePos(zone, transfo, center, shapeCenter, shapePos));
                 
-                switch (n) {
+                switch (points.length) {
                     // 1 point = circle => Place
                     case 1:     
                         // var width:int = size << 1;
                         // TODO : portage, voir si c'est nécessaire par rapport au dessin sur un canevas
                         size = size * 2;
-                        rect = new JMI.script.Rectangle(shapeCenter._x + shapePos._x - size / 2,
+                        rect = new JMI.script.Rectangle(shapeCenter.x + shapePos.x - size / 2,
                             shapeCenter._y + shapePos._y - size / 2,
                             size,
                             size);
@@ -155,10 +145,8 @@ JMI.script.ShapeX = (function() {
                     
                     // 2 points = segment => Street
                     case 2:     
-                        var A = new JMI.script.Point(points[0]._x, points[0]._y);
-                        A.add(shapePos);
-                        var B = new JMI.script.Point(points[1]._x, points[1]._y);
-                        B.add(shapePos);
+                        var A = new JMI.script.Point(points[0].x, points[0].y).add(shapePos);
+                        var B = new JMI.script.Point(points[1].x, points[1].y).add(shapePos);
                         rect = this.getLinkPoly(zone, A, B, size).getBounds();
                         break;
                 }
@@ -180,95 +168,74 @@ JMI.script.ShapeX = (function() {
         paint: function(gDrawingContext, supZone, zone, slice, transfo, center) {
             // else it is just a void frame
             if(this.isDefined(JMI.script.ShapeX.SCALE_VAL)) {
-                var points = this.getValue(JMI.script.ShapeX.POLYGON_VAL, supZone._props);
+                var points = this.getValue(JMI.script.ShapeX.POLYGON_VAL, supZone.props);
                 var p = points[0];
-                var shapePos = new JMI.script.Point(0, 0);
-                var n = points.length;
-                var i;
-                var radius = Math.round(this.getShapePos(supZone, transfo, center, p, shapePos));
-                var color; //:ColorTransform;
+                var shapePos = new JMI.script.Point();
+                var size = Math.round(this.getShapePos(supZone, transfo, center, p, shapePos));
                 
                 // Manage each case of number of points to draw for this shape
-                switch(n) {
-                    // dot => Place ??
+                switch(points.length) {
+                    // dot => Place 
                     case 1:     
-                    {
                         //composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0);
                         //g.setComposite(composite);
                         
                         // Jonathan Dray : I removed the size offset, as drawing a circle on canevas starts from the shape center 
-                        var x = p._x + shapePos._x;
-                        var y = p._y + shapePos._y;
+                        var x = p.x + shapePos.x;
+                        var y = p.y + shapePos.y;
                         
                         // Doubling size value : needed because we are using the  
                         // drawEllipse method that needs a height and width from the top,left starting point
                         // which means we have to double the radius value.
-                        // Jonathan Dray : do not double the size anymore, the arc drawing method takes the radius
+                        // Jonathan Dray 2011.01.08 : do not double the size anymore, the arc drawing method takes the radius
                         // size = size * 2;
-                        color = slice.getColor(JMI.script.Slice.OUT_COL_VAL, zone._props);
-        
-                        /*
-                         * TODO : replace this with canevas line style equivalent 
-                         *
-                        if(color != null) {
-                            s.graphics.lineStyle(1, color.color);
-                            
-                        }
-                        else {
-                            // Set an empty line style
-                            s.graphics.lineStyle();
-                        }
-                        
-                        color = slice.getColor(Slice.IN_COL_VAL, zone.m_props);
-                        if(color != null) {
-                            s.graphics.beginFill(color.color);
-                        }
-                        */
+                        var outColor = slice.getColor(JMI.script.Slice.OUT_COL_VAL, zone.props);
+                        var inColor = slice.getColor(JMI.script.Slice.IN_COL_VAL, zone.props);
+
                         gDrawingContext.beginPath();
-                        gDrawingContext.arc(x, y, radius, 0, Math.PI * 2, false);
+                        gDrawingContext.arc(x, y, size, 0, Math.PI * 2, false);
                         gDrawingContext.closePath();
-                        gDrawingContext.strokeStyle = color;
-                        gDrawingContext.stroke();
+                        if(outColor != null) {
+                            gDrawingContext.strokeStyle = outColor;
+                            gDrawingContext.stroke();
+                        }
+                        if(inColor != null) {
+                            gDrawingContext.fillStyle = inColor;
+                            gDrawingContext.fill();
+                        }
                         break;
-                    }
                         
                     // segment  => Street
                     case 2:     
-                    {
-                        /*composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f;                 
-                        g.setComposite(composite);*/
-                        
-                        var fromPoint = new JMI.script.Point(points[0]._x, points[0]._y);
-                        fromPoint.add(shapePos);
-                        var toPoint = new JMI.script.Point(points[1]._x, points[1]._y);
-                        toPoint.add(shapePos);
+                        var fromPoint = new JMI.script.Point(points[0].x, points[0].y).add(shapePos);
+                        var toPoint = new JMI.script.Point(points[1].x, points[1].y).add(shapePos);
                         var poly = this.getLinkPoly(supZone, fromPoint, toPoint, (((size + 3) / 2)));
                         
-                        color = slice.getColor(JMI.script.Slice.OUT_COL_VAL, supZone._props);
-                        if (color != null) {
-                            // s.graphics.lineStyle(1, color.color);
-                            gDrawingContext.strokeStyle = color;
-                        }
-                        color = slice.getColor(JMI.script.Slice.IN_COL_VAL, supZone._props);
-                        
-                        //if (color != null) s.graphics.beginFill(color.color);
-                        if (color != null) gDrawingContext.fillStyle = color;
+                        var outColor = slice.getColor(JMI.script.Slice.OUT_COL_VAL, supZone.props);
+                        var inColor = slice.getColor(JMI.script.Slice.IN_COL_VAL, supZone.props);
                         
                         // Drawing the polygon
                         gDrawingContext.beginPath();
                         //s.graphics.moveTo(poly.xpoints[poly.npoints-1], poly.ypoints[poly.npoints-1]);
                         gDrawingContext.moveTo(poly.xpoints[poly.npoints-1], poly.ypoints[poly.npoints-1]);
-                        for(i = 0 ; i < poly.npoints; ++i) {
+                        for(var i = 0 ; i < poly.npoints; ++i) {
                             //s.graphics.lineTo( poly.xpoints[i], poly.ypoints[i]);
                             gDrawingContext.lineTo(poly.xpoints[i], poly.ypoints[i]);
                         }
                         gDrawingContext.closePath();
-                        gDrawingContext.stroke();
                         
-                        // if (color != null) s.graphics.endFill();
-                        if (color != null) gDrawingContext.fill();
+                        if(outColor != null) {
+                            // s.graphics.lineStyle(1, color.color)
+                            gDrawingContext.strokeStyle = outColor;
+                            gDrawingContext.stroke();
+                        }
+                        if(inColor != null) {
+                            // if (color != null) s.graphics.beginFill(color.color);
+                            // if (color != null) s.graphics.endFill();
+                            gDrawingContext.fillStyle = color;
+                            gDrawingContext.fill();
+                        }
                         break;
-                    }
                 }
             }
         },
@@ -287,17 +254,17 @@ JMI.script.ShapeX = (function() {
          * @return          A new 4 Points Polygon.
          */
         getLinkPoly: function(zone, A, B, width) {
-            var flags = this.getFlags(zone._props);
+            var flags = this.getFlags(zone.props);
             var link = zone;
-            var from = link._from;
-            var to = link._to;
+            var from = link.from;
+            var to = link.to;
             var fromOff = 0;
             var toOff = 0;
             
             if (from != null && to != null) {
                 if (this.isEnabled(flags, JMI.script.ShapeX.TAN_LNK_BIT | JMI.script.ShapeX.SEC_LNK_BIT)) {
-                    fromOff = from._props["_SCALE"];
-                    toOff   = to._props["_SCALE"];
+                    fromOff = from.props["_SCALE"];
+                    toOff   = to.props["_SCALE"];
                 }
                 if (this.isEnabled(flags, JMI.script.ShapeX.SEC_LNK_BIT)) {
                     var w2  = width * width;
@@ -308,26 +275,26 @@ JMI.script.ShapeX = (function() {
             
             var poly = new JMI.script.Polygon();
             
-            var N = new JMI.script.Point(B._x - A._x, B._y - A._y);
-            var len = Math.round(Math.sqrt(N._x * N._x + N._y * N._y));
+            var N = new JMI.script.Point(B.x - A.x, B.y - A.y);
+            var len = Math.round(Math.sqrt(N.x * N.x + N.y * N.y));
             
             if (len != 0) {
-                N._x = (N._x << 16) / len;
-                N._y = (N._y << 16) / len;
+                N.x = (N.x << 16) / len;
+                N.y = (N.y << 16) / len;
                 len  = (len - fromOff - toOff) >> 1;
                 
                 var C = JMI.script.Point.Scale(N, fromOff + len);
                 var U = JMI.script.Point.Scale(N, len);
                 var V = JMI.script.Point.Scale(N, width).pivot();
                 
-                C.offset(A._x, A._y);
+                C.offset(A.x, A.y);
                 this.addLinkPoint(poly, -1., -1., C, U, V);
                 this.addLinkPoint(poly, -1., 1., C, U, V);
                 this.addLinkPoint(poly, 1., 1., C, U, V);
                 this.addLinkPoint(poly, 1., -1., C, U, V);
             }
             else{
-                poly.addPoint(A._x, A._y);
+                poly.addPoint(A.x, A.y);
             }
             
             return poly;
@@ -346,7 +313,7 @@ JMI.script.ShapeX = (function() {
          * @param V         Vector V.
          */
         addLinkPoint: function(poly, u, v, center, U, V) {
-            poly.addPoint(center._x + u * U._x + v * V._x, center._y + u * U._y + v * V._y);
+            poly.addPoint(center.x + u * U.x + v * V.x, center.y + u * U.y + v * V.y);
         },
 
         /*
@@ -442,8 +409,8 @@ JMI.script.ShapeX = (function() {
             
             // Upadate image coordinates after rescale
             imageScale >>= 1;
-            imageClone.x = p._x + shapePos.x - imageScale;
-            imageClone.y = p._y + shapePos.y - imageScale;
+            imageClone.x = p.x + shapePos.x - imageScale;
+            imageClone.y = p.y + shapePos.y - imageScale;
             
             ImageUtil.drawBitmap(imageClone, s.graphics);
             if(render) {
@@ -463,21 +430,21 @@ JMI.script.ShapeX = (function() {
          * @return          The scale of this shape after transformation.
          */
         getShapePos: function(zone, transfo, center, p0, pos) {
-            var scale = this.getFloat(JMI.script.ShapeX.SCALE_VAL, zone._props);
+            var scale = this.getFloat(JMI.script.ShapeX.SCALE_VAL, zone.props);
             var p; // :JMI.script.Point
             
             // We are drawing a real Sat!
             if(center != null) {
                 p = center.subtract(p0); 
-                pos._x = p._x;
-                pos._y = p._y;
+                pos.x = p.x;
+                pos.y = p.y;
             }
             
             if(transfo != null){
                 p =  pos.add(transfo.getCart());
-                pos._x = p._x;
-                pos._y = p._y;
-                scale *= transfo._scl;
+                pos.x = p.x;
+                pos.y = p.y;
+                scale *= transfo.scale;
             }
             return scale;
         },

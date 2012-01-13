@@ -22,10 +22,10 @@ JMI.script.Transfo = (function() {
      * @param scl       Scale of the shape to create using this transfo. // :Number
      * @param flags     An int holding one or more bits in : {CART_BIT,ABS_BIT,INTER_BIT}. // :int
      */
-    var Transfo = function(dir, pos, scl, flags) {
-        this.direction = dir;
-        this.position  = pos;
-        this.scale     = scl;
+    var Transfo = function(direction, position, scale, flags) {
+        this.direction = direction;
+        this.position  = position;
+        this.scale     = scale;
         this.flags     = flags;
     };
 
@@ -41,7 +41,7 @@ JMI.script.Transfo = (function() {
          *                      Or this if t is null or not compatible.
          */
         transform: function(transfo, isForward) {
-            // TODO : portage, add namespace prefix
+            // TODO : replace null test by undefined when constructor called have been checked
             if (transfo == null || this.flags != transfo._flags) {
                 return new JMI.script.Transfo(this.direction, this.position, this.scale, this.flags);
             }
