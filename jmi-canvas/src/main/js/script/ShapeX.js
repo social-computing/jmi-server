@@ -288,7 +288,7 @@ JMI.script.ShapeX = (function() {
                 var U = JMI.script.Point.Scale(N, len);
                 var V = JMI.script.Point.Scale(N, width).pivot();
                 
-                C.offset(A.x, A.y);
+                C.add( A);
                 this.addLinkPoint(poly, -1., -1., C, U, V);
                 this.addLinkPoint(poly, -1., 1., C, U, V);
                 this.addLinkPoint(poly, 1., 1., C, U, V);

@@ -17,6 +17,8 @@ JMI.script.Slice =  (function() {
          * //:HTMLText;
          */
 	    this.htmlTxt = null;
+
+		JMI.script.Base.call( this);
 	};
 	
 	Slice.prototype = {
@@ -41,18 +43,18 @@ JMI.script.Slice =  (function() {
          * @param supCtr        This parent satellite center.
          */
         paint: function(applet, s, supZone, zone, satShp, satCtr, supCtr) {
-            var text = getText( TEXT_VAL, zone._props );
+            var text = this.getText( JMI.script.Slice.TEXT_VAL, zone._props );
             
-            var transfo = getTransfo( TRANSFO_VAL, zone._props );
+            var transfo = this.getTransfo( JMI.script.Slice.TRANSFO_VAL, zone._props );
             
             // Draw a satellite with primitives
-            if(isDefined(IN_COL_VAL) || isDefined(OUT_COL_VAL)) {
+            if(this.isDefined(JMI.script.Slice.IN_COL_VAL) || this.isDefined(JMI.script.Slice.OUT_COL_VAL)) {
                 satShp.paint(s, supZone, zone, this, transfo, satCtr );
             }
             
             // Draw a satellite's image it is set
-            if(isDefined(IMAGE_VAL)) {
-                var imageNam = parseString(IMAGE_VAL, zone._props )[0];
+            if(isDefined(JMI.script.Slice.IMAGE_VAL)) {
+                var imageNam = parseString(JMI.script.Slice.IMAGE_VAL, zone._props )[0];
                 if (imageNam != null) {
                     satShp.drawImage(applet, s, supZone, imageNam, transfo, satCtr);
                 }
@@ -120,16 +122,16 @@ JMI.script.Slice =  (function() {
          * @return              True if the cursor's position is inside this slice, false otherwise
          */
         contains: function(planComponent, g, supZone, zone, satShp, satCtr, supCtr, pos){
-            var transfo = getTransfo(TRANSFO_VAL, zone._props);
+            var transfo = getTransfo(JMI.script.Slice.TRANSFO_VAL, zone._props);
             
             if(supZone == null) supZone = zone;
             
-            if((isDefined(IN_COL_VAL ) || isDefined(OUT_COL_VAL)) &&
+            if((isDefined(JMI.script.Slice.IN_COL_VAL ) || isDefined(JMI.script.Slice.OUT_COL_VAL)) &&
                 satShp.contains(g, supZone, transfo, satCtr, pos)) {
                 return true;
             }
             
-            var text = getText(TEXT_VAL, zone._props);
+            var text = getText(JMI.script.Slice.TEXT_VAL, zone._props);
             if (text != null) {
                 // TODO : null à remplacer
                 var htmlTxt = text.getHText(planComponent, null, zone, transfo, satCtr, supCtr, text);
@@ -154,25 +156,25 @@ JMI.script.Slice =  (function() {
          * @param bounds        A Rectangle to merge with this bounds.
          */
         setBounds: function(applet, g, supZone, zone, satShp, satCtr, supCtr, bounds) {
-            var transfo = getTransfo(TRANSFO_VAL, zone._props);
+            var transfo = getTransfo(JMI.script.Slice.TRANSFO_VAL, zone._props);
             
             if (supZone == null) supZone = zone;
             
             try {
-                if (isDefined(IN_COL_VAL) || isDefined(OUT_COL_VAL)) {
+                if (isDefined(JMI.script.Slice.IN_COL_VAL) || isDefined(JMI.script.Slice.OUT_COL_VAL)) {
                     satShp.setBounds(g, supZone, transfo, satCtr, bounds);
                 }
             }
             catch (e) {
                 var errorMessage = "getCenter supZone=" + supZone;
                 if (supZone != null) {
-                    var points = satShp.getValue(ShapeX.POLYGON_VAL, supZone._props);
-                    errorMessage += " zName=" + supZone._props[ "NAME" ] + " pKey=" + satShp._containers[ShapeX.POLYGON_VAL]._value + " pnts=" + points + " p[0]=" + points[0];
+                    var points = satShp.getValue(JMI.script.ShapeX.POLYGON_VAL, supZone._props);
+                    errorMessage += " zName=" + supZone._props[ "NAME" ] + " pKey=" + satShp._containers[JMI.script.ShapeX.POLYGON_VAL]._value + " pnts=" + points + " p[0]=" + points[0];
                 }
                 throw(new Error(errorMessage));
             }
         
-            var text = getText( TEXT_VAL, zone._props);
+            var text = getText( JMI.script.Slice.TEXT_VAL, zone._props);
             if (text != null) {
                 if (JMI.script.HTMLText.isEnabled(text.getFlags(zone.props), JMI.script.HTMLText.URL_BIT)) {
                     if (this.htmlTxt != null) bounds.copy(this.htmlTxt._bounds);
@@ -192,6 +194,11 @@ JMI.script.Slice =  (function() {
         }
 
 	};
+	
+	// Héritage
+	for (var element in JMI.script.Base.prototype ) {
+		Slice.prototype[element] = JMI.script.Base.prototype[element];
+	}
 	
 	return Slice;
 }());

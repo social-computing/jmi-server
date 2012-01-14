@@ -155,18 +155,18 @@ JMI.script.Plan = (function() {
 	    //if (this.applet.backImgUrl != null)
 	        //renderBitmap( restGfx, this.applet.backImgUrl, 0, 0, null );
 		
-		ImageUtil.clear(restDrawingSurface);
+		/*ImageUtil.clear(restDrawingSurface);
 		restDrawingSurface.graphics.beginFill( this.applet.env.inCol.color);
 		restDrawingSurface.graphics.drawRect(0, 0, this.applet.width, this.applet.height);
-		restDrawingSurface.graphics.endFill();
+		restDrawingSurface.graphics.endFill();*/
 	
 	    // Init Links, Nodes and subNodes.
-		initZones(restDrawingSurface, links, false);
-		initZones(restDrawingSurface, nodes, false);	
+		this.initZones(restDrawingSurface, this.links, false);
+		this.initZones(restDrawingSurface, this.nodes, false);	
 			
 	    // Init backImg and restImg with background, links and places parts that are "ghostable"
-		paintZones(restDrawingSurface, links, links.length, false, Satellite.ALL_TYP, true, false );
-		paintZones(restDrawingSurface, nodes, nodesCnt, false, Satellite.ALL_TYP, true, true );
+		this.paintZones(restDrawingSurface, this.links, this.links.length, false, JMI.script.Satellite.ALL_TYP, true, false );
+		this.paintZones(restDrawingSurface, this.nodes, this.nodesCnt, false, JMI.script.Satellite.ALL_TYP, true, true );
 	    
 	    // Filters backImg so it looks ghosted
 		if( this.applet.env.filterCol != null) {
@@ -177,13 +177,13 @@ JMI.script.Plan = (function() {
 		}
 	    
 	    // Finish drawing restImg with places parts that are allways visible (tip, sel...)
-		paintZones(restDrawingSurface, links, links.length, true, Satellite.BASE_TYP, true, false );
-		paintZones(restDrawingSurface, links, links.length, true, Satellite.TIP_TYP, false, false );
-		paintZones(restDrawingSurface, links, links.length, true, Satellite.SEL_TYP, false, false );
+		this.paintZones(restDrawingSurface, this.links, this.links.length, true, JMI.script.Satellite.BASE_TYP, true, false );
+		this.paintZones(restDrawingSurface, this.links, this.links.length, true, JMI.script.Satellite.TIP_TYP, false, false );
+		this.paintZones(restDrawingSurface, this.links, this.links.length, true, JMI.script.Satellite.SEL_TYP, false, false );
 		
-		paintZones(restDrawingSurface, nodes, nodesCnt, true, Satellite.BASE_TYP, true, true );
-		paintZones(restDrawingSurface, nodes, nodesCnt, true, Satellite.TIP_TYP, false, true );
-		paintZones(restDrawingSurface, nodes, nodesCnt, true, Satellite.SEL_TYP, false, true );
+		this.paintZones(restDrawingSurface, this.nodes, this.nodesCnt, true, JMI.script.Satellite.BASE_TYP, true, true );
+		this.paintZones(restDrawingSurface, this.nodes, this.nodesCnt, true, JMI.script.Satellite.TIP_TYP, false, true );
+		this.paintZones(restDrawingSurface, this.nodes, this.nodesCnt, true, JMI.script.Satellite.SEL_TYP, false, true );
 	},
 	
 	/*

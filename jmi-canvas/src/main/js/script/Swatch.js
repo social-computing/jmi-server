@@ -45,8 +45,8 @@ JMI.script.Swatch = (function() {
          */
         paint: function(applet, s, zone, isCur, isFront, showTyp, showLinks) {
             var sat = this.satellites[0];
-            var shape = sat._shape;
-            var flags = getFlags(zone.props);
+            var shape = sat.shapex;
+            var flags = this.getFlags(zone.props);
             var transfo = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone.props);
             
             // Draws Satellites links first (if they exists)
@@ -81,7 +81,7 @@ JMI.script.Swatch = (function() {
             var curZone= applet.planContainer.map.plan._curZone,
                 subZone;
             var sat = this.satellites[0];
-            var satData = isCur ? zone._curData[0] : zone._restData[0];
+            var satData = isCur ? zone.curData[0] : zone.restData[0];
             var satRelTrf, satTrf;
             var i, n = this.satellites.length,
                 flags;
@@ -96,7 +96,7 @@ JMI.script.Swatch = (function() {
             
             for (i = 1 ; i < n ; i++) {
                 sat     = this.satellites[i];
-                satData = isCur ? zone._curData[i] : zone._restData[i];
+                satData = isCur ? zone.curData[i] : zone.restData[i];
                 flags   = satData._flags;
                 
                 if (((this.isLinkOnly && JMI.script.Base.isEnabled(flags, JMI.script.Satellite.LINK_BIT)) || !this.isLinkOnly)
@@ -125,7 +125,7 @@ JMI.script.Swatch = (function() {
                             for (subZone in zones) {
                                 satTrf._dir   += supZone._stp;
                                 isCurSub       = subZone == curZone;
-                                satData        = isCur ? subZone._curData[i] : subZone._restData[i];
+                                satData        = isCur ? subZone.curData[i] : subZone.restData[i];
                                 
                                 if ((!isCur || ((hasRestBit && !isCurSub) || (hasCurBit && isCurSub)))) {
                                     satCtr = shape.transformOut(zone, satTrf);
@@ -137,7 +137,7 @@ JMI.script.Swatch = (function() {
                         // draws SuperZone
                         if (JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SUPER_BIT)) {
                             isCurSub = supZone == curZone;
-                            satData  = isCur ? zone._curData[i] : zone._restData[i];
+                            satData  = isCur ? zone.curData[i] : zone.restData[i];
                             
                             if (zones != null) satTrf._dir = dir;
                             
@@ -190,7 +190,7 @@ JMI.script.Swatch = (function() {
             // Iterate through the swatch satellite list
             for (i = 1 ; i < n ; i ++) {
                 sat         = this.satellites[i];
-                satData     = isCurZone ? zone._curData[i] : zone._restData[i];
+                satData     = isCurZone ? zone.curData[i] : zone.restData[i];
                 flags       = satData._flags;
                 
                 // This Sat is visible
@@ -218,7 +218,7 @@ JMI.script.Swatch = (function() {
                             // TODO : portage, see if this for loop works as expected
                             for (subZone in zones) {
                                 satTrf._dir   += supZone._stp;
-                                satData        = isCurZone ? subZone._curData[i] : subZone._restData[i];
+                                satData        = isCurZone ? subZone.curData[i] : subZone.restData[i];
                                 flags          = satData._flags;
                                 
                                 if (!JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData.isVisible) {
@@ -277,7 +277,7 @@ JMI.script.Swatch = (function() {
                 // Iterate throw all this swatch's satellites to test if the cursor is positionned in one of them
                 for(i = n - 1 ; i > 0 ; i--) {
                     sat     = this.satellites[i];
-                    satData = isCurZone ? zone._curData[i] : zone._restData[i];
+                    satData = isCurZone ? zone.curData[i] : zone.restData[i];
                     flags   = satData._flags;
                     
                     // This Sat is visible and it's not a tip (avoid anoying place popup!)
@@ -326,7 +326,7 @@ JMI.script.Swatch = (function() {
                                     subZone       = zones[j];
                                     satTrf._dir  -= supZone._stp;
                                     isCur         = subZone == curZone;
-                                    satData       = isCurZone ? subZone._curData[i] : subZone._restData[i];
+                                    satData       = isCurZone ? subZone.curData[i] : subZone.restData[i];
                                     flags         = satData._flags;
                                     isVisible     = !JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData.isVisible;
                                     

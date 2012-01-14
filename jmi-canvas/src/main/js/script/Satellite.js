@@ -109,16 +109,15 @@ JMI.script.Satellite = (function() {
                 else {
                     var isShowable = isSel;
                     
-                    // TODO : portage javascript switch
                     switch (showTyp) {
-                        case ALL_TYP  : isShowable = true; break;
-                        case BASE_TYP : isShowable = !(isTip || isSel); break;
-                        case TIP_TYP  : isShowable = isTip; break;
+                        case JMI.script.Satellite.ALL_TYP  : isShowable = true; break;
+                        case JMI.script.Satellite.BASE_TYP : isShowable = !(isTip || isSel); break;
+                        case JMI.script.Satellite.TIP_TYP  : isShowable = isTip; break;
                     }
                     if (isShowable) {
-                        // TODO : portage, iteration sur les éléments d'un tableau
-                        for(var slice in this.slices) {
-                            slice.paint(applet, s, supZone, zone, m_shape, satCtr, supCtr);
+                        for(var islice in this.slices) {
+                        	var slice = this.slices[islice];
+                            slice.paint(applet, s, supZone, zone, this.shapex, satCtr, supCtr);
                         }
                     }
                 }
