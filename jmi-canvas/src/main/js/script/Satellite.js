@@ -142,11 +142,11 @@ JMI.script.Satellite = (function() {
         contains: function(planComponent, g, zone, satCtr, supCtr, transfo, pos, isPie, isFake) {
             var i, n = this.slices.length;
             // If the parent satellite center is not set, take this satellite's shape center as center
-            if(supCtr == null) supCtr = this.shape.getCenter(zone);
+            if(supCtr == null) supCtr = this.shapex.getCenter(zone);
             
             // Iterate throw all this satellite's slices and check if one of them contains the cursor's position
             // Stop if it's the case 
-            for(i = 0 ; (i < n && !this.slices[i].contains(planComponent, g, zone.getParent(), zone, this.shape, satCtr, supCtr, pos)) ; i++){};
+            for(i = 0 ; (i < n && !this.slices[i].contains(planComponent, g, zone.getParent(), zone, this.shapex, satCtr, supCtr, pos)) ; i++){};
             
             // if the cursor's position is in one of the slices
             if(i < n) {
@@ -156,7 +156,7 @@ JMI.script.Satellite = (function() {
                     var zones           = supZone._subZones;
                     var nbZones         = zones.length + 1;
                     
-                    var center = isFake ? this.shape.getCenter(supZone) : supCtr;
+                    var center = isFake ? this.shapex.getCenter(supZone) : supCtr;
                     var dir = (supZone._dir != 10.) ? supZone._dir : transfo._dir,
                         step = supZone._stp,
                         m = .5 * (JMI.script.Base.Pi2 / step - nbZones),
@@ -196,9 +196,9 @@ JMI.script.Satellite = (function() {
          * @param bounds        A Rectangle to merge with this bounds.
          */
         setBounds: function(applet, g, zone, satCtr, supCtr, bounds) {
-            // TODO : portage : iteration sur les éléments d'un tableau
-            for (var slice in this.slices) {
-                slice.setBounds(applet, g, zone.getParent(), zone, this.shape, satCtr, supCtr, bounds);
+            for (var islice in this.slices) {
+            	var slice = this.slices[islice];
+                slice.setBounds(applet, g, zone.getParent(), zone, this.shapex, satCtr, supCtr, bounds);
             }
         },
 
@@ -341,8 +341,10 @@ JMI.script.Satellite = (function() {
 	
 	// Héritage
 	for (var element in JMI.script.Base.prototype ) {
-		Satellite.prototype[element] = JMI.script.Base.prototype[element];
+		if( !Satellite.prototype[element])
+			Satellite.prototype[element] = JMI.script.Base.prototype[element];
 	}
+	
 	return Satellite;
 }());
 

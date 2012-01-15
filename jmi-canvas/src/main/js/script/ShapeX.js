@@ -123,7 +123,7 @@ JMI.script.ShapeX = (function() {
          * @param center    The center of the shape before the transformation.
          * @param bounds    A Rectangle to merge with this bounds.
          */
-        setBounds: function(zone , transfo , center, bounds) {
+        setBounds: function(g, zone, transfo , center, bounds) {
             // else it is just a void frame
             if (this.isDefined(JMI.script.ShapeX.SCALE_VAL)) {
                 var points = this.getValue(JMI.script.ShapeX.POLYGON_VAL, zone.props);
@@ -497,7 +497,8 @@ JMI.script.ShapeX = (function() {
 	
 	// Héritage
 	for (var element in JMI.script.Base.prototype ) {
-		ShapeX.prototype[element] = JMI.script.Base.prototype[element];
+		if( !ShapeX.prototype[element])
+			ShapeX.prototype[element] = JMI.script.Base.prototype[element];
 	}
 	
 	return ShapeX;

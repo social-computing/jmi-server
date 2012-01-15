@@ -42,7 +42,7 @@ JMI.script.LinkZone = (function() {
          * @param isFirst   True if init called for the first time.
          */
         init: function(applet, s, isFirst) {
-            //super.init(applet, s, isFirst );// TODO portage
+            JMI.script.ActiveZone.prototype.init.call( this, applet, s, isFirst);
             
             this.parent = null;
             if (!JMI.script.Base.isEnabled(this.flags, JMI.script.LinkZone.FAKEFROM_BIT | JMI.script.LinkZone.FAKETO_BIT)) {
@@ -54,7 +54,7 @@ JMI.script.LinkZone = (function() {
                 
                 var w = this.bounds.width,
                     h = this.bounds.height;
-                var maxBox = applet.plan.maxBox;
+                var maxBox = applet.planContainer.map.plan.maxBox;
                 
                 if (w > maxBox.width)     maxBox.width    = w;
                 if (h > maxBox.height)    maxBox.height   = h;
@@ -89,7 +89,8 @@ JMI.script.LinkZone = (function() {
 	
 	// Héritage
 	for (var element in JMI.script.ActiveZone.prototype ) {
-		LinkZone.prototype[element] = JMI.script.ActiveZone.prototype[element];
+		if( !LinkZone.prototype[element])
+			LinkZone.prototype[element] = JMI.script.ActiveZone.prototype[element];
 	}
 	
 	return LinkZone;

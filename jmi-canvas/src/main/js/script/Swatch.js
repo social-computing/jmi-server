@@ -408,7 +408,8 @@ JMI.script.Swatch = (function() {
 	
 	// Héritage
 	for (var element in JMI.script.Base.prototype ) {
-		Swatch.prototype[element] = JMI.script.Base.prototype[element];
+		if( !Swatch.prototype[element])
+			Swatch.prototype[element] = JMI.script.Base.prototype[element];
 	}
 	
 	return Swatch;

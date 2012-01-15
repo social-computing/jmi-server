@@ -54,7 +54,16 @@ JMI.script.Rectangle = (function() {
             this.width = src.width;
             this.height = src.height;
             return this;
+        },
+        
+        inflate: function(dx, dy) {
+			this.x -= dx;
+			this.width += 2 * dx;
+			this.y -= dy;
+			this.height += 2 * dy;
+            return this;
         }
+        
         		
 	};
 	
