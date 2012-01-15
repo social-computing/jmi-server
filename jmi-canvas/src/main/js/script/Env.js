@@ -58,13 +58,16 @@ JMI.script.Env = (function() {
          */
         this.selections = null;
         
+        
         /*
-         * Table containing icons and sounds.
+         * Map containing icons and sounds.
          * This buffer stores all media object using a unique key to load them asynchronously during init.
          */
         this.medias = null;
         
-        //Table containing media loders.
+        /* 
+         * Map containing media loaders.
+         */
         this.loaders = null;
         
         /**
@@ -90,18 +93,10 @@ JMI.script.Env = (function() {
             var bkWhite = "0xFFFFFF";
             var bkCol = needPrint ? bkWhite : this.inColor.getColor();
             this.applet = applet;
-            medias = {};
-            loaders = {};
+            this.medias = {};
+            this.loaders = {};
         },
         
-        getMedia: function(name) {
-            return this.medias[name];
-        },
-        
-        putMedia: function (name, media) {
-            this.medias[name] = media;
-        },
-
         addLoader: function (name, loader) {
             this.loaders[name] = loader;
         },	
@@ -114,6 +109,11 @@ JMI.script.Env = (function() {
             if(this.loaders[name]) {
                 delete this.loaders[name];
             }
+        },
+        
+        hasMedia: function(name) {
+            // see : http://stackoverflow.com/questions/135448/how-do-i-check-to-see-if-an-object-has-an-attribute-in-javascript
+            return this.medias.hasOwnProperty(name);
         },
 
         // TODO portage : gestion des loaders

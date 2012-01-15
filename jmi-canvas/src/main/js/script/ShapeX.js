@@ -323,18 +323,17 @@ JMI.script.ShapeX = (function() {
          * The image is kept in the image bulk loader if not already.
          * The next call to draw the same image will simply retrieve it from the loader, not the net.
          * 
-         * @param applet        The global applet
-         * @param s             A sprite to draw on.
-         * @param zone          The zone that holds the properties used by this shape.
-         * @param imageNam      The path of the image to retrieve.
-         * @param transfo       A transformation of this shape to put the image inside.
-         * @param center        This shape center before the transformation.
+         * @param applet          The global applet
+         * @param gDrawingContext A graphical context to draw in
+         * @param zone            The zone that holds the properties used by this shape.
+         * @param imageName       The path of the image to retrieve.
+         * @param transfo         A transformation of this shape to put the image inside.
+         * @param center          This shape center before the transformation.
          */
-        // TODO : portage : a adapter à la gestion des images en js
-        drawImage: function(applet, s, zone, imageNam, transfo, center) {
+        drawImage: function(applet, gDrawingContext, zone, imageName, transfo, center) {
             // Else it is just a void frame
             if (this.isDefined(JMI.script.ShapeX.SCALE_VAL)) {
-                var image;//:Bitmap;
+                /*
                 var imageUrl;//:String;
         
                 // Check if it is an absolute url starting with http(s) or file scheme
@@ -345,17 +344,19 @@ JMI.script.ShapeX = (function() {
                 else {
                     imageUrl = URLHelper.getFullURL(ApplicationUtil.getSwfRoot(), imageNam);
                 }
+                */
                 
-                image = applet.env.getMedia(imageNam); // as Bitmap;
-        
+                // var image = applet.env.getMedia(imageName); // as Bitmap;
+                
                 // Check if the image has already been loaded
-                if (image == null) {
-                    image = new Image();
-                    image.addEventListener('load', function() {
+                if (!applet.env.hasMedia(imageName)) {
+                    var image = new Image();
+                    image.onload = function() {
                         // TODO complete
-                    }, false);
-                    image.src = imageUrl;   
-                    //TODO portage
+                        this.drawLoadedImage(applet, image, gDrawingContext, zone, imageName, transfo, center, true);
+                        applet.env.medias[imageName] = image;
+                    };
+                    image.src = imageName;   
                     /*var loader:LoaderEx = new LoaderEx();
                     var env:Env = applet.env;
                     env.addLoader( imageUrl, loader);
@@ -377,19 +378,59 @@ JMI.script.ShapeX = (function() {
         
                 // Draw the image if it has already been loaded
                 else {
-                    this.drawLoadedImage(applet, image, s, zone, imageNam, transfo, center, false);
+                    var image = applet.env.medias[imageName];
+                    this.drawLoadedImage(applet, image, gDrawingContext, zone, imageNam, transfo, center, false);
                 }
             }
         },
         
-        // TODO : portage : a adapter à la gestion des images en js
-        drawLoadedImage: function(applet , image, s, zone, imageNam, transfo, center, render) {
+        drawLoadedImage: function(applet , image, gDrawingContext, zone, imageNam, transfo, center, render) {
+            // Shape information             
+            var shapeCenter    = this.getCenter(zone); //:Point
+            var shapePosition  = new JMI.script.Point();
+            var shapeScale     = this.getShapePos(zone, transfo, center, p, shapePos); //:Number
+            
+            // Image information
+            // Position the image at the shape center absolute position on the canevas
+            var imagePosition = shapeCenter.clone().add(shapePosition);
+            var imageWidth;
+            var imageHeight;
+
+            
+            // If the shape scale is > 0 then scale the image  
+            if(shapeScale > 0.0) {
+                // Disk                
+                var imageScale = 1.414 * scale;
+                imageWidth = imageScale * image.width;
+                imageHeight = imageScale * image.height;
+                imageScale >>= 1;
+                imagePosition.x -= imageScale;
+                imagePosition.y -= imageScale;
+            }
+            else {
+                imageWidth = image.width;
+                imageHeight = image.height;
+                imagePosition.x -= imageWidth / 2;
+                imagePosition.y -= imageHeight / 2;
+            }
+            
+            // takes an image, scales it to a width of dw and a height of dh, and draws it on the canvas at coordinates (dx, dy)
+            gDrawingContext.drawImage(image, imagePosition.x, imagePosition.y, imageWidth, imageHeight); 
+            
+            if(render) {
+                applet.renderShape(gDrawingContext, imageWidth, imageHeight, imagePosition);
+            }
+            
+            
+            
+            
             // Not cloning the bitmapData itself
+            /*
             var scaledImg; //:Image;
             var imageClone = new Bitmap(image.bitmapData); //:Bitmap
             
             var p              = this.getCenter(zone); //:Point
-            var shapePos       = new JMI.script.Point(0, 0); // :Point
+            var shapePos       = new JMI.script.Point(); // :Point
             var scale          = this.getShapePos(zone, transfo, center, p, shapePos); //:Number
             var imageWidth     = imageClone.width; //:int
             var imageScale     = imageWidth; //:int
@@ -417,7 +458,9 @@ JMI.script.ShapeX = (function() {
             if(render) {
                 applet.renderShape(s, imageClone.width, imageClone.height, new JMI.script.Point(imageClone.x, imageClone.y));
             }
+            */
         },
+
 
         /*
          * Evaluate the transformation of a point using a transformation on this shape and return its scale.
