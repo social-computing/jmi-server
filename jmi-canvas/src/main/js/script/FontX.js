@@ -40,7 +40,8 @@ JMI.script.FontX = (function() {
 	
 	// Héritage
 	for (var element in JMI.script.Base.prototype ) {
-		FontX.prototype[element] = JMI.script.Base.prototype[element];
+		if( !FontX.prototype[element])
+			FontX.prototype[element] = JMI.script.Base.prototype[element];
 	}
 	
 	return FontX;

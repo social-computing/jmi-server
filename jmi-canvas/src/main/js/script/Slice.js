@@ -43,9 +43,9 @@ JMI.script.Slice =  (function() {
          * @param supCtr        This parent satellite center.
          */
         paint: function(applet, s, supZone, zone, satShp, satCtr, supCtr) {
-            var text = this.getText( JMI.script.Slice.TEXT_VAL, zone._props );
+            var text = this.getText( JMI.script.Slice.TEXT_VAL, zone.props );
             
-            var transfo = this.getTransfo( JMI.script.Slice.TRANSFO_VAL, zone._props );
+            var transfo = this.getTransfo( JMI.script.Slice.TRANSFO_VAL, zone.props );
             
             // Draw a satellite with primitives
             if(this.isDefined(JMI.script.Slice.IN_COL_VAL) || this.isDefined(JMI.script.Slice.OUT_COL_VAL)) {
@@ -54,16 +54,16 @@ JMI.script.Slice =  (function() {
             
             // Draw a satellite's image it is set
             if(isDefined(JMI.script.Slice.IMAGE_VAL)) {
-                var imageNam = parseString(JMI.script.Slice.IMAGE_VAL, zone._props )[0];
+                var imageNam = parseString(JMI.script.Slice.IMAGE_VAL, zone.props )[0];
                 if (imageNam != null) {
                     satShp.drawImage(applet, s, supZone, imageNam, transfo, satCtr);
                 }
             }
             
             if(text != null) {
-                if (JMI.script.HTMLText.isEnabled(text.getFlags(zone._props), JMI.script.HTMLText.URL_BIT)) {
+                if (JMI.script.HTMLText.isEnabled(text.getFlags(zone.props), JMI.script.HTMLText.URL_BIT)) {
                     m_htmlTxt = null;
-                    var textUrls  = text.parseString(JMI.script.HTMLText.TEXT_VAL, zone._props);
+                    var textUrls  = text.parseString(JMI.script.HTMLText.TEXT_VAL, zone.props);
                     var t , hTxt = "";
                     var i = 0;
                     // TODO portage
@@ -92,7 +92,7 @@ JMI.script.Slice =  (function() {
                     }*/
                 }
                 else {
-                    supCtr = supZone._restSwh.satellites[0]._shape.getCenter(supZone);
+                    supCtr = supZone.restSwatch.satellites[0]._shape.getCenter(supZone);
                     var htmlTxt = text.getHText(applet, s, zone, transfo, satCtr, supCtr, text);
                     
                     if (htmlTxt != null && htmlTxt._text.length > 0) {
@@ -122,7 +122,7 @@ JMI.script.Slice =  (function() {
          * @return              True if the cursor's position is inside this slice, false otherwise
          */
         contains: function(planComponent, g, supZone, zone, satShp, satCtr, supCtr, pos){
-            var transfo = getTransfo(JMI.script.Slice.TRANSFO_VAL, zone._props);
+            var transfo = getTransfo(JMI.script.Slice.TRANSFO_VAL, zone.props);
             
             if(supZone == null) supZone = zone;
             
@@ -131,7 +131,7 @@ JMI.script.Slice =  (function() {
                 return true;
             }
             
-            var text = getText(JMI.script.Slice.TEXT_VAL, zone._props);
+            var text = getText(JMI.script.Slice.TEXT_VAL, zone.props);
             if (text != null) {
                 // TODO : null à remplacer
                 var htmlTxt = text.getHText(planComponent, null, zone, transfo, satCtr, supCtr, text);
@@ -156,31 +156,31 @@ JMI.script.Slice =  (function() {
          * @param bounds        A Rectangle to merge with this bounds.
          */
         setBounds: function(applet, g, supZone, zone, satShp, satCtr, supCtr, bounds) {
-            var transfo = getTransfo(JMI.script.Slice.TRANSFO_VAL, zone._props);
+            var transfo = this.getTransfo(JMI.script.Slice.TRANSFO_VAL, zone.props);
             
             if (supZone == null) supZone = zone;
             
             try {
-                if (isDefined(JMI.script.Slice.IN_COL_VAL) || isDefined(JMI.script.Slice.OUT_COL_VAL)) {
+                if ( this.isDefined(JMI.script.Slice.IN_COL_VAL) || this.isDefined(JMI.script.Slice.OUT_COL_VAL)) {
                     satShp.setBounds(g, supZone, transfo, satCtr, bounds);
                 }
             }
             catch (e) {
                 var errorMessage = "getCenter supZone=" + supZone;
                 if (supZone != null) {
-                    var points = satShp.getValue(JMI.script.ShapeX.POLYGON_VAL, supZone._props);
-                    errorMessage += " zName=" + supZone._props[ "NAME" ] + " pKey=" + satShp._containers[JMI.script.ShapeX.POLYGON_VAL]._value + " pnts=" + points + " p[0]=" + points[0];
+                    var points = satShp.getValue(JMI.script.ShapeX.POLYGON_VAL, supZone.props);
+                    errorMessage += " zName=" + supZone.props[ "NAME" ] + " pKey=" + satShp._containers[JMI.script.ShapeX.POLYGON_VAL]._value + " pnts=" + points + " p[0]=" + points[0];
                 }
                 throw(new Error(errorMessage));
             }
         
-            var text = getText( JMI.script.Slice.TEXT_VAL, zone._props);
+            var text = this.getText( JMI.script.Slice.TEXT_VAL, zone.props);
             if (text != null) {
                 if (JMI.script.HTMLText.isEnabled(text.getFlags(zone.props), JMI.script.HTMLText.URL_BIT)) {
                     if (this.htmlTxt != null) bounds.copy(this.htmlTxt._bounds);
                 }
                 else {
-                    supCtr = supZone._restSwh.satellites[0]._shape.getCenter(supZone);
+                    supCtr = supZone.restSwatch.satellites[0]._shape.getCenter(supZone);
                     var htmlTxt;
                     
                     // TODO null à remplacer par Sprite
@@ -197,7 +197,8 @@ JMI.script.Slice =  (function() {
 	
 	// Héritage
 	for (var element in JMI.script.Base.prototype ) {
-		Slice.prototype[element] = JMI.script.Base.prototype[element];
+		if( !Slice.prototype[element])
+			Slice.prototype[element] = JMI.script.Base.prototype[element];
 	}
 	
 	return Slice;

@@ -101,8 +101,8 @@ JMI.script.Plan = (function() {
 	    // Reset the BBOX of the biggest zone
 	    prevBox = new JMI.script.Rectangle(dim.width >> 1, dim.height >> 1, 1, 1);
 	    
-	    if (zones == links) 
-	    	maxBox = new JMI.script.Dimension(0, 0);
+	    if (zones == this.links) 
+	    	this.maxBox = new JMI.script.Dimension(0, 0);
 	    
 	    // Reversed order so subZones are initialized before supZones!
 		for (i = n - 1 ; i >= 0 ; i --) {

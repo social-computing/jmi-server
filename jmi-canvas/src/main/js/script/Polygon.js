@@ -113,7 +113,7 @@ JMI.script.Polygon = (function() {
             if (this.npoints == 0) {
                 return new JMI.script.Rectangle(0, 0, 0, 0);
             }
-            if (this_bounds == null) {
+            if (this.bounds == null) {
                 this.calculateBounds(this.xpoints, this.ypoints, this.npoints);
             }
             return this.bounds;

@@ -37,7 +37,7 @@ JMI.script.BagZone = (function() {
          */
         JMI.script.ActiveZone.call( this);
 	};
-	
+
 	BagZone.prototype = {
 		constructor: JMI.script.BagZone,
 
@@ -54,7 +54,7 @@ JMI.script.BagZone = (function() {
         init: function(applet, s, isFirst) {
             var i,
                 nbSubZones = this.subZones != null ? this.subZones.length : 0;
-            JMI.script.ActiveZone.init.call( this, applet, s, isFirst);
+            JMI.script.ActiveZone.prototype.init.call( this, applet, s, isFirst);
             var restSwhBounds, curSwhBounds; 
             
             // First time init
@@ -123,7 +123,7 @@ JMI.script.BagZone = (function() {
         
             var w = this.bounds.width;
             var h = this.bounds.height;
-            var maxBox = applet.plan._maxBox;
+            var maxBox = applet.planContainer.map.plan.maxBox;
         
             if (w > maxBox.width)  maxBox.width  = w;
             if (h > maxBox.height) maxBox.height = h;
@@ -164,7 +164,8 @@ JMI.script.BagZone = (function() {
 	
 	// Héritage
 	for (var element in JMI.script.ActiveZone.prototype ) {
-		BagZone.prototype[element] = JMI.script.ActiveZone.prototype[element];
+		if( !BagZone.prototype[element])
+			BagZone.prototype[element] = JMI.script.ActiveZone.prototype[element];
 	}
 	
 	return BagZone;
