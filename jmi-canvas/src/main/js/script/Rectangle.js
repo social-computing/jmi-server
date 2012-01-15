@@ -2,6 +2,13 @@ JMI.namespace("script.Rectangle");
 
 JMI.script.Rectangle = (function() {
 	var Rectangle = function(x, y, width, height) {
+	    // If no arguments are given in the constructor call, initialize the instance with 0 values;
+	    if(arguments.length == 0) {
+	        x = 0;
+	        y = 0;
+	        width = 0;
+	        height = 0;
+	    }
 	    this.x = x;
 	    this.y = y;
 	    this.width = width;
@@ -28,10 +35,10 @@ JMI.script.Rectangle = (function() {
         },
         
         union: function(src) {
-            this.x = Math.min(this.x, src._x);
-            this.y = Math.min(this.y, src._y);
-            this.width = this.width + src._width - Math.min(this.x + this.width - src._x, src._x + src._width - this.x);
-            this.height = this.height + src._height - Math.min(this.y + this.height - src._y, src._y + src._height - this.y);
+            this.x = Math.min(this.x, src.x);
+            this.y = Math.min(this.y, src.y);
+            this.width = this.width + src.width - Math.min(this.x + this.width - src.x, src.x + src.width - this.x);
+            this.height = this.height + src.height - Math.min(this.y + this.height - src.y, src.y + src.height - this.y);
             return this;
         },
         
@@ -42,10 +49,10 @@ JMI.script.Rectangle = (function() {
          * 
          */
         copy: function(src) {
-            this.x = src._x;
-            this.y = src._y;
-            this.width = src._width;
-            this.height = src._height;
+            this.x = src.x;
+            this.y = src.y;
+            this.width = src.width;
+            this.height = src.height;
             return this;
         }
         		
