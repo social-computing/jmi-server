@@ -5,12 +5,11 @@ JMI.script.Point = (function() {
     var Point = function(x, y) {
         
         if (typeof y === "undefined") {
-            
             if (typeof x === "undefined") {
                 this.x = 0;
                 this.y = 0;
             }
-            else if (typeof x === JMI.script.Point) {
+            else if (x instanceof JMI.script.Point) {
                 this.x = x.x;
                 this.y = x.y;  
             }
@@ -56,11 +55,14 @@ JMI.script.Point = (function() {
 }());
 
 
+// Public static functions
 /*
- * Returns a new vector scaled by the given value
+ * Scales a Point previously normalized to 2^16.
+ * This is usefull to avoid using floats when scaling Vectors.
  * 
  * @param v      a vector to scale
  * @param scale  a scale value
+ * @return       new vector scaled by the given value    
  */
 JMI.script.Point.Scale = function(v, scale) {
     return new JMI.script.Point((v.x * scale) >> 16, (v.y * scale) >> 16);
