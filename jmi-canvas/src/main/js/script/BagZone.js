@@ -68,15 +68,15 @@ JMI.script.BagZone = (function() {
                     this.subZones[i]._parent = this;
                 }
         
-                restSwhBounds = this.restSwh.getBounds(applet, s.graphics, this, false);          
-                curSwhBounds  = this.curSwh.getBounds(applet, s.graphics, this, true);
+                restSwhBounds = this.restSwatch.getBounds(applet, s.graphics, this, false);          
+                curSwhBounds  = this.curSwatch.getBounds(applet, s.graphics, this, true);
                 this.bounds = restSwhBounds.union(curSwhBounds);
                 
                 var isLeft = this.bounds.x < 0;
         
                 if (nbSubZones > 0) {
                     // float dir = 0.f,
-                    var stp = 0.25 * Base.Pi2;
+                    var stp = 0.25 * JMI.script.Base.Pi2;
                     // isLeft || isRight
                     if (isLeft || (this.bounds.x + this.bounds.width > applet.width)) {
                         // TODO : portage, regarder si le décalage de bit fonctionne avec le même opérateur
@@ -84,23 +84,23 @@ JMI.script.BagZone = (function() {
         
                         if (isLeft) {
                             this.dir = -stp;
-                            this.subZones[nbSubZones - 1]._flags |= SIDE_BIT | LEFT_BIT;
+                            this.subZones[nbSubZones - 1].flags |= JMI.script.ActiveZone.SIDE_BIT | JMI.script.ActiveZone.LEFT_BIT;
                         }
                         else {
                             this.dir = stp;
-                            this.subZones[nbSubZones - 1]._flags |= SIDE_BIT;
+                            this.subZones[nbSubZones - 1].flags |= JMI.script.ActiveZone.SIDE_BIT;
                         }
                     }
                 }
                 
                 // isLeft || isRight
                 if (isLeft || (this.bounds.x + this.bounds.width > applet.width)) {
-                    this.flags |= isLeft ? SIDE_BIT | LEFT_BIT : SIDE_BIT;
+                    this.flags |= isLeft ? JMI.script.ActiveZone.SIDE_BIT | JMI.script.ActiveZone.LEFT_BIT : JMI.script.ActiveZone.SIDE_BIT;
                 }
             }
         
-            restSwhBounds     = this.restSwh.getBounds(applet, s.graphics, this, false);
-            var win           = applet.plan._prevBox.union(restSwhBounds);
+            restSwhBounds     = this.restSwath.getBounds(applet, s.graphics, this, false);
+            var win           = applet.planContainer.map.plan.prevBox.union(restSwhBounds);
             curSwhBounds      = this.curSwh.getBounds(applet, s.graphics, this, true);
             this.bounds     = restSwhBounds.union(curSwhBounds);
             
@@ -118,7 +118,7 @@ JMI.script.BagZone = (function() {
                 win.height  = this.bounds.y + this.bounds.height - win.y;
             }
         
-            applet.plan._prevBox = win;
+            applet.planContainer.map.plan.prevBox = win;
             this.bounds.inflate(2, 2);
         
             var w = this.bounds.width;

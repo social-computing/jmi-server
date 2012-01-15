@@ -32,6 +32,7 @@ JMI.script.HTMLText = (function() {
 		rounded; //:int;
 		
 	var HTMLText = function() {
+		JMI.script.Base.call( this);
 	};
 	
 	HTMLText.prototype = {
@@ -95,14 +96,14 @@ JMI.script.HTMLText = (function() {
         getHText: function( applet, s, zone, transfo, center, supCtr, textKey) // throws UnsupportedEncodingException
         {
             var htmlTxt = null;
-            var data = zone.m_datas[ textKey ];
+            var data = zone.datas[ textKey ];
             
             if ( center == null )	center = supCtr;
             
             if ( data == null )
             {
 				htmlTxt = new JMI.script.HTMLText();
-				htmlTxt.text = parseString2( TEXT_VAL, zone.props, true );
+				htmlTxt.text = this.parseString2( JMI.script.HTMLText.TEXT_VAL, zone.props, true );
                 
                 if ( htmlTxt.text.length> 0)
                 {
@@ -336,6 +337,12 @@ JMI.script.HTMLText = (function() {
             bounds.y = y;
         }
  	};
+	
+	// Héritage
+	for (var element in JMI.script.Base.prototype ) {
+		if( !HTMLText.prototype[element])
+			HTMLText.prototype[element] = JMI.script.Base.prototype[element];
+	}
 	
 	return HTMLText;
 }());

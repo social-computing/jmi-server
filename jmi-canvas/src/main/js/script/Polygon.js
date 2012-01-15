@@ -184,7 +184,7 @@ JMI.script.Polygon = (function() {
                 maxPoint.y = Math.max(maxPoint.y, ypoints[i]);
             }
             
-            this.bounds = new Rectangle(minPoint.x, minPoint.y,
+            this.bounds = new JMI.script.Rectangle(minPoint.x, minPoint.y,
                                         maxPoint.x - minPoint.x,
                                         maxPoint.y - minPoint.y);
             return this;

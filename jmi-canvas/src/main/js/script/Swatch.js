@@ -207,7 +207,7 @@ JMI.script.Swatch = (function() {
                         
                         // Gets SuperZone bounds
                         if ((!JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData.isVisible)
-                            && Base.isEnabled(flags, JMI.script.Satellite.SUPER_BIT)) {
+                            && JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SUPER_BIT)) {
                             satCtr  = shape.transformOut(zone, satTrf);
                             sat.setBounds(applet, g, zone, satCtr, supCtr, bounds);
                         }

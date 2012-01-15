@@ -479,7 +479,7 @@ JMI.script.ShapeX = (function() {
             
             // We are drawing a real Sat!
             if(center != null) {
-                p = center.subtract(p0); 
+                p = center.substract(p0); 
                 pos.x = p.x;
                 pos.y = p.y;
             }

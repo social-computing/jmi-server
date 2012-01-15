@@ -256,11 +256,11 @@ JMI.script.Token = (function() {
             }
             
             if (c == '-') {
-                this.flags |= RIGHT_BIT;
+                this.flags |= JMI.script.Token.RIGHT_BIT;
                 i ++;
             }
             else if (c == '+') {
-                this.flags |= BOUND_BIT;
+                this.flags |= JMI.script.Token.BOUND_BIT;
                 i ++;
             }
             

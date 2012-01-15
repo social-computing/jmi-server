@@ -169,7 +169,7 @@ JMI.script.Slice =  (function() {
                 var errorMessage = "getCenter supZone=" + supZone;
                 if (supZone != null) {
                     var points = satShp.getValue(JMI.script.ShapeX.POLYGON_VAL, supZone.props);
-                    errorMessage += " zName=" + supZone.props[ "NAME" ] + " pKey=" + satShp._containers[JMI.script.ShapeX.POLYGON_VAL]._value + " pnts=" + points + " p[0]=" + points[0];
+                    errorMessage += " zName=" + supZone.props[ "NAME" ] + " pKey=" + satShp.containers[JMI.script.ShapeX.POLYGON_VAL]._value + " pnts=" + points + " p[0]=" + points[0];
                 }
                 throw(new Error(errorMessage));
             }
@@ -180,7 +180,7 @@ JMI.script.Slice =  (function() {
                     if (this.htmlTxt != null) bounds.copy(this.htmlTxt._bounds);
                 }
                 else {
-                    supCtr = supZone.restSwatch.satellites[0]._shape.getCenter(supZone);
+                    supCtr = supZone.restSwatch.satellites[0].shapex.getCenter(supZone);
                     var htmlTxt;
                     
                     // TODO null à remplacer par Sprite

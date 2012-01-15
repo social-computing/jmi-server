@@ -62,8 +62,15 @@ JMI.script.Rectangle = (function() {
 			this.y -= dy;
 			this.height += 2 * dy;
             return this;
-        }
+        },
         
+        intersection: function( src) {
+			var	x1 = Math.max(this.x, src.x),
+				y1 = Math.max(this.y, src.y),
+				x2 = Math.min(this.x + this.width, src.x + src.width),
+				y2 = Math.min(this.y + this.height, src.y + src.height);
+			return new Rectangle(x1, y1, x2-x1, y2-y1);
+        }
         		
 	};
 	
