@@ -183,11 +183,9 @@ JMI.script.Slice =  (function() {
                     supCtr = supZone.restSwatch.satellites[0].shapex.getCenter(supZone);
                     var htmlTxt;
                     
-                    // TODO null à remplacer par Sprite
-                    // TODO voir à quel propriété se réfère bounds
-                    htmlTxt = text.getHText(applet, null, zone, transfo, satCtr, supCtr, text);
-                    if (htmlTxt != null && htmlTxt._text.length > 0) {
-                        bounds.merge(htmlTxt._bounds);
+                    htmlTxt = text.getHText(applet, g, zone, transfo, satCtr, supCtr, text);
+                    if (htmlTxt != null && htmlTxt.text.length > 0) {
+                        bounds.merge(htmlTxt.bounds);
                     }
                 }
             }

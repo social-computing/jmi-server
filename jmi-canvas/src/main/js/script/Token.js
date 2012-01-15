@@ -88,14 +88,12 @@ JMI.script.Token = (function() {
             var tokenStr;
             
             // Properties
-            if (Base.isEnabled(this.flags, PROP_BIT)) {
+            if (JMI.script.Base.isEnabled(this.flags, JMI.script.Token.PROP_BIT)) {
                 //:Object
                 var rawProp;
                 
                 // Global Properties
-                if (Base.isEnabled(this.flags, GLOBAL_BIT)) {
-                    // TODO portage : gestion du cast ?
-                    // props = props["ENV"] as Array;
+                if (Base.isEnabled(this.flags, JMI.script.Token.GLOBAL_BIT)) {
                     props = props["ENV"];
                 }
                 
@@ -123,9 +121,9 @@ JMI.script.Token = (function() {
                     var prop= rawProp.toString();
                     
                     // numerical prop
-                    if (Base.isEnabled(this.flags, NUM_BIT)) {
+                    if (JMI.script.Base.isEnabled(this.flags, JMI.script.Token.NUM_BIT)) {
                         // float prop
-                        if (Base.isEnabled(this.flags, FLOAT_BIT)) {
+                        if (JMI.script.Base.isEnabled(this.flags, JMI.script.Token.FLOAT_BIT)) {
                             // TODO portage : ????
                             tokenStr = prop;
                             /*  if ( this.intSize > 0 )            // fixed size
@@ -152,8 +150,7 @@ JMI.script.Token = (function() {
                             // fixed size
                             if (this.intSize > 0) {
                                 if (prop.length < this.intSize ) {
-                                    // TODO : portage : namespace prefix
-                                    if (Base.isEnabled(this.flags, BOUND_BIT)) {
+                                    if (JMI.script.Base.isEnabled(this.flags, BOUND_BIT)) {
                                         tokenStr = prop;
                                     }
                                     else {
@@ -162,7 +159,6 @@ JMI.script.Token = (function() {
                                     }
                                 }
                                 else {
-                                    // TODO : portage : vérifier le fonctionne de substring en javascript
                                     tokenStr = prop.substring(0, this.intSize);
                                 }
                             }
@@ -177,8 +173,7 @@ JMI.script.Token = (function() {
                         // fixed size
                         if (this.intSize > 0) {
                             if (prop.length < this.intSize) {
-                                // TODO : portage : namespace prefix
-                                if (Base.isEnabled(this.flags, BOUND_BIT)) {
+                                if (JMI.script.Base.isEnabled(this.flags, JMI.script.Token.BOUND_BIT)) {
                                     tokenStr = prop;
                                 }
                                 else {
@@ -187,7 +182,6 @@ JMI.script.Token = (function() {
                                 }
                             }
                             else {
-                                // TODO : portage : vérifier le fonctionne de substring en javascript
                                 tokenStr = prop.substring( 0, this.intSize );
                                 if( this.floatSize > 0) tokenStr += "...";
                             }
@@ -202,8 +196,7 @@ JMI.script.Token = (function() {
                 
                 // unknown properties
                 else {
-                    // TODO : portage : namespace prefix
-                    tokenStr = Base.isEnabled(this.flags, NEEDED_BIT ) ? null : "";
+                    tokenStr = JMI.script.Base.isEnabled(this.flags, JMI.script.Token.NEEDED_BIT ) ? null : "";
                 }
             }
             
@@ -213,7 +206,7 @@ JMI.script.Token = (function() {
             }
             
             // We must URLEncode this text !
-            if (Base.isEnabled(this.flags, URLCOD_BIT)) {
+            if (JMI.script.Base.isEnabled(this.flags, JMI.script.Token.URLCOD_BIT)) {
                 // portage , replace escape by encodeURIComponent that does a better job
                 // see : https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/encodeURIComponent
                 tokenStr = encodeURIComponent(tokenStr);
@@ -239,16 +232,16 @@ JMI.script.Token = (function() {
             var beg;
             
             if (c == '!') {
-                this.flags |= NEEDED_BIT;
+                this.flags |= JMI.script.Token.NEEDED_BIT;
                 c = text.charAt(i++);
             }
             
             if (c == '?') {
-                this.flags |= URLCOD_BIT;
+                this.flags |= JMI.script.Token.URLCOD_BIT;
                 c = text.charAt( i ++ );
             }
             
-            if (c == '/' && Base.isEnabled(this.flags, Token.LIST_BIT)) {
+            if (c == '/' && JMI.script.Base.isEnabled(this.flags, JMI.script.Token.LIST_BIT)) {
                 beg = ++ i;
                 // Character.isDigit(...)
                 while (text.charAt(i) >= '0' && text.charAt(i) <= '9') i ++;
@@ -290,10 +283,10 @@ JMI.script.Token = (function() {
             c = text.charAt( i );
             
             if (c == 'd' || c == 'f') {
-                this.flags |= NUM_BIT;
+                this.flags |= JMI.script.Token.NUM_BIT;
                 
                 if (c == 'f') {
-                    this.flags |= FLOAT_BIT;
+                    this.flags |= JMI.script.Token.FLOAT_BIT;
                 }
             }
             
@@ -307,7 +300,7 @@ JMI.script.Token = (function() {
                 }
                 else*/ 
                 if (c == '$'){
-                    this.flags |= GLOBAL_BIT;
+                    this.flags |= JMI.script.Token.GLOBAL_BIT;
                 }
             }
             
@@ -337,13 +330,11 @@ JMI.script.Token = (function() {
                 // TODO : portage : conversion from array to string
                 var wsStr = spaces;
                 
-                // TODO portage : namespace prefix
-                return Base.isEnabled(this.flags, RIGHT_BIT) ?
+                return JMI.script.Base.isEnabled(this.flags, JMI.script.Token.RIGHT_BIT) ?
                     wsStr + prop :      // Right justificated
                     prop + wsStr;       // Right justificated
         }
     };
-    
     
     return Token;
 }());

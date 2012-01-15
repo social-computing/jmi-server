@@ -99,9 +99,9 @@ JMI.script.BagZone = (function() {
                 }
             }
         
-            restSwhBounds     = this.restSwath.getBounds(applet, s.graphics, this, false);
+            restSwhBounds     = this.restSwatch.getBounds(applet, s.graphics, this, false);
             var win           = applet.planContainer.map.plan.prevBox.union(restSwhBounds);
-            curSwhBounds      = this.curSwh.getBounds(applet, s.graphics, this, true);
+            curSwhBounds      = this.curSwatch.getBounds(applet, s.graphics, this, true);
             this.bounds     = restSwhBounds.union(curSwhBounds);
             
             /*

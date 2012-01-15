@@ -22,7 +22,7 @@ JMI.namespace("script.HTMLText");
  */
 JMI.script.HTMLText = (function() {
 
-	var bound,//:Rectangle;
+	var bounds,//:Rectangle;
 		text, //:String;
 		inCol, //:ColorTransform;
 		font, //:TextFormat;
@@ -67,14 +67,14 @@ JMI.script.HTMLText = (function() {
         },
 		
 		init: function( base, zone) {
-			var font = base.getFont( FONT_VAL, zone.props);
+			var font = base.getFont( JMI.script.HTMLText.FONT_VAL, zone.props);
 			this.font = font.getTextFormat( zone.props);
-			this.inCol = base.getColor( IN_COL_VAL, zone.props);
-			this.outCol = base.getColor( OUT_COL_VAL, zone.props);
+			this.inCol = base.getColor( JMI.script.HTMLText.IN_COL_VAL, zone.props);
+			this.outCol = base.getColor( JMI.script.HTMLText.OUT_COL_VAL, zone.props);
 			//this.m_blur = base.getInt(BLUR_COL_VAL, zone.props);
-			this.blur = parseInt( base.parseString(BLUR_COL_VAL, zone.props )[0]);
-			this.rounded = base.getInt(ROUNDED_COL_VAL, zone.props);
-			var color = base.getValue( HTMLText.TEXT_COL_VAL, zone.props);
+			this.blur = parseInt( base.parseString( JMI.script.HTMLText.BLUR_COL_VAL, zone.props )[0]);
+			this.rounded = base.getInt( JMI.script.HTMLText.ROUNDED_COL_VAL, zone.props);
+			var color = base.getValue( JMI.script.HTMLText.TEXT_COL_VAL, zone.props);
 			if( color != null)
 				this.font.color = color.color;
 		},
@@ -109,13 +109,13 @@ JMI.script.HTMLText = (function() {
                 {
 					htmlTxt.init( this, zone);
                     htmlTxt.updateBounds( applet);
-                    htmlTxt.setTextBnds( applet.size, getFlags( zone.props), zone.flags ,transfo, supCtr, center );
+                    htmlTxt.setTextBnds( applet.size, this.getFlags( zone.props), zone.flags ,transfo, supCtr, center );
                 }
             }
             else
             {
                 htmlTxt = data;
-                htmlTxt.setTextBnds( applet.size, getFlags( zone.props), zone.flags, transfo, supCtr, center );
+                htmlTxt.setTextBnds( applet.size, this.getFlags( zone.props), zone.flags, transfo, supCtr, center );
             }
             
             return htmlTxt;
@@ -138,10 +138,10 @@ JMI.script.HTMLText = (function() {
 				 textField.multiline = true;
 				 textField.htmlText = this.m_text;
 				 textField.autoSize = TextFieldAutoSize.LEFT;
-				 textField.antiAliasType = AntiAliasType.ADVANCED;
-				 this.bounds = new com.socialcomputing.jmi.script.Rectangle();
-				 this.bounds.copy( textField.getBounds( applet));
-				 if( this.m_outCol != null) {
+				 textField.antiAliasType = AntiAliasType.ADVANCED;*/
+				 this.bounds = new JMI.script.Rectangle();
+				 //this.bounds.copy( textField.getBounds( applet));
+				 /*if( this.m_outCol != null) {
 					 this.bounds.width += (BORDER_WIDTH*2);
 					 this.bounds.height += (BORDER_WIDTH*2);
 				 }					 
@@ -164,8 +164,8 @@ JMI.script.HTMLText = (function() {
          */
         drawText: function( s, size, dir) {
             var pos = new JMI.script.Point();
-            var xMax = size.width - bounds.width - 1,
-                yMax = size.height - bounds.height - 1;
+            var xMax = size.width - this.bounds.width - 1,
+                yMax = size.height - this.bounds.height - 1;
             
             if (( dir & 8)!= 0)         pos.x = xMax;
             else if (( dir & 4)!= 0)    pos.x = xMax >> 1;
@@ -181,7 +181,7 @@ JMI.script.HTMLText = (function() {
          * @param size	Size of the Window to draw in.
          */
         drawText2: function( s, size) {
-            drawText3( s, size, new JMI.script.Point( bounds.x, bounds.y ));
+            drawText3( s, size, new JMI.script.Point( this.bounds.x, this.bounds.y ));
         },
         
         /**
@@ -201,9 +201,9 @@ JMI.script.HTMLText = (function() {
 					//s.graphics.lineStyle( 2, m_outCol.color);
 					s.graphics.beginFill(m_outCol.color);
 					if( m_rounded == -1)
-						s.graphics.drawRect(pos.x, pos.y, bounds.width, bounds.height);
+						s.graphics.drawRect(pos.x, pos.y, this.bounds.width, this.bounds.height);
 					else
-						s.graphics.drawRoundRect(pos.x, pos.y, bounds.width, bounds.height, m_rounded, m_rounded);
+						s.graphics.drawRoundRect(pos.x, pos.y, this.bounds.width, this.bounds.height, m_rounded, m_rounded);
 					s.graphics.endFill();
 				}
 				// TODO gérer le gradient dans les swatchs
@@ -215,9 +215,9 @@ JMI.script.HTMLText = (function() {
                 s.graphics.beginGradientFill(GradientType.LINEAR, colors, alphas, ratios, matr, SpreadMethod.PAD);
 */				s.graphics.beginFill(m_inCol.color);
 				if( m_rounded == -1)
-					s.graphics.drawRect(pos.x+borderWidth, pos.y+borderWidth, bounds.width-2*borderWidth, bounds.height-2*borderWidth);
+					s.graphics.drawRect(pos.x+borderWidth, pos.y+borderWidth, this.bounds.width-2*borderWidth, this.bounds.height-2*borderWidth);
 				else
-                	s.graphics.drawRoundRect(pos.x+borderWidth, pos.y+borderWidth, bounds.width-2*borderWidth, bounds.height-2*borderWidth, m_rounded, m_rounded);
+                	s.graphics.drawRoundRect(pos.x+borderWidth, pos.y+borderWidth, this.bounds.width-2*borderWidth, this.bounds.height-2*borderWidth, m_rounded, m_rounded);
                 s.graphics.endFill();
            }
 			
@@ -233,8 +233,8 @@ JMI.script.HTMLText = (function() {
                 s.graphics.drawRoundRect(pos.x+borderWidth, pos.y+3+borderWidth, bounds.width-2*borderWidth, (bounds.height/3)-2*borderWidth, 5, 5);
                 s.graphics.endFill();*/
             }
-            bounds.x  = pos.x;
-            bounds.y  = pos.y;
+            this.bounds.x  = pos.x;
+            this.bounds.y  = pos.y;
         },
         
 		/**
@@ -273,13 +273,13 @@ JMI.script.HTMLText = (function() {
          * @param center	Center of this before the transformation.
          */
         setTextBnds: function( size, flags, posFlags, transfo, supCtr, center) {
-            var isFloat = JMI.script.Base.isEnabled( flags, FLOAT_BIT );
+            var isFloat = JMI.script.Base.isEnabled( flags, JMI.script.HTMLText.FLOAT_BIT );
             var dx = 0,
                 dy	= 0,
                 x = center.x,
                 y = center.y,
-                w   = bounds.width,
-                h   = bounds.height,
+                w   = this.bounds.width,
+                h   = this.bounds.height,
                 w2  = w >> 1,
                 h2  = h >> 1;
             
@@ -289,11 +289,11 @@ JMI.script.HTMLText = (function() {
                 dy = y - supCtr.y;
             }
             
-            if ( JMI.script.Base.isEnabled( flags, CORNER_BIT ) && supCtr != null )
+            if ( JMI.script.Base.isEnabled( flags, JMI.script.HTMLText.CORNER_BIT ) && supCtr != null )
             {
-                if (( posFlags & ActiveZone.SIDE_BIT )!= 0)
+                if (( posFlags & JMI.script.ActiveZone.SIDE_BIT )!= 0)
                 {
-                    x += ( posFlags & ActiveZone.LEFT_BIT )!= 0? w2 : -w2;
+                    x += ( posFlags & JMI.script.ActiveZone.LEFT_BIT )!= 0? w2 : -w2;
                 }
                 else
                 {
@@ -333,8 +333,8 @@ JMI.script.HTMLText = (function() {
                 else if ( y + h > size.height )  y = size.height - 4- h;
             }
             
-            bounds.x = x;
-            bounds.y = y;
+            this.bounds.x = x;
+            this.bounds.y = y;
         }
  	};
 	
@@ -432,6 +432,6 @@ JMI.script.HTMLText.ITALIC = 0x2;  // 0 1 0 0;
 // http://help.adobe.com/en_US/ActionScript/3.0_ProgrammingAS3/WS5b3ccc516d4fbf351e63e3d118a9b90204-7fcd.html
 // http://www.davidarno.org/2009/09/25/actionscript-3-inheritance-developers-beware/
 JMI.script.HTMLText.isEnabled = function( flags, bit) {
-    return JMI.script.Base.isEnabled(flags, bit); // TODO portage
+    return JMI.script.Base.isEnabled(flags, bit); 
 }
         

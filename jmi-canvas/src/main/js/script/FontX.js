@@ -27,10 +27,10 @@ JMI.script.FontX = (function() {
 		 */
 		getTextFormat: function( props) {
 			var font = new Object()
-		    var flags = getFlags( props );
+		    var flags = this.getFlags( props );
 		    
-		    font.size = getInt( JMI.script.FontX.SIZE_VAL, props ),
-		    font.name = getString( JMI.script.FontX.NAME_VAL, props );
+		    font.size = this.getInt( JMI.script.FontX.SIZE_VAL, props ),
+		    font.name = this.getString( JMI.script.FontX.NAME_VAL, props );
 			if (( flags & JMI.script.HTMLText.BOLD )!= 0)  font.bold = true;
 			if (( flags & JMI.script.HTMLText.ITALIC )!= 0) font.italic = true;
 		    

@@ -99,7 +99,7 @@ JMI.script.Plan = (function() {
 	    	dim = this.applet.size;
 	    
 	    // Reset the BBOX of the biggest zone
-	    prevBox = new JMI.script.Rectangle(dim.width >> 1, dim.height >> 1, 1, 1);
+	    this.prevBox = new JMI.script.Rectangle(dim.width >> 1, dim.height >> 1, 1, 1);
 	    
 	    if (zones == this.links) 
 	    	this.maxBox = new JMI.script.Dimension(0, 0);
@@ -356,8 +356,8 @@ JMI.script.Plan = (function() {
 	 * @param dim	New size of the this.applet.
 	 */
 	resize: function(dim) {
-	    if (prevBox != null
-	            && ((prevBox.width != dim.width) || ( prevBox.height != dim.height ))
+	    if (this.prevBox != null
+	            && ((this.prevBox.width != dim.width) || ( this.prevBox.height != dim.height ))
 				&& dim.width > 100 && dim.height > 100 )
 	    {
 			var i;
@@ -375,16 +375,16 @@ JMI.script.Plan = (function() {
 			// too few places, lets reduce their size
 	        if (this.nodesCnt < 8) {
 	            scale	= 1.0 + (2.0 / this.nodesCnt);
-	            prevBox.x += Math.round(0.5 * (prevBox.width * (1.0 - scale)));
-	            prevBox.y += Math.round(0.5 * (prevBox.height * (1.0 - scale)));
-	            prevBox.width = Math.round(prevBox.width * scale);
-	            prevBox.height = Math.round(prevBox.height * scale);
+	            this.prevBox.x += Math.round(0.5 * (this.prevBox.width * (1.0 - scale)));
+	            this.prevBox.y += Math.round(0.5 * (this.prevBox.height * (1.0 - scale)));
+	            this.prevBox.width = Math.round(this.prevBox.width * scale);
+	            this.prevBox.height = Math.round(this.prevBox.height * scale);
 	        }
 	        
-	        sx  = (dim.width  - margin) / prevBox.width;
-	        sy  = (dim.height - margin) / prevBox.height;
-	        dx  = prevBox.x - (margin >> 1);
-	        dy  = prevBox.y - (margin >> 1);
+	        sx  = (dim.width  - margin) / this.prevBox.width;
+	        sy  = (dim.height - margin) / this.prevBox.height;
+	        dx  = this.prevBox.x - (margin >> 1);
+	        dy  = this.prevBox.y - (margin >> 1);
 			//s	= sx > sy ? sy : sx;
 	        s = (sx + sy)/2;
 	        
@@ -415,7 +415,7 @@ JMI.script.Plan = (function() {
 	            zone.props["_SCALE"] = s * scale;
 	            zone.datas.length=0;
 	        }
-	        prevBox = new JMI.script.Rectangle(0, 0, dim.height, dim.width);
+	        this.prevBox = new JMI.script.Rectangle(0, 0, dim.height, dim.width);
 	    }
 	},
 	
