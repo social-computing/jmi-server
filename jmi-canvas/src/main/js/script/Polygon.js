@@ -6,7 +6,7 @@ JMI.script.Polygon = (function() {
         this.xpoints = []; //:Vector.<int>;
         this.ypoints = []; //:Vector.<int>;
         this.npoints = 0;  //:int;
-        this.bounds = JMI.script.Rectangle;
+        this.bounds = null; //JMI.script.Rectangle;
     };
 	
 	Polygon.prototype = {
@@ -111,9 +111,9 @@ JMI.script.Polygon = (function() {
          */
         getBounds: function() {
             if (this.npoints == 0) {
-                return new JMI.script.Rectangle(0, 0, 0, 0);
+                return new JMI.script.Rectangle();
             }
-            if (this_bounds == null) {
+            if (this.bounds == null) {
                 this.calculateBounds(this.xpoints, this.ypoints, this.npoints);
             }
             return this.bounds;
@@ -152,8 +152,8 @@ JMI.script.Polygon = (function() {
                 var i2 = ((i + 1) == this.npoints) ? 0 : i + 1;
                 
                 // Edge from p[i] to p[i+1]
-                if (((this.ypoints[i] <= p._y) && (this.ypoints[i2] > p._y))    // An upward crossing
-                    || ((this.ypoints[i] > p._y) && (this.ypoints[i2] <= p._y))) {      // Or a downward crossing
+                if (((this.ypoints[i] <= p.y) && (this.ypoints[i2] > p.y))    // An upward crossing
+                    || ((this.ypoints[i] > p.y) && (this.ypoints[i2] <= p.y))) {      // Or a downward crossing
                     
                     // Compute the actual edge-ray intersect x-coordinate
                     var vt = (p._y - this.ypoints[i]) / (this.ypoints[i2] - this.ypoints[i]);
@@ -178,15 +178,15 @@ JMI.script.Polygon = (function() {
             var maxPoint = new JMI.script.Point(xpoints[0], ypoints[0]);
             
             for (var i = 1 ; i < npoints ; i++) {
-                minPoint.x = Math.min(minPoint._x, xpoints[i]);
-                minPoint.y = Math.min(minPoint._y, ypoints[i]);
-                maxPoint.x = Math.max(maxPoint._x, xpoints[i]);
-                maxPoint.y = Math.max(maxPoint._y, ypoints[i]);
+                minPoint.x = Math.min(minPoint.x, xpoints[i]);
+                minPoint.y = Math.min(minPoint.y, ypoints[i]);
+                maxPoint.x = Math.max(maxPoint.x, xpoints[i]);
+                maxPoint.y = Math.max(maxPoint.y, ypoints[i]);
             }
             
-            this.bounds = new Rectangle(minPoint._x, minPoint._y,
-                                        maxPoint._x - minPoint._x,
-                                        maxPoint._y - minPoint._y);
+            this.bounds = new Rectangle(minPoint.x, minPoint.y,
+                                        maxPoint.x - minPoint.x,
+                                        maxPoint.y - minPoint.y);
             return this;
         }
 	};
