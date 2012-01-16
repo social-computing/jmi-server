@@ -64,13 +64,11 @@ JMI.script.ActiveZone = (function() {
          * This include transforming selection prop to an int flag,
          * copying Env props reference in this prop table and
          * initializing satellite data for both swatchs.
-         * TODO : Remove graphics parameter : unused
          * 
-         * @param applet    WPSApplet owning this.
-         * @param g         A graphics compatible with the one that will be used for painting.
+         * @param applet    The applet context object
          * @param isFirst   True if init called for the first time.
          */
-        init: function (applet, s, isFirst) {
+        init: function (applet, isFirst) {
             // One time init
             if (isFirst) {
                 var sel = this.props["SELECTION"];
@@ -83,9 +81,7 @@ JMI.script.ActiveZone = (function() {
                 this.datas = {};
             }
             
-            // TODO : portage instanceof et heritage
             var isSuper = this instanceof JMI.script.BagZone;
-            
             this.restData = this.restSwatch.evalSatData(applet, this, isSuper);
             
             if (this.curSwatch != null) {
