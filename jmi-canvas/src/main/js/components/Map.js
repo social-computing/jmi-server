@@ -51,30 +51,30 @@ var planContainer = JMI.script.PlanContainer,
 		this.size = new JMI.script.Dimension( mapDiv.clientWidth, mapDiv.clientHeight);
 		
 		// Drawing surface of the component
-		var drawingCanvas = document.createElement( "canvas");
-		drawingCanvas.width = mapDiv.clientWidth;
-		drawingCanvas.height = mapDiv.clientHeight;
-		mapDiv.appendChild( drawingCanvas);
-		this.drawingSurface = drawingCanvas.getContext( "2d");
+		this.drawingCanvas = document.createElement( "canvas");
+		this.drawingCanvas.width = mapDiv.clientWidth;
+		this.drawingCanvas.height = mapDiv.clientHeight;
+		mapDiv.appendChild( this.drawingCanvas);
+		this.drawingSurface = this.drawingCanvas.getContext( "2d");
 	
 		// Graphic zones
-		var curDrawingCanvas = document.createElement( "canvas");
-		curDrawingCanvas.width = mapDiv.clientWidth;
-		curDrawingCanvas.height = mapDiv.clientHeight;
-		curDrawingCanvas.style.visibility='hidden';
-		this.curDrawingSurface = curDrawingCanvas.getContext( "2d");
+		this.curDrawingCanvas = document.createElement( "canvas");
+		this.curDrawingCanvas.width = mapDiv.clientWidth;
+		this.curDrawingCanvas.height = mapDiv.clientHeight;
+		this.curDrawingCanvas.style.visibility='hidden';
+		this.curDrawingSurface = this.curDrawingCanvas.getContext( "2d");
 
-		var restDrawingCanvas = document.createElement( "canvas");
-		restDrawingCanvas.width = mapDiv.clientWidth;
-		restDrawingCanvas.height = mapDiv.clientHeight;
-		restDrawingCanvas.style.visibility='hidden';
-		this.restDrawingSurface = restDrawingCanvas.getContext( "2d");
+		this.restDrawingCanvas = document.createElement( "canvas");
+		this.restDrawingCanvas.width = mapDiv.clientWidth;
+		this.restDrawingCanvas.height = mapDiv.clientHeight;
+		this.restDrawingCanvas.style.visibility='hidden';
+		this.restDrawingSurface = this.restDrawingCanvas.getContext( "2d");
 
-		var backDrawingCanvas = document.createElement( "canvas");
-		backDrawingCanvas.width = mapDiv.clientWidth;
-		backDrawingCanvas.height = mapDiv.clientHeight;
-		backDrawingCanvas.style.visibility='hidden';
-		this.backDrawingSurface = backDrawingCanvas.getContext( "2d");
+		this.backDrawingCanvas = document.createElement( "canvas");
+		this.backDrawingCanvas.width = mapDiv.clientWidth;
+		this.backDrawingCanvas.height = mapDiv.clientHeight;
+		this.backDrawingCanvas.style.visibility='hidden';
+		this.backDrawingSurface = this.backDrawingCanvas.getContext( "2d");
 		
 		// Event listeners
 		this.doubleClickEnabled = true;
@@ -168,7 +168,7 @@ var planContainer = JMI.script.PlanContainer,
 
 				document.body.style.cursor = 'default';
 				
-				this.renderShape( this.restDrawingSurface, this.width, this.height);
+				this.renderShape( this.restDrawingCanvas, this.size.width, this.size.height);
 				/*TODO if(this.ready)
 					dispatchEvent(new Event(Map.READY));*/
 			}
@@ -182,7 +182,7 @@ var planContainer = JMI.script.PlanContainer,
 			
 			if( width > 0 && height > 0) { 
 				// Copying the content of the context on to visible canvas context
-				drawingSurface.drawImage( context, position.x, position.y, position.x, position.y, width, height);
+				this.drawingSurface.drawImage( context, 0, 0);//position.x, position.y, position.x, position.y, width, height);
 			}
 		},
 		
