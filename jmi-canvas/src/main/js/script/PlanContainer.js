@@ -46,11 +46,9 @@ JMI.script.PlanContainer.fromJSON = function ( jsonString) {
 					for each (link in plan.links) { 
 						if( link.from != -1) {
 							link.from = plan.nodes[ link.from];
-							link.props["_VERTICES"][0] = link.from.props["_VERTICES"][0];
 						}
 						if( link.to != -1) {
 							link.to = plan.nodes[ link.to];
-							link.props["_VERTICES"][1] = link.to.props["_VERTICES"][0];
 						}
 					} 
     				return plan;
