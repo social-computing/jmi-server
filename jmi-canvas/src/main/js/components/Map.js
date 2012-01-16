@@ -28,14 +28,14 @@ var planContainer = JMI.script.PlanContainer,
  * Image used to quickly restore the aspect of a zone that is no longer current.
  * It includes the background + links + Satellites of each place at rest.
  */
-	_restDrawingSurface, //:Sprite => Canvas 2D Context  
+	restDrawingSurface, //:Sprite => Canvas 2D Context  
 /*
  * Image used as a background on which the current zone is drawn.
  * It includes the background, and the zones rendered with their 'ghosted' satellites form the rest swatch.
  * The resulting image is then filtered with a transparency color.
  */
-	_backDrawingSurface,//:Sprite => Canvas 2D Context
-	_curDrawingSurface,//:Sprite => Canvas 2D Context
+	backDrawingSurface,//:Sprite => Canvas 2D Context
+	curDrawingSurface,//:Sprite => Canvas 2D Context
 
 /*
  * API
@@ -48,31 +48,31 @@ var planContainer = JMI.script.PlanContainer,
 		entities = new Array();
 		
 		var mapDiv = document.getElementById( id);
-		this.size = new JMI.script.Dimension( mapDiv.width, mapDiv.height);
+		this.size = new JMI.script.Dimension( mapDiv.clientWidth, mapDiv.clientHeight);
 		
 		// Drawing surface of the component
 		var drawingCanvas = document.createElement( "canvas");
-		drawingCanvas.width = mapDiv.width;
-		drawingCanvas.height = mapDiv.height;
+		drawingCanvas.width = mapDiv.clientWidth;
+		drawingCanvas.height = mapDiv.clientHeight;
 		mapDiv.appendChild( drawingCanvas);
 		this.drawingSurface = drawingCanvas.getContext( "2d");
 	
 		// Graphic zones
 		var curDrawingCanvas = document.createElement( "canvas");
-		curDrawingCanvas.width = mapDiv.width;
-		curDrawingCanvas.height = mapDiv.height;
+		curDrawingCanvas.width = mapDiv.clientWidth;
+		curDrawingCanvas.height = mapDiv.clientHeight;
 		curDrawingCanvas.style.visibility='hidden';
 		this.curDrawingSurface = curDrawingCanvas.getContext( "2d");
 
 		var restDrawingCanvas = document.createElement( "canvas");
-		restDrawingCanvas.width = mapDiv.width;
-		restDrawingCanvas.height = mapDiv.height;
+		restDrawingCanvas.width = mapDiv.clientWidth;
+		restDrawingCanvas.height = mapDiv.clientHeight;
 		restDrawingCanvas.style.visibility='hidden';
 		this.restDrawingSurface = restDrawingCanvas.getContext( "2d");
 
 		var backDrawingCanvas = document.createElement( "canvas");
-		backDrawingCanvas.width = mapDiv.width;
-		backDrawingCanvas.height = mapDiv.height;
+		backDrawingCanvas.width = mapDiv.clientWidth;
+		backDrawingCanvas.height = mapDiv.clientHeight;
 		backDrawingCanvas.style.visibility='hidden';
 		this.backDrawingSurface = backDrawingCanvas.getContext( "2d");
 		
@@ -161,17 +161,28 @@ var planContainer = JMI.script.PlanContainer,
 				this.planContainer.map.plan.init();
 				this.planContainer.map.plan.resize(this.size);
 				this.planContainer.map.plan.init();
-			    for ( var zone in this.planContainer.map.plan.nodes) {
+/*			    for ( var zone in this.planContainer.map.plan.nodes) {
 					this.attributes.addItem( new Attribute( this.planContainer.map.env, zone));
-				}
+				}*/
 				this.ready = true;
 
 				document.body.style.cursor = 'default';
 				
-				this.invalidateProperties();
-				this.invalidateDisplayList();
+				this.renderShape( this.restDrawingSurface, this.width, this.height);
 				/*TODO if(this.ready)
 					dispatchEvent(new Event(Map.READY));*/
+			}
+		},
+		
+		renderShape: function( context, width, height, position) {
+			// If no position is specified, take (0,0)
+			if(position == null) {
+				position = new JMI.script.Point(0, 0);
+			}
+			
+			if( width > 0 && height > 0) { 
+				// Copying the content of the context on to visible canvas context
+				drawingSurface.drawImage( context, position.x, position.y, position.x, position.y, width, height);
 			}
 		},
 		
@@ -327,13 +338,6 @@ public function navigateHandler(event:NavigateEvent):void {
 	navigateToURL( new URLRequest( event.url), event.btarget);
 }
 
-override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
-	super.updateDisplayList(unscaledWidth, unscaledHeight);
-	//trace("Update graphic display");
-	if( this.restDrawingSurface)
-		this.renderShape(this.restDrawingSurface, this.width, this.height);
-}
-
 public function menuHandler( evt:MenuEvent):void {
 	performAction( evt.item.action);
 }
@@ -487,20 +491,4 @@ public function clearSelection( selection:String):void {
 	return  env.selections[selection];
 }
 
-com.socialcomputing.jmi.components.Map.prototype.renderShape = function(sprite, width, height, position) {
-	// If no position is specified, take (0,0)
-	if(position == null) {
-		position = new com.socialcomputing.jmi.script.Point(0, 0);
-	}
-	
-	if( _offScreen != null && _onScreen != null && width > 0 && height > 0) { 
-		// Transforming the offscreen back display to a BitmapData
-		// TODO ??? portage
-		this.offScreen.draw(sprite, new Matrix());
-		
-		// Copying the content of the back buffer on screen
-		context.putImageData(_onScreen, position.x, position.y, position.x, position.y, width, height);
-		//var sourceZone = new com.socialcomputing.jmi.script.Rectangle(position.x, position.y, width, height);
-		//_onScreen.copyPixels(this.offScreen, sourceZone, position);
-	}
-}*/
+*/

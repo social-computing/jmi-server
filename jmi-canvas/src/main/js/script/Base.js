@@ -232,8 +232,7 @@ JMI.script.Base = (function() {
             var javascript = text.substring(0, 10) === "javascript";
             var tokens = JMI.script.Base.parseTokens(text);
             var j, n, max = 0;
-            for (var itoken in tokens) {
-            	var token = tokens[itoken];
+            for each(var token in tokens) {
                 n = token.getListSize(props);
                 if (n == 0) {
                     max = 0;
@@ -310,8 +309,7 @@ JMI.script.Base.parseString4 = function(text, props, isHtm) {
     var tokens = JMI.script.Base.parseTokens(text),
         token, j, n, max = 0;
     
-    for (var itoken in tokens) {
-    	var token = tokens[itoken];
+    for each(var token in tokens) {
         n = token.getListSize(props);
         if (n === 0) {
             max = 0;
@@ -323,8 +321,7 @@ JMI.script.Base.parseString4 = function(text, props, isHtm) {
     var prop;
     
     for (j = 0; j < max; j ++) {
-        for(var itoken in tokens) {
-    		var token = tokens[itoken];
+        for each(var token in tokens) {
             prop = token.toString(j, props);
             dst += prop === null ? " ? " : prop;
         }
