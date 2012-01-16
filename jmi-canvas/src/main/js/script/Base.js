@@ -454,7 +454,7 @@ JMI.script.Base.parseTokens = function(text) {
 
 JMI.script.Base.setCharAt = function(str, c, index) {
     return str.substring(0, index)+ c + str.substring(index + 1);
-}
+};
 
 /*
  * Convenient methode to check if a bit is enabled in a flag.
@@ -466,4 +466,4 @@ JMI.script.Base.setCharAt = function(str, c, index) {
  */
 JMI.script.Base.isEnabled = function(flags, bit) {
     return (flags & bit) != 0;
-}
+};
