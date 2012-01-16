@@ -8,78 +8,85 @@ JMI.namespace("script.Plan");
  * @version 1.0
  */
 JMI.script.Plan = (function() {
-/*
- * The table of links (streets). This include the fakes one (those who get out of the screen).
- * The first linksCnt links are the real ones.
- */
-	var links, //:Array;
-/**
- * Number of real Links (the ones that are linked to nodes at both sides).
- */
-	linksCnt,//:int;
-/**
- * The table of nodes (places). This include the clusterized ones (those who only apears when a zone is hovered).
- * The first nodesCnt are the cluster(BagZone) ones.
- */
-	nodes, //:Array;
-
-/**
- * Number of cluster Nodes (the ones that are always visible).
- */
-	nodesCnt,//:int;
-
-/**
- * Id of the current active selection (only one at a time).
- * This id is between [0, 31]
- * If there is no current s�lection, this index is -1
- */
-	curSel, //:int;
-
-/**
- * Current Satellite (the one that is active).
- * If there is no current Satellite, it should be null.
- */
-	curSat = JMI.script.Satellite,
-
-/**
- * Bounding box of the Plan before resizing (pixels).
- */
-	prevBox = JMI.script.Rectangle,
-
-/**
- * Maximum bounding box of all zones. This is also the blitBuf size.
- */
-	maxBox = JMI.script.Dimension,
-
-/**
- * Temporary buffer for zone blitting operations.Its size is maxBox.
- */
-// [transient]
-//public var blitBuf:Shape;
-
-/**
- * Current super BagZone (the one that is active).
- * If there is no current ActiveZone, it should be null.
- */
-	curZone = JMI.script.ActiveZone,
-
-/**
- * Current ActiveZone (the one that is active). This can be a subZone, different from curZone.
- * If there is no current ActiveZone, it should be null.
- */
-	newZone = JMI.script.ActiveZone,
-
-/**
- * The this.applet holding this Plan.
- */
-	applet,
-
-/**
- * Table of waiters to manage tooltips.
- */
-	tipTimers; //:Object;
-
 	var Plan = function() {
+        /*
+         * The table of links (streets). This include the fakes one (those who get out of the screen).
+         * The first linksCnt links are the real ones.
+         * :Array;
+         */
+        this.links = []; 
+        
+        /**
+         * Number of real Links (the ones that are linked to nodes at both sides).
+         * :int
+         */
+        this.linksCnt = 0;
+            
+        /**
+         * The table of nodes (places). This include the clusterized ones (those who only apears when a zone is hovered).
+         * The first nodesCnt are the cluster(BagZone) ones.
+         * :Array
+         */
+        this.nodes = []; 
+        
+        /**
+         * Number of cluster Nodes (the ones that are always visible).
+         * :int
+         */
+        this.nodesCnt = 0;
+        
+        /**
+         * Id of the current active selection (only one at a time).
+         * This id is between [0, 31]
+         * If there is no current sélection, this index is -1
+         * //:int;
+         */
+        this.curSel = -1; 
+        
+        /**
+         * Current Satellite (the one that is active).
+         * If there is no current Satellite, it should be null.
+         */
+        this.curSat = JMI.script.Satellite;
+        
+        /**
+         * Bounding box of the Plan before resizing (pixels).
+         */
+        this.prevBox = JMI.script.Rectangle;
+        
+        /**
+         * Maximum bounding box of all zones. This is also the blitBuf size.
+         */
+        this.maxBox = JMI.script.Dimension;
+        
+        /**
+         * Temporary buffer for zone blitting operations.Its size is maxBox.
+         */
+        // [transient]
+        //public var blitBuf:Shape;
+        
+        /**
+         * Current super BagZone (the one that is active).
+         * If there is no current ActiveZone, it should be null.
+         */
+        this.curZone = JMI.script.ActiveZone;
+        
+        /**
+         * Current ActiveZone (the one that is active). This can be a subZone, different from curZone.
+         * If there is no current ActiveZone, it should be null.
+         */
+        this.newZone = JMI.script.ActiveZone;
+        
+        /**
+         * The this.applet holding this Plan.
+         */
+        this.applet = null;
+        
+        /**
+         * Table of waiters to manage tooltips.
+         * :Object
+         */
+        this.tipTimers = null;
 	};
 	
     Plan.prototype = {
@@ -89,6 +96,7 @@ JMI.script.Plan = (function() {
 	 * Initialize an array of zones (Nodes or Links).
 	 * This call the init method of the zones.
 	 * It also evaluate the bounding box of each zone and then allocate the blitBuf image buffer.
+	 * 
 	 * @param g			A graphics to get the font metrics.
 	 * @param zones		An array of zones (nodes or links).
 	 * @param isFirst	True if this is the first call of the session (optimisation).
@@ -100,13 +108,11 @@ JMI.script.Plan = (function() {
 	    
 	    // Reset the BBOX of the biggest zone
 	    this.prevBox = new JMI.script.Rectangle(dim.width >> 1, dim.height >> 1, 1, 1);
-	    
-	    if (zones == this.links) 
-	    	this.maxBox = new JMI.script.Dimension(0, 0);
+	    if (zones == this.links) this.maxBox = new JMI.script.Dimension();
 	    
 	    // Reversed order so subZones are initialized before supZones!
 		for (i = n - 1 ; i >= 0 ; i --) {
-	        zones[i].init( this.applet, s, isFirst );
+	        zones[i].init(this.applet, s, isFirst);
 	    }
 		
 	    // Allocate a temporary bitmap to dblBuffer curZone rendering using the biggest Zone BBox
@@ -127,7 +133,7 @@ JMI.script.Plan = (function() {
 	 * @param showLinks	True if this paint only satellite links (selection).
 	 * @param isRev		True if the array is drawn from in reversed order. That means from n-1 to 0.
 	 */
-	paintZones: function( s, zones, n, isFront, showTyp, showLinks, isRev) {
+	paintZones: function(s, zones, n, isFront, showTyp, showLinks, isRev) {
 		//zones[0].paint(this.applet, s, false, isFront, showTyp, showLinks);
 	    if (isRev) {
 	        for (var i = n - 1 ; i >= 0 ; i --) {
@@ -145,7 +151,7 @@ JMI.script.Plan = (function() {
 	 * Prepare the Plan by initializing zones, allocating and filling the image buffers and repainting the this.applet.
 	 */
 	init: function() {
-		this.tipTimers = new Object()
+		this.tipTimers = {};
 	    var dim = this.applet.size;
 	    var restDrawingSurface = this.applet.restDrawingSurface;
 		var curDrawingSurface  = this.applet.curDrawingSurface;
