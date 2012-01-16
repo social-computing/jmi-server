@@ -54,14 +54,11 @@ TestCase("RectangleTestCase", {
         assertEquals(30, r1.height);
         
         // Union with a smaller rectangle contained by the first one
-        // TODO : is this correct ? check with franck
-        /*
         r1.union(new JMI.script.Rectangle(1, 1, 20, 20));
         assertEquals(0, r1.x);
         assertEquals(0, r1.y);
         assertEquals(30, r1.width);
         assertEquals(30, r1.height);
-        */
         
         // Union of 2 unlinked rectangles        
         r1 = new JMI.script.Rectangle(20, 50, 60, 30);
