@@ -67,7 +67,7 @@ var planContainer = JMI.script.PlanContainer,
 		this.restDrawingCanvas = document.createElement( "canvas");
 		this.restDrawingCanvas.width = mapDiv.clientWidth;
 		this.restDrawingCanvas.height = mapDiv.clientHeight;
-		this.restDrawingCanvas.style.visibility='hidden';
+		//this.restDrawingCanvas.style.visibility='hidden';
 		this.restDrawingSurface = this.restDrawingCanvas.getContext( "2d");
 
 		this.backDrawingCanvas = document.createElement( "canvas");
@@ -168,6 +168,9 @@ var planContainer = JMI.script.PlanContainer,
 
 				document.body.style.cursor = 'default';
 				
+				this.restDrawingSurface.fillStyle = "rgb(200,0,0)";
+ 				this.restDrawingSurface.fillRect (10, 10, 55, 50);
+ 
 				this.renderShape( this.restDrawingCanvas, this.size.width, this.size.height);
 				/*TODO if(this.ready)
 					dispatchEvent(new Event(Map.READY));*/
