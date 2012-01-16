@@ -47,14 +47,14 @@ JMI.script.BagZone = (function() {
          * Eval the border distance and set the initial direction and side bits.
          * It also perform basic initialisation through inheritance.
          * 
-         * @param applet    applet owning this zone.
-         * @param s         A Sprite on which this must be painted.
-         * @param isFirst   True if this init is the first one. False if this is a "refresh" init.
+         * @param applet           The applet context object
+         * @param gDrawingContext  A 2d graphic context to draw the shape in.
+         * @param isFirst          True if init called for the first time.
          */
-        init: function(applet, s, isFirst) {
+        init: function(applet, gDrawingContext, isFirst) {
             var i,
                 nbSubZones = this.subZones != null ? this.subZones.length : 0;
-            JMI.script.ActiveZone.prototype.init.call( this, applet, s, isFirst);
+            JMI.script.ActiveZone.prototype.init.call(this, applet, isFirst);
             var restSwhBounds, curSwhBounds; 
             
             // First time init
@@ -65,11 +65,11 @@ JMI.script.BagZone = (function() {
                 this.dir = 10.0;
         
                 for (i = 0 ; i < nbSubZones ; i ++) {
-                    this.subZones[i]._parent = this;
+                    this.subZones[i].parent = this;
                 }
         
-                restSwhBounds = this.restSwatch.getBounds(applet, s.graphics, this, false);          
-                curSwhBounds  = this.curSwatch.getBounds(applet, s.graphics, this, true);
+                restSwhBounds = this.restSwatch.getBounds(applet, gDrawingContext, this, false);          
+                curSwhBounds  = this.curSwatch.getBounds(applet, gDrawingContext, this, true);
                 this.bounds = restSwhBounds.union(curSwhBounds);
                 
                 var isLeft = this.bounds.x < 0;
@@ -99,9 +99,9 @@ JMI.script.BagZone = (function() {
                 }
             }
         
-            restSwhBounds     = this.restSwatch.getBounds(applet, s.graphics, this, false);
+            restSwhBounds     = this.restSwatch.getBounds(applet, gDrawingContext, this, false);
             var win           = applet.planContainer.map.plan.prevBox.union(restSwhBounds);
-            curSwhBounds      = this.curSwatch.getBounds(applet, s.graphics, this, true);
+            curSwhBounds      = this.curSwatch.getBounds(applet, gDrawingContext, this, true);
             this.bounds     = restSwhBounds.union(curSwhBounds);
             
             /*

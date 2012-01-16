@@ -28,27 +28,29 @@ JMI.script.LinkZone = (function() {
          */
 		this.to = JMI.script.BagZone;
 
-        JMI.script.ActiveZone.call( this);
+        JMI.script.ActiveZone.call(this);
 	};
 	
 	LinkZone.prototype = {
 		constructor: JMI.script.LinkZone,
+		
 		/*
          * Perform precalc and basic initialisation.
          * Initialize the BBox of this zone, the max BBox of all zones and the BBox of the plan.
          * It also perform basic initialisation through inheritance.
-         * @param applet    WPSApplet owning this.
-         * @param g         A graphics compatible with the one that will be used for painting.
-         * @param isFirst   True if init called for the first time.
+         * 
+         * @param applet           The applet context object
+         * @param gDrawingContext  A 2d graphic context to draw the shape in.
+         * @param isFirst          True if init called for the first time.
          */
-        init: function(applet, s, isFirst) {
-            JMI.script.ActiveZone.prototype.init.call( this, applet, s, isFirst);
+        init: function(applet, gDrawingContext, isFirst) {
+            JMI.script.ActiveZone.prototype.init.call(this, applet, isFirst);
             
             this.parent = null;
             if (!JMI.script.Base.isEnabled(this.flags, JMI.script.LinkZone.FAKEFROM_BIT | JMI.script.LinkZone.FAKETO_BIT)) {
-                this.bounds = this.restSwatch.getBounds(applet, s.graphics, this, false);
+                this.bounds = this.restSwatch.getBounds(applet, gDrawingContext, this, false);
                 if (this.curSwatch != null) {
-                    this.bounds = this.bounds.union(this.curSwatch.getBounds(applet, s.graphics, this, true));
+                    this.bounds = this.bounds.union(this.curSwatch.getBounds(applet, gDrawingContext, this, true));
                 }
                 this.bounds.inflate(2, 2);
                 
@@ -56,8 +58,8 @@ JMI.script.LinkZone = (function() {
                     h = this.bounds.height;
                 var maxBox = applet.planContainer.map.plan.maxBox;
                 
-                if (w > maxBox.width)     maxBox.width    = w;
-                if (h > maxBox.height)    maxBox.height   = h;
+                if (w > maxBox.width)  maxBox.width  = w;
+                if (h > maxBox.height) maxBox.height = h;
                 
                 this.bounds = this.bounds.intersection(applet.size.toRectangle());
             }
