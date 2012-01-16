@@ -233,7 +233,7 @@ JMI.script.ShapeX = (function() {
                         if(inColor != null) {
                             // if (color != null) s.graphics.beginFill(color.color);
                             // if (color != null) s.graphics.endFill();
-                            gDrawingContext.fillStyle = color;
+                            gDrawingContext.fillStyle = inColor;
                             gDrawingContext.fill();
                         }
                         break;
