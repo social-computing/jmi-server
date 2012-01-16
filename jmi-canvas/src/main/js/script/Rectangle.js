@@ -1,26 +1,41 @@
 JMI.namespace("script.Rectangle");
 
 JMI.script.Rectangle = (function() {
-	var Rectangle = function(x, y, width, height) {
-	    // If no arguments are given in the constructor call, initialize the instance with 0 values;
-	    if(arguments.length == 0) {
-	        x = 0;
-	        y = 0;
-	        width = 0;
-	        height = 0;
-	    }
-	    this.x = x;
-	    this.y = y;
-	    this.width = width;
-	    this.height = height;
-	};
-	
+
+    var Rectangle = function(x, y, width, height) {
+        // If no arguments are given in the constructor call, initialize the instance with 0 values;
+        if(arguments.length == 0) {
+            x = 0;
+            y = 0;
+            width = 0;
+            height = 0;
+        }
+        // if 2 arguments are given : assume it is the width and height of the rectangle
+        else if(arguments.length == 2) {
+            width = x;
+            height = y;
+            x = 0;
+            y = 0;
+        }  
+        // if 1 argument is given : assume it is another rectangle to copy values from
+        if(arguments.length == 1 && x instanceof JMI.script.Rectangle) {
+            this.copy(x);
+        }
+        else { 
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+        }
+    };
+
+
 	Rectangle.prototype = {
 		constructor: JMI.script.Rectangle,
 		
 		/*
          * Merge 2 Rectangles.
-         * If the dest Rectangle has one null dimension then copy the source on it.
+         * If the current Rectangle has one null dimension then copy the source on it.
          * 
          * @param src   Source Rectangle.
          */
@@ -64,14 +79,13 @@ JMI.script.Rectangle = (function() {
             return this;
         },
         
-        intersection: function( src) {
+        intersection: function(src) {
 			var	x1 = Math.max(this.x, src.x),
 				y1 = Math.max(this.y, src.y),
 				x2 = Math.min(this.x + this.width, src.x + src.width),
 				y2 = Math.min(this.y + this.height, src.y + src.height);
-			return new Rectangle(x1, y1, x2-x1, y2-y1);
+			return new Rectangle(x1, y1, x2 - x1, y2 - y1);
         }
-        		
 	};
 	
 	return Rectangle;
