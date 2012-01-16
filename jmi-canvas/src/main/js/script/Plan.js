@@ -169,9 +169,10 @@ JMI.script.Plan = (function() {
 		this.paintZones(restDrawingSurface, this.nodes, this.nodesCnt, false, JMI.script.Satellite.ALL_TYP, true, true );
 	    
 	    // Filters backImg so it looks ghosted
-		if( this.applet.env.filterCol != null) {
-			ImageUtil.copy( restDrawingSurface, backDrawingSurface);
-			ImageUtil.filterImage( backDrawingSurface, dim, this.applet.env.filterCol.getColor().color);
+		if( this.applet.planContainer.map.env.filterCol != null) {
+			// TODO portage
+			//ImageUtil.copy( restDrawingSurface, backDrawingSurface);
+			//ImageUtil.filterImage( backDrawingSurface, dim, this.applet.planContainer.map.env.filterCol.getColor());
 			// this.applet.renderShape( this.applet.restDrawingSurface, 0, 0); // ??? size
 			//this.applet.env.filterImage(this.applet.backDrawingSurface, dim);
 		}

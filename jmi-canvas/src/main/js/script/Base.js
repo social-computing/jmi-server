@@ -55,7 +55,7 @@ JMI.script.Base = (function() {
          */
         getValue: function(property, props) {
             var container = this.containers[property];
-            return container != null ? (container.isBound ? props[container.value]: container.value ): null;
+            return container != 'null' ? (container.isBound ? props[container.value]: container.value ): null;
         },
         
         /*
@@ -193,7 +193,7 @@ JMI.script.Base = (function() {
          */
         parseString: function(property, props) {
             var text = this.getString(property, props);
-            return text != undefined ? this.parseString3(text, props) : null;
+            return text != null ? this.parseString3(text, props) : null;
         },
         
         /*

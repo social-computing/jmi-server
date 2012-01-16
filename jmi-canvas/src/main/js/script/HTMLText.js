@@ -181,7 +181,7 @@ JMI.script.HTMLText = (function() {
          * @param size	Size of the Window to draw in.
          */
         drawText2: function( s, size) {
-            drawText3( s, size, new JMI.script.Point( this.bounds.x, this.bounds.y ));
+            this.drawText3( s, size, new JMI.script.Point( this.bounds.x, this.bounds.y ));
         },
         
         /**
@@ -192,38 +192,34 @@ JMI.script.HTMLText = (function() {
          */
         drawText3: function( s, size, pos) {
 			var borderWidth = 0;
-			if ( m_outCol != null )
+			if ( this.outCol != null )
 				borderWidth = 2;
-            if ( m_inCol != null )
+            if ( this.inCol != null )
             {
-				s.graphics.lineStyle();
-				if ( m_outCol != null ) {
+				// TODO poetage
+				//s.graphics.lineStyle();
+				if ( this.outCol != null ) {
+					// TODO portage
 					//s.graphics.lineStyle( 2, m_outCol.color);
-					s.graphics.beginFill(m_outCol.color);
+					/*s.graphics.beginFill( this.outCol.color);
 					if( m_rounded == -1)
 						s.graphics.drawRect(pos.x, pos.y, this.bounds.width, this.bounds.height);
 					else
-						s.graphics.drawRoundRect(pos.x, pos.y, this.bounds.width, this.bounds.height, m_rounded, m_rounded);
-					s.graphics.endFill();
+						s.graphics.drawRoundRect(pos.x, pos.y, this.bounds.width, this.bounds.height, this.rounded, this.rounded);
+					s.graphics.endFill();*/
 				}
-				// TODO gérer le gradient dans les swatchs
-/*				var colors:Array = [m_inCol.color, 0x000000];
-				var alphas:Array = [1, 1];
-				var ratios:Array = [0x00, 0xFF];
-				var matr:Matrix = new Matrix();
-				matr.createGradientBox(bounds.width, bounds.height * 2, Math.PI / 2, pos.x, pos.y);
-                s.graphics.beginGradientFill(GradientType.LINEAR, colors, alphas, ratios, matr, SpreadMethod.PAD);
-*/				s.graphics.beginFill(m_inCol.color);
+				// TODO portage
+				/*s.graphics.beginFill(m_inCol.color);
 				if( m_rounded == -1)
 					s.graphics.drawRect(pos.x+borderWidth, pos.y+borderWidth, this.bounds.width-2*borderWidth, this.bounds.height-2*borderWidth);
 				else
                 	s.graphics.drawRoundRect(pos.x+borderWidth, pos.y+borderWidth, this.bounds.width-2*borderWidth, this.bounds.height-2*borderWidth, m_rounded, m_rounded);
-                s.graphics.endFill();
+                s.graphics.endFill();*/
            }
 			
-			paint( s, pos, borderWidth);
+			this.paint( s, pos, borderWidth);
 
-			if ( m_oneLine && m_inCol == null) // draw reflection only for one line boxes
+			if ( this.oneLine && this.inCol == null) // draw reflection only for one line boxes
             {
             	// TODO portage
 /*                var white:ColorTransform = new ColorTransform();
@@ -249,7 +245,7 @@ JMI.script.HTMLText = (function() {
 			if( m_blur != -1) {
 				textField.filters = [new BlurFilter(m_blur, m_blur)];
 			}*/
-			if( font != null)
+			/*if( font != null)
 				textField.defaultTextFormat = font;
 			textField.multiline = true;
 			textField.htmlText = m_text;
@@ -258,8 +254,9 @@ JMI.script.HTMLText = (function() {
 			textField.autoSize = TextFieldAutoSize.LEFT;
 			textField.antiAliasType = AntiAliasType.ADVANCED;
 			textField.border = false;
+			// TODO portage
 			ImageUtil.drawTextField( textField, s.graphics);
-			//s.addChild(textField);
+			*/
 		},
 		
         /**

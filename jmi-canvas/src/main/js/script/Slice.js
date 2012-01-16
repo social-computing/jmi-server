@@ -53,9 +53,10 @@ JMI.script.Slice =  (function() {
             }
             
             // Draw a satellite's image it is set
-            if(isDefined(JMI.script.Slice.IMAGE_VAL)) {
-                var imageNam = parseString(JMI.script.Slice.IMAGE_VAL, zone.props )[0];
+            if( this.isDefined(JMI.script.Slice.IMAGE_VAL)) {
+                var imageNam = this.parseString(JMI.script.Slice.IMAGE_VAL, zone.props );
                 if (imageNam != null) {
+                	imageNam = imageNam[0];
                     satShp.drawImage(applet, s, supZone, imageNam, transfo, satCtr);
                 }
             }
@@ -92,12 +93,12 @@ JMI.script.Slice =  (function() {
                     }*/
                 }
                 else {
-                    supCtr = supZone.restSwatch.satellites[0]._shape.getCenter(supZone);
+                    supCtr = supZone.restSwatch.satellites[0].shapex.getCenter(supZone);
                     var htmlTxt = text.getHText(applet, s, zone, transfo, satCtr, supCtr, text);
                     
-                    if (htmlTxt != null && htmlTxt._text.length > 0) {
+                    if (htmlTxt != null && htmlTxt.text.length > 0) {
                         htmlTxt.drawText2(s, applet.size);
-                        zone.m_datas[text] = htmlTxt;
+                        zone.datas[text] = htmlTxt;
                     }
                 }
             }
