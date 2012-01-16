@@ -50,22 +50,14 @@ JMI.script.Rectangle = (function() {
         },
         
         union: function(src) {
-            /*
-            this.x = Math.min(this.x, src.x);
-            this.y = Math.min(this.y, src.y);
-            this.width = this.width + src.width - Math.min(this.x + this.width - src.x, src.x + src.width - this.x);
-            this.height = this.height + src.height - Math.min(this.y + this.height - src.y, src.y + src.height - this.y);
-            */
-            var x1 = Math.min(this.x, src.x);
-            var y1 = Math.min(this.y, src.y);
-            var x2 = Math.max(this.x + this.width, src.x + src.width);
-            var y2 = Math.max(this.y + this.height, src.y + src.height);
-
+            var x1 = Math.min(this.x, src.x),
+                y1 = Math.min(this.y, src.y),
+                x2 = Math.max(this.x + this.width, src.x + src.width),
+                y2 = Math.max(this.y + this.height, src.y + src.height);
             this.x = x1;
             this.y = y1;
             this.width  = x2 - x1;
             this.height = y2 - y1;
-            
             return this;
         },
         
@@ -96,7 +88,7 @@ JMI.script.Rectangle = (function() {
 				y1 = Math.max(this.y, src.y),
 				x2 = Math.min(this.x + this.width, src.x + src.width),
 				y2 = Math.min(this.y + this.height, src.y + src.height);
-			return new Rectangle(x1, y1, x2 - x1, y2 - y1);
+			return new JMI.script.Rectangle(x1, y1, x2 - x1, y2 - y1);
         }
 	};
 	
