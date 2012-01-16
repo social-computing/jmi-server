@@ -391,7 +391,7 @@ JMI.script.Plan = (function() {
 			// Iterate through all "real" nodes 
 			for (i = 0 ; i < this.nodesCnt ; i++) {
 				zone = this.nodes[i];
-	            resizePoint(zone, 0, dx, dy, sx, sy);
+	            this.resizePoint(zone, 0, dx, dy, sx, sy);
 	            scale = zone.props["_SCALE"];
 	            zone.props["_SCALE"] = s * scale;
 	            zone.datas.length=0;
@@ -399,17 +399,17 @@ JMI.script.Plan = (function() {
 	        
 			// Iterate through remaining nodes (fake ones ??)
 	        while (i < this.nodes.length) {
-	            nodes[i++].datas = new Dictionary();
+	            nodes[i++].datas = {};
 	        }
 	
 			// Iterate through all links (real and fakes)
-			for each (zone in links) {
+			for each (var zone in this.links) {
 				//LinkZone.FAKEFROM_BIT;
-	            isFakeFrom  = JMI.script.Base.isEnabled(zone.flags, LinkZone.FAKEFROM_BIT);
-	            isFakeTo    = JMI.script.Base.isEnabled(zone.flags, LinkZone.FAKETO_BIT);
+	            isFakeFrom  = JMI.script.Base.isEnabled(zone.flags, JMI.script.LinkZone.FAKEFROM_BIT);
+	            isFakeTo    = JMI.script.Base.isEnabled(zone.flags, JMI.script.LinkZone.FAKETO_BIT);
 	            
-	            if (isFakeFrom)    resizePoint(zone, 0, dx, dy, sx, sy);
-	            else if (isFakeTo) resizePoint(zone, 1, dx, dy, sx, sy);
+	            if (isFakeFrom)    this.resizePoint(zone, 0, dx, dy, sx, sy);
+	            else if (isFakeTo) this.resizePoint(zone, 1, dx, dy, sx, sy);
 	            
 	            scale = zone.props["_SCALE"];
 	            zone.props["_SCALE"] = s * scale;

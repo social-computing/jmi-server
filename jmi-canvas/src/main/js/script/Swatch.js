@@ -375,8 +375,7 @@ JMI.script.Swatch = (function() {
             var flags;
             var isTip, isSel;
             
-            for (var isat in this.satellites) {
-            	var sat = this.satellites[isat];
+            for each (var sat in this.satellites) {
                 satData = new JMI.script.SatData();
                 flags   = sat.getFlags(zone.props);
                 satData._flags = flags;

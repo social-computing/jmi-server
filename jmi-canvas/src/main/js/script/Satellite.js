@@ -115,8 +115,7 @@ JMI.script.Satellite = (function() {
                         case JMI.script.Satellite.TIP_TYP  : isShowable = isTip; break;
                     }
                     if (isShowable) {
-                        for(var islice in this.slices) {
-                        	var slice = this.slices[islice];
+                        for each(var slice in this.slices) {
                             slice.paint(applet, s, supZone, zone, this.shapex, satCtr, supCtr);
                         }
                     }
@@ -196,8 +195,7 @@ JMI.script.Satellite = (function() {
          * @param bounds        A Rectangle to merge with this bounds.
          */
         setBounds: function(applet, g, zone, satCtr, supCtr, bounds) {
-            for (var islice in this.slices) {
-            	var slice = this.slices[islice];
+            for each(var slice in this.slices) {
                 slice.setBounds(applet, g, zone.getParent(), zone, this.shapex, satCtr, supCtr, bounds);
             }
         },
