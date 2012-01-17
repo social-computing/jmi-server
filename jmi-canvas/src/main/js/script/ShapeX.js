@@ -41,10 +41,10 @@ JMI.script.ShapeX = (function() {
             if (this.isDefined(JMI.script.ShapeX.SCALE_VAL)) {
                 var scale = this.getFloat(JMI.script.ShapeX.SCALE_VAL, zone.props);
                 var p     = this.getCenter(zone);
-                scale *= transfo.pos;
+                scale *= transfo.position;
                 
-                var x = p.x + Math.round(scale * Math.cos(transfo.dir));
-                var y = p.y + Math.round(scale * Math.sin(transfo.dir));
+                var x = p.x + Math.round(scale * Math.cos(transfo.direction));
+                var y = p.y + Math.round(scale * Math.sin(transfo.direction));
                 
                 return new JMI.script.Point(x, y);
             }

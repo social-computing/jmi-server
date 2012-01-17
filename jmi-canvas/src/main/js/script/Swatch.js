@@ -111,18 +111,18 @@ JMI.script.Swatch = (function() {
                         satTrf     = transfo != null ? transfo.transform(satRelTrf) : null;
                         
                         if(supZone.dir != 10.) {
-                            if (!JMI.script.Base.isEnabled(flags, JMI.script.Satellite.NOSIDED_BIT)) satTrf.dir = supZone.dir;
+                            if (!JMI.script.Base.isEnabled(flags, JMI.script.Satellite.NOSIDED_BIT)) satTrf.direction = supZone.dir;
                             else {
-                                if(JMI.script.Base.isEnabled(supZone.flags, JMI.script.ActiveZone.LEFT_BIT)) satTrf.dir += (JMI.script.Base.Pi2 / 2);
+                                if(JMI.script.Base.isEnabled(supZone.flags, JMI.script.ActiveZone.LEFT_BIT)) satTrf.direction += (JMI.script.Base.Pi2 / 2);
                             }
                         }
                         
-                        var dir = satTrf.dir;
+                        var dir = satTrf.direction;
                         
                         // draws SubZones
                         if (zones != null && JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SUB_BIT)) {
                             for (subZone in zones) {
-                                satTrf.dir   += supZone.stp;
+                                satTrf.direction += supZone.stp;
                                 isCurSub          = subZone == curZone;
                                 satData           = isCur ? subZone.curData[i] : subZone.restData[i];
                                 
@@ -138,7 +138,7 @@ JMI.script.Swatch = (function() {
                             isCurSub = supZone == curZone;
                             satData  = isCur ? zone.curData[i] : zone.restData[i];
                             
-                            if (zones != null) satTrf.dir = dir;
+                            if (zones != null) satTrf.direction = dir;
                             
                             if ((!isCur || ((hasRestBit && !isCurSub) || (hasCurBit && isCurSub)))) {
                                 satCtr = shape.transformOut(zone, satTrf);
@@ -318,15 +318,15 @@ JMI.script.Swatch = (function() {
                             // Or if the cursor is in one of the sub zones 
                             if (zones != null && hasSubBit) {
                                 var j, m = zones.length;
-                                satTrf.dir += (zones.length + 1) * supZone.stp;
+                                satTrf.direction += (zones.length + 1) * supZone.stp;
                                 
                                 for(j = m - 1 ; j >= 0 ; j --) {
                                     subZone       = zones[j];
-                                    satTrf.dir  -= supZone.stp;
-                                    isCur         = subZone == curZone;
-                                    satData       = isCurZone ? subZone.curData[i] : subZone.restData[i];
-                                    flags         = satData.flags;
-                                    isVisible     = !JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData.isVisible;
+                                    satTrf.direction -= supZone.stp;
+                                    isCur             = subZone == curZone;
+                                    satData           = isCurZone ? subZone.curData[i] : subZone.restData[i];
+                                    flags             = satData.flags;
+                                    isVisible         = !JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData.isVisible;
                                     
                                     if(isVisible 
                                        && ((hasRestBit && !isCur) || (hasCurBit && isCur))
