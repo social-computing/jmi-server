@@ -253,13 +253,13 @@ JMI.script.Swatch = (function() {
             // The cursor position is in the Bounding Box
             var parentzone = zone.getParent();      
                         
-            if(parentzone._bounds.contains(pos._x, pos._y)) {
+            if(parentzone.bounds.contains(pos.x, pos.y)) {
                 var sat     = this.satellites[0];
-                var shape   = sat._shape;
+                var shape   = sat.shapex;
                 var isBag   = zone instanceof JMI.script.BagZone;
                 var supZone = isBag ? zone : null;
-                var zones= isBag ? supZone._subZones : null;
-                var curZone= planComponent.plan._curZone;
+                var zones= isBag ? supZone.subZones : null;
+                var curZone= planComponent.planContainer.map.plan.curZone;
                 var subZone;
                 var satRelTrf, satTrf;
                 var transfo= sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone.props);
@@ -278,10 +278,10 @@ JMI.script.Swatch = (function() {
                 for(i = n - 1 ; i > 0 ; i--) {
                     sat     = this.satellites[i];
                     satData = isCurZone ? zone.curData[i] : zone.restData[i];
-                    flags   = satData._flags;
+                    flags   = satData.flags;
                     
                     // This Sat is visible and it's not a tip (avoid anoying place popup!)
-                    if (isEnabled(flags, JMI.script.Satellite.VISIBLE_BIT) && 
+                    if (JMI.script.Base.isEnabled(flags, JMI.script.Satellite.VISIBLE_BIT) && 
                        (isCurZone || !JMI.script.Base.isEnabled(flags, JMI.script.Satellite.TIP_BIT))) {
                         
                         isVisible   = !JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData.isVisible;

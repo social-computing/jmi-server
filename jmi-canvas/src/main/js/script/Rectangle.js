@@ -89,6 +89,10 @@ JMI.script.Rectangle = (function() {
 				x2 = Math.min(this.x + this.width, src.x + src.width),
 				y2 = Math.min(this.y + this.height, src.y + src.height);
 			return new JMI.script.Rectangle(x1, y1, x2 - x1, y2 - y1);
+        },
+
+        contains: function(x, y) {
+        	return x >= this.x && x <= this.x + this.width && y >= this.y && y <= y + this.height;
         }
 	};
 	

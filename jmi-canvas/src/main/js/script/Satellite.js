@@ -149,15 +149,15 @@ JMI.script.Satellite = (function() {
             
             // if the cursor's position is in one of the slices
             if(i < n) {
-                planComponent.plan._newZone = zone;
+                planComponent.planContainer.map.plan.newZone = zone;
                 if (isPie) {
                     var supZone         = zone;
-                    var zones           = supZone._subZones;
+                    var zones           = supZone.subZones;
                     var nbZones         = zones.length + 1;
                     
                     var center = isFake ? this.shapex.getCenter(supZone) : supCtr;
-                    var dir = (supZone._dir != 10.) ? supZone._dir : transfo._dir,
-                        step = supZone._stp,
+                    var dir = (supZone.dir != 10.) ? supZone.dir : transfo.dir,
+                        step = supZone.stp,
                         m = .5 * (JMI.script.Base.Pi2 / step - nbZones),
                         // TODO : portage : Math.atan2
                         a = Math.atan2(pos.y - center.y, pos.x - center.x);
@@ -167,15 +167,14 @@ JMI.script.Satellite = (function() {
                     if (a < dir)  a   += JMI.script.Base.Pi2;
                     
                     a = .5 + (a - dir) / step;
-                    // TODO : portage : Math.round
                     i = Math.round(a);
                     
                     if (i > 0) {
                         if (i < nbZones) {
-                            planComponent.plan._newZone = zones[i-1];
+                            planComponent.planContainer.map.plan.newZone = zones[i-1];
                         }
                         else if (a - nbZones < m) {
-                            planComponent.plan._newZone = zones[nbZones-2];
+                            planComponent.planContainer.map.plan.newZone = zones[nbZones-2];
                         }
                     }
                 }

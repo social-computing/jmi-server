@@ -13,8 +13,7 @@ JMI.namespace("components.Map");
 JMI.components.Map = (function() {
 
 var planContainer = JMI.script.PlanContainer,
-	_curPos = new JMI.script.Point(),
-	_ready = false,
+	ready = false,
 
 /*
  *  Specific display elements
@@ -44,8 +43,10 @@ var planContainer = JMI.script.PlanContainer,
 	entities; //:ArrayCollection;
 	
 	var Map = function(id) {
-		attributes = new Array();
-		entities = new Array();
+		this.curPos = new JMI.script.Point(),
+		this.ready = false;
+		this.attributes = [];
+		this.entities = [];
 		
 		var mapDiv = document.getElementById( id);
 		this.size = new JMI.script.Dimension( mapDiv.clientWidth, mapDiv.clientHeight);
@@ -56,6 +57,7 @@ var planContainer = JMI.script.PlanContainer,
 		this.drawingCanvas.height = mapDiv.clientHeight;
 		mapDiv.appendChild( this.drawingCanvas);
 		this.drawingSurface = this.drawingCanvas.getContext( "2d");
+		this.drawingCanvas.jmi = this;
 	
 		// Graphic zones
 		this.curDrawingCanvas = document.createElement( "canvas");
@@ -77,10 +79,11 @@ var planContainer = JMI.script.PlanContainer,
 		this.backDrawingContext = this.backDrawingCanvas.getContext( "2d");
 		
 		// Event listeners
-		this.doubleClickEnabled = true;
-/*		this.addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
-		this.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
-		this.addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
+		// TODO ??? inutile ? this.doubleClickEnabled = true;
+		this.drawingCanvas.addEventListener( 'mousemove', this.mouseMoveHandler, false);
+		this.drawingCanvas.addEventListener( 'mouseover', this.mouseOverHandler, false);
+		this.drawingCanvas.addEventListener( 'mouseout', this.mouseOutHandler, false);
+/*
 		this.addEventListener(MouseEvent.CLICK, mouseClickHandler);
 		this.addEventListener(MouseEvent.DOUBLE_CLICK, mouseDoubleClickHandler);
 		this.addEventListener(ResizeEvent.RESIZE, resizeHandler);
@@ -168,9 +171,6 @@ var planContainer = JMI.script.PlanContainer,
 
 				document.body.style.cursor = 'default';
 				
-				this.restDrawingContext.fillStyle = "rgb(200,0,0)";
- 				this.restDrawingContext.fillRect (10, 10, 55, 50);
- 
 				this.renderShape( this.restDrawingCanvas, this.size.width, this.size.height);
 				/*TODO if(this.ready)
 					dispatchEvent(new Event(Map.READY));*/
@@ -189,6 +189,29 @@ var planContainer = JMI.script.PlanContainer,
 			}
 		},
 		
+		mouseMoveHandler: function(event) {
+			// this == the canvas
+			if( this.jmi) {
+				this.jmi.curPos.x = event.clientX;
+				this.jmi.curPos.y = event.clientY;
+				if(this.jmi.ready) {
+					this.jmi.planContainer.map.plan.updateZoneAt( this.jmi.curPos);
+				}
+			}
+			else
+				aptana.log( this);
+		},
+
+		mouseOverHandler: function(event) {
+			// this == the canvas
+			this.jmi.mouseMoveHandler( event);
+		},
+
+		mouseOutHandler: function(event) {
+			// this == the canvas
+			this.jmi.mouseMoveHandler( event);
+		},
+
 		openSoCom: function ( e) {
 			//TODO portage
 			navigateToURL( new URLRequest( "http://www.social-computing.com"), "_blank");
@@ -203,55 +226,12 @@ JMI.components.Map.EMPTY = "empty";
 JMI.components.Map.READY = "ready";
 
 
-/*public function get ready():Boolean {
-	return plan != null && _ready;
-}			
-
-public function get plan():Plan
-{
-	if(this.planContainer == null) {
-		return null;
-	}
-	return planContainer.map.plan;
-}
-
-public function get env():Env
-{
-	if(this.planContainer == null) {
-		return null
-	}
-	return planContainer.map.env;
-}
-
-public function get size():Dimension {
-	return new Dimension(this.width, this.height);
-}
-
+/*
 public function get bitmapData():BitmapData
 {
 	return _offScreen;
 }
-public function get curDrawingContext():Sprite
-{
-	return _curDrawingContext;
-}
-public function get restDrawingContext():Sprite
-{
-	return _restDrawingContext;
-}
-
-public function get curPos():Point {
-	return _curPos;
-}
-
-public function set curPos(pos:Point):void {
-	_curPos = pos;
-}
-
-public function get planContainer():Object
-{
-	return this.planContainer;	
-}*/
+*/
 
 /*
 com.socialcomputing.jmi.components.Map.prototype.clear = function() {
@@ -272,21 +252,6 @@ public function showStatus(message:String):void {
 	dispatchEvent(new StatusEvent( StatusEvent.STATUS, message));
 }
 
-public function mouseOverHandler(event:MouseEvent):void {
-	mouseMoveHandler( event);
-}
-
-public function mouseOutHandler(event:MouseEvent):void {
-	mouseMoveHandler( event);
-}
-
-public function mouseMoveHandler(event:MouseEvent):void {
-	this.curPos.x = event.localX;
-	this.curPos.y = event.localY;
-	if(ready) {
-		planContainer.map.plan.updateZoneAt(this.curPos);
-	}
-}
 
 public function mouseClickHandler(event:MouseEvent):void {
 	if ( ready && plan.curSat != null )

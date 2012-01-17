@@ -47,7 +47,7 @@ JMI.script.Plan = (function() {
          * Current Satellite (the one that is active).
          * If there is no current Satellite, it should be null.
          */
-        this.curSat = JMI.script.Satellite;
+        this.curSat;
         
         /**
          * Bounding box of the Plan before resizing (pixels).
@@ -69,13 +69,13 @@ JMI.script.Plan = (function() {
          * Current super BagZone (the one that is active).
          * If there is no current ActiveZone, it should be null.
          */
-        this.curZone = JMI.script.ActiveZone;
+        this.curZone;
         
         /**
          * Current ActiveZone (the one that is active). This can be a subZone, different from curZone.
          * If there is no current ActiveZone, it should be null.
          */
-        this.newZone = JMI.script.ActiveZone;
+        this.newZone;
         
         /**
          * The this.applet holding this Plan.
@@ -202,60 +202,60 @@ JMI.script.Plan = (function() {
 	 * @return True if the current satellite has changed. 
 	 */
 	updateZoneAt: function(p) {
-		var curSat = JMI.script.Satellite,
+		var cSat = JMI.script.Satellite,
 			zone = JMI.script.ActiveZone,
-	    	parent = curZone != null ? curZone.getParent() : null,
+	    	parent = this.curZone != null ? this.curZone.getParent() : null,
 	        i;
 	    
 		// Check if there is a current Active Zone (Satellite ?)
-	    if(curSat != null) {
-	        curSat = curZone.curSwh.getSatAt(this.applet, this.applet.curDrawingContext.graphics, parent, p, true);
+	    if(this.curSat != null) {
+	        cSat = this.curZone.curSwh.getSatAt(this.applet, this.applet.curDrawingContext.graphics, parent, p, true);
 	        
 			// The cursor is in the current Zone
-	        if (curSat != null) {
+	        if (cSat != null) {
 				//Alert.show("a current zone is hovered");
-	            return updateCurrentZone( curSat, p);
+	            return updateCurrentZone( cSat, p);
 	        }
 	    }
 	    
 	    // The cursor is in not in the current Zone, it can be in another one...
-	    for(i = 0 ; i < nodesCnt ; i++) {
-	        zone = nodes[i];
+	    for(i = 0 ; i < this.nodesCnt ; i++) {
+	        zone = this.nodes[i];
 	        
 			// We know p is not in curZone so don't test it!
 	        if (zone != parent) {
-	            curSat = zone.restSwh.getSatAt(this.applet, this.applet.curDrawingContext.graphics, zone, p, false);
+	            cSat = zone.restSwatch.getSatAt(this.applet, this.applet.curDrawingContext.graphics, zone, p, false);
 	            
 				// The cursor is on this node
-	            if(curSat != null) {
+	            if(cSat != null) {
 					//Alert.show("an inactive zone is hovered")
-	                return updateCurrentZone( curSat, p);
+	                return this.updateCurrentZone( cSat, p);
 	            }
 	        }
 	    }
 		
 	    // The cursor is not in a Node, it can be in a Link...
 		//i = 0;
-	    for(i = linksCnt - 1 ; i >= 0 ; i --) {
-	        zone = links[i];
+	    for(i = this.linksCnt - 1 ; i >= 0 ; i --) {
+	        zone = this.links[i];
 			
 			// We know p is not in curZone so don't test it!
-	        if (zone != parent && zone.curSwh != null) {                                                
+	        if (zone != parent && zone.curSwatch != null) {                                                
 				
 				// If this zone has no current Swatch, it can't be current.
-	            curSat = zone.restSwh.getSatAt(this.applet, this.applet.curDrawingContext.graphics, zone, p, false );
+	            cSat = zone.restSwatch.getSatAt(this.applet, this.applet.curDrawingContext.graphics, zone, p, false );
 	            
 				// The cursor is on this link
-	            if (curSat != null) {
+	            if (cSat != null) {
 					//Alert.show("a link is hovered")
-	                return updateCurrentZone( curSat, p);
+	                return this.updateCurrentZone( cSat, p);
 	            }
 	        }
 	    }
 	    
 	    // Last case, the cursor is not in a Zone
 	    this.newZone = null;
-	    return updateCurrentZone( null, p);
+	    return this.updateCurrentZone( null, p);
 	},
 	
 	
@@ -270,44 +270,45 @@ JMI.script.Plan = (function() {
 	 * @param p			Location of the cursor.	Used for the 'hover' event.
 	 * @return			True if the current satellite has changed.
 	 */
-	updateCurrentZone: function( curSat, p) {
+	updateCurrentZone: function( cSat, p) {
 	
-		if ( curZone != newZone )//|| curSat != curSat)           // The current Satellite has changed
+		if ( this.curZone != this.newZone )//|| curSat != curSat)           // The current Satellite has changed
 	    {
-	        for each ( var waiter in tipTimers)
+	    	// TODO
+	        /*for each ( var waiter in tipTimers)
 	        {
 	         	waiter.interrupt();
-	        }
+	        }*/
 	    }
 	    
 		// The current Satellite has changed
-	    if (curZone != newZone || curSat != curSat) {
+	    if (this.curZone != this.newZone || this.curSat != cSat) {
 			// If flying over background reset to default arrow
 	        var cursTyp = MouseCursor.AUTO;    
 			
-	        if (curZone != null &&
-				(newZone == null || curZone.getParent() != newZone.getParent())) {
+	        if (this.curZone != null &&
+				(this.newZone == null || this.curZone.getParent() != newZone.getParent())) {
 				// Restore its rest image
 	            //ON rollover non active zone => redraw
-				var curZoneBounds = curZone.getParent().bounds;
+				var curZoneBounds = this.curZone.getParent().bounds;
 				ImageUtil.clear( this.applet.curDrawingContext);
 				this.applet.renderShape(this.applet.restDrawingContext, curZoneBounds.width, curZoneBounds.height, new Point(curZoneBounds.x, curZoneBounds.y));
 	            this.applet.toolTip = null;
 	        }
 	        
-	        curSat = curSat;
+	        this.curSat = cSat;
 	        
 			// A new Zone is hovered, let's paint it!
-	        if (curSat != null && (curZone != newZone)) {
-	            curZone = newZone;
+	        if (this.curSat != null && (this.curZone != this.newZone)) {
+	            this.curZone = this.newZone;
 			    ImageUtil.clear( this.applet.curDrawingContext);
 	            paintCurZone();              
-	            curSat.execute( this.applet, curZone, p, Satellite.HOVER_VAL);
+	            this.curSat.execute( this.applet, curZone, p, Satellite.HOVER_VAL);
 	            cursTyp = MouseCursor.HAND;   // Sets the cursor to a hand if the mouse entered a Zone
 	        }
 	        else {
-	            curZone = newZone;
-	            if (curSat == null) this.applet.showStatus("");
+	            this.curZone = newZone;
+	            if (this.curSat == null) this.applet.showStatus("");
 	        }
 	        // TODO ???
 	        //this.applet.setCursor( Cursor.getPredefinedCursor( cursTyp ));

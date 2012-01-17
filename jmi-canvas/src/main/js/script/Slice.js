@@ -123,12 +123,12 @@ JMI.script.Slice =  (function() {
          * @return              True if the cursor's position is inside this slice, false otherwise
          */
         contains: function(planComponent, g, supZone, zone, satShp, satCtr, supCtr, pos){
-            var transfo = getTransfo(JMI.script.Slice.TRANSFO_VAL, zone.props);
+            var transfo = this.getTransfo(JMI.script.Slice.TRANSFO_VAL, zone.props);
             
             if(supZone == null) supZone = zone;
             
-            if((isDefined(JMI.script.Slice.IN_COL_VAL ) || isDefined(JMI.script.Slice.OUT_COL_VAL)) &&
-                satShp.contains(g, supZone, transfo, satCtr, pos)) {
+            if((this.isDefined(JMI.script.Slice.IN_COL_VAL ) || this.isDefined(JMI.script.Slice.OUT_COL_VAL)) &&
+                satShp.contains( supZone, transfo, satCtr, pos)) {
                 return true;
             }
             
