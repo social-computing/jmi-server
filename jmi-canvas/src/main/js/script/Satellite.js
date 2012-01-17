@@ -160,7 +160,7 @@ JMI.script.Satellite = (function() {
                     var nbZones         = zones.length + 1;
                     
                     var center = isFake ? this.shapex.getCenter(supZone) : supCtr;
-                    var dir = (supZone.dir != 10.) ? supZone.dir : transfo.dir,
+                    var dir = (supZone.dir != 10.) ? supZone.dir : transfo.direction,
                         step = supZone.stp,
                         m = .5 * (JMI.script.Base.Pi2 / step - nbZones),
                         // TODO : portage : Math.atan2
