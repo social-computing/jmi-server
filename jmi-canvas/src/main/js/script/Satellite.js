@@ -115,7 +115,11 @@ JMI.script.Satellite = (function() {
                         case JMI.script.Satellite.TIP_TYP  : isShowable = isTip; break;
                     }
                     if (isShowable) {
-                        for (var slice in this.slices) {
+                        var nbSlices = this.slices.length;
+                        var i;
+                        /* for each (var slice in this.slices) { } */
+                        for(i = 0 ; i < nbSlices ; i++) {
+                            var slice = this.slices[i];   
                             slice.paint(applet, s, supZone, zone, this.shapex, satCtr, supCtr);
                         }
                     }
