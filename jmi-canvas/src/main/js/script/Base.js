@@ -356,7 +356,7 @@ JMI.script.Base.getNextTokenProp = function(tokens, includeBit, excludeBit) {
     while(tokens.length > 0) {
         var token = tokens.shift();
         
-        if ((token._flags & includeBit) != 0 && (token._flags & excludeBit) == 0) {
+        if ((token.flags & includeBit) != 0 && (token.flags & excludeBit) == 0) {
             return token.buffer;
         }
     }
@@ -410,7 +410,7 @@ JMI.script.Base.parseTokens = function(text) {
                     
                     // and create a new prop or list Token
                     token = new JMI.script.Token();
-                    token._flags = c == '{' ? JMI.script.Token.PROP_BIT : JMI.script.Token.PROP_BIT | JMI.script.Token.LIST_BIT;
+                    token.flags = c == '{' ? JMI.script.Token.PROP_BIT : JMI.script.Token.PROP_BIT | JMI.script.Token.LIST_BIT;
                     i = token.findFlags(text, i + 1);
                     j = 0;
                 }
