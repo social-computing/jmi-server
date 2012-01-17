@@ -97,11 +97,11 @@ JMI.script.Plan = (function() {
 	 * This call the init method of the zones.
 	 * It also evaluate the bounding box of each zone and then allocate the blitBuf image buffer.
 	 * 
-	 * @param g			A graphics to get the font metrics.
-	 * @param zones		An array of zones (nodes or links).
-	 * @param isFirst	True if this is the first call of the session (optimisation).
+     * @param gDrawingContext  A 2d graphic context to draw the shape in.
+	 * @param zones		       An array of zones (nodes or links).
+	 * @param isFirst	       True if this is the first call of the session (optimisation).
 	 */
-	initZones: function(s, zones, isFirst) {
+	initZones: function(gDrawingContext, zones, isFirst) {
 	    var i,
 			n = zones.length,
 	    	dim = this.applet.size;
@@ -112,7 +112,7 @@ JMI.script.Plan = (function() {
 	    
 	    // Reversed order so subZones are initialized before supZones!
 		for (i = n - 1 ; i >= 0 ; i --) {
-	        zones[i].init(this.applet, s, isFirst);
+	        zones[i].init(this.applet, gDrawingContext, isFirst);
 	    }
 		
 	    // Allocate a temporary bitmap to dblBuffer curZone rendering using the biggest Zone BBox

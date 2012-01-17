@@ -159,4 +159,4 @@ JMI.script.PlanContainer.fromJSON = function ( jsonString) {
 		}
 	}
 	return planContainer;
-}
+};

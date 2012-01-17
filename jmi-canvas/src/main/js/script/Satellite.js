@@ -187,17 +187,24 @@ JMI.script.Satellite = (function() {
         /*
          * Sets this bounds by updating an already created Rectangle.
          * 
-         * @param applet        The Applet that owns this.
-         * @param g             A graphics to get the FontMetrics used by this.
-         * @param zone          The zone that holds the properties used by this satellite.
-         * @param satCtr        This satellite center.
-         * @param supCtr        This parent satellite center.
-         * @param bounds        A Rectangle to merge with this bounds.
+         * @param applet           The Applet that owns this.
+         * @param gDrawingContext  A 2d graphic context to draw the shape in.
+         * @param zone             The zone that holds the properties used by this satellite.
+         * @param satCtr           This satellite center.
+         * @param supCtr           This parent satellite center.
+         * @param bounds           A Rectangle to merge with this bounds.
          */
-        setBounds: function(applet, g, zone, satCtr, supCtr, bounds) {
+        setBounds: function(applet, gDrawingContext, zone, satCtr, supCtr, bounds) {
+            var i;
+            var nbSlices = this.slices.length;
+            for(i = 0 ; i < nbSlices ; i++) {
+                this.slices[i].setBounds(applet, gDrawingContext, zone.getParent(), zone, this.shapex, satCtr, supCtr, bounds);
+            }
+            /*
             for each(var slice in this.slices) {
                 slice.setBounds(applet, g, zone.getParent(), zone, this.shapex, satCtr, supCtr, bounds);
             }
+            */
         },
 
         /*

@@ -18,7 +18,7 @@ JMI.script.Slice =  (function() {
          */
 	    this.htmlTxt = null;
 
-		JMI.script.Base.call( this);
+		JMI.script.Base.call(this);
 	};
 	
 	Slice.prototype = {
@@ -34,36 +34,36 @@ JMI.script.Slice =  (function() {
          * <li>IMAGE_VAL : The bitmap (icon).</li>
          * <li>TEXT_VAL : The text, standard or HTML.</li>
          * </ul>
-         * @param applet        The Applet that owns this.
-         * @param s             A sprite to draw this in.
-         * @param supZone       The parent zone of this zone.
-         * @param zone          The zone that holds the properties used by this slice.
-         * @param satShp        The shape of this Slice
-         * @param satCtr        This slice center.
-         * @param supCtr        This parent satellite center.
+         * 
+         * @param applet           The Applet that owns this.
+         * @param gDrawingContext  A 2d graphic context to draw the shape in.
+         * @param supZone          The parent zone of this zone.
+         * @param zone             The zone that holds the properties used by this slice.
+         * @param satShp           The shape of this Slice
+         * @param satCtr           This slice center.
+         * @param supCtr           This parent satellite center.
          */
-        paint: function(applet, s, supZone, zone, satShp, satCtr, supCtr) {
-            var text = this.getText( JMI.script.Slice.TEXT_VAL, zone.props );
-            
-            var transfo = this.getTransfo( JMI.script.Slice.TRANSFO_VAL, zone.props );
+        paint: function(applet, gDrawingContext, supZone, zone, satShp, satCtr, supCtr) {
+            var text = this.getText(JMI.script.Slice.TEXT_VAL, zone.props);
+            var transfo = this.getTransfo(JMI.script.Slice.TRANSFO_VAL, zone.props);
             
             // Draw a satellite with primitives
-            if(this.isDefined(JMI.script.Slice.IN_COL_VAL) || this.isDefined(JMI.script.Slice.OUT_COL_VAL)) {
-                satShp.paint(s, supZone, zone, this, transfo, satCtr );
+            if (this.isDefined(JMI.script.Slice.IN_COL_VAL) || this.isDefined(JMI.script.Slice.OUT_COL_VAL)) {
+                satShp.paint(gDrawingContext, supZone, zone, this, transfo, satCtr);
             }
             
             // Draw a satellite's image it is set
-            if( this.isDefined(JMI.script.Slice.IMAGE_VAL)) {
+            if (this.isDefined(JMI.script.Slice.IMAGE_VAL)) {
                 var imageNam = this.parseString(JMI.script.Slice.IMAGE_VAL, zone.props );
                 if (imageNam != null) {
                 	imageNam = imageNam[0];
-                    satShp.drawImage(applet, s, supZone, imageNam, transfo, satCtr);
+                    satShp.drawImage(applet, gDrawingContext, supZone, imageNam, transfo, satCtr);
                 }
             }
             
             if(text != null) {
                 if (JMI.script.HTMLText.isEnabled(text.getFlags(zone.props), JMI.script.HTMLText.URL_BIT)) {
-                    m_htmlTxt = null;
+                    this.htmlTxt = null;
                     var textUrls  = text.parseString(JMI.script.HTMLText.TEXT_VAL, zone.props);
                     var t , hTxt = "";
                     var i = 0;
@@ -94,10 +94,10 @@ JMI.script.Slice =  (function() {
                 }
                 else {
                     supCtr = supZone.restSwatch.satellites[0].shapex.getCenter(supZone);
-                    var htmlTxt = text.getHText(applet, s, zone, transfo, satCtr, supCtr, text);
+                    var htmlTxt = text.getHText(applet, gDrawingContext, zone, transfo, satCtr, supCtr, text);
                     
                     if (htmlTxt != null && htmlTxt.text.length > 0) {
-                        htmlTxt.drawText2(s, applet.size);
+                        htmlTxt.drawText2(gDrawingContext, applet.size);
                         zone.datas[text] = htmlTxt;
                     }
                 }
@@ -111,24 +111,23 @@ JMI.script.Slice =  (function() {
          * TODO : Else, if there is a Text or HTMLText, tests if the point is inside the text bounds. 
          * TODO : The image are not considered because of the complexity (retrieving size), but should...
          * 
-         * @param applet        The PlanComponent that owns this.
-         * @param g             A graphics to get the FontMetrics used by this.
-         * @param supZone       The parent of zone or null if it have none.
-         * @param zone          The zone that holds the properties used by this slice.
-         * @param satShp        This slice shape, get from its satellite.
-         * @param satCtr        This slice center, get from its satellite.
-         * @param supCtr        This parent satellite center.
-         * @param pos           A point position to test.
+         * @param applet           The PlanComponent that owns this.
+         * @param gDrawingContext  A 2d graphic context to draw the shape in.
+         * @param supZone          The parent of zone or null if it have none.
+         * @param zone             The zone that holds the properties used by this slice.
+         * @param satShp           This slice shape, get from its satellite.
+         * @param satCtr           This slice center, get from its satellite.
+         * @param supCtr           This parent satellite center.
+         * @param pos              A point position to test.
          * 
          * @return              True if the cursor's position is inside this slice, false otherwise
          */
-        contains: function(planComponent, g, supZone, zone, satShp, satCtr, supCtr, pos){
+        contains: function(planComponent, gDrawingContext, supZone, zone, satShp, satCtr, supCtr, pos){
             var transfo = getTransfo(JMI.script.Slice.TRANSFO_VAL, zone.props);
-            
             if(supZone == null) supZone = zone;
             
-            if((isDefined(JMI.script.Slice.IN_COL_VAL ) || isDefined(JMI.script.Slice.OUT_COL_VAL)) &&
-                satShp.contains(g, supZone, transfo, satCtr, pos)) {
+            if((this.isDefined(JMI.script.Slice.IN_COL_VAL ) || isDefined(JMI.script.Slice.OUT_COL_VAL)) &&
+                satShp.contains(gDrawingContext, supZone, transfo, satCtr, pos)) {
                 return true;
             }
             
@@ -136,7 +135,7 @@ JMI.script.Slice =  (function() {
             if (text != null) {
                 // TODO : null à remplacer
                 var htmlTxt = text.getHText(planComponent, null, zone, transfo, satCtr, supCtr, text);
-                return htmlTxt != null ? htmlTxt._bounds.contains(pos._x, pos._y): false;
+                return htmlTxt != null ? htmlTxt.bounds.contains(pos.x, pos.y): false;
             }
             return false;
         },
@@ -147,44 +146,43 @@ JMI.script.Slice =  (function() {
          * If there is a Text or HTMLText, the bounds of the text are considered.
          * The image bounds are not considered because of the complexity (retrieving size), but they should...
          * 
-         * @param applet        The Applet that owns this.
-         * @param g             A graphics to get the FontMetrics used by this.
-         * @param supZone       The parent of zone or null if it have none.
-         * @param zone          The zone that holds the properties used by this slice.
-         * @param satShp        This slice shape, get from its satellite.
-         * @param satCtr        This slice center, get from its satellite.
-         * @param supCtr        This parent satellite center.
-         * @param bounds        A Rectangle to merge with this bounds.
+         * @param applet           The Applet that owns this.
+         * @param gDrawingContext  A 2d graphic context to draw the shape in.
+         * @param supZone          The parent of zone or null if it have none.
+         * @param zone             The zone that holds the properties used by this slice.
+         * @param satShp           This slice shape, get from its satellite.
+         * @param satCtr           This slice center, get from its satellite.
+         * @param supCtr           This parent satellite center.
+         * @param bounds           A Rectangle to merge with this bounds.
          */
-        setBounds: function(applet, g, supZone, zone, satShp, satCtr, supCtr, bounds) {
+        setBounds: function(applet, gDrawingContext, supZone, zone, satShp, satCtr, supCtr, bounds) {
             var transfo = this.getTransfo(JMI.script.Slice.TRANSFO_VAL, zone.props);
-            
             if (supZone == null) supZone = zone;
             
             try {
-                if ( this.isDefined(JMI.script.Slice.IN_COL_VAL) || this.isDefined(JMI.script.Slice.OUT_COL_VAL)) {
-                    satShp.setBounds(g, supZone, transfo, satCtr, bounds);
+                if (this.isDefined(JMI.script.Slice.IN_COL_VAL) || this.isDefined(JMI.script.Slice.OUT_COL_VAL)) {
+                    satShp.setBounds(gDrawingContext, supZone, transfo, satCtr, bounds);
                 }
             }
             catch (e) {
                 var errorMessage = "getCenter supZone=" + supZone;
                 if (supZone != null) {
                     var points = satShp.getValue(JMI.script.ShapeX.POLYGON_VAL, supZone.props);
-                    errorMessage += " zName=" + supZone.props[ "NAME" ] + " pKey=" + satShp.containers[JMI.script.ShapeX.POLYGON_VAL]._value + " pnts=" + points + " p[0]=" + points[0];
+                    errorMessage += " zName=" + supZone.props[ "NAME" ] + " pKey=" + satShp.containers[JMI.script.ShapeX.POLYGON_VAL].value + " pnts=" + points + " p[0]=" + points[0];
                 }
                 throw(new Error(errorMessage));
             }
         
-            var text = this.getText( JMI.script.Slice.TEXT_VAL, zone.props);
+            var text = this.getText(JMI.script.Slice.TEXT_VAL, zone.props);
             if (text != null) {
                 if (JMI.script.HTMLText.isEnabled(text.getFlags(zone.props), JMI.script.HTMLText.URL_BIT)) {
-                    if (this.htmlTxt != null) bounds.copy(this.htmlTxt._bounds);
+                    if (this.htmlTxt != null) bounds.copy(this.htmlTxt.bounds);
                 }
                 else {
                     supCtr = supZone.restSwatch.satellites[0].shapex.getCenter(supZone);
                     var htmlTxt;
                     
-                    htmlTxt = text.getHText(applet, g, zone, transfo, satCtr, supCtr, text);
+                    htmlTxt = text.getHText(applet, gDrawingContext, zone, transfo, satCtr, supCtr, text);
                     if (htmlTxt != null && htmlTxt.text.length > 0) {
                         bounds.merge(htmlTxt.bounds);
                     }
