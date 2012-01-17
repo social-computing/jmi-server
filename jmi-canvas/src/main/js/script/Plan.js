@@ -161,10 +161,8 @@ JMI.script.Plan = (function() {
 	    //if (this.applet.backImgUrl != null)
 	        //renderBitmap( restGfx, this.applet.backImgUrl, 0, 0, null );
 		
-		/*ImageUtil.clear(restDrawingContext);
-		restDrawingContext.graphics.beginFill( this.applet.env.inCol.color);
-		restDrawingContext.graphics.drawRect(0, 0, this.applet.width, this.applet.height);
-		restDrawingContext.graphics.endFill();*/
+		restDrawingContext.fillStyle = this.applet.planContainer.map.env.inColor.getColor();
+		restDrawingContext.fillRect( 0, 0, dim.width, dim.height);
 	
 	    // Init Links, Nodes and subNodes.
 		this.initZones(restDrawingContext, this.links, false);
@@ -304,7 +302,7 @@ JMI.script.Plan = (function() {
 	            // TODO portage
 			    //ImageUtil.clear( this.applet.curDrawingContext);
 	            this.paintCurZone();              
-	            this.curSat.execute( this.applet, curZone, p, JMI.script.Satellite.HOVER_VAL);
+	            this.curSat.execute( this.applet, this.curZone, p, JMI.script.Satellite.HOVER_VAL);
 				cursTyp = 'pointer';
 	        }
 	        else {

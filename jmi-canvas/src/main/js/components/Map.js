@@ -18,10 +18,8 @@ var planContainer = JMI.script.PlanContainer,
 /*
  *  Specific display elements
  */
-	_backgroundColor = 0xFFFFFF,
-	_onScreen,//:BitmapData,
-	_offScreen,//:BitmapData,
-	_drawingSurface,//:SpriteVisualElement => Official Canvas 2D Context
+	backgroundColor = 0xFFFFFF,
+	drawingContext,//:SpriteVisualElement => Official Canvas 2D Context
 
 /*
  * Image used to quickly restore the aspect of a zone that is no longer current.
@@ -56,8 +54,8 @@ var planContainer = JMI.script.PlanContainer,
 		this.drawingCanvas.width = mapDiv.clientWidth;
 		this.drawingCanvas.height = mapDiv.clientHeight;
 		mapDiv.appendChild( this.drawingCanvas);
-		this.drawingSurface = this.drawingCanvas.getContext( "2d");
-		this.drawingCanvas.jmi = this;
+		this.drawingContext = this.drawingCanvas.getContext( "2d");
+		this.drawingCanvas.JMI = this;
 	
 		// Graphic zones
 		this.curDrawingCanvas = document.createElement( "canvas");
@@ -79,7 +77,6 @@ var planContainer = JMI.script.PlanContainer,
 		this.backDrawingContext = this.backDrawingCanvas.getContext( "2d");
 		
 		// Event listeners
-		// TODO ??? inutile ? this.doubleClickEnabled = true;
 		this.drawingCanvas.addEventListener( 'mousemove', this.mouseMoveHandler, false);
 		this.drawingCanvas.addEventListener( 'mouseover', this.mouseOverHandler, false);
 		this.drawingCanvas.addEventListener( 'mouseout', this.mouseOutHandler, false);
@@ -116,7 +113,7 @@ var planContainer = JMI.script.PlanContainer,
 			}
 			
 			// Clear all drawing surfaces
-			// TODO portage this.clear();
+			this.clear();
 			
 			this.attributes = [];
 			this.entities = [];
@@ -124,16 +121,12 @@ var planContainer = JMI.script.PlanContainer,
 			// If the given value is null 
 			// Reset all objects of this component
 			if(value == null) {
-				this.planContainer = null;
-				//this.plan = null;
-				//this.
-				// TODO : If the local plancontainer is set, reset objects
-				this.invalidateProperties();
-				this.invalidateDisplayList();
+				if( this.planContainer)
+					delete( this.planContainer);
 				return;
 			}
 			
-			// TODO this.showStatus("");
+			this.showStatus("");
 			document.body.style.cursor = 'wait';
 			if(value instanceof JMI.script.PlanContainer) {
 				this.planContainer = value;
@@ -170,9 +163,10 @@ var planContainer = JMI.script.PlanContainer,
 				this.ready = true;
 
 				document.body.style.cursor = 'default';
-				
-				this.renderShape( this.restDrawingCanvas, this.size.width, this.size.height);
-				/*TODO if(this.ready)
+
+				this.drawingContext.drawImage( this.restDrawingCanvas, 0, 0)				
+				/*TODO portage
+				if(this.ready)
 					dispatchEvent(new Event(Map.READY));*/
 			}
 		},
@@ -184,17 +178,24 @@ var planContainer = JMI.script.PlanContainer,
 			}
 			
 			if( width > 0 && height > 0) { 
-				// Copying the content of the context on to visible canvas context
-				this.drawingSurface.drawImage( context, 0, 0);//position.x, position.y, position.x, position.y, width, height);
+				// Copying the content of the context on to visib canvas context
+				this.drawingContext.drawImage( context, position.x, position.y, width, height, position.x, position.y, width, height);
 			}
 		},
 		
+		clear: function() {
+			//JMI.util.ImageUtil.clear(this.backDrawingCanvas, this.backDrawingContext);
+			JMI.util.ImageUtil.clear(this.restDrawingCanvas, this.restDrawingContext);
+			JMI.util.ImageUtil.clear(this.curDrawingCanvas, this.curDrawingContext);
+			JMI.util.ImageUtil.clear(this.drawingCanvas, this.drawingContext);
+		},
+		
 		mouseMoveHandler: function(event) {
-			if( this instanceof JMI.components.Map) {
-				this.curPos.x = event.clientX;
-				this.curPos.y = event.clientY;
-				if(this.ready) {
-					this.planContainer.map.plan.updateZoneAt( this.curPos);
+			if( this instanceof HTMLCanvasElement) {
+				this.JMI.curPos.x = event.clientX;
+				this.JMI.curPos.y = event.clientY;
+				if(this.JMI.ready) {
+					this.JMI.planContainer.map.plan.updateZoneAt( this.JMI.curPos);
 				}
 			}
 /*			else
@@ -202,11 +203,11 @@ var planContainer = JMI.script.PlanContainer,
 		},
 
 		mouseOverHandler: function(event) {
-			this.jmi.mouseMoveHandler( event);
+			this.JMI.mouseMoveHandler( event);
 		},
 
 		mouseOutHandler: function(event) {
-			this.jmi.mouseMoveHandler( event);
+			this.JMI.mouseMoveHandler( event);
 		},
 
 		showStatus: function(message) {
@@ -214,6 +215,62 @@ var planContainer = JMI.script.PlanContainer,
 			//dispatchEvent(new StatusEvent( StatusEvent.STATUS, message));
 		},
 
+		/*
+		 * Perform an URL action.
+		 * The action depends on the string passed:
+		 * <ul>
+		 * <li>URL : Opens the URL in a new window.</li>
+		 * <li>_target:URL : Opens the URL in the frame called target if it exists or else in a new window whose name is set to target.</li>
+		 * <li>javascript:function(args) : If LiveConnect is enabled, call the Javascript function with args (arg1,..,argn).
+		 * Else, if an alternate page is defined (NoScriptUrl Applet parameter), this page is opened with the function(args) passed using the CGI syntax.</li>
+		 * <li>javascript:_target:function(args) : See javascript:function(args) and _target cases.</li>
+		 * </ul>
+		 * @param actionStr		An URL like string describing what action to do.
+		 * @throws UnsupportedEncodingException 
+		 */
+		performAction: function( actionStr) {
+			var jsStr = "javascript";
+			var target = "_blank";
+			var sep       = actionStr.indexOf( ':' ),
+				pos;
+		
+			if ( sep != -1 )
+			{
+				target  = actionStr.substring( 0, sep );
+				if( target.toLowerCase() == jsStr )   // Call javascript function
+				{
+					actionStr   = actionStr.substring( jsStr.length+ 1 );
+					if( actionStr.charAt( 0 )== '_' )
+					{	// javascript:_target:function()
+						pos = actionStr.indexOf( ':' );
+						if( pos <= 0) return;
+						target      = actionStr.substring( 1, pos );
+						actionStr   = actionStr.substring( pos + 1 );
+					}
+			
+					pos     = actionStr.indexOf( '(' );
+					if( pos > 0)
+					{
+						var func     = actionStr.substring( 0, pos ),
+							paramStr = actionStr.substring( pos + 1, actionStr.length- 1 );
+						var params   = paramStr.split( String.fromCharCode( 0xFFFC));
+						// TODO dispatchEvent( new ActionEvent( func, params));
+					}
+					return;
+				}
+				else if( target.charAt( 0 )== '_' )   // open a frame window
+				{
+					target      = actionStr.substring( 0, sep );
+					actionStr   = actionStr.substring( sep + 1 );
+				}
+				else
+				{
+					target  = "_blank";
+				}
+			}
+			// TODO dispatchEvent(new NavigateEvent( actionStr, target)); 
+		},
+		
 		openSoCom: function ( e) {
 			//TODO portage
 			navigateToURL( new URLRequest( "http://www.social-computing.com"), "_blank");
@@ -236,19 +293,6 @@ public function get bitmapData():BitmapData
 */
 
 /*
-com.socialcomputing.jmi.components.Map.prototype.clear = function() {
-	ImageUtil.clear(this.backDrawingContext);
-	ImageUtil.clear(this.restDrawingContext);
-	ImageUtil.clear(this.curDrawingContext);
-	ImageUtil.clear(this.drawingSurface);
-	
-	if(this.width != 0 && this.height !=  0) {
-		this.onScreen = context.createImageData(this.width, this.height);
-		this.offScreen = context.createImageData(this.width, this.height);
-		// TODO portage : devrait etre inutile
-		//this.drawingSurface.addChild(new Bitmap(this.onScreen));
-	}
-}
 
 public function mouseClickHandler(event:MouseEvent):void {
 	if ( ready && plan.curSat != null )
@@ -312,63 +356,8 @@ public function actionPerformed( actionStr:String ):void {
 	performAction( actionStr);
 }*/
 
-/**
- * Perform an URL action.
- * The action depends on the string passed:
- * <ul>
- * <li>URL : Opens the URL in a new window.</li>
- * <li>_target:URL : Opens the URL in the frame called target if it exists or else in a new window whose name is set to target.</li>
- * <li>javascript:function(args) : If LiveConnect is enabled, call the Javascript function with args (arg1,..,argn).
- * Else, if an alternate page is defined (NoScriptUrl Applet parameter), this page is opened with the function(args) passed using the CGI syntax.</li>
- * <li>javascript:_target:function(args) : See javascript:function(args) and _target cases.</li>
- * </ul>
- * @param actionStr		An URL like string describing what action to do.
- * @throws UnsupportedEncodingException 
- */
-/*public function performAction( actionStr:String):void {
-	var jsStr:String  = "javascript";
-	var target:String = "_blank";
-	var sep:int       = actionStr.indexOf( ':' ),
-		pos:int;
 
-	if ( sep != -1 )
-	{
-		target  = actionStr.substring( 0, sep );
-		if( target.toLowerCase() == jsStr )   // Call javascript function
-		{
-			actionStr   = actionStr.substring( jsStr.length+ 1 );
-			if( actionStr.charAt( 0 )== '_' )
-			{	// javascript:_target:function()
-				pos = actionStr.indexOf( ':' );
-				if( pos <= 0) return;
-				target      = actionStr.substring( 1, pos );
-				actionStr   = actionStr.substring( pos + 1 );
-			}
-	
-			pos     = actionStr.indexOf( '(' );
-			if( pos > 0)
-			{
-				var func:String     = actionStr.substring( 0, pos ),
-					paramStr:String = actionStr.substring( pos + 1, actionStr.length- 1 );
-				var params:Array    = paramStr.split( String.fromCharCode( 0xFFFC));
-				dispatchEvent( new ActionEvent( func, params));
-			}
-			return;
-		}
-		else if( target.charAt( 0 )== '_' )   // open a frame window
-		{
-			target      = actionStr.substring( 0, sep );
-			actionStr   = actionStr.substring( sep + 1 );
-		}
-		else
-		{
-			target  = "_blank";
-		}
-	}
-	dispatchEvent(new NavigateEvent( actionStr, target)); 
-}
-
-public function getProperty( name:String):Object {
+/*public function getProperty( name:String):Object {
 	if( env != null && env.props.hasOwnProperty( name))
 		return env.props[name];
 	return null;
