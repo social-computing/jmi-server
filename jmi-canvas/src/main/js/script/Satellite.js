@@ -78,7 +78,7 @@ JMI.script.Satellite = (function() {
                 isVisible   = isTip || isSel ? satData.isVisible : true;
             
             var supZone = zone.getParent();
-            
+
             if (isVisible) {
                 // we must draw this Satellite Link if it exists
                 if (isLinkOnly) {

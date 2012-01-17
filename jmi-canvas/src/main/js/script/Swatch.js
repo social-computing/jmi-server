@@ -373,8 +373,7 @@ JMI.script.Swatch = (function() {
             // var flags;
             var isTip, isSel;
             
-            var i = this.satellites.length - 1;
-            do {
+            for( var i = 0; i < this.satellites.length; i++)  {
                 var sat = this.satellites[i];
                 var flags = sat.getFlags(zone.props);
                 satData = new JMI.script.SatData(flags);
@@ -398,12 +397,6 @@ JMI.script.Swatch = (function() {
                 }
                 satDatas.push(satData);                
             }
-            while(i--);
-            /*
-            for each (var sat in this.satellites) {
-
-            }
-            */
             return satDatas;
         }		
 	};
