@@ -92,18 +92,17 @@ JMI.script.ActiveZone = (function() {
         /*
          * Draw this zone on a specified Graphics using the rest or cur swatch.
          * 
-         * @param applet    WPSApplet owning this zone.
-         * @param s         A sprite on which this must be painted.
-         * @param isCur     True if this is the current zone (hovered) of the plan.
-         * @param isFront   True if this zone appears on top of ghosted zones.
-         * @param showTyp   The type of Satellite to show (SEL, TIP, BASE, ALL). See Satellite.XXXX_TYP.
-         * @param showLinks True if we only wants to paint links.
+         * @param applet           WPSApplet owning this zone.
+         * @param gDrawingContext  A 2d graphic context to draw the shape in.
+         * @param isCur            True if this is the current zone (hovered) of the plan.
+         * @param isFront          True if this zone appears on top of ghosted zones.
+         * @param showTyp          The type of Satellite to show (SEL, TIP, BASE, ALL). See Satellite.XXXX_TYP.
+         * @param showLinks        True if we only wants to paint links.
          */
-        paint: function(applet, s, isCur, isFront, showTyp, showLinks) {
+        paint: function(applet, gDrawingContext, isCur, isFront, showTyp, showLinks) {
             if ((this.flags & JMI.script.ActiveZone.INVISIBLE_BIT) != 0) return;
             var swatch = isCur ? this.curSwatch : this.restSwatch;
-            
-            swatch.paint(applet, s, this, isCur, isFront, showTyp, showLinks);
+            swatch.paint(applet, gDrawingContext, this, isCur, isFront, showTyp, showLinks);
         },
         
         /*
