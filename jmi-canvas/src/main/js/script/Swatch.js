@@ -35,45 +35,45 @@ JMI.script.Swatch = (function() {
         
         /*
          * Draws the satellites of this that have the required flags enabled.
-         * @param applet        Applet holding this.
-         * @param s             Sprite to paint in.
-         * @param zone          Zone to paint.
-         * @param isCur         True if zone is hovered.
-         * @param isFront       True to paint only satellites over the transparent filter. False to only paint those below.
-         * @param showTyp       Flags indicating what type of satellite to draw.(Satellite.XXX_TYP)
-         * @param showLinks     True if links between satelites should be drawn. False for the opposite.
+         * @param applet           Applet holding this.
+         * @param gDrawingContext  A 2d graphic context to draw the shape in.
+         * @param zone             Zone to paint.
+         * @param isCur            True if zone is hovered.
+         * @param isFront          True to paint only satellites over the transparent filter. False to only paint those below.
+         * @param showTyp          Flags indicating what type of satellite to draw.(Satellite.XXX_TYP)
+         * @param showLinks        True if links between satelites should be drawn. False for the opposite.
          */
-        paint: function(applet, s, zone, isCur, isFront, showTyp, showLinks) {
-            var sat = this.satellites[0];
-            var shape = sat.shapex;
+        paint: function(applet, gDrawingContext, zone, isCur, isFront, showTyp, showLinks) {
+            var satellite = this.satellites[0];
+            var shape = satellite.shapex;
             var flags = this.getFlags(zone.props);
-            var transfo = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone.props);
+            var transfo = satellite.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone.props);
             
             // Draws Satellites links first (if they exists)
             // so they can be partly covered by other sats
             if (JMI.script.Base.isEnabled(flags, JMI.script.Swatch.LINK_BIT) && showLinks) {
-                this.drawSats(applet, s, zone, shape, transfo, true, isCur, isFront, showTyp);
+                this.drawSats(applet, gDrawingContext, zone, shape, transfo, true, isCur, isFront, showTyp);
             }
           
             // Draws Satellites without links
-            this.drawSats(applet, s, zone, shape, transfo, false, isCur, isFront, showTyp);
+            this.drawSats(applet, gDrawingContext, zone, shape, transfo, false, isCur, isFront, showTyp);
         },
         
         /*
          * Draws satellites that have the required flags enabled.
          * Those without transfo use a default transformation.
          * 
-         * @param applet        Applet holding this.
-         * @param s             Sprite to paint in.
-         * @param zone          Zone to draw the sats.
-         * @param shape         Default shape coming from the first satellite([0]).
-         * @param transfo       Default transformation coming from the first satellite([0]).
-         * @param isLinkOnly    True to draw only links between satelites.
-         * @param isCur         True if zone is hovered.
-         * @param isFront       True to paint only satellites over the transparent filter. False to only paint those below.
-         * @param showTyp       Flags indicating what type of satellite to draw.(Satellite.XXX_TYP)
+         * @param applet           Applet holding this.
+         * @param gDrawingContext  A 2d graphic context to draw the shape in.
+         * @param zone             Zone to draw the sats.
+         * @param shape            Default shape coming from the first satellite([0]).
+         * @param transfo          Default transformation coming from the first satellite([0]).
+         * @param isLinkOnly       True to draw only links between satelites.
+         * @param isCur            True if zone is hovered.
+         * @param isFront          True to paint only satellites over the transparent filter. False to only paint those below.
+         * @param showTyp          Flags indicating what type of satellite to draw.(Satellite.XXX_TYP)
          */
-        drawSats: function(applet, s, zone, shape, transfo, isLinkOnly, isCur, isFront, showTyp) {
+        drawSats: function(applet, gDrawingContext, zone, shape, transfo, isLinkOnly, isCur, isFront, showTyp) {
             var isBag = zone instanceof JMI.script.BagZone;
             var supZone = isBag ? zone : null;
             var zones = isBag ? supZone.subZones : null;
@@ -88,9 +88,9 @@ JMI.script.Swatch = (function() {
             var satCtr,
                 supCtr = shape.getCenter(zone);
             
-            if (!this.isLinkOnly) {
+            if (!isLinkOnly) {
                 // Draws the place itself using the first Satellite
-                sat.paint(applet, s, zone, null, null, false, satData, showTyp);
+                sat.paint(applet, gDrawingContext, zone, null, null, false, satData, showTyp);
             }
             
             for (i = 1 ; i < n ; i++) {
@@ -98,17 +98,17 @@ JMI.script.Swatch = (function() {
                 satData = isCur ? zone.curData[i] : zone.restData[i];
                 flags   = satData.flags;
                 
-                if (((this.isLinkOnly && JMI.script.Base.isEnabled(flags, JMI.script.Satellite.LINK_BIT)) || !this.isLinkOnly)
+                if (((isLinkOnly && JMI.script.Base.isEnabled(flags, JMI.script.Satellite.LINK_BIT)) || !isLinkOnly)
                     && JMI.script.Base.isEnabled(flags, JMI.script.Satellite.VISIBLE_BIT)
                     // This Sat is visible
                     && (isFront != JMI.script.Base.isEnabled(flags, JMI.script.Satellite.BACK_BIT))) {
                     
                     // Bags
                     if (isBag) {
-                        hasRestBit  = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.REST_BIT);
-                        hasCurBit   = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.CUR_BIT);
-                        satRelTrf   = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone.props);
-                        satTrf      = transfo != null ? transfo.transform(satRelTrf, true) : null;
+                        hasRestBit = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.REST_BIT);
+                        hasCurBit  = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.CUR_BIT);
+                        satRelTrf  = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone.props);
+                        satTrf     = transfo != null ? transfo.transform(satRelTrf) : null;
                         
                         if(supZone.dir != 10.) {
                             if (!JMI.script.Base.isEnabled(flags, JMI.script.Satellite.NOSIDED_BIT)) satTrf.dir = supZone.dir;
@@ -123,12 +123,12 @@ JMI.script.Swatch = (function() {
                         if (zones != null && JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SUB_BIT)) {
                             for (subZone in zones) {
                                 satTrf.dir   += supZone.stp;
-                                isCurSub       = subZone == curZone;
-                                satData        = isCur ? subZone.curData[i] : subZone.restData[i];
+                                isCurSub          = subZone == curZone;
+                                satData           = isCur ? subZone.curData[i] : subZone.restData[i];
                                 
                                 if ((!isCur || ((hasRestBit && !isCurSub) || (hasCurBit && isCurSub)))) {
                                     satCtr = shape.transformOut(zone, satTrf);
-                                    sat.paint(applet, s, subZone, satCtr, supCtr, isLinkOnly, satData, showTyp);
+                                    sat.paint(applet, gDrawingContext, subZone, satCtr, supCtr, isLinkOnly, satData, showTyp);
                                 }
                             }
                         }
@@ -142,14 +142,14 @@ JMI.script.Swatch = (function() {
                             
                             if ((!isCur || ((hasRestBit && !isCurSub) || (hasCurBit && isCurSub)))) {
                                 satCtr = shape.transformOut(zone, satTrf);
-                                sat.paint(applet, s, supZone, satCtr, supCtr, isLinkOnly, satData, showTyp);
+                                sat.paint(applet, gDrawingContext, supZone, satCtr, supCtr, isLinkOnly, satData, showTyp);
                             }
                         }
                     }
                     
                     // links
                     else {
-                        sat.paint(applet, s, zone, null, null, false, satData, showTyp);
+                        sat.paint(applet, gDrawingContext, zone, null, null, false, satData, showTyp);
                     }
                 }
             }
