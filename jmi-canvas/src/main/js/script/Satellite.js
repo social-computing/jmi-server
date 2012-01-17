@@ -72,7 +72,7 @@ JMI.script.Satellite = (function() {
          * @param showTyp       The type of satellite to display.[ALL_TYP,BASE_TYP,TIP_TYP,SEL_TYP]
          */
         paint: function(applet, s, zone, satCtr, supCtr, isLinkOnly, satData, showTyp) {
-            var flags = satData._flags;
+            var flags = satData.flags;
             var isTip       = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.TIP_BIT),
                 isSel       = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT),
                 isVisible   = isTip || isSel ? satData.isVisible : true;
@@ -84,10 +84,10 @@ JMI.script.Satellite = (function() {
                 if (isLinkOnly) {
                     // This has a Link
                     if (JMI.script.Base.isEnabled(flags, JMI.script.Satellite.LINK_BIT)) {
-                        var x1 = supCtr._x,
-                            y1 = supCtr._y,
-                            x2 = satCtr._x,
-                            y2 = satCtr._y;
+                        var x1 = supCtr.x,
+                            y1 = supCtr.y,
+                            x2 = satCtr.x,
+                            y2 = satCtr.y;
                         this.setColor(s, JMI.script.Satellite.LINK_DRK_COL_VAL, zone._props);
                         s.graphics.moveTo(x1, y1 + 1);
                         s.graphics.lineTo(x2, y2 + 1);
