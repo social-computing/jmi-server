@@ -28,14 +28,14 @@ var planContainer = JMI.script.PlanContainer,
  * Image used to quickly restore the aspect of a zone that is no longer current.
  * It includes the background + links + Satellites of each place at rest.
  */
-	restDrawingSurface, //:Sprite => Canvas 2D Context  
+	restDrawingContext, //:Sprite => Canvas 2D Context  
 /*
  * Image used as a background on which the current zone is drawn.
  * It includes the background, and the zones rendered with their 'ghosted' satellites form the rest swatch.
  * The resulting image is then filtered with a transparency color.
  */
-	backDrawingSurface,//:Sprite => Canvas 2D Context
-	curDrawingSurface,//:Sprite => Canvas 2D Context
+	backDrawingContext,//:Sprite => Canvas 2D Context
+	curDrawingContext,//:Sprite => Canvas 2D Context
 
 /*
  * API
@@ -62,19 +62,19 @@ var planContainer = JMI.script.PlanContainer,
 		this.curDrawingCanvas.width = mapDiv.clientWidth;
 		this.curDrawingCanvas.height = mapDiv.clientHeight;
 		this.curDrawingCanvas.style.visibility='hidden';
-		this.curDrawingSurface = this.curDrawingCanvas.getContext( "2d");
+		this.curDrawingContext = this.curDrawingCanvas.getContext( "2d");
 
 		this.restDrawingCanvas = document.createElement( "canvas");
 		this.restDrawingCanvas.width = mapDiv.clientWidth;
 		this.restDrawingCanvas.height = mapDiv.clientHeight;
 		//this.restDrawingCanvas.style.visibility='hidden';
-		this.restDrawingSurface = this.restDrawingCanvas.getContext( "2d");
+		this.restDrawingContext = this.restDrawingCanvas.getContext( "2d");
 
 		this.backDrawingCanvas = document.createElement( "canvas");
 		this.backDrawingCanvas.width = mapDiv.clientWidth;
 		this.backDrawingCanvas.height = mapDiv.clientHeight;
 		this.backDrawingCanvas.style.visibility='hidden';
-		this.backDrawingSurface = this.backDrawingCanvas.getContext( "2d");
+		this.backDrawingContext = this.backDrawingCanvas.getContext( "2d");
 		
 		// Event listeners
 		this.doubleClickEnabled = true;
@@ -155,8 +155,8 @@ var planContainer = JMI.script.PlanContainer,
 				this.planContainer.map.env.init(this, needPrint);
 				this.planContainer.map.plan.applet = this;
 				this.planContainer.map.plan.curSel = -1;
-				this.planContainer.map.plan.initZones(this.restDrawingSurface, this.planContainer.map.plan.links, true);
-	            this.planContainer.map.plan.initZones(this.restDrawingSurface, this.planContainer.map.plan.nodes, true);
+				this.planContainer.map.plan.initZones(this.restDrawingContext, this.planContainer.map.plan.links, true);
+	            this.planContainer.map.plan.initZones(this.restDrawingContext, this.planContainer.map.plan.nodes, true);
 				this.planContainer.map.plan.resize(this.size);
 				this.planContainer.map.plan.init();
 				this.planContainer.map.plan.resize(this.size);
@@ -168,8 +168,8 @@ var planContainer = JMI.script.PlanContainer,
 
 				document.body.style.cursor = 'default';
 				
-				this.restDrawingSurface.fillStyle = "rgb(200,0,0)";
- 				this.restDrawingSurface.fillRect (10, 10, 55, 50);
+				this.restDrawingContext.fillStyle = "rgb(200,0,0)";
+ 				this.restDrawingContext.fillRect (10, 10, 55, 50);
  
 				this.renderShape( this.restDrawingCanvas, this.size.width, this.size.height);
 				/*TODO if(this.ready)
@@ -231,13 +231,13 @@ public function get bitmapData():BitmapData
 {
 	return _offScreen;
 }
-public function get curDrawingSurface():Sprite
+public function get curDrawingContext():Sprite
 {
-	return _curDrawingSurface;
+	return _curDrawingContext;
 }
-public function get restDrawingSurface():Sprite
+public function get restDrawingContext():Sprite
 {
-	return _restDrawingSurface;
+	return _restDrawingContext;
 }
 
 public function get curPos():Point {
@@ -255,9 +255,9 @@ public function get planContainer():Object
 
 /*
 com.socialcomputing.jmi.components.Map.prototype.clear = function() {
-	ImageUtil.clear(this.backDrawingSurface);
-	ImageUtil.clear(this.restDrawingSurface);
-	ImageUtil.clear(this.curDrawingSurface);
+	ImageUtil.clear(this.backDrawingContext);
+	ImageUtil.clear(this.restDrawingContext);
+	ImageUtil.clear(this.curDrawingContext);
 	ImageUtil.clear(this.drawingSurface);
 	
 	if(this.width != 0 && this.height !=  0) {
@@ -326,9 +326,9 @@ public function resizeHandler(event:ResizeEvent):void {
 	//trace("resize, new size = (" + this.width + ", " + this.height + ")");
 	this.clear();
 	
-	this.restDrawingSurface.graphics.beginFill(this.ready ? this.env.inCol.m_color : this.backgroundColor);
-	this.restDrawingSurface.graphics.drawRect(0, 0, this.width, this.height);
-	this.restDrawingSurface.graphics.endFill();
+	this.restDrawingContext.graphics.beginFill(this.ready ? this.env.inCol.m_color : this.backgroundColor);
+	this.restDrawingContext.graphics.drawRect(0, 0, this.width, this.height);
+	this.restDrawingContext.graphics.endFill();
 		
 	if(this.ready) {
 		this.plan.resize( this.size);

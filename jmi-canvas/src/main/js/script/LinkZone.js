@@ -77,15 +77,15 @@ JMI.script.LinkZone = (function() {
         paintCur: function(applet){
             if((this.flags & JMI.script.ActiveZone.INVISIBLE_BIT) != 0) return;
             
-            ImageUtil.clear(applet.curDrawingSurface);
-            this.curSwatch.paint(applet, applet.curDrawingSurface, this, true, true, Satellite.BASE_TYP, true);
+            ImageUtil.clear(applet.curDrawingContext);
+            this.curSwatch.paint(applet, applet.curDrawingContext, this, true, true, Satellite.BASE_TYP, true);
             
-            this.from.paint(applet, applet.curDrawingSurface, false, true, Satellite.ALL_TYP, true);
-            this.to.paint(applet, applet.curDrawingSurface, false, true, Satellite.ALL_TYP, true);
-            this.curSwatch.paint(applet, applet.curDrawingSurface, this, true, true, Satellite.TIP_TYP, true);
-            this.curSwatch.paint(applet, applet.curDrawingSurface, this, true, true, Satellite.SEL_TYP, true);
+            this.from.paint(applet, applet.curDrawingContext, false, true, Satellite.ALL_TYP, true);
+            this.to.paint(applet, applet.curDrawingContext, false, true, Satellite.ALL_TYP, true);
+            this.curSwatch.paint(applet, applet.curDrawingContext, this, true, true, Satellite.TIP_TYP, true);
+            this.curSwatch.paint(applet, applet.curDrawingContext, this, true, true, Satellite.SEL_TYP, true);
         
-            applet.renderShape(applet.curDrawingSurface, this.bounds.width, this.bounds.height, new JMI.script.Point(this.bounds.x, this.bounds.y));
+            applet.renderShape(applet.curDrawingContext, this.bounds.width, this.bounds.height, new JMI.script.Point(this.bounds.x, this.bounds.y));
         }
 	};
 	

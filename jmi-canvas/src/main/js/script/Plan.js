@@ -153,44 +153,44 @@ JMI.script.Plan = (function() {
 	init: function() {
 		this.tipTimers = {};
 	    var dim = this.applet.size;
-	    var restDrawingSurface = this.applet.restDrawingSurface;
-		var curDrawingSurface  = this.applet.curDrawingSurface;
-		var backDrawingSurface = this.applet.backDrawingSurface;
+	    var restDrawingContext = this.applet.restDrawingContext;
+		var curDrawingContext  = this.applet.curDrawingContext;
+		var backDrawingContext = this.applet.backDrawingContext;
 	
 	    // If there is any background image, load it
 	    //if (this.applet.backImgUrl != null)
 	        //renderBitmap( restGfx, this.applet.backImgUrl, 0, 0, null );
 		
-		/*ImageUtil.clear(restDrawingSurface);
-		restDrawingSurface.graphics.beginFill( this.applet.env.inCol.color);
-		restDrawingSurface.graphics.drawRect(0, 0, this.applet.width, this.applet.height);
-		restDrawingSurface.graphics.endFill();*/
+		/*ImageUtil.clear(restDrawingContext);
+		restDrawingContext.graphics.beginFill( this.applet.env.inCol.color);
+		restDrawingContext.graphics.drawRect(0, 0, this.applet.width, this.applet.height);
+		restDrawingContext.graphics.endFill();*/
 	
 	    // Init Links, Nodes and subNodes.
-		this.initZones(restDrawingSurface, this.links, false);
-		this.initZones(restDrawingSurface, this.nodes, false);	
+		this.initZones(restDrawingContext, this.links, false);
+		this.initZones(restDrawingContext, this.nodes, false);	
 			
 	    // Init backImg and restImg with background, links and places parts that are "ghostable"
-		this.paintZones(restDrawingSurface, this.links, this.links.length, false, JMI.script.Satellite.ALL_TYP, true, false );
-		this.paintZones(restDrawingSurface, this.nodes, this.nodesCnt, false, JMI.script.Satellite.ALL_TYP, true, true );
+		this.paintZones(restDrawingContext, this.links, this.links.length, false, JMI.script.Satellite.ALL_TYP, true, false );
+		this.paintZones(restDrawingContext, this.nodes, this.nodesCnt, false, JMI.script.Satellite.ALL_TYP, true, true );
 	    
 	    // Filters backImg so it looks ghosted
 		if( this.applet.planContainer.map.env.filterCol != null) {
 			// TODO portage
-			//ImageUtil.copy( restDrawingSurface, backDrawingSurface);
-			//ImageUtil.filterImage( backDrawingSurface, dim, this.applet.planContainer.map.env.filterCol.getColor());
-			// this.applet.renderShape( this.applet.restDrawingSurface, 0, 0); // ??? size
-			//this.applet.env.filterImage(this.applet.backDrawingSurface, dim);
+			//ImageUtil.copy( restDrawingContext, backDrawingContext);
+			//ImageUtil.filterImage( backDrawingContext, dim, this.applet.planContainer.map.env.filterCol.getColor());
+			// this.applet.renderShape( this.applet.restDrawingContext, 0, 0); // ??? size
+			//this.applet.env.filterImage(this.applet.backDrawingContext, dim);
 		}
 	    
 	    // Finish drawing restImg with places parts that are allways visible (tip, sel...)
-		this.paintZones(restDrawingSurface, this.links, this.links.length, true, JMI.script.Satellite.BASE_TYP, true, false );
-		this.paintZones(restDrawingSurface, this.links, this.links.length, true, JMI.script.Satellite.TIP_TYP, false, false );
-		this.paintZones(restDrawingSurface, this.links, this.links.length, true, JMI.script.Satellite.SEL_TYP, false, false );
+		this.paintZones(restDrawingContext, this.links, this.links.length, true, JMI.script.Satellite.BASE_TYP, true, false );
+		this.paintZones(restDrawingContext, this.links, this.links.length, true, JMI.script.Satellite.TIP_TYP, false, false );
+		this.paintZones(restDrawingContext, this.links, this.links.length, true, JMI.script.Satellite.SEL_TYP, false, false );
 		
-		this.paintZones(restDrawingSurface, this.nodes, this.nodesCnt, true, JMI.script.Satellite.BASE_TYP, true, true );
-		this.paintZones(restDrawingSurface, this.nodes, this.nodesCnt, true, JMI.script.Satellite.TIP_TYP, false, true );
-		this.paintZones(restDrawingSurface, this.nodes, this.nodesCnt, true, JMI.script.Satellite.SEL_TYP, false, true );
+		this.paintZones(restDrawingContext, this.nodes, this.nodesCnt, true, JMI.script.Satellite.BASE_TYP, true, true );
+		this.paintZones(restDrawingContext, this.nodes, this.nodesCnt, true, JMI.script.Satellite.TIP_TYP, false, true );
+		this.paintZones(restDrawingContext, this.nodes, this.nodesCnt, true, JMI.script.Satellite.SEL_TYP, false, true );
 	},
 	
 	/*
@@ -209,7 +209,7 @@ JMI.script.Plan = (function() {
 	    
 		// Check if there is a current Active Zone (Satellite ?)
 	    if(curSat != null) {
-	        curSat = curZone.curSwh.getSatAt(this.applet, this.applet.curDrawingSurface.graphics, parent, p, true);
+	        curSat = curZone.curSwh.getSatAt(this.applet, this.applet.curDrawingContext.graphics, parent, p, true);
 	        
 			// The cursor is in the current Zone
 	        if (curSat != null) {
@@ -224,7 +224,7 @@ JMI.script.Plan = (function() {
 	        
 			// We know p is not in curZone so don't test it!
 	        if (zone != parent) {
-	            curSat = zone.restSwh.getSatAt(this.applet, this.applet.curDrawingSurface.graphics, zone, p, false);
+	            curSat = zone.restSwh.getSatAt(this.applet, this.applet.curDrawingContext.graphics, zone, p, false);
 	            
 				// The cursor is on this node
 	            if(curSat != null) {
@@ -243,7 +243,7 @@ JMI.script.Plan = (function() {
 	        if (zone != parent && zone.curSwh != null) {                                                
 				
 				// If this zone has no current Swatch, it can't be current.
-	            curSat = zone.restSwh.getSatAt(this.applet, this.applet.curDrawingSurface.graphics, zone, p, false );
+	            curSat = zone.restSwh.getSatAt(this.applet, this.applet.curDrawingContext.graphics, zone, p, false );
 	            
 				// The cursor is on this link
 	            if (curSat != null) {
@@ -290,8 +290,8 @@ JMI.script.Plan = (function() {
 				// Restore its rest image
 	            //ON rollover non active zone => redraw
 				var curZoneBounds = curZone.getParent().bounds;
-				ImageUtil.clear( this.applet.curDrawingSurface);
-				this.applet.renderShape(this.applet.restDrawingSurface, curZoneBounds.width, curZoneBounds.height, new Point(curZoneBounds.x, curZoneBounds.y));
+				ImageUtil.clear( this.applet.curDrawingContext);
+				this.applet.renderShape(this.applet.restDrawingContext, curZoneBounds.width, curZoneBounds.height, new Point(curZoneBounds.x, curZoneBounds.y));
 	            this.applet.toolTip = null;
 	        }
 	        
@@ -300,7 +300,7 @@ JMI.script.Plan = (function() {
 			// A new Zone is hovered, let's paint it!
 	        if (curSat != null && (curZone != newZone)) {
 	            curZone = newZone;
-			    ImageUtil.clear( this.applet.curDrawingSurface);
+			    ImageUtil.clear( this.applet.curDrawingContext);
 	            paintCurZone();              
 	            curSat.execute( this.applet, curZone, p, Satellite.HOVER_VAL);
 	            cursTyp = MouseCursor.HAND;   // Sets the cursor to a hand if the mouse entered a Zone

@@ -92,9 +92,9 @@ JMI.namespace("com.socialcomputing.jmi.script.TipTimer") = (function() {
 				 
 				if(_bounds.width == 0 && _bounds.height == 0) {
 					// Asynchronous URL content loaded (bounds not set)
-					slice.setBounds( _plan.applet, _plan.applet.curDrawingSurface.graphics, zone.getParent(), zone, null, null, null, _bounds );
+					slice.setBounds( _plan.applet, _plan.applet.curDrawingContext.graphics, zone.getParent(), zone, null, null, null, _bounds );
 				}
-				_plan.applet.renderShape( _plan.applet.restDrawingSurface, _bounds.width, _bounds.height, new com.socialcomputing.jmi.script.Point( _bounds.x, _bounds.y));
+				_plan.applet.renderShape( _plan.applet.restDrawingContext, _bounds.width, _bounds.height, new com.socialcomputing.jmi.script.Point( _bounds.x, _bounds.y));
 				if( full) _plan.paintCurZone();
 			}
 			// TODO : portage : delete keyword in javascript ?
@@ -111,9 +111,9 @@ JMI.namespace("com.socialcomputing.jmi.script.TipTimer") = (function() {
 			this.started = true;
 			// :Point
 			var pos = _plan.applet.curPos;
-			slice.paint( _plan.applet, _plan.applet.curDrawingSurface, zone.getParent(), zone, null, pos, null );
-			slice.setBounds( _plan.applet, _plan.applet.curDrawingSurface.graphics, zone.getParent(), zone, null, pos, null, _bounds );
-			_plan.applet.renderShape( _plan.applet.curDrawingSurface, _bounds.width, _bounds.height, new com.socialcomputing.jmi.script.Point( _bounds.x, _bounds.y));
+			slice.paint( _plan.applet, _plan.applet.curDrawingContext, zone.getParent(), zone, null, pos, null );
+			slice.setBounds( _plan.applet, _plan.applet.curDrawingContext.graphics, zone.getParent(), zone, null, pos, null, _bounds );
+			_plan.applet.renderShape( _plan.applet.curDrawingContext, _bounds.width, _bounds.height, new com.socialcomputing.jmi.script.Point( _bounds.x, _bounds.y));
 		}
 		if( duration != -1) {
 		    // TODO portage : timer in javascript

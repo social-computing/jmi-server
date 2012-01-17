@@ -140,23 +140,23 @@ JMI.script.BagZone = (function() {
          * @param applet    applet owning this zone.
          */
         paintCur: function(applet) {
-            // Copy backDrawingSurface hovered zone to curDrawingSurface
+            // Copy backDrawingContext hovered zone to curDrawingContext
             // Use this method instead of ImageUtil.copy to improve performance  
             var backBitmap = new BitmapData(this.bounds.width + this.bounds.x, this.bounds.height + this.bounds.y);
-            backBitmap.draw(applet.backDrawingSurface, null, null, null, 
+            backBitmap.draw(applet.backDrawingContext, null, null, null, 
                             new JMI.script.Rectangle(this.bounds.x, this.bounds.y, 
                                                      this.bounds.width + this.bounds.x, this.bounds.height + this.bounds.y));
-            applet.curDrawingSurface.graphics.beginBitmapFill(backBitmap);
-            applet.curDrawingSurface.graphics.drawRect(this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height);
-            applet.curDrawingSurface.graphics.endFill();
+            applet.curDrawingContext.graphics.beginBitmapFill(backBitmap);
+            applet.curDrawingContext.graphics.drawRect(this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height);
+            applet.curDrawingContext.graphics.endFill();
             
-            this.curSwh.paint(applet, applet.curDrawingSurface, this, true, true, JMI.script.Satellite.ALL_TYP, true);
+            this.curSwh.paint(applet, applet.curDrawingContext, this, true, true, JMI.script.Satellite.ALL_TYP, true);
             /*
                 bufGfx.translate( m_bounds.x, m_bounds.y );
                 g.setClip( m_bounds.x, m_bounds.y, m_bounds.width, m_bounds.height );
                 g.drawImage( applet.m_plan.blitBuf, m_bounds.x, m_bounds.y, null );
             */
-            applet.renderShape(applet.curDrawingSurface, this.bounds.width, this.bounds.height, 
+            applet.renderShape(applet.curDrawingContext, this.bounds.width, this.bounds.height, 
                                new JMI.script.Point(this.bounds.x, this.bounds.y));
         }
 
