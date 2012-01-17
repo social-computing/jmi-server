@@ -235,14 +235,16 @@ JMI.script.Satellite = (function() {
                 if (zone instanceof JMI.script.LinkZone) {
                     //dispatchEvent( new LinkClickEvent( plan.curZone as LinkZone));
                 }
-                else { 
-                    var event = null;
+                else {
+                	// TODO 
+                    /*var event = null;
                     if(actionId == JMI.script.Satellite.CLICK_VAL) event = AttributeEvent.CLICK;
                     else if(actionId == JMI.script.Satellite.DBLCLICK_VAL) event = AttributeEvent.DOUBLE_CLICK;
                     else if(actionId == JMI.script.Satellite.HOVER_VAL) event = AttributeEvent.HOVER;
                     if(event != null) {
-                        // applet.dispatchEvent( new AttributeEvent( event, applet.findAttribute( zone), pos.x, pos.y));
+                        applet.dispatchEvent( new AttributeEvent( event, applet.findAttribute( zone), pos.x, pos.y));
                     }
+                    */
                 }
             }
         

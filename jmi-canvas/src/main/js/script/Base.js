@@ -139,7 +139,6 @@ JMI.script.Base = (function() {
          * @param   props   If this contains a referenced property, props is the table that hold the property.
          * @return  the Color corresponding to the ColorX field whose index is prop or null if the property doesn't exists or is void.
          */
-        // TODO : portage, instanceof
         getColor: function(property, props) {
             var value = this.getValue(property, props);
             if(value instanceof JMI.script.ColorX) { 
@@ -247,7 +246,6 @@ JMI.script.Base = (function() {
                 
                 for (token in tokens) {
                     if (javascript) {
-                        // TODO portage : String.fromCharCode
                         token.buffer = token.buffer.split( ",").join(String.fromCharCode(0xFFFC));
                     }
                     prop = token.toString(j, props);
@@ -256,8 +254,7 @@ JMI.script.Base = (function() {
                         dst[j] = null;
                         break;
                     }
-                    // TODO portage : concat 
-                    dst[j] = dst[j].concat(prop);
+                    dst[j] = dst[j] + prop;
                 }
             }
             
@@ -383,7 +380,6 @@ JMI.script.Base.parseTokens = function(text) {
     var tokens = [];
     
     for (i = 0; i < len; i++) {
-        // TODO : portage charAt
         c = text.charAt(i);
         if(c == '\\') {
             isAfterBS = true;
@@ -404,7 +400,6 @@ JMI.script.Base.parseTokens = function(text) {
                     // there was a text Token previously,
                     if (token != null) {
                         //token.buffer.setLength( j );
-                        // TODO : portage push
                         tokens.push(token);    // store it
                     }
                     
@@ -418,7 +413,6 @@ JMI.script.Base.parseTokens = function(text) {
                 // a new prop or list Token ends
                 else if (c == '}' || c == ']') {
                     //token.buffer.setLength( j );
-                    // TODO : portage push
                     tokens.push(token);        // store the previous token
                     token = null;              // a new one must be created
                 }
@@ -440,7 +434,6 @@ JMI.script.Base.parseTokens = function(text) {
     // don't forget the last one!
     if (c != '}' && c != ']') {
         //token.buffer.setLength( j );
-        // TODO : portage push
         // store the previous token
         tokens.push( token );        
     }

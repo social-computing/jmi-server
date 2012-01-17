@@ -131,7 +131,7 @@ JMI.script.Slice =  (function() {
                 return true;
             }
             
-            var text = getText(JMI.script.Slice.TEXT_VAL, zone.props);
+            var text = this.getText(JMI.script.Slice.TEXT_VAL, zone.props);
             if (text != null) {
                 // TODO : null à remplacer
                 var htmlTxt = text.getHText(planComponent, null, zone, transfo, satCtr, supCtr, text);
