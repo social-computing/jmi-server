@@ -115,7 +115,7 @@ JMI.script.Satellite = (function() {
                         case JMI.script.Satellite.TIP_TYP  : isShowable = isTip; break;
                     }
                     if (isShowable) {
-                        for each(var slice in this.slices) {
+                        for (var slice in this.slices) {
                             slice.paint(applet, s, supZone, zone, this.shapex, satCtr, supCtr);
                         }
                     }
