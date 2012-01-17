@@ -163,9 +163,6 @@ var planContainer = JMI.script.PlanContainer,
 				this.ready = true;
 				document.body.style.cursor = 'default';
 
-				this.restDrawingContext.fillStyle = "rgb(150,29,28)";
-				this.restDrawingContext.fillRect (10,10,80,80);
-				
 				this.renderShape( this.restDrawingCanvas, this.size.width, this.size.height)				
 				/*TODO portage
 				if(this.ready)

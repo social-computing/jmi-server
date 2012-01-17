@@ -72,7 +72,7 @@ JMI.script.Satellite = (function() {
          * @param showTyp       The type of satellite to display.[ALL_TYP,BASE_TYP,TIP_TYP,SEL_TYP]
          */
         paint: function(applet, s, zone, satCtr, supCtr, isLinkOnly, satData, showTyp) {
-            var flags = satData.flags;
+            var flags = satData._flags;
             var isTip       = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.TIP_BIT),
                 isSel       = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT),
                 isVisible   = isTip || isSel ? satData.isVisible : true;
