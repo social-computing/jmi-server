@@ -17,10 +17,10 @@ JMI.script.Transfo = (function() {
      * Constructor
      * Creates a new Transfo using parameters whose meaning depends on the flags argument.
      * 
-     * @param dir       Angular direction in POLAR coordinates. X pos or WIDTH in cartesian coordinates. // :Number
-     * @param pos       Radius in Polar coordinates. Y pos or HEIGHT in cartesian coordinates. // :Number
-     * @param scl       Scale of the shape to create using this transfo. // :Number
-     * @param flags     An int holding one or more bits in : {CART_BIT,ABS_BIT,INTER_BIT}. // :int
+     * @param direction  Angular direction in POLAR coordinates. X pos or WIDTH in cartesian coordinates. // :Number
+     * @param position   Radius in Polar coordinates. Y pos or HEIGHT in cartesian coordinates. // :Number
+     * @param scale      Scale of the shape to create using this transfo. // :Number
+     * @param flags      An int holding one or more bits in : {CART_BIT,ABS_BIT,INTER_BIT}. // :int
      */
     var Transfo = function(direction, position, scale, flags) {
         this.direction = direction;
@@ -36,18 +36,17 @@ JMI.script.Transfo = (function() {
          * 
          * @param transfo       A Transfo that define a position and scale to transform. It should be of the same type as this.
          *                      This means its flags should be the same. // :Transfo
-         * @param isForward     Useless now. // :Boolean
          * @return              A new Transfo resulting of the compositiong with this.
          *                      Or this if t is null or not compatible.
          */
-        transform: function(transfo, isForward) {
+        transform: function(transfo) {
             // TODO : replace null test by undefined when constructor called have been checked
-            if (transfo == null || this.flags != transfo._flags) {
+            if (transfo == null || this.flags != transfo.flags) {
                 return new JMI.script.Transfo(this.direction, this.position, this.scale, this.flags);
             }
             else {
-                return new JMI.script.Transfo(this.direction + transfo._direction, this.position * transfo._position,
-                                              this.scale * transfo._scale, this.flags);
+                return new JMI.script.Transfo(this.direction + transfo.direction, this.position * transfo.position,
+                                              this.scale * transfo.scale, this.flags);
             }
         },
         
