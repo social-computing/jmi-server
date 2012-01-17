@@ -93,12 +93,12 @@ JMI.script.Token = (function() {
                 var rawProp;
                 
                 // Global Properties
-                if (Base.isEnabled(this.flags, JMI.script.Token.GLOBAL_BIT)) {
+                if (JMI.script.Base.isEnabled(this.flags, JMI.script.Token.GLOBAL_BIT)) {
                     props = props["ENV"];
                 }
                 
                 // List Properties
-                if (Base.isEnabled(this.flags, JMI.script.Token.LIST_BIT)) {
+                if (JMI.script.Base.isEnabled(this.flags, JMI.script.Token.LIST_BIT)) {
                     rawProp = props[this.buffer];
                     
                     if (rawProp != null) {

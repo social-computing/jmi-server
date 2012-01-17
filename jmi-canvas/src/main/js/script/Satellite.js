@@ -72,7 +72,7 @@ JMI.script.Satellite = (function() {
          * @param showTyp       The type of satellite to display.[ALL_TYP,BASE_TYP,TIP_TYP,SEL_TYP]
          */
         paint: function(applet, s, zone, satCtr, supCtr, isLinkOnly, satData, showTyp) {
-            var flags = satData._flags;
+            var flags = satData.flags;
             var isTip       = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.TIP_BIT),
                 isSel       = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT),
                 isVisible   = isTip || isSel ? satData.isVisible : true;
@@ -115,8 +115,8 @@ JMI.script.Satellite = (function() {
                         case JMI.script.Satellite.TIP_TYP  : isShowable = isTip; break;
                     }
                     if (isShowable) {
-                        for each(var slice in this.slices) {
-                            slice.paint(applet, s, supZone, zone, this.shapex, satCtr, supCtr);
+                        for (var i = 0; i < this.slices.length; i++) {
+                            this.slices[i].paint(applet, s, supZone, zone, this.shapex, satCtr, supCtr);
                         }
                     }
                 }

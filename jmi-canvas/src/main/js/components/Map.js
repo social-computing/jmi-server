@@ -161,17 +161,19 @@ var planContainer = JMI.script.PlanContainer,
 					this.attributes.addItem( new Attribute( this.planContainer.map.env, zone));
 				}*/
 				this.ready = true;
-
 				document.body.style.cursor = 'default';
 
-				this.drawingContext.drawImage( this.restDrawingCanvas, 0, 0)				
+				this.restDrawingContext.fillStyle = "rgb(150,29,28)";
+				this.restDrawingContext.fillRect (10,10,80,80);
+				
+				this.renderShape( this.restDrawingCanvas, this.size.width, this.size.height)				
 				/*TODO portage
 				if(this.ready)
 					dispatchEvent(new Event(Map.READY));*/
 			}
 		},
 		
-		renderShape: function( context, width, height, position) {
+		renderShape: function( canvas, width, height, position) {
 			// If no position is specified, take (0,0)
 			if(position == null) {
 				position = new JMI.script.Point(0, 0);
@@ -179,7 +181,7 @@ var planContainer = JMI.script.PlanContainer,
 			
 			if( width > 0 && height > 0) { 
 				// Copying the content of the context on to visib canvas context
-				this.drawingContext.drawImage( context, position.x, position.y, width, height, position.x, position.y, width, height);
+				this.drawingContext.drawImage( canvas, position.x, position.y, width, height, position.x, position.y, width, height);
 			}
 		},
 		
