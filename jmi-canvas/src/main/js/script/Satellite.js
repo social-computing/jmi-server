@@ -225,8 +225,8 @@ JMI.script.Satellite = (function() {
          * @param actionId      Type of event that triggers the action.[HOVER_VAL,CLICK_VAL,DBLCLICK_VAL].
          */
         execute: function(applet, zone, pos, actionId) {
-            var firstSat = zone._curSwh.satellites[0];
-            var isExe = isDefined(actionId);
+            var firstSat = zone.curSwatch.satellites[0];
+            var isExe = this.isDefined(actionId);
         
             // Events
             // TODO : portage gestion des événements
@@ -247,10 +247,10 @@ JMI.script.Satellite = (function() {
             }
         
             if (isExe) {
-                var actionStr = getString(actionId, zone._props);
+                var actionStr = this.getString(actionId, zone._props);
                 
                 if (actionStr != null) {
-                    var actions = getString(actionId, zone._props ).split("\n");
+                    var actions = this.getString(actionId, zone._props ).split("\n");
                     var action, func, args;
                     var i, j, n = actions.length;
                     
@@ -274,7 +274,7 @@ JMI.script.Satellite = (function() {
                                 args = args.substring(j, args.length);
                             }
                             
-                            applet.actionPerformed(args);
+                            applet.performAction( args);
                         }
                         
                         // Popup a menu

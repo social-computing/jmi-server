@@ -162,10 +162,8 @@ JMI.script.Plan = (function() {
 	    //if (this.applet.backImgUrl != null)
 	        //renderBitmap( restGfx, this.applet.backImgUrl, 0, 0, null );
 		
-		/*ImageUtil.clear(restDrawingContext);
-		restDrawingContext.graphics.beginFill( this.applet.env.inCol.color);
-		restDrawingContext.graphics.drawRect(0, 0, this.applet.width, this.applet.height);
-		restDrawingContext.graphics.endFill();*/
+		restDrawingContext.fillStyle = this.applet.planContainer.map.env.inColor.getColor();
+		restDrawingContext.fillRect( 0, 0, dim.width, dim.height);
 	
 	    // Init Links, Nodes and subNodes.
 		this.initZones(restDrawingContext, this.links, false);
@@ -210,12 +208,12 @@ JMI.script.Plan = (function() {
 	    
 		// Check if there is a current Active Zone (Satellite ?)
 	    if(this.curSat != null) {
-	        cSat = this.curZone.curSwh.getSatAt(this.applet, this.applet.curDrawingContext, parent, p, true);
+	        cSat = this.curZone.curSwatch.getSatAt(this.applet, this.applet.curDrawingContext, parent, p, true);
 	        
 			// The cursor is in the current Zone
 	        if (cSat != null) {
 				//Alert.show("a current zone is hovered");
-	            return updateCurrentZone(cSat, p);
+	            return this.updateCurrentZone(cSat, p);
 	        }
 	    }
 	    
@@ -284,36 +282,34 @@ JMI.script.Plan = (function() {
 		// The current Satellite has changed
 	    if (this.curZone != this.newZone || this.curSat != cSat) {
 			// If flying over background reset to default arrow
-	        var cursTyp = MouseCursor.AUTO;    
+	        var cursTyp = 'normal';    
 			
 	        if (this.curZone != null &&
-				(this.newZone == null || this.curZone.getParent() != newZone.getParent())) {
+				(this.newZone == null || this.curZone.getParent() != this.newZone.getParent())) {
 				// Restore its rest image
 	            //ON rollover non active zone => redraw
 				var curZoneBounds = this.curZone.getParent().bounds;
-				ImageUtil.clear( this.applet.curDrawingContext);
-				this.applet.renderShape(this.applet.restDrawingContext, curZoneBounds.width, curZoneBounds.height, new Point(curZoneBounds.x, curZoneBounds.y));
-	            this.applet.toolTip = null;
+				// TODO portage
+				//ImageUtil.clear( this.applet.curDrawingContext);
+				//this.applet.renderShape(this.applet.restDrawingContext, curZoneBounds.width, curZoneBounds.height, new Point(curZoneBounds.x, curZoneBounds.y));
+	            //this.applet.toolTip = null;
 	        }
-	        
 	        this.curSat = cSat;
 	        
 			// A new Zone is hovered, let's paint it!
 	        if (this.curSat != null && (this.curZone != this.newZone)) {
 	            this.curZone = this.newZone;
-			    ImageUtil.clear( this.applet.curDrawingContext);
-	            paintCurZone();              
-	            this.curSat.execute( this.applet, curZone, p, Satellite.HOVER_VAL);
-	            cursTyp = MouseCursor.HAND;   // Sets the cursor to a hand if the mouse entered a Zone
+	            // TODO portage
+			    //ImageUtil.clear( this.applet.curDrawingContext);
+	            this.paintCurZone();              
+	            this.curSat.execute( this.applet, this.curZone, p, JMI.script.Satellite.HOVER_VAL);
+				cursTyp = 'pointer';
 	        }
 	        else {
-	            this.curZone = newZone;
+	            this.curZone = this.newZone;
 	            if (this.curSat == null) this.applet.showStatus("");
 	        }
-	        // TODO ???
-	        //this.applet.setCursor( Cursor.getPredefinedCursor( cursTyp ));
-	        //g.dispose();
-	        
+	        document.body.style.cursor = cursTyp;
 	        return true;
 	    }
 	    
@@ -327,8 +323,8 @@ JMI.script.Plan = (function() {
 	 */
 	paintCurZone: function() {
 		// A new Zone is hovered, let's paint it!
-		if (curZone != null) {
-	        curZone.getParent().paintCur( this.applet);
+		if (this.curZone != null) {
+	        this.curZone.getParent().paintCur( this.applet);
 	    }
 	},
 	
@@ -409,7 +405,6 @@ JMI.script.Plan = (function() {
 	            nodes[i++].datas = {};
 	        }
 	
-	        
 			// Iterate through all links (real and fakes)
 			/* for each (var zone in this.links) { } */
 			var nbLinks = this.links.length;
