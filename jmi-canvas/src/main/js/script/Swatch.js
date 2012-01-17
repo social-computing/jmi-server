@@ -290,7 +290,7 @@ JMI.script.Swatch = (function() {
                             hasSubBit = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SUB_BIT);
                             satRelTrf = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone.props);
                             
-                            if (zones != null && hasSubBit && hasCurBit && satRelTrf != null && satRelTrf._pos == 0.) {
+                            if (zones != null && hasSubBit && hasCurBit && satRelTrf != null && satRelTrf.position == 0.) {
                                 if (isVisible && sat.contains(planComponent, g, zone, null, null, transfo, pos, true, true)) {
                                     return sat;
                                 }

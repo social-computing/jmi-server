@@ -156,8 +156,8 @@ JMI.script.Polygon = (function() {
                     || ((this.ypoints[i] > p.y) && (this.ypoints[i2] <= p.y))) {      // Or a downward crossing
                     
                     // Compute the actual edge-ray intersect x-coordinate
-                    var vt = (p._y - this.ypoints[i]) / (this.ypoints[i2] - this.ypoints[i]);
-                    if (p._x < this.xpoints[i] + vt * (this.xpoints[i2] - this.xpoints[i])) // p.x < intersect
+                    var vt = (p.y - this.ypoints[i]) / (this.ypoints[i2] - this.ypoints[i]);
+                    if (p.x < this.xpoints[i] + vt * (this.xpoints[i2] - this.xpoints[i])) // p.x < intersect
                         ++cn;   // a valid crossing of y = p.y right of p.x
                 }
             }

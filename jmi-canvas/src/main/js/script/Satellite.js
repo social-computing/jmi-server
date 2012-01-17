@@ -52,7 +52,7 @@ JMI.script.Satellite = (function() {
         // TODO : portage, décalage de bits
         isVisible: function(zone, isTip, curSel, sel) {
             var hasSel = curSel >= 0,
-                isSel  = JMI.script.Base.isEnabled(zone._selection, 1 << curSel);
+                isSel  = JMI.script.Base.isEnabled(zone.selection, 1 << curSel);
             
             return isTip ? !hasSel || !isSel : hasSel && sel == curSel && isSel;
         },
@@ -88,10 +88,10 @@ JMI.script.Satellite = (function() {
                             y1 = supCtr.y,
                             x2 = satCtr.x,
                             y2 = satCtr.y;
-                        this.setColor(s, JMI.script.Satellite.LINK_DRK_COL_VAL, zone._props);
+                        this.setColor(s, JMI.script.Satellite.LINK_DRK_COL_VAL, zone.props);
                         s.graphics.moveTo(x1, y1 + 1);
                         s.graphics.lineTo(x2, y2 + 1);
-                        if (this.setColor(s, JMI.script.Satellite.LINK_LIT_COL_VAL, zone._props)) {
+                        if (this.setColor(s, JMI.script.Satellite.LINK_LIT_COL_VAL, zone.props)) {
                             s.graphics.moveTo(x1 - 1, y1);
                             s.graphics.lineTo(x2 - 1, y2);
                             s.graphics.moveTo(x1, y1);
@@ -99,7 +99,7 @@ JMI.script.Satellite = (function() {
                             s.graphics.moveTo(x1 + 1, y1 );
                             s.graphics.lineTo(x2 + 1, y2);
                             
-                            this.setColor(s, JMI.script.Satellite.LINK_NRM_COL_VAL, zone._props);
+                            this.setColor(s, JMI.script.Satellite.LINK_NRM_COL_VAL, zone.props);
                             s.graphics.moveTo(x1, y1 - 1);
                             s.graphics.lineTo(x2, y2 - 1);
                         }
@@ -247,10 +247,10 @@ JMI.script.Satellite = (function() {
             }
         
             if (isExe) {
-                var actionStr = this.getString(actionId, zone._props);
+                var actionStr = this.getString(actionId, zone.props);
                 
                 if (actionStr != null) {
-                    var actions = this.getString(actionId, zone._props ).split("\n");
+                    var actions = this.getString(actionId, zone.props ).split("\n");
                     var action, func, args;
                     var i, j, n = actions.length;
                     
@@ -258,7 +258,7 @@ JMI.script.Satellite = (function() {
                         action  = actions[i];
                         j       = action.indexOf(' ');
                         func    = action.substring(0, j);
-                        args    = this.parseString3(action.substring(j + 1, action.length), zone._props )[0];
+                        args    = this.parseString3(action.substring(j + 1, action.length), zone.props )[0];
                         
                         // Shows a message in the StatusBar
                         if (func == ("show")) {
@@ -280,7 +280,7 @@ JMI.script.Satellite = (function() {
                         // Popup a menu
                         // TODO : portage getion du menu
                         else if (func == ("popup")) {
-                            var menux = zone._curSwh._refs[args];
+                            var menux = zone.curSwh.refs[args];
                             
                             if (menux != null) {
                                 var menuData = [];
@@ -291,24 +291,24 @@ JMI.script.Satellite = (function() {
                                 //menu.setStyle("fontWeight", "bold");
                                 menu.addEventListener(JMI.script.MenuEvent.ITEM_CLICK, applet.menuHandler);
                                 var point = applet.localToGlobal(pos);
-                                menu.show(point._x, point._y);
+                                menu.show(point.x, point.y);
                                 menu.visible = false;
-                                if (point._x + menu.width > applet.width) 
-                                    point._x = Math.max(point._x - menu.width, 0);
-                                if (point._y + menu.height > applet.height) 
-                                    point._y = Math.max(point._y - menu.height, 0);
-                                menu.move(point._x, point._y);
+                                if (point.x + menu.width > applet.width) 
+                                    point.x = Math.max(point.x - menu.width, 0);
+                                if (point.y + menu.height > applet.height) 
+                                    point.y = Math.max(point.y - menu.height, 0);
+                                menu.move(point.x, point.y);
                                 menu.visible = true;
                             }
                         }
                         
                         // Pop a tooltip
                         else if (func == ("pop")) {
-                            var slice = zone._curSwh._refs[args];
+                            var slice = zone.curSwh.refs[args];
                             
                             if (slice != null) {
-                                var delay  = slice.getInt(JMI.script.Slice.DELAY_VAL, zone._props);
-                                var length = slice.getInt(JMI.script.Slice.LENGTH_VAL, zone._props);
+                                var delay  = slice.getInt(JMI.script.Slice.DELAY_VAL, zone.props);
+                                var length = slice.getInt(JMI.script.Slice.LENGTH_VAL, zone.props);
                                 //var text:HTMLText = slice.getText(Slice.TEXT_VAL, zone.m_props);
                                 //applet.toolTip    = text.parseString(HTMLText.TEXT_VAL, zone.m_props).join("\n");
                                 applet.plan.popSlice(zone, slice, delay, length, args);

@@ -430,5 +430,5 @@ JMI.script.HTMLText.ITALIC = 0x2;  // 0 1 0 0;
 // http://www.davidarno.org/2009/09/25/actionscript-3-inheritance-developers-beware/
 JMI.script.HTMLText.isEnabled = function( flags, bit) {
     return JMI.script.Base.isEnabled(flags, bit); 
-}
+};
         
