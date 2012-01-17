@@ -58,11 +58,9 @@ package com.socialcomputing.wps.script
 				var link:LinkZone = item as LinkZone;
 				if( link.m_fromIndex != -1) {
 					link.m_from = plan.m_nodes[ link.m_fromIndex];
-					link.m_props["_VERTICES"][0] = link.m_from.m_props["_VERTICES"][0];
 				}
 				if( link.m_toIndex != -1) {
 					link.m_to = plan.m_nodes[ link.m_toIndex];
-					link.m_props["_VERTICES"][1] = link.m_to.m_props["_VERTICES"][0];
 				}
 			} 
 			return plan;
