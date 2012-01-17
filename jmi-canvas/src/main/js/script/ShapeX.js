@@ -97,7 +97,7 @@ JMI.script.ShapeX = (function() {
             switch(points.length) {
                 // 1 point = circle => Place
                 case 1: 
-                    var distance = shapeCenter.clone().add(shapePosition).subtract(pos);
+                    var distance = shapeCenter.clone().add(shapePosition).substract(pos);
                     
                     // We check if the position is located inside the circle
                     // Another way to express it : is the distance between the circle center and the position < circle radius
