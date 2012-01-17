@@ -111,7 +111,7 @@ JMI.script.Plan = (function() {
 	    if (zones == this.links) this.maxBox = new JMI.script.Dimension();
 	    
 	    // Reversed order so subZones are initialized before supZones!
-		for (i = n - 1 ; i >= 0 ; i --) {
+		for (i = n - 1 ; i >= 0 ; i--) {
 	        zones[i].init(this.applet, gDrawingContext, isFirst);
 	    }
 		
@@ -122,27 +122,28 @@ JMI.script.Plan = (function() {
 	    // }
 	},
 	
-	/*
-	 * Draws an array of zones at rest with specified satellites.
-	 * 
-	 * @param g			Graphics to paint on.
-	 * @param zones		An array of zones to paint.
-	 * @param n			Zone count. In normal order, zones are drawn from index 0 to n-1.
-	 * @param isFront	True if this paint only the satellites over the transparent filter.
-	 * @param showTyp	The type of satellite to display.[ALL_TYP,BASE_TYP,TIP_TYP,SEL_TYP]
-	 * @param showLinks	True if this paint only satellite links (selection).
-	 * @param isRev		True if the array is drawn from in reversed order. That means from n-1 to 0.
-	 */
-	paintZones: function(s, zones, n, isFront, showTyp, showLinks, isRev) {
+
+    /*
+     * Draws an array of zones at rest with specified satellites.
+     *
+     * @param gDrawingContext  A 2d graphic context to draw the shape in.
+     * @param zones	           An array of zones to paint.
+     * @param n	     	       Zone count. In normal order, zones are drawn from index 0 to n-1.
+     * @param isFront          True if this paint only the satellites over the transparent filter.
+     * @param showTyp          The type of satellite to display.[ALL_TYP,BASE_TYP,TIP_TYP,SEL_TYP]
+     * @param showLinks        True if this paint only satellite links (selection).
+     * @param isRev	           True if the array is drawn from in reversed order. That means from n-1 to 0.
+     */
+	paintZones: function(gDrawingContext, zones, n, isFront, showTyp, showLinks, isRev) {
 		//zones[0].paint(this.applet, s, false, isFront, showTyp, showLinks);
 	    if (isRev) {
-	        for (var i = n - 1 ; i >= 0 ; i --) {
-	            zones[i].paint(this.applet, s, false, isFront, showTyp, showLinks);
+	        for (var i = n - 1 ; i >= 0 ; i--) {
+	            zones[i].paint(this.applet, gDrawingContext, false, isFront, showTyp, showLinks);
 	        }
 	    }
 	    else {
 	        for (i = 0 ; i < n ; i++) {
-	            zones[i].paint(this.applet, s, false, isFront, showTyp, showLinks);
+	            zones[i].paint(this.applet, gDrawingContext, false, isFront, showTyp, showLinks);
 	        }
 	    }
 	},
@@ -171,11 +172,11 @@ JMI.script.Plan = (function() {
 		this.initZones(restDrawingContext, this.nodes, false);	
 			
 	    // Init backImg and restImg with background, links and places parts that are "ghostable"
-		this.paintZones(restDrawingContext, this.links, this.links.length, false, JMI.script.Satellite.ALL_TYP, true, false );
-		this.paintZones(restDrawingContext, this.nodes, this.nodesCnt, false, JMI.script.Satellite.ALL_TYP, true, true );
+		this.paintZones(restDrawingContext, this.links, this.links.length, false, JMI.script.Satellite.ALL_TYP, true, false);
+		this.paintZones(restDrawingContext, this.nodes, this.nodesCnt, false, JMI.script.Satellite.ALL_TYP, true, true);
 	    
 	    // Filters backImg so it looks ghosted
-		if( this.applet.planContainer.map.env.filterCol != null) {
+		if(this.applet.planContainer.map.env.filterCol != null) {
 			// TODO portage
 			//ImageUtil.copy( restDrawingContext, backDrawingContext);
 			//ImageUtil.filterImage( backDrawingContext, dim, this.applet.planContainer.map.env.filterCol.getColor());
@@ -184,13 +185,13 @@ JMI.script.Plan = (function() {
 		}
 	    
 	    // Finish drawing restImg with places parts that are allways visible (tip, sel...)
-		this.paintZones(restDrawingContext, this.links, this.links.length, true, JMI.script.Satellite.BASE_TYP, true, false );
-		this.paintZones(restDrawingContext, this.links, this.links.length, true, JMI.script.Satellite.TIP_TYP, false, false );
-		this.paintZones(restDrawingContext, this.links, this.links.length, true, JMI.script.Satellite.SEL_TYP, false, false );
+		this.paintZones(restDrawingContext, this.links, this.links.length, true, JMI.script.Satellite.BASE_TYP, true, false);
+		this.paintZones(restDrawingContext, this.links, this.links.length, true, JMI.script.Satellite.TIP_TYP, false, false);
+		this.paintZones(restDrawingContext, this.links, this.links.length, true, JMI.script.Satellite.SEL_TYP, false, false);
 		
-		this.paintZones(restDrawingContext, this.nodes, this.nodesCnt, true, JMI.script.Satellite.BASE_TYP, true, true );
-		this.paintZones(restDrawingContext, this.nodes, this.nodesCnt, true, JMI.script.Satellite.TIP_TYP, false, true );
-		this.paintZones(restDrawingContext, this.nodes, this.nodesCnt, true, JMI.script.Satellite.SEL_TYP, false, true );
+		this.paintZones(restDrawingContext, this.nodes, this.nodesCnt, true, JMI.script.Satellite.BASE_TYP, true, true);
+		this.paintZones(restDrawingContext, this.nodes, this.nodesCnt, true, JMI.script.Satellite.TIP_TYP, false, true);
+		this.paintZones(restDrawingContext, this.nodes, this.nodesCnt, true, JMI.script.Satellite.SEL_TYP, false, true);
 	},
 	
 	/*
@@ -209,12 +210,12 @@ JMI.script.Plan = (function() {
 	    
 		// Check if there is a current Active Zone (Satellite ?)
 	    if(this.curSat != null) {
-	        cSat = this.curZone.curSwh.getSatAt(this.applet, this.applet.curDrawingContext.graphics, parent, p, true);
+	        cSat = this.curZone.curSwh.getSatAt(this.applet, this.applet.curDrawingContext, parent, p, true);
 	        
 			// The cursor is in the current Zone
 	        if (cSat != null) {
 				//Alert.show("a current zone is hovered");
-	            return updateCurrentZone( cSat, p);
+	            return updateCurrentZone(cSat, p);
 	        }
 	    }
 	    
@@ -224,38 +225,38 @@ JMI.script.Plan = (function() {
 	        
 			// We know p is not in curZone so don't test it!
 	        if (zone != parent) {
-	            cSat = zone.restSwatch.getSatAt(this.applet, this.applet.curDrawingContext.graphics, zone, p, false);
+	            cSat = zone.restSwatch.getSatAt(this.applet, this.applet.curDrawingContext, zone, p, false);
 	            
 				// The cursor is on this node
 	            if(cSat != null) {
 					//Alert.show("an inactive zone is hovered")
-	                return this.updateCurrentZone( cSat, p);
+	                return this.updateCurrentZone(cSat, p);
 	            }
 	        }
 	    }
 		
 	    // The cursor is not in a Node, it can be in a Link...
 		//i = 0;
-	    for(i = this.linksCnt - 1 ; i >= 0 ; i --) {
+	    for(i = this.linksCnt - 1 ; i >= 0 ; i--) {
 	        zone = this.links[i];
 			
 			// We know p is not in curZone so don't test it!
 	        if (zone != parent && zone.curSwatch != null) {                                                
 				
 				// If this zone has no current Swatch, it can't be current.
-	            cSat = zone.restSwatch.getSatAt(this.applet, this.applet.curDrawingContext.graphics, zone, p, false );
+	            cSat = zone.restSwatch.getSatAt(this.applet, this.applet.curDrawingContext, zone, p, false);
 	            
 				// The cursor is on this link
 	            if (cSat != null) {
 					//Alert.show("a link is hovered")
-	                return this.updateCurrentZone( cSat, p);
+	                return this.updateCurrentZone(cSat, p);
 	            }
 	        }
 	    }
 	    
 	    // Last case, the cursor is not in a Zone
 	    this.newZone = null;
-	    return this.updateCurrentZone( null, p);
+	    return this.updateCurrentZone(null, p);
 	},
 	
 	
@@ -270,8 +271,7 @@ JMI.script.Plan = (function() {
 	 * @param p			Location of the cursor.	Used for the 'hover' event.
 	 * @return			True if the current satellite has changed.
 	 */
-	updateCurrentZone: function( cSat, p) {
-	
+	updateCurrentZone: function(cSat, p) {
 		if ( this.curZone != this.newZone )//|| curSat != curSat)           // The current Satellite has changed
 	    {
 	    	// TODO
@@ -366,8 +366,7 @@ JMI.script.Plan = (function() {
 	resize: function(dim) {
 	    if (this.prevBox != null
 	            && ((this.prevBox.width != dim.width) || ( this.prevBox.height != dim.height ))
-				&& dim.width > 100 && dim.height > 100 )
-	    {
+				&& dim.width > 100 && dim.height > 100 ) {
 			var i;
 	        var margin = 10;
 	        var scale; //:Number;
@@ -382,7 +381,7 @@ JMI.script.Plan = (function() {
 	        
 			// too few places, lets reduce their size
 	        if (this.nodesCnt < 8) {
-	            scale	= 1.0 + (2.0 / this.nodesCnt);
+	            scale = 1.0 + (2.0 / this.nodesCnt);
 	            this.prevBox.x += Math.round(0.5 * (this.prevBox.width * (1.0 - scale)));
 	            this.prevBox.y += Math.round(0.5 * (this.prevBox.height * (1.0 - scale)));
 	            this.prevBox.width = Math.round(this.prevBox.width * scale);
@@ -394,7 +393,7 @@ JMI.script.Plan = (function() {
 	        dx  = this.prevBox.x - (margin >> 1);
 	        dy  = this.prevBox.y - (margin >> 1);
 			//s	= sx > sy ? sy : sx;
-	        s = (sx + sy)/2;
+	        s = (sx + sy) / 2;
 	        
 			// Iterate through all "real" nodes 
 			for (i = 0 ; i < this.nodesCnt ; i++) {
@@ -410,19 +409,24 @@ JMI.script.Plan = (function() {
 	            nodes[i++].datas = {};
 	        }
 	
+	        
 			// Iterate through all links (real and fakes)
-			for each (var zone in this.links) {
+			/* for each (var zone in this.links) { } */
+			var nbLinks = this.links.length;
+			for(i = 0 ; i < nbLinks ; i++) {
+			    var link = this.links[i];
 				//LinkZone.FAKEFROM_BIT;
-	            isFakeFrom  = JMI.script.Base.isEnabled(zone.flags, JMI.script.LinkZone.FAKEFROM_BIT);
-	            isFakeTo    = JMI.script.Base.isEnabled(zone.flags, JMI.script.LinkZone.FAKETO_BIT);
+	            isFakeFrom  = JMI.script.Base.isEnabled(link.flags, JMI.script.LinkZone.FAKEFROM_BIT);
+	            isFakeTo    = JMI.script.Base.isEnabled(link.flags, JMI.script.LinkZone.FAKETO_BIT);
 	            
-	            if (isFakeFrom)    this.resizePoint(zone, 0, dx, dy, sx, sy);
-	            else if (isFakeTo) this.resizePoint(zone, 1, dx, dy, sx, sy);
+	            if (isFakeFrom)    this.resizePoint(link, 0, dx, dy, sx, sy);
+	            else if (isFakeTo) this.resizePoint(link, 1, dx, dy, sx, sy);
 	            
-	            scale = zone.props["_SCALE"];
-	            zone.props["_SCALE"] = s * scale;
-	            zone.datas.length=0;
-	        }
+	            scale = link.props["_SCALE"];
+	            link.props["_SCALE"] = s * scale;
+	            link.datas.length = 0;
+			}
+
 	        this.prevBox = new JMI.script.Rectangle(0, 0, dim.height, dim.width);
 	    }
 	},
