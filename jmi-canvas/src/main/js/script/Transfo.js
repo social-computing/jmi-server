@@ -23,9 +23,9 @@ JMI.script.Transfo = (function() {
      * @param flags     An int holding one or more bits in : {CART_BIT,ABS_BIT,INTER_BIT}. // :int
      */
     var Transfo = function(direction, position, scale, flags) {
-        this.direction = direction;
-        this.position  = position;
-        this.scale     = scale;
+        this.dir  = direction;
+        this.pos  = position;
+        this.scl     = scale;
         this.flags     = flags;
     };
 
@@ -43,11 +43,11 @@ JMI.script.Transfo = (function() {
         transform: function(transfo, isForward) {
             // TODO : replace null test by undefined when constructor called have been checked
             if (transfo == null || this.flags != transfo.flags) {
-                return new JMI.script.Transfo(this.direction, this.position, this.scale, this.flags);
+                return new JMI.script.Transfo(this.dir, this.pos, this.scl, this.flags);
             }
             else {
-                return new JMI.script.Transfo(this.direction + transfo.direction, this.position * transfo._position,
-                                              this.scale * transfo._scale, this.flags);
+                return new JMI.script.Transfo(this.dir + transfo.dir, this.pos * transfo.pos,
+                                              this.scl * transfo.scl, this.flags);
             }
         },
         
@@ -57,7 +57,7 @@ JMI.script.Transfo = (function() {
          * @return A new Point holding the coordinates of the translation. // :Point 
          */
         getCart: function() {
-            return new JMI.script.Point(this.direction, this.position);  
+            return new JMI.script.Point(this.dir, this.pos);  
         }
     };
     

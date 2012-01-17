@@ -201,7 +201,7 @@ JMI.script.Swatch = (function() {
                         satRelTrf = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone.props);
                         satTrf    = transfo.transform(satRelTrf, true);
                         
-                        if (supZone.dir != 10.) satTrf.dir = supZone.dir;
+                        if (supZone.dir != 10.) satTrf.direction = supZone.dir;
                         
                         // Gets SuperZone bounds
                         if ((!JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData.isVisible)
