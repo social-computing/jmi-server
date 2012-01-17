@@ -161,7 +161,7 @@ JMI.script.Slice =  (function() {
             
             try {
                 if (this.isDefined(JMI.script.Slice.IN_COL_VAL) || this.isDefined(JMI.script.Slice.OUT_COL_VAL)) {
-                    satShp.setBounds(gDrawingContext, supZone, transfo, satCtr, bounds);
+                    satShp.setBounds(supZone, transfo, satCtr, bounds);
                 }
             }
             catch (e) {

@@ -101,7 +101,7 @@ JMI.script.ShapeX = (function() {
                     
                     // We check if the position is located inside the circle
                     // Another way to express it : is the distance between the circle center and the position < circle radius
-                    return (distance._x * distance._x) + (distance._y * distance._y) < (size * size);
+                    return (distance.x * distance.x) + (distance.y * distance.y) < (size * size);
                     
                 // 2 points = segment => Street
                 case 2:     
@@ -123,7 +123,7 @@ JMI.script.ShapeX = (function() {
          * @param center    The center of the shape before the transformation.
          * @param bounds    A Rectangle to merge with this bounds.
          */
-        setBounds: function(g, zone, transfo , center, bounds) {
+        setBounds: function(zone, transfo, center, bounds) {
             // else it is just a void frame
             if (this.isDefined(JMI.script.ShapeX.SCALE_VAL)) {
                 var points = this.getValue(JMI.script.ShapeX.POLYGON_VAL, zone.props);
@@ -139,7 +139,7 @@ JMI.script.ShapeX = (function() {
                         // TODO : portage, voir si c'est nécessaire par rapport au dessin sur un canevas
                         size = size * 2;
                         rect = new JMI.script.Rectangle(shapeCenter.x + shapePos.x - size / 2,
-                            shapeCenter._y + shapePos._y - size / 2,
+                            shapeCenter.y + shapePos.y - size / 2,
                             size,
                             size);
                         break;
@@ -420,10 +420,6 @@ JMI.script.ShapeX = (function() {
             if(render) {
                 applet.renderShape(gDrawingContext, imageWidth, imageHeight, imagePosition);
             }
-            
-            
-            
-            
             // Not cloning the bitmapData itself
             /*
             var scaledImg; //:Image;
@@ -497,7 +493,7 @@ JMI.script.ShapeX = (function() {
 	
 	// Héritage
 	for (var element in JMI.script.Base.prototype ) {
-		if( !ShapeX.prototype[element])
+		if(!ShapeX.prototype[element])
 			ShapeX.prototype[element] = JMI.script.Base.prototype[element];
 	}
 	
