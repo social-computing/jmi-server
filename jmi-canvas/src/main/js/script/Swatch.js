@@ -27,7 +27,7 @@ JMI.script.Swatch = (function() {
          */
     	this.refs; 
 
-		JMI.script.Base.call( this);
+		JMI.script.Base.call(this);
 	};
 	
 	Swatch.prototype = {
@@ -159,21 +159,20 @@ JMI.script.Swatch = (function() {
         /*
          * Gets this bounds by merging the satellites bounds.
          * 
-         * @param applet        The Applet that owns this.
-         * @param g             A graphics to get the FontMetrics used by this.
-         * @param zone          The zone that holds the properties used by this swatch.
-         * @param isCurZone     True if zone is hovered.
+         * @param applet           The Applet that owns this.
+         * @param gDrawingContext  A 2d graphic context to draw the shape in.
+         * @param zone             The zone that holds the properties used by this swatch.
+         * @param isCurZone        True if zone is hovered.
          * 
-         * @return              This swatch bounding box for zone.
+         * @return  This swatch bounding box for zone.
          */
-        getBounds: function(applet, g, zone, isCurZone) {
-            var bounds = new JMI.script.Rectangle(0, 0, 0, 0);
+        getBounds: function(applet, gDrawingContext, zone, isCurZone) {
+            var bounds = new JMI.script.Rectangle();
             var sat = this.satellites[0];
             var shape = sat.shapex;
-            // TODO : portage, instanceof et heritage
             var isBag = zone instanceof JMI.script.BagZone;
             var supZone = isBag ? zone : null;
-            var zones = isBag ? supZone._subZones : null;
+            var zones = isBag ? supZone.subZones : null;
             var subZone;
             var satRelTrf, satTrf,
                 transfo = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone.props);
@@ -185,13 +184,13 @@ JMI.script.Swatch = (function() {
                 supCtr = shape.getCenter(zone);
             
             // Gets the bounds of the place itself using the first Satellite
-            sat.setBounds(applet, g, zone, null, null, bounds);
+            sat.setBounds(applet, gDrawingContext, zone, null, null, bounds);
             
             // Iterate through the swatch satellite list
-            for (i = 1 ; i < n ; i ++) {
+            for (i = 1 ; i < n ; i++) {
                 sat         = this.satellites[i];
                 satData     = isCurZone ? zone.curData[i] : zone.restData[i];
-                flags       = satData._flags;
+                flags       = satData.flags;
                 
                 // This Sat is visible
                 if (JMI.script.Base.isEnabled(flags, JMI.script.Satellite.VISIBLE_BIT)) {
@@ -200,16 +199,16 @@ JMI.script.Swatch = (function() {
                     if (isBag) {
                         //hasRestBit  = Base.isEnabled( flags, Satellite.REST_BIT );
                         //hasCurBit   = Base.isEnabled( flags, Satellite.CUR_BIT );
-                        satRelTrf   = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone.props);
-                        satTrf      = transfo.transform(satRelTrf, true);
+                        satRelTrf = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone.props);
+                        satTrf    = transfo.transform(satRelTrf, true);
                         
-                        if (supZone._dir != 10.) satTrf._dir = supZone._dir;
+                        if (supZone.dir != 10.) satTrf.dir = supZone.dir;
                         
                         // Gets SuperZone bounds
                         if ((!JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData.isVisible)
                             && JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SUPER_BIT)) {
                             satCtr  = shape.transformOut(zone, satTrf);
-                            sat.setBounds(applet, g, zone, satCtr, supCtr, bounds);
+                            sat.setBounds(applet, gDrawingContext, zone, satCtr, supCtr, bounds);
                         }
                         
                         // gets SubZones bounds
@@ -217,13 +216,13 @@ JMI.script.Swatch = (function() {
                             
                             // TODO : portage, see if this for loop works as expected
                             for (subZone in zones) {
-                                satTrf._dir   += supZone._stp;
-                                satData        = isCurZone ? subZone.curData[i] : subZone.restData[i];
-                                flags          = satData._flags;
+                                satTrf.dir += supZone.stp;
+                                satData     = isCurZone ? subZone.curData[i] : subZone.restData[i];
+                                flags       = satData.flags;
                                 
                                 if (!JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData.isVisible) {
                                     satCtr  = shape.transformOut(zone, satTrf);
-                                    sat.setBounds(applet, g, subZone, satCtr, supCtr, bounds);
+                                    sat.setBounds(applet, gDrawingContext, subZone, satCtr, supCtr, bounds);
                                 }
                             }
                         }
@@ -231,7 +230,7 @@ JMI.script.Swatch = (function() {
         
                     // This is a LinkZone 
                     else {
-                        sat.setBounds(applet, g, zone, null, null, bounds);
+                        sat.setBounds(applet, gDrawingContext, zone, null, null, bounds);
                     }
                 }
             }
@@ -372,13 +371,14 @@ JMI.script.Swatch = (function() {
         evalSatData: function(applet, zone, isSuper) {
             var satDatas = [];
             var satData;
-            var flags;
+            // var flags;
             var isTip, isSel;
             
-            for each (var sat in this.satellites) {
-                satData = new JMI.script.SatData();
-                flags   = sat.getFlags(zone.props);
-                satData._flags = flags;
+            var i = this.satellites.length - 1;
+            do {
+                var sat = this.satellites[i];
+                var flags = sat.getFlags(zone.props);
+                satData = new JMI.script.SatData(flags);
                 
                 isTip = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.TIP_BIT);
                 isSel = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT);
@@ -397,10 +397,14 @@ JMI.script.Swatch = (function() {
                 else {
                     satData.isVisible = true;
                 }
-                
-                // TODO : portage, equivalent de push sur array
-                satDatas.push(satData);
+                satDatas.push(satData);                
             }
+            while(i--);
+            /*
+            for each (var sat in this.satellites) {
+
+            }
+            */
             return satDatas;
         }		
 	};

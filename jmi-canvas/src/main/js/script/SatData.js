@@ -15,14 +15,17 @@ JMI.namespace("script.SatData");
  * @version 1.0
  */
 JMI.script.SatData = (function() {
-    
-    // Jonathan Dray 2012.01.09
-    // TODO : Voir comment sont faits les appels au constructeur
-    // et modifier en conséquence 
-    var SatData = function () {
-        // :int;
-        this.flags = null;
-        //:Boolean
+
+    /**
+     * SatData constructor
+     * 
+     * @param flags {int} a valid flags integer value 
+     */    
+    var SatData = function (flags) {
+        if (arguments.length == 0) {
+            flags = null;
+        }
+        this.flags = flags;
         this.isVisible = false;
     };
 
