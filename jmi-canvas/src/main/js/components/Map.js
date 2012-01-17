@@ -190,26 +190,28 @@ var planContainer = JMI.script.PlanContainer,
 		},
 		
 		mouseMoveHandler: function(event) {
-			// this == the canvas
-			if( this.jmi) {
-				this.jmi.curPos.x = event.clientX;
-				this.jmi.curPos.y = event.clientY;
-				if(this.jmi.ready) {
-					this.jmi.planContainer.map.plan.updateZoneAt( this.jmi.curPos);
+			if( this instanceof JMI.components.Map) {
+				this.curPos.x = event.clientX;
+				this.curPos.y = event.clientY;
+				if(this.ready) {
+					this.planContainer.map.plan.updateZoneAt( this.curPos);
 				}
 			}
-			else
-				aptana.log( this);
+/*			else
+				aptana.log( this);*/
 		},
 
 		mouseOverHandler: function(event) {
-			// this == the canvas
 			this.jmi.mouseMoveHandler( event);
 		},
 
 		mouseOutHandler: function(event) {
-			// this == the canvas
 			this.jmi.mouseMoveHandler( event);
+		},
+
+		showStatus: function(message) {
+			// TODO portage
+			//dispatchEvent(new StatusEvent( StatusEvent.STATUS, message));
 		},
 
 		openSoCom: function ( e) {
@@ -247,11 +249,6 @@ com.socialcomputing.jmi.components.Map.prototype.clear = function() {
 		//this.drawingSurface.addChild(new Bitmap(this.onScreen));
 	}
 }
-
-public function showStatus(message:String):void {
-	dispatchEvent(new StatusEvent( StatusEvent.STATUS, message));
-}
-
 
 public function mouseClickHandler(event:MouseEvent):void {
 	if ( ready && plan.curSat != null )

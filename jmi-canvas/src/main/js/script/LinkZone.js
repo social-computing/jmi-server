@@ -77,13 +77,14 @@ JMI.script.LinkZone = (function() {
         paintCur: function(applet){
             if((this.flags & JMI.script.ActiveZone.INVISIBLE_BIT) != 0) return;
             
-            ImageUtil.clear(applet.curDrawingContext);
-            this.curSwatch.paint(applet, applet.curDrawingContext, this, true, true, Satellite.BASE_TYP, true);
+            // TODO portage
+            //ImageUtil.clear(applet.curDrawingContext);
+            this.curSwatch.paint(applet, applet.curDrawingContext, this, true, true, JMI.script.Satellite.BASE_TYP, true);
             
-            this.from.paint(applet, applet.curDrawingContext, false, true, Satellite.ALL_TYP, true);
-            this.to.paint(applet, applet.curDrawingContext, false, true, Satellite.ALL_TYP, true);
-            this.curSwatch.paint(applet, applet.curDrawingContext, this, true, true, Satellite.TIP_TYP, true);
-            this.curSwatch.paint(applet, applet.curDrawingContext, this, true, true, Satellite.SEL_TYP, true);
+            this.from.paint(applet, applet.curDrawingContext, false, true, JMI.script.Satellite.ALL_TYP, true);
+            this.to.paint(applet, applet.curDrawingContext, false, true, JMI.script.Satellite.ALL_TYP, true);
+            this.curSwatch.paint(applet, applet.curDrawingContext, this, true, true, JMI.script.Satellite.TIP_TYP, true);
+            this.curSwatch.paint(applet, applet.curDrawingContext, this, true, true, JMI.script.Satellite.SEL_TYP, true);
         
             applet.renderShape(applet.curDrawingContext, this.bounds.width, this.bounds.height, new JMI.script.Point(this.bounds.x, this.bounds.y));
         }
