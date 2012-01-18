@@ -83,6 +83,12 @@ JMI.script.Rectangle = (function() {
             return this;
         },
         
+        add: function(x, y) {
+			this.width += x;
+			this.height += y;
+            return this;
+        },
+        
         intersection: function(src) {
 			var	x1 = Math.max(this.x, src.x),
 				y1 = Math.max(this.y, src.y),

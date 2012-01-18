@@ -62,7 +62,7 @@ JMI.script.Slice =  (function() {
             }
             
             if(text != null) {
-                if (JMI.script.HTMLText.isEnabled(text.getFlags(zone.props), JMI.script.HTMLText.URL_BIT)) {
+                if (JMI.script.Base.isEnabled(text.getFlags(zone.props), JMI.script.HTMLText.URL_BIT)) {
                     this.htmlTxt = null;
                     var textUrls  = text.parseString(JMI.script.HTMLText.TEXT_VAL, zone.props);
                     var t , hTxt = "";
@@ -175,7 +175,7 @@ JMI.script.Slice =  (function() {
         
             var text = this.getText(JMI.script.Slice.TEXT_VAL, zone.props);
             if (text != null) {
-                if (JMI.script.HTMLText.isEnabled(text.getFlags(zone.props), JMI.script.HTMLText.URL_BIT)) {
+                if (JMI.script.Base.isEnabled(text.getFlags(zone.props), JMI.script.HTMLText.URL_BIT)) {
                     if (this.htmlTxt != null) bounds.copy(this.htmlTxt.bounds);
                 }
                 else {

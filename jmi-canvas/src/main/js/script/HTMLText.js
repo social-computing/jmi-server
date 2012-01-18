@@ -135,9 +135,9 @@ JMI.script.HTMLText = (function() {
 				 gDrawingContext.textAlign = "left";
 				 gDrawingContext.font = this.font.canvas;
 				 var dim = gDrawingContext.measureText( this.text);
-				 this.bounds.inflate( dim.width, this.font.size);
+				 this.bounds.add( dim.width, this.font.size);
 				 if( this.outColor != null) {
-				 	this.bounds.inflate( JMI.script.HTMLText.BORDER_WIDTH*2, JMI.script.HTMLText.BORDER_WIDTH*2);
+				 	this.bounds.add( JMI.script.HTMLText.BORDER_WIDTH*2, JMI.script.HTMLText.BORDER_WIDTH*2);
 				 }					 
 			 }
        },
@@ -400,10 +400,3 @@ JMI.script.HTMLText.NORTH_WEST = 0x0;  // 0 0 0 0;
 JMI.script.HTMLText.BOLD = 0x1;  // 0 1 0 0;
 JMI.script.HTMLText.ITALIC = 0x2;  // 0 1 0 0;
 
-   // static properties/methods aren't inherited in AS3
-// http://help.adobe.com/en_US/ActionScript/3.0_ProgrammingAS3/WS5b3ccc516d4fbf351e63e3d118a9b90204-7fcd.html
-// http://www.davidarno.org/2009/09/25/actionscript-3-inheritance-developers-beware/
-JMI.script.HTMLText.isEnabled = function( flags, bit) {
-    return JMI.script.Base.isEnabled(flags, bit); 
-};
-        
