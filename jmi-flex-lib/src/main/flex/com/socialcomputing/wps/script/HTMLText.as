@@ -515,13 +515,5 @@ package com.socialcomputing.wps.script{
             m_bounds.y = y;
         }
         
-       // static properties/methods aren't inherited in AS3
-        // http://help.adobe.com/en_US/ActionScript/3.0_ProgrammingAS3/WS5b3ccc516d4fbf351e63e3d118a9b90204-7fcd.html
-        // http://www.davidarno.org/2009/09/25/actionscript-3-inheritance-developers-beware/
-        public static function isEnabled( flags:int, bit:int):Boolean {
-            return Base.isEnabled(flags, bit);
-        }
-            
     }
-    
 }
