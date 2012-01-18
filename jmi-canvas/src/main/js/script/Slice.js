@@ -79,7 +79,7 @@ JMI.script.Slice =  (function() {
                             m_htmlTxt = new HTMLText();
                             m_htmlTxt.m_text = hTxt;
                             m_htmlTxt.init( text, zone);
-                            m_htmlTxt.updateBounds( applet);
+                            m_htmlTxt.updateBounds( gDrawingContext, applet);
                             supCtr  = supZone.m_restSwh.satellites[0].m_shape.getCenter( supZone );
                             m_htmlTxt.setTextBnds( applet.size, getFlags( zone.m_props), zone.m.flags ,transfo, satCtr, supCtr );
                             m_htmlTxt.drawText( s, applet.size, text.getFlags( zone.m_props )>> 16);//HTMLText.SOUTH_WEST );

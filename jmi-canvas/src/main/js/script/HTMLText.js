@@ -67,16 +67,15 @@ JMI.script.HTMLText = (function() {
         },
 		
 		init: function( base, zone) {
-			var font = base.getFont( JMI.script.HTMLText.FONT_VAL, zone.props);
-			this.font = font.getTextFormat( zone.props);
-			this.inCol = base.getColor( JMI.script.HTMLText.IN_COL_VAL, zone.props);
-			this.outCol = base.getColor( JMI.script.HTMLText.OUT_COL_VAL, zone.props);
-			//this.m_blur = base.getInt(BLUR_COL_VAL, zone.props);
+			this.font = base.getFont( JMI.script.HTMLText.FONT_VAL, zone.props);
+			this.font.init( zone.props);
+			this.inColor = base.getColor( JMI.script.HTMLText.IN_COL_VAL, zone.props);
+			this.outColor = base.getColor( JMI.script.HTMLText.OUT_COL_VAL, zone.props);
 			this.blur = parseInt( base.parseString( JMI.script.HTMLText.BLUR_COL_VAL, zone.props )[0]);
 			this.rounded = base.getInt( JMI.script.HTMLText.ROUNDED_COL_VAL, zone.props);
 			var color = base.getValue( JMI.script.HTMLText.TEXT_COL_VAL, zone.props);
 			if( color != null)
-				this.font.color = color.color;
+				this.font.color = color.getColor();
 		},
         
         /**
@@ -93,7 +92,7 @@ JMI.script.HTMLText = (function() {
          * @return			A new or existing HTMLText whose bounds are initilized.
          * @throws UnsupportedEncodingException 
          */
-        getHText: function( applet, s, zone, transfo, center, supCtr, textKey) // throws UnsupportedEncodingException
+        getHText: function( applet, gDrawingContext, zone, transfo, center, supCtr, textKey) // throws UnsupportedEncodingException
         {
             var htmlTxt = null;
             var data = zone.datas[ textKey ];
@@ -108,7 +107,7 @@ JMI.script.HTMLText = (function() {
                 if ( htmlTxt.text.length> 0)
                 {
 					htmlTxt.init( this, zone);
-                    htmlTxt.updateBounds( applet);
+                    htmlTxt.updateBounds( applet, gDrawingContext);
                     htmlTxt.setTextBnds( applet.size, this.getFlags( zone.props), zone.flags ,transfo, supCtr, center );
                 }
             }
@@ -127,31 +126,19 @@ JMI.script.HTMLText = (function() {
          * @param g			The graphics used to retrieve the font metrics.
          * @param htmlText	A string of text with or without HTML tags to parse.
          */
-        updateBounds: function( applet) {
+        updateBounds: function( applet, gDrawingContext) {
 			 // The text exists!
-			oneLine = true;
+			this.oneLine = true;
 			if ( this.text.length > 0)
 			 {
-			 	// TODO portage
-/*				 var textField:TextField = new TextField();
-				 textField.defaultTextFormat = m_font;
-				 textField.multiline = true;
-				 textField.htmlText = this.m_text;
-				 textField.autoSize = TextFieldAutoSize.LEFT;
-				 textField.antiAliasType = AntiAliasType.ADVANCED;*/
 				 this.bounds = new JMI.script.Rectangle();
-				 //this.bounds.copy( textField.getBounds( applet));
-				 /*if( this.m_outCol != null) {
-					 this.bounds.width += (BORDER_WIDTH*2);
-					 this.bounds.height += (BORDER_WIDTH*2);
+				 gDrawingContext.textAlign = "left";
+				 gDrawingContext.font = this.font.canvas;
+				 var dim = gDrawingContext.measureText( this.text);
+				 this.bounds.inflate( dim.width, this.font.size);
+				 if( this.outColor != null) {
+				 	this.bounds.inflate( JMI.script.HTMLText.BORDER_WIDTH*2, JMI.script.HTMLText.BORDER_WIDTH*2);
 				 }					 
-				 
-				 try {
-					 textField.getLineText(1);
-					 m_oneLine = false;
-				 }catch( e : RangeError){
-					 m_oneLine = true;
-				 }*/
 			 }
        },
         
@@ -180,8 +167,8 @@ JMI.script.HTMLText = (function() {
          * @param g		Graphics to draw in.
          * @param size	Size of the Window to draw in.
          */
-        drawText2: function( s, size) {
-            this.drawText3( s, size, new JMI.script.Point( this.bounds.x, this.bounds.y ));
+        drawText2: function( gDrawingContext, size) {
+            this.drawText3( gDrawingContext, size, new JMI.script.Point( this.bounds.x, this.bounds.y ));
         },
         
         /**
@@ -190,38 +177,33 @@ JMI.script.HTMLText = (function() {
          * @param size	Size of the Window to draw in.
          * @param pos	Where to draw this.
          */
-        drawText3: function( s, size, pos) {
+        drawText3: function( gDrawingContext, size, pos) {
 			var borderWidth = 0;
-			if ( this.outCol != null )
-				borderWidth = 2;
-            if ( this.inCol != null )
+			if ( this.outColor != null )
+				borderWidth = JMI.script.HTMLText.BORDER_WIDTH;
+            if ( this.inColor != null )
             {
-				// TODO poetage
-				//s.graphics.lineStyle();
-				if ( this.outCol != null ) {
-					// TODO portage
-					//s.graphics.lineStyle( 2, m_outCol.color);
-					/*s.graphics.beginFill( this.outCol.color);
+            	gDrawingContext.lineWidth = '1';
+				if ( this.outColor != null ) {
+					gDrawingContext.strokeStyle = this.outColor;
 					if( m_rounded == -1)
-						s.graphics.drawRect(pos.x, pos.y, this.bounds.width, this.bounds.height);
+						gDrawingContext.strokeRect(pos.x, pos.y, this.bounds.width, this.bounds.height);
 					else
-						s.graphics.drawRoundRect(pos.x, pos.y, this.bounds.width, this.bounds.height, this.rounded, this.rounded);
-					s.graphics.endFill();*/
+						JMI.util.ImageUtil.roundRect( gDrawingContext, pos.x, pos.y, this.bounds.width, this.bounds.height, this.rounded);
+					s.graphics.endFill();
 				}
-				// TODO portage
-				/*s.graphics.beginFill(m_inCol.color);
-				if( m_rounded == -1)
-					s.graphics.drawRect(pos.x+borderWidth, pos.y+borderWidth, this.bounds.width-2*borderWidth, this.bounds.height-2*borderWidth);
+				gDrawingContext.fillStyle = this.inColor;
+				if( this.rounded == -1)
+					gDrawingContext.fillRect(pos.x+borderWidth, pos.y+borderWidth, this.bounds.width-2*borderWidth, this.bounds.height-2*borderWidth);
 				else
-                	s.graphics.drawRoundRect(pos.x+borderWidth, pos.y+borderWidth, this.bounds.width-2*borderWidth, this.bounds.height-2*borderWidth, m_rounded, m_rounded);
-                s.graphics.endFill();*/
+					JMI.util.ImageUtil.roundRect( gDrawingContext, pos.x+borderWidth, pos.y+borderWidth, this.bounds.width-2*borderWidth, this.bounds.height-2*borderWidth, this.rounded);
            }
 			
-			this.paint( s, pos, borderWidth);
+			this.paint( gDrawingContext, pos, borderWidth);
 
-			if ( this.oneLine && this.inCol == null) // draw reflection only for one line boxes
+			if ( this.oneLine && this.inColor == null) // draw reflection only for one line boxes
             {
-            	// TODO portage
+            	// TODO portage Non !!!
 /*                var white:ColorTransform = new ColorTransform();
                 white.color = 0xFFFFFF;
                 s.graphics.beginFill(white.color, 0.2);
@@ -239,24 +221,17 @@ JMI.script.HTMLText = (function() {
 		 * @param g		The graphics to draw in.
 		 * @param pos	The position where this should be drawn before its internal translation is added.
 		 */
-		paint: function( s, pos, borderWidth) {
+		paint: function( gDrawingContext, pos, borderWidth) {
 			// TODO Portage
+
 			/*var textField:TextField = new TextField();
 			if( m_blur != -1) {
 				textField.filters = [new BlurFilter(m_blur, m_blur)];
 			}*/
-			/*if( font != null)
-				textField.defaultTextFormat = font;
-			textField.multiline = true;
-			textField.htmlText = m_text;
-			textField.x = pos.x + borderWidth;
-			textField.y = pos.y + borderWidth; 
-			textField.autoSize = TextFieldAutoSize.LEFT;
-			textField.antiAliasType = AntiAliasType.ADVANCED;
-			textField.border = false;
-			// TODO portage
-			ImageUtil.drawTextField( textField, s.graphics);
-			*/
+			gDrawingContext.textAlign = "left";
+			gDrawingContext.font = this.font.canvas;
+			gDrawingContext.fillStyle = this.font.color; 
+			gDrawingContext.fillText( this.text, pos.x + borderWidth, pos.y + borderWidth);
 		},
 		
         /**

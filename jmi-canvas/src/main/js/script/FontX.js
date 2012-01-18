@@ -25,16 +25,20 @@ JMI.script.FontX = (function() {
 		 * @param props		A property table that should hold props referenced by this containers.
 		 * @return			a new Font equivalent to this.
 		 */
-		getTextFormat: function( props) {
-			var font = new Object()
+		init: function( props) {
 		    var flags = this.getFlags( props );
 		    
-		    font.size = this.getInt( JMI.script.FontX.SIZE_VAL, props ),
-		    font.name = this.getString( JMI.script.FontX.NAME_VAL, props );
-			if (( flags & JMI.script.HTMLText.BOLD )!= 0)  font.bold = true;
-			if (( flags & JMI.script.HTMLText.ITALIC )!= 0) font.italic = true;
-		    
-		    return font;
+		    this.size = this.getInt( JMI.script.FontX.SIZE_VAL, props );
+			if (( flags & JMI.script.HTMLText.BOLD )!= 0)  this.bold = true;
+			if (( flags & JMI.script.HTMLText.ITALIC )!= 0) this.italic = true;
+			this.font = this.getString( JMI.script.FontX.NAME_VAL, props );
+
+			this.canvas = '';
+			if( this.bold)
+				this.canvas = 'bold ' + this.canvas;
+			if( this.italic)
+				this.canvas = 'italic ' + this.canvas;
+		    this.canvas = this.canvas + this.getString( JMI.script.FontX.SIZE_VAL, props ) + 'pt ' + this.getString( JMI.script.FontX.NAME_VAL, props );
 		}
 	};
 	
