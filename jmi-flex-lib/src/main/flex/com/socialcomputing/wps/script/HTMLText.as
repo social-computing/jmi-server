@@ -366,7 +366,7 @@ package com.socialcomputing.wps.script{
         public function drawText3( s:Sprite, size:Dimension, pos:Point):void {
 			var borderWidth:int = 0;
 			if ( m_outCol != null )
-				borderWidth = 2;
+				borderWidth = BORDER_WIDTH;
             if ( m_inCol != null )
             {
 				s.graphics.lineStyle();
