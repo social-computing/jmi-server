@@ -3,7 +3,7 @@ JMI.namespace("script.TipTimer");
 JMI.script.TipTimer = (function() {
 
     var TipTimer = function() {
-    }
+    };
     
 	TipTimer.prototype = {
 		constructor: JMI.script.TipTimer,
@@ -88,5 +88,5 @@ JMI.script.TipTimer = (function() {
 	    }
 	};
 		
-	return Timer;
+	return TipTimer;
 }());
