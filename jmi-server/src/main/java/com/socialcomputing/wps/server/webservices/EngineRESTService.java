@@ -96,7 +96,7 @@ public class EngineRESTService {
     @GET
     @Path("{map}.json")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getJSonPlan(@HeaderParam("User-Agent") String userAgent, @PathParam("account") String account,
+    public Response getJSonPlan(@HeaderParam("User-Agent") String userAgent, @PathParam("account") String account,
                               @PathParam("map") String planName, @Context UriInfo ui) {
         MDC.put(DiagnosticContext.ENTRY_POINT_CTX.name, "GET /engine/" + account + "/" + planName + ".json");
         PlanMaker planMaker = new BeanPlanMaker();
@@ -119,7 +119,9 @@ public class EngineRESTService {
         finally {
             MDC.remove(DiagnosticContext.ENTRY_POINT_CTX.name);
         }
-        return PlanJSONProvider.planToString(jsonResults);
+        return Response.ok( PlanJSONProvider.planToString(jsonResults), MediaType.APPLICATION_JSON)
+                        .header( "Access-Control-Allow-Origin", "*")
+                        .build();
     }
 
     /**
