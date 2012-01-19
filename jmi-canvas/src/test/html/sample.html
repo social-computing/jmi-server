@@ -41,9 +41,12 @@
 <script>
 function GoMap() {
 	var map = new JMI.components.Map( 'map');
-	var requester = new JMI.components.MapRequester();
+	var requester = new JMI.components.MapRequester( 'http://localhost:8080/jmi-server/');
 	var parameters = [];
-	requester.getMap( 'Feeds', map.width, map.height, parameters, function( data) {
+    parameters.wpsserverurl = 'http://localhost:8080/jmi-server/';
+	parameters.invert="false";
+    parameters.analysisProfile = "GlobalProfile";
+	requester.getMap( 'Json_sample', map.size.width, map.size.height, parameters, function( data) {
 		map.setData( data);
 	});
 };

@@ -16,25 +16,29 @@ JMI.components.MapRequester = (function() {
 			document.body.style.cursor = 'wait';
 			var client = new XMLHttpRequest(); 
 			client.onreadystatechange = function() {
-				if( this.readyState == XMLHttpRequest.DONE) {
+				if( this.readyState == 4) {
 					document.body.style.cursor = 'default';
 					onReady( client.responseText);
 				}
 			}; 
-			var url = this.jmiServerUrl + 'services/engine/0/' + name + '.json?';
+			var url = this.jmiServerUrl;
+			if( url.charAt(url.length - 1) != '/')
+				url += '/';
+			url += 'services/engine/0/' + name + '.json?';
 			url = this.addParameter( url, 'width', width);
 			url = this.addParameter( url, 'height', height);
 			for( var p in parameters) {
 				url = this.addParameter( url, p, parameters[p]);
 			}
 			client.open( "GET", "/jmi-canvas/src/main/resources/feeds.json", true); 
+			//client.open( "GET", url, true); 
 			client.send();
 		},
 	
 		addParameter: function( url, param, value, first) {
-			if( url.charAt[ url.length - 1] != '?')
+			if( url.charAt(url.length - 1) != '?')
 				url = url + '&';
-			url = url + param + '=' + escape( value);
+			url = url + param + '=' + encodeURIComponent( value);
 			return url;
 		}
 	};

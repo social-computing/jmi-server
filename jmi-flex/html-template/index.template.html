@@ -62,7 +62,7 @@
 			{
 				var parameters = {};
 				parameters["entityId"] = args[0];
-            	parameters["wpsserverurl"] = "http://localhost:8080/wps-server";
+            	parameters["wpsserverurl"] = "http://localhost:8080/jmi-server";
         		getMap().compute( parameters);
 			}
 			function center( args)
@@ -91,7 +91,7 @@
             flashvars.allowDomain = "*";
      		flashvars.allocineserverurl = "http://localhost:8080/web-labs";
             flashvars.wpsserverurl = "http://localhost:8080/jmi-server";
-            flashvars.wpsplanname = "Allocine";//
+            flashvars.wpsplanname = "Json_sample";//
      		flashvars.invert="false";
             flashvars.analysisProfile = "GlobalProfile";
      		flashvars.kind="film_gender";
