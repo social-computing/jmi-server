@@ -159,7 +159,6 @@ JMI.script.Satellite = (function() {
                     var dir = (supZone.dir != 10.) ? supZone.dir : transfo.direction,
                         step = supZone.stp,
                         m = .5 * (JMI.script.Base.Pi2 / step - nbZones),
-                        // TODO : portage : Math.atan2
                         a = Math.atan2(pos.y - center.y, pos.x - center.x);
                     
                     if (dir < 0)  dir += JMI.script.Base.Pi2;

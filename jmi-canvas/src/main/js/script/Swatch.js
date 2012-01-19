@@ -212,9 +212,9 @@ JMI.script.Swatch = (function() {
                         
                         // gets SubZones bounds
                         if (zones != null && JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SUB_BIT)) {
-                            
-                            // TODO : portage, see if this for loop works as expected
-                            for (subZone in zones) {
+
+                            for (var j = 0; j < zones.length; ++j) {
+                            	subZone = zones[j];
                                 satTrf.direction += supZone.stp;
                                 satData           = isCurZone ? subZone.curData[i] : subZone.restData[i];
                                 flags             = satData.flags;

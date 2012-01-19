@@ -60,7 +60,7 @@ JMI.script.ShapeX = (function() {
         getCenter: function(zone) {
             var points = this.getValue(JMI.script.ShapeX.POLYGON_VAL, zone.props);
             var p;
-            var c = new JMI.script.Point(points[0].x,  points[0].y);
+            var c = new JMI.script.Point( points[0]);
             var i;
             var n = points.length;
             
@@ -105,8 +105,8 @@ JMI.script.ShapeX = (function() {
                     
                 // 2 points = segment => Street
                 case 2:     
-                    var fromPoint = new JMI.script.Point(points[0].x, points[0].y).add(shapePosition);
-                    var toPoint = new JMI.script.Point(points[1].x, points[1].y).add(shapePosition);
+                    var fromPoint = points[0].clone().add(shapePosition);
+                    var toPoint = points[1].clone().add(shapePosition);
                     var poly = this.getLinkPoly(zone, fromPoint, toPoint, size);
                     return poly.contains(pos);
                 default:
