@@ -272,11 +272,10 @@ JMI.script.Plan = (function() {
 	updateCurrentZone: function(cSat, p) {
 		if ( this.curZone != this.newZone )//|| curSat != curSat)           // The current Satellite has changed
 	    {
-	    	// TODO
-	        /*for each ( var waiter in tipTimers)
+	        for ( var i = 0; i < this.tipTimers.length; ++i)
 	        {
-	         	waiter.interrupt();
-	        }*/
+	         	this.tipTimers[i].interrupt();
+	        }
 	    }
 	    
 		// The current Satellite has changed
@@ -291,8 +290,8 @@ JMI.script.Plan = (function() {
 				var curZoneBounds = this.curZone.getParent().bounds;
 				// TODO portage
 				//ImageUtil.clear( this.applet.curDrawingContext);
-				//this.applet.renderShape(this.applet.restDrawingContext, curZoneBounds.width, curZoneBounds.height, new Point(curZoneBounds.x, curZoneBounds.y));
-	            //this.applet.toolTip = null;
+				this.applet.renderShape(this.applet.restDrawingCanvas, curZoneBounds.width, curZoneBounds.height, new JMI.script.Point(curZoneBounds.x, curZoneBounds.y));
+	            this.applet.toolTip = null;
 	        }
 	        this.curSat = cSat;
 	        
@@ -350,9 +349,7 @@ JMI.script.Plan = (function() {
 					return;
 			}
 		}
-		
-		tipTimer = new TipTimer( this, zone, slice, key, delay, length );
-		tipTimers[key] = tipTimer;
+		tipTimers[key] = new TipTimer( this, zone, slice, key, delay, length );;
 	},
 	
 	/**

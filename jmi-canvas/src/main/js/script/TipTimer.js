@@ -1,148 +1,92 @@
+JMI.namespace("script.TipTimer");
 
-JMI.namespace("com.socialcomputing.jmi.script.TipTimer") = (function() {
-		
-    // :Timer;
-    var timer,
+JMI.script.TipTimer = (function() {
+
+    var TipTimer = function() {
+    }
     
-        //:int
-	    start, 
-	    
-	    //:int
-	    duration,
-	    
-	    //:Boolean
-	    _isInterrupted,
-	    
-	    // :Plan
-	    _plan,
-	    
-	    // :ActiveZone
-	   _zone,
-	   
-	   // :Slice
-	   _slice,
-	
-	   // :Boolean
-	   _started,
-	
-	   // :String
-	   _key,
-	
-	   // :Rectangle
-	   _bounds;
-	
-	/**
-	 * @param plan //:Plan
-	 * @param zone //:ActiveZone
-	 * @param slice //:Slice
-	 * @param key //:String
-	 * @param start //:Number
-	 * @param duration // :int //default value -1
-	 */
-	this.prototype.init = function(plan, zone, slice, key, start, duration) {
-		this.isInterrupted = false;
+	TipTimer.prototype = {
+		constructor: JMI.script.TipTimer,
 		
-		this.plan = plan;
-		this.zone = zone;
-		this.slice = slice;
-		this.key = key;
-		this.bounds = new Rectanglecom.socialcomputing.jmi.script.Rectangle(0, 0, 0, 0);
-		this.started = false;
-		
-		this.start = start;
-		this.duration = duration;
-		
-		// TODO: Portage : trouver un équivalent au timer
-		// timer = new Timer( start, 1);
-		// timer.addEventListener("timer", startHandler);
-		// timer.start();
-	};
-	
-	// :Slice 
-	this.prototype.getSlice = function() {
-		return _slice;
-	};
-
-    // :ActiveZone
-	this.prototype.getZone = function() {
-		return _zone;
-	};
-
-    // :Boolean
-	this.prototype.getStarted= function() {
-		return _started;
-	};
-	
-	// :void
-	this.prototype.interrupt = function() {
-		if (timer != null) {
-		    timer.stop();
-			clean(false);
-		}			
-	};
-	
-	/**
-	 * @param full //:Boolean 
-	 * @return //:void
-	 */
-	this.prototype.clean = function(full) {
-		if (this.started) {
+		/**
+		 * @param plan //:Plan
+		 * @param zone //:ActiveZone
+		 * @param slice //:Slice
+		 * @param key //:String
+		 * @param start //:Number
+		 * @param duration // :int //default value -1
+		 */
+		init: function(plan, zone, slice, key, start, duration) {
+			this.isInterrupted = false;
+			
+			this.plan = plan;
+			this.zone = zone;
+			this.slice = slice;
+			this.key = key;
+			this.bounds = new JMI.script.Rectangle();
 			this.started = false;
-			if ( _plan.applet.plan != null) {
-				 
-				if(_bounds.width == 0 && _bounds.height == 0) {
-					// Asynchronous URL content loaded (bounds not set)
-					slice.setBounds( _plan.applet, _plan.applet.curDrawingContext.graphics, zone.getParent(), zone, null, null, null, _bounds );
+			
+			this.start = start;
+			this.duration = duration;
+			this.timer = setTimeout( this.startHandler, start);
+		},
+		
+		// :void
+		interrupt: function() {
+			if (this.timer != null) {
+			    this.clearTimeout( this.timer);
+				this.clean(false);
+			}			
+		},
+		
+		/**
+		 * @param full //:Boolean 
+		 * @return //:void
+		 */
+		clean: function(full) {
+			if (this.started) {
+				this.started = false;
+				if ( plan.applet.plan != null) {
+					 
+					if(this.bounds.width == 0 && this.bounds.height == 0) {
+						// Asynchronous URL content loaded (bounds not set)
+						slice.setBounds( this.plan.applet, this.plan.applet.curDrawingContext.graphics, zone.getParent(), zone, null, null, null, this.bounds );
+					}
+					this.plan.applet.renderShape( this.plan.applet.restDrawingContext, this.bounds.width, this.bounds.height, new com.socialcomputing.jmi.script.Point( this.bounds.x, this.bounds.y));
+					if( full) 
+						this.plan.paintCurZone();
 				}
-				_plan.applet.renderShape( _plan.applet.restDrawingContext, _bounds.width, _bounds.height, new com.socialcomputing.jmi.script.Point( _bounds.x, _bounds.y));
-				if( full) _plan.paintCurZone();
+				// TODO : portage : delete keyword in javascript ?
+				delete this.plan.tipTimers[this.key];
 			}
-			// TODO : portage : delete keyword in javascript ?
-			delete _plan.tipTimers[_key];
-		}
+		},
+		
+		/**
+		 * @param event :TimerEvent
+		 * @return //:void
+		 */
+		startHandler: function(event) {
+			if( !this.started) {
+				this.started = true;
+				// :Point
+				var pos = this.plan.applet.curPos;
+				slice.paint( this.plan.applet, this.plan.applet.curDrawingContext, zone.getParent(), zone, null, pos, null );
+				slice.setBounds( this.plan.applet, this.plan.applet.curDrawingContext.graphics, zone.getParent(), zone, null, pos, null, this.bounds );
+				this.plan.applet.renderShape( this.plan.applet.curDrawingContext, this.bounds.width, this.bounds.height, new JMI.script.Point( this.bounds.x, this.bounds.y));
+			}
+			if( duration != -1) {
+				this.timer = setTimeout( this.stopHandler, duration);
+			}
+		},
+		
+	    /**
+	     * @param event :TimerEvent
+	     * @return //:void
+	     */
+	    stopHandler: function(event) {
+	        this.clean(true);
+	    }
 	};
-	
-	/**
-	 * @param event :TimerEvent
-	 * @return //:void
-	 */
-	this.prototype.startHandler = function(event) {
-		if( !this.started) {
-			this.started = true;
-			// :Point
-			var pos = _plan.applet.curPos;
-			slice.paint( _plan.applet, _plan.applet.curDrawingContext, zone.getParent(), zone, null, pos, null );
-			slice.setBounds( _plan.applet, _plan.applet.curDrawingContext.graphics, zone.getParent(), zone, null, pos, null, _bounds );
-			_plan.applet.renderShape( _plan.applet.curDrawingContext, _bounds.width, _bounds.height, new com.socialcomputing.jmi.script.Point( _bounds.x, _bounds.y));
-		}
-		if( duration != -1) {
-		    // TODO portage : timer in javascript
-		    /*
-			timer = new Timer( duration, 1);
-			timer.addEventListener("timer", stopHandler);
-			timer.start();
-			*/
-		}
-	};
-	
-
-    /**
-     * @param event :TimerEvent
-     * @return //:void
-     */
-    this.prototype.stopHandler = function(event) {
-        clean(true);
-    };
-    
-    // Public API
-    return  {
-        init: init,
-        getSlice: getSlice,
-        getZone: getZone,
-        getStarted: getStarted,
-        interrupt: interrupt,
-        clean: clean,
-        startHandler: startHandler,
-        stopHandler: stopHandler,
-    };
+		
+	return Timer;
 }());
