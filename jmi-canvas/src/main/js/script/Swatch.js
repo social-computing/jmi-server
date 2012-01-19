@@ -121,7 +121,8 @@ JMI.script.Swatch = (function() {
                         
                         // draws SubZones
                         if (zones != null && JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SUB_BIT)) {
-                            for (subZone in zones) {
+                            for (var j = 0; j < zones.length; ++j) {
+                            	subZone = zones[j];
                                 satTrf.direction += supZone.stp;
                                 isCurSub          = subZone == curZone;
                                 satData           = isCur ? subZone.curData[i] : subZone.restData[i];

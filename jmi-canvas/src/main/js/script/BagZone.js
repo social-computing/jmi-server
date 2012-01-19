@@ -54,7 +54,7 @@ JMI.script.BagZone = (function() {
         init: function(applet, gDrawingContext, isFirst) {
             var i,
                 nbSubZones = this.subZones != null ? this.subZones.length : 0;
-            JMI.script.ActiveZone.prototype.init.call(this, applet, isFirst);
+            JMI.script.ActiveZone.prototype.init.call(this, applet, gDrawingContext, isFirst);
             var restSwhBounds, curSwhBounds; 
             
             // First time init

@@ -37,8 +37,8 @@ JMI.script.PlanContainer.fromJSON = function ( jsonString) {
 					var n = plan.nodes.length; 
 					for( var i = 0; i < n; ++i) {
 						// BagZone : append ActiveZone
-						for (var az in plan.nodes[i].subZones) { 
-							plan.nodes.push( az);
+						for (var j = 0; j < plan.nodes[i].subZones.length; ++j) { 
+							plan.nodes.push( plan.nodes[i].subZones[j]);
 						}			
 					}
 					// Résolution des références

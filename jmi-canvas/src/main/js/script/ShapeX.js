@@ -349,7 +349,7 @@ JMI.script.ShapeX = (function() {
                 // var image = applet.env.getMedia(imageName); // as Bitmap;
                 
                 // Check if the image has already been loaded
-                if (!applet.env.hasMedia(imageName)) {
+                if (!applet.planContainer.map.env.hasMedia(imageName)) {
                     var image = new Image();
                     image.onload = function() {
                         // TODO complete

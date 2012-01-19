@@ -68,7 +68,7 @@ JMI.script.ActiveZone = (function() {
          * @param applet    The applet context object
          * @param isFirst   True if init called for the first time.
          */
-        init: function (applet, isFirst) {
+        init: function (applet, gDrawingContext, isFirst) {
             // One time init
             if (isFirst) {
                 var sel = this.props["SELECTION"];

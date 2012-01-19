@@ -399,7 +399,7 @@ JMI.script.Plan = (function() {
 	        
 			// Iterate through remaining nodes (fake ones ??)
 	        while (i < this.nodes.length) {
-	            nodes[i++].datas = {};
+	            this.nodes[i++].datas = {};
 	        }
 	
 			// Iterate through all links (real and fakes)
@@ -416,7 +416,7 @@ JMI.script.Plan = (function() {
 	            
 	            scale = link.props["_SCALE"];
 	            link.props["_SCALE"] = s * scale;
-	            link.datas.length = 0;
+	            link.datas = null;
 			}
 
 	        this.prevBox = new JMI.script.Rectangle(0, 0, dim.height, dim.width);
