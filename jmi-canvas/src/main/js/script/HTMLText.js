@@ -189,14 +189,14 @@ JMI.script.HTMLText = (function() {
 					if( m_rounded == -1)
 						gDrawingContext.strokeRect(pos.x, pos.y, this.bounds.width, this.bounds.height);
 					else
-						JMI.util.ImageUtil.roundRect( gDrawingContext, pos.x, pos.y, this.bounds.width, this.bounds.height, this.rounded);
+						JMI.util.ImageUtil.roundRect( gDrawingContext, pos.x, pos.y, pos.x+this.bounds.width, pos.y+this.bounds.height, this.rounded);
 					s.graphics.endFill();
 				}
 				gDrawingContext.fillStyle = this.inColor;
 				if( this.rounded == -1)
 					gDrawingContext.fillRect(pos.x+borderWidth, pos.y+borderWidth, this.bounds.width-2*borderWidth, this.bounds.height-2*borderWidth);
 				else
-					JMI.util.ImageUtil.roundRect( gDrawingContext, pos.x+borderWidth, pos.y+borderWidth, this.bounds.width-2*borderWidth, this.bounds.height-2*borderWidth, this.rounded);
+					JMI.util.ImageUtil.roundRect( gDrawingContext, pos.x+borderWidth, pos.y+borderWidth, pos.x+this.bounds.width-2*borderWidth, pos.y+this.bounds.height-2*borderWidth, this.rounded);
            }
 			
 			this.paint( gDrawingContext, pos, borderWidth);

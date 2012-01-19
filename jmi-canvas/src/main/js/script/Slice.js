@@ -133,8 +133,7 @@ JMI.script.Slice =  (function() {
             
             var text = this.getText(JMI.script.Slice.TEXT_VAL, zone.props);
             if (text != null) {
-                // TODO : null à remplacer
-                var htmlTxt = text.getHText(planComponent, null, zone, transfo, satCtr, supCtr, text);
+                var htmlTxt = text.getHText(planComponent, gDrawingContext, zone, transfo, satCtr, supCtr, text);
                 return htmlTxt != null ? htmlTxt.bounds.contains(pos.x, pos.y): false;
             }
             return false;

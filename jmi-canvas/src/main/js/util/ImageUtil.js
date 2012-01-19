@@ -31,8 +31,8 @@ JMI.util.ImageUtil.clear= function( canvas, context) {
 
 JMI.util.ImageUtil.roundRect = function(context,sx,sy,ex,ey,r) {
     var r2d = Math.PI/180;
-    if( ( ex - sx ) - ( 2 * r ) < 0 ) { r = ( ( ex - sx ) / 2 ); } //ensure that the radius isn't too large for x
-    if( ( ey - sy ) - ( 2 * r ) < 0 ) { r = ( ( ey - sy ) / 2 ); } //ensure that the radius isn't too large for y
+    //if( ( ex - sx ) - ( 2 * r ) < 0 ) { r = ( ( ex - sx ) / 2 ); } //ensure that the radius isn't too large for x
+    //if( ( ey - sy ) - ( 2 * r ) < 0 ) { r = ( ( ey - sy ) / 2 ); } //ensure that the radius isn't too large for y
     context.beginPath();
     context.moveTo(sx+r,sy);
     context.lineTo(ex-r,sy);
