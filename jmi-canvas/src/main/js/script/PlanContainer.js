@@ -43,7 +43,8 @@ JMI.script.PlanContainer.fromJSON = function ( jsonString) {
 					}
 					// Résolution des références
 					// Convert from et to index to Bagzone reference
-					for each (link in plan.links) { 
+					for (var i = 0; i < plan.links.length; ++i) {
+						var link = plan.links[i];
 						if( link.from != -1) {
 							link.from = plan.nodes[ link.from];
 						}

@@ -198,11 +198,6 @@ JMI.script.Satellite = (function() {
             for(i = 0 ; i < nbSlices ; i++) {
                 this.slices[i].setBounds(applet, gDrawingContext, zone.getParent(), zone, this.shapex, satCtr, supCtr, bounds);
             }
-            /*
-            for each(var slice in this.slices) {
-                slice.setBounds(applet, g, zone.getParent(), zone, this.shapex, satCtr, supCtr, bounds);
-            }
-            */
         },
 
         /*

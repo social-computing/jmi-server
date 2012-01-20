@@ -231,8 +231,8 @@ JMI.script.Base = (function() {
             var javascript = text.substring(0, 10) === "javascript";
             var tokens = JMI.script.Base.parseTokens(text);
             var j, n, max = 0;
-            for each(var token in tokens) {
-                n = token.getListSize(props);
+    		for (var i = 0; i < tokens.length; ++i) {
+                n = tokens[i].getListSize(props);
                 if (n == 0) {
                     max = 0;
                     break;
@@ -244,7 +244,8 @@ JMI.script.Base = (function() {
             for (j = 0; j < max; j ++) {
                 dst[j] = "";
                 
-                for (token in tokens) {
+    			for (var i = 0; i < tokens.length; ++i) {
+    				var token = tokens[i];
                     if (javascript) {
                         token.buffer = token.buffer.split( ",").join(String.fromCharCode(0xFFFC));
                     }
@@ -306,8 +307,8 @@ JMI.script.Base.parseString4 = function(text, props, isHtm) {
     var tokens = JMI.script.Base.parseTokens(text),
         token, j, n, max = 0;
     
-    for each(var token in tokens) {
-        n = token.getListSize(props);
+    for (var i = 0; i < tokens.length; ++i) {
+        n = tokens[i].getListSize(props);
         if (n === 0) {
             max = 0;
             break;
@@ -318,8 +319,8 @@ JMI.script.Base.parseString4 = function(text, props, isHtm) {
     var prop;
     
     for (j = 0; j < max; j ++) {
-        for each(var token in tokens) {
-            prop = token.toString(j, props);
+	    for (var i = 0; i < tokens.length; ++i) {
+            prop = tokens[i].toString(j, props);
             dst += prop === null ? " ? " : prop;
         }
         if (j < max - 1) dst += "<br/>";

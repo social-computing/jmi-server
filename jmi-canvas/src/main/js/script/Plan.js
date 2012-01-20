@@ -403,7 +403,6 @@ JMI.script.Plan = (function() {
 	        }
 	
 			// Iterate through all links (real and fakes)
-			/* for each (var zone in this.links) { } */
 			var nbLinks = this.links.length;
 			for(i = 0 ; i < nbLinks ; i++) {
 			    var link = this.links[i];
