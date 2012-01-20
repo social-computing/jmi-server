@@ -30,7 +30,7 @@ JMI.components.MapRequester = (function() {
 			for( var p in parameters) {
 				url = this.addParameter( url, p, parameters[p]);
 			}
-			client.open( "GET", "/jmi-canvas/src/main/resources/feeds.json", true); 
+			client.open( "GET", "/jmi-canvas/src/main/resources/feeds3.json", true); 
 			//client.open( "GET", url, true); 
 			client.send();
 		},
