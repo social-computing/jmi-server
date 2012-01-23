@@ -19,15 +19,11 @@ JMI.util.ImageUtil = (function() {
  */
 
 /*
- * Clear the given sprite which means : 
- *   - clear the sprite graphics 
- *   - remove all the sprite children
- * 
- * @param sprite the sprite to clear
+ * Clear a canevas drawing context 
  */
-JMI.util.ImageUtil.clear= function( canvas, context) {
-	context.clearRect( 0, 0, canvas.width, canvas.height);
-}
+JMI.util.ImageUtil.clear = function(canvas, context) {
+	context.clearRect(0, 0, canvas.width, canvas.height);
+};
 
 JMI.util.ImageUtil.roundRect = function(context,sx,sy,ex,ey,r) {
     var r2d = Math.PI/180;
@@ -44,7 +40,7 @@ JMI.util.ImageUtil.roundRect = function(context,sx,sy,ex,ey,r) {
     context.lineTo(sx,sy+r);
     context.arc(sx+r,sy+r,r,r2d*180,r2d*270,false);
     context.closePath();
-}
+};
 
 /**
  * Copy the all the elements drawn in a sprite graphics to another sprite.
