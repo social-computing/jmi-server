@@ -54,9 +54,9 @@ JMI.script.Slice =  (function() {
             
             // Draw a satellite's image it is set
             if (this.isDefined(JMI.script.Slice.IMAGE_VAL)) {
-                var imageNam = this.parseString(JMI.script.Slice.IMAGE_VAL, zone.props );
-                if (imageNam != null) {
-                	imageNam = imageNam[0];
+                var imageName = this.parseString(JMI.script.Slice.IMAGE_VAL, zone.props);
+                if (imageName != null) {
+                	imageName = imageName[0];
                     satShp.drawImage(applet, gDrawingContext, supZone, imageNam, transfo, satCtr);
                 }
             }
@@ -126,8 +126,9 @@ JMI.script.Slice =  (function() {
             var transfo = this.getTransfo(JMI.script.Slice.TRANSFO_VAL, zone.props);
             if(supZone == null) supZone = zone;
             
-            if((this.isDefined(JMI.script.Slice.IN_COL_VAL ) || this.isDefined(JMI.script.Slice.OUT_COL_VAL)) &&
-                satShp.contains( supZone, transfo, satCtr, pos)) {
+            if((this.isDefined(JMI.script.Slice.IN_COL_VAL) 
+                    || this.isDefined(JMI.script.Slice.OUT_COL_VAL)) 
+                    && satShp.contains(supZone, transfo, satCtr, pos)) {
                 return true;
             }
             
@@ -160,7 +161,7 @@ JMI.script.Slice =  (function() {
             
             try {
                 if (this.isDefined(JMI.script.Slice.IN_COL_VAL) || this.isDefined(JMI.script.Slice.OUT_COL_VAL)) {
-                    satShp.setBounds(supZone, transfo, satCtr, bounds);
+                    satShp.setBounds(gDrawingContext, supZone, transfo, satCtr, bounds);
                 }
             }
             catch (e) {

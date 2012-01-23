@@ -40,9 +40,12 @@ TestCase("PointTestCase", {
         var point1 = new JMI.script.Point();
         
         var point2 = point1.add(new JMI.script.Point(2, 3));
-        assertEquals(2, point1.x);
-        assertEquals(3, point1.y);
-        assertEquals(point1, point2);
+        assertEquals(2, point2.x);
+        assertEquals(3, point2.y);
+        
+        // The initial object should not have been modified
+        assertEquals(0, point1.x);
+        assertEquals(0, point1.y);
     },
     
     "test Substract 2 points": function() {
@@ -50,31 +53,32 @@ TestCase("PointTestCase", {
         
         // The point to substract is < to the current point
         var point2 = point1.substract(new JMI.script.Point(1, 1));
-        assertEquals(1, point1.x);
-        assertEquals(2, point1.y);
+        assertEquals(1, point2.x);
+        assertEquals(2, point2.y);
         
-        // Test method chaining
-        assertEquals(point1, point2);
+        // The initial object should not have been modified
+        assertEquals(2, point1.x);
+        assertEquals(3, point1.y);
         
         // The abs of the point to substract is > to the abs of the current point
-        point1.substract(new JMI.script.Point(3, 0));
+        point1 = point2.substract(new JMI.script.Point(3, 0));
         assertEquals(2, point1.x);
         assertEquals(2, point1.y);
         
         // The ord of the point to substract is > to the ord of the current point
-        point1.substract(new JMI.script.Point(0, 3));
-        assertEquals(2, point1.x);
-        assertEquals(1, point1.y);
+        point2 = point1.substract(new JMI.script.Point(0, 3));
+        assertEquals(2, point2.x);
+        assertEquals(1, point2.y);
         
         // The point to substract is > to the current point
-        point1.substract(new JMI.script.Point(3, 2));
+        point1 = point2.substract(new JMI.script.Point(3, 2));
         assertEquals(1, point1.x);
         assertEquals(1, point1.y);
         
         // The point to substract is = to the current point
-        point1.substract(new JMI.script.Point(1, 1));
-        assertEquals(0, point1.x);
-        assertEquals(0, point1.y);
+        point2 = point1.substract(new JMI.script.Point(1, 1));
+        assertEquals(0, point2.x);
+        assertEquals(0, point2.y);
     },
     
     "test Pivot a point": function() {

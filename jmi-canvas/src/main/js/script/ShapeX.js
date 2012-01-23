@@ -60,12 +60,12 @@ JMI.script.ShapeX = (function() {
         getCenter: function(zone) {
             var points = this.getValue(JMI.script.ShapeX.POLYGON_VAL, zone.props);
             var p;
-            var c = new JMI.script.Point( points[0]);
+            var c = new JMI.script.Point(points[0]);
             var i;
             var n = points.length;
             
             if (n > 1) {
-                for (i = 1; i < n; i++) {
+                for (i = 1 ; i < n ; i++) {
                     p    = points[i];
                     c.x += p.x;
                     c.y += p.y;
@@ -97,7 +97,7 @@ JMI.script.ShapeX = (function() {
             switch(points.length) {
                 // 1 point = circle => Place
                 case 1: 
-                    var distance = shapeCenter.clone().add(shapePosition).substract(pos);
+                    var distance = shapeCenter.add(shapePosition).substract(pos);
                     
                     // We check if the position is located inside the circle
                     // Another way to express it : is the distance between the circle center and the position < circle radius
@@ -105,8 +105,8 @@ JMI.script.ShapeX = (function() {
                     
                 // 2 points = segment => Street
                 case 2:     
-                    var fromPoint = points[0].clone().add(shapePosition);
-                    var toPoint = points[1].clone().add(shapePosition);
+                    var fromPoint = points[0].add(shapePosition);
+                    var toPoint = points[1].add(shapePosition);
                     var poly = this.getLinkPoly(zone, fromPoint, toPoint, size);
                     return poly.contains(pos);
                 default:
@@ -123,7 +123,7 @@ JMI.script.ShapeX = (function() {
          * @param center    The center of the shape before the transformation.
          * @param bounds    A Rectangle to merge with this bounds.
          */
-        setBounds: function(zone, transfo, center, bounds) {
+        setBounds: function(gDrawingContext, zone, transfo, center, bounds) {
             // else it is just a void frame
             if (this.isDefined(JMI.script.ShapeX.SCALE_VAL)) {
                 var points = this.getValue(JMI.script.ShapeX.POLYGON_VAL, zone.props);
@@ -137,11 +137,18 @@ JMI.script.ShapeX = (function() {
                     case 1:     
                         // var width:int = size << 1;
                         // TODO : portage, voir si c'est nécessaire par rapport au dessin sur un canevas
-                        size = size * 2;
-                        rect = new JMI.script.Rectangle(shapeCenter.x + shapePos.x - size / 2,
-                            shapeCenter.y + shapePos.y - size / 2,
-                            size,
-                            size);
+                        //size = size * 2;
+                        // Jonathan Dray : 2011.01.23, the size is the radius
+                        rect = new JMI.script.Rectangle(shapeCenter.x + shapePos.x - size,
+                            shapeCenter.y + shapePos.y - size,
+                            size * 2,
+                            size * 2);
+                        /* DEBUG start*/
+                       /*
+                        gDrawingContext.strokeStyle = "rgb(200,0,0)";  
+                        gDrawingContext.strokeRect(rect.x, rect.y, rect.width, rect.height);
+                        */
+                        /* DEBUG end */
                         break;
                     
                     // 2 points = segment => Street
@@ -149,6 +156,13 @@ JMI.script.ShapeX = (function() {
                         var A = new JMI.script.Point(points[0].x, points[0].y).add(shapePos);
                         var B = new JMI.script.Point(points[1].x, points[1].y).add(shapePos);
                         rect = this.getLinkPoly(zone, A, B, size).getBounds();
+                        /* DEBUG start */
+                        /*
+                        gDrawingContext.strokeStyle = "rgb(0,200,0)";  
+                        gDrawingContext.strokeRect(points[0].x, points[0].y, 1, 1);
+                        gDrawingContext.strokeRect(points[1].x, points[1].y, 1, 1);
+                        */
+                        /* DEBUG end */
                         break;
                 }
                 bounds.merge(rect);
@@ -204,12 +218,24 @@ JMI.script.ShapeX = (function() {
                             gDrawingContext.fillStyle = inColor;
                             gDrawingContext.fill();
                         }
+                        
+                        /* DEBUG start */
+                        gDrawingContext.strokeStyle = "rgb(200,0,0)";  
+                        gDrawingContext.strokeRect(x, y, 1, 1);
+                        /* DEBUG end */
                         break;
                         
                     // segment  => Street
                     case 2:     
                         var fromPoint = new JMI.script.Point(points[0].x, points[0].y).add(shapePos);
                         var toPoint = new JMI.script.Point(points[1].x, points[1].y).add(shapePos);
+                        
+                        /* DEBUG start */
+                        gDrawingContext.strokeStyle = "rgb(0,200,0)";  
+                        gDrawingContext.strokeRect(fromPoint.x, fromPoint.y, 1, 1);
+                        gDrawingContext.strokeRect(toPoint.x, toPoint.y, 1, 1);
+                        /* DEBUG end */
+                        
                         var poly = this.getLinkPoly(supZone, fromPoint, toPoint, (((size + 3) / 2)));
                         
                         var outColor = slice.getColor(JMI.script.Slice.OUT_COL_VAL, supZone.props);
@@ -288,7 +314,7 @@ JMI.script.ShapeX = (function() {
                 var U = JMI.script.Point.Scale(N, len);
                 var V = JMI.script.Point.Scale(N, width).pivot();
                 
-                C.add( A);
+                C = C.add(A);
                 this.addLinkPoint(poly, -1., -1., C, U, V);
                 this.addLinkPoint(poly, -1., 1., C, U, V);
                 this.addLinkPoint(poly, 1., 1., C, U, V);
@@ -386,19 +412,19 @@ JMI.script.ShapeX = (function() {
         
         drawLoadedImage: function(applet , image, gDrawingContext, zone, imageNam, transfo, center, render) {
             // Shape information             
-            var shapeCenter    = this.getCenter(zone); //:Point
-            var shapePosition  = new JMI.script.Point();
-            var shapeScale     = this.getShapePos(zone, transfo, center, p, shapePos); //:Number
+            var shapeCenter   = this.getCenter(zone);
+            var shapePosition = new JMI.script.Point();
+            var shapeScale    = this.getShapePos(zone, transfo, center, p, shapePos); //:Number
             
             // Image information
             // Position the image at the shape center absolute position on the canevas
-            var imagePosition = shapeCenter.clone().add(shapePosition);
+            var imagePosition = shapeCenter.add(shapePosition);
             var imageWidth;
             var imageHeight;
 
             
             // If the shape scale is > 0 then scale the image  
-            if(shapeScale > 0.0) {
+            if (shapeScale > 0.0) {
                 // Disk                
                 var imageScale = 1.414 * scale;
                 imageWidth = imageScale * image.width;
@@ -474,14 +500,14 @@ JMI.script.ShapeX = (function() {
             var p; // :JMI.script.Point
             
             // We are drawing a real Sat!
-            if(center != null) {
+            if (center != null) {
                 p = center.substract(p0); 
                 pos.x = p.x;
                 pos.y = p.y;
             }
             
-            if(transfo != null){
-                p =  pos.add(transfo.getCart());
+            if (transfo != null) {
+                p = pos.add(transfo.getCart());
                 pos.x = p.x;
                 pos.y = p.y;
                 scale *= transfo.scale;
