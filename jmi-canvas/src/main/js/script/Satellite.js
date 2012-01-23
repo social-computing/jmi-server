@@ -24,16 +24,16 @@ JMI.script.Satellite = (function() {
          * This can be a simple dot, a disk, a rectangle or a polygon.
          * :JMI.script.ShapeX
          */
-         this.shapex;
+        this.shapex;
          
-         /*
+        /*
           * The elementary slices that are stacked to draw this satellite.
           * They describe how to fill the shape.
           * //:Vector.<Slice>;
           */
-	     this.slices;
+	    this.slices;
 	     
-		 JMI.script.Base.call( this);
+        JMI.script.Base.call(this);
 	};
 	
 	Satellite.prototype = {
@@ -62,21 +62,20 @@ JMI.script.Satellite = (function() {
          * It's position and size is evaluated by its parent and transfo.
          * A type filtering can be applied to select a special kind of satellite.
          * 
-         * @param applet        The Applet that owns this.
-         * @param s             A sprite to draw this in.
-         * @param zone          The zone that holds the properties used by this satellite.
-         * @param satCtr        This satellite center.
-         * @param supCtr        This parent satellite center.
-         * @param isLinkOnly    True to paint only the link between this and its parent if it exists.
-         * @param satData       This satellite data buffer.
-         * @param showTyp       The type of satellite to display.[ALL_TYP,BASE_TYP,TIP_TYP,SEL_TYP]
+         * @param applet           The Applet that owns this.
+         * @param gDrawingContext  A 2d graphic context to draw the shape in.
+         * @param zone             The zone that holds the properties used by this satellite.
+         * @param satCtr           This satellite center.
+         * @param supCtr           This parent satellite center.
+         * @param isLinkOnly       True to paint only the link between this and its parent if it exists.
+         * @param satData          This satellite data buffer.
+         * @param showTyp          The type of satellite to display.[ALL_TYP,BASE_TYP,TIP_TYP,SEL_TYP]
          */
-        paint: function(applet, s, zone, satCtr, supCtr, isLinkOnly, satData, showTyp) {
-            var flags = satData.flags;
-            var isTip       = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.TIP_BIT),
-                isSel       = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT),
-                isVisible   = isTip || isSel ? satData.isVisible : true;
-            
+        paint: function(applet, gDrawingContext, zone, satCtr, supCtr, isLinkOnly, satData, showTyp) {
+            var flags     = satData.flags;
+            var isTip     = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.TIP_BIT),
+                isSel     = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT),
+                isVisible = isTip || isSel ? satData.isVisible : true;
             var supZone = zone.getParent();
 
             if (isVisible) {
@@ -88,21 +87,26 @@ JMI.script.Satellite = (function() {
                             y1 = supCtr.y,
                             x2 = satCtr.x,
                             y2 = satCtr.y;
-                        this.setColor(s, JMI.script.Satellite.LINK_DRK_COL_VAL, zone.props);
-                        s.graphics.moveTo(x1, y1 + 1);
-                        s.graphics.lineTo(x2, y2 + 1);
-                        if (this.setColor(s, JMI.script.Satellite.LINK_LIT_COL_VAL, zone.props)) {
-                            s.graphics.moveTo(x1 - 1, y1);
-                            s.graphics.lineTo(x2 - 1, y2);
-                            s.graphics.moveTo(x1, y1);
-                            s.graphics.lineTo(x2, y2);
-                            s.graphics.moveTo(x1 + 1, y1 );
-                            s.graphics.lineTo(x2 + 1, y2);
+                        this.setColor(gDrawingContext, JMI.script.Satellite.LINK_DRK_COL_VAL, zone.props);
+                        
+                        // TODO : portage vérifier que la forme est bien dessinée
+                        gDrawingContext.beginPath();
+                        gDrawingContext.moveTo(x1, y1 + 1);
+                        gDrawingContext.lineTo(x2, y2 + 1);
+                        if (this.setColor(gDrawingContext, JMI.script.Satellite.LINK_LIT_COL_VAL, zone.props)) {
+                            gDrawingContext.moveTo(x1 - 1, y1);
+                            gDrawingContext.lineTo(x2 - 1, y2);
+                            gDrawingContext.moveTo(x1, y1);
+                            gDrawingContext.lineTo(x2, y2);
+                            gDrawingContext.moveTo(x1 + 1, y1 );
+                            gDrawingContext.lineTo(x2 + 1, y2);
                             
-                            this.setColor(s, JMI.script.Satellite.LINK_NRM_COL_VAL, zone.props);
-                            s.graphics.moveTo(x1, y1 - 1);
-                            s.graphics.lineTo(x2, y2 - 1);
+                            this.setColor(gDrawingContext, JMI.script.Satellite.LINK_NRM_COL_VAL, zone.props);
+                            gDrawingContext.moveTo(x1, y1 - 1);
+                            gDrawingContext.lineTo(x2, y2 - 1);
                         }
+                        gDrawingContext.closePath();
+                        gDrawingContext.fill();
                     }
                 }
                 
@@ -116,7 +120,7 @@ JMI.script.Satellite = (function() {
                     }
                     if (isShowable) {
                         for (var i = 0; i < this.slices.length; i++) {
-                            this.slices[i].paint(applet, s, supZone, zone, this.shapex, satCtr, supCtr);
+                            this.slices[i].paint(applet, gDrawingContext, supZone, zone, this.shapex, satCtr, supCtr);
                         }
                     }
                 }
@@ -127,7 +131,7 @@ JMI.script.Satellite = (function() {
          * Return wether a point is inside this Satellite
          * 
          * @param planComponent     The PlanComponent that owns this.
-         * @param g                 A graphics to get the FontMetrics used by this.
+         * @param gDrawingContext   A 2d graphic context to draw the shape in.
          * @param zone              The zone that holds the properties used by this satellite.
          * @param satCtr            This satellite center.
          * @param supCtr            This parent satellite center.
@@ -138,22 +142,22 @@ JMI.script.Satellite = (function() {
          * 
          * @return                  True if the cursor's position is inside this satellite, false otherwise.
          */
-        contains: function(planComponent, g, zone, satCtr, supCtr, transfo, pos, isPie, isFake) {
+        contains: function(planComponent, gDrawingContext, zone, satCtr, supCtr, transfo, pos, isPie, isFake) {
             var i, n = this.slices.length;
             // If the parent satellite center is not set, take this satellite's shape center as center
             if(supCtr == null) supCtr = this.shapex.getCenter(zone);
             
             // Iterate throw all this satellite's slices and check if one of them contains the cursor's position
             // Stop if it's the case 
-            for(i = 0 ; (i < n && !this.slices[i].contains(planComponent, g, zone.getParent(), zone, this.shapex, satCtr, supCtr, pos)) ; i++){};
+            for(i = 0 ; (i < n && !this.slices[i].contains(planComponent, gDrawingContext, zone.getParent(), zone, this.shapex, satCtr, supCtr, pos)) ; i++){};
             
             // if the cursor's position is in one of the slices
             if(i < n) {
                 planComponent.planContainer.map.plan.newZone = zone;
                 if (isPie) {
-                    var supZone         = zone;
-                    var zones           = supZone.subZones;
-                    var nbZones         = zones.length + 1;
+                    var supZone = zone;
+                    var zones   = supZone.subZones;
+                    var nbZones = zones.length + 1;
                     
                     var center = isFake ? this.shapex.getCenter(supZone) : supCtr;
                     var dir = (supZone.dir != 10.) ? supZone.dir : transfo.direction,
@@ -161,9 +165,9 @@ JMI.script.Satellite = (function() {
                         m = .5 * (JMI.script.Base.Pi2 / step - nbZones),
                         a = Math.atan2(pos.y - center.y, pos.x - center.x);
                     
-                    if (dir < 0)  dir += JMI.script.Base.Pi2;
-                    if (a < 0)    a   += JMI.script.Base.Pi2;
-                    if (a < dir)  a   += JMI.script.Base.Pi2;
+                    if (dir < 0) dir += JMI.script.Base.Pi2;
+                    if (a < 0)   a   += JMI.script.Base.Pi2;
+                    if (a < dir) a   += JMI.script.Base.Pi2;
                     
                     a = .5 + (a - dir) / step;
                     i = Math.round(a);
