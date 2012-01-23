@@ -2,8 +2,7 @@ JMI.namespace("script.TipTimer");
 
 JMI.script.TipTimer = (function() {
 
-    var TipTimer = function() {
-    };
+    var TipTimer = function() {};
     
 	TipTimer.prototype = {
 		constructor: JMI.script.TipTimer,
@@ -46,15 +45,14 @@ JMI.script.TipTimer = (function() {
 		clean: function(full) {
 			if (this.started) {
 				this.started = false;
-				if ( plan.applet.plan != null) {
+				if (this.plan.applet.plan != null) {
 					 
-					if(this.bounds.width == 0 && this.bounds.height == 0) {
+					if (this.bounds.width == 0 && this.bounds.height == 0) {
 						// Asynchronous URL content loaded (bounds not set)
-						slice.setBounds( this.plan.applet, this.plan.applet.curDrawingContext.graphics, zone.getParent(), zone, null, null, null, this.bounds );
+						this.slice.setBounds( this.plan.applet, this.plan.applet.curDrawingContext, zone.getParent(), zone, null, null, null, this.bounds);
 					}
-					this.plan.applet.renderShape( this.plan.applet.restDrawingContext, this.bounds.width, this.bounds.height, new com.socialcomputing.jmi.script.Point( this.bounds.x, this.bounds.y));
-					if( full) 
-						this.plan.paintCurZone();
+					this.plan.applet.renderShape(this.plan.applet.restDrawingContext, this.bounds.width, this.bounds.height, new JMI.script.Point(this.bounds.x, this.bounds.y));
+					if(full) this.plan.paintCurZone();
 				}
 				// TODO : portage : delete keyword in javascript ?
 				delete this.plan.tipTimers[this.key];
@@ -66,16 +64,16 @@ JMI.script.TipTimer = (function() {
 		 * @return //:void
 		 */
 		startHandler: function(event) {
-			if( !this.started) {
+			if (!this.started) {
 				this.started = true;
 				// :Point
 				var pos = this.plan.applet.curPos;
-				slice.paint( this.plan.applet, this.plan.applet.curDrawingContext, zone.getParent(), zone, null, pos, null );
-				slice.setBounds( this.plan.applet, this.plan.applet.curDrawingContext.graphics, zone.getParent(), zone, null, pos, null, this.bounds );
-				this.plan.applet.renderShape( this.plan.applet.curDrawingContext, this.bounds.width, this.bounds.height, new JMI.script.Point( this.bounds.x, this.bounds.y));
+				this.slice.paint(this.plan.applet, this.plan.applet.curDrawingContext, this.zone.getParent(), this.zone, null, pos, null);
+				this.slice.setBounds(this.plan.applet, this.plan.applet.curDrawingContext, this.zone.getParent(), this.zone, null, pos, null, this.bounds);
+				this.plan.applet.renderShape(this.plan.applet.curDrawingContext, this.bounds.width, this.bounds.height, new JMI.script.Point(this.bounds.x, this.bounds.y));
 			}
-			if( duration != -1) {
-				this.timer = setTimeout( this.stopHandler, duration);
+			if (duration != -1) {
+				this.timer = setTimeout(this.stopHandler, duration);
 			}
 		},
 		
