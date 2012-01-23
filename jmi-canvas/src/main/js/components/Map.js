@@ -163,7 +163,7 @@ var planContainer = JMI.script.PlanContainer,
 				this.ready = true;
 				document.body.style.cursor = 'default';
 
-				this.renderShape( this.restDrawingCanvas, this.size.width, this.size.height)				
+				this.renderShape( this.restDrawingCanvas, this.size.width, this.size.height);
 				/*TODO portage
 				if(this.ready)
 					dispatchEvent(new Event(Map.READY));*/
@@ -173,7 +173,7 @@ var planContainer = JMI.script.PlanContainer,
 		renderShape: function( canvas, width, height, position) {
 			// If no position is specified, take (0,0)
 			if(position == null) {
-				position = new JMI.script.Point(0, 0);
+				position = new JMI.script.Point();
 			}
 			
 			if( width > 0 && height > 0) { 
