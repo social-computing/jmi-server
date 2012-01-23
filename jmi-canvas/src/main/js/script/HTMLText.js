@@ -159,7 +159,7 @@ JMI.script.HTMLText = (function() {
             if (( dir & 2)!= 0)         pos.y = yMax;
             else if (( dir & 1)!= 0)    pos.y = yMax >> 1;
             
-            drawText3( s, size, pos );
+            this.drawText3( s, size, pos );
         },
         
         /**
