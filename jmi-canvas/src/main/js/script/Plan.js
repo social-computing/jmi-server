@@ -342,14 +342,14 @@ JMI.script.Plan = (function() {
 		if ( tipTimer != null )
 		{
 			if ( tipTimer.zone != zone) {
-				tipTimer.interrupt()
+				tipTimer.interrupt();
 			}
 			else {
 				if( tipTimer.started)
 					return;
 			}
 		}
-		tipTimers[key] = new TipTimer( this, zone, slice, key, delay, length );;
+		tipTimers[key] = new TipTimer( this, zone, slice, key, delay, length);
 	},
 	
 	/**
@@ -358,16 +358,11 @@ JMI.script.Plan = (function() {
 	 */
 	resize: function(dim) {
 	    if (this.prevBox != null
-	            && ((this.prevBox.width != dim.width) || ( this.prevBox.height != dim.height ))
-				&& dim.width > 100 && dim.height > 100 ) {
+	            && ((this.prevBox.width != dim.width) || (this.prevBox.height != dim.height))
+				&& dim.width > 100 && dim.height > 100) {
 			var i;
 	        var margin = 10;
 	        var scale; //:Number;
-			var sx; //:Number;
-	        var sy; //:Number;
-	        var dx; //:Number;
-	        var dy; //:Number;
-	        var s; //:Number;
 	        var zone = JMI.script.ActiveZone;
 	        var isFakeFrom; //:Boolean;
 	        var isFakeTo; //:Boolean;
@@ -381,12 +376,12 @@ JMI.script.Plan = (function() {
 	            this.prevBox.height = Math.round(this.prevBox.height * scale);
 	        }
 	        
-	        sx  = (dim.width  - margin) / this.prevBox.width;
-	        sy  = (dim.height - margin) / this.prevBox.height;
-	        dx  = this.prevBox.x - (margin >> 1);
-	        dy  = this.prevBox.y - (margin >> 1);
+	        var sx  = (dim.width  - margin) / this.prevBox.width;
+	        var sy  = (dim.height - margin) / this.prevBox.height;
+	        var dx  = this.prevBox.x - (margin >> 1);
+	        var dy  = this.prevBox.y - (margin >> 1);
 			//s	= sx > sy ? sy : sx;
-	        s = (sx + sy) / 2;
+	        var s = (sx + sy) / 2;
 	        
 			// Iterate through all "real" nodes 
 			for (i = 0 ; i < this.nodesCnt ; i++) {
@@ -394,7 +389,10 @@ JMI.script.Plan = (function() {
 	            this.resizePoint(zone, 0, dx, dy, sx, sy);
 	            scale = zone.props["_SCALE"];
 	            zone.props["_SCALE"] = s * scale;
-	            zone.datas.length=0;
+	            // Jonathan Dray : a quoi correspond cette instruction en flash ? 
+	            // Reset des datas de la zone ?
+	            // zone.datas.length = 0;
+	            zone.datas = {};
 	        }
 	        
 			// Iterate through remaining nodes (fake ones ??)
@@ -407,15 +405,23 @@ JMI.script.Plan = (function() {
 			for(i = 0 ; i < nbLinks ; i++) {
 			    var link = this.links[i];
 				//LinkZone.FAKEFROM_BIT;
-	            isFakeFrom  = JMI.script.Base.isEnabled(link.flags, JMI.script.LinkZone.FAKEFROM_BIT);
-	            isFakeTo    = JMI.script.Base.isEnabled(link.flags, JMI.script.LinkZone.FAKETO_BIT);
+	            isFakeFrom = JMI.script.Base.isEnabled(link.flags, JMI.script.LinkZone.FAKEFROM_BIT);
+	            isFakeTo   = JMI.script.Base.isEnabled(link.flags, JMI.script.LinkZone.FAKETO_BIT);
 	            
+	            // Jonathan Dray : The problem comes or from the bit operation or from the initial object init from json deserialization
+	            // the is FakeFrom and isFakeTo are always false even for real links 
+	            // remove the check as temp fix 
+	            /*
 	            if (isFakeFrom)    this.resizePoint(link, 0, dx, dy, sx, sy);
 	            else if (isFakeTo) this.resizePoint(link, 1, dx, dy, sx, sy);
+	            */
+	            this.resizePoint(link, 0, dx, dy, sx, sy);
+	            this.resizePoint(link, 1, dx, dy, sx, sy);
 	            
 	            scale = link.props["_SCALE"];
 	            link.props["_SCALE"] = s * scale;
-	            link.datas = null;
+	            //link.datas = null;
+	            link.datas = {};
 			}
 
 	        this.prevBox = new JMI.script.Rectangle(0, 0, dim.height, dim.width);
