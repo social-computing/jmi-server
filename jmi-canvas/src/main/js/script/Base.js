@@ -166,16 +166,17 @@ JMI.script.Base = (function() {
         /*
          * Sets the Graphics pen color using a Color Container.
          * 
-         * @param  s       A Graphical context whose pen color must be updated.
-         * @param  prop    Index of the container in the table (ex:OUT_COL_VAL).
-         * @param  props   If this contains a referenced property, props is the table that hold the property.
-         * @return          True if the property exist and has a value. False Otherwise.
+         * @param  gDrawingContext  A Graphical context whose pen color must be updated.
+         * @param  prop             Index of the container in the table (ex:OUT_COL_VAL).
+         * @param  props            If this contains a referenced property, props is the table that hold the property.
+         * 
+         * @return                  True if the property exist and has a value. False Otherwise.
          */
         // TODO : portage, methode graphique
         setColor: function(s, property, props) {
             var color = this.getColor(property, props);
             if (color != null) {
-                s.graphics.beginFill(color.color);
+                gDrawingContext.fillStyle = color;
                 return true;
             }
             return false;
