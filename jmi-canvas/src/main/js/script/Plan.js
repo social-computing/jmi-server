@@ -408,18 +408,8 @@ JMI.script.Plan = (function() {
 	            isFakeFrom = JMI.script.Base.isEnabled(link.flags, JMI.script.LinkZone.FAKEFROM_BIT);
 	            isFakeTo   = JMI.script.Base.isEnabled(link.flags, JMI.script.LinkZone.FAKETO_BIT);
 	            
-	            // Jonathan Dray : The problem comes or from the bit operation or from the initial object init from json deserialization
-	            // the is FakeFrom and isFakeTo are always false even for real links 
-	            // remove the check as temp fix 
-	            // Update : The values in the json feed and in the objects are correct
-	            // Update 2 : Bit manipulation seems to be correct ....
-	            // Then see why only nodes are moved during resize operation and restore the next commented lines
-	            /*
 	            if (isFakeFrom)    this.resizePoint(link, 0, dx, dy, sx, sy);
 	            else if (isFakeTo) this.resizePoint(link, 1, dx, dy, sx, sy);
-	            */
-	            this.resizePoint(link, 0, dx, dy, sx, sy);
-	            this.resizePoint(link, 1, dx, dy, sx, sy);
 	            
 	            scale = link.props["_SCALE"];
 	            link.props["_SCALE"] = s * scale;
