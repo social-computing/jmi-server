@@ -174,12 +174,9 @@ JMI.script.Plan = (function() {
 		this.paintZones(restDrawingContext, this.nodes, this.nodesCnt, false, JMI.script.Satellite.ALL_TYP, true, true);
 	    
 	    // Filters backImg so it looks ghosted
-		if(this.applet.planContainer.map.env.filterCol != null) {
-			// TODO portage
-			//ImageUtil.copy( restDrawingContext, backDrawingContext);
-			//ImageUtil.filterImage( backDrawingContext, dim, this.applet.planContainer.map.env.filterCol.getColor());
-			// this.applet.renderShape( this.applet.restDrawingContext, 0, 0); // ??? size
-			//this.applet.env.filterImage(this.applet.backDrawingContext, dim);
+		if(this.applet.planContainer.map.env.filterColor != null) {
+			backDrawingContext.drawImage( this.applet.restDrawingCanvas, 0, 0);
+			JMI.util.ImageUtil.filterImage( backDrawingContext, dim, this.applet.planContainer.map.env.filterColor.getColor());
 		}
 	    
 	    // Finish drawing restImg with places parts that are allways visible (tip, sel...)
@@ -438,26 +435,6 @@ JMI.script.Plan = (function() {
 	    p.y = Math.round(sy * (p.y - dy));
 	},
 	
-	/*
-	 * Copy an image rectangle to a Graphics (blitting).
-	 * @param g			Graphics to copy the image in.
-	 * @param image		An Image from which a rectangle is copyed.
-	 * @param bounds	Bounds of the image part to copy into g.
-	 */
-	blitImage: function (g, shape, bounds) {
-	    var dim = this.applet.size;
-	    var x1 = bounds.x < 0? 0: bounds.x,
-	        y1 = bounds.y < 0? 0: bounds.y,
-	        x2 = bounds.x + bounds.width + 1,
-	        y2 = bounds.y + bounds.height + 1;
-	    
-	    if ( x2 > dim.width )   x2 = dim.width;
-	    if ( y2 > dim.height )  y2 = dim.height;
-	    
-		/// TODO
-		trace( "Plan blitImage à terminer");
-	    //g.renderBitmap( g, shape, x1, y1, x2, y2, x1, y1, x2, y2);
-	}
     };
      
     return Plan; 

@@ -141,16 +141,7 @@ JMI.script.BagZone = (function() {
          */
         paintCur: function(applet) {
             // Copy backDrawingContext hovered zone to curDrawingContext
-            // Use this method instead of ImageUtil.copy to improve performance  
-            // TODO
-            /*var backBitmap = new BitmapData(this.bounds.width + this.bounds.x, this.bounds.height + this.bounds.y);
-            backBitmap.draw(applet.backDrawingContext, null, null, null, 
-                            new JMI.script.Rectangle(this.bounds.x, this.bounds.y, 
-                                                     this.bounds.width + this.bounds.x, this.bounds.height + this.bounds.y));
-            applet.curDrawingContext.graphics.beginBitmapFill(backBitmap);
-            applet.curDrawingContext.graphics.drawRect(this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height);
-            applet.curDrawingContext.graphics.endFill();
-            */
+           applet.curDrawingContext.drawImage( applet.backDrawingCanvas, this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height, this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height);
            
             this.curSwatch.paint(applet, applet.curDrawingContext, this, true, true, JMI.script.Satellite.ALL_TYP, true);
             applet.renderShape(applet.curDrawingCanvas, this.bounds.width, this.bounds.height, new JMI.script.Point(this.bounds.x, this.bounds.y));

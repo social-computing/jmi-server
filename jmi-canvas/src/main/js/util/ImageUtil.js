@@ -50,66 +50,28 @@ JMI.util.ImageUtil.roundRect = function(context, x, y, width, height, radius) {
 }*/
 
 /**
- * Draw the given bitmap in the specified graphics object.
- * The scala and the position are taken frop the bitmap attributes.
- * 
- * @param image    the bitmap image to draw
- * @param graphics the graphics object where the bitmap will be rendered
- */ 
-/*public static function drawBitmap(image:Bitmap, graphics:Graphics):void {
-	// Initialize a matrix with the scale and position of the image
-	var matrix: Matrix = new Matrix();
-	matrix.scale(image.scaleX, image.scaleY);
-	matrix.translate(image.x, image.y);
-
-	// Reset line style
-	graphics.lineStyle();
-	
-	// Fill the graphics with the image bitmap data  
-	graphics.beginBitmapFill(image.bitmapData, matrix);
-	graphics.drawRect(image.x, image.y, image.width, image.height);
-	graphics.endFill();	
-}
-
-public static function drawTextField(text:TextField, graphics:Graphics):void {
-	var bitmapData:BitmapData = new BitmapData(text.width, text.height, true, 0x000000);
-	bitmapData.draw(text);
-	
-	// Initialize a matrix with the scale and position of the image
-	var matrix: Matrix = new Matrix();
-	matrix.scale(1, 1);
-	matrix.translate(text.x, text.y);
-	
-	// Fill the graphics with the image bitmap data  
-	graphics.beginBitmapFill(bitmapData, matrix);
-	graphics.lineStyle();
-	graphics.drawRect(text.x, text.y, text.width, text.height);
-}*/
-
-/**
  * Apply a half transparent color over an image.
  * This is achieved by drawing 45° lines every 2 pixels.
  * 
  * @param image The image to cover.
  * @param dim   size of the image.
  */
-/*JMI.util.ImageUtil.filterImage = function( sprite:Sprite, dim:Dimension, color:uint):void {
-	var g:Graphics = sprite.graphics;
-	g.lineStyle(1, color, 1);
+JMI.util.ImageUtil.filterImage = function( gDrawingContext, dim, color) {
+    gDrawingContext.fillStyle = color;
 	
-	var w:int= dim.width - 1,
-		h:int = dim.height - 1,
-		min:int = Math.min( w, h ),
-		i:int, j:int, n:int = min + 2;
+	var w = dim.width - 1,
+		h = dim.height - 1,
+		min = Math.min( w, h ),
+		i , j , n = min + 2;
 	
+    gDrawingContext.beginPath();
 	for ( i = 1, j =( w + h + 1)% 2; i < n; i += 2, j += 2)
 	{
-		//g.drawLine( 0, i, i, 0);
-		g.moveTo(0, i);
-		g.lineTo(i, 0);
-		//g.drawLine( w - j, h, w, h - j );
-		g.moveTo(w - j, h);
-		g.lineTo(w, h-j);
+		gDrawingContext.moveTo(0, i);
+		gDrawingContext.lineTo(i, 0);
+
+		gDrawingContext.moveTo(w - j, h);
+		gDrawingContext.lineTo(w, h-j);
 	}
 	if ( w > h )
 	{
@@ -117,9 +79,8 @@ public static function drawTextField(text:TextField, graphics:Graphics):void {
 		
 		for ( i = 1+( h % 2); i < n; i += 2)
 		{
-			//g.drawLine( i, h, min + i, 0);
-			g.moveTo(i, h);
-			g.lineTo(min+i, 0);
+			gDrawingContext.moveTo(i, h);
+			gDrawingContext.lineTo(min+i, 0);
 		}
 	}
 	else
@@ -128,9 +89,10 @@ public static function drawTextField(text:TextField, graphics:Graphics):void {
 		
 		for ( i = 1+( w % 2); i < n; i += 2)
 		{
-			//g.drawLine( w, i, 0, min + i );
-			g.moveTo(w, i);
-			g.lineTo(0, min + i);
+			gDrawingContext.moveTo(w, i);
+			gDrawingContext.lineTo(0, min + i);
 		}
 	}
-}*/
+    gDrawingContext.closePath();
+    gDrawingContext.fill();
+}

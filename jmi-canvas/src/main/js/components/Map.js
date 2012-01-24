@@ -183,7 +183,7 @@ var planContainer = JMI.script.PlanContainer,
 		},
 		
 		clear: function() {
-			//JMI.util.ImageUtil.clear(this.backDrawingCanvas, this.backDrawingContext);
+			JMI.util.ImageUtil.clear(this.backDrawingCanvas, this.backDrawingContext);
 			JMI.util.ImageUtil.clear(this.restDrawingCanvas, this.restDrawingContext);
 			JMI.util.ImageUtil.clear(this.curDrawingCanvas, this.curDrawingContext);
 			JMI.util.ImageUtil.clear(this.drawingCanvas, this.drawingContext);
