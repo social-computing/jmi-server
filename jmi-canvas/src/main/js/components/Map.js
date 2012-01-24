@@ -40,46 +40,67 @@ var planContainer = JMI.script.PlanContainer,
 	attributes, //:ArrayCollection;
 	entities; //:ArrayCollection;
 	
+
+    // Adapted from: http://www.quirksmode.org/js/findpos.html and 
+    // http://stackoverflow.com/questions/5085689/tracking-mouse-position-in-canvas
+    function getPosition(canvas, e) {
+        var left = 0, top = 0;
+
+        if(canvas.offsetParent) {
+            while(canvas) {
+                left += canvas.offsetLeft;
+                top += canvas.offsetTop;
+                canvas = canvas.offsetParent;
+            }
+        }
+
+        return {
+            x : e.pageX - left,
+            y : e.pageY - top
+        };
+    }
+
+	
 	var Map = function(id) {
 		this.curPos = new JMI.script.Point(),
 		this.ready = false;
 		this.attributes = [];
 		this.entities = [];
 		
-		var mapDiv = document.getElementById( id);
-		this.size = new JMI.script.Dimension( mapDiv.clientWidth, mapDiv.clientHeight);
+		var mapDiv = document.getElementById(id);
+		this.size = new JMI.script.Dimension(mapDiv.clientWidth, mapDiv.clientHeight);
 		
 		// Drawing surface of the component
-		this.drawingCanvas = document.createElement( "canvas");
+		this.drawingCanvas = document.createElement("canvas");
 		this.drawingCanvas.width = mapDiv.clientWidth;
 		this.drawingCanvas.height = mapDiv.clientHeight;
-		mapDiv.appendChild( this.drawingCanvas);
-		this.drawingContext = this.drawingCanvas.getContext( "2d");
+		mapDiv.appendChild(this.drawingCanvas);
+		this.drawingContext = this.drawingCanvas.getContext("2d");
 		this.drawingCanvas.JMI = this;
 	
 		// Graphic zones
-		this.curDrawingCanvas = document.createElement( "canvas");
+		this.curDrawingCanvas = document.createElement("canvas");
 		this.curDrawingCanvas.width = mapDiv.clientWidth;
 		this.curDrawingCanvas.height = mapDiv.clientHeight;
-		this.curDrawingCanvas.style.visibility='hidden';
-		this.curDrawingContext = this.curDrawingCanvas.getContext( "2d");
+		this.curDrawingCanvas.style.visibility = 'hidden';
+		this.curDrawingContext = this.curDrawingCanvas.getContext("2d");
 
-		this.restDrawingCanvas = document.createElement( "canvas");
+		this.restDrawingCanvas = document.createElement("canvas");
 		this.restDrawingCanvas.width = mapDiv.clientWidth;
 		this.restDrawingCanvas.height = mapDiv.clientHeight;
 		//this.restDrawingCanvas.style.visibility='hidden';
-		this.restDrawingContext = this.restDrawingCanvas.getContext( "2d");
+		this.restDrawingContext = this.restDrawingCanvas.getContext("2d");
 
-		this.backDrawingCanvas = document.createElement( "canvas");
+		this.backDrawingCanvas = document.createElement("canvas");
 		this.backDrawingCanvas.width = mapDiv.clientWidth;
 		this.backDrawingCanvas.height = mapDiv.clientHeight;
-		this.backDrawingCanvas.style.visibility='hidden';
-		this.backDrawingContext = this.backDrawingCanvas.getContext( "2d");
+		this.backDrawingCanvas.style.visibility = 'hidden';
+		this.backDrawingContext = this.backDrawingCanvas.getContext("2d");
 		
 		// Event listeners
-		this.drawingCanvas.addEventListener( 'mousemove', this.mouseMoveHandler, false);
-		this.drawingCanvas.addEventListener( 'mouseover', this.mouseOverHandler, false);
-		this.drawingCanvas.addEventListener( 'mouseout', this.mouseOutHandler, false);
+		this.drawingCanvas.addEventListener('mousemove', this.mouseMoveHandler, false);
+		this.drawingCanvas.addEventListener('mouseover', this.mouseOverHandler, false);
+		this.drawingCanvas.addEventListener('mouseout', this.mouseOutHandler, false);
 /*
 		this.addEventListener(MouseEvent.CLICK, mouseClickHandler);
 		this.addEventListener(MouseEvent.DOUBLE_CLICK, mouseDoubleClickHandler);
@@ -163,24 +184,29 @@ var planContainer = JMI.script.PlanContainer,
 				this.ready = true;
 				document.body.style.cursor = 'default';
 
-				this.renderShape( this.restDrawingCanvas, this.size.width, this.size.height);
+				this.renderShape(this.restDrawingCanvas, this.size.width, this.size.height);
 				/*TODO portage
 				if(this.ready)
 					dispatchEvent(new Event(Map.READY));*/
 			}
 		},
 		
-		renderShape: function( canvas, width, height, position) {
-			// If no position is specified, take (0,0)
-			if(position == null) {
-				position = new JMI.script.Point();
-			}
-			
-			if( width > 0 && height > 0) { 
-				// Copying the content of the context on to visib canvas context
-				this.drawingContext.drawImage( canvas, position.x, position.y, width, height, position.x, position.y, width, height);
-			}
-		},
+		
+        renderShape: function(canvas, width, height, position) {
+            // If no position is specified, take (0,0)
+            /*
+            if(position == null) {
+                position = new JMI.script.Point();
+            }
+            */
+            position = position || new JMI.script.Point();
+
+            if(width > 0 && height > 0) {
+                // Copying the content of the context on to visible canvas context
+                this.drawingContext.drawImage(canvas, position.x, position.y, width, height, position.x, position.y, width, height);
+            }
+        },
+
 		
 		clear: function() {
 			JMI.util.ImageUtil.clear(this.backDrawingCanvas, this.backDrawingContext);
@@ -190,11 +216,15 @@ var planContainer = JMI.script.PlanContainer,
 		},
 		
 		mouseMoveHandler: function(event) {
-			if( this instanceof HTMLCanvasElement) {
-				this.JMI.curPos.x = event.clientX;
-				this.JMI.curPos.y = event.clientY;
-				if(this.JMI.ready) {
-					this.JMI.planContainer.map.plan.updateZoneAt( this.JMI.curPos);
+			if (this instanceof HTMLCanvasElement) {
+			    var mousePosition = getPosition(this, event);
+				this.JMI.curPos.x = mousePosition.x;
+				this.JMI.curPos.y = mousePosition.y;
+				var debugDiv = document.getElementById("mouse");
+				//debugDiv.innerHTML = this.x
+				debugDiv.innerHTML = "<br> mouse position : (" + mousePosition.x + ", " + mousePosition.y + ")";
+				if (this.JMI.ready) {
+					this.JMI.planContainer.map.plan.updateZoneAt(this.JMI.curPos);
 				}
 			}
 /*			else
