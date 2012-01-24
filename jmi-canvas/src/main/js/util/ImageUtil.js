@@ -25,21 +25,18 @@ JMI.util.ImageUtil.clear = function(canvas, context) {
 	context.clearRect(0, 0, canvas.width, canvas.height);
 };
 
-JMI.util.ImageUtil.roundRect = function(context,sx,sy,ex,ey,r) {
-    var r2d = Math.PI/180;
-    //if( ( ex - sx ) - ( 2 * r ) < 0 ) { r = ( ( ex - sx ) / 2 ); } //ensure that the radius isn't too large for x
-    //if( ( ey - sy ) - ( 2 * r ) < 0 ) { r = ( ( ey - sy ) / 2 ); } //ensure that the radius isn't too large for y
-    context.beginPath();
-    context.moveTo(sx+r,sy);
-    context.lineTo(ex-r,sy);
-    context.arc(ex-r,sy+r,r,r2d*270,r2d*360,false);
-    context.lineTo(ex,ey-r);
-    context.arc(ex-r,ey-r,r,r2d*0,r2d*90,false);
-    context.lineTo(sx+r,ey);
-    context.arc(sx+r,ey-r,r,r2d*90,r2d*180,false);
-    context.lineTo(sx,sy+r);
-    context.arc(sx+r,sy+r,r,r2d*180,r2d*270,false);
-    context.closePath();
+JMI.util.ImageUtil.roundRect = function(context, x, y, width, height, radius) {
+	  context.beginPath();
+	  context.moveTo(x + radius, y);
+	  context.lineTo(x + width - radius, y);
+	  context.quadraticCurveTo(x + width, y, x + width, y + radius);
+	  context.lineTo(x + width, y + height - radius);
+	  context.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+	  context.lineTo(x + radius, y + height);
+	  context.quadraticCurveTo(x, y + height, x, y + height - radius);
+	  context.lineTo(x, y + radius);
+	  context.quadraticCurveTo(x, y, x + radius, y);
+	  context.closePath();
 };
 
 /**

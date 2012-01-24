@@ -132,13 +132,15 @@ JMI.script.HTMLText = (function() {
 			if ( this.text.length > 0)
 			 {
 				 this.bounds = new JMI.script.Rectangle();
+				 gDrawingContext.textBaseline = "top";
 				 gDrawingContext.textAlign = "left";
 				 gDrawingContext.font = this.font.canvas;
 				 var dim = gDrawingContext.measureText( this.text);
-				 this.bounds.add( dim.width, this.font.size);
+				 this.bounds.add( dim.width, Math.round( this.font.size * 96 / 72));
+				 this.bounds.add( JMI.script.HTMLText.MARGIN*2, JMI.script.HTMLText.MARGIN*2);
 				 if( this.outColor != null) {
 				 	this.bounds.add( JMI.script.HTMLText.BORDER_WIDTH*2, JMI.script.HTMLText.BORDER_WIDTH*2);
-				 }					 
+				 }
 			 }
        },
         
@@ -188,15 +190,18 @@ JMI.script.HTMLText = (function() {
 					gDrawingContext.strokeStyle = this.outColor;
 					if( m_rounded == -1)
 						gDrawingContext.strokeRect(pos.x, pos.y, this.bounds.width, this.bounds.height);
-					else
-						JMI.util.ImageUtil.roundRect( gDrawingContext, pos.x, pos.y, pos.x+this.bounds.width, pos.y+this.bounds.height, this.rounded);
-					s.graphics.endFill();
+					else {
+						JMI.util.ImageUtil.roundRect( gDrawingContext, pos.x, pos.y, this.bounds.width, this.bounds.height, this.rounded);
+						gDrawingContext.stroke();
+					}
 				}
 				gDrawingContext.fillStyle = this.inColor;
 				if( this.rounded == -1)
 					gDrawingContext.fillRect(pos.x+borderWidth, pos.y+borderWidth, this.bounds.width-2*borderWidth, this.bounds.height-2*borderWidth);
-				else
-					JMI.util.ImageUtil.roundRect( gDrawingContext, pos.x+borderWidth, pos.y+borderWidth, pos.x+this.bounds.width-2*borderWidth, pos.y+this.bounds.height-2*borderWidth, this.rounded);
+				else {
+					JMI.util.ImageUtil.roundRect( gDrawingContext, pos.x+borderWidth, pos.y+borderWidth, this.bounds.width-2*borderWidth, this.bounds.height-2*borderWidth, this.rounded);
+					gDrawingContext.fill();
+				}
            }
 			
 			this.paint( gDrawingContext, pos, borderWidth);
@@ -228,10 +233,11 @@ JMI.script.HTMLText = (function() {
 			if( m_blur != -1) {
 				textField.filters = [new BlurFilter(m_blur, m_blur)];
 			}*/
+			gDrawingContext.textBaseline = "top";
 			gDrawingContext.textAlign = "left";
 			gDrawingContext.font = this.font.canvas;
 			gDrawingContext.fillStyle = this.font.color; 
-			gDrawingContext.fillText( this.text, pos.x + borderWidth, pos.y + borderWidth);
+			gDrawingContext.fillText( this.text, pos.x + borderWidth + JMI.script.HTMLText.MARGIN, pos.y + borderWidth + JMI.script.HTMLText.MARGIN);
 		},
 		
         /**
@@ -319,6 +325,7 @@ JMI.script.HTMLText = (function() {
 	return HTMLText;
 }());
 		
+JMI.script.HTMLText.MARGIN = 2;
 JMI.script.HTMLText.BORDER_WIDTH = 2;
 /**
  * Index of the bit flag prop in VContainer table
