@@ -49,12 +49,13 @@
 		<property name="hbm2ddl.auto">update</property>
 		
 		<!-- For debug only -->
-		<property name="show_sql">true</property>
+		<property name="show_sql">false</property>
 		
 		<property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
 		<property name="current_session_context_class">thread</property>
 		<mapping class="com.socialcomputing.wps.server.persistence.hibernate.DictionaryImpl"/>
 		<mapping class="com.socialcomputing.wps.server.persistence.hibernate.SwatchImpl" />
+		<mapping class="com.socialcomputing.wps.server.persistence.hibernate.Track"/>
 		<mapping class="com.socialcomputing.wps.server.persistence.hibernate.Accounts"/>
 		<mapping class="com.socialcomputing.wps.server.persistence.hibernate.Roles"/>
 		<mapping class="com.socialcomputing.wps.server.persistence.hibernate.Users" />

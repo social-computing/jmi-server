@@ -20,6 +20,7 @@ import com.socialcomputing.wps.server.generator.PlanGenerator;
 import com.socialcomputing.wps.server.generator.ProtoPlan;
 import com.socialcomputing.wps.server.persistence.Dictionary;
 import com.socialcomputing.wps.server.persistence.hibernate.DictionaryManagerImpl;
+import com.socialcomputing.wps.server.persistence.hibernate.Track;
 import com.socialcomputing.wps.server.plandictionary.AnalysisProfile;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.wps.server.webservices.PlanRequest;
@@ -69,14 +70,17 @@ public class BeanPlanMaker implements PlanMaker {
             throws RemoteException {
         Steps status = Steps.PlanMakerStarted;
         boolean isVisual = false;
-        Connection connection = null;
         WPSDictionary dico = null;
         PlanContainer container = null;
         PlanRequest planRequest = null;
-
+        Session session = null;
+        
         String name = (String) params.get("planName");
         if (name == null)
             throw new RemoteException("WPS parameter 'planName' missing.");
+        // Track
+        Track track = new Track( name);
+
         String x = (String) params.get("width");
         if (x != null && Integer.parseInt(x) == 0)
             throw new RemoteException("WPS parameter 'width' can't be 0.");
@@ -93,8 +97,8 @@ public class BeanPlanMaker implements PlanMaker {
             isVisual = true;
 
         try {
-            connection = HibernateUtil.getSessionFactory().getCurrentSession().connection();
-
+            session = HibernateUtil.getSessionFactory().getCurrentSession();
+            
             // DICTIONARY LOADER
             DictionaryManagerImpl manager = new DictionaryManagerImpl();
             Dictionary dictionaryLoader = manager.findByName(name);
@@ -107,7 +111,7 @@ public class BeanPlanMaker implements PlanMaker {
             status = Steps.DictionaryLoaded;
 
             // PLANREQUEST CREATION
-            planRequest = new PlanRequest(connection, dico, params);
+            planRequest = new PlanRequest(session.connection(), dico, params);
             switch (planRequest.getAnalysisProfile().m_planType) {
                 case AnalysisProfile.PERSONAL_PLAN:
                     results.put( PlanMaker.TYPE, "personal");
@@ -141,18 +145,23 @@ public class BeanPlanMaker implements PlanMaker {
 
             container = new PlanContainer(planGenerator.getEnv(), planGenerator.getPlan());
             status = Steps.EnvInitialized;
-
+            track.stop( true);
         }
         catch (Exception e) {
             LOG.error(e.getMessage(), e);
+            track.stop( false);
             throw new RemoteException(e.getMessage());
         }
         finally {
             try {
                 if (dico != null)
                     dico.closeConnections();
+                if( session != null)
+                    session.save( track);
             }
-            catch (Exception e) {}
+            catch (Exception e) {
+                LOG.error(e.getMessage(), e);
+            }
         }
 
         return container;
