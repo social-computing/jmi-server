@@ -349,7 +349,6 @@ JMI.script.Swatch = (function() {
                 }
                 
                 // Tests if the cursor is located in the place itself
-                // TODO : portage instanceof et héritage
                 sat = this.satellites[0];
                 if(sat.contains(planComponent, g, zone, null, null, transfo, pos, zones != null, true) 
                     || (isCurZone && !(zone instanceof JMI.script.LinkZone))) {

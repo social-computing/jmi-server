@@ -209,7 +209,7 @@ JMI.script.Plan = (function() {
 	        
 			// The cursor is in the current Zone
 	        if (cSat != null) {
-				//Alert.show("a current zone is hovered");
+				this.applet.log("a current zone is hovered");
 	            return this.updateCurrentZone(cSat, p);
 	        }
 	    }
@@ -224,7 +224,7 @@ JMI.script.Plan = (function() {
 	            
 				// The cursor is on this node
 	            if(cSat != null) {
-					//Alert.show("an inactive zone is hovered")
+					this.applet.log("an inactive zone is hovered")
 	                return this.updateCurrentZone(cSat, p);
 	            }
 	        }
@@ -243,7 +243,7 @@ JMI.script.Plan = (function() {
 	            
 				// The cursor is on this link
 	            if (cSat != null) {
-					//Alert.show("a link is hovered")
+					this.applet.log("a link is hovered")
 	                return this.updateCurrentZone(cSat, p);
 	            }
 	        }
@@ -285,8 +285,7 @@ JMI.script.Plan = (function() {
 				// Restore its rest image
 	            //ON rollover non active zone => redraw
 				var curZoneBounds = this.curZone.getParent().bounds;
-				// TODO portage
-				//ImageUtil.clear( this.applet.curDrawingContext);
+				JMI.util.ImageUtil.clear(this.applet.curDrawingCanvas, this.applet.curDrawingContext);
 				this.applet.renderShape(this.applet.restDrawingCanvas, curZoneBounds.width, curZoneBounds.height, new JMI.script.Point(curZoneBounds.x, curZoneBounds.y));
 	            this.applet.toolTip = null;
 	        }
@@ -295,10 +294,9 @@ JMI.script.Plan = (function() {
 			// A new Zone is hovered, let's paint it!
 	        if (this.curSat != null && (this.curZone != this.newZone)) {
 	            this.curZone = this.newZone;
-	            // TODO portage
-			    //ImageUtil.clear( this.applet.curDrawingContext);
-	            this.paintCurZone();              
-	            this.curSat.execute( this.applet, this.curZone, p, JMI.script.Satellite.HOVER_VAL);
+				JMI.util.ImageUtil.clear(this.applet.curDrawingCanvas, this.applet.curDrawingContext);
+	            this.paintCurZone();
+ 	            this.curSat.execute( this.applet, this.curZone, p, JMI.script.Satellite.HOVER_VAL);
 				cursTyp = 'pointer';
 	        }
 	        else {

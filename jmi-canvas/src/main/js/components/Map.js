@@ -88,7 +88,7 @@ var planContainer = JMI.script.PlanContainer,
 		this.restDrawingCanvas = document.createElement("canvas");
 		this.restDrawingCanvas.width = mapDiv.clientWidth;
 		this.restDrawingCanvas.height = mapDiv.clientHeight;
-		//this.restDrawingCanvas.style.visibility='hidden';
+		this.restDrawingCanvas.style.visibility='hidden';
 		this.restDrawingContext = this.restDrawingCanvas.getContext("2d");
 
 		this.backDrawingCanvas = document.createElement("canvas");
@@ -234,14 +234,18 @@ var planContainer = JMI.script.PlanContainer,
 		mouseOverHandler: function(event) {
 			this.JMI.mouseMoveHandler( event);
 		},
-
 		mouseOutHandler: function(event) {
 			this.JMI.mouseMoveHandler( event);
 		},
-
 		showStatus: function(message) {
 			// TODO portage
 			//dispatchEvent(new StatusEvent( StatusEvent.STATUS, message));
+		},
+		log: function(message) {
+			if( aptana && aptana.log)
+				aptana.log( message);
+			if( console && console.log)
+				console.log( message);
 		},
 
 		/*
