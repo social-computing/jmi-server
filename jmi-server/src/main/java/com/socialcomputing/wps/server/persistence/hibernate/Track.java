@@ -23,6 +23,7 @@ public class Track {
     
     @XmlElement
     @Column(columnDefinition = "varchar(512)")
+    @Index(name="nameIndex")
     private String      name;
 
     @XmlElement
@@ -53,6 +54,10 @@ public class Track {
     
     public long getDuration() {
         return duration;
+    }
+    
+    public boolean getSuccess() {
+        return success;
     }
     
     public void stop( boolean success) {
