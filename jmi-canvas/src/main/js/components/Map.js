@@ -101,9 +101,9 @@ var planContainer = JMI.script.PlanContainer,
 		this.drawingCanvas.addEventListener('mousemove', this.mouseMoveHandler, false);
 		this.drawingCanvas.addEventListener('mouseover', this.mouseOverHandler, false);
 		this.drawingCanvas.addEventListener('mouseout', this.mouseOutHandler, false);
+		this.drawingCanvas.addEventListener('click', this.mouseClickHandler, false);
+		this.drawingCanvas.addEventListener('dblclick', this.mouseDoubleClickHandler, false);
 /*
-		this.addEventListener(MouseEvent.CLICK, mouseClickHandler);
-		this.addEventListener(MouseEvent.DOUBLE_CLICK, mouseDoubleClickHandler);
 		this.addEventListener(ResizeEvent.RESIZE, resizeHandler);
 		this.addEventListener(NavigateEvent.NAVIGATE, navigateHandler);
 */		
@@ -227,15 +227,32 @@ var planContainer = JMI.script.PlanContainer,
 					this.JMI.planContainer.map.plan.updateZoneAt(this.JMI.curPos);
 				}
 			}
-/*			else
-				aptana.log( this);*/
 		},
-
 		mouseOverHandler: function(event) {
 			this.JMI.mouseMoveHandler( event);
 		},
 		mouseOutHandler: function(event) {
 			this.JMI.mouseMoveHandler( event);
+		},
+		mouseClickHandler: function(event) {
+			if (this instanceof HTMLCanvasElement) {
+			    var mousePosition = getPosition(this, event);
+				if ( this.JMI.ready && this.JMI.planContainer.map.plan.curSat != null )
+				{
+					this.JMI.planContainer.map.plan.updateZoneAt( mousePosition);
+					this.JMI.planContainer.map.plan.curSat.execute( this.JMI, this.JMI.planContainer.map.plan.curZone, mousePosition, JMI.script.Satellite.CLICK_VAL);
+				}
+			}
+		},
+		mouseDoubleClickHandler: function(event) {
+			if (this instanceof HTMLCanvasElement) {
+			    var mousePosition = getPosition(this, event);
+				if ( this.JMI.ready && this.JMI.planContainer.map.plan.curSat != null )
+				{
+					this.JMI.planContainer.map.plan.updateZoneAt( mousePosition);
+					this.JMI.planContainer.map.plan.curSat.execute( this.JMI, this.JMI.planContainer.map.plan.curZone, mousePosition, JMI.script.Satellite.DBLCLICK_VAL);
+				}
+			}
 		},
 		showStatus: function(message) {
 			// TODO portage
@@ -327,16 +344,6 @@ public function get bitmapData():BitmapData
 
 /*
 
-public function mouseClickHandler(event:MouseEvent):void {
-	if ( ready && plan.curSat != null )
-	{
-		var point:Point = new Point();
-		point.x = event.localX;
-		point.y = event.localY;
-		plan.updateZoneAt( point);
-		plan.curSat.execute( this, plan.curZone, point, Satellite.CLICK_VAL);
-	}
-}
 
 public function findAttribute( zone:ActiveZone):Attribute {
 	for each( var attribute:Attribute in attributes) {
@@ -350,16 +357,6 @@ private function findLink( zone:ActiveZone):Link {
 	return new Link( zone);
 }
 
-public function mouseDoubleClickHandler(event:MouseEvent):void {
-	if ( ready && plan.curSat != null )
-	{
-		var point:Point = new Point();
-		point.x = event.localX;
-		point.y = event.localY;
-		plan.updateZoneAt( point);
-		plan.curSat.execute( this, plan.curZone, point, Satellite.DBLCLICK_VAL);
-	}
-}
 
 public function resizeHandler(event:ResizeEvent):void {
 	//trace("resize, new size = (" + this.width + ", " + this.height + ")");
