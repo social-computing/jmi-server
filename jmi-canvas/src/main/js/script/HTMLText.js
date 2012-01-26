@@ -94,12 +94,13 @@ JMI.script.HTMLText = (function() {
          */
         getHText: function( applet, gDrawingContext, zone, transfo, center, supCtr, textKey) // throws UnsupportedEncodingException
         {
-            var htmlTxt = null;
-            var data = zone.datas[ textKey ];
+        	// Voir Slice.js ligne 101 : textKey
+        	// TODO later : difficulté à trouver la bonne clé (textKey), voir Slice.js paint
+            var htmlTxt = null;//zone.datas[ textKey ];
             
             if ( center == null )	center = supCtr;
             
-            if ( data == null )
+            if ( htmlTxt == null )
             {
 				htmlTxt = new JMI.script.HTMLText();
 				htmlTxt.text = this.parseString2( JMI.script.HTMLText.TEXT_VAL, zone.props, true );
@@ -113,7 +114,6 @@ JMI.script.HTMLText = (function() {
             }
             else
             {
-                htmlTxt = data;
                 htmlTxt.setTextBnds( applet.size, this.getFlags( zone.props), zone.flags, transfo, supCtr, center );
             }
             

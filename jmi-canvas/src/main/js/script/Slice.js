@@ -98,7 +98,8 @@ JMI.script.Slice =  (function() {
                     
                     if (htmlTxt != null && htmlTxt.text.length > 0) {
                         htmlTxt.drawText2(gDrawingContext, applet.size);
-                        zone.datas[text] = htmlTxt;
+                        // TODO later : difficulté à trouver la bonne clé (text) voir aussi HTMLText.js getHText
+                        //zone.datas[text] = htmlTxt;
                     }
                 }
             }
