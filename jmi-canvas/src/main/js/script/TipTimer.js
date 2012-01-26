@@ -2,33 +2,31 @@ JMI.namespace("script.TipTimer");
 
 JMI.script.TipTimer = (function() {
 
-    var TipTimer = function() {};
+	/**
+	 * @param plan //:Plan
+	 * @param zone //:ActiveZone
+	 * @param slice //:Slice
+	 * @param key //:String
+	 * @param start //:Number
+	 * @param duration // :int //default value -1
+	 */
+    var TipTimer = function(plan, zone, slice, key, start, duration) {
+		this.isInterrupted = false;
+		
+		this.plan = plan;
+		this.zone = zone;
+		this.slice = slice;
+		this.key = key;
+		this.bounds = new JMI.script.Rectangle();
+		this.started = false;
+		
+		this.start = start;
+		this.duration = duration;
+		this.timer = setTimeout( this.startHandler, start);
+	};
     
 	TipTimer.prototype = {
 		constructor: JMI.script.TipTimer,
-		
-		/**
-		 * @param plan //:Plan
-		 * @param zone //:ActiveZone
-		 * @param slice //:Slice
-		 * @param key //:String
-		 * @param start //:Number
-		 * @param duration // :int //default value -1
-		 */
-		init: function(plan, zone, slice, key, start, duration) {
-			this.isInterrupted = false;
-			
-			this.plan = plan;
-			this.zone = zone;
-			this.slice = slice;
-			this.key = key;
-			this.bounds = new JMI.script.Rectangle();
-			this.started = false;
-			
-			this.start = start;
-			this.duration = duration;
-			this.timer = setTimeout( this.startHandler, start);
-		},
 		
 		// :void
 		interrupt: function() {

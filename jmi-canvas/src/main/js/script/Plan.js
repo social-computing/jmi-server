@@ -332,7 +332,7 @@ JMI.script.Plan = (function() {
 	 * @param key		A unique ID for each slices of the same kind (tooltip != infoTip).
 	 */
 	popSlice: function( zone, slice, delay, length, key) {
-		var tipTimer = tipTimers[key];
+		var tipTimer = this.tipTimers[key];
 		
 		if ( tipTimer != null )
 		{
@@ -344,7 +344,7 @@ JMI.script.Plan = (function() {
 					return;
 			}
 		}
-		tipTimers[key] = new TipTimer( this, zone, slice, key, delay, length);
+		this.tipTimers[key] = new JMI.script.TipTimer( this, zone, slice, key, delay, length);
 	},
 	
 	/**
