@@ -279,7 +279,7 @@ JMI.script.Satellite = (function() {
                         // Popup a menu
                         // TODO : portage getion du menu
                         else if (func == ("popup")) {
-                            var menux = zone.curSwh.refs[args];
+                            var menux = zone.curSwatch.refs[args];
                             
                             if (menux != null) {
                                 var menuData = [];
@@ -303,7 +303,7 @@ JMI.script.Satellite = (function() {
                         
                         // Pop a tooltip
                         else if (func == ("pop")) {
-                            var slice = zone.curSwh.refs[args];
+                            var slice = zone.curSwatch.refs[args];
                             
                             if (slice != null) {
                                 var delay  = slice.getInt(JMI.script.Slice.DELAY_VAL, zone.props);

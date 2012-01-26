@@ -57,8 +57,6 @@ JMI.util.ImageUtil.roundRect = function(context, x, y, width, height, radius) {
  * @param dim   size of the image.
  */
 JMI.util.ImageUtil.filterImage = function( gDrawingContext, dim, color) {
-    gDrawingContext.fillStyle = color;
-	
 	var w = dim.width - 1,
 		h = dim.height - 1,
 		min = Math.min( w, h ),
@@ -94,5 +92,7 @@ JMI.util.ImageUtil.filterImage = function( gDrawingContext, dim, color) {
 		}
 	}
     gDrawingContext.closePath();
+    gDrawingContext.lineWidth = 1;
+    gDrawingContext.fillStyle = color;
     gDrawingContext.fill();
 }

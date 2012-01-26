@@ -55,7 +55,9 @@ JMI.script.Base = (function() {
          */
         getValue: function(property, props) {
             var container = this.containers[property];
-            return container != 'null' ? (container.isBound ? props[container.value]: container.value ): null;
+            if( container == null || container == 'null')
+            	return null;
+            return container.isBound ? props[container.value] : container.value;
         },
         
         /*
