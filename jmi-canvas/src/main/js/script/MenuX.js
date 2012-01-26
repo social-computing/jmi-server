@@ -41,16 +41,16 @@ JMI.script.MenuX = (function() {
         var j;
         var k		= -1;
         var n		= 1;
-        var iCnt	= m_items.length;
+        var iCnt	= this.items.length;
         var isEmpty = true;
         var subMenu;
         var menuItm;
-        var font = this.getTextFormat( zone.m_props);
+        var font = this.getTextFormat( zone.props);
         var labels = null;
         
         if ( isDefined( TEXT_VAL ))
         {
-            labels	= parseString( TEXT_VAL, zone.m_props);
+            labels	= parseString( TEXT_VAL, zone.props);
             n		= labels.length;
         }
         
@@ -58,8 +58,8 @@ JMI.script.MenuX = (function() {
         {
             if ( n > 1|| (n == 1 && labels != null))
             {
-				subMenu	= new ArrayCollection();
-				menuItm = new Object();
+				subMenu	= [];
+				menuItm = {};
 				menuItm.label = labels[j];
 				menuItm.children = subMenu;
                 dst.addItem( menuItm );
@@ -74,7 +74,7 @@ JMI.script.MenuX = (function() {
             for ( i = 0; i < iCnt; i ++ )
             {
                 var menu = m_items[i];
-                var flags = menu.getFlags( zone.m_props);
+                var flags = menu.getFlags( zone.props);
                 
                 if ( JMI.script.Base.isEnabled( flags, ITEM_BIT ))
                 {
@@ -90,13 +90,13 @@ JMI.script.MenuX = (function() {
                     else
                     {
                         subMenu.removeItemAt( subMenu.length - 1);
-                        var subitems = menu.parseString( TEXT_VAL, zone.m_props);
+                        var subitems = menu.parseString( TEXT_VAL, zone.props);
                         if( subitems != null && subitems.length > 0)
                         {
                             menuItm = new Object;
 							menuItm.label = subitems[0];
                             // TODO menuItm.setFont( menu.getFont( zone ));
-                            var fontMenu = menu.getFont( FONT_VAL, zone.m_props).getTextFormat(zone.m_props);
+                            var fontMenu = menu.getFont( FONT_VAL, zone.props).getTextFormat(zone.props);
                             if ( fontMenu != null) {
                                 if (fontMenu.bold == true)
                                     menuItm.bold = "true";
@@ -125,25 +125,25 @@ JMI.script.MenuX = (function() {
      * @throws UnsupportedEncodingException 
      */
     parseItem: function( dst, zone, j) {
-        var parts 	= getString( TEXT_VAL, zone.m_props ).split( SEP);
+        var parts 	= this.getString( TEXT_VAL, zone.props ).split( SEP);
         var title	= parts[0];
         var url		= parts.length > 1? parts[1] : null;
         var redir   = parts.length > 2? parts[2] : null;
         //itemStr;
-        var font = this.getTextFormat( zone.m_props);
-        var items = parseString3( title, zone.m_props);
-        var urls = url != null ? parseString3( url, zone.m_props) : null;
-        var redirs = redir != null ? parseString3( redir, zone.m_props) : urls;
+        var font = this.getTextFormat( zone.props);
+        var its = parseString3( title, zone.props);
+        var urls = url != null ? parseString3( url, zone.props) : null;
+        var redirs = redir != null ? parseString3( redir, zone.props) : urls;
         //MenuItem    item;
         var i;
-        var n	= items.length;
+        var n	= its.length;
         var m	= redirs != null ? redirs.length : 0;
         
         if ( j == -1)
         {
             for ( i = 0; i < n; i ++ )
             {
-                addItem( dst, items[i], redirs != null ? redirs[i] : null, font );
+                addItem( dst, its[i], redirs != null ? redirs[i] : null, font );
             }
         }
         else
@@ -151,7 +151,7 @@ JMI.script.MenuX = (function() {
             i	= m - 1< j ? m - 1: j;
             j	= n - 1< j ? n - 1: j;
             if( i >= 0 && j >= 0)
-                addItem( dst, items[j], redirs != null ? redirs[i] : null, font );
+                addItem( dst, its[j], redirs != null ? redirs[i] : null, font );
         }
         
         return n > 0;
@@ -166,7 +166,7 @@ JMI.script.MenuX = (function() {
      * @param font		TypeFace of the label.
      */
     addItem: function( menu, title, url, font) {
-        var item = new Object();
+        var item = {};
         if( url == null && title == "-") {
 			item.type = "separator";	
 		} else {

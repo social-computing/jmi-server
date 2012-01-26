@@ -33,7 +33,7 @@ JMI.script.Base = (function() {
          * @return True if prop exists.
          */
         isDefined: function(property) {
-            return this.containers[property] != null;
+            return this.containers[property] != null && this.containers[property] != 'null';
         },
         
         /*

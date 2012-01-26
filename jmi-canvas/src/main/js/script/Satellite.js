@@ -308,9 +308,9 @@ JMI.script.Satellite = (function() {
                             if (slice != null) {
                                 var delay  = slice.getInt(JMI.script.Slice.DELAY_VAL, zone.props);
                                 var length = slice.getInt(JMI.script.Slice.LENGTH_VAL, zone.props);
-                                var text = slice.getText(Slice.TEXT_VAL, zone.m_props);
-                                applet.toolTip  = text.parseString(HTMLText.TEXT_VAL, zone.m_props).join("\n");
-                                applet.plan.popSlice(zone, slice, delay, length, args);
+                                var text = slice.getText(JMI.script.Slice.TEXT_VAL, zone.props);
+                                applet.toolTip  = text.parseString(JMI.script.HTMLText.TEXT_VAL, zone.props).join("\n");
+                                applet.planContainer.map.plan.popSlice(zone, slice, delay, length, args);
                             }
                         }
                         
