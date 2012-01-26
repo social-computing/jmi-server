@@ -84,10 +84,6 @@ JMI.script.LinkZone = (function() {
             this.to.paint(applet, applet.curDrawingContext, false, true, JMI.script.Satellite.ALL_TYP, true);
             this.curSwatch.paint(applet, applet.curDrawingContext, this, true, true, JMI.script.Satellite.TIP_TYP, true);
             this.curSwatch.paint(applet, applet.curDrawingContext, this, true, true, JMI.script.Satellite.SEL_TYP, true);
-        
-			applet.curDrawingContext.strokeStyle = "red";
-    		applet.curDrawingContext.strokeRect(this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height);
-    		
             applet.renderShape(applet.curDrawingCanvas, this.bounds.width, this.bounds.height, new JMI.script.Point(this.bounds.x, this.bounds.y));
         }
 	};

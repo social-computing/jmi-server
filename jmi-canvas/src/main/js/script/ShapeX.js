@@ -143,12 +143,6 @@ JMI.script.ShapeX = (function() {
                             shapeCenter.y + shapePos.y - size,
                             size * 2,
                             size * 2);
-                        /* DEBUG start*/
-                       /*
-                        gDrawingContext.strokeStyle = "rgb(200,0,0)";  
-                        gDrawingContext.strokeRect(rect.x, rect.y, rect.width, rect.height);
-                        */
-                        /* DEBUG end */
                         break;
                     
                     // 2 points = segment => Street
@@ -156,13 +150,6 @@ JMI.script.ShapeX = (function() {
                         var A = new JMI.script.Point(points[0].x, points[0].y).add(shapePos);
                         var B = new JMI.script.Point(points[1].x, points[1].y).add(shapePos);
                         rect = this.getLinkPoly(zone, A, B, size).getBounds();
-                        /* DEBUG start */
-                        /*
-                        gDrawingContext.strokeStyle = "rgb(0,200,0)";  
-                        gDrawingContext.strokeRect(points[0].x, points[0].y, 1, 1);
-                        gDrawingContext.strokeRect(points[1].x, points[1].y, 1, 1);
-                        */
-                        /* DEBUG end */
                         break;
                 }
                 bounds.merge(rect);

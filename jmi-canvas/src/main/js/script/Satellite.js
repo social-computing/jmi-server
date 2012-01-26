@@ -49,7 +49,6 @@ JMI.script.Satellite = (function() {
          * 
          * @return          True if this satellite is visible, false otherwise.
          */
-        // TODO : portage, décalage de bits
         isVisible: function(zone, isTip, curSel, sel) {
             var hasSel = curSel >= 0,
                 isSel  = JMI.script.Base.isEnabled(zone.selection, 1 << curSel);
@@ -309,8 +308,8 @@ JMI.script.Satellite = (function() {
                             if (slice != null) {
                                 var delay  = slice.getInt(JMI.script.Slice.DELAY_VAL, zone.props);
                                 var length = slice.getInt(JMI.script.Slice.LENGTH_VAL, zone.props);
-                                //var text:HTMLText = slice.getText(Slice.TEXT_VAL, zone.m_props);
-                                //applet.toolTip    = text.parseString(HTMLText.TEXT_VAL, zone.m_props).join("\n");
+                                var text = slice.getText(Slice.TEXT_VAL, zone.m_props);
+                                applet.toolTip  = text.parseString(HTMLText.TEXT_VAL, zone.m_props).join("\n");
                                 applet.plan.popSlice(zone, slice, delay, length, args);
                             }
                         }
@@ -329,8 +328,7 @@ JMI.script.Satellite = (function() {
                         
                         // Print a string in the console
                         else if (func == ("dump")) {
-                            // TODO : portage, instruction de debug equivalente
-                            trace(args);
+                            applet.log(args);
                         }
                     }
                 }
