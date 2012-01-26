@@ -162,7 +162,7 @@ JMI.script.Polygon = (function() {
                 }
             }
             // TODO : portage : à changer
-            return new Boolean(cn & 1);    // 0 if even (out), and 1 if odd (in)
+            return cn & 1;    // 0 if even (out), and 1 if odd (in)
         },
         
         /**

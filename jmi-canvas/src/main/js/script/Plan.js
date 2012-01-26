@@ -209,7 +209,7 @@ JMI.script.Plan = (function() {
 	        
 			// The cursor is in the current Zone
 	        if (cSat != null) {
-				this.applet.log("a current zone is hovered");
+				//this.applet.log("a current zone is hovered");
 	            return this.updateCurrentZone(cSat, p);
 	        }
 	    }
@@ -224,7 +224,7 @@ JMI.script.Plan = (function() {
 	            
 				// The cursor is on this node
 	            if(cSat != null) {
-					this.applet.log("an inactive zone is hovered")
+					//this.applet.log("an inactive zone is hovered")
 	                return this.updateCurrentZone(cSat, p);
 	            }
 	        }

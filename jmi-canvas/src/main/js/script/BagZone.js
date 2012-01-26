@@ -141,9 +141,10 @@ JMI.script.BagZone = (function() {
          */
         paintCur: function(applet) {
             // Copy backDrawingContext hovered zone to curDrawingContext
-           applet.curDrawingContext.drawImage( applet.backDrawingCanvas, this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height, this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height);
-           
+            applet.curDrawingContext.drawImage( applet.backDrawingCanvas, this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height, this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height);
             this.curSwatch.paint(applet, applet.curDrawingContext, this, true, true, JMI.script.Satellite.ALL_TYP, true);
+			applet.curDrawingContext.strokeStyle = "red";
+    		applet.curDrawingContext.strokeRect(this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height);
             applet.renderShape(applet.curDrawingCanvas, this.bounds.width, this.bounds.height, new JMI.script.Point(this.bounds.x, this.bounds.y));
         }
 
