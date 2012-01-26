@@ -21,10 +21,6 @@ JMI.script.PlanContainer.fromJSON = function ( jsonString) {
 	else {
 		var jmiData = JMI.lib.jsonParse( jsonString, function (key, value) {
 	        if (value && typeof value === 'object') {
-	        	if( key === 'containers') {
-	        		var i = 0;
-	        		i++;
-	        	}
 	        	if( 'env' === key && value.hasOwnProperty('selections')) {
 	        		var env = new JMI.script.Env();
 	        		for (var attr in value) {
