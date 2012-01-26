@@ -170,7 +170,7 @@ JMI.script.Slice =  (function() {
                     var points = satShp.getValue(JMI.script.ShapeX.POLYGON_VAL, supZone.props);
                     errorMessage += " zName=" + supZone.props[ "NAME" ] + " pKey=" + satShp.containers[JMI.script.ShapeX.POLYGON_VAL].value + " pnts=" + points + " p[0]=" + points[0];
                 }
-                throw(new Error(errorMessage));
+                applet.log(errorMessage);
             }
         
             var text = this.getText(JMI.script.Slice.TEXT_VAL, zone.props);
@@ -180,9 +180,7 @@ JMI.script.Slice =  (function() {
                 }
                 else {
                     supCtr = supZone.restSwatch.satellites[0].shapex.getCenter(supZone);
-                    var htmlTxt;
-                    
-                    htmlTxt = text.getHText(applet, gDrawingContext, zone, transfo, satCtr, supCtr, text);
+                    var htmlTxt = text.getHText(applet, gDrawingContext, zone, transfo, satCtr, supCtr, text);
                     if (htmlTxt != null && htmlTxt.text.length > 0) {
                         bounds.merge(htmlTxt.bounds);
                     }

@@ -206,7 +206,6 @@ JMI.script.ShapeX = (function() {
                         // size = size * 2;
                         var outColor = slice.getColor(JMI.script.Slice.OUT_COL_VAL, zone.props);
                         var inColor = slice.getColor(JMI.script.Slice.IN_COL_VAL, zone.props);
-
                         gDrawingContext.beginPath();
                         gDrawingContext.arc(x, y, size, 0, Math.PI * 2, false);
                         gDrawingContext.closePath();
@@ -218,23 +217,12 @@ JMI.script.ShapeX = (function() {
                             gDrawingContext.fillStyle = inColor;
                             gDrawingContext.fill();
                         }
-                        
-                        /* DEBUG start */
-                        gDrawingContext.strokeStyle = "rgb(200,0,0)";  
-                        gDrawingContext.strokeRect(x, y, 1, 1);
-                        /* DEBUG end */
                         break;
                         
                     // segment  => Street
                     case 2:     
                         var fromPoint = new JMI.script.Point(points[0].x, points[0].y).add(shapePos);
                         var toPoint = new JMI.script.Point(points[1].x, points[1].y).add(shapePos);
-                        
-                        /* DEBUG start */
-                        gDrawingContext.strokeStyle = "rgb(0,200,0)";  
-                        gDrawingContext.strokeRect(fromPoint.x, fromPoint.y, 1, 1);
-                        gDrawingContext.strokeRect(toPoint.x, toPoint.y, 1, 1);
-                        /* DEBUG end */
                         
                         var poly = this.getLinkPoly(supZone, fromPoint, toPoint, (((size + 3) / 2)));
                         

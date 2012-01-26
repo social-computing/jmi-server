@@ -243,7 +243,7 @@ JMI.script.Plan = (function() {
 	            
 				// The cursor is on this link
 	            if (cSat != null) {
-					this.applet.log("a link is hovered")
+					//this.applet.log("a link is hovered")
 	                return this.updateCurrentZone(cSat, p);
 	            }
 	        }

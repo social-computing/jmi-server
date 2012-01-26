@@ -87,7 +87,6 @@ JMI.script.LinkZone = (function() {
         
 			applet.curDrawingContext.strokeStyle = "red";
     		applet.curDrawingContext.strokeRect(this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height);
-    		applet.log(this.bounds.x+'/'+this.bounds.y+','+this.bounds.width+'/'+this.bounds.height);
     		
             applet.renderShape(applet.curDrawingCanvas, this.bounds.width, this.bounds.height, new JMI.script.Point(this.bounds.x, this.bounds.y));
         }
