@@ -22,16 +22,23 @@ JMI.script.TipTimer = (function() {
 		
 		this.start = start;
 		this.duration = duration;
-		this.timer = setTimeout( this.startHandler, start);
+		var timer = this;
+		this.timer = this.async(
+						function () { 
+							timer.startHandler(); 
+						}, start);
 	};
     
 	TipTimer.prototype = {
 		constructor: JMI.script.TipTimer,
 		
+		async: function(fn, t) {
+		    return setTimeout(fn, t);
+		},
 		// :void
 		interrupt: function() {
 			if (this.timer != null) {
-			    this.clearTimeout( this.timer);
+			    clearTimeout( this.timer);
 				this.clean(false);
 			}			
 		},
@@ -43,16 +50,15 @@ JMI.script.TipTimer = (function() {
 		clean: function(full) {
 			if (this.started) {
 				this.started = false;
-				if (this.plan.applet.plan != null) {
+				if (this.plan.applet.planContainer != null) {
 					 
 					if (this.bounds.width == 0 && this.bounds.height == 0) {
 						// Asynchronous URL content loaded (bounds not set)
-						this.slice.setBounds( this.plan.applet, this.plan.applet.curDrawingContext, zone.getParent(), zone, null, null, null, this.bounds);
+						this.slice.setBounds( this.plan.applet, this.plan.applet.curDrawingContext, this.zone.getParent(), this.zone, null, null, null, this.bounds);
 					}
-					this.plan.applet.renderShape(this.plan.applet.restDrawingContext, this.bounds.width, this.bounds.height, new JMI.script.Point(this.bounds.x, this.bounds.y));
+					this.plan.applet.renderShape(this.plan.applet.restDrawingCanvas, this.bounds.width, this.bounds.height, new JMI.script.Point(this.bounds.x, this.bounds.y));
 					if(full) this.plan.paintCurZone();
 				}
-				// TODO : portage : delete keyword in javascript ?
 				delete this.plan.tipTimers[this.key];
 			}
 		},
@@ -61,17 +67,21 @@ JMI.script.TipTimer = (function() {
 		 * @param event :TimerEvent
 		 * @return //:void
 		 */
-		startHandler: function(event) {
+		startHandler: function() {
 			if (!this.started) {
 				this.started = true;
 				// :Point
 				var pos = this.plan.applet.curPos;
 				this.slice.paint(this.plan.applet, this.plan.applet.curDrawingContext, this.zone.getParent(), this.zone, null, pos, null);
 				this.slice.setBounds(this.plan.applet, this.plan.applet.curDrawingContext, this.zone.getParent(), this.zone, null, pos, null, this.bounds);
-				this.plan.applet.renderShape(this.plan.applet.curDrawingContext, this.bounds.width, this.bounds.height, new JMI.script.Point(this.bounds.x, this.bounds.y));
+				this.plan.applet.renderShape(this.plan.applet.curDrawingCanvas, this.bounds.width, this.bounds.height, new JMI.script.Point(this.bounds.x, this.bounds.y));
 			}
-			if (duration != -1) {
-				this.timer = setTimeout(this.stopHandler, duration);
+			if (this.duration != -1) {
+				var timer = this;
+				this.timer = this.async(
+								function () { 
+									timer.stopHandler(); 
+								}, this.duration);
 			}
 		},
 		
@@ -79,7 +89,7 @@ JMI.script.TipTimer = (function() {
 	     * @param event :TimerEvent
 	     * @return //:void
 	     */
-	    stopHandler: function(event) {
+	    stopHandler: function() {
 	        this.clean(true);
 	    }
 	};

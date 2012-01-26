@@ -188,7 +188,7 @@ JMI.script.HTMLText = (function() {
             	gDrawingContext.lineWidth = '1';
 				if ( this.outColor != null ) {
 					gDrawingContext.strokeStyle = this.outColor;
-					if( m_rounded == -1)
+					if( this.rounded == -1)
 						gDrawingContext.strokeRect(pos.x, pos.y, this.bounds.width, this.bounds.height);
 					else {
 						JMI.util.ImageUtil.roundRect( gDrawingContext, pos.x, pos.y, this.bounds.width, this.bounds.height, this.rounded);
