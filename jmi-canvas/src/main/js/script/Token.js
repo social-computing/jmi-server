@@ -65,8 +65,6 @@ JMI.script.Token = (function() {
             if (JMI.script.Base.isEnabled(this.flags, JMI.script.Token.LIST_BIT)) {
                 // :Array
                 var list = props[this.buffer];
-                
-                // TODO portage : see if the ternary operator works as expected
                 size = list != null ? list.length : 0;
                 if (this.lineMax > 0 && size > this.lineMax) size = this.lineMax;
             }
@@ -117,14 +115,12 @@ JMI.script.Token = (function() {
                 // prop exists!
                 if (rawProp != null) {
                     // :String
-                    // TODO portage : revoir toString d'un array
                     var prop= rawProp.toString();
                     
                     // numerical prop
                     if (JMI.script.Base.isEnabled(this.flags, JMI.script.Token.NUM_BIT)) {
                         // float prop
                         if (JMI.script.Base.isEnabled(this.flags, JMI.script.Token.FLOAT_BIT)) {
-                            // TODO portage : ????
                             tokenStr = prop;
                             /*  if ( this.intSize > 0 )            // fixed size
                             {
@@ -142,10 +138,8 @@ JMI.script.Token = (function() {
                         
                         // int prop
                         else {
-                            // TODO portage : toujours les casts
                             // if (rawProp is Number )
-                            // prop = "" + int(rawProp);
-                            if (rawProp) prop = "" + rawProp;
+                            if (rawProp) prop = '' + rawProp;
                             
                             // fixed size
                             if (this.intSize > 0) {
@@ -154,7 +148,6 @@ JMI.script.Token = (function() {
                                         tokenStr = prop;
                                     }
                                     else {
-                                        // TODO : portage : besoin de prefixer par this sur les appels de functions de la classe ?
                                         tokenStr = extendWS(prop, this.intSize - prop.length);
                                     }
                                 }
@@ -177,7 +170,6 @@ JMI.script.Token = (function() {
                                     tokenStr = prop;
                                 }
                                 else {
-                                    // TODO : portage : besoin de prefixer par this sur les appels de functions de la classe ?
                                     tokenStr = extendWS(prop, this.intSize - prop.length);
                                 }
                             }
@@ -270,13 +262,8 @@ JMI.script.Token = (function() {
             
             if (i > beg) {
                 // :Number
-                // TODO : portage : cast
-                // var sizes = parseFloat( text.substring( beg, i ));
                 var sizes = text.substring(beg, i);
-                
-                // TODO : portage : cast
-                // this.intSize = int(sizes);
-                this.intSize = sizes;
+                this.intSize = Math.floor(sizes);
                 this.floatSize = Math.round(10. * (sizes - this.intSize));
             }
             
@@ -327,7 +314,6 @@ JMI.script.Token = (function() {
                 }
                 
                 //:String 
-                // TODO : portage : conversion from array to string
                 var wsStr = spaces;
                 
                 return JMI.script.Base.isEnabled(this.flags, JMI.script.Token.RIGHT_BIT) ?
