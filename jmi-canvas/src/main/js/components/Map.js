@@ -1,14 +1,5 @@
 JMI.namespace("components.Map");
-/*
-	[Event(name="error",    type="com.socialcomputing.jmi.components.events.StatusEvent")]
-	[Event(name="action",   type="com.socialcomputing.jmi.components.events.ActionEvent")]
-	[Event(name="navigate", type="com.socialcomputing.jmi.components.events.NavigateEvent")]
-	[Event(name="status",   type="com.socialcomputing.jmi.components.events.StatusEvent")]
-	[Event(name="attribute_click", type="com.socialcomputing.jmi.components.events.AttributeEvent")]
-	[Event(name="attribute_double_click", type="com.socialcomputing.jmi.components.events.AttributeEvent")]
-	[Event(name="attribute_hover", type="com.socialcomputing.jmi.components.events.AttributeEvent")]
-	//[Event(name="link_click",      type="com.socialcomputing.jmi.components.events.LinkClickEvent")]
-*/	
+
 JMI.components.Map = (function() {
 
 	var Map = function(id) {
@@ -19,33 +10,33 @@ JMI.components.Map = (function() {
 		this.attributes = [];
 		this.entities = [];
 		
-		var mapDiv = document.getElementById(id);
-		this.size = new JMI.script.Dimension(mapDiv.clientWidth, mapDiv.clientHeight);
+		this.parent = document.getElementById(id);
+		this.size = new JMI.script.Dimension(this.parent.clientWidth, this.parent.clientHeight);
 		
 		// Drawing surface of the component
 		this.drawingCanvas = document.createElement("canvas");
-		this.drawingCanvas.width = mapDiv.clientWidth;
-		this.drawingCanvas.height = mapDiv.clientHeight;
-		mapDiv.appendChild(this.drawingCanvas);
+		this.drawingCanvas.width = this.parent.clientWidth;
+		this.drawingCanvas.height = this.parent.clientHeight;
+		this.parent.appendChild(this.drawingCanvas);
 		this.drawingContext = this.drawingCanvas.getContext("2d");
 		this.drawingCanvas.JMI = this;
 	
 		// Graphic zones
 		this.curDrawingCanvas = document.createElement("canvas");
-		this.curDrawingCanvas.width = mapDiv.clientWidth;
-		this.curDrawingCanvas.height = mapDiv.clientHeight;
+		this.curDrawingCanvas.width = this.parent.clientWidth;
+		this.curDrawingCanvas.height = this.parent.clientHeight;
 		this.curDrawingCanvas.style.visibility = 'hidden';
 		this.curDrawingContext = this.curDrawingCanvas.getContext("2d");
 
 		this.restDrawingCanvas = document.createElement("canvas");
-		this.restDrawingCanvas.width = mapDiv.clientWidth;
-		this.restDrawingCanvas.height = mapDiv.clientHeight;
+		this.restDrawingCanvas.width = this.parent.clientWidth;
+		this.restDrawingCanvas.height = this.parent.clientHeight;
 		this.restDrawingCanvas.style.visibility='hidden';
 		this.restDrawingContext = this.restDrawingCanvas.getContext("2d");
 
 		this.backDrawingCanvas = document.createElement("canvas");
-		this.backDrawingCanvas.width = mapDiv.clientWidth;
-		this.backDrawingCanvas.height = mapDiv.clientHeight;
+		this.backDrawingCanvas.width = this.parent.clientWidth;
+		this.backDrawingCanvas.height = this.parent.clientHeight;
 		this.backDrawingCanvas.style.visibility = 'hidden';
 		this.backDrawingContext = this.backDrawingCanvas.getContext("2d");
 		
@@ -59,7 +50,6 @@ JMI.components.Map = (function() {
 		this.eventManager = new JMI.util.EventManager();
 /*
 		this.addEventListener(ResizeEvent.RESIZE, resizeHandler);
-		this.addEventListener(NavigateEvent.NAVIGATE, navigateHandler);
 */		
 /*		var wpsMenu:ContextMenu = new ContextMenu();
 		wpsMenu.hideBuiltInItems();
@@ -112,12 +102,12 @@ JMI.components.Map = (function() {
 			if( this.planContainer.hasOwnProperty( "error")) {
 				// Server error
 				CursorManager.removeBusyCursor();
-				this.dispatchEvent({ type: JMI.components.Map.ERROR, message: this.planContainer.error});
+				this.dispatchEvent({map: this, type: JMI.components.Map.ERROR, message: this.planContainer.error});
 			}
 			else if( !this.planContainer.hasOwnProperty( "map")) {
 				// Empty map
 				document.body.style.cursor = 'default';
-				this.dispatchEvent(JMI.components.Map.EMPTY);
+				this.dispatchEvent({ map: this, type: JMI.components.Map.EMPTY});
 			}
 			else {
 				var needPrint = false; // Later
@@ -139,7 +129,7 @@ JMI.components.Map = (function() {
 
 				this.renderShape(this.restDrawingCanvas, this.size.width, this.size.height);
 				if(this.ready)
-					this.dispatchEvent(JMI.components.Map.READY);
+					this.dispatchEvent({map: this, type:JMI.components.Map.READY});
 			}
 		},
 		
@@ -200,7 +190,7 @@ JMI.components.Map = (function() {
 			}
 		},
 		showStatus: function(message) {
-			this.dispatchEvent( { type: JMI.components.Map.STATUS, message: message});
+			this.dispatchEvent( {map: this, type: JMI.components.Map.STATUS, message: message});
 		},
 		log: function(message) {
 			if( aptana && aptana.log)
@@ -256,7 +246,7 @@ JMI.components.Map = (function() {
 						var func     = actionStr.substring( 0, pos ),
 							paramStr = actionStr.substring( pos + 1, actionStr.length- 1 );
 						var params   = paramStr.split( String.fromCharCode( 0xFFFC));
-						// TODO dispatchEvent( new ActionEvent( func, params));
+						this.dispatchEvent( {map: this, type: JMI.components.Map.ACTION, fn: func, args: params});
 					}
 					return;
 				}
@@ -270,13 +260,21 @@ JMI.components.Map = (function() {
 					target  = "_blank";
 				}
 			}
-			// TODO dispatchEvent(new NavigateEvent( actionStr, target)); 
+			this.dispatchEvent( {map: this, type: JMI.components.Map.NAVIGATE, url: actionStr, target: target});
+			window.open( actionStr, target);
 		},
-		
 		openSoCom: function ( e) {
-			//TODO portage
-			navigateToURL( new URLRequest( "http://www.social-computing.com"), "_blank");
+			window.open( "http://www.social-computing.com", "_blank");
+		},
+		findAttribute: function( zone) {
+			// TODO portage
+			/*for each( var attribute:Attribute in attributes) {
+				if( attribute.zone == zone)
+					return attribute;
+			}*/
+			return null;
 		}
+
 	};
 	
 	return Map;
@@ -287,6 +285,15 @@ JMI.components.Map.EMPTY = "empty";
 JMI.components.Map.READY = "ready";
 JMI.components.Map.STATUS = "status";
 JMI.components.Map.ERROR = "error";
+JMI.components.Map.ATTRIBUTE_CLICK = "attribute_click";
+JMI.components.Map.ATTRIBUTE_DBLECLICK = "attribute_dblclick";
+JMI.components.Map.ATTRIBUTE_HOVER = "attribute_hover";
+JMI.components.Map.ACTION = "action";
+JMI.components.Map.NAVIGATE = "navigate";
+// Not yest implemented
+//JMI.components.Map.LINK_CLICK = "link_click";
+//JMI.components.Map.LINK_DBLECLICK = "link_dblclick";
+//JMI.components.Map.LINK_HOVER = "link_hover";
 
 // Adapted from: http://www.quirksmode.org/js/findpos.html and 
 // http://stackoverflow.com/questions/5085689/tracking-mouse-position-in-canvas
@@ -316,14 +323,6 @@ public function get bitmapData():BitmapData
 /*
 
 
-public function findAttribute( zone:ActiveZone):Attribute {
-	for each( var attribute:Attribute in attributes) {
-		if( attribute.zone == zone)
-			return attribute;
-	}
-	return null;
-}
-
 private function findLink( zone:ActiveZone):Link {
 	return new Link( zone);
 }
@@ -344,14 +343,9 @@ public function resizeHandler(event:ResizeEvent):void {
 	}
 }
 		
-public function navigateHandler(event:NavigateEvent):void {
-	navigateToURL( new URLRequest( event.url), event.btarget);
-}
-
 public function menuHandler( evt:MenuEvent):void {
 	performAction( evt.item.action);
 }
-
 
 public function actionPerformed( actionStr:String ):void {
 	performAction( actionStr);

@@ -7,7 +7,7 @@ package com.socialcomputing.wps.components.events
 	public class AttributeEvent extends Event
 	{
 		public static const CLICK:String = "attribute_click";
-		public static const DOUBLE_CLICK:String = "attribute_double_click";
+		public static const DOUBLE_CLICK:String = "attribute_dblclick";
 		public static const HOVER:String = "attribute_hover";
 		private var _attribute:Attribute;
 		private var _localX:int, _localY:int;
