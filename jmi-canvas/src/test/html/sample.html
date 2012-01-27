@@ -41,15 +41,18 @@
 
 <script>
 function GoMap() {
-	var map = new JMI.components.Map( 'map');
+	var map = new JMI.components.Map('map');
 	map.addEventListener('status', function(event) {
-		document.getElementById('status').innerHTML = event.map.parent.id + ': ' + event.message;
+		document.getElementById('status').innerHTML = event.message;
 	} )
 	map.addEventListener('action', function(event) {
 		window[event.fn](event.args);
 	} )
 	map.addEventListener('attribute_click', function(event) {
 		//alert( event.attribute.props['NAME']);
+	} )
+	map.addEventListener('error', function(event) {
+		alert( event.message);
 	} )
 	var requester = new JMI.components.MapRequester( 'http://localhost:8080/jmi-server/');
 	var parameters = [];

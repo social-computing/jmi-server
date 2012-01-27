@@ -2,40 +2,57 @@ JMI.namespace("components.Map");
 
 JMI.components.Map = (function() {
 
-	var Map = function(id) {
+	var Map = function(parent) {
 		this.backgroundColor = 0xFFFFFF,
 		this.curPos = new JMI.script.Point(),
 		this.ready = false;
 		this.planContainer = null;
+		this.eventManager = new JMI.util.EventManager();
+		this.size = new JMI.script.Dimension();
 
-		this.parent = document.getElementById(id);
+	    if (!parent) {
+	    	throw 'JMI map: parent id must be set';
+		}
+	    if (typeof parent == "string") {
+			this.parent = document.getElementById(parent);
+			if( this.parent == null) {
+				throw 'JMI map: unknown parent element ' + parent;
+			}
+		}
+	    else if (typeof parent == "object") {
+	    	this.parent  = parent;
+	    }
+	    else {
+			throw 'JMI map: invalid parent ' + parent;
+	    }	
 		this.parent.JMI = this;
-		this.size = new JMI.script.Dimension(this.parent.clientWidth, this.parent.clientHeight);
-		
+		this.size.width = this.parent.clientWidth;
+		this.size.height = this.parent.clientHeight;
+				
 		// Drawing surface of the component
 		this.drawingCanvas = document.createElement("canvas");
-		this.drawingCanvas.width = this.parent.clientWidth;
-		this.drawingCanvas.height = this.parent.clientHeight;
+		this.drawingCanvas.width = this.size.width;
+		this.drawingCanvas.height = this.size.height;
 		this.parent.appendChild(this.drawingCanvas);
 		this.drawingContext = this.drawingCanvas.getContext("2d");
 		this.drawingCanvas.JMI = this;
 	
 		// Graphic zones
 		this.curDrawingCanvas = document.createElement("canvas");
-		this.curDrawingCanvas.width = this.parent.clientWidth;
-		this.curDrawingCanvas.height = this.parent.clientHeight;
+		this.curDrawingCanvas.width = this.size.width;
+		this.curDrawingCanvas.height = this.size.height;
 		this.curDrawingCanvas.style.visibility = 'hidden';
 		this.curDrawingContext = this.curDrawingCanvas.getContext("2d");
 
 		this.restDrawingCanvas = document.createElement("canvas");
-		this.restDrawingCanvas.width = this.parent.clientWidth;
-		this.restDrawingCanvas.height = this.parent.clientHeight;
+		this.restDrawingCanvas.width = this.size.width;
+		this.restDrawingCanvas.height = this.size.height;
 		this.restDrawingCanvas.style.visibility='hidden';
 		this.restDrawingContext = this.restDrawingCanvas.getContext("2d");
 
 		this.backDrawingCanvas = document.createElement("canvas");
-		this.backDrawingCanvas.width = this.parent.clientWidth;
-		this.backDrawingCanvas.height = this.parent.clientHeight;
+		this.backDrawingCanvas.width = this.size.width;
+		this.backDrawingCanvas.height = this.size.height;
 		this.backDrawingCanvas.style.visibility = 'hidden';
 		this.backDrawingContext = this.backDrawingCanvas.getContext("2d");
 		
@@ -45,9 +62,6 @@ JMI.components.Map = (function() {
 		this.drawingCanvas.addEventListener('mouseout', this.mouseOutHandler, false);
 		this.drawingCanvas.addEventListener('click', this.mouseClickHandler, false);
 		this.drawingCanvas.addEventListener('dblclick', this.mouseDoubleClickHandler, false);
-
-		// Map events
-		this.eventManager = new JMI.util.EventManager();
 
 /*		var wpsMenu:ContextMenu = new ContextMenu();
 		wpsMenu.hideBuiltInItems();
