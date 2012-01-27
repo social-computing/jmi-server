@@ -278,7 +278,7 @@ JMI.script.Plan = (function() {
 		// The current Satellite has changed
 	    if (this.curZone != this.newZone || this.curSat != cSat) {
 			// If flying over background reset to default arrow
-	        var cursTyp = 'normal';    
+	        var cursTyp = 'default';    
 			
 	        if (this.curZone != null &&
 				(this.newZone == null || this.curZone.getParent() != this.newZone.getParent())) {
@@ -301,7 +301,7 @@ JMI.script.Plan = (function() {
 	        }
 	        else {
 	            this.curZone = this.newZone;
-	            if (this.curSat == null) this.applet.showStatus("");
+	            if (this.curSat == null) this.applet.showStatus('');
 	        }
 	        document.body.style.cursor = cursTyp;
 	        return true;
