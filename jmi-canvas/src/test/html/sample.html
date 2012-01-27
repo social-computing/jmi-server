@@ -42,6 +42,9 @@
 <script>
 function GoMap() {
 	var map = new JMI.components.Map( 'map');
+	map.addEventListener('status', function(event) {
+		document.getElementById('status').innerHTML = event.message;
+	} )
 	var requester = new JMI.components.MapRequester( 'http://localhost:8080/jmi-server/');
 	var parameters = [];
     parameters.wpsserverurl = 'http://localhost:8080/jmi-server/';
@@ -62,5 +65,6 @@ function GoMap() {
 	</div>
 <div id="map" style="border:1px solid black ; width: 640px ; height: 480px"></div>
 <div id="mouse"></div>
+<div id="status"></div>
 </body>
 </html>
