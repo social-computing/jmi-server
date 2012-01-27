@@ -77,7 +77,6 @@ JMI.components.Map = (function() {
 			
 			// Clear all drawing surfaces
 			this.clear();
-			
 
 			// If the given value is null 
 			// Reset all objects of this component
@@ -87,7 +86,7 @@ JMI.components.Map = (function() {
 				return;
 			}
 			
-			this.showStatus("");
+			this.showStatus('');
 			document.body.style.cursor = 'wait';
 			if(value instanceof JMI.script.PlanContainer) {
 				this.planContainer = value;
@@ -120,17 +119,23 @@ JMI.components.Map = (function() {
 				this.ready = true;
 				document.body.style.cursor = 'default';
 
-				this.renderShape(this.restDrawingCanvas, this.size.width, this.size.height);
+				this.invalidate();
 				if(this.ready)
 					this.dispatchEvent({map: this, type:JMI.components.Map.READY});
 			}
 		},
+		getProperty: function( name) {
+			if( this.planContainer && env.props[name])
+				return this.planContainer.map.env.props[name];
+			return null;
+		},
 		
-		
+		invalidate: function() {
+			this.renderShape(this.restDrawingCanvas, this.size.width, this.size.height);
+		},		
         renderShape: function(canvas, width, height, position) {
             // If no position is specified, take (0,0)
             position = position || new JMI.script.Point();
-
             if(width > 0 && height > 0) {
                 // Copying the content of the context on to visible canvas context
                 this.drawingContext.drawImage(canvas, position.x, position.y, width, height, position.x, position.y, width, height);
@@ -142,7 +147,6 @@ JMI.components.Map = (function() {
 			JMI.util.ImageUtil.clear(this.curDrawingCanvas, this.curDrawingContext);
 			JMI.util.ImageUtil.clear(this.drawingCanvas, this.drawingContext);
 		},
-		
 		mouseMoveHandler: function(event) {
 			if (this instanceof HTMLCanvasElement) {
 			    var mousePosition = JMI.components.Map.getPosition(this, event);
@@ -201,7 +205,7 @@ JMI.components.Map = (function() {
 				this.planContainer.map.plan.resize( this.size);
 				this.planContainer.map.plan.init();
 			}
-			this.renderShape(this.restDrawingCanvas, this.size.width, this.size.height);
+			this.invalidate();
 		},
 		showStatus: function(message) {
 			this.dispatchEvent( {map: this, type: JMI.components.Map.STATUS, message: message});
@@ -221,7 +225,52 @@ JMI.components.Map = (function() {
 		removeEventListener: function(event, listener) {
 			this.eventManager.removeListener(event, listener);
 		},
-		/*
+		/**
+		 * Sets the currently displayed selection.
+		 * Called by JavaScript.
+		 * @param selNam	A selection name as defined in the Dictionary.
+		 */
+		setSelection: function(selection) {
+			var selId = this.getSelId(selection);
+			this.JMI.planContainer.map.plan.curSel = selId;
+			this.JMI.planContainer.map.plan.init();
+			this.invalidate();
+		},
+		clearSelection: function( selection) {
+			this.clearZoneSelection( selection, this.JMI.planContainer.map.plan.nodes, this.JMI.planContainer.map.plan.nodes.length );
+			this.clearZoneSelection( selection, this.JMI.planContainer.map.plan.links, this.JMI.planContainer.map.plan.linksCnt );
+			this.invalidate();
+		},
+		/**
+		 * Remove zones from a selection.
+		 * The display must be refresh to reflect the new selection.
+		 * @param selNam	A selection name as defined in the Dictionary.
+		 * @param zones		An array of Zones (Nodes or Links).
+		 * @param n			Number of zone to remove from selection in the array, starting from index 0.
+		 */
+		clearZoneSelection: function( selection, zones, n) {
+			var selId = getSelId(selection);
+			if ( selId != -1 )
+			{
+				var unselBit = ~( 1 << selId );
+				for( var i = 0; i < n; i ++ )
+				{
+					zones[i].selection &= unselBit;
+				}
+			}
+		},
+		/**
+		 * Gets the id of a selection, knowing its name.
+		 * @param selNam	A selection name as defined in the Dictionary.
+		 * @return			An ID in [0,31] or -1 if the selection name is unknown.
+		 */
+		getSelId: function( selection) {
+			if( this.JMI.planContainer.map.env.selections[selection] == null)
+				return -1;
+			return  env.selections[selection];
+		},
+		
+		/**
 		 * Perform an URL action.
 		 * The action depends on the string passed:
 		 * <ul>
@@ -280,7 +329,6 @@ JMI.components.Map = (function() {
 		openSoCom: function ( e) {
 			window.open( "http://www.social-computing.com", "_blank");
 		}
-
 	};
 	
 	return Map;
@@ -343,11 +391,7 @@ public function actionPerformed( actionStr:String ):void {
 }*/
 
 
-/*public function getProperty( name:String):Object {
-	if( env != null && env.props.hasOwnProperty( name))
-		return env.props[name];
-	return null;
-}
+/*
 
 public function defineEntities( nodeFields:Array, nodeId:String="POSS_ID", linkId:String="REC_ID"):void {
 	
@@ -381,54 +425,3 @@ public function defineEntities( nodeFields:Array, nodeId:String="POSS_ID", linkI
 	}
 }*/
 
-/**
- * Sets the currently displayed selection.
- * Called by JavaScript.
- * @param selNam	A selection name as defined in the Dictionary.
- */
-/*public function setSelection( selection:String):void
-{
-	var selId:int   = getSelId( selection );
-	plan.curSel = selId;
-	plan.init();
-	this.invalidateDisplayList();
-}
-
-public function clearSelection( selection:String):void {
-	clearZoneSelection( selection, plan.nodes, plan.nodes.length );
-	clearZoneSelection( selection, plan.links, plan.linksCnt );
-}*/
-
-/**
- * Remove zones from a selection.
- * The display must be refresh to reflect the new selection.
- * @param selNam	A selection name as defined in the Dictionary.
- * @param zones		An array of Zones (Nodes or Links).
- * @param n			Number of zone to remove from selection in the array, starting from index 0.
- */
-/*private function clearZoneSelection( selection:String, zones:Array, n:int):void
-{
-	var selId:int   = getSelId( selection );
-	if ( selId != -1 )
-	{
-		var unselBit:int = ~( 1 << selId );
-		for( var i:int = 0; i < n; i ++ )
-		{
-			zones[i].m_selection &= unselBit;
-		}
-	}
-}*/
-
-/**
- * Gets the id of a selection, knowing its name.
- * @param selNam	A selection name as defined in the Dictionary.
- * @return			An ID in [0,31] or -1 if the selection name is unknown.
- */
-/*private function getSelId( selection:String):int
-{
-	if( env.selections[selection] == null)
-		return -1;
-	return  env.selections[selection];
-}
-
-*/
