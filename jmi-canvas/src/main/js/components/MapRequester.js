@@ -11,14 +11,21 @@ JMI.components.MapRequester = (function() {
 	MapRequester.prototype = {
 		constructor: JMI.components.MapRequester,
 		
-		// TODO gérer les erreurs
-		getMap: function(name, width, height, parameters, onReady) {
+		getMap: function(name, width, height, parameters) {
 			document.body.style.cursor = 'wait';
 			var client = new XMLHttpRequest(); 
+			var requester = this;
 			client.onreadystatechange = function() {
 				if( this.readyState == 4) {
 					document.body.style.cursor = 'default';
-					onReady( client.responseText);
+					if( this.status == 200) {
+						if( requester.onready)
+							requester.onready( client.responseText);
+					}
+					else { 
+						if( requester.onerror)
+							requester.onerror( 'Error ' + client.status + ': ' + client.statusText + '\n' + requester.jmiServerUrl + '...');
+					}
 				}
 			}; 
 			var url = this.jmiServerUrl;
@@ -30,8 +37,8 @@ JMI.components.MapRequester = (function() {
 			for( var p in parameters) {
 				url = this.addParameter( url, p, parameters[p]);
 			}
-			client.open( "GET", "/jmi-canvas/src/main/resources/feeds3.json", true); 
-			//client.open( "GET", url, true); 
+			//client.open( "GET", "/jmi-canvas/src/main/resources/feeds3.json", true); 
+			client.open( "GET", url, true); 
 			client.send();
 		},
 	

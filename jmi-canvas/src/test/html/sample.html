@@ -59,9 +59,13 @@ function GoMap() {
     parameters.wpsserverurl = 'http://localhost:8080/jmi-server/';
 	parameters.invert="false";
     parameters.analysisProfile = "GlobalProfile";
-	requester.getMap( 'Json_sample', map.size.width, map.size.height, parameters, function( data) {
+    requester.onerror = function(error) {
+		alert( error);
+	};
+    requester.onready = function(data) {
 		map.setData( data);
-	});
+	};
+	requester.getMap('Json_sample', map.size.width, map.size.height, parameters);
 };
 function JMIF_Navigate(args) {
 	alert( args[0]);
