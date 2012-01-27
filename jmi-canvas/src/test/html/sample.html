@@ -54,18 +54,15 @@ function GoMap() {
 	map.addEventListener('error', function(event) {
 		alert( event.message);
 	} )
-	var requester = new JMI.components.MapRequester( 'http://localhost:8080/jmi-server/');
-	var parameters = [];
+	var requester = new JMI.components.MapRequester(map, 'http://localhost:8080/jmi-server/');
+	var parameters = {};
     parameters.wpsserverurl = 'http://localhost:8080/jmi-server/';
 	parameters.invert="false";
     parameters.analysisProfile = "GlobalProfile";
     requester.onerror = function(error) {
 		alert( error);
 	};
-    requester.onready = function(data) {
-		map.setData( data);
-	};
-	requester.getMap('Json_sample', map.size.width, map.size.height, parameters);
+	requester.getMap('Json_sample', parameters);
 };
 function JMIF_Navigate(args) {
 	alert( args[0]);

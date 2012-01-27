@@ -2,16 +2,19 @@ JMI.namespace("components.MapRequester");
 
 JMI.components.MapRequester = (function() {
 	
-	var jmiServerUrl;
+	var jmiServerUrl, map;
 	
-	var MapRequester = function( jmiServerUrl) {
+	var MapRequester = function( map, jmiServerUrl) {
+		if( !map || !(map instanceof JMI.components.Map))
+			throw('map component is not set');
+		this.map = map;
 		this.jmiServerUrl = jmiServerUrl || 'http://server.just-map-it.com/';
 	};
 	
 	MapRequester.prototype = {
 		constructor: JMI.components.MapRequester,
 		
-		getMap: function(name, width, height, parameters) {
+		getMap: function(name, parameters) {
 			document.body.style.cursor = 'wait';
 			var client = new XMLHttpRequest(); 
 			var requester = this;
@@ -19,8 +22,7 @@ JMI.components.MapRequester = (function() {
 				if( this.readyState == 4) {
 					document.body.style.cursor = 'default';
 					if( this.status == 200) {
-						if( requester.onready)
-							requester.onready( client.responseText);
+						requester.map.setData( client.responseText);
 					}
 					else { 
 						if( requester.onerror)
@@ -32,8 +34,8 @@ JMI.components.MapRequester = (function() {
 			if( url.charAt(url.length - 1) != '/')
 				url += '/';
 			url += 'services/engine/0/' + name + '.json?';
-			url = this.addParameter( url, 'width', width);
-			url = this.addParameter( url, 'height', height);
+			url = this.addParameter( url, 'width', this.map.size.width);
+			url = this.addParameter( url, 'height', this.map.size.height);
 			for( var p in parameters) {
 				url = this.addParameter( url, p, parameters[p]);
 			}
