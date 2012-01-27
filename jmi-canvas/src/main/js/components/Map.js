@@ -9,6 +9,7 @@ JMI.components.Map = (function() {
 		this.planContainer = null;
 
 		this.parent = document.getElementById(id);
+		this.parent.JMI = this;
 		this.size = new JMI.script.Dimension(this.parent.clientWidth, this.parent.clientHeight);
 		
 		// Drawing surface of the component
@@ -44,11 +45,10 @@ JMI.components.Map = (function() {
 		this.drawingCanvas.addEventListener('mouseout', this.mouseOutHandler, false);
 		this.drawingCanvas.addEventListener('click', this.mouseClickHandler, false);
 		this.drawingCanvas.addEventListener('dblclick', this.mouseDoubleClickHandler, false);
-		
+
+		// Map events
 		this.eventManager = new JMI.util.EventManager();
-/*
-		this.addEventListener(ResizeEvent.RESIZE, resizeHandler);
-*/		
+
 /*		var wpsMenu:ContextMenu = new ContextMenu();
 		wpsMenu.hideBuiltInItems();
 		var menuItem:ContextMenuItem = new ContextMenuItem("powered by Just Map It! - Social Computing");
@@ -182,6 +182,27 @@ JMI.components.Map = (function() {
 				}
 			}
 		},
+		resize: function(width, height){
+			this.clear();
+
+			this.size.width = width; 
+			this.size.height = height;
+			 
+			this.drawingCanvas.width = width;
+			this.drawingCanvas.height = height;
+			this.curDrawingCanvas.width = width;
+			this.curDrawingCanvas.height = height;
+			this.restDrawingCanvas.width = width;
+			this.restDrawingCanvas.height = height;
+			this.backDrawingCanvas.width = width;
+			this.backDrawingCanvas.height = height;
+				
+			if(this.ready) {
+				this.planContainer.map.plan.resize( this.size);
+				this.planContainer.map.plan.init();
+			}
+			this.renderShape(this.restDrawingCanvas, this.size.width, this.size.height);
+		},
 		showStatus: function(message) {
 			this.dispatchEvent( {map: this, type: JMI.components.Map.STATUS, message: message});
 		},
@@ -313,21 +334,6 @@ private function findLink( zone:ActiveZone):Link {
 }
 
 
-public function resizeHandler(event:ResizeEvent):void {
-	//trace("resize, new size = (" + this.width + ", " + this.height + ")");
-	this.clear();
-	
-	this.restDrawingContext.graphics.beginFill(this.ready ? this.env.inCol.m_color : this.backgroundColor);
-	this.restDrawingContext.graphics.drawRect(0, 0, this.width, this.height);
-	this.restDrawingContext.graphics.endFill();
-		
-	if(this.ready) {
-		this.plan.resize( this.size);
-		this.plan.init();
-		this.invalidateSize();  
-	}
-}
-		
 public function menuHandler( evt:MenuEvent):void {
 	performAction( evt.item.action);
 }
