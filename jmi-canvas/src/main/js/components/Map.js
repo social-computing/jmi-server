@@ -1,6 +1,5 @@
 JMI.namespace("components.Map");
-/*	[Event(name="ready",    type="flash.events.Event")]
-	[Event(name="empty",    type="flash.events.Event")]
+/*
 	[Event(name="error",    type="com.socialcomputing.jmi.components.events.StatusEvent")]
 	[Event(name="action",   type="com.socialcomputing.jmi.components.events.ActionEvent")]
 	[Event(name="navigate", type="com.socialcomputing.jmi.components.events.NavigateEvent")]
@@ -12,58 +11,11 @@ JMI.namespace("components.Map");
 */	
 JMI.components.Map = (function() {
 
-var planContainer = JMI.script.PlanContainer,
-	ready = false,
-
-/*
- *  Specific display elements
- */
-	backgroundColor = 0xFFFFFF,
-	drawingContext,//:SpriteVisualElement => Official Canvas 2D Context
-
-/*
- * Image used to quickly restore the aspect of a zone that is no longer current.
- * It includes the background + links + Satellites of each place at rest.
- */
-	restDrawingContext, //:Sprite => Canvas 2D Context  
-/*
- * Image used as a background on which the current zone is drawn.
- * It includes the background, and the zones rendered with their 'ghosted' satellites form the rest swatch.
- * The resulting image is then filtered with a transparency color.
- */
-	backDrawingContext,//:Sprite => Canvas 2D Context
-	curDrawingContext,//:Sprite => Canvas 2D Context
-
-/*
- * API
- */
-	attributes, //:ArrayCollection;
-	entities; //:ArrayCollection;
-	
-
-    // Adapted from: http://www.quirksmode.org/js/findpos.html and 
-    // http://stackoverflow.com/questions/5085689/tracking-mouse-position-in-canvas
-    function getPosition(canvas, e) {
-        var left = 0, top = 0;
-
-        if(canvas.offsetParent) {
-            while(canvas) {
-                left += canvas.offsetLeft;
-                top += canvas.offsetTop;
-                canvas = canvas.offsetParent;
-            }
-        }
-
-        return {
-            x : e.pageX - left,
-            y : e.pageY - top
-        };
-    }
-
-	
 	var Map = function(id) {
+		this.backgroundColor = 0xFFFFFF,
 		this.curPos = new JMI.script.Point(),
 		this.ready = false;
+		this.planContainer = null;
 		this.attributes = [];
 		this.entities = [];
 		
@@ -103,6 +55,8 @@ var planContainer = JMI.script.PlanContainer,
 		this.drawingCanvas.addEventListener('mouseout', this.mouseOutHandler, false);
 		this.drawingCanvas.addEventListener('click', this.mouseClickHandler, false);
 		this.drawingCanvas.addEventListener('dblclick', this.mouseDoubleClickHandler, false);
+		
+		this.eventManager = new JMI.util.EventManager();
 /*
 		this.addEventListener(ResizeEvent.RESIZE, resizeHandler);
 		this.addEventListener(NavigateEvent.NAVIGATE, navigateHandler);
@@ -158,13 +112,12 @@ var planContainer = JMI.script.PlanContainer,
 			if( this.planContainer.hasOwnProperty( "error")) {
 				// Server error
 				CursorManager.removeBusyCursor();
-				dispatchEvent(new StatusEvent(StatusEvent.ERROR, this.planContainer.error));
+				this.dispatchEvent({ type: JMI.components.Map.ERROR, message: this.planContainer.error});
 			}
 			else if( !this.planContainer.hasOwnProperty( "map")) {
 				// Empty map
 				document.body.style.cursor = 'default';
-				// TODO
-				//dispatchEvent(new Event( Map.EMPTY));*/
+				this.dispatchEvent(JMI.components.Map.EMPTY);
 			}
 			else {
 				var needPrint = false; // Later
@@ -185,20 +138,14 @@ var planContainer = JMI.script.PlanContainer,
 				document.body.style.cursor = 'default';
 
 				this.renderShape(this.restDrawingCanvas, this.size.width, this.size.height);
-				/*TODO portage
 				if(this.ready)
-					dispatchEvent(new Event(Map.READY));*/
+					this.dispatchEvent(JMI.components.Map.READY);
 			}
 		},
 		
 		
         renderShape: function(canvas, width, height, position) {
             // If no position is specified, take (0,0)
-            /*
-            if(position == null) {
-                position = new JMI.script.Point();
-            }
-            */
             position = position || new JMI.script.Point();
 
             if(width > 0 && height > 0) {
@@ -206,8 +153,6 @@ var planContainer = JMI.script.PlanContainer,
                 this.drawingContext.drawImage(canvas, position.x, position.y, width, height, position.x, position.y, width, height);
             }
         },
-
-		
 		clear: function() {
 			JMI.util.ImageUtil.clear(this.backDrawingCanvas, this.backDrawingContext);
 			JMI.util.ImageUtil.clear(this.restDrawingCanvas, this.restDrawingContext);
@@ -217,7 +162,7 @@ var planContainer = JMI.script.PlanContainer,
 		
 		mouseMoveHandler: function(event) {
 			if (this instanceof HTMLCanvasElement) {
-			    var mousePosition = getPosition(this, event);
+			    var mousePosition = JMI.components.Map.getPosition(this, event);
 				this.JMI.curPos.x = mousePosition.x;
 				this.JMI.curPos.y = mousePosition.y;
 				var debugDiv = document.getElementById("mouse");
@@ -236,7 +181,7 @@ var planContainer = JMI.script.PlanContainer,
 		},
 		mouseClickHandler: function(event) {
 			if (this instanceof HTMLCanvasElement) {
-			    var mousePosition = getPosition(this, event);
+			    var mousePosition = JMI.components.Map.getPosition(this, event);
 				if ( this.JMI.ready && this.JMI.planContainer.map.plan.curSat != null )
 				{
 					this.JMI.planContainer.map.plan.updateZoneAt( mousePosition);
@@ -246,7 +191,7 @@ var planContainer = JMI.script.PlanContainer,
 		},
 		mouseDoubleClickHandler: function(event) {
 			if (this instanceof HTMLCanvasElement) {
-			    var mousePosition = getPosition(this, event);
+			    var mousePosition = JMI.components.Map.getPosition(this, event);
 				if ( this.JMI.ready && this.JMI.planContainer.map.plan.curSat != null )
 				{
 					this.JMI.planContainer.map.plan.updateZoneAt( mousePosition);
@@ -255,8 +200,7 @@ var planContainer = JMI.script.PlanContainer,
 			}
 		},
 		showStatus: function(message) {
-			// TODO portage
-			//dispatchEvent(new StatusEvent( StatusEvent.STATUS, message));
+			this.dispatchEvent( { type: JMI.components.Map.STATUS, message: message});
 		},
 		log: function(message) {
 			if( aptana && aptana.log)
@@ -264,7 +208,15 @@ var planContainer = JMI.script.PlanContainer,
 			if( console && console.log)
 				console.log( message);
 		},
-
+		addEventListener: function(event, listener) {
+			this.eventManager.addListener(event, listener);
+		},
+		dispatchEvent: function(event) {
+			this.eventManager.fire(event);
+		},
+		removeEventListener: function(event, listener) {
+			this.eventManager.removeListener(event, listener);
+		},
 		/*
 		 * Perform an URL action.
 		 * The action depends on the string passed:
@@ -333,7 +285,26 @@ var planContainer = JMI.script.PlanContainer,
 JMI.components.Map.version = "1.0-SNAPSHOT";
 JMI.components.Map.EMPTY = "empty";
 JMI.components.Map.READY = "ready";
+JMI.components.Map.STATUS = "status";
+JMI.components.Map.ERROR = "error";
 
+// Adapted from: http://www.quirksmode.org/js/findpos.html and 
+// http://stackoverflow.com/questions/5085689/tracking-mouse-position-in-canvas
+JMI.components.Map.getPosition= function(canvas, e) {
+    var left = 0, top = 0;
+
+    if(canvas.offsetParent) {
+        while(canvas) {
+            left += canvas.offsetLeft;
+            top += canvas.offsetTop;
+            canvas = canvas.offsetParent;
+        }
+    }
+    return {
+        x : e.pageX - left,
+        y : e.pageY - top
+    };
+};
 
 /*
 public function get bitmapData():BitmapData
