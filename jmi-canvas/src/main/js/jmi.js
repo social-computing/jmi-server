@@ -31,3 +31,17 @@ JMI.namespace = function(ns_string) {
     // returns the deepest lvl component (object) of the given namespace
     return parent;
 };
+
+JMI.canvas = function() {
+	return !!document.createElement('canvas').getContext('2d');
+};
+
+JMI.Map = function(parent, flash) {
+	if( !flash && JMI.canvas()) {
+		return new JMI.components.Map( parent);
+	}
+	if( flash == null || flash) {
+		throw 'TODO integrate Flex client';
+	}
+	throw 'No JMI client supported';
+};

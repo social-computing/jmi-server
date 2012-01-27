@@ -41,7 +41,7 @@
 
 <script>
 function GoMap() {
-	var map = new JMI.components.Map('map');
+	var map = JMI.Map('map');
 	map.addEventListener('status', function(event) {
 		document.getElementById('status').innerHTML = event.message;
 	} )
