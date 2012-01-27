@@ -352,31 +352,13 @@ JMI.script.ShapeX = (function() {
                 // Check if the image has already been loaded
                 if (!applet.planContainer.map.env.hasMedia(imageName)) {
                     var image = new Image();
+                    var sh = this;
                     image.onload = function() {
-                        // TODO complete
-                        this.drawLoadedImage(applet, image, gDrawingContext, zone, imageName, transfo, center, true);
-                        applet.env.medias[imageName] = image;
+                        sh.drawLoadedImage(applet, image, gDrawingContext, zone, imageName, transfo, center, true);
+                        applet.planContainer.map.env.medias[imageName] = image;
                     };
                     image.src = imageName;   
-                    /*var loader:LoaderEx = new LoaderEx();
-                    var env:Env = applet.env;
-                    env.addLoader( imageUrl, loader);
-                    loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function (e:Event):void {
-                        loader = env.getLoader( imageUrl);
-                        if( loader && !loader.stop) {
-                            image = Bitmap( LoaderInfo(e.target).content);
-                            drawLoadedImage(applet, image, s, zone, imageNam, transfo, center, true);
-                            env.putMedia(imageNam, image);
-                        }
-                        env.removeLoader( imageUrl);
-                    });
-                    loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function (e:Event):void {
-                        trace('Load image ' + imageUrl + ' failed');
-                    });
-                    var fileRequest:URLRequest = new URLRequest( imageUrl);
-                    loader.load(fileRequest);*/
                 }
-        
                 // Draw the image if it has already been loaded
                 else {
                     var image = applet.env.medias[imageName];
@@ -389,7 +371,7 @@ JMI.script.ShapeX = (function() {
             // Shape information             
             var shapeCenter   = this.getCenter(zone);
             var shapePosition = new JMI.script.Point();
-            var shapeScale    = this.getShapePos(zone, transfo, center, p, shapePos); //:Number
+            var shapeScale    = this.getShapePos(zone, transfo, center, shapeCenter, shapePosition); //:Number
             
             // Image information
             // Position the image at the shape center absolute position on the canevas
@@ -401,7 +383,7 @@ JMI.script.ShapeX = (function() {
             // If the shape scale is > 0 then scale the image  
             if (shapeScale > 0.0) {
                 // Disk                
-                var imageScale = 1.414 * scale;
+                var imageScale = 1.414 * shapeScale;
                 imageWidth = imageScale * image.width;
                 imageHeight = imageScale * image.height;
                 imageScale >>= 1;
