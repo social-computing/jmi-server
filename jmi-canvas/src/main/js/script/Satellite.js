@@ -232,7 +232,7 @@ JMI.script.Satellite = (function() {
                     //dispatchEvent( new LinkClickEvent( plan.curZone as LinkZone));
                 }
                 else {
-                    var event = {map: this, x: pos.x, y: pos.y, attribute: applet.findAttribute( zone)};
+                    var event = {map: this, x: pos.x, y: pos.y, attribute: zone};
                     if(actionId == JMI.script.Satellite.CLICK_VAL) event.type= JMI.components.Map.ATTRIBUTE_CLICK;
                     else if(actionId == JMI.script.Satellite.DBLCLICK_VAL) event.type= JMI.components.Map.ATTRIBUTE_DBLECLICK;
                     else if(actionId == JMI.script.Satellite.HOVER_VAL) event.type= JMI.components.Map.ATTRIBUTE_HOVER;

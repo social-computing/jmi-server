@@ -7,9 +7,7 @@ JMI.components.Map = (function() {
 		this.curPos = new JMI.script.Point(),
 		this.ready = false;
 		this.planContainer = null;
-		this.attributes = [];
-		this.entities = [];
-		
+
 		this.parent = document.getElementById(id);
 		this.size = new JMI.script.Dimension(this.parent.clientWidth, this.parent.clientHeight);
 		
@@ -80,9 +78,7 @@ JMI.components.Map = (function() {
 			// Clear all drawing surfaces
 			this.clear();
 			
-			this.attributes = [];
-			this.entities = [];
-			
+
 			// If the given value is null 
 			// Reset all objects of this component
 			if(value == null) {
@@ -121,9 +117,6 @@ JMI.components.Map = (function() {
 				this.planContainer.map.plan.init();
 				this.planContainer.map.plan.resize(this.size);
 				this.planContainer.map.plan.init();
-/*			    for ( var zone in this.planContainer.map.plan.nodes) {
-					this.attributes.addItem( new Attribute( this.planContainer.map.env, zone));
-				}*/
 				this.ready = true;
 				document.body.style.cursor = 'default';
 
@@ -265,14 +258,6 @@ JMI.components.Map = (function() {
 		},
 		openSoCom: function ( e) {
 			window.open( "http://www.social-computing.com", "_blank");
-		},
-		findAttribute: function( zone) {
-			// TODO portage
-			/*for each( var attribute:Attribute in attributes) {
-				if( attribute.zone == zone)
-					return attribute;
-			}*/
-			return null;
 		}
 
 	};
