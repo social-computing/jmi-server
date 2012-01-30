@@ -2,7 +2,8 @@ JMI.namespace("components.Map");
 
 JMI.components.Map = (function() {
 
-	var Map = function(parent) {
+	var Map = function(parent, server) {
+		this.requester = new JMI.components.MapRequester(this, server);
 		this.backgroundColor = 0xFFFFFF,
 		this.curPos = new JMI.script.Point(),
 		this.ready = false;
@@ -74,6 +75,10 @@ JMI.components.Map = (function() {
     Map.prototype = {
         constructor: JMI.components.Map,
 		
+		compute: function(name, parameters) {
+			this.requester.getMap(name, parameters);
+		},
+		
 		setData: function(value) {
 			// Set component status to "not ready"
 			this.ready = false;
@@ -137,6 +142,9 @@ JMI.components.Map = (function() {
 				if(this.ready)
 					this.dispatchEvent({map: this, type:JMI.components.Map.READY});
 			}
+		},
+		getData: function() {
+			return this.planContainer;
 		},
 		getProperty: function( name) {
 			if( this.planContainer && env.props[name])

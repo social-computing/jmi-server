@@ -113,7 +113,7 @@ JMI.script.Swatch = (function() {
                         if(supZone.dir != 10.) {
                             if (!JMI.script.Base.isEnabled(flags, JMI.script.Satellite.NOSIDED_BIT)) satTrf.direction = supZone.dir;
                             else {
-                                if(JMI.script.Base.isEnabled(supZone.flags, JMI.script.ActiveZone.LEFT_BIT)) satTrf.direction += (JMI.script.Base.Pi2 / 2);
+                                if(JMI.script.Base.isEnabled(supZone.flags, JMI.script.ActiveZone.LEFT_BIT)) satTrf.direction += Math.PI;
                             }
                         }
                         

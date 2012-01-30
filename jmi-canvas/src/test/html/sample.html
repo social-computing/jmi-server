@@ -41,28 +41,24 @@
 
 <script>
 function GoMap() {
-	var map = JMI.Map('map');
+	var map = JMI.Map('map', 'http://localhost:8080/jmi-server/');
 	map.addEventListener('status', function(event) {
 		document.getElementById('status').innerHTML = event.message;
-	} )
+	} );
 	map.addEventListener('action', function(event) {
 		window[event.fn](event.args);
-	} )
+	} );
 	map.addEventListener('attribute_click', function(event) {
 		//alert( event.attribute.props['NAME']);
-	} )
+	} );
 	map.addEventListener('error', function(event) {
 		alert( event.message);
-	} )
-	var requester = new JMI.components.MapRequester(map, 'http://localhost:8080/jmi-server/');
+	} );
 	var parameters = {};
     parameters.wpsserverurl = 'http://localhost:8080/jmi-server/';
 	parameters.invert="false";
     parameters.analysisProfile = "GlobalProfile";
-    requester.onerror = function(error) {
-		alert( error);
-	};
-	requester.getMap('Json_sample', parameters);
+	map.compute('Json_sample', parameters);
 };
 function JMIF_Navigate(args) {
 	alert( args[0]);

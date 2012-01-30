@@ -25,8 +25,7 @@ JMI.components.MapRequester = (function() {
 						requester.map.setData( client.responseText);
 					}
 					else { 
-						if( requester.onerror)
-							requester.onerror( 'Error ' + client.status + ': ' + client.statusText + '\n' + requester.jmiServerUrl + '...');
+						requester.map.dispatchEvent({map: this.map, type: JMI.components.Map.ERROR, message: 'Error ' + client.status + ': ' + client.statusText + '\n' + requester.jmiServerUrl + '...'});
 					}
 				}
 			}; 
@@ -39,8 +38,8 @@ JMI.components.MapRequester = (function() {
 			for( var p in parameters) {
 				url = this.addParameter( url, p, parameters[p]);
 			}
-			//client.open( "GET", "/jmi-canvas/src/main/resources/feeds3.json", true); 
-			client.open( "GET", url, true); 
+			client.open( "GET", "/jmi-canvas/src/main/resources/feeds3.json", true); 
+			//client.open( "GET", url, true); 
 			client.send();
 		},
 	

@@ -36,9 +36,9 @@ JMI.canvas = function() {
 	return !!document.createElement('canvas').getContext('2d');
 };
 
-JMI.Map = function(parent, flash) {
+JMI.Map = function(parent, server, flash) {
 	if( !flash && JMI.canvas()) {
-		return new JMI.components.Map( parent);
+		return new JMI.components.Map( parent, server);
 	}
 	if( flash == null || flash) {
 		throw 'TODO integrate Flex client';
