@@ -19,7 +19,6 @@
 			
 			import spark.effects.Fade;
 	
-            private var planName:String;
             private var planService:PlanService;
 			private var waiterUrl:String;
 			
@@ -30,7 +29,7 @@
             protected function onCreationComplete(event:FlexEvent):void {
 				// Reading application properties
 				var serverURL:String = this.checkApplicationParameter("wpsserverurl");
-				this.planName = this.checkApplicationParameter("wpsplanname");
+				this.checkApplicationParameter("wpsplanname");
 				var parameters:Object = FlexGlobals.topLevelApplication.parameters;
 				this.waiterUrl = FlexGlobals.topLevelApplication.parameters["waiterurl"]
 
@@ -65,15 +64,15 @@
 						navigateCallback = "navigate";
 				}
 				
-				// Initialising service
-				this.planService = new PlanService(serverURL);
-				computeMap( true, parameters);
-				
 				// for js calls
 				ExternalInterface.addCallback( "compute", compute);
 				ExternalInterface.addCallback( "getProperty", getProperty);
 				ExternalInterface.addCallback( "getArrayProperty", getArrayProperty);
 				ExternalInterface.addCallback( "uploadAsImage", uploadAsImage);
+				
+				// Initialising service
+				this.planService = new PlanService(serverURL);
+				computeMap( true, parameters);
             }
 			
 			private function checkApplicationParameter(paramName:String):String {
@@ -89,7 +88,7 @@
 			
 			private function computeMap(initial:Boolean, parameters:Object):void {
 				showWaiter( initial);
-				getPlanResult.token = this.planService.getPlan(this.planName, map.width, map.height, parameters);
+				getPlanResult.token = this.planService.getPlan(parameters.wpsplanname, map.width, map.height, parameters);
 			}
 			
 			public function getProperty( name:String):String {

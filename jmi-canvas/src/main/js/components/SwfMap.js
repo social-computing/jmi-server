@@ -12,10 +12,6 @@ JMI.components.SwfMap = (function() {
 		this.size.height = this.parent.clientHeight;
 		this.eventManager = new JMI.util.EventManager();
 
-		if (!jmiparams.hasOwnProperty('allowDomain'))
-			jmiparams.allowDomain = '*'
-		jmiparams.mainCallback = 'JMI.components.SwfMap.mainCallback';
-		jmiparams.wpsplanname = jmiparams.map;
 		var params = {
 		  quality: 'high',
 		  wmode: 'opaque',
@@ -30,7 +26,7 @@ JMI.components.SwfMap = (function() {
 		this.parent.innerHTML = "<div id='" + attributes.id + "'>Flash player is required</div>";
 		var comp = this;
 		swfobject.embedSWF(this.swf, attributes.id, "100%", "100%", "10.0.0", "expressInstall.swf", 
-							jmiparams, params, attributes,
+							this.checkParams(jmiparams), params, attributes,
 							function(res) {
 								if( !res.success)
 									throw('Error creating JMI flash client');
@@ -41,17 +37,17 @@ JMI.components.SwfMap = (function() {
 	
     SwfMap.prototype = {
         constructor: JMI.components.SwfMap,
-		
-		compute: function(name, parameters) {
+
+		checkParams: function(jmiparams) {
+			if (!jmiparams.hasOwnProperty('allowDomain'))
+				jmiparams.allowDomain = '*'
+			jmiparams.mainCallback = 'JMI.components.SwfMap.mainCallback';
+			jmiparams.wpsplanname = jmiparams.map;
+			return jmiparams;
+		},	
+		compute: function(jmiparams) {
 			if( this.swfmap) {
-				var params = {};
-				for (var attr in parameters) {
-					if (parameters.hasOwnProperty(attr)) params[attr] = parameters[attr];
-				}
-				if (!parameters.hasOwnProperty('wpsserverurl'))
-	            	params.wpsserverurl = this.server;
-	            params.wpsplanname = name;
-				this.swfmap.compute(params);
+				this.swfmap.compute(this.checkParams(jmiparams));
 			}
 		},
 		getProperty: function(name) {

@@ -50,7 +50,7 @@ JMI.components.CanvasMap = (function() {
 		this.drawingCanvas.addEventListener('click', this.mouseClickHandler, false);
 		this.drawingCanvas.addEventListener('dblclick', this.mouseDoubleClickHandler, false);
 
-		this.compute(jmiparams.map, jmiparams);
+		this.compute(jmiparams);
 /*		var wpsMenu:ContextMenu = new ContextMenu();
 		wpsMenu.hideBuiltInItems();
 		var menuItem:ContextMenuItem = new ContextMenuItem("powered by Just Map It! - Social Computing");
@@ -62,8 +62,8 @@ JMI.components.CanvasMap = (function() {
     CanvasMap.prototype = {
         constructor: JMI.components.CanvasMap,
 		
-		compute: function(name, parameters) {
-			this.requester.getMap(name, parameters);
+		compute: function(jmiparams) {
+			this.requester.getMap(jmiparams.map, jmiparams);
 		},
 		
 		setData: function(value) {
