@@ -36,12 +36,48 @@ JMI.canvas = function() {
 	return !!document.createElement('canvas').getContext('2d');
 };
 
-JMI.Map = function(parent, server, flash) {
-	if( !flash && JMI.canvas()) {
-		return new JMI.components.Map( parent, server);
+JMI.Map = function(params) {
+	var divParent;
+    if (!params.parent) {
+    	throw 'JMI map: parent id must be set';
 	}
-	if( flash == null || flash) {
-		throw 'TODO integrate Flex client';
+    if (typeof params.parent == "string") {
+		divParent = document.getElementById(params.parent);
+		if( divParent == null) {
+			throw 'JMI map: unknown parent element ' + params.parent;
+		}
+	}
+    else if (typeof params.parent == "object") {
+    	divParent  = params.parent;
+    }
+    else {
+		throw 'JMI map: invalid parent ' + params.parent;
+    }	
+	if( (!params.client || params.client == JMI.Map.CANVAS) && JMI.canvas()) {
+		return new JMI.components.CanvasMap(divParent, params.server, params.parameters);
+	}
+	if( !params.client || params.client == JMI.Map.SWF) {
+		return new JMI.components.SwfMap(divParent, params.server, params.swf, params.parameters);
 	}
 	throw 'No JMI client supported';
 };
+
+JMI.Map.CANVAS = "canvas";
+JMI.Map.SWF = "swf";
+
+JMI.namespace("Map.event");
+
+JMI.Map.event.EMPTY = "empty";
+JMI.Map.event.READY = "ready";
+JMI.Map.event.STATUS = "status";
+JMI.Map.event.ERROR = "error";
+JMI.Map.event.ATTRIBUTE_CLICK = "attribute_click";
+JMI.Map.event.ATTRIBUTE_DBLECLICK = "attribute_dblclick";
+JMI.Map.event.ATTRIBUTE_HOVER = "attribute_hover";
+JMI.Map.event.ACTION = "action";
+JMI.Map.event.NAVIGATE = "navigate";
+// Not yest implemented
+//JMI.Map.event.LINK_CLICK = "link_click";
+//JMI.Map.event.LINK_DBLECLICK = "link_dblclick";
+//JMI.Map.event.LINK_HOVER = "link_hover";
+

@@ -233,9 +233,9 @@ JMI.script.Satellite = (function() {
                 }
                 else {
                     var event = {map: this, x: pos.x, y: pos.y, attribute: zone};
-                    if(actionId == JMI.script.Satellite.CLICK_VAL) event.type= JMI.components.Map.ATTRIBUTE_CLICK;
-                    else if(actionId == JMI.script.Satellite.DBLCLICK_VAL) event.type= JMI.components.Map.ATTRIBUTE_DBLECLICK;
-                    else if(actionId == JMI.script.Satellite.HOVER_VAL) event.type= JMI.components.Map.ATTRIBUTE_HOVER;
+                    if(actionId == JMI.script.Satellite.CLICK_VAL) event.type= JMI.Map.event.ATTRIBUTE_CLICK;
+                    else if(actionId == JMI.script.Satellite.DBLCLICK_VAL) event.type= JMI.Map.event.ATTRIBUTE_DBLECLICK;
+                    else if(actionId == JMI.script.Satellite.HOVER_VAL) event.type= JMI.Map.event.ATTRIBUTE_HOVER;
                     applet.dispatchEvent( event);
                 }
             }

@@ -1,8 +1,8 @@
-JMI.namespace("components.Map");
+JMI.namespace("components.CanvasMap");
 
-JMI.components.Map = (function() {
+JMI.components.CanvasMap = (function() {
 
-	var Map = function(parent, server) {
+	var CanvasMap = function(parent, server, jmiparams) {
 		this.requester = new JMI.components.MapRequester(this, server);
 		this.backgroundColor = 0xFFFFFF,
 		this.curPos = new JMI.script.Point(),
@@ -11,21 +11,7 @@ JMI.components.Map = (function() {
 		this.eventManager = new JMI.util.EventManager();
 		this.size = new JMI.script.Dimension();
 
-	    if (!parent) {
-	    	throw 'JMI map: parent id must be set';
-		}
-	    if (typeof parent == "string") {
-			this.parent = document.getElementById(parent);
-			if( this.parent == null) {
-				throw 'JMI map: unknown parent element ' + parent;
-			}
-		}
-	    else if (typeof parent == "object") {
-	    	this.parent  = parent;
-	    }
-	    else {
-			throw 'JMI map: invalid parent ' + parent;
-	    }	
+		this.parent = parent;
 		this.parent.JMI = this;
 		this.size.width = this.parent.clientWidth;
 		this.size.height = this.parent.clientHeight;
@@ -64,6 +50,7 @@ JMI.components.Map = (function() {
 		this.drawingCanvas.addEventListener('click', this.mouseClickHandler, false);
 		this.drawingCanvas.addEventListener('dblclick', this.mouseDoubleClickHandler, false);
 
+		this.compute(jmiparams.map, jmiparams);
 /*		var wpsMenu:ContextMenu = new ContextMenu();
 		wpsMenu.hideBuiltInItems();
 		var menuItem:ContextMenuItem = new ContextMenuItem("powered by Just Map It! - Social Computing");
@@ -72,8 +59,8 @@ JMI.components.Map = (function() {
 		this.contextMenu = wpsMenu;*/
 	};
 	
-    Map.prototype = {
-        constructor: JMI.components.Map,
+    CanvasMap.prototype = {
+        constructor: JMI.components.CanvasMap,
 		
 		compute: function(name, parameters) {
 			this.requester.getMap(name, parameters);
@@ -115,13 +102,13 @@ JMI.components.Map = (function() {
 			}
 			if( this.planContainer.hasOwnProperty( "error")) {
 				// Server error
-				CursorManager.removeBusyCursor();
-				this.dispatchEvent({map: this, type: JMI.components.Map.ERROR, message: this.planContainer.error});
+				document.body.style.cursor = 'default';
+				this.dispatchEvent({map: this, type: JMI.Map.event.ERROR, message: this.planContainer.error});
 			}
 			else if( !this.planContainer.hasOwnProperty( "map")) {
 				// Empty map
 				document.body.style.cursor = 'default';
-				this.dispatchEvent({ map: this, type: JMI.components.Map.EMPTY});
+				this.dispatchEvent({ map: this, type: JMI.Map.event.EMPTY});
 			}
 			else {
 				var needPrint = false; // Later
@@ -140,7 +127,7 @@ JMI.components.Map = (function() {
 
 				this.invalidate();
 				if(this.ready)
-					this.dispatchEvent({map: this, type:JMI.components.Map.READY});
+					this.dispatchEvent({map: this, type:JMI.Map.event.READY});
 			}
 		},
 		getData: function() {
@@ -171,7 +158,7 @@ JMI.components.Map = (function() {
 		},
 		mouseMoveHandler: function(event) {
 			if (this instanceof HTMLCanvasElement) {
-			    var mousePosition = JMI.components.Map.getPosition(this, event);
+			    var mousePosition = JMI.components.CanvasMap.getPosition(this, event);
 				this.JMI.curPos.x = mousePosition.x;
 				this.JMI.curPos.y = mousePosition.y;
 				var debugDiv = document.getElementById("mouse");
@@ -190,7 +177,7 @@ JMI.components.Map = (function() {
 		},
 		mouseClickHandler: function(event) {
 			if (this instanceof HTMLCanvasElement) {
-			    var mousePosition = JMI.components.Map.getPosition(this, event);
+			    var mousePosition = JMI.components.CanvasMap.getPosition(this, event);
 				if ( this.JMI.ready && this.JMI.planContainer.map.plan.curSat != null )
 				{
 					this.JMI.planContainer.map.plan.updateZoneAt( mousePosition);
@@ -200,7 +187,7 @@ JMI.components.Map = (function() {
 		},
 		mouseDoubleClickHandler: function(event) {
 			if (this instanceof HTMLCanvasElement) {
-			    var mousePosition = JMI.components.Map.getPosition(this, event);
+			    var mousePosition = JMI.components.CanvasMap.getPosition(this, event);
 				if ( this.JMI.ready && this.JMI.planContainer.map.plan.curSat != null )
 				{
 					this.JMI.planContainer.map.plan.updateZoneAt( mousePosition);
@@ -230,7 +217,7 @@ JMI.components.Map = (function() {
 			this.invalidate();
 		},
 		showStatus: function(message) {
-			this.dispatchEvent( {map: this, type: JMI.components.Map.STATUS, message: message});
+			this.dispatchEvent( {map: this, type: JMI.Map.event.STATUS, message: message});
 		},
 		log: function(message) {
 			if( aptana && aptana.log)
@@ -331,7 +318,7 @@ JMI.components.Map = (function() {
 						var func     = actionStr.substring( 0, pos ),
 							paramStr = actionStr.substring( pos + 1, actionStr.length- 1 );
 						var params   = paramStr.split( String.fromCharCode( 0xFFFC));
-						this.dispatchEvent( {map: this, type: JMI.components.Map.ACTION, fn: func, args: params});
+						this.dispatchEvent( {map: this, type: JMI.Map.event.ACTION, fn: func, args: params});
 					}
 					return;
 				}
@@ -345,7 +332,7 @@ JMI.components.Map = (function() {
 					target  = "_blank";
 				}
 			}
-			this.dispatchEvent( {map: this, type: JMI.components.Map.NAVIGATE, url: actionStr, target: target});
+			this.dispatchEvent( {map: this, type: JMI.Map.event.NAVIGATE, url: actionStr, target: target});
 			window.open( actionStr, target);
 		},
 		openSoCom: function ( e) {
@@ -353,27 +340,14 @@ JMI.components.Map = (function() {
 		}
 	};
 	
-	return Map;
+	return CanvasMap;
 }());
 
-JMI.components.Map.version = "1.0-SNAPSHOT";
-JMI.components.Map.EMPTY = "empty";
-JMI.components.Map.READY = "ready";
-JMI.components.Map.STATUS = "status";
-JMI.components.Map.ERROR = "error";
-JMI.components.Map.ATTRIBUTE_CLICK = "attribute_click";
-JMI.components.Map.ATTRIBUTE_DBLECLICK = "attribute_dblclick";
-JMI.components.Map.ATTRIBUTE_HOVER = "attribute_hover";
-JMI.components.Map.ACTION = "action";
-JMI.components.Map.NAVIGATE = "navigate";
-// Not yest implemented
-//JMI.components.Map.LINK_CLICK = "link_click";
-//JMI.components.Map.LINK_DBLECLICK = "link_dblclick";
-//JMI.components.Map.LINK_HOVER = "link_hover";
+JMI.components.CanvasMap.version = "1.0-SNAPSHOT";
 
 // Adapted from: http://www.quirksmode.org/js/findpos.html and 
 // http://stackoverflow.com/questions/5085689/tracking-mouse-position-in-canvas
-JMI.components.Map.getPosition= function(canvas, e) {
+JMI.components.CanvasMap.getPosition= function(canvas, e) {
     var left = 0, top = 0;
 
     if(canvas.offsetParent) {
