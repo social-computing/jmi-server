@@ -4,12 +4,13 @@ package com.socialcomputing.wps.components.events
 	
 	public class ActionEvent extends Event
 	{
+		public static const ACTION:String = "action";
 		private var _action:String;
 		private var _args:Array;
 		
 		public function ActionEvent(action:String, args:Array=null, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
-			super("action", bubbles, cancelable);
+			super(ActionEvent.ACTION, bubbles, cancelable);
 			this._action = action;
 			this._args = args;
 		}

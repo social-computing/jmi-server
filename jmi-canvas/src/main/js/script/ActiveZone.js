@@ -112,7 +112,18 @@ JMI.script.ActiveZone = (function() {
          */
         getParent: function () {
             return this.parent == null ? this : this.parent;
-        }
+        },
+        
+        // API
+		select: function( selection) {
+			var selId = this.props["ENV"].selections[selection];
+			if ( selId != -1 )
+			{
+				selId = 1 << selId;
+				this.selection |= selId;
+			}
+		}
+        
 	};
 	
 	return ActiveZone;

@@ -41,7 +41,7 @@ public class RESTEntityConnector extends FileEntityConnector {
      * @return an initialised instance of <code>RESTEntityConnector</code>
      */
     public static RESTEntityConnector readObject(org.jdom.Element element) {
-        LOG.info("Reading REST entity connector configuration");
+        //LOG.info("Reading REST entity connector configuration");
         RESTEntityConnector connector = new RESTEntityConnector(element.getAttributeValue("name"));
 
         connector._readObject(element);
@@ -63,9 +63,9 @@ public class RESTEntityConnector extends FileEntityConnector {
             connector.attributeProperties.add(new PropertyDefinition(property.getAttributeValue("id"), property
                     .getAttributeValue("entity")));
         }
-        LOG.debug("(type = {}, invert = {}, entity=({}), attribute=({}))", new Object[] { connector.contentType,
+        /*LOG.debug("(type = {}, invert = {}, entity=({}), attribute=({}))", new Object[] { connector.contentType,
                                                                                          connector.invert,
-                                                                                         connector.entityProperties });
+                                                                                         connector.entityProperties });*/
         return connector;
     }
 
@@ -126,7 +126,7 @@ public class RESTEntityConnector extends FileEntityConnector {
                 }
             }
             ArrayNode entities = (ArrayNode) node.get(m_EntityMarkup);
-            LOG.debug("Getting entities for json node with name = {}", this.m_EntityMarkup);
+            //LOG.debug("Getting entities for json node with name = {}", this.m_EntityMarkup);
             if (entities != null) {
                 for (JsonNode jsonentity : entities) {
 
@@ -144,7 +144,7 @@ public class RESTEntityConnector extends FileEntityConnector {
                             entity.addAttribute(attribute, 1);
                         }
                     }
-                    LOG.debug("Entity added : {}", entity);
+                    //LOG.debug("Entity added : {}", entity);
                 }
             }
             ArrayNode attributes = (ArrayNode) node.get(m_AttributeMarkup);
@@ -158,7 +158,7 @@ public class RESTEntityConnector extends FileEntityConnector {
                                 attribute.addProperty(property, readJSONValue( p));
                         }
                     }
-                    LOG.debug("Attribute added : {}", attribute);
+                    //LOG.debug("Attribute added : {}", attribute);
                     if (!isInverted())
                         addEntityProperties(attribute);
                 }

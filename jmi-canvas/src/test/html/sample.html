@@ -36,23 +36,48 @@
 <script type="text/javascript" src="/jmi-canvas/src/main/js/util/ImageUtil.js"></script>
 <script type="text/javascript" src="/jmi-canvas/src/main/js/util/EventManager.js"></script>
 
-<script type="text/javascript" src="/jmi-canvas/src/main/js/components/Map.js"></script>
 <script type="text/javascript" src="/jmi-canvas/src/main/js/components/MapRequester.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/components/CanvasMap.js"></script>
+
+<script type="text/javascript" src="/jmi-canvas/src/main/js/lib/swfobject.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/components/SwfMap.js"></script>
 
 <script>
+function getParams() {
+	var p = {
+		map: 'Json_sample',
+    	wpsserverurl: 'http://localhost:8080/jmi-server/',
+		invert: 'false',
+    	analysisProfile: 'GlobalProfile'
+    };
+    return p;
+};
 function GoMap() {
-	var map = new JMI.components.Map( 'map');
-	map.addEventListener('status', function(event) {
+	var map = JMI.Map({
+				parent: 'map', 
+				swf: '/jmi-canvas/src/main/swf/jmi-flex-1.0-SNAPSHOT.swf', 
+				server: 'http://localhost:8080/jmi-server/', 
+				//client: JMI.Map.SWF,
+				parameters: getParams()
+			});
+	map.addEventListener(JMI.Map.event.STATUS, function(event) {
 		document.getElementById('status').innerHTML = event.message;
-	} )
-	var requester = new JMI.components.MapRequester( 'http://localhost:8080/jmi-server/');
-	var parameters = [];
-    parameters.wpsserverurl = 'http://localhost:8080/jmi-server/';
-	parameters.invert="false";
-    parameters.analysisProfile = "GlobalProfile";
-	requester.getMap( 'Json_sample', map.size.width, map.size.height, parameters, function( data) {
-		map.setData( data);
-	});
+	} );
+	map.addEventListener(JMI.Map.event.ACTION, function(event) {
+		window[event.fn](event.args);
+	} );
+	map.addEventListener(JMI.Map.event.ATTRIBUTE_CLICK, function(event) {
+		//alert( event.attribute.props['NAME']);
+	} );
+	map.addEventListener(JMI.Map.event.ERROR, function(event) {
+		alert( event.message);
+	} );
+};
+function JMIF_Navigate(args) {
+	alert( args[0]);
+};
+function compute() {
+	document.getElementById('map').JMI.compute(getParams());
 };
 </script>
 </head>
@@ -64,7 +89,9 @@ function GoMap() {
 		</ul>
 	</div>
 <div id="map" style="border:1px solid black ; width: 640px ; height: 480px"></div>
-<div id="mouse"></div>
-<div id="status"></div>
+<button onclick="document.getElementById('map').JMI.resize(900,480);">Resize</button>
+<button onclick="compute();">Compute</button>
+<div id="mouse">&nbsp;</div>
+<div id="status">&nbsp;</div>
 </body>
 </html>

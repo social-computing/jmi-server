@@ -57,7 +57,7 @@ JMI.script.Slice =  (function() {
                 var imageName = this.parseString(JMI.script.Slice.IMAGE_VAL, zone.props);
                 if (imageName != null) {
                 	imageName = imageName[0];
-                    satShp.drawImage(applet, gDrawingContext, supZone, imageNam, transfo, satCtr);
+                    satShp.drawImage(applet, gDrawingContext, supZone, imageName, transfo, satCtr);
                 }
             }
             

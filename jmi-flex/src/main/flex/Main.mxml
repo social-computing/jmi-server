@@ -7,8 +7,10 @@
     <fx:Style source="Main.css"/>
     <fx:Script>
         <![CDATA[
+			import com.socialcomputing.wps.components.events.*;
 			import com.socialcomputing.wps.services.planservice.PlanService;
 			
+			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			import mx.graphics.codec.PNGEncoder;
@@ -17,18 +19,17 @@
 			
 			import spark.effects.Fade;
 	
-            private var planName:String;
             private var planService:PlanService;
 			private var waiterUrl:String;
 			
 			// JS Callbacks
+			private var mainCallback:String;
 			private var readyCallback:String, emptyCallback:String, errorCallback:String, statusCallback:String, navigateCallback:String;
 			
             protected function onCreationComplete(event:FlexEvent):void {
-				
 				// Reading application properties
 				var serverURL:String = this.checkApplicationParameter("wpsserverurl");
-				this.planName = this.checkApplicationParameter("wpsplanname");
+				this.checkApplicationParameter("wpsplanname");
 				var parameters:Object = FlexGlobals.topLevelApplication.parameters;
 				this.waiterUrl = FlexGlobals.topLevelApplication.parameters["waiterurl"]
 
@@ -38,26 +39,30 @@
 				}
 				
 				// CallBacks
-				if( FlexGlobals.topLevelApplication.parameters.hasOwnProperty( "readyCallback")) 
-					readyCallback = FlexGlobals.topLevelApplication.parameters["readyCallback"];
-				else
-					readyCallback = "ready";
-				if( FlexGlobals.topLevelApplication.parameters.hasOwnProperty( "emptyCallback")) 
-					emptyCallback = FlexGlobals.topLevelApplication.parameters["emptyCallback"];
-				else
-					emptyCallback = "empty";
-				if( FlexGlobals.topLevelApplication.parameters.hasOwnProperty( "errorCallback")) 
-					errorCallback = FlexGlobals.topLevelApplication.parameters["errorCallback"];
-				else
-					errorCallback = "error";
-				if( FlexGlobals.topLevelApplication.parameters.hasOwnProperty( "statusCallback")) 
-					statusCallback = FlexGlobals.topLevelApplication.parameters["statusCallback"];
-				else
-					statusCallback = "status";
-				if( FlexGlobals.topLevelApplication.parameters.hasOwnProperty( "navigateCallback")) 
-					navigateCallback = FlexGlobals.topLevelApplication.parameters["navigateCallback"];
-				else
-					navigateCallback = "navigate";
+				if( FlexGlobals.topLevelApplication.parameters.hasOwnProperty( "mainCallback")) 
+					mainCallback = FlexGlobals.topLevelApplication.parameters["mainCallback"];
+				else {
+					if( FlexGlobals.topLevelApplication.parameters.hasOwnProperty( "readyCallback")) 
+						readyCallback = FlexGlobals.topLevelApplication.parameters["readyCallback"];
+					else
+						readyCallback = "ready";
+					if( FlexGlobals.topLevelApplication.parameters.hasOwnProperty( "emptyCallback")) 
+						emptyCallback = FlexGlobals.topLevelApplication.parameters["emptyCallback"];
+					else
+						emptyCallback = "empty";
+					if( FlexGlobals.topLevelApplication.parameters.hasOwnProperty( "errorCallback")) 
+						errorCallback = FlexGlobals.topLevelApplication.parameters["errorCallback"];
+					else
+						errorCallback = "error";
+					if( FlexGlobals.topLevelApplication.parameters.hasOwnProperty( "statusCallback")) 
+						statusCallback = FlexGlobals.topLevelApplication.parameters["statusCallback"];
+					else
+						statusCallback = "status";
+					if( FlexGlobals.topLevelApplication.parameters.hasOwnProperty( "navigateCallback")) 
+						navigateCallback = FlexGlobals.topLevelApplication.parameters["navigateCallback"];
+					else
+						navigateCallback = "navigate";
+				}
 				
 				// for js calls
 				ExternalInterface.addCallback( "compute", compute);
@@ -83,7 +88,7 @@
 			
 			private function computeMap(initial:Boolean, parameters:Object):void {
 				showWaiter( initial);
-				getPlanResult.token = this.planService.getPlan(planName, map.width, map.height, parameters);
+				getPlanResult.token = this.planService.getPlan(parameters.wpsplanname, map.width, map.height, parameters);
 			}
 			
 			public function getProperty( name:String):String {
@@ -164,12 +169,48 @@
 				fade.target = map;
 				fade.play();
 			}
+			protected function fireEvent(type:String, oldfunctionname:String, event:Object):void {
+				if( mainCallback != null) {
+					// Canvas compatible version
+					var jsevt:Object = {
+						type : type
+					};
+					if( type == com.socialcomputing.wps.components.events.StatusEvent.ERROR)
+						jsevt.message = event.status;
+					if( type == com.socialcomputing.wps.components.events.StatusEvent.STATUS)
+						jsevt.message = event.status;
+					if( type == NavigateEvent.NAVIGATE) {
+						jsevt.url = event.url;
+						jsevt.target = event.btarget;
+					}
+					if( type == ActionEvent.ACTION) {
+						jsevt.fn = event.action;
+						jsevt.args = event.args;
+					}
+					ExternalInterface.call(mainCallback, FlexGlobals.topLevelApplication.id, jsevt);
+				}
+				else {
+					if( type == Map.EMPTY)
+						ExternalInterface.call(oldfunctionname);
+					if( type == Map.READY)
+						ExternalInterface.call(oldfunctionname);
+					if( type == com.socialcomputing.wps.components.events.StatusEvent.ERROR)
+						ExternalInterface.call(oldfunctionname, event.status);
+					if( type == com.socialcomputing.wps.components.events.StatusEvent.STATUS)
+						ExternalInterface.call(oldfunctionname, event.status);
+					if( type == NavigateEvent.NAVIGATE)
+						ExternalInterface.call(oldfunctionname, event.url, event.btarget);
+					if( type == ActionEvent.ACTION)
+						ExternalInterface.call(oldfunctionname, event.args);
+				}
+			}
 	]]>
     </fx:Script>
     
     <fx:Declarations>
         <s:CallResponder id="getPlanResult"
-						 fault="ExternalInterface.call('error', event.fault.faultString);" />
+						 fault="fireEvent(com.socialcomputing.wps.components.events.StatusEvent.ERROR, errorCallback, {status: event.fault.faultString});"
+						 />
     </fx:Declarations>
 
 	<mx:Canvas id="main" width="100%" height="100%">
@@ -177,12 +218,12 @@
 		<wps:Map id="map" alpha="0"
 				backgroundColor="{this.getStyle('contentBackgroundColor')}"
 				dataProvider="{getPlanResult.lastResult}" 
-				ready="hideWaiter();ExternalInterface.call(readyCallback);"
-				empty="hideWaiter();ExternalInterface.call(emptyCallback);"
-				error="hideWaiter();ExternalInterface.call(errorCallback, event.status);"
-				status="ExternalInterface.call(statusCallback, event.status);"
-				action="ExternalInterface.call(event.action, event.args);" 
-				navigate="ExternalInterface.call(navigateCallback, event.url, event.btarget);"
+				ready="hideWaiter();fireEvent(Map.READY, readyCallback, null);"
+				empty="hideWaiter();fireEvent(Map.EMPTY, emptyCallback, null);"
+				error="hideWaiter();fireEvent(com.socialcomputing.wps.components.events.StatusEvent.ERROR, errorCallback, event);"
+				status="fireEvent(com.socialcomputing.wps.components.events.StatusEvent.STATUS, statusCallback, event);"
+				action="fireEvent(ActionEvent.ACTION, event.action, event);" 
+				navigate="fireEvent(NavigateEvent.NAVIGATE, navigateCallback, event);"
 				percentWidth="100"
 				percentHeight="100"
 		/>

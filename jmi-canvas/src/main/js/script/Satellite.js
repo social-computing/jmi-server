@@ -226,22 +226,17 @@ JMI.script.Satellite = (function() {
             var isExe = this.isDefined(actionId);
         
             // Events
-            // TODO : portage gestion des événements
             if (zone != null) {
-                // TODO : portage instanceof et héritage
                 if (zone instanceof JMI.script.LinkZone) {
+                	// Not yest implemented
                     //dispatchEvent( new LinkClickEvent( plan.curZone as LinkZone));
                 }
                 else {
-                	// TODO 
-                    /*var event = null;
-                    if(actionId == JMI.script.Satellite.CLICK_VAL) event = AttributeEvent.CLICK;
-                    else if(actionId == JMI.script.Satellite.DBLCLICK_VAL) event = AttributeEvent.DOUBLE_CLICK;
-                    else if(actionId == JMI.script.Satellite.HOVER_VAL) event = AttributeEvent.HOVER;
-                    if(event != null) {
-                        applet.dispatchEvent( new AttributeEvent( event, applet.findAttribute( zone), pos.x, pos.y));
-                    }
-                    */
+                    var event = {map: this, x: pos.x, y: pos.y, attribute: zone};
+                    if(actionId == JMI.script.Satellite.CLICK_VAL) event.type= JMI.Map.event.ATTRIBUTE_CLICK;
+                    else if(actionId == JMI.script.Satellite.DBLCLICK_VAL) event.type= JMI.Map.event.ATTRIBUTE_DBLECLICK;
+                    else if(actionId == JMI.script.Satellite.HOVER_VAL) event.type= JMI.Map.event.ATTRIBUTE_HOVER;
+                    applet.dispatchEvent( event);
                 }
             }
         
