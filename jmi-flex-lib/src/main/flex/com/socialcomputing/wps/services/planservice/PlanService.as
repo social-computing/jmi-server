@@ -21,7 +21,6 @@ package com.socialcomputing.wps.services.planservice
 		private static var restSerializationFilter:JSONSerializationFilter = new JSONSerializationFilter();
 
 		// Initialize service control
-		// "http://192.168.111.12:8180/wps/services/engine/"
 		public function PlanService(baseURL:String) {
 			super(baseURL);
 			var operations:Array = new Array();

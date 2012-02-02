@@ -36,6 +36,7 @@
 				// Security Sandbox
 				if( FlexGlobals.topLevelApplication.parameters.hasOwnProperty( "allowDomain")) {
 					Security.allowDomain( FlexGlobals.topLevelApplication.parameters["allowDomain"]);
+					Security.allowInsecureDomain( FlexGlobals.topLevelApplication.parameters["allowDomain"]);
 				}
 				
 				// CallBacks
@@ -177,15 +178,20 @@
 					};
 					if( type == com.socialcomputing.wps.components.events.StatusEvent.ERROR)
 						jsevt.message = event.status;
-					if( type == com.socialcomputing.wps.components.events.StatusEvent.STATUS)
+					else if( type == com.socialcomputing.wps.components.events.StatusEvent.STATUS)
 						jsevt.message = event.status;
-					if( type == NavigateEvent.NAVIGATE) {
+					else if( type == ActionEvent.ACTION) {
+						jsevt.fn = oldfunctionname;
+						jsevt.args = event.args;
+					}
+					else if( type == NavigateEvent.NAVIGATE) {
 						jsevt.url = event.url;
 						jsevt.target = event.btarget;
 					}
-					if( type == ActionEvent.ACTION) {
-						jsevt.fn = event.action;
-						jsevt.args = event.args;
+					else if( type == AttributeEvent.CLICK || type == AttributeEvent.DOUBLE_CLICK || type == AttributeEvent.HOVER) {
+						jsevt.attribute = 0; // TODO !!!!
+						jsevt.x = event._localX;
+						jsevt.y = event._localY;
 					}
 					ExternalInterface.call(mainCallback, FlexGlobals.topLevelApplication.id, jsevt);
 				}
@@ -224,6 +230,9 @@
 				status="fireEvent(com.socialcomputing.wps.components.events.StatusEvent.STATUS, statusCallback, event);"
 				action="fireEvent(ActionEvent.ACTION, event.action, event);" 
 				navigate="fireEvent(NavigateEvent.NAVIGATE, navigateCallback, event);"
+				attribute_click="fireEvent(AttributeEvent.CLICK, null, event);"
+				attribute_dblclick="fireEvent(AttributeEvent.DOUBLE_CLICK, null, event);"
+				attribute_hover="fireEvent(AttributeEvent.HOVER, null, event);"
 				percentWidth="100"
 				percentHeight="100"
 		/>
