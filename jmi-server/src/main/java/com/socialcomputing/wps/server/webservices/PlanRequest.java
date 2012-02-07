@@ -72,12 +72,12 @@ public class PlanRequest {
         switch (analysisProfile.m_planType) {
             case AnalysisProfile.PERSONAL_PLAN:
                 if (m_entityId == null)
-                    throw new WPSConnectorException("WPS Server : entityId parameter is not set for personal plan");
+                    throw new WPSConnectorException("JMI server : entityId parameter is not set for personal plan");
                 break;
             case AnalysisProfile.DISCOVERY_PLAN:
                 m_discoveryAttributeId = getParameter("attributeId");
                 if (m_discoveryAttributeId == null)
-                    throw new WPSConnectorException("WPS Server : attributeId parameter is not set for discovery plan");
+                    throw new WPSConnectorException("JMI server : attributeId parameter is not set for discovery plan");
                 if (analysisProfile.m_AttributesRef.indexOf('=') != -1
                         || analysisProfile.m_AttributesRef.indexOf('&') != -1) {
                     StringTokenizer st = new StringTokenizer(analysisProfile.m_AttributesRef, "&");
@@ -550,7 +550,7 @@ public class PlanRequest {
                     m_LoadedSwatch.put(swatchName, swatch);
                 }
                 catch (Exception e) {
-                    throw new WPSConnectorException("WPS server unable to find swatch", e);
+                    throw new WPSConnectorException("JMI server unable to find swatch", e);
                     //e.printStackTrace();
                 }
             }

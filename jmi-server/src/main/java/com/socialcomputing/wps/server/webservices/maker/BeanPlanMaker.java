@@ -103,7 +103,7 @@ public class BeanPlanMaker implements PlanMaker {
             DictionaryManagerImpl manager = new DictionaryManagerImpl();
             Dictionary dictionaryLoader = manager.findByName(name);
             if (dictionaryLoader == null)
-                throw new RemoteException("WPS parameter can't find dictionary " + name);
+                throw new RemoteException("JMI server unknown map '" + name + "'");
             results.put( PlanMaker.PLAN_NAME, name);
 
             // DICTIONARY RETRIEVAL
