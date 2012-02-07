@@ -61,8 +61,8 @@ public class BeanPlanMaker implements PlanMaker {
             return result;
         }
         catch (Exception e) {
-            LOG.error(e.getMessage(), e);
-            throw new RemoteException("WPS can't create plan " + (String) params.get("planName") + " : " + e.getMessage());
+            //LOG.error(e.getMessage(), e);
+            throw new RemoteException("JMI '" + (String) params.get("planName") + "' map creation failed: " + e.getMessage());
         }
     }
 
@@ -77,16 +77,16 @@ public class BeanPlanMaker implements PlanMaker {
         
         String name = (String) params.get("planName");
         if (name == null)
-            throw new RemoteException("WPS parameter 'planName' missing.");
+            throw new RemoteException("JMI parameter 'planName' missing.");
         // Track
         Track track = new Track( name);
 
         String x = (String) params.get("width");
         if (x != null && Integer.parseInt(x) == 0)
-            throw new RemoteException("WPS parameter 'width' can't be 0.");
+            throw new RemoteException("JMI parameter 'width' can't be 0.");
         x = (String) params.get("height");
         if (x != null && Integer.parseInt(x) == 0)
-            throw new RemoteException("WPS parameter 'height' can't be 0.");
+            throw new RemoteException("JMI parameter 'height' can't be 0.");
 
         String useragent = (String) params.get("User-Agent");
         if (useragent == null)

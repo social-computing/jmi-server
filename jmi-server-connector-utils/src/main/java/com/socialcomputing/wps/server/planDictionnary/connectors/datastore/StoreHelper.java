@@ -18,6 +18,19 @@ public class StoreHelper {
 
     protected Hashtable<String, Object> m_Globals = new Hashtable<String, Object>();
 
+    protected String err_message = null, err_trace = null;
+    protected long err_code = 0;
+    
+    public void setError( long code, String message) {
+        setError( code, message, null);
+    }
+    
+    public void setError( long code, String message, String trace) {
+        err_code = code;
+        err_message = message == null ? "" : message;
+        err_trace = trace == null ? "" : trace;
+    }
+    
     public void addGlobal(String id, Object value) {
         m_Globals.put( id, value);
     }
@@ -100,29 +113,42 @@ public class StoreHelper {
     }
 
    public String toJson() {
-       StringBuilder sb = new StringBuilder( "{\"entities\":[");
-       boolean first = true;
-       for( Entity entity : getEntities().values()) {
-           if( first) first = false;
-           else sb.append(',');
-           entity.toJson(sb);
+       StringBuilder sb = new StringBuilder();
+       if( err_message == null) {
+           sb.append("{\"entities\":[");
+           boolean first = true;
+           for( Entity entity : getEntities().values()) {
+               if( first) first = false;
+               else sb.append(',');
+               entity.toJson(sb);
+           }
+           sb.append("],\"attributes\" : [");
+           first = true;
+           for( Attribute attribute : getAttributes().values()) {
+               if( first) first = false;
+               else sb.append(',');
+               attribute.toJson(sb);
+           }
+           sb.append("],\"globals\" : {");
+           first = true;
+           for( Entry<String, Object> global : m_Globals.entrySet()) {
+               if( first) first = false;
+               else sb.append(',');
+               sb.append( "\"").append(Data.toJson( global.getKey())).append("\":");
+               Data.toJson( sb, global.getValue());
+           }
+           sb.append("}}");
        }
-       sb.append("],\"attributes\" : [");
-       first = true;
-       for( Attribute attribute : getAttributes().values()) {
-           if( first) first = false;
-           else sb.append(',');
-           attribute.toJson(sb);
+       else {
+           sb.append("{\"error\":{");
+           sb.append("\"code\":");
+           Data.toJson( sb, err_code);
+           sb.append(",\"message\":");
+           Data.toJson( sb, err_message);
+           sb.append(",\"trace\":");
+           Data.toJson( sb, err_trace);
+           sb.append("}}");
        }
-       sb.append("],\"globals\" : {");
-       first = true;
-       for( Entry<String, Object> global : m_Globals.entrySet()) {
-           if( first) first = false;
-           else sb.append(',');
-           sb.append( "\"").append(Data.toJson( global.getKey())).append("\":");
-           Data.toJson( sb, global.getValue());
-       }
-       sb.append("}}");
        return sb.toString();
    }
 }

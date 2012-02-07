@@ -87,7 +87,6 @@ public class RESTEntityConnector extends FileEntityConnector {
         // force the mime type to that value instead of relying on the mime type
         // detected when the connection opens
         String contentType = (this.contentType != null) ? this.contentType : urlHelper.getContentType();
-        LOG.debug("content type = {}", contentType);
 
         m_inverted = UrlHelper.ReplaceParameter(invert, wpsparams).equalsIgnoreCase("true");
 
@@ -118,60 +117,63 @@ public class RESTEntityConnector extends FileEntityConnector {
         ObjectMapper mapper = new ObjectMapper();
         try {
             JsonNode node = mapper.readTree(urlHelper.getStream());
-            JsonNode globals = (JsonNode) node.get("globals");
-            if (globals != null) {
-                for (Iterator<String> it = globals.getFieldNames(); it.hasNext();) {
-                    String key = it.next();
-                    wpsparams.put( key, readJSONValue( globals.get(key)));
-                }
+            JsonNode error = (JsonNode) node.get("error");
+            if( error != null) {
+                throw new WPSConnectorException( error.get("message").getTextValue());
             }
-            ArrayNode entities = (ArrayNode) node.get(m_EntityMarkup);
-            //LOG.debug("Getting entities for json node with name = {}", this.m_EntityMarkup);
-            if (entities != null) {
-                for (JsonNode jsonentity : entities) {
-
-                    Entity entity = addEntity(jsonentity.get(m_EntityId).getTextValue());
-                    for (PropertyDefinition property : entityProperties) {
-                        if (property.isSimple()) {
-                            entity.addProperty(property.getName(), readJSONValue( jsonentity.get(property.getName())));
+            else {
+                JsonNode globals = (JsonNode) node.get("globals");
+                if (globals != null) {
+                    for (Iterator<String> it = globals.getFieldNames(); it.hasNext();) {
+                        String key = it.next();
+                        wpsparams.put( key, readJSONValue( globals.get(key)));
+                    }
+                }
+                ArrayNode entities = (ArrayNode) node.get(m_EntityMarkup);
+                if (entities != null) {
+                    for (JsonNode jsonentity : entities) {
+    
+                        Entity entity = addEntity(jsonentity.get(m_EntityId).getTextValue());
+                        for (PropertyDefinition property : entityProperties) {
+                            if (property.isSimple()) {
+                                entity.addProperty(property.getName(), readJSONValue( jsonentity.get(property.getName())));
+                            }
+                        }
+    
+                        ArrayNode attributes = (ArrayNode) jsonentity.get(m_AttributeMarkup);
+                        if (attributes != null) {
+                            for (JsonNode jsonattribute : attributes) {
+                                Attribute attribute = addAttribute( jsonattribute.get(m_AttributeId).getTextValue());
+                                entity.addAttribute(attribute, 1);
+                            }
                         }
                     }
-
-                    ArrayNode attributes = (ArrayNode) jsonentity.get(m_AttributeMarkup);
-                    if (attributes != null) {
-                        for (JsonNode jsonattribute : attributes) {
-                            Attribute attribute = addAttribute( jsonattribute.get(m_AttributeId).getTextValue());
-                            entity.addAttribute(attribute, 1);
-                        }
-                    }
-                    //LOG.debug("Entity added : {}", entity);
                 }
-            }
-            ArrayNode attributes = (ArrayNode) node.get(m_AttributeMarkup);
-            if (attributes != null) {
-                for (JsonNode jsonattribute : attributes) {
-                    Attribute attribute = addAttribute(jsonattribute.get(m_AttributeId).getTextValue());
-                    for (PropertyDefinition property : attributeProperties) {
-                        if (property.isSimple()) {
-                            JsonNode p = jsonattribute.get(property.getName());
-                            if (p != null)
-                                attribute.addProperty(property, readJSONValue( p));
+                ArrayNode attributes = (ArrayNode) node.get(m_AttributeMarkup);
+                if (attributes != null) {
+                    for (JsonNode jsonattribute : attributes) {
+                        Attribute attribute = addAttribute(jsonattribute.get(m_AttributeId).getTextValue());
+                        for (PropertyDefinition property : attributeProperties) {
+                            if (property.isSimple()) {
+                                JsonNode p = jsonattribute.get(property.getName());
+                                if (p != null)
+                                    attribute.addProperty(property, readJSONValue( p));
+                            }
                         }
+                        if (!isInverted())
+                            addEntityProperties(attribute);
                     }
-                    //LOG.debug("Attribute added : {}", attribute);
-                    if (!isInverted())
-                        addEntityProperties(attribute);
                 }
-            }
-            if (isInverted()) {
-                for (Entity entity : m_Entities.values()) {
-                    addAttributeProperties(entity);
+                if (isInverted()) {
+                    for (Entity entity : m_Entities.values()) {
+                        addAttributeProperties(entity);
+                    }
                 }
             }
         }
         catch (Exception e) {
-            LOG.error(e.getMessage(), e);
-            throw new WPSConnectorException("openConnections", e);
+            //LOG.error(e.getMessage(), e);
+            throw new WPSConnectorException("REST Reading json error", e);
         }
     }
 
@@ -214,7 +216,7 @@ public class RESTEntityConnector extends FileEntityConnector {
         }
         catch (Exception e) {
             LOG.error(e.getMessage(), e);
-            throw new WPSConnectorException("openConnections", e);
+            throw new WPSConnectorException("REST Reading xml error", e);
         }
 
         for (Element el : (List<Element>) root.getChildren("globals")) {

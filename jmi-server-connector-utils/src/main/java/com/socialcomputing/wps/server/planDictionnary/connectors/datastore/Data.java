@@ -102,6 +102,9 @@ public abstract class Data {
         else if( o instanceof Integer) {
             sb.append( String.valueOf( ( Integer) o));
         }
+        else if( o instanceof Long) {
+            sb.append( String.valueOf( ( Long) o));
+        }
         else if( o instanceof Object[]) {
             boolean first = true;
             sb.append( '[');
