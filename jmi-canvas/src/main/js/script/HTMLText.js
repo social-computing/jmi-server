@@ -288,7 +288,7 @@ JMI.script.HTMLText = (function() {
 	
 					var leftLen = this.body.width - fTok.width;
 	
-					x   = ( fTok.m_flags & JMI.script.HTMLText.CENTER_BIT )!= 0 ? leftLen >> 1 :(( fTok.m_flags & JMI.script.HTMLText.RIGHT_BIT )!= 0 ? leftLen : 0 );
+					x   = ( fTok.flags & JMI.script.HTMLText.CENTER_BIT )!= 0 ? leftLen >> 1 :(( fTok.flags & JMI.script.HTMLText.RIGHT_BIT )!= 0 ? leftLen : 0 );
 					x  += margin.left +( fTok.margin != null ? fTok.margin.left : 0 );
 					y  += fTok.aMax +( fTok.margin != null ? fTok.margin.top : 0 );
 					this.removeElement( this.tokens, token);
@@ -421,7 +421,7 @@ JMI.script.HTMLText = (function() {
 	
 						if ( tag.length > 1 && alignStr == null && margin == null )
 						{
-							flags   = m_body.m_flags;
+							flags   = m_body.flags;
 							applet.log( "[updateTag] syntax error Tag : " + tag );
 							return null;
 						}
