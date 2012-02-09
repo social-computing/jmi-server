@@ -62,14 +62,22 @@ JMI.util.ImageUtil.filterImage = function( gDrawingContext, dim, color) {
 		min = Math.min( w, h ),
 		i , j , n = min + 2;
 	
-    gDrawingContext.beginPath();
+    gDrawingContext.lineWidth = 1;
+    gDrawingContext.strokeStyle = color;
+    //gDrawingContext.fillStyle = '#0000ff';//color;
 	for ( i = 1, j =( w + h + 1)% 2; i < n; i += 2, j += 2)
 	{
+    	gDrawingContext.beginPath();
 		gDrawingContext.moveTo(0, i);
 		gDrawingContext.lineTo(i, 0);
+	    gDrawingContext.closePath();
+	    gDrawingContext.stroke();
 
+    	gDrawingContext.beginPath();
 		gDrawingContext.moveTo(w - j, h);
 		gDrawingContext.lineTo(w, h-j);
+	    gDrawingContext.closePath();
+	    gDrawingContext.stroke();
 	}
 	if ( w > h )
 	{
@@ -77,8 +85,11 @@ JMI.util.ImageUtil.filterImage = function( gDrawingContext, dim, color) {
 		
 		for ( i = 1+( h % 2); i < n; i += 2)
 		{
+    		gDrawingContext.beginPath();
 			gDrawingContext.moveTo(i, h);
 			gDrawingContext.lineTo(min+i, 0);
+		    gDrawingContext.closePath();
+		    gDrawingContext.stroke();
 		}
 	}
 	else
@@ -87,12 +98,11 @@ JMI.util.ImageUtil.filterImage = function( gDrawingContext, dim, color) {
 		
 		for ( i = 1+( w % 2); i < n; i += 2)
 		{
+    		gDrawingContext.beginPath();
 			gDrawingContext.moveTo(w, i);
 			gDrawingContext.lineTo(0, min + i);
+		    gDrawingContext.closePath();
+		    gDrawingContext.stroke();
 		}
 	}
-    gDrawingContext.closePath();
-    gDrawingContext.lineWidth = 1;
-    gDrawingContext.fillStyle = color;
-    gDrawingContext.fill();
 }
