@@ -307,7 +307,6 @@ package com.socialcomputing.wps.script  {
 					// Restore its rest image
                     //ON rollover non active zone => redraw
 					var curZoneBounds:Rectangle = m_curZone.getParent().m_bounds;
-					ImageUtil.clear( this.m_applet.curDrawingSurface);
 					this.m_applet.renderShape(this.m_applet.restDrawingSurface, curZoneBounds.width, curZoneBounds.height, new Point(curZoneBounds.x, curZoneBounds.y));
                     this.m_applet.toolTip = null;
                 }
@@ -317,7 +316,6 @@ package com.socialcomputing.wps.script  {
 				// A new Zone is hovered, let's paint it!
                 if (m_curSat != null && (m_curZone != m_newZone)) {
                     m_curZone = m_newZone;
-				    ImageUtil.clear( this.m_applet.curDrawingSurface);
                     paintCurZone();              
                     m_curSat.execute( m_applet, m_curZone, p, Satellite.HOVER_VAL);
                     cursTyp = MouseCursor.HAND;   // Sets the cursor to a hand if the mouse entered a Zone

@@ -269,9 +269,8 @@ JMI.script.Plan = (function() {
 	updateCurrentZone: function(cSat, p) {
 		if ( this.curZone != this.newZone )//|| curSat != curSat)           // The current Satellite has changed
 	    {
-	        for ( var i = 0; i < this.tipTimers.length; ++i)
-	        {
-	         	this.tipTimers[i].interrupt();
+			for(var t in this.tipTimers) {
+	         	this.tipTimers[t].interrupt();
 	        }
 	    }
 	    
@@ -285,7 +284,6 @@ JMI.script.Plan = (function() {
 				// Restore its rest image
 	            //ON rollover non active zone => redraw
 				var curZoneBounds = this.curZone.getParent().bounds;
-				JMI.util.ImageUtil.clear(this.applet.curDrawingCanvas, this.applet.curDrawingContext);
 				this.applet.renderShape(this.applet.restDrawingCanvas, curZoneBounds.width, curZoneBounds.height, new JMI.script.Point(curZoneBounds.x, curZoneBounds.y));
 	            this.applet.toolTip = null;
 	        }
@@ -294,7 +292,6 @@ JMI.script.Plan = (function() {
 			// A new Zone is hovered, let's paint it!
 	        if (this.curSat != null && (this.curZone != this.newZone)) {
 	            this.curZone = this.newZone;
-				JMI.util.ImageUtil.clear(this.applet.curDrawingCanvas, this.applet.curDrawingContext);
 	            this.paintCurZone();
  	            this.curSat.execute( this.applet, this.curZone, p, JMI.script.Satellite.HOVER_VAL);
 				cursTyp = 'pointer';
