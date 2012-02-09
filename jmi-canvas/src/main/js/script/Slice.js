@@ -96,7 +96,7 @@ JMI.script.Slice =  (function() {
                     supCtr = supZone.restSwatch.satellites[0].shapex.getCenter(supZone);
                     var htmlTxt = text.getHText(applet, gDrawingContext, zone, transfo, satCtr, supCtr, text);
                     
-                    if (htmlTxt != null && htmlTxt.text.length > 0) {
+                    if (htmlTxt != null) {// TODO}&& htmlTxt.text.length > 0) {
                         htmlTxt.drawText2(gDrawingContext, applet.size);
                         // TODO later : difficulté à trouver la bonne clé (text) voir aussi HTMLText.js getHText
                         //zone.datas[text] = htmlTxt;
@@ -182,7 +182,7 @@ JMI.script.Slice =  (function() {
                 else {
                     supCtr = supZone.restSwatch.satellites[0].shapex.getCenter(supZone);
                     var htmlTxt = text.getHText(applet, gDrawingContext, zone, transfo, satCtr, supCtr, text);
-                    if (htmlTxt != null && htmlTxt.text.length > 0) {
+                    if (htmlTxt != null) {//TODO && htmlTxt.text.length > 0) {
                         bounds.merge(htmlTxt.bounds);
                     }
                 }
