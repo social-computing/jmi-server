@@ -127,6 +127,10 @@ JMI.script.HTMLText = (function() {
                     //htmlTxt.updateBounds( applet, gDrawingContext);
                     htmlTxt.setTextBnds( applet.size, this.getFlags( zone.props), zone.flags ,transfo, supCtr, center );
                 }
+                else {
+					htmlTxt.bounds = new JMI.script.Rectangle();
+					htmlTxt.tokens = [];
+				}
             }
             else
             {
@@ -306,30 +310,6 @@ JMI.script.HTMLText = (function() {
 			 	this.bounds.add( JMI.script.HTMLText.BORDER_WIDTH*2, JMI.script.HTMLText.BORDER_WIDTH*2);
 			 }
 		},
-       /**
-         * Evaluate this bounding box using margins.
-		 * 
-         * @param g			The graphics used to retrieve the font metrics.
-         * @param htmlText	A string of text with or without HTML tags to parse.
-         */
-        /*updateBounds: function( applet, gDrawingContext) {
-			 // The text exists!
-			this.oneLine = true;
-			if ( this.text.length > 0)
-			 {
-				 this.bounds = new JMI.script.Rectangle();
-				 gDrawingContext.textBaseline = "top";
-				 gDrawingContext.textAlign = "left";
-				 gDrawingContext.font = this.font.canvas;
-				 var dim = gDrawingContext.measureText( this.text);
-				 this.bounds.add( dim.width, Math.round( this.font.size * 96 / 72));
-				 this.bounds.add( JMI.script.HTMLText.MARGIN*2, JMI.script.HTMLText.MARGIN*2);
-				 if( this.outColor != null) {
-				 	this.bounds.add( JMI.script.HTMLText.BORDER_WIDTH*2, JMI.script.HTMLText.BORDER_WIDTH*2);
-				 }
-			 }
-       },*/
-
 		/**
 		 * Process this text Token to optimize tokens and evaluate the token bounding box.
 		 * @param g			Graphics to get the font metrics.
@@ -678,26 +658,6 @@ JMI.script.HTMLText = (function() {
             this.bounds.y  = pos.y;
         },
         
-		/**
-		 * Paint this at a specified location.
-		 * The inner location is used to offset the fonts.
-		 * @param g		The graphics to draw in.
-		 * @param pos	The position where this should be drawn before its internal translation is added.
-		 */
-	/* TODO à supprimer paint: function( gDrawingContext, pos, borderWidth) {
-			// TODO Portage
-
-			/*var textField:TextField = new TextField();
-			if( m_blur != -1) {
-				textField.filters = [new BlurFilter(m_blur, m_blur)];
-			}*/
-			/*gDrawingContext.textBaseline = "top";
-			gDrawingContext.textAlign = "left";
-			gDrawingContext.font = this.font.canvas;
-			gDrawingContext.fillStyle = this.font.color; 
-			gDrawingContext.fillText( this.text, pos.x + borderWidth + JMI.script.HTMLText.MARGIN, pos.y + borderWidth + JMI.script.HTMLText.MARGIN);
-		},*/
-		
         /**
          * Evaluate this bounds.
          * The bounds member is updated.
