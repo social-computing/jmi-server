@@ -9,102 +9,54 @@
   
   <groupId>com.socialcomputing.jmi.jmi</groupId>
   <artifactId>jmi-canvas</artifactId>
-  <packaging>js</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>Just Map It - Canvas client</name>
   <url>http://www.just-map-it.com</url>
   
-  <repositories>
-    <repository>
-      <id>Codehaus Snapshots</id>
-      <url>http://nexus.codehaus.org/snapshots/</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-    </repository>
-  </repositories>
-  
   <pluginRepositories>
     <pluginRepository>
-      <id>Codehaus Snapshots</id>
-      <url>http://nexus.codehaus.org/snapshots/</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>  <!-- Workaround for MNG-2974, see note below -->
-      </releases>
+      <name>oss.sonatype.org</name>
+      <id>oss.sonatype.org</id>
+      <url>http://oss.sonatype.org/content/groups/public</url>
     </pluginRepository>
   </pluginRepositories>
-
+ 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+
   <build>
-    <extensions>
-      <extension>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>javascript-maven-plugin</artifactId>
-        <version>2.0.0-SNAPSHOT</version>
-      </extension>
-    </extensions>
     <pluginManagement>
-    	<plugins>
-    		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-    		<plugin>
-    			<groupId>org.eclipse.m2e</groupId>
-    			<artifactId>lifecycle-mapping</artifactId>
-    			<version>1.0.0</version>
-    			<configuration>
-    				<lifecycleMappingMetadata>
-    					<pluginExecutions>
-    						<pluginExecution>
-    							<pluginExecutionFilter>
-    								<groupId>org.codehaus.mojo</groupId>
-    								<artifactId>
-    									js-import-maven-plugin
-    								</artifactId>
-    								<versionRange>
-    									[1.0.0-SNAPSHOT,)
-    								</versionRange>
-    								<goals>
-    									<goal>generate-html</goal>
-    									<goal>import-js</goal>
-    									<goal>test-generate-html</goal>
-    									<goal>test-import-js</goal>
-    								</goals>
-    							</pluginExecutionFilter>
-    							<action>
-    								<ignore></ignore>
-    							</action>
-    						</pluginExecution>
-    						<pluginExecution>
-    							<pluginExecutionFilter>
-    								<groupId>org.codehaus.mojo</groupId>
-    								<artifactId>
-    									jslint-maven-plugin
-    								</artifactId>
-    								<versionRange>
-    									[1.0.1-SNAPSHOT,)
-    								</versionRange>
-    								<goals>
-    									<goal>jslint</goal>
-    									<goal>test-jslint</goal>
-    								</goals>
-    							</pluginExecutionFilter>
-    							<action>
-    								<ignore></ignore>
-    							</action>
-    						</pluginExecution>
-    					</pluginExecutions>
-    				</lifecycleMappingMetadata>
-    			</configuration>
-    		</plugin>
-    	</plugins>
+      <plugins>
+        <plugin>
+          <groupId>net.alchim31.maven</groupId>
+          <artifactId>yuicompressor-maven-plugin</artifactId>
+          <version>1.2</version>
+        </plugin>
+      </plugins>
     </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>net.alchim31.maven</groupId>
+        <artifactId>yuicompressor-maven-plugin</artifactId>
+        <version>1.2</version>
+        <executions>
+          <execution>
+            <goals>
+			  <goal>jslint</goal>
+              <goal>compress</goal>
+            </goals>
+          </execution>
+        </executions>        
+        <configuration>
+          <nosuffix>true</nosuffix>
+		  <sourceDirectory>src/main/js</sourceDirectory>
+		  <excludes>
+			<exclude>**/swfobject.js</exclude>
+		  </excludes>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 </project>

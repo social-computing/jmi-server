@@ -1,7 +1,7 @@
 /**
  * JMI application global context
  */
-var JMI = JMI || {}
+var JMI = JMI || {};
 
 /**
  * namespace creation function
@@ -13,7 +13,9 @@ var JMI = JMI || {}
 JMI.namespace = function(ns_string) {
 
     // if no argument or an empty string is given, return the JMI root namespace
-    if(typeof ns_string === "undefined" || ns_string === "") return JMI; 
+    if(typeof ns_string === "undefined" || ns_string === "") {
+    	return JMI; 
+    }
     
     var parts  = ns_string.split('.'); 
     var parent = JMI; 
@@ -43,7 +45,7 @@ JMI.Map = function(params) {
 	}
     if (typeof params.parent == "string") {
 		divParent = document.getElementById(params.parent);
-		if( divParent == null) {
+		if( divParent === null) {
 			throw 'JMI map: unknown parent element ' + params.parent;
 		}
 	}

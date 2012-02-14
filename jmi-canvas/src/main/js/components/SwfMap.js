@@ -28,8 +28,9 @@ JMI.components.SwfMap = (function() {
 		swfobject.embedSWF(this.swf, attributes.id, "100%", "100%", "10.0.0", "expressInstall.swf", 
 							this.checkParams(jmiparams), params, attributes,
 							function(res) {
-								if( !res.success)
+								if( !res.success) {
 									throw('Error creating JMI flash client');
+								}
 								comp.swfmap = res.ref; //swfobject.getObjectById(e.id);
 								comp.swfmap.JMI = comp;
 							});
@@ -39,8 +40,9 @@ JMI.components.SwfMap = (function() {
         constructor: JMI.components.SwfMap,
 
 		checkParams: function(jmiparams) {
-			if (!jmiparams.hasOwnProperty('allowDomain'))
-				jmiparams.allowDomain = '*'
+			if (!jmiparams.hasOwnProperty('allowDomain')) {
+				jmiparams.allowDomain = '*';
+			}
 			jmiparams.mainCallback = 'JMI.components.SwfMap.mainCallback';
 			jmiparams.wpsplanname = jmiparams.map;
 			return jmiparams;
@@ -73,4 +75,4 @@ JMI.components.SwfMap.mainCallback = function(id, event) {
 		map.map = map;
 		map.JMI.dispatchEvent( event);
 	}
-}
+};

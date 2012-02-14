@@ -71,20 +71,20 @@ JMI.script.ActiveZone = (function() {
         init: function (applet, gDrawingContext, isFirst) {
             // One time init
             if (isFirst) {
-                var sel = this.props["SELECTION"];
-                if (sel != null) {
+                var sel = this.props.SELECTION;
+                if (sel !== null) {
                     this.selection = sel;
                 }
                 
                 // Quick access to Env props
-                this.props["ENV"] = applet.planContainer.map.env.props;
+                this.props.ENV = applet.planContainer.map.env.props;
                 this.datas = {};
             }
             
             var isSuper = this instanceof JMI.script.BagZone;
             this.restData = this.restSwatch.evalSatData(applet, this, isSuper);
             
-            if (this.curSwatch != null) {
+            if (this.curSwatch !== null) {
                 this.curData = this.curSwatch.evalSatData(applet, this, isSuper);
             }
         },
@@ -100,7 +100,9 @@ JMI.script.ActiveZone = (function() {
          * @param showLinks        True if we only wants to paint links.
          */
         paint: function(applet, gDrawingContext, isCur, isFront, showTyp, showLinks) {
-            if ((this.flags & JMI.script.ActiveZone.INVISIBLE_BIT) != 0) return;
+            if ((this.flags & JMI.script.ActiveZone.INVISIBLE_BIT) !== 0)  {
+            	return;
+            }
             var swatch = isCur ? this.curSwatch : this.restSwatch;
             swatch.paint(applet, gDrawingContext, this, isCur, isFront, showTyp, showLinks);
         },
@@ -111,12 +113,12 @@ JMI.script.ActiveZone = (function() {
          * @return  The BagZone holding this or null if this is a BagZone.
          */
         getParent: function () {
-            return this.parent == null ? this : this.parent;
+            return this.parent === null ? this : this.parent;
         },
         
         // API
 		select: function( selection) {
-			var selId = this.props["ENV"].selections[selection];
+			var selId = this.props.ENV.selections[selection];
 			if ( selId != -1 )
 			{
 				selId = 1 << selId;

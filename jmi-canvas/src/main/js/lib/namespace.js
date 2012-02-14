@@ -45,7 +45,7 @@
 
     for (var i=1; i < arguments.length; i++) {
       var arg = arguments[i];
-      if(typeof(arg) == 'object' && arg != null){
+      if(typeof(arg) == 'object' && arg !== null){
         for(var prop in arg){
           if (arg.hasOwnProperty(prop)) {
             space[functionName(prop)] = arg[prop];

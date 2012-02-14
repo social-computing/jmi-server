@@ -12,24 +12,6 @@ JMI.namespace("script.BagZone");
 JMI.script.BagZone = (function() {
 	
 	var BagZone = function() {
-	    // Clusterized subZones table.
-	    //:Array = null;
-        this.subZones; 
-    
-        /*
-         * Initial angular direction of Satellites.
-         * It change depending on the distance to window borders.
-         * The main zone will start at this angle. Evaluated during init.
-         */
-        this.dir = null;
-    
-        /*
-         * Angular step between two subZones.
-         * Basicaly 2PI/subs, but in case of half circle (borders) it's PI/subs!
-         * Evaluated during init.
-         */
-        this.stp = null;
-    
         /*
          * Creates a BagZone with its subZones.
          * Its size and position should be initialized by setting the "_SCALE" (float) and "_VERTICES" (Point[1]) properties;
@@ -53,7 +35,7 @@ JMI.script.BagZone = (function() {
          */
         init: function(applet, gDrawingContext, isFirst) {
             var i,
-                nbSubZones = this.subZones != null ? this.subZones.length : 0;
+                nbSubZones = this.subZones !== null ? this.subZones.length : 0;
             JMI.script.ActiveZone.prototype.init.call(this, applet, gDrawingContext, isFirst);
             var restSwhBounds, curSwhBounds; 
             
@@ -61,7 +43,9 @@ JMI.script.BagZone = (function() {
             if (isFirst) {
                 this.parent = null;
         
-                if (nbSubZones > 0) this.stp = JMI.script.Base.Pi2 / (nbSubZones + 1);
+                if (nbSubZones > 0) {
+                	this.stp = JMI.script.Base.Pi2 / (nbSubZones + 1);
+                }
                 this.dir = 10.0;
         
                 for (i = 0 ; i < nbSubZones ; i ++) {
@@ -125,8 +109,12 @@ JMI.script.BagZone = (function() {
             var h = this.bounds.height;
             var maxBox = applet.planContainer.map.plan.maxBox;
         
-            if (w > maxBox.width)  maxBox.width  = w;
-            if (h > maxBox.height) maxBox.height = h;
+            if (w > maxBox.width) {
+            	maxBox.width  = w;
+            }
+            if (h > maxBox.height) {
+            	maxBox.height = h;
+            }
         
             this.bounds = this.bounds.intersection(applet.size.toRectangle());
         },

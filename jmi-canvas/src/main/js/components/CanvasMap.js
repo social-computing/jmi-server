@@ -4,8 +4,8 @@ JMI.components.CanvasMap = (function() {
 
 	var CanvasMap = function(parent, server, jmiparams) {
 		this.requester = new JMI.components.MapRequester(this, server);
-		this.backgroundColor = 0xFFFFFF,
-		this.curPos = new JMI.script.Point(),
+		this.backgroundColor = 0xFFFFFF;
+		this.curPos = new JMI.script.Point();
 		this.ready = false;
 		this.planContainer = null;
 		this.eventManager = new JMI.util.EventManager();
@@ -50,7 +50,15 @@ JMI.components.CanvasMap = (function() {
 		this.drawingCanvas.addEventListener('click', this.mouseClickHandler, false);
 		this.drawingCanvas.addEventListener('dblclick', this.mouseDoubleClickHandler, false);
 
+/*		var menu = document.createElement('menu');
+		menu.id = 'totsso';
+		menu.type = 'context';
+		menu.innerHTML = '<menuitem label="aaapowered by Just Map It!" onclick=";"/>';
+		this.parent.appendChild(menu);
+		this.parent.contextMenu = menu;*/
+		
 		this.compute(jmiparams);
+		//'<menu type="context" id="imagemenu"><menuitem label="powered by Just Map It!" onclick="alert('rotate');"/></menu>'
 /*		var wpsMenu:ContextMenu = new ContextMenu();
 		wpsMenu.hideBuiltInItems();
 		var menuItem:ContextMenuItem = new ContextMenuItem("powered by Just Map It! - Social Computing");
@@ -86,9 +94,10 @@ JMI.components.CanvasMap = (function() {
 
 			// If the given value is null 
 			// Reset all objects of this component
-			if(value == null) {
-				if( this.planContainer)
+			if(value === null) {
+				if( this.planContainer) {
 					delete( this.planContainer);
+				}
 				return;
 			}
 			
@@ -126,16 +135,18 @@ JMI.components.CanvasMap = (function() {
 				document.body.style.cursor = 'default';
 
 				this.invalidate();
-				if(this.ready)
+				if(this.ready) {
 					this.dispatchEvent({map: this, type:JMI.Map.event.READY});
+				}
 			}
 		},
 		getData: function() {
 			return this.planContainer;
 		},
 		getProperty: function( name) {
-			if( this.planContainer && env.props[name])
+			if( this.planContainer && env.props[name]) {
 				return this.planContainer.map.env.props[name];
+			}
 			return null;
 		},
 		
@@ -178,7 +189,7 @@ JMI.components.CanvasMap = (function() {
 		mouseClickHandler: function(event) {
 			if (this instanceof HTMLCanvasElement) {
 			    var mousePosition = JMI.components.CanvasMap.getPosition(this, event);
-				if ( this.JMI.ready && this.JMI.planContainer.map.plan.curSat != null )
+				if ( this.JMI.ready && this.JMI.planContainer.map.plan.curSat !== null )
 				{
 					this.JMI.planContainer.map.plan.updateZoneAt( mousePosition);
 					this.JMI.planContainer.map.plan.curSat.execute( this.JMI, this.JMI.planContainer.map.plan.curZone, mousePosition, JMI.script.Satellite.CLICK_VAL);
@@ -188,7 +199,7 @@ JMI.components.CanvasMap = (function() {
 		mouseDoubleClickHandler: function(event) {
 			if (this instanceof HTMLCanvasElement) {
 			    var mousePosition = JMI.components.CanvasMap.getPosition(this, event);
-				if ( this.JMI.ready && this.JMI.planContainer.map.plan.curSat != null )
+				if ( this.JMI.ready && this.JMI.planContainer.map.plan.curSat !== null )
 				{
 					this.JMI.planContainer.map.plan.updateZoneAt( mousePosition);
 					this.JMI.planContainer.map.plan.curSat.execute( this.JMI, this.JMI.planContainer.map.plan.curZone, mousePosition, JMI.script.Satellite.DBLCLICK_VAL);
@@ -220,10 +231,12 @@ JMI.components.CanvasMap = (function() {
 			this.dispatchEvent( {map: this, type: JMI.Map.event.STATUS, message: message});
 		},
 		log: function(message) {
-			if( aptana && aptana.log)
+			if( aptana && aptana.log) {
 				aptana.log( message);
-			if( console && console.log)
+			}
+			if( console && console.log) {
 				console.log( message);
+			}
 		},
 		addEventListener: function(event, listener) {
 			this.eventManager.addListener(event, listener);
@@ -274,8 +287,9 @@ JMI.components.CanvasMap = (function() {
 		 * @return			An ID in [0,31] or -1 if the selection name is unknown.
 		 */
 		getSelId: function( selection) {
-			if( this.JMI.planContainer.map.env.selections[selection] == null)
+			if( this.JMI.planContainer.map.env.selections[selection] === null) {
 				return -1;
+			}
 			return  env.selections[selection];
 		},
 		
@@ -307,7 +321,9 @@ JMI.components.CanvasMap = (function() {
 					if( actionStr.charAt( 0 )== '_' )
 					{	// javascript:_target:function()
 						pos = actionStr.indexOf( ':' );
-						if( pos <= 0) return;
+						if( pos <= 0) {
+							return;
+						}
 						target      = actionStr.substring( 1, pos );
 						actionStr   = actionStr.substring( pos + 1 );
 					}

@@ -59,10 +59,8 @@ JMI.namespace("lib.jsonParse");
  */
 JMI.lib.jsonParse = (function() {
 
-  var number
-      = '(?:-?\\b(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\\b)';
-  var oneChar = '(?:[^\\0-\\x08\\x0a-\\x1f\"\\\\]'
-      + '|\\\\(?:[\"/\\\\bfnrt]|u[0-9A-Fa-f]{4}))';
+  var number = '(?:-?\\b(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\\b)';
+  var oneChar = '(?:[^\\0-\\x08\\x0a-\\x1f\"\\\\]' + '|\\\\(?:[\"/\\\\bfnrt]|u[0-9A-Fa-f]{4}))';
   var string = '(?:\"' + oneChar + '*\")';
 
   // Will match a value in a well-formed JSON file.
@@ -95,7 +93,7 @@ JMI.lib.jsonParse = (function() {
   }
 
   // A non-falsy value that coerces to the empty string when used as a key.
-  var EMPTY_STRING = new String('');
+  var EMPTY_STRING = '';
   var SLASH = '\\';
 
   // Constructor to use based on an open token.
