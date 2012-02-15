@@ -94,7 +94,7 @@ JMI.script.Polygon = (function() {
             this.xpoints[this.npoints] = x;
             this.ypoints[this.npoints] = y;
             this.npoints++;
-            if (this.bounds != null) {
+            if (this.bounds !== null) {
                 this.updateBounds(x, y);
             }
             
@@ -110,10 +110,10 @@ JMI.script.Polygon = (function() {
          * @return a <code>Rectangle</code> that defines the bounds of this <code>Polygon</code>.
          */
         getBounds: function() {
-            if (this.npoints == 0) {
+            if (this.npoints === 0) {
                 return new JMI.script.Rectangle();
             }
-            if (this.bounds == null) {
+            if (this.bounds === null) {
                 this.calculateBounds(this.xpoints, this.ypoints, this.npoints);
             }
             return this.bounds;
@@ -151,14 +151,16 @@ JMI.script.Polygon = (function() {
                 
                 var i2 = ((i + 1) == this.npoints) ? 0 : i + 1;
                 
-                // Edge from p[i] to p[i+1]
-                if (((this.ypoints[i] <= p.y) && (this.ypoints[i2] > p.y))    // An upward crossing
-                    || ((this.ypoints[i] > p.y) && (this.ypoints[i2] <= p.y))) {      // Or a downward crossing
-                    
+                // Edge from p[i] to p[i+1] 
+                if (((this.ypoints[i] <= p.y) && (this.ypoints[i2] > p.y)) || ((this.ypoints[i] > p.y) && (this.ypoints[i2] <= p.y))) { 
+                	// An upward crossing
+                	// Or a downward crossing
                     // Compute the actual edge-ray intersect x-coordinate
                     var vt = (p.y - this.ypoints[i]) / (this.ypoints[i2] - this.ypoints[i]);
-                    if (p.x < this.xpoints[i] + vt * (this.xpoints[i2] - this.xpoints[i])) // p.x < intersect
+                    if (p.x < this.xpoints[i] + vt * (this.xpoints[i2] - this.xpoints[i])) {
+                    	// p.x < intersect
                         ++cn;   // a valid crossing of y = p.y right of p.x
+                    }
                 }
             }
             // TODO : portage : à changer

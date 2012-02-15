@@ -41,7 +41,7 @@ JMI.script.Transfo = (function() {
          */
         transform: function(transfo) {
             // TODO : replace null test by undefined when constructor called have been checked
-            if (transfo == null || this.flags != transfo.flags) {
+            if (transfo === null || this.flags != transfo.flags) {
                 return new JMI.script.Transfo(this.direction, this.position, this.scale, this.flags);
             }
             else {

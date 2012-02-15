@@ -24,14 +24,14 @@ JMI.script.Satellite = (function() {
          * This can be a simple dot, a disk, a rectangle or a polygon.
          * :JMI.script.ShapeX
          */
-        this.shapex;
+        this.shapex = null;
          
         /*
           * The elementary slices that are stacked to draw this satellite.
           * They describe how to fill the shape.
           * //:Vector.<Slice>;
           */
-	    this.slices;
+	    this.slices = null;
 	     
         JMI.script.Base.call(this);
 	};
@@ -144,11 +144,12 @@ JMI.script.Satellite = (function() {
         contains: function(planComponent, gDrawingContext, zone, satCtr, supCtr, transfo, pos, isPie, isFake) {
             var i, n = this.slices.length;
             // If the parent satellite center is not set, take this satellite's shape center as center
-            if(supCtr == null) supCtr = this.shapex.getCenter(zone);
+            if(supCtr === null) {supCtr = this.shapex.getCenter(zone);}
             
             // Iterate throw all this satellite's slices and check if one of them contains the cursor's position
             // Stop if it's the case 
-            for(i = 0 ; (i < n && !this.slices[i].contains(planComponent, gDrawingContext, zone.getParent(), zone, this.shapex, satCtr, supCtr, pos)) ; i++){};
+            for(i = 0 ; (i < n && !this.slices[i].contains(planComponent, gDrawingContext, zone.getParent(), zone, this.shapex, satCtr, supCtr, pos)) ; i++){
+            }
             
             // if the cursor's position is in one of the slices
             if(i < n) {
@@ -159,16 +160,16 @@ JMI.script.Satellite = (function() {
                     var nbZones = zones.length + 1;
                     
                     var center = isFake ? this.shapex.getCenter(supZone) : supCtr;
-                    var dir = (supZone.dir != 10.) ? supZone.dir : transfo.direction,
+                    var dir = (supZone.dir != 10.0) ? supZone.dir : transfo.direction,
                         step = supZone.stp,
-                        m = .5 * (JMI.script.Base.Pi2 / step - nbZones),
+                        m = 0.5 * (JMI.script.Base.Pi2 / step - nbZones),
                         a = Math.atan2(pos.y - center.y, pos.x - center.x);
                     
-                    if (dir < 0) dir += JMI.script.Base.Pi2;
-                    if (a < 0)   a   += JMI.script.Base.Pi2;
-                    if (a < dir) a   += JMI.script.Base.Pi2;
+                    if (dir < 0) {dir += JMI.script.Base.Pi2;}
+                    if (a < 0)   {a   += JMI.script.Base.Pi2;}
+                    if (a < dir) {a   += JMI.script.Base.Pi2;}
                     
-                    a = .5 + (a - dir) / step;
+                    a = 0.5 + (a - dir) / step;
                     i = Math.round(a);
                     
                     if (i > 0) {
@@ -226,16 +227,16 @@ JMI.script.Satellite = (function() {
             var isExe = this.isDefined(actionId);
         
             // Events
-            if (zone != null) {
+            if (zone !== null) {
                 if (zone instanceof JMI.script.LinkZone) {
                 	// Not yest implemented
                     //dispatchEvent( new LinkClickEvent( plan.curZone as LinkZone));
                 }
                 else {
                     var event = {map: this, x: pos.x, y: pos.y, attribute: zone};
-                    if(actionId == JMI.script.Satellite.CLICK_VAL) event.type= JMI.Map.event.ATTRIBUTE_CLICK;
-                    else if(actionId == JMI.script.Satellite.DBLCLICK_VAL) event.type= JMI.Map.event.ATTRIBUTE_DBLECLICK;
-                    else if(actionId == JMI.script.Satellite.HOVER_VAL) event.type= JMI.Map.event.ATTRIBUTE_HOVER;
+                    if(actionId == JMI.script.Satellite.CLICK_VAL) {event.type= JMI.Map.event.ATTRIBUTE_CLICK;}
+                    else if(actionId == JMI.script.Satellite.DBLCLICK_VAL) {event.type= JMI.Map.event.ATTRIBUTE_DBLECLICK;}
+                    else if(actionId == JMI.script.Satellite.HOVER_VAL) {event.type= JMI.Map.event.ATTRIBUTE_HOVER;}
                     applet.dispatchEvent( event);
                 }
             }
@@ -243,7 +244,7 @@ JMI.script.Satellite = (function() {
             if (isExe) {
                 var actionStr = this.getString(actionId, zone.props);
                 
-                if (actionStr != null) {
+                if (actionStr !== null) {
                     var actions = this.getString(actionId, zone.props ).split("\n");
                     var action, func, args;
                     var i, j, n = actions.length;
@@ -276,7 +277,7 @@ JMI.script.Satellite = (function() {
                         else if (func == ("popup")) {
                             var menux = zone.curSwatch.refs[args];
                             
-                            if (menux != null) {
+                            if (menux !== null) {
                                 var menuData = [];
                                 menux.parseMenu(menuData, zone);
                                 var menu = Menu.createMenu(applet, menuData, false);
@@ -287,10 +288,12 @@ JMI.script.Satellite = (function() {
                                 var point = applet.localToGlobal(pos);
                                 menu.show(point.x, point.y);
                                 menu.visible = false;
-                                if (point.x + menu.width > applet.width) 
+                                if (point.x + menu.width > applet.width) { 
                                     point.x = Math.max(point.x - menu.width, 0);
-                                if (point.y + menu.height > applet.height) 
+                                }
+                                if (point.y + menu.height > applet.height) {
                                     point.y = Math.max(point.y - menu.height, 0);
+                                }
                                 menu.move(point.x, point.y);
                                 menu.visible = true;
                             }
@@ -300,7 +303,7 @@ JMI.script.Satellite = (function() {
                         else if (func == ("pop")) {
                             var slice = zone.curSwatch.refs[args];
                             
-                            if (slice != null) {
+                            if (slice !== null) {
                                 var delay  = slice.getInt(JMI.script.Slice.DELAY_VAL, zone.props);
                                 var length = slice.getInt(JMI.script.Slice.LENGTH_VAL, zone.props);
                                 var text = slice.getText(JMI.script.Slice.TEXT_VAL, zone.props);
@@ -338,8 +341,9 @@ JMI.script.Satellite = (function() {
 	
 	// Héritage
 	for (var element in JMI.script.Base.prototype ) {
-		if( !Satellite.prototype[element])
+		if( !Satellite.prototype[element]) {
 			Satellite.prototype[element] = JMI.script.Base.prototype[element];
+		}
 	}
 	
 	return Satellite;

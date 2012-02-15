@@ -28,32 +28,43 @@ JMI.script.FontX = (function() {
 		init: function( props) {
 		    var flags = this.getFlags( props );
 		    this.size = this.getInt( JMI.script.FontX.SIZE_VAL, props );
-			if (( flags & JMI.script.HTMLText.BOLD )!= 0)  this.bold = true;
-			if (( flags & JMI.script.HTMLText.ITALIC )!= 0) this.italic = true;
+			if (( flags & JMI.script.HTMLText.BOLD )!== 0) {
+				this.bold = true;
+			}
+			if (( flags & JMI.script.HTMLText.ITALIC )!== 0) {
+				this.italic = true;
+			}
 			this.font = this.getString( JMI.script.FontX.NAME_VAL, props );
 			this.initCanvas();
 		},
 		init2: function( name, flags, size) {
 		    this.size = size;
-			if (( flags & JMI.script.HTMLText.BOLD )!= 0)  this.bold = true;
-			if (( flags & JMI.script.HTMLText.ITALIC )!= 0) this.italic = true;
+			if (( flags & JMI.script.HTMLText.BOLD )!== 0)  {
+				this.bold = true;
+			}
+			if (( flags & JMI.script.HTMLText.ITALIC )!== 0) {
+				this.italic = true;
+			}
 			this.font = name;
 			this.initCanvas();
 		},
 		initCanvas: function() {
 			this.canvas = '';
-			if( this.bold)
+			if( this.bold) {
 				this.canvas = 'bold ' + this.canvas;
-			if( this.italic)
+			}
+			if( this.italic) {
 				this.canvas = 'italic ' + this.canvas;
+			}
 		    this.canvas = this.canvas + this.size + 'pt ' + this.font;
 		}
 	};
 	
 	// Héritage
 	for (var element in JMI.script.Base.prototype ) {
-		if( !FontX.prototype[element])
+		if( !FontX.prototype[element]) {
 			FontX.prototype[element] = JMI.script.Base.prototype[element];
+		}
 	}
 	
 	return FontX;

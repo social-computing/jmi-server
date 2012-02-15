@@ -55,13 +55,13 @@ JMI.script.Slice =  (function() {
             // Draw a satellite's image it is set
             if (this.isDefined(JMI.script.Slice.IMAGE_VAL)) {
                 var imageName = this.parseString(JMI.script.Slice.IMAGE_VAL, zone.props);
-                if (imageName != null) {
+                if (imageName !== null) {
                 	imageName = imageName[0];
                     satShp.drawImage(applet, gDrawingContext, supZone, imageName, transfo, satCtr);
                 }
             }
             
-            if(text != null) {
+            if(text !== null) {
                 if (JMI.script.Base.isEnabled(text.getFlags(zone.props), JMI.script.HTMLText.URL_BIT)) {
                     this.htmlTxt = null;
                     var textUrls  = text.parseString(JMI.script.HTMLText.TEXT_VAL, zone.props);
@@ -96,7 +96,7 @@ JMI.script.Slice =  (function() {
                     supCtr = supZone.restSwatch.satellites[0].shapex.getCenter(supZone);
                     var htmlTxt = text.getHText(applet, gDrawingContext, zone, transfo, satCtr, supCtr, text);
                     
-                    if (htmlTxt != null) {// TODO}&& htmlTxt.text.length > 0) {
+                    if (htmlTxt !== null) {// TODO}&& htmlTxt.text.length > 0) {
                         htmlTxt.drawText2(gDrawingContext, applet.size);
                         // TODO later : difficulté à trouver la bonne clé (text) voir aussi HTMLText.js getHText
                         //zone.datas[text] = htmlTxt;
@@ -125,18 +125,16 @@ JMI.script.Slice =  (function() {
          */
         contains: function(planComponent, gDrawingContext, supZone, zone, satShp, satCtr, supCtr, pos){
             var transfo = this.getTransfo(JMI.script.Slice.TRANSFO_VAL, zone.props);
-            if(supZone == null) supZone = zone;
+            if(supZone === null) {supZone = zone;}
             
-            if((this.isDefined(JMI.script.Slice.IN_COL_VAL) 
-                    || this.isDefined(JMI.script.Slice.OUT_COL_VAL)) 
-                    && satShp.contains(supZone, transfo, satCtr, pos)) {
+            if((this.isDefined(JMI.script.Slice.IN_COL_VAL) || this.isDefined(JMI.script.Slice.OUT_COL_VAL)) && satShp.contains(supZone, transfo, satCtr, pos)) {
                 return true;
             }
             
             var text = this.getText(JMI.script.Slice.TEXT_VAL, zone.props);
-            if (text != null) {
+            if (text !== null) {
                 var htmlTxt = text.getHText(planComponent, gDrawingContext, zone, transfo, satCtr, supCtr, text);
-                return htmlTxt != null ? htmlTxt.bounds.contains(pos.x, pos.y): false;
+                return htmlTxt !== null ? htmlTxt.bounds.contains(pos.x, pos.y): false;
             }
             return false;
         },
@@ -158,7 +156,7 @@ JMI.script.Slice =  (function() {
          */
         setBounds: function(applet, gDrawingContext, supZone, zone, satShp, satCtr, supCtr, bounds) {
             var transfo = this.getTransfo(JMI.script.Slice.TRANSFO_VAL, zone.props);
-            if (supZone == null) supZone = zone;
+            if (supZone === null) {supZone = zone;}
             
             try {
                 if (this.isDefined(JMI.script.Slice.IN_COL_VAL) || this.isDefined(JMI.script.Slice.OUT_COL_VAL)) {
@@ -167,22 +165,22 @@ JMI.script.Slice =  (function() {
             }
             catch (e) {
                 var errorMessage = "getCenter supZone=" + supZone;
-                if (supZone != null) {
+                if (supZone !== null) {
                     var points = satShp.getValue(JMI.script.ShapeX.POLYGON_VAL, supZone.props);
-                    errorMessage += " zName=" + supZone.props[ "NAME" ] + " pKey=" + satShp.containers[JMI.script.ShapeX.POLYGON_VAL].value + " pnts=" + points + " p[0]=" + points[0];
+                    errorMessage += " zName=" + supZone.props.NAME + " pKey=" + satShp.containers[JMI.script.ShapeX.POLYGON_VAL].value + " pnts=" + points + " p[0]=" + points[0];
                 }
                 applet.log(errorMessage);
             }
         
             var text = this.getText(JMI.script.Slice.TEXT_VAL, zone.props);
-            if (text != null) {
+            if (text !== null) {
                 if (JMI.script.Base.isEnabled(text.getFlags(zone.props), JMI.script.HTMLText.URL_BIT)) {
-                    if (this.htmlTxt != null) bounds.copy(this.htmlTxt.bounds);
+                    if (this.htmlTxt !== null) {bounds.copy(this.htmlTxt.bounds);}
                 }
                 else {
                     supCtr = supZone.restSwatch.satellites[0].shapex.getCenter(supZone);
                     var htmlTxt = text.getHText(applet, gDrawingContext, zone, transfo, satCtr, supCtr, text);
-                    if (htmlTxt != null) {//TODO && htmlTxt.text.length > 0) {
+                    if (htmlTxt !== null) {//TODO && htmlTxt.text.length > 0) {
                         bounds.merge(htmlTxt.bounds);
                     }
                 }
@@ -193,8 +191,9 @@ JMI.script.Slice =  (function() {
 	
 	// Héritage
 	for (var element in JMI.script.Base.prototype ) {
-		if( !Slice.prototype[element])
+		if( !Slice.prototype[element]) {
 			Slice.prototype[element] = JMI.script.Base.prototype[element];
+		}
 	}
 	
 	return Slice;

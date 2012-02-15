@@ -37,7 +37,7 @@ JMI.script.TipTimer = (function() {
 		},
 		// :void
 		interrupt: function() {
-			if (this.timer != null) {
+			if (this.timer !== null) {
 			    clearTimeout( this.timer);
 				this.clean(false);
 			}			
@@ -50,14 +50,16 @@ JMI.script.TipTimer = (function() {
 		clean: function(full) {
 			if (this.started) {
 				this.started = false;
-				if (this.plan.applet.planContainer != null) {
+				if (this.plan.applet.planContainer !== null) {
 					 
-					if (this.bounds.width == 0 && this.bounds.height == 0) {
+					if (this.bounds.width === 0 && this.bounds.height === 0) {
 						// Asynchronous URL content loaded (bounds not set)
 						this.slice.setBounds( this.plan.applet, this.plan.applet.curDrawingContext, this.zone.getParent(), this.zone, null, null, null, this.bounds);
 					}
 					this.plan.applet.renderShape(this.plan.applet.restDrawingCanvas, this.bounds.width, this.bounds.height, new JMI.script.Point(this.bounds.x, this.bounds.y));
-					if(full) this.plan.paintCurZone();
+					if(full) {
+						this.plan.paintCurZone();
+					}
 				}
 				delete this.plan.tipTimers[this.key];
 			}

@@ -49,7 +49,7 @@ JMI.script.LinkZone = (function() {
             this.parent = null;
             if (!JMI.script.Base.isEnabled(this.flags, JMI.script.LinkZone.FAKEFROM_BIT | JMI.script.LinkZone.FAKETO_BIT)) {
                 this.bounds = this.restSwatch.getBounds(applet, gDrawingContext, this, false);
-                if (this.curSwatch != null) {
+                if (this.curSwatch !== null) {
                     this.bounds = this.bounds.union(this.curSwatch.getBounds(applet, gDrawingContext, this, true));
                 }
                 this.bounds.inflate(2, 2);
@@ -58,8 +58,8 @@ JMI.script.LinkZone = (function() {
                     h = this.bounds.height;
                 var maxBox = applet.planContainer.map.plan.maxBox;
                 
-                if (w > maxBox.width)  maxBox.width  = w;
-                if (h > maxBox.height) maxBox.height = h;
+                if (w > maxBox.width) { maxBox.width  = w;}
+                if (h > maxBox.height){ maxBox.height = h;}
                 
                 this.bounds = this.bounds.intersection(applet.size.toRectangle());
             }
@@ -75,7 +75,7 @@ JMI.script.LinkZone = (function() {
          * @param applet    WPSApplet owning this zone.
          */
         paintCur: function(applet){
-            if((this.flags & JMI.script.ActiveZone.INVISIBLE_BIT) != 0) return;
+            if((this.flags & JMI.script.ActiveZone.INVISIBLE_BIT) !== 0) {return;}
             
             JMI.util.ImageUtil.clear( applet.curDrawingCanvas, applet.curDrawingContext);
             this.curSwatch.paint(applet, applet.curDrawingContext, this, true, true, JMI.script.Satellite.BASE_TYP, true);
@@ -90,8 +90,9 @@ JMI.script.LinkZone = (function() {
 	
 	// Héritage
 	for (var element in JMI.script.ActiveZone.prototype ) {
-		if( !LinkZone.prototype[element])
+		if( !LinkZone.prototype[element]) {
 			LinkZone.prototype[element] = JMI.script.ActiveZone.prototype[element];
+		}
 	}
 	
 	return LinkZone;

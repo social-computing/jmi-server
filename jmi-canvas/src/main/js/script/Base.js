@@ -33,7 +33,7 @@ JMI.script.Base = (function() {
          * @return True if prop exists.
          */
         isDefined: function(property) {
-            return this.containers[property] != null && this.containers[property] != 'null';
+            return this.containers[property] !== null && this.containers[property] != 'null';
         },
         
         /*
@@ -55,8 +55,9 @@ JMI.script.Base = (function() {
          */
         getValue: function(property, props) {
             var container = this.containers[property];
-            if( container == null || container == 'null')
+            if( container === null || container == 'null') {
             	return null;
+            }
             return container.isBound ? props[container.value] : container.value;
         },
         
@@ -177,7 +178,7 @@ JMI.script.Base = (function() {
         // TODO : portage, methode graphique
         setColor: function(s, property, props) {
             var color = this.getColor(property, props);
-            if (color != null) {
+            if (color !== null) {
                 gDrawingContext.fillStyle = color;
                 return true;
             }
@@ -195,7 +196,7 @@ JMI.script.Base = (function() {
          */
         parseString: function(property, props) {
             var text = this.getString(property, props);
-            return text != null ? this.parseString3(text, props) : null;
+            return text !== null ? this.parseString3(text, props) : null;
         },
         
         /*
@@ -214,7 +215,7 @@ JMI.script.Base = (function() {
         // TODO : portage voir si on peut refusionner avec la method parseString
         parseString2: function(property, props, isHtm) {
             var text = this.getString(property, props);
-            return text != undefined ? JMI.script.Base.parseString4(text, props, isHtm) : undefined;
+            return text !== undefined ? JMI.script.Base.parseString4(text, props, isHtm) : undefined;
         },
         
         /*
@@ -231,12 +232,12 @@ JMI.script.Base = (function() {
         // TODO : portage voir si on peut refusionner avec la method parseString
         parseString3: function(text, props) {
             // Bug fix : javascript
-            var javascript = text.substring(0, 10) === "javascript";
-            var tokens = JMI.script.Base.parseTokens(text);
-            var j, n, max = 0;
-    		for (var i = 0; i < tokens.length; ++i) {
+            var javascript = text.substring(0, 10) === "javascript",
+             	tokens = JMI.script.Base.parseTokens(text),
+            	i, j, n, max = 0;
+    		for (i = 0; i < tokens.length; ++i) {
                 n = tokens[i].getListSize(props);
-                if (n == 0) {
+                if (n === 0) {
                     max = 0;
                     break;
                 }
@@ -247,14 +248,14 @@ JMI.script.Base = (function() {
             for (j = 0; j < max; j ++) {
                 dst[j] = "";
                 
-    			for (var i = 0; i < tokens.length; ++i) {
+    			for (i = 0; i < tokens.length; ++i) {
     				var token = tokens[i];
                     if (javascript) {
                         token.buffer = token.buffer.split( ",").join(String.fromCharCode(0xFFFC));
                     }
                     prop = token.toString(j, props);
                     
-                    if (prop == null) {
+                    if (prop === null) {
                         dst[j] = null;
                         break;
                     }
@@ -308,9 +309,9 @@ JMI.script.Base.FLAGS_VAL = 0;
  */
 JMI.script.Base.parseString4 = function(text, props, isHtm) {
     var tokens = JMI.script.Base.parseTokens(text),
-        token, j, n, max = 0;
+        token, i, j, n, max = 0;
     
-    for (var i = 0; i < tokens.length; ++i) {
+    for (i = 0; i < tokens.length; ++i) {
         n = tokens[i].getListSize(props);
         if (n === 0) {
             max = 0;
@@ -322,11 +323,13 @@ JMI.script.Base.parseString4 = function(text, props, isHtm) {
     var prop;
     
     for (j = 0; j < max; j ++) {
-	    for (var i = 0; i < tokens.length; ++i) {
+	    for (i = 0; i < tokens.length; ++i) {
             prop = tokens[i].toString(j, props);
             dst += prop === null ? " ? " : prop;
         }
-        if (j < max - 1) dst += "<br/>";
+        if (j < max - 1) {
+        	dst += "<br/>";
+        }
     }
     
     return dst;
@@ -357,7 +360,7 @@ JMI.script.Base.getNextTokenProp = function(tokens, includeBit, excludeBit) {
     while(tokens.length > 0) {
         var token = tokens.shift();
         
-        if ((token.flags & includeBit) != 0 && (token.flags & excludeBit) == 0) {
+        if ((token.flags & includeBit) !== 0 && (token.flags & excludeBit) === 0) {
             return token.buffer;
         }
     }
@@ -390,7 +393,7 @@ JMI.script.Base.parseTokens = function(text) {
         }
         else {
             if (isAfterBS ) {
-                if (token == null) {
+                if (token === null) {
                     token = new JMI.script.Token();
                     j = 0;
                 }
@@ -402,7 +405,7 @@ JMI.script.Base.parseTokens = function(text) {
                 // a new prop or list Token begins
                 if (c == '{' || c == '[') {
                     // there was a text Token previously,
-                    if (token != null) {
+                    if (token !== null) {
                         //token.buffer.setLength( j );
                         tokens.push(token);    // store it
                     }
@@ -423,7 +426,7 @@ JMI.script.Base.parseTokens = function(text) {
                 else {
                     
                     // a new text Token begins
-                    if (token == null) {
+                    if (token === null) {
                         // create it
                         token = new JMI.script.Token();
                         j = 0;
@@ -459,5 +462,5 @@ JMI.script.Base.setCharAt = function(str, c, index) {
  * @return      true if the bit is 1, false otherwise.
  */
 JMI.script.Base.isEnabled = function(flags, bit) {
-    return (flags & bit) != 0;
+    return (flags & bit) !== 0;
 };

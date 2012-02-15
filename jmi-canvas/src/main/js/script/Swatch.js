@@ -18,14 +18,14 @@ JMI.script.Swatch = (function() {
          * Satellites are where the real information of this is.
          * :Vector.<Satellite>;
          */
-    	this.satellites,// = satellites;
+    	this.satellites = null;// = satellites;
 
         /**
          * Objects references (MenuX, Slice...) created by the server side.
          * This is used by the events to find menu or slices to pop.
          * :Array;
          */
-    	this.refs; 
+    	this.refs = null; 
 
 		JMI.script.Base.call(this);
 	};
@@ -108,19 +108,19 @@ JMI.script.Swatch = (function() {
                         hasRestBit = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.REST_BIT);
                         hasCurBit  = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.CUR_BIT);
                         satRelTrf  = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone.props);
-                        satTrf     = transfo != null ? transfo.transform(satRelTrf) : null;
+                        satTrf     = transfo !== null ? transfo.transform(satRelTrf) : null;
                         
-                        if(supZone.dir != 10.) {
-                            if (!JMI.script.Base.isEnabled(flags, JMI.script.Satellite.NOSIDED_BIT)) satTrf.direction = supZone.dir;
+                        if(supZone.dir != 10.0) {
+                            if (!JMI.script.Base.isEnabled(flags, JMI.script.Satellite.NOSIDED_BIT)) {satTrf.direction = supZone.dir;}
                             else {
-                                if(JMI.script.Base.isEnabled(supZone.flags, JMI.script.ActiveZone.LEFT_BIT)) satTrf.direction += Math.PI;
+                                if(JMI.script.Base.isEnabled(supZone.flags, JMI.script.ActiveZone.LEFT_BIT)) {satTrf.direction += Math.PI;}
                             }
                         }
                         
                         var dir = satTrf.direction;
                         
                         // draws SubZones
-                        if (zones != null && JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SUB_BIT)) {
+                        if (zones !== null && JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SUB_BIT)) {
                             for (var j = 0; j < zones.length; ++j) {
                             	subZone = zones[j];
                                 satTrf.direction += supZone.stp;
@@ -139,7 +139,7 @@ JMI.script.Swatch = (function() {
                             isCurSub = supZone == curZone;
                             satData  = isCur ? zone.curData[i] : zone.restData[i];
                             
-                            if (zones != null) satTrf.direction = dir;
+                            if (zones !== null) {satTrf.direction = dir;}
                             
                             if ((!isCur || ((hasRestBit && !isCurSub) || (hasCurBit && isCurSub)))) {
                                 satCtr = shape.transformOut(zone, satTrf);
@@ -202,7 +202,7 @@ JMI.script.Swatch = (function() {
                         satRelTrf = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone.props);
                         satTrf    = transfo.transform(satRelTrf, true);
                         
-                        if (supZone.dir != 10.) satTrf.direction = supZone.dir;
+                        if (supZone.dir != 10.0) {satTrf.direction = supZone.dir;}
                         
                         // Gets SuperZone bounds
                         if ((!JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SEL_BIT) || satData.isVisible)
@@ -212,7 +212,7 @@ JMI.script.Swatch = (function() {
                         }
                         
                         // gets SubZones bounds
-                        if (zones != null && JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SUB_BIT)) {
+                        if (zones !== null && JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SUB_BIT)) {
 
                             for (var j = 0; j < zones.length; ++j) {
                             	subZone = zones[j];
@@ -291,7 +291,7 @@ JMI.script.Swatch = (function() {
                             hasSubBit = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SUB_BIT);
                             satRelTrf = sat.getTransfo(JMI.script.Satellite.TRANSFO_VAL, zone.props);
                             
-                            if (zones != null && hasSubBit && hasCurBit && satRelTrf != null && satRelTrf.position == 0.) {
+                            if (zones !== null && hasSubBit && hasCurBit && satRelTrf !== null && satRelTrf.position === 0) {
                                 if (isVisible && sat.contains(planComponent, g, zone, null, null, transfo, pos, true, true)) {
                                     return sat;
                                 }
@@ -304,7 +304,7 @@ JMI.script.Swatch = (function() {
                             hasRestBit  = JMI.script.Base.isEnabled(flags, JMI.script.Satellite.REST_BIT);
                             satTrf      = transfo.transform(satRelTrf, true);
                             
-                            if (isBag && supZone.dir != 10.) satTrf.dir = supZone.dir;
+                            if (isBag && supZone.dir != 10.0) {satTrf.dir = supZone.dir;}
                             
                             // Test if the cursor is the super zone
                             if (JMI.script.Base.isEnabled(flags, JMI.script.Satellite.SUPER_BIT)) {
@@ -317,7 +317,7 @@ JMI.script.Swatch = (function() {
                             }
                             
                             // Or if the cursor is in one of the sub zones 
-                            if (zones != null && hasSubBit) {
+                            if (zones !== null && hasSubBit) {
                                 var j, m = zones.length;
                                 satTrf.direction += (zones.length + 1) * supZone.stp;
                                 
@@ -340,8 +340,7 @@ JMI.script.Swatch = (function() {
                         
                         // Else, if it's a link zone
                         else {
-                            if(isVisible 
-                                && sat.contains(planComponent, g, zone, null, null, transfo, pos, false, true)) {
+                            if(isVisible && sat.contains(planComponent, g, zone, null, null, transfo, pos, false, true)) {
                                 return sat;
                             }
                         }
@@ -350,8 +349,7 @@ JMI.script.Swatch = (function() {
                 
                 // Tests if the cursor is located in the place itself
                 sat = this.satellites[0];
-                if(sat.contains(planComponent, g, zone, null, null, transfo, pos, zones != null, true) 
-                    || (isCurZone && !(zone instanceof JMI.script.LinkZone))) {
+                if(sat.contains(planComponent, g, zone, null, null, transfo, pos, zones !== null, true) || (isCurZone && !(zone instanceof JMI.script.LinkZone))) {
                     return sat;
                 }
             }
@@ -385,9 +383,10 @@ JMI.script.Swatch = (function() {
                     var sels  = sat.parseString(JMI.script.Satellite.SELECTION_VAL, zone.props);
                     var sel = -1;
                     
-                    if (sels != null) {
-                        if(applet.planContainer.map.env.selections[sels[0]] != null)
+                    if (sels !== null) {
+                        if(applet.planContainer.map.env.selections[sels[0]] !== null) {
                             sel = applet.planContainer.map.env.selections[sels[0]];
+                        }
                     }
                     
                     satData.isVisible = sat.isVisible(zone, isTip, applet.planContainer.map.plan.curSel, sel);
@@ -403,8 +402,9 @@ JMI.script.Swatch = (function() {
 	
 	// Héritage
 	for (var element in JMI.script.Base.prototype ) {
-		if( !Swatch.prototype[element])
+		if( !Swatch.prototype[element]) {
 			Swatch.prototype[element] = JMI.script.Base.prototype[element];
+		}
 	}
 	
 	return Swatch;

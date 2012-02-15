@@ -15,27 +15,28 @@ JMI.script.PlanContainer = (function() {
 
 JMI.script.PlanContainer.fromJSON = function ( jsonString) {
 	var planContainer = new JMI.script.PlanContainer();
-	if(jsonString == null) {
+	if(jsonString === null) {
 		planContainer.error = "the json data can't be null";
 	}
 	else {
 		var jmiData = JMI.lib.jsonParse( jsonString, function (key, value) {
+			var result, attr, i;
 	        if (value && typeof value === 'object') {
 	        	if( 'env' === key && value.hasOwnProperty('selections')) {
 	        		var env = new JMI.script.Env();
-	        		for (var attr in value) {
+	        		for (attr in value) {
 	        			env[attr] = value[attr];
     				}
     				return env;
 	        	}
 	        	else if( 'plan' === key && value.hasOwnProperty('nodes')) {
 	        		var plan = new JMI.script.Plan();
-	        		for (var attr in value) {
+	        		for (attr in value) {
 	        			plan[attr] = value[attr];
     				}
     				// Résolution des références
 					var n = plan.nodes.length; 
-					for( var i = 0; i < n; ++i) {
+					for( i = 0; i < n; ++i) {
 						// BagZone : append ActiveZone
 						for (var j = 0; j < plan.nodes[i].subZones.length; ++j) { 
 							plan.nodes.push( plan.nodes[i].subZones[j]);
@@ -43,15 +44,15 @@ JMI.script.PlanContainer.fromJSON = function ( jsonString) {
 					}
 					// Résolution des références
 					// Convert from et to index to Bagzone reference
-					for (var i = 0; i < plan.links.length; ++i) {
+					for (i = 0; i < plan.links.length; ++i) {
 						var link = plan.links[i];
 						if( link.from != -1) {
 							link.from = plan.nodes[ link.from];
-							link.props["_VERTICES"][0] = link.from.props["_VERTICES"][0];
+							link.props._VERTICES[0] = link.from.props._VERTICES[0];
 						}
 						if( link.to != -1) {
 							link.to = plan.nodes[ link.to];
-							link.props["_VERTICES"][1] = link.to.props["_VERTICES"][0];
+							link.props._VERTICES[1] = link.to.props._VERTICES[0];
 						}
 					} 
     				return plan;
@@ -60,20 +61,22 @@ JMI.script.PlanContainer.fromJSON = function ( jsonString) {
 	        		return new JMI.script.Transfo( value.dir, value.pos, value.scl, value.flags);
 	        	}
 	        	else if( 'Slice' === value.cls) {
-	        		var slice = new JMI.script.Slice();
-	        		for (var attr in value) {
-	        			if( attr !== 'cls')
-	        				slice[attr] = value[attr];
+	        		result = new JMI.script.Slice();
+	        		for (attr in value) {
+	        			if( attr !== 'cls') {
+	        				result[attr] = value[attr];
+	        			}
     				}
-    				return slice;
+    				return result;
 	        	}
 	        	else if( 'Satellite' === value.cls) {
-	        		var slice = new JMI.script.Satellite();
-	        		for (var attr in value) {
-	        			if( attr !== 'cls')
-	        				slice[attr] = value[attr];
+	        		result = new JMI.script.Satellite();
+	        		for (attr in value) {
+	        			if( attr !== 'cls') {
+	        				result[attr] = value[attr];
+	        			}
     				}
-    				return slice;
+    				return result;
 	        	}
 	        	else if( 'Point' === value.cls) {
 	        		return new JMI.script.Point( value.x, value.y);
@@ -85,71 +88,80 @@ JMI.script.PlanContainer.fromJSON = function ( jsonString) {
 	        		return new JMI.script.VContainer( value.value, value.bound);
 	        	}
 	        	else if( 'ActiveZone' === value.cls) {
-	        		var shape = new JMI.script.ActiveZone();
-	        		for (var attr in value) {
-	        			if( attr !== 'cls')
-	        				shape[attr] = value[attr];
+	        		result = new JMI.script.ActiveZone();
+	        		for (attr in value) {
+	        			if( attr !== 'cls') {
+	        				result[attr] = value[attr];
+	        			}
     				}
-    				return shape;
+    				return result;
     			}
 	        	else if( 'BagZone' === value.cls) {
-	        		var shape = new JMI.script.BagZone();
-	        		for (var attr in value) {
-	        			if( attr !== 'cls')
-	        				shape[attr] = value[attr];
+	        		result = new JMI.script.BagZone();
+	        		for (attr in value) {
+	        			if( attr !== 'cls') {
+	        				result[attr] = value[attr];
+	        			}
     				}
-    				return shape;
+    				return result;
     			}
 	        	else if( 'LinkZone' === value.cls) {
-	        		var shape = new JMI.script.LinkZone();
-	        		for (var attr in value) {
-	        			if( attr !== 'cls')
-	        				shape[attr] = value[attr];
+	        		result = new JMI.script.LinkZone();
+	        		for (attr in value) {
+	        			if( attr !== 'cls') {
+	        				result[attr] = value[attr];
+	        			}
     				}
-    				return shape;
+    				return result;
     			}
 	        	else if( 'ShapeX' === value.cls) {
-	        		var shape = new JMI.script.ShapeX();
-	        		for (var attr in value) {
-	        			if( attr !== 'cls')
-	        				shape[attr] = value[attr];
+	        		result = new JMI.script.ShapeX();
+	        		for (attr in value) {
+	        			if( attr !== 'cls') {
+	        				result[attr] = value[attr];
+	        			}
     				}
-    				return shape;
+    				return result;
     			}
 	        	else if( 'MenuX' === value.cls) {
-	        		var shape = new JMI.script.MenuX();
-	        		for (var attr in value) {
-	        			if( attr !== 'cls')
-	        				shape[attr] = value[attr];
+	        		result = new JMI.script.MenuX();
+	        		for (attr in value) {
+	        			if( attr !== 'cls') {
+	        				result[attr] = value[attr];
+	        			}
     				}
-    				return shape;
+    				return result;
     			}
 	        	else if( 'FontX' === value.cls) {
-	        		var shape = new JMI.script.FontX();
-	        		for (var attr in value) {
-	        			if( attr !== 'cls')
-	        				shape[attr] = value[attr];
+	        		result = new JMI.script.FontX();
+	        		for (attr in value) {
+	        			if( attr !== 'cls') {
+	        				result[attr] = value[attr];
+	        			}
     				}
-    				return shape;
+    				return result;
     			}
 	        	else if( 'Swatch' === value.cls) {
-	        		var swatch = new JMI.script.Swatch();
-	        		for (var attr in value) {
-	        			if( attr !== 'cls')
-	        				swatch[attr] = value[attr];
+	        		result = new JMI.script.Swatch();
+	        		for (attr in value) {
+	        			if( attr !== 'cls') {
+	        				result[attr] = value[attr];
+	        			}
     				}
-    				return swatch;
+    				return result;
     			}
 	        	else if( 'HtmlText' === value.cls) {
-	        		var swatch = new JMI.script.HTMLText();
-	        		for (var attr in value) {
-	        			if( attr !== 'cls')
-	        				swatch[attr] = value[attr];
+	        		result = new JMI.script.HTMLText();
+	        		for (attr in value) {
+	        			if( attr !== 'cls') {
+	        				result[attr] = value[attr];
+	        			}
     				}
-    				return swatch;
+    				return result;
 		       	} else {
-		       		if( value.hasOwnProperty('cls'))
-		       			aptana.log( key + ' unconverted = ' + value.cls);
+		       		if( value.hasOwnProperty('cls')) {
+		       			//aptana.log( key + ' unconverted = ' + value.cls);
+		       		}
 		         	return value;
 		       	}
 	       	} else {

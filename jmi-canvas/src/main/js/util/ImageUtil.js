@@ -6,7 +6,7 @@ JMI.util.ImageUtil = (function() {
     };
     
 	ImageUtil.prototype = {
-		constructor: JMI.util.ImageUtil,
+		constructor: JMI.util.ImageUtil
 	};
 	
 	return ImageUtil;
@@ -105,4 +105,5 @@ JMI.util.ImageUtil.filterImage = function( gDrawingContext, dim, color) {
 		    gDrawingContext.stroke();
 		}
 	}
-}
+};
+

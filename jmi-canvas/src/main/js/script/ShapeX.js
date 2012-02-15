@@ -87,7 +87,7 @@ JMI.script.ShapeX = (function() {
          */
         contains: function(zone, transfo, center, pos) {
             // it is just a void frame
-            if(!this.isDefined(JMI.script.ShapeX.SCALE_VAL)) return false;
+            if(!this.isDefined(JMI.script.ShapeX.SCALE_VAL)) {return false;}
             
             var points = this.getValue(JMI.script.ShapeX.POLYGON_VAL, zone.props);
             var shapeCenter = this.getCenter(zone);
@@ -174,6 +174,7 @@ JMI.script.ShapeX = (function() {
                 var p = points[0];
                 var shapePos = new JMI.script.Point();
                 var size = Math.round(this.getShapePos(supZone, transfo, center, p, shapePos));
+                var outColor, inColor;
                 
                 // Manage each case of number of points to draw for this shape
                 switch(points.length) {
@@ -191,16 +192,16 @@ JMI.script.ShapeX = (function() {
                         // which means we have to double the radius value.
                         // Jonathan Dray 2011.01.08 : do not double the size anymore, the arc drawing method takes the radius
                         // size = size * 2;
-                        var outColor = slice.getColor(JMI.script.Slice.OUT_COL_VAL, zone.props);
-                        var inColor = slice.getColor(JMI.script.Slice.IN_COL_VAL, zone.props);
+                        outColor = slice.getColor(JMI.script.Slice.OUT_COL_VAL, zone.props);
+                        inColor = slice.getColor(JMI.script.Slice.IN_COL_VAL, zone.props);
                         gDrawingContext.beginPath();
                         gDrawingContext.arc(x, y, size, 0, Math.PI * 2, false);
                         gDrawingContext.closePath();
-                        if(outColor != null) {
+                        if(outColor !== null) {
                             gDrawingContext.strokeStyle = outColor;
                             gDrawingContext.stroke();
                         }
-                        if(inColor != null) {
+                        if(inColor !== null) {
                             gDrawingContext.fillStyle = inColor;
                             gDrawingContext.fill();
                         }
@@ -213,8 +214,8 @@ JMI.script.ShapeX = (function() {
                         
                         var poly = this.getLinkPoly(supZone, fromPoint, toPoint, (((size + 3) / 2)));
                         
-                        var outColor = slice.getColor(JMI.script.Slice.OUT_COL_VAL, supZone.props);
-                        var inColor = slice.getColor(JMI.script.Slice.IN_COL_VAL, supZone.props);
+                        outColor = slice.getColor(JMI.script.Slice.OUT_COL_VAL, supZone.props);
+                        inColor = slice.getColor(JMI.script.Slice.IN_COL_VAL, supZone.props);
                         
                         // Drawing the polygon
                         gDrawingContext.beginPath();
@@ -226,12 +227,12 @@ JMI.script.ShapeX = (function() {
                         }
                         gDrawingContext.closePath();
                         
-                        if(outColor != null) {
+                        if(outColor !== null) {
                             // s.graphics.lineStyle(1, color.color)
                             gDrawingContext.strokeStyle = outColor;
                             gDrawingContext.stroke();
                         }
-                        if(inColor != null) {
+                        if(inColor !== null) {
                             // if (color != null) s.graphics.beginFill(color.color);
                             // if (color != null) s.graphics.endFill();
                             gDrawingContext.fillStyle = inColor;
@@ -263,15 +264,15 @@ JMI.script.ShapeX = (function() {
             var fromOff = 0;
             var toOff = 0;
             
-            if (from != null && to != null) {
+            if (from !== null && to !== null) {
                 if (JMI.script.Base.isEnabled(flags, JMI.script.ShapeX.TAN_LNK_BIT | JMI.script.ShapeX.SEC_LNK_BIT)) {
-                    fromOff = from.props["_SCALE"];
-                    toOff   = to.props["_SCALE"];
+                    fromOff = from.props._SCALE;
+                    toOff   = to.props._SCALE;
                 }
                 if (JMI.script.Base.isEnabled(flags, JMI.script.ShapeX.SEC_LNK_BIT)) {
                     var w2  = width * width;
-                    fromOff = Math.round((.9 * Math.sqrt(fromOff * fromOff - w2)));
-                    toOff   = Math.round((.9 * Math.sqrt(toOff * toOff - w2)));
+                    fromOff = Math.round((0.9 * Math.sqrt(fromOff * fromOff - w2)));
+                    toOff   = Math.round((0.9 * Math.sqrt(toOff * toOff - w2)));
                 }
             }
             
@@ -280,7 +281,7 @@ JMI.script.ShapeX = (function() {
             var N = new JMI.script.Point(B.x - A.x, B.y - A.y);
             var len = Math.round(Math.sqrt(N.x * N.x + N.y * N.y));
             
-            if (len != 0) {
+            if (len !== 0) {
                 N.x = (N.x << 16) / len;
                 N.y = (N.y << 16) / len;
                 len  = (len - fromOff - toOff) >> 1;
@@ -290,10 +291,10 @@ JMI.script.ShapeX = (function() {
                 var V = JMI.script.Point.Scale(N, width).pivot();
                 
                 C = C.add(A);
-                this.addLinkPoint(poly, -1., -1., C, U, V);
-                this.addLinkPoint(poly, -1., 1., C, U, V);
-                this.addLinkPoint(poly, 1., 1., C, U, V);
-                this.addLinkPoint(poly, 1., -1., C, U, V);
+                this.addLinkPoint(poly, -1, -1, C, U, V);
+                this.addLinkPoint(poly, -1, 1, C, U, V);
+                this.addLinkPoint(poly, 1, 1, C, U, V);
+                this.addLinkPoint(poly, 1, -1, C, U, V);
             }
             else{
                 poly.addPoint(A.x, A.y);
@@ -347,11 +348,12 @@ JMI.script.ShapeX = (function() {
                 }
                 */
                 
+                var image;
                 // var image = applet.env.getMedia(imageName); // as Bitmap;
                 
                 // Check if the image has already been loaded
                 if (!applet.planContainer.map.env.hasMedia(imageName)) {
-                    var image = new Image();
+                    image = new Image();
                     var sh = this;
                     image.onload = function() {
                         sh.drawLoadedImage(applet, image, gDrawingContext, zone, imageName, transfo, center, true);
@@ -361,7 +363,7 @@ JMI.script.ShapeX = (function() {
                 }
                 // Draw the image if it has already been loaded
                 else {
-                    var image = applet.env.medias[imageName];
+                    image = applet.planContainer.map.env.medias[imageName];
                     this.drawLoadedImage(applet, image, gDrawingContext, zone, imageNam, transfo, center, false);
                 }
             }
@@ -457,27 +459,28 @@ JMI.script.ShapeX = (function() {
             var p; // :JMI.script.Point
             
             // We are drawing a real Sat!
-            if (center != null) {
+            if (center !== null) {
                 p = center.substract(p0); 
                 pos.x = p.x;
                 pos.y = p.y;
             }
             
-            if (transfo != null) {
+            if (transfo !== null) {
                 p = pos.add(transfo.getCart());
                 pos.x = p.x;
                 pos.y = p.y;
                 scale *= transfo.scale;
             }
             return scale;
-        },
+        }
         
 	};
 	
 	// Héritage
 	for (var element in JMI.script.Base.prototype ) {
-		if(!ShapeX.prototype[element])
+		if(!ShapeX.prototype[element]) {
 			ShapeX.prototype[element] = JMI.script.Base.prototype[element];
+		}
 	}
 	
 	return ShapeX;

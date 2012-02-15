@@ -22,7 +22,7 @@ JMI.script.SatData = (function() {
      * @param flags {int} a valid flags integer value 
      */    
     var SatData = function (flags) {
-        if (arguments.length == 0) {
+        if (arguments.length === 0) {
             flags = null;
         }
         this.flags = flags;

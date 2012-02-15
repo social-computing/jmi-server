@@ -26,19 +26,19 @@ JMI.script.Token = (function() {
          * A bit table holding all the XXX_BITs.
          */
         // :int 
-        this.flags = 0, 
+        this.flags = 0;
         
         /**
          * Number of digit of the integer part if this is a number property.
          */
         // :int
-        this.intSize = 0,
+        this.intSize = 0;
         
         /**
          * Number of digit of the fractional part if this is a float number property.
          */
         // :int
-        this.floatSize = 0,
+        this.floatSize = 0;
         
         /**
          * Maximum nuber of lines in a list property.
@@ -65,8 +65,8 @@ JMI.script.Token = (function() {
             if (JMI.script.Base.isEnabled(this.flags, JMI.script.Token.LIST_BIT)) {
                 // :Array
                 var list = props[this.buffer];
-                size = list != null ? list.length : 0;
-                if (this.lineMax > 0 && size > this.lineMax) size = this.lineMax;
+                size = list ? list.length : 0;
+                if (this.lineMax > 0 && size > this.lineMax) {size = this.lineMax;}
             }
             return size;
         },
@@ -92,14 +92,14 @@ JMI.script.Token = (function() {
                 
                 // Global Properties
                 if (JMI.script.Base.isEnabled(this.flags, JMI.script.Token.GLOBAL_BIT)) {
-                    props = props["ENV"];
+                    props = props.ENV;
                 }
                 
                 // List Properties
                 if (JMI.script.Base.isEnabled(this.flags, JMI.script.Token.LIST_BIT)) {
                     rawProp = props[this.buffer];
                     
-                    if (rawProp != null) {
+                    if (rawProp !== null) {
                         rawProp = (props[ this.buffer])[i];
                     }
                     else {
@@ -113,7 +113,7 @@ JMI.script.Token = (function() {
                 }
                 
                 // prop exists!
-                if (rawProp != null) {
+                if (rawProp !== null) {
                     // :String
                     var prop= rawProp.toString();
                     
@@ -139,7 +139,7 @@ JMI.script.Token = (function() {
                         // int prop
                         else {
                             // if (rawProp is Number )
-                            if (rawProp) prop = '' + rawProp;
+                            if (rawProp) {prop = '' + rawProp;}
                             
                             // fixed size
                             if (this.intSize > 0) {
@@ -170,12 +170,12 @@ JMI.script.Token = (function() {
                                     tokenStr = prop;
                                 }
                                 else {
-                                    tokenStr = extendWS(prop, this.intSize - prop.length);
+                                    tokenStr = this.extendWS(prop, this.intSize - prop.length);
                                 }
                             }
                             else {
                                 tokenStr = prop.substring( 0, this.intSize );
-                                if( this.floatSize > 0) tokenStr += "...";
+                                if( this.floatSize > 0) {tokenStr += "...";}
                             }
                         }
                         
@@ -236,8 +236,10 @@ JMI.script.Token = (function() {
             if (c == '/' && JMI.script.Base.isEnabled(this.flags, JMI.script.Token.LIST_BIT)) {
                 beg = ++ i;
                 // Character.isDigit(...)
-                while (text.charAt(i) >= '0' && text.charAt(i) <= '9') i ++;
-                this.lineMax = parseInt(text.substring(beg, i));
+                while (text.charAt(i) >= '0' && text.charAt(i) <= '9') {
+                	 i ++;
+                }
+                this.lineMax = parseInt(text.substring(beg, i),10);
             }
             
             if (c == '-') {
@@ -252,19 +254,23 @@ JMI.script.Token = (function() {
             beg = i;
             
             // Character.isDigit(...)
-            while (text.charAt( i ) >= '0' && text.charAt( i ) <= '9') i ++;
+            while (text.charAt( i ) >= '0' && text.charAt( i ) <= '9') {
+            	i ++;
+            }
             
             if (text.charAt( i ) == '.') {
                 i ++;
                 // Character.isDigit(...)
-                while (text.charAt( i ) >= '0' && text.charAt( i ) <= '9') i ++;
+                while (text.charAt( i ) >= '0' && text.charAt( i ) <= '9') {
+                	i ++;
+                }
             }
             
             if (i > beg) {
                 // :Number
                 var sizes = text.substring(beg, i);
                 this.intSize = Math.floor(sizes);
-                this.floatSize = Math.round(10. * (sizes - this.intSize));
+                this.floatSize = Math.round(10 * (sizes - this.intSize));
             }
             
             c = text.charAt( i );

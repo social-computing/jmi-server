@@ -4,7 +4,7 @@ JMI.script.Dimension = (function() {
 	
 	var Dimension = function(width, height) {
 	    // If no arguments are given in the constructor call, initialize the instance with 0 values;
-	    if(arguments.length == 0) {
+	    if(arguments.length === 0) {
             width = 0;
             height = 0;
         }

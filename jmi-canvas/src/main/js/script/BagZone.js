@@ -138,8 +138,9 @@ JMI.script.BagZone = (function() {
 	
 	// Héritage
 	for (var element in JMI.script.ActiveZone.prototype ) {
-		if( !BagZone.prototype[element])
+		if( !BagZone.prototype[element]) {
 			BagZone.prototype[element] = JMI.script.ActiveZone.prototype[element];
+		}
 	}
 	
 	return BagZone;

@@ -25,13 +25,13 @@ JMI.script.ColorX = (function() {
         constructor: JMI.script.ColorX,
 
         getColor: function(props) {
-            if(this.scolor == null) {
+            if(this.scolor === null) {
                 return this.toHex();
             } 
             else {
                 var str = JMI.script.Base.parseString4(this.scolor, props, false);
                 // TODO : portage, supprimer parseInt et renvoyer un code couleur hexadecimal
-                var colValue =  (str == null) ? 0 : parseInt(str);
+                var colValue =  (str === null) ? 0 : parseInt(str,10);
                 return new JMI.script.ColorX(colValue).toHex();
             }
         },

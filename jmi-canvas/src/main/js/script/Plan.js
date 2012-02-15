@@ -47,7 +47,7 @@ JMI.script.Plan = (function() {
          * Current Satellite (the one that is active).
          * If there is no current Satellite, it should be null.
          */
-        this.curSat;
+        this.curSat = null;
         
         /**
          * Bounding box of the Plan before resizing (pixels).
@@ -69,13 +69,13 @@ JMI.script.Plan = (function() {
          * Current super BagZone (the one that is active).
          * If there is no current ActiveZone, it should be null.
          */
-        this.curZone;
+        this.curZone = null;
         
         /**
          * Current ActiveZone (the one that is active). This can be a subZone, different from curZone.
          * If there is no current ActiveZone, it should be null.
          */
-        this.newZone;
+        this.newZone = null;
         
         /**
          * The this.applet holding this Plan.
@@ -108,7 +108,9 @@ JMI.script.Plan = (function() {
 	    
 	    // Reset the BBOX of the biggest zone
 	    this.prevBox = new JMI.script.Rectangle(dim.width >> 1, dim.height >> 1, 1, 1);
-	    if (zones == this.links) this.maxBox = new JMI.script.Dimension();
+	    if (zones == this.links) {
+	    	this.maxBox = new JMI.script.Dimension();
+	    }
 	    
 	    // Reversed order so subZones are initialized before supZones!
 		for (i = n - 1 ; i >= 0 ; i--) {
@@ -135,9 +137,10 @@ JMI.script.Plan = (function() {
      * @param isRev	           True if the array is drawn from in reversed order. That means from n-1 to 0.
      */
 	paintZones: function(gDrawingContext, zones, n, isFront, showTyp, showLinks, isRev) {
+		var i;
 		//zones[0].paint(this.applet, s, false, isFront, showTyp, showLinks);
 	    if (isRev) {
-	        for (var i = n - 1 ; i >= 0 ; i--) {
+	        for (i = n - 1 ; i >= 0 ; i--) {
 	            zones[i].paint(this.applet, gDrawingContext, false, isFront, showTyp, showLinks);
 	        }
 	    }
@@ -174,7 +177,7 @@ JMI.script.Plan = (function() {
 		this.paintZones(restDrawingContext, this.nodes, this.nodesCnt, false, JMI.script.Satellite.ALL_TYP, true, true);
 	    
 	    // Filters backImg so it looks ghosted
-		if(this.applet.planContainer.map.env.filterColor != null) {
+		if(this.applet.planContainer.map.env.filterColor !== null) {
 			backDrawingContext.drawImage( this.applet.restDrawingCanvas, 0, 0);
 			JMI.util.ImageUtil.filterImage( backDrawingContext, dim, this.applet.planContainer.map.env.filterColor.getColor());
 		}
@@ -200,15 +203,15 @@ JMI.script.Plan = (function() {
 	updateZoneAt: function(p) {
 		var cSat = JMI.script.Satellite,
 			zone = JMI.script.ActiveZone,
-	    	parent = this.curZone != null ? this.curZone.getParent() : null,
+	    	parent = this.curZone !== null ? this.curZone.getParent() : null,
 	        i;
 	    
 		// Check if there is a current Active Zone (Satellite ?)
-	    if(this.curSat != null) {
+	    if(this.curSat !== null) {
 	        cSat = this.curZone.curSwatch.getSatAt(this.applet, this.applet.curDrawingContext, parent, p, true);
 	        
 			// The cursor is in the current Zone
-	        if (cSat != null) {
+	        if (cSat !== null) {
 				//this.applet.log("a current zone is hovered");
 	            return this.updateCurrentZone(cSat, p);
 	        }
@@ -223,7 +226,7 @@ JMI.script.Plan = (function() {
 	            cSat = zone.restSwatch.getSatAt(this.applet, this.applet.curDrawingContext, zone, p, false);
 	            
 				// The cursor is on this node
-	            if(cSat != null) {
+	            if(cSat !== null) {
 					//this.applet.log("an inactive zone is hovered")
 	                return this.updateCurrentZone(cSat, p);
 	            }
@@ -236,13 +239,13 @@ JMI.script.Plan = (function() {
 	        zone = this.links[i];
 			
 			// We know p is not in curZone so don't test it!
-	        if (zone != parent && zone.curSwatch != null) {                                                
+	        if (zone != parent && zone.curSwatch !== null) {                                                
 				
 				// If this zone has no current Swatch, it can't be current.
 	            cSat = zone.restSwatch.getSatAt(this.applet, this.applet.curDrawingContext, zone, p, false);
 	            
 				// The cursor is on this link
-	            if (cSat != null) {
+	            if (cSat !== null) {
 					//this.applet.log("a link is hovered")
 	                return this.updateCurrentZone(cSat, p);
 	            }
@@ -279,8 +282,8 @@ JMI.script.Plan = (function() {
 			// If flying over background reset to default arrow
 	        var cursTyp = 'default';    
 			
-	        if (this.curZone != null &&
-				(this.newZone == null || this.curZone.getParent() != this.newZone.getParent())) {
+	        if (this.curZone !== null &&
+				(this.newZone === null || this.curZone.getParent() != this.newZone.getParent())) {
 				// Restore its rest image
 	            //ON rollover non active zone => redraw
 				var curZoneBounds = this.curZone.getParent().bounds;
@@ -290,7 +293,7 @@ JMI.script.Plan = (function() {
 	        this.curSat = cSat;
 	        
 			// A new Zone is hovered, let's paint it!
-	        if (this.curSat != null && (this.curZone != this.newZone)) {
+	        if (this.curSat !== null && (this.curZone != this.newZone)) {
 	            this.curZone = this.newZone;
 	            this.paintCurZone();
  	            this.curSat.execute( this.applet, this.curZone, p, JMI.script.Satellite.HOVER_VAL);
@@ -298,7 +301,7 @@ JMI.script.Plan = (function() {
 	        }
 	        else {
 	            this.curZone = this.newZone;
-	            if (this.curSat == null) this.applet.showStatus('');
+	            if (this.curSat === null) {this.applet.showStatus('');}
 	        }
 	        document.body.style.cursor = cursTyp;
 	        return true;
@@ -314,7 +317,7 @@ JMI.script.Plan = (function() {
 	 */
 	paintCurZone: function() {
 		// A new Zone is hovered, let's paint it!
-		if (this.curZone != null) {
+		if (this.curZone !== null) {
 	        this.curZone.getParent().paintCur( this.applet);
 	    }
 	},
@@ -331,14 +334,15 @@ JMI.script.Plan = (function() {
 	popSlice: function( zone, slice, delay, length, key) {
 		var tipTimer = this.tipTimers[key];
 		
-		if ( tipTimer != null )
+		if ( tipTimer)
 		{
 			if ( tipTimer.zone != zone) {
 				tipTimer.interrupt();
 			}
 			else {
-				if( tipTimer.started)
+				if( tipTimer.started) {
 					return;
+				}
 			}
 		}
 		this.tipTimers[key] = new JMI.script.TipTimer( this, zone, slice, key, delay, length);
@@ -349,9 +353,7 @@ JMI.script.Plan = (function() {
 	 * @param dim	New size of the this.applet.
 	 */
 	resize: function(dim) {
-	    if (this.prevBox != null
-	            && ((this.prevBox.width != dim.width) || (this.prevBox.height != dim.height))
-				&& dim.width > 100 && dim.height > 100) {
+	    if (this.prevBox !== null && ((this.prevBox.width != dim.width) || (this.prevBox.height != dim.height)) && dim.width > 100 && dim.height > 100) {
 			var i;
 	        var margin = 10;
 	        var scale; //:Number;
@@ -379,8 +381,8 @@ JMI.script.Plan = (function() {
 			for (i = 0 ; i < this.nodesCnt ; i++) {
 				zone = this.nodes[i];
 	            this.resizePoint(zone, 0, dx, dy, sx, sy);
-	            scale = zone.props["_SCALE"];
-	            zone.props["_SCALE"] = s * scale;
+	            scale = zone.props._SCALE;
+	            zone.props._SCALE = s * scale;
 	            // Jonathan Dray : a quoi correspond cette instruction en flash ? 
 	            // Reset des datas de la zone ?
 	            // zone.datas.length = 0;
@@ -400,11 +402,11 @@ JMI.script.Plan = (function() {
 	            isFakeFrom = JMI.script.Base.isEnabled(link.flags, JMI.script.LinkZone.FAKEFROM_BIT);
 	            isFakeTo   = JMI.script.Base.isEnabled(link.flags, JMI.script.LinkZone.FAKETO_BIT);
 	            
-	            if (isFakeFrom)    this.resizePoint(link, 0, dx, dy, sx, sy);
-	            else if (isFakeTo) this.resizePoint(link, 1, dx, dy, sx, sy);
+	            if (isFakeFrom)    {this.resizePoint(link, 0, dx, dy, sx, sy);}
+	            else if (isFakeTo) {this.resizePoint(link, 1, dx, dy, sx, sy);}
 	            
-	            scale = link.props["_SCALE"];
-	            link.props["_SCALE"] = s * scale;
+	            scale = link.props._SCALE;
+	            link.props._SCALE = s * scale;
 	            //link.datas = null;
 	            link.datas = {};
 			}
@@ -425,10 +427,10 @@ JMI.script.Plan = (function() {
 	 * @param sy	Vertical scaling after translation.
 	 */
 	resizePoint: function(zone, i, dx, dy, sx, sy) {
-	    var p = zone.props["_VERTICES"][i];
+	    var p = zone.props._VERTICES[i];
 	    p.x = Math.round(sx * (p.x - dx));
 	    p.y = Math.round(sy * (p.y - dy));
-	},
+	}
 	
     };
      

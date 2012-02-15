@@ -54,15 +54,16 @@ JMI.script.MenuX = (function() {
 	        
 	        for ( j = 0; j < n; j ++ )
 	        {
-	            if ( n > 1|| (n == 1 && labels != null))
+	            if ( n > 1|| (n == 1 && labels !== null))
 	            {
 					subMenu	= [];
 					menuItm = {};
 					menuItm.label = labels[j];
 					menuItm.children = subMenu;
 	                dst.addItem( menuItm );
-	                if( n > 1)
+	                if( n > 1) {
 	                    k = j;
+	                }
 	            }
 	            else
 	            {
@@ -83,23 +84,26 @@ JMI.script.MenuX = (function() {
 	                }
 	                else
 	                {
-	                    if ( menu.parseMenu( subMenu, zone ))
+	                    if ( menu.parseMenu( subMenu, zone )) {
 	                        isEmpty = false;
+	                    }
 	                    else
 	                    {
 	                        subMenu.removeItemAt( subMenu.length - 1);
 	                        var subitems = menu.parseString( JMI.script.MenuX.TEXT_VAL, zone.props);
-	                        if( subitems != null && subitems.length > 0)
+	                        if( subitems !== null && subitems.length > 0)
 	                        {
-	                            menuItm = new Object;
+	                            menuItm = {};
 								menuItm.label = subitems[0];
 	                            // TODO menuItm.setFont( menu.getFont( zone ));
 	                            var fontMenu = menu.getFont( JMI.script.MenuX.FONT_VAL, zone.props).getTextFormat(zone.props);
-	                            if ( fontMenu != null) {
-	                                if (fontMenu.bold == true)
+	                            if ( fontMenu !== null) {
+	                                if (fontMenu.bold === true) {
 	                                    menuItm.bold = "true";
-	                                else
+	                                }
+	                                else {
 	                                    menuItm.bold = "false";
+	                                }
 	                                menuItm.font = fontMenu.font;
 	                            }
 	                            menuItm.enabled = false;
@@ -130,26 +134,27 @@ JMI.script.MenuX = (function() {
 	        //itemStr;
 	        var font = this.getTextFormat( zone.props);
 	        var its = parseString3( title, zone.props);
-	        var urls = url != null ? parseString3( url, zone.props) : null;
-	        var redirs = redir != null ? parseString3( redir, zone.props) : urls;
+	        var urls = url !== null ? parseString3( url, zone.props) : null;
+	        var redirs = redir !== null ? parseString3( redir, zone.props) : urls;
 	        //MenuItem    item;
 	        var i;
 	        var n	= its.length;
-	        var m	= redirs != null ? redirs.length : 0;
+	        var m	= redirs !== null ? redirs.length : 0;
 	        
 	        if ( j == -1)
 	        {
 	            for ( i = 0; i < n; i ++ )
 	            {
-	                addItem( dst, its[i], redirs != null ? redirs[i] : null, font );
+	                addItem( dst, its[i], redirs !== null ? redirs[i] : null, font );
 	            }
 	        }
 	        else
 	        {
 	            i	= m - 1< j ? m - 1: j;
 	            j	= n - 1< j ? n - 1: j;
-	            if( i >= 0 && j >= 0)
-	                addItem( dst, its[j], redirs != null ? redirs[i] : null, font );
+	            if( i >= 0 && j >= 0) {
+	                addItem( dst, its[j], redirs !== null ? redirs[i] : null, font );
+	            }
 	        }
 	        
 	        return n > 0;
@@ -165,17 +170,20 @@ JMI.script.MenuX = (function() {
 	     */
 	    addItem: function( menu, title, url, font) {
 	        var item = {};
-	        if( url == null && title == "-") {
+	        if( url === null && title == "-") {
 				item.type = "separator";	
 			} else {
 				item.label = title;
-				if ( url != null )
+				if ( url !== null ) {
 					item.action = url;
-	            if ( font != null) {
-	                if (font.bold == true)
+				}
+	            if ( font !== null) {
+	                if (font.bold === true) {
 	                    item.bold = "true";
-	                else
+	                }
+	                else {
 	                    item.bold = "false";
+	                }
 	                item.font = font.font;
 	            }
 			}
@@ -190,14 +198,15 @@ JMI.script.MenuX = (function() {
 	    getTextFormat: function(props) {
 	        var font = this.getFont( JMI.script.MenuX.FONT_VAL, props);
 	        
-	        return font != null ? font.init( props ): null;
+	        return font !== null ? font.init( props ): null;
 	    }
 	};
 	
 	// Héritage
 	for (var element in JMI.script.Base.prototype ) {
-		if( !MenuX.prototype[element])
+		if( !MenuX.prototype[element]) {
 			MenuX.prototype[element] = JMI.script.Base.prototype[element];
+		}
 	}
 	return MenuX;
 }());		

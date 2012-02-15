@@ -4,7 +4,7 @@ JMI.script.Rectangle = (function() {
 
     var Rectangle = function(x, y, width, height) {
         // If no arguments are given in the constructor call, initialize the instance with 0 values;
-        if(arguments.length == 0) {
+        if(arguments.length === 0) {
             x = 0;
             y = 0;
             width = 0;
@@ -40,7 +40,7 @@ JMI.script.Rectangle = (function() {
          * @param src   Source Rectangle.
          */
         merge: function(src) {
-            if(this.width * this.height != 0) {
+            if(this.width * this.height !== 0) {
                 this.union(src);
             }
             else {

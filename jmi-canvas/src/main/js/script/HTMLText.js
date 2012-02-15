@@ -56,13 +56,16 @@ JMI.script.HTMLText = (function() {
 			this.blur		= blur;
 			this.rounded   = rounded;
 			
-			this.font = new Object();
+			this.font = {};
 			this.font.font = fontNam;
 			this.font.size = fontSiz;
 			this.font.color = textCol;
-			if (( fontStl & BOLD )!= 0)  this.font.bold = true;
-			if (( fontStl & ITALIC )!= 0) this.font.italic = true;
-			
+			if (( fontStl & BOLD )!== 0) {
+				this.font.bold = true;
+			}
+			if (( fontStl & ITALIC )!== 0) {
+				this.font.italic = true;
+			}
 			this.font.leftMargin = margin.left;
 			this.font.rightMargin = margin.right;
         },
@@ -72,11 +75,12 @@ JMI.script.HTMLText = (function() {
 			this.font.init( zone.props);
 			this.inColor = base.getColor( JMI.script.HTMLText.IN_COL_VAL, zone.props);
 			this.outColor = base.getColor( JMI.script.HTMLText.OUT_COL_VAL, zone.props);
-			this.blur = parseInt( base.parseString( JMI.script.HTMLText.BLUR_COL_VAL, zone.props )[0]);
+			this.blur = parseInt( base.parseString( JMI.script.HTMLText.BLUR_COL_VAL, zone.props )[0],10);
 			this.rounded = base.getInt( JMI.script.HTMLText.ROUNDED_COL_VAL, zone.props);
 			var color = base.getValue( JMI.script.HTMLText.TEXT_COL_VAL, zone.props);
-			if( color != null)
+			if( color !== null) {
 				this.font.color = color.getColor();
+			}
 
 			this.body          = new JMI.script.FormatToken();
 			this.body.flags  = base.getFlags( zone.props );
@@ -89,8 +93,12 @@ JMI.script.HTMLText = (function() {
 			this.heap.push( "f=" + this.font.name);
 			this.wCur = 0;
 	
-			if (( this.font.style & JMI.script.FontX.BOLD )!= 0 )   this.heap.push( "b" );
-			if (( this.font.style & JMI.script.FontX.ITALIC )!= 0 ) this.heap.push( "i" );
+			if (( this.font.style & JMI.script.FontX.BOLD )!== 0 )   {
+				this.heap.push( "b" );
+			}
+			if (( this.font.style & JMI.script.FontX.ITALIC )!== 0 ) {
+				this.heap.push( "i" );
+			}
 		},
         
         /**
@@ -107,15 +115,16 @@ JMI.script.HTMLText = (function() {
          * @return			A new or existing HTMLText whose bounds are initilized.
          * @throws UnsupportedEncodingException 
          */
-        getHText: function( applet, gDrawingContext, zone, transfo, center, supCtr, textKey) // throws UnsupportedEncodingException
-        {
+        getHText: function( applet, gDrawingContext, zone, transfo, center, supCtr, textKey) {
         	// Voir Slice.js ligne 101 : textKey
         	// TODO later : difficulté à trouver la bonne clé (textKey), voir Slice.js paint
             var htmlTxt = null;//zone.datas[ textKey ];
             
-            if ( center == null )	center = supCtr;
+            if ( center === null ) {
+            	center = supCtr;
+            }
             
-            if ( htmlTxt == null )
+            if ( htmlTxt === null )
             {
 				htmlTxt = new JMI.script.HTMLText();
 				var lines = this.parseString2( JMI.script.HTMLText.TEXT_VAL, zone.props, true );
@@ -141,8 +150,9 @@ JMI.script.HTMLText = (function() {
         },
         
         tokenize: function( text, sep, index) {
-        	if( !index)
+        	if( !index) {
         		index = 0;
+        	}
         	var tokens = [];
         	if( index >= sep.length) {
         		tokens.push( text);
@@ -150,27 +160,33 @@ JMI.script.HTMLText = (function() {
         	}
         	var separator = sep[index];
         	var tks = text.split(separator);
-        	if( text[0] == separator)
+        	if( text[0] == separator) {
         		tokens.push(separator);
+        	}
         	for( var i = 0 ; i < tks.length; ++i) {
         		tokens = tokens.concat( this.tokenize( tks[i], sep, index+1));
-        		if( i < tks.length-1)
+        		if( i < tks.length-1) {
         			tokens.push(separator);
+        		}
         	}
-        	if( text[text.length-1] == separator)
+        	if( text[text.length-1] == separator) {
         		tokens.push(separator);
+        	}
         	return tokens;
         },
         removeElement: function( array, value) {
         	var found = false;
         	for( var i = 0; i < array.length; ++i) {
-        		if( array[i] == value) 
+        		if( array[i] == value) {
         			found = true;
-       			if( found  && i < array.length-1)
+        		}
+       			if( found  && i < array.length-1) {
         			array[i] = array[i+1];
+        		}
         	}
-       		if( found)
+       		if( found) {
         		array.pop();
+        	}
 		},        
 	 	/**
 		 * Parses this to extract the Tokens using a line of text.
@@ -216,7 +232,7 @@ JMI.script.HTMLText = (function() {
 						textTok = this.updateTag( applet, gDrawingContext, tokenStr );
 	
 						// An real Tag
-						if ( textTok != null )
+						if ( textTok !== null )
 						{
 							isText  = false;
 						}
@@ -251,7 +267,7 @@ JMI.script.HTMLText = (function() {
 			}
 	
 			// Don't forget the last or only piece of text
-			if ( prevStr != null )
+			if ( prevStr !== null )
 			{
 				this.updateText( gDrawingContext, prevStr, textTok, isText );
 			}
@@ -279,18 +295,18 @@ JMI.script.HTMLText = (function() {
 	
 				if ( token instanceof JMI.script.FormatToken) // a <br> or <p> or </p>
 				{
-					if ( fTok != null )
+					if ( fTok !== null )
 					{
-						y += fTok.dMax + ( fTok.margin != null ? fTok.margin.bottom : 0 );
+						y += fTok.dMax + ( fTok.margin !== null ? fTok.margin.bottom : 0 );
 					}
 	
 					fTok    = token;
 	
 					var leftLen = this.body.width - fTok.width;
 	
-					x   = ( fTok.flags & JMI.script.HTMLText.CENTER_BIT )!= 0 ? leftLen >> 1 :(( fTok.flags & JMI.script.HTMLText.RIGHT_BIT )!= 0 ? leftLen : 0 );
-					x  += margin.left +( fTok.margin != null ? fTok.margin.left : 0 );
-					y  += fTok.aMax +( fTok.margin != null ? fTok.margin.top : 0 );
+					x   = ( fTok.flags & JMI.script.HTMLText.CENTER_BIT )!== 0 ? leftLen >> 1 :(( fTok.flags & JMI.script.HTMLText.RIGHT_BIT )!== 0 ? leftLen : 0 );
+					x  += margin.left +( fTok.margin !== null ? fTok.margin.left : 0 );
+					y  += fTok.aMax +( fTok.margin !== null ? fTok.margin.top : 0 );
 					this.removeElement( this.tokens, token);
 					i --;
 					n --;
@@ -306,7 +322,7 @@ JMI.script.HTMLText = (function() {
 	
 			this.bounds = new JMI.script.Rectangle( 0, 0, this.body.width + margin.left + margin.right-1, y + margin.bottom );
 			this.bounds.add( JMI.script.HTMLText.MARGIN*2, JMI.script.HTMLText.MARGIN*2);
-			if( this.outColor != null) {
+			if( this.outColor !== null) {
 			 	this.bounds.add( JMI.script.HTMLText.BORDER_WIDTH*2, JMI.script.HTMLText.BORDER_WIDTH*2);
 			 }
 		},
@@ -323,9 +339,8 @@ JMI.script.HTMLText = (function() {
 			if ( text.length > 0 )
 			{
 				var metrics = gDrawingContext.measureText( text);
-				// TODO
-				var             a       = 0 //fm.getAscent(),
-								d       = Math.round( this.font.size * 96 / 72); //fm.getDescent(),
+				var             a       = 0, //fm.getAscent(),
+								d       = Math.round( this.font.size * 96 / 72), //fm.getDescent(),
 								w       = metrics.width,
 								h       = Math.round( this.font.size * 96 / 72);
 
@@ -336,7 +351,7 @@ JMI.script.HTMLText = (function() {
 	
 					textTok.text     += text;
 					textTok.bounds.width += w;
-					if ( textTok.bounds.height < h ) textTok.bounds.height = h;
+					if ( textTok.bounds.height < h ) {textTok.bounds.height = h;}
 				}
 				// The previous token was a formating one.
 				else
@@ -347,9 +362,12 @@ JMI.script.HTMLText = (function() {
 					textTok.bounds    = new JMI.script.Rectangle ( 0, 0, w, h );
 				}
 	
-				if ( a > this.body.aMax )   this.body.aMax  = a;
-				if ( d > this.body.dMax )   this.body.dMax  = d;
-	
+				if ( a > this.body.aMax ) {
+					this.body.aMax  = a;
+				}
+				if ( d > this.body.dMax ) {
+					this.body.dMax  = d;
+				}
 				this.wCur             += w;
 			}
 		},
@@ -380,7 +398,7 @@ JMI.script.HTMLText = (function() {
 					if ( tempTag.charAt( 0 )== nxtChar ) // ! very simple verification !
 					{
 						textTok = closeTag( applet, gDrawingContext, tempTag );
-						if ( nxtChar != 'p' )   return textTok;
+						if ( nxtChar != 'p' )   {return textTok;}
 					}
 					else
 					{
@@ -393,15 +411,16 @@ JMI.script.HTMLText = (function() {
 				var			prevMrg = prevTok.margin,
 							margin  = this.body.margin;
 				var         flags   = this.body.flags,
-							width   = this.wCur +( prevMrg != null ? prevMrg.left + prevMrg.right : 0 );
+							width   = this.wCur +( prevMrg !== null ? prevMrg.left + prevMrg.right : 0 );
 	
 				// Start of Tag	+ </p>
 				if ( tag=="br" || tag=="br/"  || begChar == 'p' || tag == "/p" )
 				{
 					if ( tag == "br" || tag == "br/")
 					{
-						if ( prevMrg != null )
+						if ( prevMrg !== null ) {
 							margin  = prevMrg;
+						}
 						flags   = prevTok.flags;
 					}
 	
@@ -410,7 +429,7 @@ JMI.script.HTMLText = (function() {
 					{
 						var  alignStr    = readAtt( tag, "a" );
 	
-						if ( alignStr != null )
+						if ( alignStr !== null )
 						{
 							var    align   = alignStr.charAt( 0 ).toLowerCase();
 	
@@ -419,7 +438,7 @@ JMI.script.HTMLText = (function() {
 	
 						margin  = readMargin( tag );
 	
-						if ( tag.length > 1 && alignStr == null && margin == null )
+						if ( tag.length > 1 && alignStr === null && margin === null )
 						{
 							flags   = m_body.flags;
 							applet.log( "[updateTag] syntax error Tag : " + tag );
@@ -442,11 +461,11 @@ JMI.script.HTMLText = (function() {
 					this.wCur  = 0;
 	
 					// Stores the max width of all lines including its margins
-					if ( width > this.body.width )   this.body.width  = width;
+					if ( width > this.body.width )   {this.body.width  = width;}
 	
 					this.curTok          = new JMI.script.FormatToken();
 					this.curTok.flags    = flags;
-					this.curTok.margin   = margin == null ? this.body.margin : margin;
+					this.curTok.margin   = margin === null ? this.body.margin : margin;
 	
 					this.tokens.push( this.curTok );
 	
@@ -490,7 +509,7 @@ JMI.script.HTMLText = (function() {
 				{
 					rgb = parseInt( tag.substr( 2 ), 16);// #RRGGBB
 	
-					if ( color == null || color.getRGB()== rgb )
+					if ( color === null || color.getRGB()== rgb )
 					{
 						if ( subtag == "c=" )
 						{
@@ -526,7 +545,7 @@ JMI.script.HTMLText = (function() {
 				}
 				else if ( subtag == "s=" )
 				{
-					this.font.size  = parseInt( tag.substr( 2 ));
+					this.font.size  = parseInt( tag.substr( 2 ),10);
 				}
 				else if ( subtag == "f=" )
 				{
@@ -557,9 +576,13 @@ JMI.script.HTMLText = (function() {
 	
 			this.removeElement( heap, tag );
 	
-			if ( c == 'b' )         this.style &= ~Font.BOLD;
-			else if ( c == 'i' )    this.style &= ~Font.ITALIC;
-	
+			if ( c == 'b' ) {
+				this.style &= ~Font.BOLD;
+			}
+			else if ( c == 'i' ) {
+				this.style &= ~Font.ITALIC;
+			}
+				
 			if ( isGfx( c ))
 			{
 				while ( i -- > 0 )
@@ -589,10 +612,10 @@ JMI.script.HTMLText = (function() {
             var xMax = size.width - this.bounds.width - 1,
                 yMax = size.height - this.bounds.height - 1;
             
-            if (( dir & 8)!= 0)         pos.x = xMax;
-            else if (( dir & 4)!= 0)    pos.x = xMax >> 1;
-            if (( dir & 2)!= 0)         pos.y = yMax;
-            else if (( dir & 1)!= 0)    pos.y = yMax >> 1;
+            if (( dir & 8)!== 0)         {pos.x = xMax;}
+            else if (( dir & 4)!== 0)    {pos.x = xMax >> 1;}
+            if (( dir & 2)!== 0)         {pos.y = yMax;}
+            else if (( dir & 1)!== 0)    {pos.y = yMax >> 1;}
             
             this.drawText3( gDrawingContext, size, pos );
         },
@@ -614,23 +637,26 @@ JMI.script.HTMLText = (function() {
          */
         drawText3: function( gDrawingContext, size, pos) {
 			var borderWidth = 0;
-			if ( this.outColor != null )
+			if ( this.outColor !== null ) {
 				borderWidth = JMI.script.HTMLText.BORDER_WIDTH;
-            if ( this.inColor != null )
+			}
+            if ( this.inColor !== null )
             {
             	gDrawingContext.lineWidth = '1';
-				if ( this.outColor != null ) {
+				if ( this.outColor !== null ) {
 					gDrawingContext.strokeStyle = this.outColor;
-					if( this.rounded == -1)
+					if( this.rounded == -1) {
 						gDrawingContext.strokeRect(pos.x, pos.y, this.bounds.width, this.bounds.height);
+					}
 					else {
 						JMI.util.ImageUtil.roundRect( gDrawingContext, pos.x, pos.y, this.bounds.width, this.bounds.height, this.rounded);
 						gDrawingContext.stroke();
 					}
 				}
 				gDrawingContext.fillStyle = this.inColor;
-				if( this.rounded == -1)
+				if( this.rounded == -1) {
 					gDrawingContext.fillRect(pos.x+borderWidth, pos.y+borderWidth, this.bounds.width-2*borderWidth, this.bounds.height-2*borderWidth);
+				}
 				else {
 					JMI.util.ImageUtil.roundRect( gDrawingContext, pos.x+borderWidth, pos.y+borderWidth, this.bounds.width-2*borderWidth, this.bounds.height-2*borderWidth, this.rounded);
 					gDrawingContext.fill();
@@ -644,7 +670,7 @@ JMI.script.HTMLText = (function() {
 				textTok.paint( gDrawingContext, pos, borderWidth);
 			}
 
-			if ( this.oneLine && this.inColor == null) // draw reflection only for one line boxes
+			if ( this.oneLine && this.inColor === null) // draw reflection only for one line boxes
             {
             	// TODO portage Non !!!
 /*                var white:ColorTransform = new ColorTransform();
@@ -669,8 +695,8 @@ JMI.script.HTMLText = (function() {
          * @param center	Center of this before the transformation.
          */
         setTextBnds: function( size, flags, posFlags, transfo, supCtr, center) {
-            var isFloat = JMI.script.Base.isEnabled( flags, JMI.script.HTMLText.FLOAT_BIT );
-            var dx = 0,
+            var isFloat = JMI.script.Base.isEnabled( flags, JMI.script.HTMLText.FLOAT_BIT ),
+                dx = 0,
                 dy	= 0,
                 x = center.x,
                 y = center.y,
@@ -679,27 +705,27 @@ JMI.script.HTMLText = (function() {
                 w2  = w >> 1,
                 h2  = h >> 1;
             
-            if ( supCtr != null )
+            if ( supCtr !== null )
             {
                 dx = x - supCtr.x;
                 dy = y - supCtr.y;
             }
             
-            if ( JMI.script.Base.isEnabled( flags, JMI.script.HTMLText.CORNER_BIT ) && supCtr != null )
+            if ( JMI.script.Base.isEnabled( flags, JMI.script.HTMLText.CORNER_BIT ) && supCtr !== null )
             {
-                if (( posFlags & JMI.script.ActiveZone.SIDE_BIT )!= 0)
+                if (( posFlags & JMI.script.ActiveZone.SIDE_BIT )!== 0)
                 {
-                    x += ( posFlags & JMI.script.ActiveZone.LEFT_BIT )!= 0? w2 : -w2;
+                    x += ( posFlags & JMI.script.ActiveZone.LEFT_BIT )!== 0? w2 : -w2;
                 }
                 else
                 {
-                    if ( dx != 0)
+                    if ( dx !== 0)
                     {
                         x += dx > 0? w2 : -w2;
                     }
                 }
                 
-                if ( dy != 0)
+                if ( dy !== 0)
                 {
                     y += dy > 0? h2 : -h2;
                 }
@@ -710,7 +736,7 @@ JMI.script.HTMLText = (function() {
                 y += h2 + 32; // cursor height
             }
             
-            if ( transfo != null )
+            if ( transfo !== null )
             {
                 var dp = transfo.getCart();
                 x += dp.x;
@@ -722,11 +748,11 @@ JMI.script.HTMLText = (function() {
             
             if ( isFloat )  // avoid boundaries!
             {
-                if ( x < 0)    x = 4;
-                else if ( x + w-1> size.width ) x = size.width - 4- w-1;
+                if ( x < 0)    {x = 4;}
+                else if ( x + w-1> size.width ) {x = size.width - 4- w-1;}
                 
-                if ( y < 0)    y = 4;
-                else if ( y + h > size.height )  y = size.height - 4- h;
+                if ( y < 0)    {y = 4;}
+                else if ( y + h > size.height )  {y = size.height - 4- h;}
             }
             
             this.bounds.x = x;
@@ -762,8 +788,9 @@ JMI.script.HTMLText = (function() {
 	
 	// Héritage
 	for (var element in JMI.script.Base.prototype ) {
-		if( !HTMLText.prototype[element])
+		if( !HTMLText.prototype[element]) {
 			HTMLText.prototype[element] = JMI.script.Base.prototype[element];
+		}
 	}
 	
 	return HTMLText;
@@ -887,10 +914,12 @@ JMI.script.TextToken = (function() {
 
 			gDrawingContext.textBaseline = "top";
 			gDrawingContext.textAlign = "left";
-			if( this.font)
+			if( this.font) {
 				gDrawingContext.font = this.font.canvas;
-			if( this.font.color)
+			}
+			if( this.font.color) {
 				gDrawingContext.fillStyle = this.font.color; 
+			}
 			gDrawingContext.fillText( this.text, x + borderWidth + JMI.script.HTMLText.MARGIN, y + borderWidth + JMI.script.HTMLText.MARGIN);
 		}
 	};
