@@ -20,7 +20,7 @@ public class StoreHelper {
 
     protected String err_message = null, err_trace = null;
     protected long err_code = 0;
-    
+        
     public void setError( long code, String message) {
         setError( code, message, null);
     }
@@ -113,8 +113,8 @@ public class StoreHelper {
     }
 
    public String toJson() {
-       StringBuilder sb = new StringBuilder();
        if( err_message == null) {
+           StringBuilder sb = new StringBuilder();
            sb.append("{\"entities\":[");
            boolean first = true;
            for( Entity entity : getEntities().values()) {
@@ -138,17 +138,28 @@ public class StoreHelper {
                Data.toJson( sb, global.getValue());
            }
            sb.append("}}");
+           return sb.toString();
        }
        else {
-           sb.append("{\"error\":{");
-           sb.append("\"code\":");
-           Data.toJson( sb, err_code);
-           sb.append(",\"message\":");
-           Data.toJson( sb, err_message);
-           sb.append(",\"trace\":");
-           Data.toJson( sb, err_trace);
-           sb.append("}}");
+           return StoreHelper.ErrorToJson(err_code, err_message, err_trace);
        }
+   }
+   
+   public static String ErrorToJson( long code, String message, String trace) {
+       StringBuilder sb = new StringBuilder();
+       sb.append("{\"error\":{");
+       sb.append("\"code\":");
+       Data.toJson( sb, message);
+       sb.append(",\"message\":");
+       Data.toJson( sb, message);
+       sb.append(",\"trace\":");
+       Data.toJson( sb, trace);
+       sb.append("}}");
        return sb.toString();
    }
+   
+   public static String ErrorToJson( Exception e) {
+       return StoreHelper.ErrorToJson(0, e.getMessage(), e.getStackTrace().toString());
+   }
+   
 }
