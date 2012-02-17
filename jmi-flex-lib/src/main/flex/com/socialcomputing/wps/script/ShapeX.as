@@ -7,8 +7,11 @@ package com.socialcomputing.wps.script  {
     import com.socialcomputing.wps.util.shapes.RectangleUtil;
     
     import flash.display.Bitmap;
+    import flash.display.BitmapData;
+    import flash.display.DisplayObject;
     import flash.display.Graphics;
     import flash.display.LoaderInfo;
+    import flash.display.PixelSnapping;
     import flash.display.Sprite;
     import flash.events.Event;
     import flash.events.IOErrorEvent;
@@ -284,7 +287,7 @@ package com.socialcomputing.wps.script  {
                         
                         color = slice.getColor( Slice.OUT_COL_VAL, zone.m_props);
                         if(color != null) {
-                            s.graphics.lineStyle(1, color.color);
+                            s.graphics.lineStyle(1, color.color, 1.0, true);
                         }
                         else {
                             // Set an empty line style
@@ -312,7 +315,7 @@ package com.socialcomputing.wps.script  {
 						
 						color = slice.getColor(Slice.OUT_COL_VAL, supZone.m_props);
 						if (color != null) {
-							s.graphics.lineStyle(1, color.color);
+							s.graphics.lineStyle(1, color.color, 1.0, true);
 						}
                         color = slice.getColor(Slice.IN_COL_VAL, supZone.m_props);
 						if (color != null) s.graphics.beginFill(color.color);
@@ -433,8 +436,18 @@ package com.socialcomputing.wps.script  {
 				var imageUrl:String;
 
 				if( imageNam.search( "embedded:") == 0) {
-					var ClassReference:Class = getDefinitionByName( imageNam.substr(9)) as Class;
-					image = new ClassReference();
+					var classReference:Class = getDefinitionByName( imageNam.substr(9)) as Class;
+					var embeded:Object = new classReference();
+					if( embeded is Bitmap) {
+						image = embeded as Bitmap;
+					}
+					else { // SWF
+						var swf:DisplayObject = embeded as DisplayObject;
+						var bd:BitmapData = new BitmapData(swf.height, swf.width);
+						bd.draw(swf);
+						image = new Bitmap(bd,PixelSnapping.ALWAYS,true);
+						//applet.addChild( swf);
+					}
 				}
 				else {
 					// Check if it is an absolute url starting with http(s) or file scheme
@@ -492,7 +505,7 @@ package com.socialcomputing.wps.script  {
 		protected function drawLoadedImage(applet:Map, image:Bitmap, s:Sprite, zone:ActiveZone, imageNam:String, transfo:Transfo, center:Point, render:Boolean):void {
 			// Not cloning the bitmapData itself
 			var scaledImg:Image;
-			var imageClone:Bitmap = new Bitmap(image.bitmapData);
+			var imageClone:Bitmap = new Bitmap(image.bitmapData,PixelSnapping.AUTO,true);
 			
 			var p:Point        = getCenter(zone);
 			var shapePos:Point = new Point();
