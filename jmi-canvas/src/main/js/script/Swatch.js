@@ -1,4 +1,5 @@
 /*global define, JMI */
+/*jslint continue: true */
 JMI.namespace("script.Swatch");
 
 /*
