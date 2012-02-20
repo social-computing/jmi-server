@@ -1,3 +1,4 @@
+/*global define, JMI */
 JMI.namespace("script.TipTimer");
 
 JMI.script.TipTimer = (function() {
@@ -78,7 +79,7 @@ JMI.script.TipTimer = (function() {
 				this.slice.setBounds(this.plan.applet, this.plan.applet.curDrawingContext, this.zone.getParent(), this.zone, null, pos, null, this.bounds);
 				this.plan.applet.renderShape(this.plan.applet.curDrawingCanvas, this.bounds.width, this.bounds.height, new JMI.script.Point(this.bounds.x, this.bounds.y));
 			}
-			if (this.duration != -1) {
+			if (this.duration !== -1) {
 				var timer = this;
 				this.timer = this.async(
 								function () { 

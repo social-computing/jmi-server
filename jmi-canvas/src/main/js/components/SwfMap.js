@@ -1,3 +1,4 @@
+/*global define, JMI, swfobject */
 JMI.namespace("components.SwfMap");
 
 JMI.components.SwfMap = (function() {
@@ -18,8 +19,8 @@ JMI.components.SwfMap = (function() {
 		  bgcolor: this.parent.style.backgroundColor,
 		  allowscriptaccess: 'always',
 		  allowfullscreen: 'true'
-		};
-		var attributes = {
+		},
+		attributes = {
 		  id: 'JMI_' + this.parent.id,
 		  name: 'JMI_' + this.parent.id
 		};

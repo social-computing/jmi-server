@@ -1,3 +1,4 @@
+/*global define, JMI */
 JMI.namespace("script.Dimension");
 
 JMI.script.Dimension = (function() {
@@ -9,7 +10,7 @@ JMI.script.Dimension = (function() {
             height = 0;
         }
         // if 1 argument is given : assume it is & rectangle to copy values from
-        if(arguments.length == 1 && width instanceof JMI.script.Rectangle) {
+        if(arguments.length === 1 && width instanceof JMI.script.Rectangle) {
             height = width.height;
             width  = width.width;
         }

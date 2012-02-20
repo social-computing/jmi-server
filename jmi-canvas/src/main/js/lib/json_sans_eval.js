@@ -1,3 +1,4 @@
+/*global define, JMI*/
 JMI.namespace("lib.jsonParse");
 
 // This source code is free for use in the public domain.

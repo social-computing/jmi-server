@@ -1,3 +1,4 @@
+/*global define, JMI */
 JMI.namespace("script.Point");
 
 JMI.script.Point = (function() {

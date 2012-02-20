@@ -1,3 +1,4 @@
+/*global define, JMI */
 JMI.namespace("script.FontX");
 
 /*
@@ -14,7 +15,7 @@ JMI.namespace("script.FontX");
  */
 JMI.script.FontX = (function() {
 
-	var FontX = function() {
+	var element, FontX = function() {
 		JMI.script.Base.call( this);
 	};
 	FontX.prototype = {
@@ -61,7 +62,7 @@ JMI.script.FontX = (function() {
 	};
 	
 	// Héritage
-	for (var element in JMI.script.Base.prototype ) {
+	for (element in JMI.script.Base.prototype ) {
 		if( !FontX.prototype[element]) {
 			FontX.prototype[element] = JMI.script.Base.prototype[element];
 		}

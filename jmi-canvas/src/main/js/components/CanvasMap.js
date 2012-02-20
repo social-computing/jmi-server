@@ -1,3 +1,5 @@
+/*global define, window JMI HTMLCanvasElement aptana console*/
+/*jslint vars: false, bitwise: true*/
 JMI.namespace("components.CanvasMap");
 
 JMI.components.CanvasMap = (function() {
@@ -144,7 +146,7 @@ JMI.components.CanvasMap = (function() {
 			return this.planContainer;
 		},
 		getProperty: function( name) {
-			if( this.planContainer && env.props[name]) {
+			if( this.planContainer && this.planContainer.map.props[name]) {
 				return this.planContainer.map.env.props[name];
 			}
 			return null;
@@ -172,9 +174,6 @@ JMI.components.CanvasMap = (function() {
 			    var mousePosition = JMI.components.CanvasMap.getPosition(this, event);
 				this.JMI.curPos.x = mousePosition.x;
 				this.JMI.curPos.y = mousePosition.y;
-				var debugDiv = document.getElementById("mouse");
-				//debugDiv.innerHTML = this.x
-				debugDiv.innerHTML = "<br> mouse position : (" + mousePosition.x + ", " + mousePosition.y + ")";
 				if (this.JMI.ready) {
 					this.JMI.planContainer.map.plan.updateZoneAt(this.JMI.curPos);
 				}
@@ -254,13 +253,13 @@ JMI.components.CanvasMap = (function() {
 		 */
 		setSelection: function(selection) {
 			var selId = this.getSelId(selection);
-			this.JMI.planContainer.map.plan.curSel = selId;
-			this.JMI.planContainer.map.plan.init();
+			this.planContainer.map.plan.curSel = selId;
+			this.planContainer.map.plan.init();
 			this.invalidate();
 		},
 		clearSelection: function( selection) {
-			this.clearZoneSelection( selection, this.JMI.planContainer.map.plan.nodes, this.JMI.planContainer.map.plan.nodes.length );
-			this.clearZoneSelection( selection, this.JMI.planContainer.map.plan.links, this.JMI.planContainer.map.plan.linksCnt );
+			this.clearZoneSelection( selection, this.planContainer.map.plan.nodes, this.planContainer.map.plan.nodes.length );
+			this.clearZoneSelection( selection, this.planContainer.map.plan.links, this.planContainer.map.plan.linksCnt );
 			this.invalidate();
 		},
 		/**
@@ -271,11 +270,11 @@ JMI.components.CanvasMap = (function() {
 		 * @param n			Number of zone to remove from selection in the array, starting from index 0.
 		 */
 		clearZoneSelection: function( selection, zones, n) {
-			var selId = getSelId(selection);
-			if ( selId != -1 )
+			var i, unselBit, selId = this.getSelId(selection);
+			if ( selId !== -1 )
 			{
-				var unselBit = ~( 1 << selId );
-				for( var i = 0; i < n; i ++ )
+				unselBit = ~( 1 << selId );
+				for( i = 0; i < n; i ++ )
 				{
 					zones[i].selection &= unselBit;
 				}
@@ -287,10 +286,10 @@ JMI.components.CanvasMap = (function() {
 		 * @return			An ID in [0,31] or -1 if the selection name is unknown.
 		 */
 		getSelId: function( selection) {
-			if( this.JMI.planContainer.map.env.selections[selection] === null) {
+			if( this.planContainer.map.env.selections[selection] === null) {
 				return -1;
 			}
-			return  env.selections[selection];
+			return  this.planContainer.map.env.selections[selection];
 		},
 		
 		/**
@@ -307,18 +306,18 @@ JMI.components.CanvasMap = (function() {
 		 * @throws UnsupportedEncodingException 
 		 */
 		performAction: function( actionStr) {
-			var jsStr = "javascript";
-			var target = "_blank";
-			var sep       = actionStr.indexOf( ':' ),
+			var jsStr = "javascript",
+				target = "_blank",
+				sep       = actionStr.indexOf( ':' ),
 				pos;
 		
-			if ( sep != -1 )
+			if ( sep !== -1 )
 			{
 				target  = actionStr.substring( 0, sep );
-				if( target.toLowerCase() == jsStr )   // Call javascript function
+				if( target.toLowerCase() === jsStr )   // Call javascript function
 				{
 					actionStr   = actionStr.substring( jsStr.length+ 1 );
-					if( actionStr.charAt( 0 )== '_' )
+					if( actionStr.charAt( 0 )=== '_' )
 					{	// javascript:_target:function()
 						pos = actionStr.indexOf( ':' );
 						if( pos <= 0) {
@@ -332,13 +331,13 @@ JMI.components.CanvasMap = (function() {
 					if( pos > 0)
 					{
 						var func     = actionStr.substring( 0, pos ),
-							paramStr = actionStr.substring( pos + 1, actionStr.length- 1 );
-						var params   = paramStr.split( String.fromCharCode( 0xFFFC));
+							paramStr = actionStr.substring( pos + 1, actionStr.length- 1 ),
+							params   = paramStr.split( String.fromCharCode( 0xFFFC));
 						this.dispatchEvent( {map: this, type: JMI.Map.event.ACTION, fn: func, args: params});
 					}
 					return;
 				}
-				else if( target.charAt( 0 )== '_' )   // open a frame window
+				else if( target.charAt( 0 )=== '_' )   // open a frame window
 				{
 					target      = actionStr.substring( 0, sep );
 					actionStr   = actionStr.substring( sep + 1 );

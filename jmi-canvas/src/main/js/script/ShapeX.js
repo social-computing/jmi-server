@@ -1,3 +1,4 @@
+/*global define, JMI */
 JMI.namespace("script.ShapeX");
 
 /*
@@ -19,7 +20,7 @@ JMI.namespace("script.ShapeX");
 
 JMI.script.ShapeX = (function() {
 	
-	var ShapeX = function() {
+	var element, ShapeX = function() {
 		JMI.script.Base.call( this);
 	};
 	
@@ -175,6 +176,7 @@ JMI.script.ShapeX = (function() {
                 var shapePos = new JMI.script.Point();
                 var size = Math.round(this.getShapePos(supZone, transfo, center, p, shapePos));
                 var outColor, inColor;
+                var x, y, i, fromPoint, toPoint, poly;
                 
                 // Manage each case of number of points to draw for this shape
                 switch(points.length) {
@@ -184,8 +186,8 @@ JMI.script.ShapeX = (function() {
                         //g.setComposite(composite);
                         
                         // Jonathan Dray : I removed the size offset, as drawing a circle on canevas starts from the shape center 
-                        var x = p.x + shapePos.x;
-                        var y = p.y + shapePos.y;
+                        x = p.x + shapePos.x;
+                        y = p.y + shapePos.y;
                         
                         // Doubling size value : needed because we are using the  
                         // drawEllipse method that needs a height and width from the top,left starting point
@@ -209,10 +211,10 @@ JMI.script.ShapeX = (function() {
                         
                     // segment  => Street
                     case 2:     
-                        var fromPoint = new JMI.script.Point(points[0].x, points[0].y).add(shapePos);
-                        var toPoint = new JMI.script.Point(points[1].x, points[1].y).add(shapePos);
+                        fromPoint = new JMI.script.Point(points[0].x, points[0].y).add(shapePos);
+                        toPoint = new JMI.script.Point(points[1].x, points[1].y).add(shapePos);
                         
-                        var poly = this.getLinkPoly(supZone, fromPoint, toPoint, (((size + 3) / 2)));
+                        poly = this.getLinkPoly(supZone, fromPoint, toPoint, (((size + 3) / 2)));
                         
                         outColor = slice.getColor(JMI.script.Slice.OUT_COL_VAL, supZone.props);
                         inColor = slice.getColor(JMI.script.Slice.IN_COL_VAL, supZone.props);
@@ -221,7 +223,7 @@ JMI.script.ShapeX = (function() {
                         gDrawingContext.beginPath();
                         //s.graphics.moveTo(poly.xpoints[poly.npoints-1], poly.ypoints[poly.npoints-1]);
                         gDrawingContext.moveTo(poly.xpoints[poly.npoints-1], poly.ypoints[poly.npoints-1]);
-                        for(var i = 0 ; i < poly.npoints; ++i) {
+                        for(i = 0 ; i < poly.npoints; ++i) {
                             //s.graphics.lineTo( poly.xpoints[i], poly.ypoints[i]);
                             gDrawingContext.lineTo(poly.xpoints[i], poly.ypoints[i]);
                         }
@@ -364,7 +366,7 @@ JMI.script.ShapeX = (function() {
                 // Draw the image if it has already been loaded
                 else {
                     image = applet.planContainer.map.env.medias[imageName];
-                    this.drawLoadedImage(applet, image, gDrawingContext, zone, imageNam, transfo, center, false);
+                    this.drawLoadedImage(applet, image, gDrawingContext, zone, imageName, transfo, center, false);
                 }
             }
         },
@@ -477,7 +479,7 @@ JMI.script.ShapeX = (function() {
 	};
 	
 	// Héritage
-	for (var element in JMI.script.Base.prototype ) {
+	for (element in JMI.script.Base.prototype ) {
 		if(!ShapeX.prototype[element]) {
 			ShapeX.prototype[element] = JMI.script.Base.prototype[element];
 		}

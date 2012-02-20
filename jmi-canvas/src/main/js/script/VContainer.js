@@ -1,3 +1,4 @@
+/*global define, JMI */
 JMI.namespace("script.VContainer");
 
 /**

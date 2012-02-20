@@ -1,3 +1,4 @@
+/*global define, JMI */
 JMI.namespace("script.LinkZone");
 
 /*
@@ -16,7 +17,7 @@ JMI.script.LinkZone = (function() {
      * @param from  The Place to start from.
      * @param to    The Place to end to.
      */
-	var LinkZone = function() {
+	var element, LinkZone = function() {
 	    /*
          * The Place from which the link start.
          * JMI.script.BagZone
@@ -89,7 +90,7 @@ JMI.script.LinkZone = (function() {
 	};
 	
 	// Héritage
-	for (var element in JMI.script.ActiveZone.prototype ) {
+	for (element in JMI.script.ActiveZone.prototype ) {
 		if( !LinkZone.prototype[element]) {
 			LinkZone.prototype[element] = JMI.script.ActiveZone.prototype[element];
 		}

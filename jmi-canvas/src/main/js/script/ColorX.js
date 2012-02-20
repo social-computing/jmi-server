@@ -1,3 +1,4 @@
+/*global define, JMI */
 JMI.namespace("script.ColorX");
 
 
@@ -5,7 +6,7 @@ JMI.script.ColorX = (function() {
 	
 	function convert(integer) { 
         var str = Number(integer).toString(16); 
-        return str.length == 1 ? "0" + str : str; 
+        return str.length === 1 ? "0" + str : str; 
     }
 
 
