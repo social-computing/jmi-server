@@ -1,5 +1,4 @@
 /*global define, window JMI HTMLCanvasElement aptana console*/
-/*jslint vars: false, bitwise: true*/
 JMI.namespace("components.CanvasMap");
 
 JMI.components.CanvasMap = (function() {

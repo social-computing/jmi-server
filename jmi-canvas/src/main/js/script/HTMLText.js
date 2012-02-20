@@ -207,14 +207,12 @@ JMI.script.HTMLText = ( function() {
 
 			var itokenizer = 1;
 			while(hasMore) {
-				tokenStr = itokenizer < tokenizer.length ? tokenizer[itokenizer] : null;
-				++itokenizer;
+				tokenStr = itokenizer < tokenizer.length ? tokenizer[itokenizer] : null; ++itokenizer;
 				hasMore = itokenizer < tokenizer.length;
 
 				// A start of Tag
 				if(prevStr === "<") {
-					nextStr = hasMore ? tokenizer[itokenizer] : null;
-					++itokenizer;
+					nextStr = hasMore ? tokenizer[itokenizer] : null; ++itokenizer;
 
 					// A closed Tag
 					if(hasMore && nextStr === ">")// tag
@@ -231,8 +229,7 @@ JMI.script.HTMLText = ( function() {
 							this.updateText(gDrawingContext, "<" + tokenStr + ">", textTok, isText);
 							isText = true;
 						}
-						prevStr = itokenizer < tokenizer.length ? tokenizer[itokenizer] : null;
-						++itokenizer;
+						prevStr = itokenizer < tokenizer.length ? tokenizer[itokenizer] : null; ++itokenizer;
 					}
 					// An unclosed Tag. Handle it as normal text.
 					else {
