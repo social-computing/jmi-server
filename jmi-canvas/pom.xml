@@ -27,6 +27,39 @@
 
 
   <build>
+   <!--extensions>
+      <extension>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>javascript-maven-plugin</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
+      </extension>
+    </extensions>
+	<plugins>
+	  <plugin>
+	    <groupId>org.codehaus.mojo</groupId>
+	    <artifactId>jslint-maven-plugin</artifactId>
+	    <version>1.0.1</version>
+        <configuration>
+		  <excludes>
+		    <exclude>**/namespace.js</exclude>
+		    <exclude>**/swfobject.js</exclude>
+			<exclude>**/json_sans_eval.js</exclude>
+		  </excludes>
+		  <allowOneVarStatementPerFunction>false</allowOneVarStatementPerFunction>
+		  <disallowBitwiseOperators>false</disallowBitwiseOperators>
+		  <failOnIssues>false</failOnIssues>
+        </configuration>
+      </plugin>
+	</plugins-->
+
+    <resources>  
+      <!--resource>  
+         <directory>src</directory>
+         <includes>
+             <include>jmi-client.js</include>
+         </includes>
+      </resource-->  
+    </resources>  
     <pluginManagement>
       <plugins>
         <plugin>
@@ -52,30 +85,36 @@
         <configuration>
           <nosuffix>true</nosuffix>
 		  <sourceDirectory>src/main/js</sourceDirectory>
+		  <outputDirectory>target/jmi</outputDirectory>
 		  <excludes>
 			<exclude>**/*.jon</exclude>
 		  </excludes>
           <aggregations>
             <aggregation>
-              <!-- remove files after aggregation (default: false)
-              <removeIncluded>true</removeIncluded>
-              -->
-              <!-- insert new line after each concatenation (default: false) -->
               <insertNewLine>true</insertNewLine>
-              <output>${project.build.directory}/jmi.js</output>
-              <!-- files to include, path relative to output's directory or absolute path-->
-              <!--inputDir>base directory for non absolute includes, default to parent dir of output</inputDir-->
+              <output>target/jmi-client.js</output>
               <includes>
-                <include>**/*.js</include>
+                <include>jmi/jmi.js</include>
+                <include>jmi/lib/*.js</include>
+                <include>jmi/util/*.js</include>
+                <include>jmi/script/*.js</include>
+                <include>jmi/components/*.js</include>
               </includes>
-              <!-- files to exclude, path relative to output's directory
-              <excludes>
-                <exclude>**/*.pack.js</exclude>
-                <exclude>**/compressed.css</exclude>
-              </excludes>
-              -->
             </aggregation>
           </aggregations>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <includes>
+            <include>../jmi-client.js</include>
+          </includes>
+		  <excludes>
+			<exclude>**/*.jon</exclude>
+		  </excludes>
         </configuration>
       </plugin>
     </plugins>
