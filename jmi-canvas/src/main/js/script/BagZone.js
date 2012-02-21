@@ -62,7 +62,6 @@ JMI.script.BagZone = ( function() {
 					var stp = 0.25 * JMI.script.Base.Pi2;
 					// isLeft || isRight
 					if(isLeft || (this.bounds.x + this.bounds.width > applet.width)) {
-						// TODO : portage, regarder si le décalage de bit fonctionne avec le même opérateur
 						this.stp = JMI.script.Base.Pi2 / (nbSubZones << 1);
 
 						if(isLeft) {

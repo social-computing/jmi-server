@@ -36,7 +36,6 @@ JMI.script.ShapeX = (function() {
          * 
          * @return          The Point translation produced by the transfo on this.
          */
-        // TODO portage : gestion des nombres à virgule flottante
         transformOut: function(zone, transfo) {
             // else it is just a void frame
             if (this.isDefined(JMI.script.ShapeX.SCALE_VAL)) {
@@ -184,7 +183,6 @@ JMI.script.ShapeX = (function() {
                     case 1:     
                         //composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0);
                         //g.setComposite(composite);
-                        
                         // Jonathan Dray : I removed the size offset, as drawing a circle on canevas starts from the shape center 
                         x = p.x + shapePos.x;
                         y = p.y + shapePos.y;
@@ -211,8 +209,8 @@ JMI.script.ShapeX = (function() {
                         
                     // segment  => Street
                     case 2:     
-                        fromPoint = new JMI.script.Point(points[0].x, points[0].y).add(shapePos);
-                        toPoint = new JMI.script.Point(points[1].x, points[1].y).add(shapePos);
+                        fromPoint = points[0].add(shapePos);
+                        toPoint = points[1].add(shapePos);
                         
                         poly = this.getLinkPoly(supZone, fromPoint, toPoint, (((size + 3) / 2)));
                         
