@@ -66,11 +66,11 @@ function GoMap() {
 	map.addEventListener(JMI.Map.event.ACTION, function(event) {
 		window[event.fn](event.args);
 	} );
-	map.addEventListener(JMI.Map.event.ATTRIBUTE_CLICK, function(event) {
-		alert( event.attribute.props['NAME']);
-	} );
 	map.addEventListener(JMI.Map.event.ERROR, function(event) {
 		alert( event.message);
+	} );
+	map.addEventListener(JMI.Map.event.ATTRIBUTE_CLICK, function(event) {
+		alert( event.attribute.props.NAME);
 	} );
 };
 function JMIF_Navigate(args) {
@@ -82,32 +82,18 @@ function compute() {
 </script>
 </head>
 <body onload="GoMap()">
-	<div>
-		<ul>
-			<li>element 1</li>
-			<li>element 2</li>
-		</ul>
-	</div>
+<div>
+	<ul>
+		<li>element 1</li>
+		<li>element 2</li>
+	</ul>
+</div>
 <div id="map" style="border:1px solid black ; width: 640px ; height: 480px" ></div>
 <button onclick="document.getElementById('map').JMI.resize(900,480);">Resize</button>
 <button onclick="compute();">Compute</button>
-<div id="mouse">&nbsp;</div>
 <div id="status">&nbsp;</div>
 <!--menu type='context' id='toto' >
  <menuitem label="powered by Just Map It!" onclick="alert('rotate');"/>
 </menu-->
-<menu type="list">
- <li>
-  <menu label="Fichier">
-    <button type="button" onclick="fopen()">Ouvrir</button>
-    <button type="button" onclick="fopen()">Ouvrir2</button>
-  </menu>
- </li>
- <li>
-  <menu label="Editer">
-   <button type="button" onclick="fcopy()">Copier</button>
-  </menu>
- </li>
-</menu>
 </body>
 </html>

@@ -288,13 +288,11 @@ JMI.script.Satellite = ( function() {
 							var menux = zone.curSwatch.refs[args];
 
 							if(menux !== null) {
-								var menuData = [];
-								menux.parseMenu(menuData, zone);
-								var menu = null;//TDO Menu.createMenu(applet, menuData, false);
-								menu.variableRowHeight = true;
-								menu.labelField = "label";
+								var menu = document.createElement("ul");
+								menux.parseMenu(applet,menu,zone);
+								applet.divMenu.appendChild( menu);
 								//menu.setStyle("fontWeight", "bold");
-								menu.addEventListener(JMI.script.MenuEvent.ITEM_CLICK, applet.menuHandler);
+								//menu.addEventListener(JMI.script.MenuEvent.ITEM_CLICK, applet.menuHandler);
 								var point = applet.localToGlobal(pos);
 								menu.show(point.x, point.y);
 								menu.visible = false;

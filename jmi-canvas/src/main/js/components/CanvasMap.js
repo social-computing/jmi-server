@@ -24,6 +24,11 @@ JMI.components.CanvasMap = (function() {
 		this.parent.appendChild(this.drawingCanvas);
 		this.drawingContext = this.drawingCanvas.getContext("2d");
 		this.drawingCanvas.JMI = this;
+
+		// Menu
+		this.divMenu = document.createElement("div");
+		//this.divMenu.style.visibility = 'hidden';
+		this.parent.appendChild(this.divMenu);
 	
 		// Graphic zones
 		this.curDrawingCanvas = document.createElement("canvas");
@@ -290,7 +295,9 @@ JMI.components.CanvasMap = (function() {
 			}
 			return  this.planContainer.map.env.selections[selection];
 		},
-		
+		menuHandler: function( event){
+			event.target.JMI.performAction( event.target.href);
+		},
 		/**
 		 * Perform an URL action.
 		 * The action depends on the string passed:
@@ -331,7 +338,7 @@ JMI.components.CanvasMap = (function() {
 					{
 						var func     = actionStr.substring( 0, pos ),
 							paramStr = actionStr.substring( pos + 1, actionStr.length- 1 ),
-							params   = paramStr.split( String.fromCharCode( 0xFFFC));
+							params   = paramStr.split( '%EF%BF%BC');//String.fromCharCode( 0xFFFC));
 						this.dispatchEvent( {map: this, type: JMI.Map.event.ACTION, fn: func, args: params});
 					}
 					return;

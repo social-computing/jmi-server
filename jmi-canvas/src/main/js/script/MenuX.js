@@ -34,7 +34,7 @@ JMI.script.MenuX = ( function() {
 		 * @return			True if this menu is not empty. This is used in the recursive process and is useless for the main call.
 		 * @throws UnsupportedEncodingException
 		 */
-		parseMenu : function(dst, zone) {
+		parseMenu : function(applet,dst,zone) {
 			var i;
 			var j;
 			var k = -1;
@@ -53,11 +53,11 @@ JMI.script.MenuX = ( function() {
 
 			for( j = 0; j < n; j++) {
 				if(n > 1 || (n === 1 && labels !== null)) {
-					subMenu = [];
-					menuItm = {};
-					menuItm.label = labels[j];
-					menuItm.children = subMenu;
-					dst.addItem(menuItm);
+					subMenu = document.createElement("ul");
+					menuItm = document.createElement("li");
+					menuItm.innerHTML = labels[j];
+					menuItm.appendChild(subMenu);
+					dst.appendChild(menuItm);
 					if(n > 1) {
 						k = j;
 					}
@@ -70,30 +70,18 @@ JMI.script.MenuX = ( function() {
 					var flags = menu.getFlags(zone.props);
 
 					if(JMI.script.Base.isEnabled(flags, JMI.script.MenuX.ITEM_BIT)) {
-						if(menu.parseItem(subMenu, zone, k)) {
+						if(menu.parseItem(applet,subMenu, zone, k)) {
 							isEmpty = false;
 						}
 					} else {
-						if(menu.parseMenu(subMenu, zone)) {
+						if(menu.parseMenu(applet,subMenu, zone)) {
 							isEmpty = false;
 						} else {
-							subMenu.removeItemAt(subMenu.length - 1);
+							subMenu.removeChild(subMenu.lastChild());
 							var subitems = menu.parseString(JMI.script.MenuX.TEXT_VAL, zone.props);
 							if(subitems !== null && subitems.length > 0) {
-								menuItm = {};
-								menuItm.label = subitems[0];
-								// TODO menuItm.setFont( menu.getFont( zone ));
 								var fontMenu = menu.getFont(JMI.script.MenuX.FONT_VAL, zone.props).getTextFormat(zone.props);
-								if(fontMenu !== null) {
-									if(fontMenu.bold === true) {
-										menuItm.bold = "true";
-									} else {
-										menuItm.bold = "false";
-									}
-									menuItm.font = fontMenu.font;
-								}
-								menuItm.enabled = false;
-								subMenu.addItem(menuItm);
+								this.addItem(applet,subMenu,subitems[0],null,fontMenu);
 							}
 						}
 					}
@@ -111,8 +99,8 @@ JMI.script.MenuX = ( function() {
 		 * @return			True if this item is not empty. This is used in the recursive process and is useless for the main call.
 		 * @throws UnsupportedEncodingException
 		 */
-		parseItem : function(dst, zone, j) {
-			var parts = this.getString(JMI.script.MenuX.TEXT_VAL, zone.props).split(JMI.script.MenuX.SEP);
+		parseItem : function(applet, dst, zone, j) {
+			var parts = this.getString(JMI.script.MenuX.TEXT_VAL, zone.props).split(JMI.script.Base.SEP);
 			var title = parts[0];
 			var url = parts.length > 1 ? parts[1] : null;
 			var redir = parts.length > 2 ? parts[2] : null;
@@ -128,13 +116,13 @@ JMI.script.MenuX = ( function() {
 
 			if(j === -1) {
 				for( i = 0; i < n; i++) {
-					this.addItem(dst, its[i], redirs !== null ? redirs[i] : null, font);
+					this.addItem(applet, dst, its[i], redirs !== null ? redirs[i] : null, font);
 				}
 			} else {
 				i = m - 1 < j ? m - 1 : j;
 				j = n - 1 < j ? n - 1 : j;
 				if(i >= 0 && j >= 0) {
-					this.addItem(dst, its[j], redirs !== null ? redirs[i] : null, font);
+					this.addItem(applet, dst, its[j], redirs !== null ? redirs[i] : null, font);
 				}
 			}
 
@@ -148,25 +136,34 @@ JMI.script.MenuX = ( function() {
 		 * @param url		Adress to go (including Javascript) when this is selected.
 		 * @param font		TypeFace of the label.
 		 */
-		addItem : function(menu, title, url, font) {
-			var item = {};
+		addItem : function(applet,menu, title, url, font) {
+			var a, item = document.createElement("li");
 			if(url === null && title === "-") {
-				item.type = "separator";
+				//item.type = "separator";
 			} else {
-				item.label = title;
 				if(url !== null) {
-					item.action = url;
+					a = document.createElement("a");
+					a.href = url;
+					a.innerHTML = title;
+					a.addEventListener('click', applet.menuHandler, false);
+					a.addEventListener('dblclick', applet.menuHandler, false);
+					a.JMI = applet;
+					item.appendChild(a);
 				}
-				if(font !== null) {
+				else {
+					item.innerHTML = title;
+				}
+				/* TDO à finir
+				 if(font !== null) {
 					if(font.bold === true) {
 						item.bold = "true";
 					} else {
 						item.bold = "false";
 					}
 					item.font = font.font;
-				}
+				}*/
 			}
-			menu.push(item);
+			menu.appendChild(item);
 		},
 		/**
 		 * Retrieve a java.awt.Font from this FontX propertie (FONT_VAL container).
@@ -208,3 +205,4 @@ JMI.script.MenuX.TEXT_VAL = 2;
  * True if this menu is just an item.
  */
 JMI.script.MenuX.ITEM_BIT = 0x01;
+
