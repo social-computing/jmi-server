@@ -25,23 +25,11 @@ JMI.script.Point = (function() {
 		constructor: JMI.script.Point,
 		
         add: function(p) {
-            /*
-            this.x = this.x + p.x;
-            this.y = this.y + p.y;
-            return this;
-            */
            return new JMI.script.Point(this.x + p.x, this.y + p.y);
         },
         
         substract: function(p) {
-            /*
-            this.x = this.x > p.x ? this.x - p.x : p.x - this.x;
-            this.y = this.y > p.y ? this.y - p.y : p.y - this.y;
-            return this;
-            */
-            var sx = this.x > p.x ? this.x - p.x : p.x - this.x;
-            var sy = this.y > p.y ? this.y - p.y : p.y - this.y;
-            return new JMI.script.Point(sx, sy);
+            return new JMI.script.Point(this.x - p.x , this.y - p.y);
         },
         
         /**
@@ -49,12 +37,6 @@ JMI.script.Point = (function() {
          * Useful to create a 2D ortho basis of vectors.
          */
         pivot: function() {
-            /*
-            this.x -= this.y;
-            this.y += this.x;
-            this.x -= this.y;
-            return this;
-            */
             var p = this.clone();
             p.x -= p.y;
             p.y += p.x;
