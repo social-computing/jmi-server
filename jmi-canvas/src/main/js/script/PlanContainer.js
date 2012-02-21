@@ -15,11 +15,12 @@ JMI.script.PlanContainer = ( function() {
 
 JMI.script.PlanContainer.fromJSON = function(jsonString) {
 	var planContainer = new JMI.script.PlanContainer(),
-		attr, jmiData, result, i, env, plan, n, j, link;
+		attr, jmiData;
 	if(jsonString === null) {
 		planContainer.error = "the json data can't be null";
 	} else {
 		jmiData = JMI.lib.jsonParse(jsonString, function(key, value) {
+			var attr, result, i, env, plan, n, j, link;
 			if(value && typeof value === 'object') {
 				if('env' === key && value.hasOwnProperty('selections')) {
 					env = new JMI.script.Env();

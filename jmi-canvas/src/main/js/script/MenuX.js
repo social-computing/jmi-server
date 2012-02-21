@@ -14,7 +14,6 @@ JMI.script.MenuX = ( function() {
 
 	var element, MenuX = function() {
 		JMI.script.Base.call(this);
-		this.items = [];
 	};
 
 	MenuX.prototype = {
@@ -40,7 +39,7 @@ JMI.script.MenuX = ( function() {
 			var j;
 			var k = -1;
 			var n = 1;
-			var iCnt = this.items.length;
+			var iCnt = this.menu.length;
 			var isEmpty = true;
 			var subMenu;
 			var menuItm;
@@ -67,7 +66,7 @@ JMI.script.MenuX = ( function() {
 				}
 
 				for( i = 0; i < iCnt; i++) {
-					var menu = this.items[i];
+					var menu = this.menu[i];
 					var flags = menu.getFlags(zone.props);
 
 					if(JMI.script.Base.isEnabled(flags, JMI.script.MenuX.ITEM_BIT)) {
@@ -167,7 +166,7 @@ JMI.script.MenuX = ( function() {
 					item.font = font.font;
 				}
 			}
-			menu.addItem(item);
+			menu.push(item);
 		},
 		/**
 		 * Retrieve a java.awt.Font from this FontX propertie (FONT_VAL container).
@@ -176,8 +175,8 @@ JMI.script.MenuX = ( function() {
 		 */
 		getTextFormat : function(props) {
 			var font = this.getFont(JMI.script.MenuX.FONT_VAL, props);
-
-			return font !== null ? font.init(props) : null;
+			if( font !== null) { font.init(props); }
+			return font;
 		}
 	};
 
