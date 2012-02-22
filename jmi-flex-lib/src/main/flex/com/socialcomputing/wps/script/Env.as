@@ -2,6 +2,7 @@ package com.socialcomputing.wps.script  {
     import com.socialcomputing.wps.components.Map;
     import com.socialcomputing.wps.util.LoaderEx;
     
+	import flash.utils.Dictionary;
     import flash.geom.ColorTransform;
 
 /**
@@ -117,7 +118,7 @@ public class Env
 		var bkCol:ColorTransform= needPrint ? bkWhite : m_inCol.getColor();
 		this.m_applet        = applet;
 		this.m_medias        = new Object();
-		this.m_loaders      = new Object();
+		this.m_loaders      = new Array();
 	}
 
 	public function getMedia(name:String):Object {

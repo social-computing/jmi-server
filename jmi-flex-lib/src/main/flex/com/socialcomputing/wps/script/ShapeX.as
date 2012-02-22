@@ -10,7 +10,9 @@ package com.socialcomputing.wps.script  {
     import flash.display.BitmapData;
     import flash.display.DisplayObject;
     import flash.display.Graphics;
+    import flash.display.Loader;
     import flash.display.LoaderInfo;
+    import flash.display.MovieClip;
     import flash.display.PixelSnapping;
     import flash.display.Sprite;
     import flash.events.Event;
@@ -442,41 +444,61 @@ package com.socialcomputing.wps.script  {
 						image = embeded as Bitmap;
 					}
 					else { // SWF
-						var swf:DisplayObject = embeded as DisplayObject;
+						// Ne marche pas....
+						var swf:MovieClip = embeded as MovieClip;
 						var bd:BitmapData = new BitmapData(swf.height, swf.width);
 						bd.draw(swf);
 						image = new Bitmap(bd,PixelSnapping.ALWAYS,true);
-						//applet.addChild( swf);
 					}
 				}
 				else {
 					// Check if it is an absolute url starting with http(s) or file scheme
 					// Else get ressources from a path relative to the flash application hosting URL
-					if(URLUtil.isHttpURL(imageNam) || URLHelper.isFileURL(imageNam)) {
+					/*if(URLUtil.isHttpURL(imageNam) || URLHelper.isFileURL(imageNam)) {
 						imageUrl = imageNam;
 					}
 					else {
 						imageUrl = URLHelper.getFullURL(ApplicationUtil.getSwfRoot(), imageNam);
-					}
-					
+					}*/
+					imageUrl = imageNam;
 					image = applet.env.getMedia(imageNam) as Bitmap;
 				}
 
 				// Check if the image has already been loaded
+				var env:Env = applet.env;
                 if (image == null) {
+					if(env.getLoader(imageUrl) != null) return;
 					var loader:LoaderEx = new LoaderEx();
-					var env:Env = applet.env;
 					env.addLoader( imageUrl, loader);
 					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function (e:Event):void {
 						loader = env.getLoader( imageUrl);
 						if( loader && !loader.stop) {
-							image = Bitmap( LoaderInfo(e.target).content);
-							drawLoadedImage(applet, image, s, zone, imageNam, transfo, center, true);
-							env.putMedia(imageNam, image);
+							if( (e.target as LoaderInfo).content is Bitmap) {
+								image = (e.target as LoaderInfo).content as Bitmap;
+							}
+							else  if( (e.target as LoaderInfo).content is DisplayObject) {
+								var swf:DisplayObject = (e.currentTarget as LoaderInfo).content;
+								var bd:BitmapData = new BitmapData(swf.height+22, swf.width+22, true, 0x00000000);
+								bd.draw(swf);
+								image = new Bitmap(bd,PixelSnapping.ALWAYS,true);
+							}
+							if( image != null) {
+								//drawLoadedImage(applet, image, s, zone, imageNam, transfo, center, true);
+								env.putMedia(imageNam, image);
+							}
 						}
 						env.removeLoader( imageUrl);
+						if( env.m_loaders.length == 0) {
+							applet.plan.init();
+							applet.renderShape(applet.restDrawingSurface, applet.width, applet.height);
+						}
 					});
 					loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function (e:Event):void {
+						env.removeLoader( imageUrl);
+						if( env.m_loaders.length == 0) {
+							applet.plan.init();
+							applet.renderShape(applet.restDrawingSurface, applet.width, applet.height);
+						}
 						trace('Load image ' + imageUrl + ' failed');
 					});
 					var fileRequest:URLRequest = new URLRequest( imageUrl);
