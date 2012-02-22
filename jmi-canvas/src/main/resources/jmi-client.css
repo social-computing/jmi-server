@@ -1,22 +1,31 @@
+#menu {
+	font-family:Verda, Helvetica, sans-serif;	
+	font-size:14px;	
+  }
+
 ul#menu {
- 	background:	#dddddd;
+ 	background:	#ffffff;
 	border-radius: 4px; /*Chrome 6, Opera 10.10 */
 	-webkit-border-radius: 4px; /* Chrome et Safari*/
 	-moz-border-radius: 4px;
+	border:1px solid #aaaaaa;
+	padding: 0;
   }
  
 #menu li, li a { 
 	color:#000000;
-}
-
+	text-decoration:none;
+ 	list-style: none;
+	padding: 0 10px 0 10px;
+ }
 
 #menu li:hover {
-	color:#FDFFEB;
-	background:#666666;
+	color:#000000;
+	background:#B2DDFF;
 	}
 
 #menu li a:hover {
-	color:#FDFFEB;
+	color:#000000;
 	}
 
 #menu ul li:first-child a {
@@ -42,4 +51,8 @@ ul#menu {
 	background: #035D8A;
 	}
 
- 
+#menu hr { 
+	color: #aaaaaa;
+	margin: 2px 0 2px 0;
+	padding: 0px;
+} 

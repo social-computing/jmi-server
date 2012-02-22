@@ -292,8 +292,9 @@ JMI.script.Satellite = ( function() {
 								menu.id = 'menu';
 								menux.parseMenu(applet,menu,zone);
 								applet.divMenu.appendChild( menu);
-								var x = pos.x + applet.parent.style.left,
-									y = pos.y + applet.parent.style.top;
+								var p = JMI.components.CanvasMap.getAbsPosition(applet.drawingCanvas);
+								var x = pos.x + p.x,
+									y = pos.y + p.y;
 								/*menu.show(point.x, point.y);
 								menu.visible = false;
 								if(point.x + menu.width > applet.width) {

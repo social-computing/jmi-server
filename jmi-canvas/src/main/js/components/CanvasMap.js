@@ -395,6 +395,22 @@ JMI.components.CanvasMap.getPosition= function(canvas, e) {
     };
 };
 
+JMI.components.CanvasMap.getAbsPosition= function(canvas) {
+    var left = 0, top = 0;
+
+    if(canvas.offsetParent) {
+        while(canvas) {
+            left += canvas.offsetLeft;
+            top += canvas.offsetTop;
+            canvas = canvas.offsetParent;
+        }
+    }
+    return {
+        x : left,
+        y : top
+    };
+};
+
 /*
 public function get bitmapData():BitmapData
 {
