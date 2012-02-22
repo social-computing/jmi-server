@@ -3,6 +3,7 @@
 <head>
 <title>Test</title>
 
+<link rel="stylesheet" type="text/css" href="/jmi-canvas/src/main/resources/jmi-client.css" />
 <script type="text/javascript" src="/jmi-canvas/src/main/js/jmi.js"></script>
 <script type="text/javascript" src="/jmi-canvas/src/main/js/lib/json_sans_eval.js"></script>
 
@@ -70,7 +71,7 @@ function GoMap() {
 		alert( event.message);
 	} );
 	map.addEventListener(JMI.Map.event.ATTRIBUTE_CLICK, function(event) {
-		alert( event.attribute.props.NAME);
+		//alert( event.attribute.props.NAME);
 	} );
 };
 function JMIF_Navigate(args) {

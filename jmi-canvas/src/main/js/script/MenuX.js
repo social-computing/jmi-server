@@ -140,6 +140,8 @@ JMI.script.MenuX = ( function() {
 			var a, item = document.createElement("li");
 			if(url === null && title === "-") {
 				//item.type = "separator";
+				a = document.createElement("hr");
+				item.appendChild(a);
 			} else {
 				if(url !== null) {
 					a = document.createElement("a");

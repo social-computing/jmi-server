@@ -288,13 +288,13 @@ JMI.script.Satellite = ( function() {
 							var menux = zone.curSwatch.refs[args];
 
 							if(menux !== null) {
-								var menu = document.createElement("ul");
+								var menu = document.createElement('ul');
+								menu.id = 'menu';
 								menux.parseMenu(applet,menu,zone);
 								applet.divMenu.appendChild( menu);
-								//menu.setStyle("fontWeight", "bold");
-								//menu.addEventListener(JMI.script.MenuEvent.ITEM_CLICK, applet.menuHandler);
-								var point = applet.localToGlobal(pos);
-								menu.show(point.x, point.y);
+								var x = pos.x + applet.parent.style.left,
+									y = pos.y + applet.parent.style.top;
+								/*menu.show(point.x, point.y);
 								menu.visible = false;
 								if(point.x + menu.width > applet.width) {
 									point.x = Math.max(point.x - menu.width, 0);
@@ -302,8 +302,10 @@ JMI.script.Satellite = ( function() {
 								if(point.y + menu.height > applet.height) {
 									point.y = Math.max(point.y - menu.height, 0);
 								}
-								menu.move(point.x, point.y);
-								menu.visible = true;
+								menu.move(point.x, point.y);*/
+								applet.divMenu.style.top = y + 'px';
+								applet.divMenu.style.left = x + 'px';
+								applet.divMenu.style.visibility = '';
 							}
 						}
 
