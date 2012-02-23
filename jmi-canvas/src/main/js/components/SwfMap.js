@@ -74,7 +74,7 @@ JMI.components.SwfMap = (function() {
 JMI.components.SwfMap.mainCallback = function(id, event) {
 	var map = swfobject.getObjectById(id);
 	if( map) {
-		map.map = map;
+		event.map = map.JMI;
 		map.JMI.dispatchEvent( event);
 	}
 };
