@@ -190,8 +190,8 @@
 					}
 					else if( type == AttributeEvent.CLICK || type == AttributeEvent.DOUBLE_CLICK || type == AttributeEvent.HOVER) {
 						jsevt.attribute = 0; // TODO !!!!
-						jsevt.x = event._localX;
-						jsevt.y = event._localY;
+						//jsevt.x = event._localX;
+						//jsevt.y = event._localY;
 					}
 					ExternalInterface.call(mainCallback, FlexGlobals.topLevelApplication.id, jsevt);
 				}

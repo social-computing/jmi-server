@@ -46,6 +46,7 @@ JMI.components.SwfMap = (function() {
 			}
 			jmiparams.mainCallback = 'JMI.components.SwfMap.mainCallback';
 			jmiparams.wpsplanname = jmiparams.map;
+			jmiparams.wpsserverurl = this.server;
 			return jmiparams;
 		},	
 		compute: function(jmiparams) {

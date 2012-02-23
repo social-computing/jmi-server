@@ -57,7 +57,7 @@ JMI.script.FontX = (function() {
 			if( this.italic) {
 				this.canvas = 'italic ' + this.canvas;
 			}
-		    this.canvas = this.canvas + this.size + 'pt ' + this.font;
+		    this.canvas = this.canvas + (this.size) + 'px ' + this.font;
 		}
 	};
 	
