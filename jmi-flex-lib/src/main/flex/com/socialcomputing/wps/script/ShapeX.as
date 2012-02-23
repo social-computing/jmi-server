@@ -478,7 +478,7 @@ package com.socialcomputing.wps.script  {
 							}
 							else  if( (e.target as LoaderInfo).content is DisplayObject) {
 								var swf:DisplayObject = (e.currentTarget as LoaderInfo).content;
-								var bd:BitmapData = new BitmapData(swf.height+22, swf.width+22, true, 0x00000000);
+								var bd:BitmapData = new BitmapData(swf.height+28, swf.width+28, true, 0x00000000);
 								bd.draw(swf);
 								image = new Bitmap(bd,PixelSnapping.ALWAYS,true);
 							}
