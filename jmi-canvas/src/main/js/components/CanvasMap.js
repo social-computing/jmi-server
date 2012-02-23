@@ -192,12 +192,7 @@ JMI.components.CanvasMap = (function() {
 		},
 		mouseClickHandler: function(event) {
 			if (this instanceof HTMLCanvasElement) {
-				if( this.JMI.divMenu.style.visibility === '') {
-					this.JMI.divMenu.style.visibility = 'hidden';
-					if(this.JMI.divMenu.firstChild) {
-						this.JMI.divMenu.removeChild(this.JMI.divMenu.firstChild);
-					}
-				}
+				this.JMI.hideMenu();
 			    var mousePosition = JMI.components.CanvasMap.getPosition(this, event);
 				if ( this.JMI.ready && this.JMI.planContainer.map.plan.curSat !== null )
 				{
@@ -208,11 +203,20 @@ JMI.components.CanvasMap = (function() {
 		},
 		mouseDoubleClickHandler: function(event) {
 			if (this instanceof HTMLCanvasElement) {
+				this.JMI.hideMenu();
 			    var mousePosition = JMI.components.CanvasMap.getPosition(this, event);
 				if ( this.JMI.ready && this.JMI.planContainer.map.plan.curSat !== null )
 				{
 					this.JMI.planContainer.map.plan.updateZoneAt( mousePosition);
 					this.JMI.planContainer.map.plan.curSat.execute( this.JMI, this.JMI.planContainer.map.plan.curZone, mousePosition, JMI.script.Satellite.DBLCLICK_VAL);
+				}
+			}
+		},
+		hideMenu: function() {
+			if( this.divMenu.style.visibility === '') {
+				this.divMenu.style.visibility = 'hidden';
+				if(this.divMenu.firstChild) {
+					this.divMenu.removeChild(this.divMenu.firstChild);
 				}
 			}
 		},
@@ -303,10 +307,7 @@ JMI.components.CanvasMap = (function() {
 			return  this.planContainer.map.env.selections[selection];
 		},
 		menuHandler: function( event){
-			event.target.JMI.divMenu.style.visibility = 'hidden';
-			if(event.target.JMI.divMenu.firstChild) {
-				event.target.JMI.divMenu.removeChild(event.target.JMI.divMenu.firstChild);
-			}
+			event.target.JMI.hideMenu();
 			event.target.JMI.performAction( event.target.href);
 		},
 		/**
