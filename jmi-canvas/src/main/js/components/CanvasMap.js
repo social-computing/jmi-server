@@ -376,6 +376,7 @@ JMI.components.CanvasMap = (function() {
 	return CanvasMap;
 }());
 
+JMI.components.CanvasMap.type = JMI.Map.CANVAS;
 JMI.components.CanvasMap.version = "1.0-SNAPSHOT";
 
 // Adapted from: http://www.quirksmode.org/js/findpos.html and 

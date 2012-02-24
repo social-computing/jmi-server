@@ -71,6 +71,9 @@ JMI.components.SwfMap = (function() {
 	return SwfMap;
 }());
 
+JMI.components.SwfMap.type = JMI.Map.SWF;
+JMI.components.SwfMap.version = "1.0-SNAPSHOT";
+
 JMI.components.SwfMap.mainCallback = function(id, event) {
 	var map = swfobject.getObjectById(id);
 	if( map) {
