@@ -43,10 +43,15 @@ JMI.components.MapRequester = (function() {
 			for( p in parameters) {
 				url = this.addParameter( url, p, parameters[p]);
 			}
-			client.open( "GET", "/jmi-canvas/src/main/resources/feeds2.json", true); 
-			//client.open( "GET", url, true); 
-			client.send();
-		},
+			try {
+				//client.open( "GET", "/jmi-canvas/src/main/resources/feeds.json", true); 
+				client.open( "GET", url, true); 
+				client.send();
+			}
+			catch(err) {
+				requester.map.dispatchEvent({map: this.map, type: JMI.Map.event.ERROR, message: err + 'Check browser security parameters: allow data accross different domains.'});
+			}
+  		},
 	
 		addParameter: function( url, param, value, first) {
 			if( url.charAt(url.length - 1) !== '?') {

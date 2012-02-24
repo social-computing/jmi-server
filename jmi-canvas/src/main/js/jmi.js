@@ -35,7 +35,7 @@ JMI.namespace = function(ns_string) {
 };
 
 JMI.canvas = function() {
-	return !!document.createElement('canvas').getContext('2d');
+	return window.HTMLCanvasElement;
 };
 
 JMI.Map = function(params) {
