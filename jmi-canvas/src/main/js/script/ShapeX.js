@@ -401,8 +401,8 @@ JMI.script.ShapeX = (function() {
             if (shapeScale > 0.0) {
                 // Disk                
                 var imageScale = 1.414 * shapeScale;
-                imageWidth = image.width;// / imageScale;
-                imageHeight = image.height;// / imageScale;
+                imageWidth = imageScale;
+                imageHeight = imageScale;
                 imageScale >>= 1;
                 imagePosition.x -= imageScale;
                 imagePosition.y -= imageScale;
