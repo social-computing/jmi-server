@@ -52,14 +52,12 @@
       </plugin>
 	</plugins-->
 
-    <resources>  
-      <!--resource>  
-         <directory>src</directory>
-         <includes>
-             <include>jmi-client.js</include>
-         </includes>
-      </resource-->  
-    </resources>  
+    <!--resources>  
+      <resource>  
+         <directory>target/jmi</directory>
+		 <filtering>true</filtering>
+      </resource>  
+    </resources-->  
     <pluginManagement>
       <plugins>
         <plugin>
@@ -92,29 +90,28 @@
           <aggregations>
             <aggregation>
               <insertNewLine>true</insertNewLine>
-              <output>target/jmi-client.js</output>
+              <output>target/jmi/jmi-client.js</output>
               <includes>
-                <include>jmi/jmi.js</include>
-                <include>jmi/lib/*.js</include>
-                <include>jmi/util/*.js</include>
-                <include>jmi/script/*.js</include>
-                <include>jmi/components/*.js</include>
+                <include>jmi.js</include>
+                <include>lib/*.js</include>
+                <include>util/*.js</include>
+                <include>script/*.js</include>
+                <include>components/*.js</include>
               </includes>
             </aggregation>
           </aggregations>
         </configuration>
       </plugin>
-      <plugin>
+       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <version>2.4</version>
         <configuration>
+		  <directory>target/jmi</directory>
           <includes>
-            <include>../jmi-client.js</include>
+            <include>jmi-client.js</include>
+            <include>jmi-client.css</include>
           </includes>
-		  <excludes>
-			<exclude>**/*.jon</exclude>
-		  </excludes>
         </configuration>
       </plugin>
     </plugins>
