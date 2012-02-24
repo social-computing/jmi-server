@@ -53,7 +53,8 @@ JMI.Map = function(params) {
 	} else {
 		throw 'JMI map: invalid parent ' + params.parent;
 	}
-	if((!params.client || params.client === JMI.Map.CANVAS) && JMI.canvas()) {
+	// Opera doesn't fully support canvas
+	if((!params.client || params.client === JMI.Map.CANVAS) && JMI.canvas() && !window.opera) {
 		return new JMI.components.CanvasMap(divParent, params.server, params.parameters);
 	}
 	if(!params.client || params.client === JMI.Map.SWF) {
