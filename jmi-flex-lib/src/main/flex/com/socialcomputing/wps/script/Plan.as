@@ -169,6 +169,8 @@ package com.socialcomputing.wps.script  {
 			var curDrawingSurface:Sprite  = m_applet.curDrawingSurface;
 			var backDrawingSurface:Sprite = m_applet.backDrawingSurface;
 
+			this._m_curSat = null;
+			this.m_curZone = null;
             // If there is any background image, load it
             //if (m_applet.backImgUrl != null)
                 //renderBitmap( restGfx, m_applet.m_backImgUrl, 0, 0, null );

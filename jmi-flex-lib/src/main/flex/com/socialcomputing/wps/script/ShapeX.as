@@ -466,7 +466,7 @@ package com.socialcomputing.wps.script  {
 
 				// Check if the image has already been loaded
 				var env:Env = applet.env;
-                if (image == null) {
+                if (image == null && !applet.env.getBadMedia(imageNam)) {
 					if(env.getLoader(imageUrl) != null) return;
 					var loader:LoaderEx = new LoaderEx();
 					env.addLoader( imageUrl, loader);
@@ -500,25 +500,14 @@ package com.socialcomputing.wps.script  {
 							applet.renderShape(applet.restDrawingSurface, applet.width, applet.height);
 						}
 						trace('Load image ' + imageUrl + ' failed');
+						applet.env.putBadMedia( imageUrl);
 					});
 					var fileRequest:URLRequest = new URLRequest( imageUrl);
 					loader.load(fileRequest);
-/*					imageLoader.add(imageUrl, {id: imageNam});
-                    imageLoader.get(imageUrl).addEventListener(BulkLoader.ERROR, function loaderError(e:Event):void {
-						Alert('Load image ' + imageUrl + ' failed');
-					});
-					imageLoader.get(imageUrl).addEventListener(BulkLoader.SECURITY_ERROR, function loaderSecError(e:Event):void {
-						Alert('Load image ' + imageUrl + ' failed:' + e.toString());
-					});
-					imageLoader.get(imageUrl).addEventListener(BulkLoader.COMPLETE, function loaderComplete(e:Event):void {
-						image = imageLoader.getBitmap(imageNam);
-						if( image != null)
-							drawLoadedImage(applet, image, s, zone, imageNam, transfo, center, true);
-					});*/
                 }
 
 				// Draw the image if it has already been loaded
-				else {
+				if( image != null) {
 					drawLoadedImage(applet, image, s, zone, imageNam, transfo, center, false);
                 }
             }

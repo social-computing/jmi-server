@@ -348,21 +348,36 @@ JMI.script.ShapeX = (function() {
                 }
                 */
                 
-                var image;
-                // var image = applet.env.getMedia(imageName); // as Bitmap;
+                var image = null;
+                //var image = applet.env.getMedia(imageName); // as Bitmap;
                 
                 // Check if the image has already been loaded
                 if (!applet.planContainer.map.env.hasMedia(imageName)) {
-                    image = new Image();
-                    var sh = this;
-                    image.onload = function() {
-                        sh.drawLoadedImage(applet, image, gDrawingContext, zone, imageName, transfo, center, true);
-                        applet.planContainer.map.env.medias[imageName] = image;
-                    };
-                    image.src = imageName;   
+                	if( !applet.planContainer.map.env.badMedias[imageName]) {
+                		if (!applet.planContainer.map.env.loaders[imageName]) {
+		                    applet.planContainer.map.env.loaders[imageName] = true;
+		                    image = new Image();
+		                    var sh = this;
+		                    image.onload = function() {
+		                        applet.planContainer.map.env.medias[imageName] = image;
+		                    	applet.planContainer.map.env.loaders.splice(imageName,1);
+		                    	if( applet.planContainer.map.env.loaders.length === 0) {
+				                    //sh.drawLoadedImage(applet, image, gDrawingContext, zone, imageName, transfo, center, true);
+									applet.planContainer.map.plan.init();
+									applet.renderShape(applet.restDrawingCanvas, applet.size.width, applet.size.height);
+		                    	}
+		                    };
+		                    image.onerror = function() {
+		                    	applet.planContainer.map.env.badMedias[imageName] = true; 
+		                    	applet.planContainer.map.env.loaders.splice(imageName,1);
+		                    	applet.log('Load image ' + imageName + ' failed');
+		                    };
+		                    image.src = imageName;   
+		                }
+	                }
                 }
-                // Draw the image if it has already been loaded
                 else {
+                	// Draw the image if it has already been loaded
                     image = applet.planContainer.map.env.medias[imageName];
                     this.drawLoadedImage(applet, image, gDrawingContext, zone, imageName, transfo, center, false);
                 }
@@ -386,8 +401,8 @@ JMI.script.ShapeX = (function() {
             if (shapeScale > 0.0) {
                 // Disk                
                 var imageScale = 1.414 * shapeScale;
-                imageWidth = imageScale * image.width;
-                imageHeight = imageScale * image.height;
+                imageWidth = image.width;// / imageScale;
+                imageHeight = image.height;// / imageScale;
                 imageScale >>= 1;
                 imagePosition.x -= imageScale;
                 imagePosition.y -= imageScale;

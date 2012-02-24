@@ -156,6 +156,8 @@ JMI.script.Plan = ( function() {
 			var curDrawingContext = this.applet.curDrawingContext;
 			var backDrawingContext = this.applet.backDrawingContext;
 
+			this.curZone = null;
+			this.curSat = null;
 			// If there is any background image, load it
 			//if (this.applet.backImgUrl != null)
 			//renderBitmap( restGfx, this.applet.backImgUrl, 0, 0, null );

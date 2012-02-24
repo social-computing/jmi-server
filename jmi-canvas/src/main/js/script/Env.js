@@ -95,21 +95,8 @@ JMI.script.Env = (function() {
             var bkCol = needPrint ? bkWhite : this.inColor.getColor();
             this.applet = applet;
             this.medias = {};
-            this.loaders = {};
-        },
-        
-        addLoader: function (name, loader) {
-            this.loaders[name] = loader;
-        },	
-
-        getLoader: function (name) {
-            return this.loaders[name];
-        },	
-        
-        removeLoader: function(name) {
-            if(this.loaders[name]) {
-                delete this.loaders[name];
-            }
+            this.loaders = [];
+            this.badMedias = {};
         },
         
         hasMedia: function(name) {

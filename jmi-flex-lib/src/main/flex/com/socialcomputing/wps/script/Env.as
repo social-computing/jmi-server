@@ -83,7 +83,7 @@ public class Env
 	 * Table containing icons and sounds.
 	 * This buffer stores all media object using a unique key to load them asynchronously during init.
 	 */
-	public var m_medias:Object = null;
+	public var m_medias:Object = null, m_badMedias = null;;
 
 	/**
 	 * Table containing media loders.
@@ -118,7 +118,8 @@ public class Env
 		var bkCol:ColorTransform= needPrint ? bkWhite : m_inCol.getColor();
 		this.m_applet        = applet;
 		this.m_medias        = new Object();
-		this.m_loaders      = new Array();
+		this.m_loaders       = new Array();
+		this.m_badMedias     = new Object();
 	}
 
 	public function getMedia(name:String):Object {
@@ -127,6 +128,14 @@ public class Env
 	
 	public function putMedia(name:String, media:Object):void {
 		this.m_medias[name] = media;
+	}
+	
+	public function getBadMedia(name:String):Boolean {
+		return this.m_badMedias[name] != null;
+	}
+	
+	public function putBadMedia(name:String):void {
+		this.m_badMedias[name] = false;
 	}
 	
 	public function addLoader(name:String, loader:LoaderEx):void {
