@@ -102,7 +102,7 @@ JMI.script.MenuX = ( function() {
 		parseItem : function(applet, dst, zone, j) {
 			var parts = this.getString(JMI.script.MenuX.TEXT_VAL, zone.props).split(JMI.script.Base.SEP);
 			var title = parts[0];
-			var url = parts.length > 1 ? parts[1] : null;
+			var url = parts.length > 1 ? (parts[1]===''? null :parts[1]): null;
 			var redir = parts.length > 2 ? parts[2] : null;
 			//itemStr;
 			var font = this.getTextFormat(zone.props);

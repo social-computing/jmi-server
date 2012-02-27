@@ -12,16 +12,27 @@ ul#menu {
 	padding: 0;
   }
  
-#menu li, li a { 
-	color:#343434;
+#menu li { 
+	color:#aaaaaa;
 	text-decoration:none;
  	list-style: none;
-	padding: 0 10px 0 10px;
+	padding: 0 15px 0 15px;
 	margin-bottom:5px;
 	margin-top:5px;
  }
 
 #menu li:hover {
+	color:#aaaaaa;
+	background:#B2DDFF;
+	}
+
+#menu li a { 
+	color:#343434;
+	text-decoration:none;
+ 	list-style: none;
+ }
+ 
+#menu li:hover a {
 	color:#343434;
 	background:#B2DDFF;
 	}

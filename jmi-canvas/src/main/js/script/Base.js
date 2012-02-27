@@ -428,6 +428,9 @@ JMI.script.Base.parseTokens = function(text) {
 };
 
 JMI.script.Base.setCharAt = function(str, c, index) {
+	if( index >= str.length) {
+		return str + c;
+	}
 	return str.substring(0, index) + c + str.substring(index + 1);
 };
 /*
