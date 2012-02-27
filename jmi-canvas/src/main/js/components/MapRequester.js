@@ -51,6 +51,7 @@ JMI.components.MapRequester = (function() {
 				client.send();
 			}
 			catch(err) {
+				document.body.style.cursor = 'default';
 				setTimeout( function() {
 					requester.map.dispatchEvent({map: this.map, type: JMI.Map.event.ERROR, message: err + 'Check browser security parameters: allow access data sources across domains.'});
 				},100);
