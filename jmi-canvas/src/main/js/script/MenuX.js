@@ -151,17 +151,11 @@ JMI.script.MenuX = ( function() {
 					a.addEventListener('dblclick', applet.menuHandler, false);
 					a.JMI = applet;
 					item.appendChild(a);
-					item.addEventListener('click', function() {
-						a.click();
-					}, false);
-					item.addEventListener('dblclick', function() {
-						a.click();
-					}, false);
 				}
 				else {
 					item.innerHTML = title;
 				}
-				/* TDO à finir
+				/* TODO à finir
 				 if(font !== null) {
 					if(font.bold === true) {
 						item.bold = "true";

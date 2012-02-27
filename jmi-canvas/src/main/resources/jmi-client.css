@@ -29,7 +29,8 @@ ul#menu {
 #menu li a { 
 	color:#343434;
 	text-decoration:none;
- 	list-style: none;
+ 	list-style:none;
+ 	display:block;
  }
  
 #menu li:hover a {
