@@ -24,16 +24,20 @@ JMI.components.SwfMap = (function() {
 		  id: 'JMI_' + this.parent.id,
 		  name: 'JMI_' + this.parent.id
 		};
-		this.parent.innerHTML = "<div id='" + attributes.id + "'>Flash player is required</div>";
+		this.parent.innerHTML = '<div id="' + attributes.id + '"><p>Either scripts and active content are not permitted to run or Adobe Flash Player version 10.0 or greater is not installed.</p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash Player" /></a></div>';
 		var comp = this;
 		swfobject.embedSWF(this.swf, attributes.id, "100%", "100%", "10.0.0", "expressInstall.swf", 
 							this.checkParams(jmiparams), params, attributes,
 							function(res) {
 								if( !res.success) {
-									throw('Error creating JMI flash client');
+									setTimeout( function() {
+										comp.dispatchEvent({map: comp, type: JMI.Map.event.ERROR, message: 'Error creating JMI flash client'});
+									},100);
 								}
-								comp.swfmap = res.ref; //swfobject.getObjectById(e.id);
-								comp.swfmap.JMI = comp;
+								else {
+									comp.swfmap = res.ref; //swfobject.getObjectById(e.id);
+									comp.swfmap.JMI = comp;
+								}
 							});
 	};
 	

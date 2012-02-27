@@ -29,7 +29,9 @@ JMI.components.MapRequester = (function() {
 						requester.map.setData( client.responseText);
 					}
 					else { 
-						requester.map.dispatchEvent({map: this.map, type: JMI.Map.event.ERROR, message: 'Error ' + client.status + ': ' + client.statusText + '\n' + requester.jmiServerUrl + '...'});
+						setTimeout( function() {
+							requester.map.dispatchEvent({map: requester.map, type: JMI.Map.event.ERROR, message: 'Error ' + client.status + ': ' + client.statusText + '\n' + requester.jmiServerUrl + '...'});
+						},100);
 					}
 				}
 			}; 
@@ -49,7 +51,9 @@ JMI.components.MapRequester = (function() {
 				client.send();
 			}
 			catch(err) {
-				requester.map.dispatchEvent({map: this.map, type: JMI.Map.event.ERROR, message: err + 'Check browser security parameters: allow data accross different domains.'});
+				setTimeout( function() {
+					requester.map.dispatchEvent({map: this.map, type: JMI.Map.event.ERROR, message: err + 'Check browser security parameters: allow access data sources across domains.'});
+				},100);
 			}
   		},
 	
