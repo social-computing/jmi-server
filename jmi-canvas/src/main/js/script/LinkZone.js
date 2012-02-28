@@ -45,7 +45,7 @@ JMI.script.LinkZone = (function() {
          * @param isFirst          True if init called for the first time.
          */
         init: function(applet, gDrawingContext, isFirst) {
-            JMI.script.ActiveZone.prototype.init.call(this, applet, isFirst);
+            JMI.script.ActiveZone.prototype.init.call(this, applet, gDrawingContext, isFirst);
             
             this.parent = null;
             if (!JMI.script.Base.isEnabled(this.flags, JMI.script.LinkZone.FAKEFROM_BIT | JMI.script.LinkZone.FAKETO_BIT)) {
