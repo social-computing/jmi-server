@@ -2,8 +2,8 @@ package com.socialcomputing.wps.script  {
     import com.socialcomputing.wps.components.Map;
     import com.socialcomputing.wps.util.LoaderEx;
     
-	import flash.utils.Dictionary;
     import flash.geom.ColorTransform;
+    import flash.utils.Dictionary;
 
 /**
  * <p>Title: Env</p>
@@ -83,7 +83,7 @@ public class Env
 	 * Table containing icons and sounds.
 	 * This buffer stores all media object using a unique key to load them asynchronously during init.
 	 */
-	public var m_medias:Object = null, m_badMedias = null;;
+	public var m_medias:Object = null, m_badMedias:Object = null;;
 
 	/**
 	 * Table containing media loders.
