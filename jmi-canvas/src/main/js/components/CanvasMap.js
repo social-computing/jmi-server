@@ -328,8 +328,8 @@ JMI.components.CanvasMap = (function() {
 			var jsStr = "javascript",
 				target = "_blank",
 				sep       = actionStr.indexOf( ':' ),
-				pos;
-		
+				pos, i;
+
 			if ( sep !== -1 )
 			{
 				target  = actionStr.substring( 0, sep );
@@ -352,6 +352,9 @@ JMI.components.CanvasMap = (function() {
 						var func     = actionStr.substring( 0, pos ),
 							paramStr = actionStr.substring( pos + 1, actionStr.length- 1 ),
 							params   = paramStr.split( '%EF%BF%BC');//String.fromCharCode( 0xFFFC));
+						for( i = 0; i < params.length; ++i) {
+							params[i] = decodeURI( params[i]);
+						}
 						this.dispatchEvent( {map: this, type: JMI.Map.event.ACTION, fn: func, args: params});
 					}
 					return;
