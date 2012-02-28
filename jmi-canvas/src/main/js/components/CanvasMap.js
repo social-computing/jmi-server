@@ -4,6 +4,7 @@ JMI.namespace("components.CanvasMap");
 JMI.components.CanvasMap = (function() {
 
 	var CanvasMap = function(parent, server, jmiparams) {
+		this.type = JMI.Map.CANVAS;
 		this.requester = new JMI.components.MapRequester(this, server);
 		this.backgroundColor = 0xFFFFFF;
 		this.curPos = new JMI.script.Point();
@@ -376,8 +377,7 @@ JMI.components.CanvasMap = (function() {
 	return CanvasMap;
 }());
 
-JMI.components.CanvasMap.type = JMI.Map.CANVAS;
-JMI.components.CanvasMap.version = "1.0-SNAPSHOT";
+JMI.components.CanvasMap.Version = "1.0-SNAPSHOT";
 
 // Adapted from: http://www.quirksmode.org/js/findpos.html and 
 // http://stackoverflow.com/questions/5085689/tracking-mouse-position-in-canvas

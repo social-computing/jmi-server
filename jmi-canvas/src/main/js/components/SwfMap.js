@@ -4,6 +4,7 @@ JMI.namespace("components.SwfMap");
 JMI.components.SwfMap = (function() {
 
 	var SwfMap = function(parent, server, swf, jmiparams) {
+		this.type = JMI.Map.SWF;
 		this.server = server;
 		this.swf = swf;
 		this.parent = parent;
@@ -75,8 +76,7 @@ JMI.components.SwfMap = (function() {
 	return SwfMap;
 }());
 
-JMI.components.SwfMap.type = JMI.Map.SWF;
-JMI.components.SwfMap.version = "1.0-SNAPSHOT";
+JMI.components.SwfMap.Version = "1.0-SNAPSHOT";
 
 JMI.components.SwfMap.mainCallback = function(id, event) {
 	var map = swfobject.getObjectById(id);
