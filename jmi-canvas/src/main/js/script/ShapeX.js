@@ -135,9 +135,6 @@ JMI.script.ShapeX = (function() {
                 switch (points.length) {
                     // 1 point = circle => Place
                     case 1:     
-                        // var width:int = size << 1;
-                        // TODO : portage, voir si c'est nécessaire par rapport au dessin sur un canevas
-                        //size = size * 2;
                         // Jonathan Dray : 2011.01.23, the size is the radius
                         rect = new JMI.script.Rectangle(shapeCenter.x + shapePos.x - size,
                             shapeCenter.y + shapePos.y - size,
@@ -420,41 +417,6 @@ JMI.script.ShapeX = (function() {
             if(render) {
                 applet.renderShape(gDrawingContext, imageWidth, imageHeight, imagePosition);
             }
-            // Not cloning the bitmapData itself
-            /*
-            var scaledImg; //:Image;
-            var imageClone = new Bitmap(image.bitmapData); //:Bitmap
-            
-            var p              = this.getCenter(zone); //:Point
-            var shapePos       = new JMI.script.Point(); // :Point
-            var scale          = this.getShapePos(zone, transfo, center, p, shapePos); //:Number
-            var imageWidth     = imageClone.width; //:int
-            var imageScale     = imageWidth; //:int
-            
-            // Disk
-            if (scale > 0.0) {
-                //TODO : portage cast to int
-                imageScale = 1.414 * scale;
-            }
-            
-            // Rescale image
-            if (imageWidth != imageScale) {
-                if (scaledImg == null) {
-                    imageClone.scaleX = imageScale / imageClone.width;
-                    imageClone.scaleY = imageScale / imageClone.height;
-                }
-            }
-            
-            // Upadate image coordinates after rescale
-            imageScale >>= 1;
-            imageClone.x = p.x + shapePos.x - imageScale;
-            imageClone.y = p.y + shapePos.y - imageScale;
-            
-            ImageUtil.drawBitmap(imageClone, s.graphics);
-            if(render) {
-                applet.renderShape(s, imageClone.width, imageClone.height, new JMI.script.Point(imageClone.x, imageClone.y));
-            }
-            */
         },
 
 

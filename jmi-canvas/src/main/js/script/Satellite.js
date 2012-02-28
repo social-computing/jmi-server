@@ -86,7 +86,6 @@ JMI.script.Satellite = ( function() {
 						y2 = satCtr.y;
 						this.setColor(gDrawingContext, JMI.script.Satellite.LINK_DRK_COL_VAL, zone.props);
 
-						// TODO : portage vérifier que la forme est bien dessinée
 						gDrawingContext.beginPath();
 						gDrawingContext.moveTo(x1, y1 + 1);
 						gDrawingContext.lineTo(x2, y2 + 1);
@@ -283,7 +282,6 @@ JMI.script.Satellite = ( function() {
 						}
 
 						// Popup a menu
-						// TODO : portage getion du menu
 						else if(func === ("popup")) {
 							var menux = zone.curSwatch.refs[args];
 

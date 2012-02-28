@@ -165,7 +165,6 @@ JMI.script.Base = ( function() {
 		*
 		* @return                  True if the property exist and has a value. False Otherwise.
 		*/
-		// TODO : portage, methode graphique
 		setColor : function(gDrawingContext, property, props) {
 			var color = this.getColor(property, props);
 			if(color !== null) {
