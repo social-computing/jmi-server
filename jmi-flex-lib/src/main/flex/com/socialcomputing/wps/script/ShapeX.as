@@ -362,8 +362,8 @@ package com.socialcomputing.wps.script  {
                 if ( isEnabled( flags, SEC_LNK_BIT ))
                 {
                     var w2:int= width * width;
-                    fromOff = int((.9 * Math.sqrt( fromOff * fromOff - w2 )));
-                    toOff   = int((.9 * Math.sqrt( toOff * toOff - w2 )));
+                    fromOff = Math.round((.9 * Math.sqrt( fromOff * fromOff - w2 )));
+                    toOff   = Math.round((.9 * Math.sqrt( toOff * toOff - w2 )));
                 }
             }
             
