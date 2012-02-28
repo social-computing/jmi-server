@@ -224,7 +224,7 @@ JMI.script.Satellite = ( function() {
 		 * @param pos           The current cursor position. Used to popup a menu.
 		 * @param actionId      Type of event that triggers the action.[HOVER_VAL,CLICK_VAL,DBLCLICK_VAL].
 		 */
-		execute : function(applet, zone, pos, actionId) {
+		execute : function(applet, zone, pos, actionId, absPosition) {
 			var firstSat = zone.curSwatch.satellites[0];
 			var isExe = this.isDefined(actionId);
 
@@ -292,9 +292,8 @@ JMI.script.Satellite = ( function() {
 								menu.id = 'menu';
 								menux.parseMenu(applet,menu,zone);
 								applet.divMenu.appendChild( menu);
-								var p = JMI.components.CanvasMap.getAbsPosition(applet.drawingCanvas);
-								var x = pos.x + p.x,
-									y = pos.y + p.y;
+								var x = absPosition.x,
+									y = absPosition.y;
 								/*menu.show(point.x, point.y);
 								menu.visible = false;
 								if(point.x + menu.width > applet.width) {

@@ -29,7 +29,7 @@ JMI.components.CanvasMap = (function() {
 		this.divMenu = document.createElement("div");
 		this.divMenu.style.visibility = 'hidden';
 		this.divMenu.style.position = 'absolute';
-		this.parent.appendChild(this.divMenu);
+		document.body.appendChild(this.divMenu);
 	
 		// Graphic zones
 		this.curDrawingCanvas = document.createElement("canvas");
@@ -197,7 +197,7 @@ JMI.components.CanvasMap = (function() {
 				if ( this.JMI.ready && this.JMI.planContainer.map.plan.curSat !== null )
 				{
 					this.JMI.planContainer.map.plan.updateZoneAt( mousePosition);
-					this.JMI.planContainer.map.plan.curSat.execute( this.JMI, this.JMI.planContainer.map.plan.curZone, mousePosition, JMI.script.Satellite.CLICK_VAL);
+					this.JMI.planContainer.map.plan.curSat.execute( this.JMI, this.JMI.planContainer.map.plan.curZone, mousePosition, JMI.script.Satellite.CLICK_VAL, new JMI.script.Point( event.clientX, event.clientY));
 				}
 			}
 		},
@@ -208,7 +208,7 @@ JMI.components.CanvasMap = (function() {
 				if ( this.JMI.ready && this.JMI.planContainer.map.plan.curSat !== null )
 				{
 					this.JMI.planContainer.map.plan.updateZoneAt( mousePosition);
-					this.JMI.planContainer.map.plan.curSat.execute( this.JMI, this.JMI.planContainer.map.plan.curZone, mousePosition, JMI.script.Satellite.DBLCLICK_VAL);
+					this.JMI.planContainer.map.plan.curSat.execute( this.JMI, this.JMI.planContainer.map.plan.curZone, mousePosition, JMI.script.Satellite.DBLCLICK_VAL, new JMI.script.Point( event.clientX, event.clientY));
 				}
 			}
 		},
