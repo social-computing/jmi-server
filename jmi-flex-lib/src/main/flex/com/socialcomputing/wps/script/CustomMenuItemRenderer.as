@@ -8,9 +8,9 @@ package com.socialcomputing.wps.script {
             if(value == null) return;
             super.data = value;
             if(this.data){
-                if (this.data.bold == "true") 
+                if (this.data.bold) 
 					this.setStyle("fontWeight", "bold");
-				if (this.data.italic == "true") 
+				if (this.data.italic) 
 					this.setStyle("fontStyle", "italic");
 				if( this.data.hasOwnProperty("font"))
                 	this.setStyle("fontFamily", this.data.font);

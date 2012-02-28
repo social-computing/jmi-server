@@ -122,14 +122,12 @@ package com.socialcomputing.wps.script  {
                             {
                                 menuItm = new Object;
 								menuItm.label = subitems[0];
-                                // TODO menuItm.setFont( menu.getFont( zone ));
                                 var fontMenu:TextFormat = menu.getFont( FONT_VAL, zone.m_props).getTextFormat(zone.m_props);
                                 if ( fontMenu != null) {
-                                    if (fontMenu.bold == true)
-                                        menuItm.bold = "true";
-                                    else
-                                        menuItm.bold = "false";
+                                    menuItm.bold = fontMenu.bold;
+									menuItm.italic = fontMenu.italic;
                                     menuItm.font = fontMenu.font;
+									menuItm.size = fontMenu.size;
                                 }
                                 menuItm.enabled = false;
                                 subMenu.addItem( menuItm );
@@ -201,11 +199,10 @@ package com.socialcomputing.wps.script  {
 				if ( url != null )
 					item.action = url;
                 if ( font != null) {
-                    if (font.bold == true)
-                        item.bold = "true";
-                    else
-                        item.bold = "false";
+					item.bold = font.bold;
+					item.italic = font.italic;
                     item.font = font.font;
+					item.size = font.size;
                 }
 			}
 			menu.addItem( item );
