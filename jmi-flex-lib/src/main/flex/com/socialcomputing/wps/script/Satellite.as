@@ -436,7 +436,8 @@ package com.socialcomputing.wps.script  {
                                 menu.variableRowHeight = true;
                                 menu.labelField = "label";
 								menu.itemRenderer = new ClassFactory(CustomMenuItemRenderer);
-                                //menu.setStyle("fontWeight", "bold");
+								menu.setStyle("fontFamily", "Helvetica");
+								menu.setStyle("fontSize", "12");
 								menu.addEventListener(MenuEvent.ITEM_CLICK, applet.menuHandler);
 								var point:Point = applet.localToGlobal(pos);
 								menu.show( point.x, point.y );
