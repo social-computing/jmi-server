@@ -155,15 +155,16 @@ JMI.script.MenuX = ( function() {
 				else {
 					item.innerHTML = title;
 				}
-				/* TODO à finir
-				 if(font !== null) {
+				if(font !== null) {
 					if(font.bold === true) {
-						item.bold = "true";
-					} else {
-						item.bold = "false";
+						item.style.fontWeight = 'bold';
 					}
-					item.font = font.font;
-				}*/
+					if(font.italic === true) {
+						item.style.fontStyle = 'italic';
+					}
+					item.style.fontFamily = font.font;
+					item.style.fontSize = font.size + 'px';
+				}
 			}
 			menu.appendChild(item);
 		},

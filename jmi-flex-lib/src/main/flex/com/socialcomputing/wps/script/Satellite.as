@@ -11,6 +11,9 @@ package com.socialcomputing.wps.script  {
     import mx.controls.Alert;
     import mx.controls.Menu;
     import mx.events.MenuEvent;
+	import mx.core.ClassFactory;
+	
+    import spark.components.supportClasses.ItemRenderer;
     
     /**
      * <p>Title: Satellite</p>
@@ -432,6 +435,7 @@ package com.socialcomputing.wps.script  {
 								var menu:Menu = Menu.createMenu( applet, menuData, false);
                                 menu.variableRowHeight = true;
                                 menu.labelField = "label";
+								menu.itemRenderer = new ClassFactory(CustomMenuItemRenderer);
                                 //menu.setStyle("fontWeight", "bold");
 								menu.addEventListener(MenuEvent.ITEM_CLICK, applet.menuHandler);
 								var point:Point = applet.localToGlobal(pos);
