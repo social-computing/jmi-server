@@ -58,6 +58,11 @@ JMI.components.CanvasMap = (function() {
 		this.drawingCanvas.addEventListener('click', this.mouseClickHandler, false);
 		this.drawingCanvas.addEventListener('dblclick', this.mouseDoubleClickHandler, false);
 
+	    this.drawingCanvas.addEventListener("touchstart", this.touchHandler, true);
+	    this.drawingCanvas.addEventListener("touchmove", this.touchHandler, true);
+	    this.drawingCanvas.addEventListener("touchend", this.touchHandler, true);
+	    this.drawingCanvas.addEventListener("touchcancel", this.touchHandler, true); 
+
 /*		var menu = document.createElement('menu');
 		menu.id = 'totsso';
 		menu.type = 'context';
@@ -213,6 +218,57 @@ JMI.components.CanvasMap = (function() {
 				}
 			}
 		},
+		touchHandler: function(event) {
+			if (this instanceof HTMLCanvasElement) {
+				var touches = event.changedTouches, first = touches[0], type = "";
+				switch(event.type) {
+					case "touchstart":
+						type = "mousemove";
+						this.JMI.hideMenu();
+						if( this.touchPressedTimer) {
+							clearTimeout( this.touchPressedTimer);
+						}
+						this.touchPressedTimer = setTimeout( function() {
+							var simulatedEvent = document.createEvent("MouseEvent");
+							simulatedEvent.initMouseEvent('click', true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0/*left*/, null);
+							first.target.dispatchEvent(simulatedEvent);
+							event.preventDefault();
+						},1000);
+						break;
+					case "touchmove":
+						type = "mousemove";
+						if( this.touchPressedTimer) {
+							clearTimeout( this.touchPressedTimer);
+						}
+						this.touchPressedTimer = setTimeout( function() {
+							var simulatedEvent = document.createEvent("MouseEvent");
+							simulatedEvent.initMouseEvent('click', true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0/*left*/, null);
+							first.target.dispatchEvent(simulatedEvent);
+							event.preventDefault();
+						},1000);
+						break;
+					case "touchend":
+						type = "mouseup";
+						if( this.touchPressedTimer) {
+							clearTimeout( this.touchPressedTimer);
+							delete this.touchPressedTimer;
+						}
+						break;
+					default:
+						return;
+				}
+	
+				var simulatedEvent = document.createEvent("MouseEvent");
+				simulatedEvent.initMouseEvent(type, true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0/*left*/, null);
+				first.target.dispatchEvent(simulatedEvent);
+				event.preventDefault();
+			}
+		},
+		menuHandler: function( event){
+			event.target.JMI.hideMenu();
+			event.target.JMI.performAction( event.target.href);
+			event.preventDefault();
+		},
 		hideMenu: function() {
 			if( this.divMenu.style.visibility === '') {
 				this.divMenu.style.visibility = 'hidden';
@@ -306,10 +362,6 @@ JMI.components.CanvasMap = (function() {
 				return -1;
 			}
 			return  this.planContainer.map.env.selections[selection];
-		},
-		menuHandler: function( event){
-			event.target.JMI.hideMenu();
-			event.target.JMI.performAction( event.target.href);
 		},
 		/**
 		 * Perform an URL action.
