@@ -427,6 +427,41 @@ JMI.components.CanvasMap = (function() {
 		},
 		openSoCom: function ( e) {
 			window.open( "http://www.social-computing.com", "_blank");
+		},
+		getImage: function(mime, width, height, keepProportions) {
+			var copy = document.createElement("canvas"),
+				copyCtx = copy.getContext("2d"),
+				dx, dy;
+			width = width || this.drawingCanvas.width;
+			height = height || this.drawingCanvas.height;
+			if( keepProportions === undefined) {
+				keepProportions = true;
+			}
+			if ( width === this.drawingCanvas.width && height === this.drawingCanvas.width) {
+				keepProportions = false; // same => direct copy
+			}
+			copy.width = width;
+			copy.height = height;
+			if( keepProportions) {
+				copyCtx.fillStyle = this.ready ? this.planContainer.map.env.inColor.getColor() : this.backgroundColor;
+				copyCtx.fillRect(0, 0, width, height);
+				
+				dx = width / this.drawingCanvas.width;
+				dy = height / this.drawingCanvas.height;
+				if( dx < dy) {
+					height = Math.round(dx * this.drawingCanvas.height);
+				}
+				else {
+					width = Math.round(dy * this.drawingCanvas.width);
+				}
+				dx = (copy.width - width) / 2;
+				dy = (copy.height - height) / 2;
+				copyCtx.drawImage(this.drawingCanvas, 0, 0, this.drawingCanvas.width, this.drawingCanvas.height, dx, dy, width, height);
+			}
+			else {
+				copyCtx.drawImage(this.drawingCanvas, 0, 0, this.drawingCanvas.width, this.drawingCanvas.height, 0, 0, width, height);
+			}
+			return copy.toDataURL("image/png");
 		}
 	};
 	
@@ -469,12 +504,6 @@ JMI.components.CanvasMap.getAbsPosition= function(canvas) {
     };
 };
 
-/*
-public function get bitmapData():BitmapData
-{
-	return _offScreen;
-}
-*/
 
 /*
 
@@ -483,14 +512,7 @@ private function findLink( zone:ActiveZone):Link {
 	return new Link( zone);
 }
 
-
-public function menuHandler( evt:MenuEvent):void {
-	performAction( evt.item.action);
-}
-
-public function actionPerformed( actionStr:String ):void {
-	performAction( actionStr);
-}*/
+*/
 
 
 /*
