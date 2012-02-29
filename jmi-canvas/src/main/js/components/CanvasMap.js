@@ -62,7 +62,7 @@ JMI.components.CanvasMap = (function() {
 	    this.drawingCanvas.addEventListener("touchstart", this.touchHandler, true);
 	    this.drawingCanvas.addEventListener("touchmove", this.touchHandler, true);
 	    this.drawingCanvas.addEventListener("touchend", this.touchHandler, true);
-	    this.drawingCanvas.addEventListener("touchcancel", this.touchHandler, true); 
+	    //this.drawingCanvas.addEventListener("touchcancel", this.touchHandler, true); 
 
 /*		var menu = document.createElement('menu');
 		menu.id = 'totsso';
@@ -221,7 +221,7 @@ JMI.components.CanvasMap = (function() {
 		},
 		touchHandler: function(event) {
 			if (this instanceof HTMLCanvasElement) {
-				var touches = event.changedTouches, first = touches[0], type = "";
+				var touches = event.changedTouches, first = touches[0], type = null;
 				switch(event.type) {
 					case "touchstart":
 						type = "mousemove";
@@ -233,7 +233,6 @@ JMI.components.CanvasMap = (function() {
 							var simulatedEvent = document.createEvent("MouseEvent");
 							simulatedEvent.initMouseEvent('click', true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0/*left*/, null);
 							first.target.dispatchEvent(simulatedEvent);
-							event.preventDefault();
 						},this.JMI.touchMenuDelay);
 						break;
 					case "touchmove":
@@ -245,7 +244,6 @@ JMI.components.CanvasMap = (function() {
 							var simulatedEvent = document.createEvent("MouseEvent");
 							simulatedEvent.initMouseEvent('click', true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0/*left*/, null);
 							first.target.dispatchEvent(simulatedEvent);
-							event.preventDefault();
 						},this.JMI.touchMenuDelay);
 						break;
 					case "touchend":
@@ -258,11 +256,12 @@ JMI.components.CanvasMap = (function() {
 					default:
 						return;
 				}
-	
-				var simulatedEvent = document.createEvent("MouseEvent");
-				simulatedEvent.initMouseEvent(type, true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0/*left*/, null);
-				first.target.dispatchEvent(simulatedEvent);
 				event.preventDefault();
+				if( type !== null) {
+					var simulatedEvent = document.createEvent("MouseEvent");
+					simulatedEvent.initMouseEvent(type, true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0/*left*/, null);
+					first.target.dispatchEvent(simulatedEvent);
+				}
 			}
 		},
 		menuHandler: function( event){
