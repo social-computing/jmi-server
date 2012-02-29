@@ -53,18 +53,11 @@ JMI.Map = function(params) {
 	} else {
 		throw 'JMI client: invalid parent ' + params.parent;
 	}
-	backgroundColor = params.backgroundColor;
-	if(!backgroundColor) {
-		backgroundColor = divParent.style.backgroundColor;
-	}
-	server = params.server;
-	if(!server) {
-		server = 'http://server.just-map-it.com/';
-	}
-	touchMenuDelay = params.touchMenuDelay;
-	if(!touchMenuDelay) {
-		touchMenuDelay = 1000;
-	}
+
+	backgroundColor = params.backgroundColor || divParent.style.backgroundColor;
+	server = params.server || 'http://server.just-map-it.com/';
+	touchMenuDelay = params.touchMenuDelay || 1000;
+
 	// Opera doesn't fully support canvas
 	if((!params.client || params.client === JMI.Map.CANVAS) && JMI.canvas() && !window.opera) {
 		return new JMI.components.CanvasMap(divParent, server, touchMenuDelay, backgroundColor, params.parameters);
