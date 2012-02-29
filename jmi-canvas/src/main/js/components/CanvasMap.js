@@ -3,10 +3,11 @@ JMI.namespace("components.CanvasMap");
 
 JMI.components.CanvasMap = (function() {
 
-	var CanvasMap = function(parent, server, jmiparams) {
+	var CanvasMap = function(parent, server, touchMenuDelay, backgroundColor, jmiparams) {
 		this.type = JMI.Map.CANVAS;
 		this.requester = new JMI.components.MapRequester(this, server);
-		this.backgroundColor = 0xFFFFFF;
+		this.backgroundColor = backgroundColor;
+		this.touchMenuDelay = touchMenuDelay;
 		this.curPos = new JMI.script.Point();
 		this.ready = false;
 		this.planContainer = null;
@@ -233,7 +234,7 @@ JMI.components.CanvasMap = (function() {
 							simulatedEvent.initMouseEvent('click', true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0/*left*/, null);
 							first.target.dispatchEvent(simulatedEvent);
 							event.preventDefault();
-						},1000);
+						},this.JMI.touchMenuDelay);
 						break;
 					case "touchmove":
 						type = "mousemove";
@@ -245,7 +246,7 @@ JMI.components.CanvasMap = (function() {
 							simulatedEvent.initMouseEvent('click', true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0/*left*/, null);
 							first.target.dispatchEvent(simulatedEvent);
 							event.preventDefault();
-						},1000);
+						},this.JMI.touchMenuDelay);
 						break;
 					case "touchend":
 						type = "mouseup";
