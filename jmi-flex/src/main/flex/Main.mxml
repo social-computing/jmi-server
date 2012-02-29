@@ -14,6 +14,7 @@
 			import mx.core.FlexGlobals;
 			import mx.events.FlexEvent;
 			import mx.graphics.codec.PNGEncoder;
+			import mx.utils.Base64Encoder;
 			
 			import ru.inspirit.net.MultipartURLLoader;
 			
@@ -70,6 +71,7 @@
 				ExternalInterface.addCallback( "getProperty", getProperty);
 				ExternalInterface.addCallback( "getArrayProperty", getArrayProperty);
 				ExternalInterface.addCallback( "uploadAsImage", uploadAsImage);
+				ExternalInterface.addCallback( "getImage", getImage);
 				
 				// Initialising service
 				this.planService = new PlanService(serverURL);
@@ -98,14 +100,18 @@
 			public function getArrayProperty( name:String):Array {
 				return this.map.getProperty( name) as Array;
 			}
-			public function uploadAsImage( url:String, name:String, mime:String, width:int, height:int, keepProportions:Boolean, params:Object):void {
+			private function _getImage( width:int, height:int, keepProportions:Boolean):ByteArray {
 				var encoder:PNGEncoder  = new PNGEncoder();
-				var dummyMap:BitmapData = new BitmapData(width, height);
+				if( width == -1) 
+					width = map.width;
+				if( height == -1) 
+					height = map.height;
+				var dummyMap:BitmapData = new BitmapData(width, height, false, map.ready ? map.env.m_inCol.m_color : map.backgroundColor);
 				var matrix:Matrix = new Matrix();
 				if( keepProportions) {
 					var dx:Number = width / map.width;
 					var dy:Number = height / map.height;
-					if( dx > dy) {
+					if( dx < dy) {
 						matrix.scale( dx, dx);
 						matrix.translate( 0, -((map.height * dx) - height) / 2);
 					}
@@ -117,7 +123,17 @@
 				else
 					matrix.scale( width / map.width, height / map.height);
 				dummyMap.draw( map.bitmapData, matrix);
-				var bphoto:ByteArray = encoder.encode( dummyMap);
+				return encoder.encode( dummyMap);
+			}
+			// New API
+			public function getImage( mime:String="image/png", width:int=-1, height:int=-1, keepProportions:Boolean=true):String {
+				var enc:Base64Encoder = new Base64Encoder();    
+				enc.encodeBytes( this._getImage( width, height, keepProportions));
+				return "data:image/png;base64," + enc.drain();
+			}
+			// OLD API
+			public function uploadAsImage( url:String, name:String, mime:String, width:int, height:int, keepProportions:Boolean, params:Object):void {
+				var bphoto:ByteArray = this._getImage( width, height, keepProportions);
 				var mploader:MultipartURLLoader = new MultipartURLLoader();
 				/*mploader.addEventListener(
 					Event.COMPLETE, function onComplete(e:Event):void {

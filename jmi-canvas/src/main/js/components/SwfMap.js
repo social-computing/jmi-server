@@ -60,7 +60,14 @@ JMI.components.SwfMap = (function() {
 			}
 		},
 		getProperty: function(name) {
-			this.swfmap.getProperty(name);
+			if( this.swfmap) {
+				return this.swfmap.getProperty(name);
+			}
+		},
+		getImage: function(mime, width, height, keepProportions) {
+			if( this.swfmap) {
+				return this.swfmap.getImage(mime, width, height, keepProportions);
+			}
 		},
 		addEventListener: function(event, listener) {
 			this.eventManager.addListener(event, listener);

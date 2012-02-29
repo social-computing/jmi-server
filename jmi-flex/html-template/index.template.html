@@ -79,6 +79,9 @@
      			parameters["kind"] = "film_gender";
         		getMap().compute( parameters);
 			}
+			function goImage(){
+        		document.location.href = getMap().getImage( "image/png", 200, 200);
+			}			
         </script>
 		    
         <script type="text/javascript" src="swfobject.js"></script>
@@ -89,9 +92,17 @@
             var xiSwfUrlStr = "${expressInstallSwf}";
             var flashvars = {};
             flashvars.allowDomain = "*";
-     		flashvars.allocineserverurl = "http://localhost:8080/web-labs";
+/*     		flashvars.allocineserverurl = "http://localhost:8080/web-labs";
             flashvars.wpsserverurl = "http://localhost:8080/jmi-server";
-            flashvars.wpsplanname = "Json_sample";//
+            flashvars.wpsplanname = "Json_sample";
+            flashvars.analysisProfile = "GlobalProfile";
+     		flashvars.invert="false";*/
+			flashvars.wpsserverurl = "http://server.just-map-it.com";
+		    flashvars.feedsserverurl = "http://feeds.just-map-it.com";
+			flashvars.wpsplanname = "Feeds";
+		    flashvars.feed = "http://www.social-computing.com/feed";
+			flashvars.site = "";
+			flashvars.track = "";
      		flashvars.invert="false";
             flashvars.analysisProfile = "GlobalProfile";
      		flashvars.kind="film_gender";
@@ -109,7 +120,8 @@
             attributes.align = "middle";
             swfobject.embedSWF(
                 "${swf}.swf", "flashContent", 
-                "${width}", "${height}", 
+                "640", "480",
+                //"${width}", "${height}", 
                 swfVersionStr, xiSwfUrlStr, 
                 flashvars, params, attributes);
 			<!-- JavaScript enabled so display the flashContent div in case it is not replaced with a swf object. -->
@@ -117,6 +129,7 @@
         </script>
     </head>
     <body>
+    	<button onclick="goImage();">Image</button>
         <div id="flashContent">
         	<p>
 	        	To view this page ensure that Adobe Flash Player version 
