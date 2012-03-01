@@ -4,6 +4,7 @@ JMI.namespace("components.CanvasMap");
 JMI.components.CanvasMap = (function() {
 
 	var CanvasMap = function(parent, server, touchMenuDelay, backgroundColor, jmiparams) {
+		this.isTouchInterface = JMI.components.CanvasMap.IsTouchInterface();
 		this.type = JMI.Map.CANVAS;
 		this.requester = new JMI.components.MapRequester(this, server);
 		this.backgroundColor = backgroundColor;
@@ -53,7 +54,9 @@ JMI.components.CanvasMap = (function() {
 		this.backDrawingContext = this.backDrawingCanvas.getContext("2d");
 		
 		// Event listeners
-		this.drawingCanvas.addEventListener('mousemove', this.mouseMoveHandler, false);
+		if( !this.isTouchInterface) {
+			this.drawingCanvas.addEventListener('mousemove', this.mouseMoveHandler, false);
+		}
 		this.drawingCanvas.addEventListener('mouseover', this.mouseOverHandler, false);
 		this.drawingCanvas.addEventListener('mouseout', this.mouseOutHandler, false);
 		this.drawingCanvas.addEventListener('click', this.mouseClickHandler, false);
@@ -176,6 +179,10 @@ JMI.components.CanvasMap = (function() {
             }
         },
 		clear: function() {
+			if( this.touchPressedTimer) {
+				clearTimeout( this.touchPressedTimer);
+				delete this.touchPressedTimer;
+			}
 			JMI.util.ImageUtil.clear(this.backDrawingCanvas, this.backDrawingContext);
 			JMI.util.ImageUtil.clear(this.restDrawingCanvas, this.restDrawingContext);
 			JMI.util.ImageUtil.clear(this.curDrawingCanvas, this.curDrawingContext);
@@ -183,7 +190,8 @@ JMI.components.CanvasMap = (function() {
 		},
 		mouseMoveHandler: function(event) {
 			if (this instanceof HTMLCanvasElement) {
-			    var mousePosition = JMI.components.CanvasMap.getPosition(this, event);
+				event.preventDefault();
+			    var mousePosition = JMI.components.CanvasMap.getPosition(this, event.pageX, event.pageY);
 				this.JMI.curPos.x = mousePosition.x;
 				this.JMI.curPos.y = mousePosition.y;
 				if (this.JMI.ready) {
@@ -200,7 +208,7 @@ JMI.components.CanvasMap = (function() {
 		mouseClickHandler: function(event) {
 			if (this instanceof HTMLCanvasElement) {
 				this.JMI.hideMenu();
-			    var mousePosition = JMI.components.CanvasMap.getPosition(this, event);
+			    var mousePosition = JMI.components.CanvasMap.getPosition(this, event.pageX, event.pageY);
 				if ( this.JMI.ready && this.JMI.planContainer.map.plan.curSat !== null )
 				{
 					this.JMI.planContainer.map.plan.updateZoneAt( mousePosition);
@@ -211,7 +219,7 @@ JMI.components.CanvasMap = (function() {
 		mouseDoubleClickHandler: function(event) {
 			if (this instanceof HTMLCanvasElement) {
 				this.JMI.hideMenu();
-			    var mousePosition = JMI.components.CanvasMap.getPosition(this, event);
+			    var mousePosition = JMI.components.CanvasMap.getPosition(this, event.pageX, event.pageY);
 				if ( this.JMI.ready && this.JMI.planContainer.map.plan.curSat !== null )
 				{
 					this.JMI.planContainer.map.plan.updateZoneAt( mousePosition);
@@ -224,39 +232,54 @@ JMI.components.CanvasMap = (function() {
 				var touches = event.changedTouches, first = touches[0], type = null;
 				switch(event.type) {
 					case "touchstart":
-						type = "mousemove";
+						//type = "mousemove";
+						event.preventDefault();
 						this.JMI.hideMenu();
-						if( this.touchPressedTimer) {
-							clearTimeout( this.touchPressedTimer);
+						if( this.JMI.touchPressedTimer) {
+							clearTimeout( this.JMI.touchPressedTimer);
 						}
-						this.touchPressedTimer = setTimeout( function() {
+						this.JMI.touchPressedTimer = setTimeout( function() {
 							var simulatedEvent = document.createEvent("MouseEvent");
-							simulatedEvent.initMouseEvent('click', true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0/*left*/, null);
+							simulatedEvent.initMouseEvent('click', true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0, null);
 							first.target.dispatchEvent(simulatedEvent);
 						},this.JMI.touchMenuDelay);
+
+					    var mousePosition = JMI.components.CanvasMap.getPosition(this, first.pageX, first.pageY);
+						this.JMI.curPos.x = mousePosition.x;
+						this.JMI.curPos.y = mousePosition.y;
+						if (this.JMI.ready) {
+							this.JMI.planContainer.map.plan.updateZoneAt(this.JMI.curPos);
+						}
 						break;
 					case "touchmove":
-						type = "mousemove";
-						if( this.touchPressedTimer) {
-							clearTimeout( this.touchPressedTimer);
+						//type = "mousemove";
+						event.preventDefault();
+						if( this.JMI.touchPressedTimer) {
+							clearTimeout( this.JMI.touchPressedTimer);
 						}
-						this.touchPressedTimer = setTimeout( function() {
+						this.JMI.touchPressedTimer = setTimeout( function() {
 							var simulatedEvent = document.createEvent("MouseEvent");
-							simulatedEvent.initMouseEvent('click', true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0/*left*/, null);
+							simulatedEvent.initMouseEvent('click', true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0, null);
 							first.target.dispatchEvent(simulatedEvent);
 						},this.JMI.touchMenuDelay);
+
+					    var mousePosition = JMI.components.CanvasMap.getPosition(this, first.pageX, first.pageY);
+						this.JMI.curPos.x = mousePosition.x;
+						this.JMI.curPos.y = mousePosition.y;
+						if (this.JMI.ready) {
+							this.JMI.planContainer.map.plan.updateZoneAt(this.JMI.curPos);
+						}
 						break;
 					case "touchend":
-						type = "mouseup";
-						if( this.touchPressedTimer) {
-							clearTimeout( this.touchPressedTimer);
-							delete this.touchPressedTimer;
+						//type = "mouseup";
+						if( this.JMI.touchPressedTimer) {
+							clearTimeout( this.JMI.touchPressedTimer);
+							delete this.JMI.touchPressedTimer;
 						}
 						break;
 					default:
 						return;
 				}
-				event.preventDefault();
 				if( type !== null) {
 					var simulatedEvent = document.createEvent("MouseEvent");
 					simulatedEvent.initMouseEvent(type, true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0/*left*/, null);
@@ -302,12 +325,12 @@ JMI.components.CanvasMap = (function() {
 			this.dispatchEvent( {map: this, type: JMI.Map.event.STATUS, message: message});
 		},
 		log: function(message) {
-			if( aptana && aptana.log) {
-				aptana.log( message);
-			}
 			if( console && console.log) {
 				console.log( message);
 			}
+			/*if( aptana && aptana.log) {
+				aptana.log( message);
+			}*/
 		},
 		addEventListener: function(event, listener) {
 			this.eventManager.addListener(event, listener);
@@ -471,7 +494,7 @@ JMI.components.CanvasMap.Version = "1.0-SNAPSHOT";
 
 // Adapted from: http://www.quirksmode.org/js/findpos.html and 
 // http://stackoverflow.com/questions/5085689/tracking-mouse-position-in-canvas
-JMI.components.CanvasMap.getPosition= function(canvas, e) {
+JMI.components.CanvasMap.getPosition= function(canvas, px, py) {
     var left = 0, top = 0;
 
     if(canvas.offsetParent) {
@@ -482,8 +505,8 @@ JMI.components.CanvasMap.getPosition= function(canvas, e) {
         }
     }
     return {
-        x : e.pageX - left,
-        y : e.pageY - top
+        x : px - left,
+        y : py - top
     };
 };
 
@@ -503,7 +526,9 @@ JMI.components.CanvasMap.getAbsPosition= function(canvas) {
     };
 };
 
-
+JMI.components.CanvasMap.IsTouchInterface= function() {
+	return navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i);
+}
 /*
 
 

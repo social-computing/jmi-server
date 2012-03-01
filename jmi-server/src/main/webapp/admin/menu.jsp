@@ -32,6 +32,7 @@ Collection<Dictionary> dics = dManager.findAll();
 <!--   <tr><td align="left" nowrap><a href="doc/WPS.PDF" target="_blank"><font size="-2" >&nbsp;&nbsp;&nbsp;&nbsp;Technical guide</font></a></td></tr> --> 
 <tr><td align="left" nowrap>
 <ul>
+<li><a href="./docClient.jsp" >Html5/Flash client</a></li>
 <li><a href="./docFlash.jsp" >Flash client</a></li>
 <li><a href="./docApplet.jsp">Java Applet client</a></li>
 <li><a href="./docDTD.jsp">DTD definition</a></li>
