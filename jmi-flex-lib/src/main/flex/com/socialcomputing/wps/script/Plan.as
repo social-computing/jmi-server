@@ -405,10 +405,10 @@ package com.socialcomputing.wps.script  {
 				// too few places, lets reduce their size
                 if (this.m_nodesCnt < 8) {
                     scale	= 1.0 + (2.0 / this.m_nodesCnt);
-                    m_prevBox.x += int(0.5 * (m_prevBox.width * (1.0 - scale)));
-                    m_prevBox.y += int(0.5 * (m_prevBox.height * (1.0 - scale)));
-                    m_prevBox.width = int(m_prevBox.width * scale);
-                    m_prevBox.height = int(m_prevBox.height * scale);
+                    m_prevBox.x += Math.round(0.5 * (m_prevBox.width * (1.0 - scale)));
+                    m_prevBox.y += Math.round(0.5 * (m_prevBox.height * (1.0 - scale)));
+                    m_prevBox.width = Math.round(m_prevBox.width * scale);
+                    m_prevBox.height = Math.round(m_prevBox.height * scale);
                 }
                 
                 sx  = (dim.width  - margin) / m_prevBox.width;
@@ -464,8 +464,8 @@ package com.socialcomputing.wps.script  {
          */
 		private function resizePoint(zone:ActiveZone, i:int, dx:Number, dy:Number, sx:Number, sy:Number):void {
             var p:Point = zone.m_props["_VERTICES"][i];
-            p.x = int(sx * (p.x - dx));
-            p.y = int(sy * (p.y - dy));
+            p.x = Math.round(sx * (p.x - dx));
+            p.y = Math.round(sy * (p.y - dy));
         }
         
         /**

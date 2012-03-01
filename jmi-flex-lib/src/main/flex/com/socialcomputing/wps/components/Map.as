@@ -507,8 +507,9 @@ package com.socialcomputing.wps.components
 		}
 		
 		public function clearSelection( selection:String):void {
-			clearZoneSelection( selection, plan.m_nodes, plan.m_nodes.length );
 			clearZoneSelection( selection, plan.m_links, plan.m_linksCnt );
+			clearZoneSelection( selection, plan.m_nodes, plan.m_nodes.length );
+			plan.m_curSel = -1;
 		}
 		
 		/**

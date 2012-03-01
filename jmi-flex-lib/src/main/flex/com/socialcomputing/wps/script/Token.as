@@ -325,7 +325,7 @@ package com.socialcomputing.wps.script  {
             {
                 var sizes:Number= parseFloat( text.substring( beg, i ));
                 
-                m_intSize = int(sizes);
+                m_intSize = Math.round(sizes);
                 m_floatSize = Math.round( 10.*( sizes - m_intSize ));
             }
             

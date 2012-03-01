@@ -93,7 +93,7 @@ package com.socialcomputing.wps.script  {
          * @return		A new Point holding the coordinates of the translation.
          */
         public function getCart():Point {
-            return new Point(int(m_dir), int(m_pos ));
+            return new Point(Math.round(m_dir), Math.round(m_pos ));
         }
     }
 }

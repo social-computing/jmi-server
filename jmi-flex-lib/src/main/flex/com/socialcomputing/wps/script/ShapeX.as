@@ -92,8 +92,8 @@ package com.socialcomputing.wps.script  {
                 scale *= transfo.m_pos;
                 p     = getCenter(zone);
                 
-                x = p.x + int(scale * Math.cos(transfo.m_dir));
-                y = p.y + int(scale * Math.sin(transfo.m_dir));
+                x = p.x + Math.round(scale * Math.cos(transfo.m_dir));
+                y = p.y + Math.round(scale * Math.sin(transfo.m_dir));
 				
                 return new Point(x, y);
             }
@@ -145,7 +145,7 @@ package com.socialcomputing.wps.script  {
             var points:Array = getValue(POLYGON_VAL, zone.m_props) as Array;
             var shapeCenter:Point   = this.getCenter(zone);
             var shapePosition:Point = new Point();
-            var size:Number = int(this.getShapePos(zone, transfo, center, shapeCenter, shapePosition));
+            var size:Number = Math.round(this.getShapePos(zone, transfo, center, shapeCenter, shapePosition));
             var nbPoint:int = points.length;
             var ret:Boolean;
             
@@ -199,7 +199,7 @@ package com.socialcomputing.wps.script  {
                 var shapePos:Point = new Point();
                 var rect:Rectangle = null;
                 var n:int          = points.length;
-                var size:Number    = int(getShapePos(zone, transfo, center, shapeCenter, shapePos));
+                var size:Number    = Math.round(getShapePos(zone, transfo, center, shapeCenter, shapePos));
                 
                 switch (n) {
                     // 1 point = circle => Place
@@ -269,7 +269,7 @@ package com.socialcomputing.wps.script  {
                 var shapePos:Point = new Point();
                 var n:int = points.length;
                 var i:int;
-                var size:Number = int(getShapePos(supZone, transfo, center, p, shapePos));
+                var size:Number = Math.round(getShapePos(supZone, transfo, center, p, shapePos));
                 var color:ColorTransform;
                 
                 // Manage each case of number of points to draw for this shape
@@ -370,7 +370,7 @@ package com.socialcomputing.wps.script  {
             poly    = new Polygon();
             
             var N:Point= new Point( B.x - A.x, B.y - A.y );
-            var len:int= int(Math.sqrt( N.x * N.x + N.y * N.y ));
+            var len:int= Math.round(Math.sqrt( N.x * N.x + N.y * N.y ));
             
             if ( len != 0)
             {
@@ -526,7 +526,7 @@ package com.socialcomputing.wps.script  {
 			
 			// Disk
 			if (scale > 0.0) {
-				imageScale = int(1.414 * scale);
+				imageScale = Math.round(1.414 * scale);
 			}
 			
 			// Rescale image
