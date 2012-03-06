@@ -45,10 +45,12 @@ package com.socialcomputing.wps.components
 	[Event(name="action",   type="com.socialcomputing.wps.components.events.ActionEvent")]
 	[Event(name="navigate", type="com.socialcomputing.wps.components.events.NavigateEvent")]
 	[Event(name="status",   type="com.socialcomputing.wps.components.events.StatusEvent")]
-	[Event(name="attribute_click", type="com.socialcomputing.wps.components.events.AttributeEvent")]
+	[Event(name="attribute_click", 	  type="com.socialcomputing.wps.components.events.AttributeEvent")]
 	[Event(name="attribute_dblclick", type="com.socialcomputing.wps.components.events.AttributeEvent")]
-	[Event(name="attribute_hover", type="com.socialcomputing.wps.components.events.AttributeEvent")]
-	//[Event(name="link_click",      type="com.socialcomputing.wps.components.events.LinkClickEvent")]
+	[Event(name="attribute_hover",    type="com.socialcomputing.wps.components.events.AttributeEvent")]
+	[Event(name="link_click",      	  type="com.socialcomputing.wps.components.events.LinkEvent")]
+	[Event(name="link_dblclick",      type="com.socialcomputing.wps.components.events.LinkEvent")]
+	[Event(name="link_hover",         type="com.socialcomputing.wps.components.events.LinkEvent")]
 	
 	public class Map extends UIComponent {
 		public static var version:String = "1.0-SNAPSHOT";
@@ -211,6 +213,7 @@ package com.socialcomputing.wps.components
 			if( this.plan != null) {
 				this.plan.m_curSat = null;
 				this.plan.m_curZone = null;
+				this.plan.m_curSel = -1;
 			}
 			
 			// Clear all drawing surfaces
@@ -223,9 +226,6 @@ package com.socialcomputing.wps.components
 			// Reset all objects of this component
 			if(value == null) {
 				this._dataProvider = null;
-				//this._plan = null;
-				//this.
-				// TODO : If the local plancontainer is set, reset objects
 				this.invalidateProperties();
 				this.invalidateDisplayList();
 				return;
@@ -339,10 +339,6 @@ package com.socialcomputing.wps.components
 					return attribute;
 			}
 			return null;
-		}
-		
-		private function findLink( zone:ActiveZone):Link {
-			return new Link( zone);
 		}
 		
 		public function mouseDoubleClickHandler(event:MouseEvent):void {

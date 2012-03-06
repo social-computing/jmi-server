@@ -72,6 +72,7 @@
 				ExternalInterface.addCallback( "getArrayProperty", getArrayProperty);
 				ExternalInterface.addCallback( "uploadAsImage", uploadAsImage);
 				ExternalInterface.addCallback( "getImage", getImage);
+				ExternalInterface.addCallback( "getData", getData);
 				
 				// Initialising service
 				this.planService = new PlanService(serverURL);
@@ -124,6 +125,9 @@
 					matrix.scale( width / map.width, height / map.height);
 				dummyMap.draw( map.bitmapData, matrix);
 				return encoder.encode( dummyMap);
+			}
+			public function getData():Object {
+				return map.dataProvider;
 			}
 			// New API
 			public function getImage( mime:String="image/png", width:int=-1, height:int=-1, keepProportions:Boolean=true):String {
@@ -205,7 +209,12 @@
 						jsevt.target = event.btarget;
 					}
 					else if( type == AttributeEvent.CLICK || type == AttributeEvent.DOUBLE_CLICK || type == AttributeEvent.HOVER) {
-						jsevt.attribute = 0; // TODO !!!!
+						jsevt.attribute = event.attribute._INDEX;
+						jsevt.x = event.localX;
+						jsevt.y = event.localY;
+					}
+					else if( type == LinkEvent.CLICK || type == LinkEvent.DOUBLE_CLICK || type == LinkEvent.HOVER) {
+						jsevt.link = event.link.m_props._INDEX;
 						jsevt.x = event.localX;
 						jsevt.y = event.localY;
 					}
@@ -249,6 +258,9 @@
 				attribute_click="fireEvent(AttributeEvent.CLICK, null, event);"
 				attribute_dblclick="fireEvent(AttributeEvent.DOUBLE_CLICK, null, event);"
 				attribute_hover="fireEvent(AttributeEvent.HOVER, null, event);"
+				link_click="fireEvent(LinkEvent.CLICK, null, event);"
+				link_dblclick="fireEvent(LinkEvent.DOUBLE_CLICK, null, event);"
+				link_hover="fireEvent(LinkEvent.HOVER, null, event);"
 				percentWidth="100"
 				percentHeight="100"
 		/>

@@ -229,16 +229,22 @@ JMI.script.Satellite = ( function() {
 
 			// Events
 			if(zone !== null) {
+				var event = {
+					map : this,
+					x : pos.x,
+					y : pos.y
+				};
 				if( zone instanceof JMI.script.LinkZone) {
-					// Not yest implemented
-					//dispatchEvent( new LinkClickEvent( plan.curZone as LinkZone));
+					event.link = zone.props._INDEX;
+					if(actionId === JMI.script.Satellite.CLICK_VAL) {
+						event.type = JMI.Map.event.LINK_CLICK;
+					} else if(actionId === JMI.script.Satellite.DBLCLICK_VAL) {
+						event.type = JMI.Map.event.LINK_DBLECLICK;
+					} else if(actionId === JMI.script.Satellite.HOVER_VAL) {
+						event.type = JMI.Map.event.LINK_HOVER;
+					}
 				} else {
-					var event = {
-						map : this,
-						x : pos.x,
-						y : pos.y,
-						attribute : zone
-					};
+					event.attribute = zone.props._INDEX;
 					if(actionId === JMI.script.Satellite.CLICK_VAL) {
 						event.type = JMI.Map.event.ATTRIBUTE_CLICK;
 					} else if(actionId === JMI.script.Satellite.DBLCLICK_VAL) {
@@ -246,6 +252,8 @@ JMI.script.Satellite = ( function() {
 					} else if(actionId === JMI.script.Satellite.HOVER_VAL) {
 						event.type = JMI.Map.event.ATTRIBUTE_HOVER;
 					}
+				}
+				if( event.type) {
 					applet.dispatchEvent(event);
 				}
 			}

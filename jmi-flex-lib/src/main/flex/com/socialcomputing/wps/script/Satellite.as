@@ -1,6 +1,7 @@
 package com.socialcomputing.wps.script  {
     import com.socialcomputing.wps.components.Map;
     import com.socialcomputing.wps.components.events.AttributeEvent;
+    import com.socialcomputing.wps.components.events.LinkEvent;
     
     import flash.display.Graphics;
     import flash.display.Sprite;
@@ -10,9 +11,9 @@ package com.socialcomputing.wps.script  {
     import mx.collections.ArrayCollection;
     import mx.controls.Alert;
     import mx.controls.Menu;
+    import mx.core.ClassFactory;
     import mx.events.MenuEvent;
-	import mx.core.ClassFactory;
-	
+    
     import spark.components.supportClasses.ItemRenderer;
     
     /**
@@ -375,11 +376,19 @@ package com.socialcomputing.wps.script  {
 
 			// Events
 			if( zone != null) {
+				var event:String = null;
 				if( zone is LinkZone) {
-					//dispatchEvent( new LinkClickEvent( plan.m_curZone as LinkZone));
+					if( actionId == Satellite.CLICK_VAL) 
+						event = LinkEvent.CLICK;
+					else if( actionId == Satellite.DBLCLICK_VAL) 
+						event = LinkEvent.DOUBLE_CLICK;
+					else if( actionId == Satellite.HOVER_VAL) 
+						event = LinkEvent.HOVER;
+					if( event != null) {
+						applet.dispatchEvent( new LinkEvent( event, zone as LinkZone, pos.x, pos.y));
+					}
 				}
 				else {
-					var event:String = null;
 					if( actionId == Satellite.CLICK_VAL) 
 						event = AttributeEvent.CLICK;
 					else if( actionId == Satellite.DBLCLICK_VAL) 

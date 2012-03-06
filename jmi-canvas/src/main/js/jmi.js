@@ -80,12 +80,11 @@ JMI.Map.event.EMPTY = "empty";
 JMI.Map.event.READY = "ready";
 JMI.Map.event.STATUS = "status";
 JMI.Map.event.ERROR = "error";
+JMI.Map.event.ACTION = "action";
+JMI.Map.event.NAVIGATE = "navigate";
 JMI.Map.event.ATTRIBUTE_CLICK = "attribute_click";
 JMI.Map.event.ATTRIBUTE_DBLECLICK = "attribute_dblclick";
 JMI.Map.event.ATTRIBUTE_HOVER = "attribute_hover";
-JMI.Map.event.ACTION = "action";
-JMI.Map.event.NAVIGATE = "navigate";
-// Not yest implemented
-//JMI.Map.event.LINK_CLICK = "link_click";
-//JMI.Map.event.LINK_DBLECLICK = "link_dblclick";
-//JMI.Map.event.LINK_HOVER = "link_hover";
+JMI.Map.event.LINK_CLICK = "link_click";
+JMI.Map.event.LINK_DBLECLICK = "link_dblclick";
+JMI.Map.event.LINK_HOVER = "link_hover";
