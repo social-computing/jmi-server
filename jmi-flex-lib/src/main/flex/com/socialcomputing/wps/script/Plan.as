@@ -313,6 +313,10 @@ package com.socialcomputing.wps.script  {
                     this.m_applet.toolTip = null;
                 }
                 
+				if( m_newZone == null && m_curSat != null && curSat == null && m_curZone != null) {
+					m_curSat.execute( m_applet, m_curZone, p, Satellite.LEAVE_VAL);
+				} 
+				
                 m_curSat = curSat;
                 
 				// A new Zone is hovered, let's paint it!
@@ -324,7 +328,8 @@ package com.socialcomputing.wps.script  {
                 }
                 else {
                     m_curZone = m_newZone;
-                    if (m_curSat == null) m_applet.showStatus("");
+                    if (m_curSat == null) 
+						m_applet.showStatus("");
                 }
                 // TODO ???
                 //m_applet.setCursor( Cursor.getPredefinedCursor( cursTyp ));

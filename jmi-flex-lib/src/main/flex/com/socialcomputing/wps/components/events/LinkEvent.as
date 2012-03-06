@@ -9,6 +9,7 @@ package com.socialcomputing.wps.components.events
 		public static const CLICK:String = "link_click";
 		public static const DOUBLE_CLICK:String = "link_dblclick";
 		public static const HOVER:String = "link_hover";
+		public static const LEAVE:String = "link_leave";
 		private var _link:LinkZone;
 		private var _localX:int, _localY:int;
 		

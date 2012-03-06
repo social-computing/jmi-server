@@ -237,12 +237,12 @@
 						jsevt.url = event.url;
 						jsevt.target = event.btarget;
 					}
-					else if( type == AttributeEvent.CLICK || type == AttributeEvent.DOUBLE_CLICK || type == AttributeEvent.HOVER) {
+					else if( type == AttributeEvent.CLICK || type == AttributeEvent.DOUBLE_CLICK || type == AttributeEvent.HOVER || type == AttributeEvent.LEAVE) {
 						jsevt.attribute = event.attribute._INDEX;
 						jsevt.x = event.localX;
 						jsevt.y = event.localY;
 					}
-					else if( type == LinkEvent.CLICK || type == LinkEvent.DOUBLE_CLICK || type == LinkEvent.HOVER) {
+					else if( type == LinkEvent.CLICK || type == LinkEvent.DOUBLE_CLICK || type == LinkEvent.HOVER || type == LinkEvent.LEAVE) {
 						jsevt.link = event.link.m_props._INDEX;
 						jsevt.x = event.localX;
 						jsevt.y = event.localY;

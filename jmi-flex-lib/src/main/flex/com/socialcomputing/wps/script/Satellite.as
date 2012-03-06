@@ -70,6 +70,11 @@ package com.socialcomputing.wps.script  {
          */
         public static const LINK_LIT_COL_VAL:int= 8;
         
+		/**
+		 * Index of the hovered event prop in VContainer table
+		 */
+		public static const LEAVE_VAL:int= 9;
+		
         /**
          * True if this Satellite is visible.
          * It can be interesting to create fake invisible satellite (even if it has never been tested).
@@ -384,6 +389,8 @@ package com.socialcomputing.wps.script  {
 						event = LinkEvent.DOUBLE_CLICK;
 					else if( actionId == Satellite.HOVER_VAL) 
 						event = LinkEvent.HOVER;
+					else if( actionId == Satellite.LEAVE_VAL) 
+						event = LinkEvent.LEAVE;
 					if( event != null) {
 						applet.dispatchEvent( new LinkEvent( event, zone as LinkZone, pos.x, pos.y));
 					}
@@ -395,6 +402,8 @@ package com.socialcomputing.wps.script  {
 						event = AttributeEvent.DOUBLE_CLICK;
 					else if( actionId == Satellite.HOVER_VAL) 
 						event = AttributeEvent.HOVER;
+					else if( actionId == Satellite.LEAVE_VAL) 
+						event = AttributeEvent.LEAVE;
 					if( event != null) {
 						applet.dispatchEvent( new AttributeEvent( event, applet.findAttribute( zone), pos.x, pos.y));
 					}

@@ -242,6 +242,8 @@ JMI.script.Satellite = ( function() {
 						event.type = JMI.Map.event.LINK_DBLECLICK;
 					} else if(actionId === JMI.script.Satellite.HOVER_VAL) {
 						event.type = JMI.Map.event.LINK_HOVER;
+					} else if(actionId === JMI.script.Satellite.LEAVE_VAL) {
+						event.type = JMI.Map.event.LINK_LEAVE;
 					}
 				} else {
 					event.attribute = applet.attributes[zone.props._INDEX];
@@ -251,6 +253,8 @@ JMI.script.Satellite = ( function() {
 						event.type = JMI.Map.event.ATTRIBUTE_DBLECLICK;
 					} else if(actionId === JMI.script.Satellite.HOVER_VAL) {
 						event.type = JMI.Map.event.ATTRIBUTE_HOVER;
+					} else if(actionId === JMI.script.Satellite.LEAVE_VAL) {
+						event.type = JMI.Map.event.ATTRIBUTE_LEAVE;
 					}
 				}
 				if( event.type) {
@@ -405,6 +409,8 @@ JMI.script.Satellite.LINK_NRM_COL_VAL = 7;
  * Index of the bright link color prop in VContainer table.
  */
 JMI.script.Satellite.LINK_LIT_COL_VAL = 8;
+
+JMI.script.Satellite.LEAVE_VAL = 9;
 
 /*
  * True if this Satellite is visible.

@@ -9,6 +9,7 @@ package com.socialcomputing.wps.components.events
 		public static const CLICK:String = "attribute_click";
 		public static const DOUBLE_CLICK:String = "attribute_dblclick";
 		public static const HOVER:String = "attribute_hover";
+		public static const LEAVE:String = "attribute_leave";
 		private var _attribute:Attribute;
 		private var _localX:int, _localY:int;
 		

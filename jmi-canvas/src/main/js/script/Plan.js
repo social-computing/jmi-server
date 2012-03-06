@@ -281,6 +281,11 @@ JMI.script.Plan = ( function() {
 					this.applet.renderShape(this.applet.restDrawingCanvas, curZoneBounds.width, curZoneBounds.height, new JMI.script.Point(curZoneBounds.x, curZoneBounds.y));
 					this.applet.toolTip = null;
 				}
+
+				if( this.newZone === null && this.curSat !== null && curSat === null && this.curZone !== null) {
+					this.curSat.execute( this.applet, this.curZone, p, JMI.script.Satellite.LEAVE_VAL);
+				} 
+				
 				this.curSat = cSat;
 
 				// A new Zone is hovered, let's paint it!

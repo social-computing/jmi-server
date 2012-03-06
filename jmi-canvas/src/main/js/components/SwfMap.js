@@ -108,10 +108,10 @@ JMI.components.SwfMap.mainCallback = function(id, event) {
 		if(event.type === JMI.Map.event.READY) {
 			map.JMI.initApiObjects();
 		}
-		if(event.type === JMI.Map.event.ATTRIBUTE_CLICK || event.type === JMI.Map.event.ATTRIBUTE_DBLECLICK || event.type === JMI.Map.event.ATTRIBUTE_HOVER) {
+		if(event.type === JMI.Map.event.ATTRIBUTE_CLICK || event.type === JMI.Map.event.ATTRIBUTE_DBLECLICK || event.type === JMI.Map.event.ATTRIBUTE_HOVER || event.type === JMI.Map.event.ATTRIBUTE_LEAVE) {
 			event.attribute = map.JMI.attributes[event.attribute];
 		}
-		if(event.type === JMI.Map.event.LINK_CLICK || event.type === JMI.Map.event.LINK_DBLECLICK || event.type === JMI.Map.event.LINK_HOVER) {
+		if(event.type === JMI.Map.event.LINK_CLICK || event.type === JMI.Map.event.LINK_DBLECLICK || event.type === JMI.Map.event.LINK_HOVER || event.type === JMI.Map.event.LINK_LEAVE) {
 			event.link = map.JMI.links[event.link];
 		}
 		map.JMI.dispatchEvent( event);

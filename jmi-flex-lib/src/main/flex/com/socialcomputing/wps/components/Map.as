@@ -48,9 +48,11 @@ package com.socialcomputing.wps.components
 	[Event(name="attribute_click", 	  type="com.socialcomputing.wps.components.events.AttributeEvent")]
 	[Event(name="attribute_dblclick", type="com.socialcomputing.wps.components.events.AttributeEvent")]
 	[Event(name="attribute_hover",    type="com.socialcomputing.wps.components.events.AttributeEvent")]
+	[Event(name="attribute_leave",    type="com.socialcomputing.wps.components.events.AttributeEvent")]
 	[Event(name="link_click",      	  type="com.socialcomputing.wps.components.events.LinkEvent")]
 	[Event(name="link_dblclick",      type="com.socialcomputing.wps.components.events.LinkEvent")]
 	[Event(name="link_hover",         type="com.socialcomputing.wps.components.events.LinkEvent")]
+	[Event(name="link_leave",         type="com.socialcomputing.wps.components.events.LinkEvent")]
 	
 	public class Map extends UIComponent {
 		public static var version:String = "1.0-SNAPSHOT";
