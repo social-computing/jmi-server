@@ -94,7 +94,7 @@ JMI.script.Token = ( function() {
 
 				// Global Properties
 				if(JMI.script.Base.isEnabled(this.flags, JMI.script.Token.GLOBAL_BIT)) {
-					props = props.ENV;
+					props = props._ENV;
 				}
 
 				// List Properties

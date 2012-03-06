@@ -80,7 +80,7 @@ JMI.script.ActiveZone = ( function() {
 				}
 
 				// Quick access to Env props
-				this.props.ENV = applet.planContainer.map.env.props;
+				this.props._ENV = applet.planContainer.map.env.props;
 				this.datas = {};
 			}
 
@@ -118,7 +118,7 @@ JMI.script.ActiveZone = ( function() {
 		},
 		// API
 		select : function(selection) {
-			var selId = this.props.ENV.selections[selection];
+			var selId = this.props._ENV.selections[selection];
 			if(selId !== -1) {
 				selId = 1 << selId;
 				this.selection |= selId;
