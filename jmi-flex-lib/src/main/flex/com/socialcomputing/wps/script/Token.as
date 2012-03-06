@@ -146,7 +146,7 @@ package com.socialcomputing.wps.script  {
                 
                 if ( Base.isEnabled( m_flags, GLOBAL_BIT ))    // Global Propertie
                 {
-                    props = props[ "ENV"] as Array;
+                    props = props[ "_ENV"] as Array;
                 }
                 
                 if ( Base.isEnabled( m_flags, LIST_BIT ))    // List Propertie

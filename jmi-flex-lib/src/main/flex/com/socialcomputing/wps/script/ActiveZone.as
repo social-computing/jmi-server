@@ -130,7 +130,7 @@ package com.socialcomputing.wps.script  {
                 }
                 
                 // Quick access to Env props
-				m_props["ENV"] = applet.env.m_props;
+				m_props["_ENV"] = applet.env.m_props;
                 m_datas = new Dictionary();
             }
             
