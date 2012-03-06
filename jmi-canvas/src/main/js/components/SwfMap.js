@@ -13,6 +13,7 @@ JMI.components.SwfMap = (function() {
 		this.size.width = this.parent.clientWidth;
 		this.size.height = this.parent.clientHeight;
 		this.eventManager = new JMI.util.EventManager();
+		JMI.Map.InitApiObjects(this);
 
 		var params = {
 		  quality: 'high',
@@ -69,6 +70,21 @@ JMI.components.SwfMap = (function() {
 				return this.swfmap.getImage(mime, width, height, keepProportions);
 			}
 		},
+		initApiObjects: function() {
+			var i, count;
+			if( this.swfmap) {
+				this.attributes.length = 0;
+				this.links.length = 0;
+				count = this.swfmap.getAttributesCount();
+				for( i = 0; i < count; ++i) {
+					this.attributes.push( this.swfmap.getAttribute(i));
+				}
+				count = this.swfmap.getLinksCount();
+				for( i = 0; i < count; ++i) {
+					this.links.push( this.swfmap.getLink(i));
+				}
+			}
+		},
 		addEventListener: function(event, listener) {
 			this.eventManager.addListener(event, listener);
 		},
@@ -89,6 +105,15 @@ JMI.components.SwfMap.mainCallback = function(id, event) {
 	var map = swfobject.getObjectById(id);
 	if( map) {
 		event.map = map.JMI;
+		if(event.type === JMI.Map.event.READY) {
+			map.JMI.initApiObjects();
+		}
+		if(event.type === JMI.Map.event.ATTRIBUTE_CLICK || event.type === JMI.Map.event.ATTRIBUTE_DBLECLICK || event.type === JMI.Map.event.ATTRIBUTE_HOVER) {
+			event.attribute = map.JMI.attributes[event.attribute];
+		}
+		if(event.type === JMI.Map.event.LINK_CLICK || event.type === JMI.Map.event.LINK_DBLECLICK || event.type === JMI.Map.event.LINK_HOVER) {
+			event.link = map.JMI.links[event.link];
+		}
 		map.JMI.dispatchEvent( event);
 	}
 };

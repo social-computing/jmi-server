@@ -67,12 +67,7 @@ JMI.components.CanvasMap = (function() {
 	    this.drawingCanvas.addEventListener("touchend", this.touchHandler, true);
 	    //this.drawingCanvas.addEventListener("touchcancel", this.touchHandler, true); 
 
-/*		var menu = document.createElement('menu');
-		menu.id = 'totsso';
-		menu.type = 'context';
-		menu.innerHTML = '<menuitem label="aaapowered by Just Map It!" onclick=";"/>';
-		this.parent.appendChild(menu);
-		this.parent.contextMenu = menu;*/
+		JMI.Map.InitApiObjects(this);
 		
 		this.compute(jmiparams);
 		//'<menu type="context" id="imagemenu"><menuitem label="powered by Just Map It!" onclick="alert('rotate');"/></menu>'
@@ -82,6 +77,7 @@ JMI.components.CanvasMap = (function() {
 		menuItem.addEventListener( ContextMenuEvent.MENU_ITEM_SELECT, openSoCom);
 		wpsMenu.customItems.push( menuItem);
 		this.contextMenu = wpsMenu;*/
+		
 	};
 	
     CanvasMap.prototype = {
@@ -104,6 +100,12 @@ JMI.components.CanvasMap = (function() {
 			if( this.planContainer && this.planContainer.map.plan) {
 				this.planContainer.map.plan.curSat = null;
 				this.planContainer.map.plan.curZone = null;
+				this.planContainer.map.plan.curSel = -1;
+				
+				this.attributes.length = 0;
+				this.links.length = 0;
+				this.nodes.length = 0;
+				this.selections.length = 0;
 			}
 			
 			// Clear all drawing surfaces
@@ -151,6 +153,7 @@ JMI.components.CanvasMap = (function() {
 				this.ready = true;
 				document.body.style.cursor = 'default';
 
+				this.initApiObjects();
 				this.invalidate();
 				if(this.ready) {
 					this.dispatchEvent({map: this, type:JMI.Map.event.READY});
@@ -484,6 +487,88 @@ JMI.components.CanvasMap = (function() {
 				copyCtx.drawImage(this.drawingCanvas, 0, 0, this.drawingCanvas.width, this.drawingCanvas.height, 0, 0, width, height);
 			}
 			return copy.toDataURL("image/png");
+		},
+		initApiObjects: function(nodeFields, entityAttProps, entityLinkProps) {
+			var i, j, o1, o2, o3, p, z;
+			this.attributes.length = 0;
+			this.links.length = 0;
+			this.nodes.length = 0;
+			for (i = 0; i < this.planContainer.map.plan.nodesCnt; ++i) {
+				z = this.planContainer.map.plan.nodes[i];
+				o1 = new JMI.components.Node(i);
+				o2 = new JMI.components.Attribute(i);
+				this.nodes.push( o1);
+				o1.attributes.push( o2);
+				this.attributes.push( o2);
+				o2.node = o1;
+				for(p in z.props) {
+					if(p && (p.charAt(0) !== '_' || p === '_INDEX')) {
+						o2[p] = z.props[p]; 
+					}
+				}
+				var sz = z.subZones;
+				for( j = 0; sz && j < sz.length; ++j) {
+					z = sz[j];
+					o3 = new JMI.components.Attribute(i);
+					this.attributes.push( o3);
+					o1.attributes.push( o3);
+					o3.node = o1;
+					for(p in z.props) {
+						if(p && (p.charAt(0) !== '_' || p === '_INDEX')) {
+							o3[p] = z.props[p]; 
+						}
+					}
+				}
+			}
+			for (i = 0; i < this.planContainer.map.plan.links.length; ++i) {
+				z = this.planContainer.map.plan.links[i];
+				o1 = new JMI.components.Link(i);
+				this.links.push(o1);
+				for(p in z.props) {
+					if(p && (p.charAt(0) !== '_' || p === '_INDEX')) {
+						o1[p] = z.props[p]; 
+					}
+				}
+			}
+			// Extraction des entités
+/*			if( !entityAttProps) {
+				entityAttProps = ['POSS_ID', 'POSS_NAME'];
+			}
+			if( !entityLinkProps) {
+				entityLinkProps = ['REC_ID', 'REC_NAME'];
+			}
+			for (i = 0; i < this.planContainer.map.plan.nodes.length; ++i) {
+				o1 = this.planContainer.map.plan.nodes[i];
+				for( j = 0; j < entityAttProps.length; ++j) {
+					p = o1.props[entityAttProps[j]];
+					if( p) {
+						
+					}
+				}
+				for( j = 0; p && i < p.length; ++i) {
+					if( !ents.hasOwnProperty( ids[i])) {
+						var entity = new JMI.components.Entity( env);
+						entity[nodeId] = ids[i];
+						for each( var name:Object in nodeFields) {
+							entity[name] = zone.m_props[name][i];
+						}
+						ents[ids[i]] = entity;
+						this.entities.push( entity);
+					}
+				}
+			}
+			for( i = 0; i < this.planContainer.map.plan.links.length; ++i) {
+				p = this.planContainer.map.plan.li,nks[i].props[linkId];
+				for( j = 0; p && i < p.length; ++i) {
+					//ents[id].addLink( link);
+				}
+			}
+			for each( var attribute:Attribute in this.attributes) {
+				ids = attribute.zone.m_props[nodeId] as Array;
+				for( i = 0; i < ids.length; ++i) {
+					ents[ids[i]].push( attribute);
+				}
+			}*/
 		}
 	};
 	
@@ -528,48 +613,6 @@ JMI.components.CanvasMap.getAbsPosition= function(canvas) {
 
 JMI.components.CanvasMap.IsTouchInterface= function() {
 	return navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i);
-}
-/*
+};
 
-
-private function findLink( zone:ActiveZone):Link {
-	return new Link( zone);
-}
-
-*/
-
-
-/*
-
-public function defineEntities( nodeFields:Array, nodeId:String="POSS_ID", linkId:String="REC_ID"):void {
-	
-	// Extraction des entités
-	var ents:Object = new Object();
-	for each( var zone:ActiveZone in plan.nodes) {
-		var ids:Array = zone.m_props[nodeId] as Array;
-		for( var i:int = 0; i < ids.length; ++i) {
-			if( !ents.hasOwnProperty( ids[i])) {
-				var entity:Entity = new Entity( env);
-				entity[nodeId] = ids[i];
-				for each( var name:Object in nodeFields) {
-					entity[name] = zone.m_props[name][i];
-				}
-				ents[ids[i]] = entity;
-				this.entities.addItem( entity);
-			}
-		}
-	}
-	for each( var link:LinkZone in plan.links) {
-		ids = link.m_props[linkId] as Array;
-		for each( var id:String in ids) {
-			ents[id].addLink( link);
-		}
-	}
-	for each( var attribute:Attribute in this.attributes) {
-		ids = attribute.zone.m_props[nodeId] as Array;
-		for( i = 0; i < ids.length; ++i) {
-			ents[ids[i]].addAttribute( attribute);
-		}
-	}
-}*/
 

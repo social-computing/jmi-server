@@ -42,6 +42,12 @@
 <script type="text/javascript" src="/jmi-canvas/src/main/js/lib/swfobject.js"></script>
 <script type="text/javascript" src="/jmi-canvas/src/main/js/components/SwfMap.js"></script>
 
+<script type="text/javascript" src="/jmi-canvas/src/main/js/components/Attribute.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/components/Entity.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/components/Node.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/components/Link.js"></script>
+<script type="text/javascript" src="/jmi-canvas/src/main/js/components/Selection.js"></script>
+
 <script>
 function getParams() {
 	var p = {
@@ -68,7 +74,7 @@ function GoMap() {
 				parameters: parameters
 			});
 	map.addEventListener(JMI.Map.event.STATUS, function(event) {
-		document.getElementById('status').innerHTML = event.message;
+		//document.getElementById('status').innerHTML = event.message;
 	} );
 	map.addEventListener(JMI.Map.event.ACTION, function(event) {
 		window[event.fn](event.map, event.args);
@@ -81,6 +87,12 @@ function GoMap() {
 	} );
 	map.addEventListener(JMI.Map.event.ATTRIBUTE_CLICK, function(event) {
 		//alert( event.attribute.props.NAME);
+	} );
+	map.addEventListener(JMI.Map.event.ATTRIBUTE_HOVER, function(event) {
+		document.getElementById('status').innerHTML = event.attribute._INDEX;
+	} );
+	map.addEventListener(JMI.Map.event.LINK_HOVER, function(event) {
+		document.getElementById('status').innerHTML = event.link._INDEX;
 	} );
 };
 function JMIF_Navigate(args) {
@@ -105,6 +117,11 @@ function JMIF_Center(map, args) {
 function image() {
 	document.location.href = document.getElementById('map').JMI.getImage("image/png", 200, 200, true);
 };
+function search(value) {
+	var map = document.getElementById('map').JMI;
+	var res = map.attributes.match(value,['NAME']);	
+	document.getElementById('res').innerHTML = res.length + ' found'; 
+};
 </script>
 </head>
 <body onload="GoMap()">
@@ -119,6 +136,7 @@ function image() {
 <button onclick="document.getElementById('map').JMI.resize(900,480);">Resize</button>
 <button onclick="compute();">Compute</button>
 <button onclick="image();">Image</button>
+<input onkeypress="search(this.value)"/><span id="res"></span>
 <div id="status">&nbsp;</div>
 <!--menu type='context' id='toto' >
  <menuitem label="powered by Just Map It!" onclick="alert('rotate');"/>

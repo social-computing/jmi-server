@@ -8,6 +8,7 @@
     <fx:Script>
         <![CDATA[
 			import com.socialcomputing.wps.components.events.*;
+			import com.socialcomputing.wps.script.ActiveZone;
 			import com.socialcomputing.wps.services.planservice.PlanService;
 			
 			import mx.controls.Alert;
@@ -72,7 +73,10 @@
 				ExternalInterface.addCallback( "getArrayProperty", getArrayProperty);
 				ExternalInterface.addCallback( "uploadAsImage", uploadAsImage);
 				ExternalInterface.addCallback( "getImage", getImage);
-				ExternalInterface.addCallback( "getData", getData);
+				ExternalInterface.addCallback( "getAttributesCount", getAttributesCount);
+				ExternalInterface.addCallback( "getAttribute", getAttribute);
+				ExternalInterface.addCallback( "getLinksCount", getLinksCount);
+				ExternalInterface.addCallback( "getLink", getLink);
 				
 				// Initialising service
 				this.planService = new PlanService(serverURL);
@@ -126,8 +130,33 @@
 				dummyMap.draw( map.bitmapData, matrix);
 				return encoder.encode( dummyMap);
 			}
-			public function getData():Object {
-				return map.dataProvider;
+			public function getAttributesCount():int {
+				return map.plan == null ? 0 : map.plan.m_nodes.length;
+			}
+			public function getAttribute(index:int):Object {
+				if(map.plan == null || index >= map.plan.m_nodes.length)
+					return null;
+				var attribute:Object = new Object();
+				var zone:ActiveZone = map.plan.m_nodes[index];
+				for( var o : * in zone.m_props) {
+					if( o.charAt( 0) != '_' || o == '_INDEX')
+						attribute[o] = zone.m_props[o];
+				}
+				return attribute;
+			}
+			public function getLinksCount():int {
+				return map.plan == null ? 0 : map.plan.m_links.length;
+			}
+			public function getLink(index:int):Object {
+				if(map.plan == null || index >= map.plan.m_links.length)
+					return null;
+				var link:Object = new Object();
+				var zone:ActiveZone = map.plan.m_links[index];
+				for( var o : * in zone.m_props) {
+					if( o.charAt( 0) != '_' || o == '_INDEX')
+						link[o] = zone.m_props[o];
+				}
+				return link;
 			}
 			// New API
 			public function getImage( mime:String="image/png", width:int=-1, height:int=-1, keepProportions:Boolean=true):String {

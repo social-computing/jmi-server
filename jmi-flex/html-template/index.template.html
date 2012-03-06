@@ -82,6 +82,10 @@
 			function goImage(){
         		document.location.href = getMap().getImage( "image/png", 200, 200);
 			}			
+			function goData(){
+        		var data = getMap().getAttribute(0);
+        		alert( data);
+			}			
         </script>
 		    
         <script type="text/javascript" src="swfobject.js"></script>
@@ -129,6 +133,7 @@
         </script>
     </head>
     <body>
+    	<button onclick="goData();">Data</button>
     	<button onclick="goImage();">Image</button>
         <div id="flashContent">
         	<p>

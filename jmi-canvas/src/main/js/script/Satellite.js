@@ -230,12 +230,12 @@ JMI.script.Satellite = ( function() {
 			// Events
 			if(zone !== null) {
 				var event = {
-					map : this,
+					map : applet,
 					x : pos.x,
 					y : pos.y
 				};
 				if( zone instanceof JMI.script.LinkZone) {
-					event.link = zone.props._INDEX;
+					event.link = applet.links[zone.props._INDEX];
 					if(actionId === JMI.script.Satellite.CLICK_VAL) {
 						event.type = JMI.Map.event.LINK_CLICK;
 					} else if(actionId === JMI.script.Satellite.DBLCLICK_VAL) {
@@ -244,7 +244,7 @@ JMI.script.Satellite = ( function() {
 						event.type = JMI.Map.event.LINK_HOVER;
 					}
 				} else {
-					event.attribute = zone.props._INDEX;
+					event.attribute = applet.attributes[zone.props._INDEX];
 					if(actionId === JMI.script.Satellite.CLICK_VAL) {
 						event.type = JMI.Map.event.ATTRIBUTE_CLICK;
 					} else if(actionId === JMI.script.Satellite.DBLCLICK_VAL) {

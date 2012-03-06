@@ -46,7 +46,7 @@ JMI.components.MapRequester = (function() {
 				url = this.addParameter( url, p, parameters[p]);
 			}
 			try {
-				//client.open( "GET", "/jmi-canvas/src/main/resources/feeds.json", true); 
+				//client.open( "GET", "/jmi-canvas/src/main/resources/feeds2.json", true); 
 				client.open( "GET", url, true); 
 				client.send();
 			}
