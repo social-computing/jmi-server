@@ -215,7 +215,7 @@ JMI.components.CanvasMap = (function() {
 				if ( this.JMI.ready && this.JMI.planContainer.map.plan.curSat !== null )
 				{
 					this.JMI.planContainer.map.plan.updateZoneAt( mousePosition);
-					this.JMI.planContainer.map.plan.curSat.execute( this.JMI, this.JMI.planContainer.map.plan.curZone, mousePosition, JMI.script.Satellite.CLICK_VAL, new JMI.script.Point( event.clientX, event.clientY));
+					this.JMI.planContainer.map.plan.curSat.execute( this.JMI, this.JMI.planContainer.map.plan.curZone, mousePosition, JMI.script.Satellite.CLICK_VAL, new JMI.script.Point( event.pageX, event.pageY));
 				}
 			}
 		},
