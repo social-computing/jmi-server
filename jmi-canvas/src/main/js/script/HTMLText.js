@@ -310,8 +310,8 @@ JMI.script.HTMLText = ( function() {
 			if(text.length > 0) {
 				var metrics = gDrawingContext.measureText(text);
 				var a = 0, //fm.getAscent(),
-				d = Math.round(this.font.size * 96 / 72), //fm.getDescent(),
-				w = metrics.width, h = Math.round(this.font.size * 96 / 72);
+				d = Math.round(this.font.size),// * 96 / 72), //fm.getDescent(),
+				w = metrics.width, h = Math.round(this.font.size);// * 96 / 72);
 
 				// The previous token was a text too so we must merge it with this new one.
 				if(isText) {
@@ -706,7 +706,7 @@ JMI.script.HTMLText = ( function() {
 	return HTMLText;
 }());
 
-JMI.script.HTMLText.MARGIN = 2;
+JMI.script.HTMLText.MARGIN = 4;
 JMI.script.HTMLText.BORDER_WIDTH = 2;
 /**
  * Index of the bit flag prop in VContainer table
