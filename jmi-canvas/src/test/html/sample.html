@@ -89,10 +89,10 @@ function GoMap() {
 		//alert( event.attribute.props.NAME);
 	} );
 	map.addEventListener(JMI.Map.event.ATTRIBUTE_HOVER, function(event) {
-		document.getElementById('status').innerHTML = event.attribute._INDEX;
+		document.getElementById('status').innerHTML = event.attribute._index;
 	} );
 	map.addEventListener(JMI.Map.event.LINK_HOVER, function(event) {
-		document.getElementById('status').innerHTML = event.link._INDEX;
+		document.getElementById('status').innerHTML = event.link._index;
 	} );
 };
 function JMIF_Navigate(args) {

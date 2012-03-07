@@ -282,7 +282,7 @@ JMI.script.Plan = ( function() {
 					this.applet.toolTip = null;
 				}
 
-				if( this.newZone === null && this.curSat !== null && curSat === null && this.curZone !== null) {
+				if( this.newZone === null && this.curSat !== null && cSat === null && this.curZone !== null) {
 					this.curSat.execute( this.applet, this.curZone, p, JMI.script.Satellite.LEAVE_VAL);
 				} 
 				

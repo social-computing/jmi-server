@@ -71,17 +71,32 @@ JMI.components.SwfMap = (function() {
 			}
 		},
 		initApiObjects: function() {
-			var i, count;
+			// Manque les nodes, les entités
+			var i, count, o, swfO, p;
 			if( this.swfmap) {
 				this.attributes.length = 0;
 				this.links.length = 0;
 				count = this.swfmap.getAttributesCount();
 				for( i = 0; i < count; ++i) {
-					this.attributes.push( this.swfmap.getAttribute(i));
+					o = new JMI.components.Attribute(i);
+					swfO = this.swfmap.getAttribute(i);
+					for(p in swfO) {
+						if(p && (p.charAt(0) !== '_')) {
+							o[p] = swfO[p]; 
+						}
+					}
+					this.attributes.push( o);
 				}
 				count = this.swfmap.getLinksCount();
 				for( i = 0; i < count; ++i) {
-					this.links.push( this.swfmap.getLink(i));
+					o = new JMI.components.Link(i);
+					swfO = this.swfmap.getLink(i);
+					for(p in swfO) {
+						if(p && (p.charAt(0) !== '_')) {
+							o[p] = swfO[p]; 
+						}
+					}
+					this.links.push( o);
 				}
 			}
 		},
@@ -101,6 +116,10 @@ JMI.components.SwfMap = (function() {
 
 JMI.components.SwfMap.Version = "1.0-SNAPSHOT";
 
+/*
+ * Callback du swf
+ * Mise à jour des évènements
+ */
 JMI.components.SwfMap.mainCallback = function(id, event) {
 	var map = swfobject.getObjectById(id);
 	if( map) {

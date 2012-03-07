@@ -489,6 +489,7 @@ JMI.components.CanvasMap = (function() {
 			return copy.toDataURL("image/png");
 		},
 		initApiObjects: function(nodeFields, entityAttProps, entityLinkProps) {
+			// Manque les entités
 			var i, j, o1, o2, o3, p, z;
 			this.attributes.length = 0;
 			this.links.length = 0;
@@ -502,7 +503,7 @@ JMI.components.CanvasMap = (function() {
 				this.attributes.push( o2);
 				o2.node = o1;
 				for(p in z.props) {
-					if(p && (p.charAt(0) !== '_' || p === '_INDEX')) {
+					if(p && (p.charAt(0) !== '_')) {
 						o2[p] = z.props[p]; 
 					}
 				}
@@ -514,7 +515,7 @@ JMI.components.CanvasMap = (function() {
 					o1.attributes.push( o3);
 					o3.node = o1;
 					for(p in z.props) {
-						if(p && (p.charAt(0) !== '_' || p === '_INDEX')) {
+						if(p && (p.charAt(0) !== '_')) {
 							o3[p] = z.props[p]; 
 						}
 					}
@@ -525,7 +526,7 @@ JMI.components.CanvasMap = (function() {
 				o1 = new JMI.components.Link(i);
 				this.links.push(o1);
 				for(p in z.props) {
-					if(p && (p.charAt(0) !== '_' || p === '_INDEX')) {
+					if(p && (p.charAt(0) !== '_')) {
 						o1[p] = z.props[p]; 
 					}
 				}
