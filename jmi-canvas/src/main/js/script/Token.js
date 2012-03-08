@@ -114,9 +114,9 @@ JMI.script.Token = ( function() {
 				}
 
 				// prop exists!
-				if(rawProp !== null) {
+				if(rawProp) {
 					// :String
-					var prop = rawProp.toString();
+					var prop = rawProp;//.toString();
 
 					// numerical prop
 					if(JMI.script.Base.isEnabled(this.flags, JMI.script.Token.NUM_BIT)) {

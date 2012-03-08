@@ -164,7 +164,7 @@ JMI.components.CanvasMap = (function() {
 			return this.planContainer;
 		},
 		getProperty: function( name) {
-			if( this.planContainer && this.planContainer.map.props[name]) {
+			if( this.planContainer && this.planContainer.map && this.planContainer.map.env.props[name]) {
 				return this.planContainer.map.env.props[name];
 			}
 			return null;
