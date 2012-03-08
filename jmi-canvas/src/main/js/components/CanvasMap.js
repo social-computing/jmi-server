@@ -133,7 +133,7 @@ JMI.components.CanvasMap = (function() {
 				document.body.style.cursor = 'default';
 				this.dispatchEvent({map: this, type: JMI.Map.event.ERROR, message: this.planContainer.error});
 			}
-			else if( !this.planContainer.hasOwnProperty( "map")) {
+			else if( !this.planContainer.hasOwnProperty( 'map') || !this.planContainer.map.hasOwnProperty( 'plan')) {
 				// Empty map
 				document.body.style.cursor = 'default';
 				this.dispatchEvent({ map: this, type: JMI.Map.event.EMPTY});

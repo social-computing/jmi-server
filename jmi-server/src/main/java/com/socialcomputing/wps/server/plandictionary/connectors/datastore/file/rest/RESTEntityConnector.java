@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
@@ -194,7 +195,7 @@ public class RESTEntityConnector extends FileEntityConnector {
         else if ( node.isDouble()) {
             return node.getDoubleValue();
         }
-        return node.getTextValue();
+        return StringEscapeUtils.unescapeHtml(node.getTextValue());
     }
     
     /**
