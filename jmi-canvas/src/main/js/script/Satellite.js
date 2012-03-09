@@ -353,7 +353,7 @@ JMI.script.Satellite = ( function() {
 			}
 
 			else if(this !== firstSat) {
-				firstSat.execute(applet, zone, pos, actionId);
+				firstSat.execute(applet, zone, pos, actionId, absPosition);
 			}
 		}
 	};

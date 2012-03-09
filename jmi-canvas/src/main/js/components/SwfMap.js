@@ -20,7 +20,8 @@ JMI.components.SwfMap = (function() {
 		  wmode: 'opaque',
 		  bgcolor: backgroundColor,
 		  allowscriptaccess: 'always',
-		  allowfullscreen: 'true'
+		  allowfullscreen: 'true',
+		  fullScreenOnSelection: 'true'
 		},
 		attributes = {
 		  id: 'JMI_' + this.parent.id,
