@@ -293,7 +293,7 @@ JMI.script.Swatch = ( function() {
 							satTrf = transfo.transform(satRelTrf, true);
 
 							if(isBag && supZone.dir !== 10.0) {
-								satTrf.dir = supZone.dir;
+								satTrf.direction = supZone.dir;
 							}
 
 							// Test if the cursor is the super zone
