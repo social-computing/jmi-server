@@ -40,19 +40,18 @@ JMI.script.Rectangle = ( function() {
 		 */
 		merge : function(src) {
 			if(this.width * this.height !== 0) {
-				this.union(src);
+				this.copy(this.union(src));
 			} else {
 				this.copy(src);
 			}
 			return this;
 		},
 		union : function(src) {
-			var x1 = Math.min(this.x, src.x), y1 = Math.min(this.y, src.y), x2 = Math.max(this.x + this.width, src.x + src.width), y2 = Math.max(this.y + this.height, src.y + src.height);
-			this.x = x1;
-			this.y = y1;
-			this.width = x2 - x1;
-			this.height = y2 - y1;
-			return this;
+			var x = Math.min(this.x, src.x),
+				y = Math.min(this.y, src.y),
+				w = Math.max(this.x + this.width, src.x + src.width), 
+				h = Math.max(this.y + this.height, src.y + src.height);
+			return new JMI.script.Rectangle(x, y, w-x, h-y);
 		},
 		/*
 		 * Copy the source <code>Rectangle</code> properties to the destination <code>Rectangle</code>
