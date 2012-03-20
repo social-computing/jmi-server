@@ -299,7 +299,7 @@ JMI.script.Satellite = ( function() {
 
 							if(menux !== null) {
 								var menu = document.createElement('ul');
-								menu.id = 'menu';
+								menu.className = 'jmi-menu';
 								menux.parseMenu(applet,menu,zone);
 								applet.divMenu.appendChild( menu);
 								var x = absPosition.x,

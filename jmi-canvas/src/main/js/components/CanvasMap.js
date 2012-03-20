@@ -297,6 +297,7 @@ JMI.components.CanvasMap = (function() {
 		},
 		hideMenu: function() {
 			if( this.divMenu.style.visibility === '') {
+				JMI.script.MenuX.hideSubMenu(this.divMenu.firstChild);
 				this.divMenu.style.visibility = 'hidden';
 				if(this.divMenu.firstChild) {
 					this.divMenu.removeChild(this.divMenu.firstChild);
