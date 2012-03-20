@@ -21,7 +21,15 @@ ul.jmi-menu {
 	padding: 0 15px 0 15px;
 	margin-bottom:5px;
 	margin-top:5px;
- }
+	}
+
+.jmi-menu a.jmi-menu-arrow  { 
+	background:url(./arrow-right.png) no-repeat center right;
+	}
+
+.jmi-menu a.jmi-menu-arrow:hover  { 
+	background:url(./arrow-right.png) no-repeat center right;
+	}
 
 .jmi-menu li:hover {
 	color:#aaaaaa;

@@ -63,6 +63,7 @@ JMI.script.MenuX = ( function() {
 
 					menuItm = document.createElement("li");
 					a = document.createElement("a");
+					a.className = 'jmi-menu-arrow';
 					a.href = '';
 					a.innerHTML = labels[j];
 					a.JMI = applet;
@@ -255,10 +256,7 @@ JMI.script.MenuX.TEXT_VAL = 2;
 JMI.script.MenuX.ITEM_BIT = 0x01;
 
 JMI.script.MenuX.hideSubMenu=function(menu) {
-	if( !menu) {
-		return;
-	}
-	if( menu.currentSubMenu) {
+	if( menu && menu.currentSubMenu) {
 		JMI.script.MenuX.hideSubMenu( menu.currentSubMenu.firstChild);
 		menu.currentSubMenu.style.visibility = 'hidden';
 		delete menu.currentSubMenu;
