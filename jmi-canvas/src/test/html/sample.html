@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 <title>Test</title>
 <meta name="viewport" content="target- densitydpi=device-dpi, width=device-width, user-scalable=no"/>
@@ -52,7 +52,6 @@
 function getParams() {
 	var p = {
 		map: 'Feeds',
-    	wpsserverurl: 'http://localhost:8080/jmi-server/',
 		invert: 'false',
     	feedsserverurl: 'http://feeds.just-map-it.com',
 		feed: 'http://www.social-computing.com/feed/',
@@ -69,6 +68,7 @@ function GoMap() {
 				parent: 'map', 
 				swf: '/jmi-canvas/src/main/swf/jmi-flex-1.0-SNAPSHOT.swf', 
 				touchMenuDelay : 1000,
+    			//server: 'http://localhost:8080/jmi-server/',
 				//server: 'http://server.just-map-it.com/', 
 				//client: JMI.Map.SWF,
 				parameters: parameters
@@ -117,10 +117,14 @@ function JMIF_Center(map, args) {
 function image() {
 	document.location.href = document.getElementById('map').JMI.getImage("image/png", 200, 200, true);
 };
+function data() {
+	document.location.href = document.getElementById('map').JMI.getData();
+};
 function search(value) {
 	var map = document.getElementById('map').JMI;
-	var res = map.attributes.match(value,['NAME']);	
-	document.getElementById('res').innerHTML = res.length + ' found'; 
+	var res1 = map.attributes.match(value,['NAME']);	
+	var res2 = map.links.match(value,['REC_NAME']);	
+	document.getElementById('res').innerHTML = res1.length + ' attribute(s) found / ' + res2.length + ' link(s) found'; 
 };
 </script>
 </head>
@@ -136,7 +140,8 @@ function search(value) {
 <button onclick="document.getElementById('map').JMI.resize(900,480);">Resize</button>
 <button onclick="compute();">Compute</button>
 <button onclick="image();">Image</button>
-<input onkeypress="search(this.value)"/><span id="res"></span>
+<button onclick="data();">Data</button>
+<input onkeyup="search(this.value)"/><span id="res"></span>
 <div id="status">&nbsp;</div>
 <!--menu type='context' id='toto' >
  <menuitem label="powered by Just Map It!" onclick="alert('rotate');"/>

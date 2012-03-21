@@ -81,19 +81,49 @@ JMI.Map.InitApiObjects = function(map) {
 	map.links = [];
 	map.selections = [];
 	map.attributes.JMI = map;
+	
 	map.attributes.match = function(str,fields) {
-		var i, j, attribute, result = [];
+		var i, result = [];
 		for(i = 0; i < map.attributes.length; ++i) {
-			attribute = map.attributes[i];
-			for(j = 0; j < fields.length; ++j) {
-				if( attribute[fields[j]] && attribute[fields[j]].match(str)) {
-					result.push(attribute);
-					break;
-				}
+			if( JMI.Map.MatchFields(map.attributes[i],str,fields)) {
+				result.push(map.attributes[i]);
 			}
 		}
 		return result;
 	};
+
+	map.links.match = function(str,fields) {
+		var i, result = [];
+		for(i = 0; i < map.links.length; ++i) {
+			if( JMI.Map.MatchFields(map.links[i],str,fields)) {
+				result.push(map.links[i]);
+			}
+		}
+		return result;
+	};
+};
+
+JMI.Map.MatchFields = function(o,str,fields) {
+	var i,p,pp;
+	if( str.length === 0) {
+		return false;
+	}
+	for(i = 0; i < fields.length; ++i) {
+		if( o[fields[i]]) {
+			if( typeof o[fields[i]] === 'string' && o[fields[i]].match(str)) {
+				return true;
+			}
+			else if( typeof o[fields[i]] === 'object') {
+				p = o[fields[i]];
+				for(pp in p) {
+					if( typeof p[pp] === 'string' && p[pp].match(str)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 };
 
 JMI.namespace("Map.event");
