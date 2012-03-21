@@ -496,7 +496,7 @@ package com.socialcomputing.wps.components
 		 * Called by JavaScript.
 		 * @param selNam	A selection name as defined in the Dictionary.
 		 */
-		public function setSelection( selection:String):void
+		public function showSelection( selection:String):void
 		{
 			var selId:int   = getSelId( selection );
 			plan.m_curSel = selId;
@@ -507,7 +507,23 @@ package com.socialcomputing.wps.components
 		public function clearSelection( selection:String):void {
 			clearZoneSelection( selection, plan.m_links, plan.m_linksCnt );
 			clearZoneSelection( selection, plan.m_nodes, plan.m_nodes.length );
-			plan.m_curSel = -1;
+		}
+		
+		public function addSelection(selection:String,attributes:Array,links:Array=null):void {
+			var i:int, selId:int   = getSelId(selection);
+			if ( selId != -1 ) {
+				selId = 1 << selId;
+				if( attributes != null) {
+					for( i = 0; i < attributes.length; ++i) {
+						plan.m_nodes[attributes[i]].m_selection |= selId;
+					}
+				}
+				if( links != null) {
+					for( i = 0; i < links.length; ++i) {
+						plan.m_links[links[i]].m_selection |= selId;
+					}
+				}
+			}
 		}
 		
 		/**

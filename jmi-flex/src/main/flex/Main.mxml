@@ -77,6 +77,10 @@
 				ExternalInterface.addCallback( "getAttribute", getAttribute);
 				ExternalInterface.addCallback( "getLinksCount", getLinksCount);
 				ExternalInterface.addCallback( "getLink", getLink);
+				ExternalInterface.addCallback( "getSelections", getSelections);
+				ExternalInterface.addCallback( "showSelection", showSelection);
+				ExternalInterface.addCallback( "addSelection", addSelection);
+				ExternalInterface.addCallback( "clearSelection", clearSelection);
 				
 				// Initialising service
 				this.planService = new PlanService(serverURL);
@@ -157,6 +161,18 @@
 						link[o] = zone.m_props[o];
 				}
 				return link;
+			}
+			public function getSelections():Object {
+				return map.env == null ? null : map.env.m_selections;
+			}
+			public function showSelection(selection:String):void {
+				return map.showSelection(selection);
+			}
+			public function clearSelection(selection:String):void {
+				return map.clearSelection(selection);
+			}
+			public function addSelection(selection:String,attributes:Array,links:Array):void {
+				map.addSelection(selection,attributes,links);
 			}
 			// New API
 			public function getImage( mime:String="image/png", width:int=-1, height:int=-1, keepProportions:Boolean=true):String {

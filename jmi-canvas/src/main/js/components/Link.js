@@ -8,7 +8,7 @@ JMI.components.Link = ( function() {
 	};
 	
 	Link.prototype = {
-		constructor : JMI.script.Link
+		constructor : JMI.components.Link
 
 	};
 

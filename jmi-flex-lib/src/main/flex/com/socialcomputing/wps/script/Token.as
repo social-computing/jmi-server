@@ -137,7 +137,7 @@ package com.socialcomputing.wps.script  {
          * @return			A String representation of this Token after parsing.
          * @throws UnsupportedEncodingException 
          */
-		public function toString(i:int, props:Array):String {
+		public function toString(i:int, props:Object):String {
             var tokenStr:String= null;
             
             if ( Base.isEnabled( m_flags, PROP_BIT ))       // Propertie

@@ -77,7 +77,7 @@ public class Env
 	 * This is used by swatchs because they only know the selection name, not the ID.
 	 * It should be used by Javascript...but it isn't.
 	 */
-	public      var m_selections:Array;
+	public      var m_selections:Object;
 
 	/**
 	 * Table containing icons and sounds.

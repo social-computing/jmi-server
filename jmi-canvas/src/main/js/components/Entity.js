@@ -8,7 +8,7 @@ JMI.components.Entity = ( function() {
 	};
 
 	Entity.prototype = {
-		constructor : JMI.script.Entity
+		constructor : JMI.components.Entity
 
 	};
 

@@ -33,7 +33,7 @@ JMI.script.ActiveZone = ( function() {
 		this.bounds = null;
 
 		//Flag indicating which of the 32 possible selections are active for this zone.
-		this.selection = null;
+		this.selection = 0;
 
 		//Parent of this zone if it is clusterized or null if this is already a BagZone.
 		//:ActiveZone;

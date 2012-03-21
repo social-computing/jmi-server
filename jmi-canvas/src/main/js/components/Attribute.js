@@ -8,7 +8,7 @@ JMI.components.Attribute = ( function() {
 	};
 
 	Attribute.prototype = {
-		constructor : JMI.script.Attribute
+		constructor : JMI.components.Attribute
 		
 	};
 

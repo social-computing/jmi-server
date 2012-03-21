@@ -346,50 +346,41 @@ JMI.components.CanvasMap = (function() {
 		removeEventListener: function(event, listener) {
 			this.eventManager.removeListener(event, listener);
 		},
-		/**
-		 * Sets the currently displayed selection.
-		 * Called by JavaScript.
-		 * @param selNam	A selection name as defined in the Dictionary.
-		 */
-		setSelection: function(selection) {
-			var selId = this.getSelId(selection);
-			this.planContainer.map.plan.curSel = selId;
+		showSelection: function(selection) {
+			this.planContainer.map.plan.curSel = this.getSelId(selection);
 			this.planContainer.map.plan.init();
 			this.invalidate();
 		},
-		clearSelection: function( selection) {
-			this.clearZoneSelection( selection, this.planContainer.map.plan.nodes, this.planContainer.map.plan.nodes.length );
-			this.clearZoneSelection( selection, this.planContainer.map.plan.links, this.planContainer.map.plan.linksCnt );
-			this.invalidate();
+		clearSelection: function(selection) {
+			var i, unselBit = ~( 1 << this.getSelId(selection));
+			for( i = 0; i < this.planContainer.map.nodes.length; i ++ ) {
+				this.planContainer.map.plan.nodes[i].selection &= unselBit;
+			}
+			for( i = 0; i < this.planContainer..map.links.length; i ++ ) {
+				this.planContainer.map.plan.links[i].selection &= unselBit;
+			}
 		},
-		/**
-		 * Remove zones from a selection.
-		 * The display must be refresh to reflect the new selection.
-		 * @param selNam	A selection name as defined in the Dictionary.
-		 * @param zones		An array of Zones (Nodes or Links).
-		 * @param n			Number of zone to remove from selection in the array, starting from index 0.
-		 */
-		clearZoneSelection: function( selection, zones, n) {
-			var i, unselBit, selId = this.getSelId(selection);
-			if ( selId !== -1 )
-			{
-				unselBit = ~( 1 << selId );
-				for( i = 0; i < n; i ++ )
-				{
-					zones[i].selection &= unselBit;
+		addSelection: function(selection,attributes,links) {
+			var i, selId = this.getSelId(selection);
+			if ( selId !== -1 ) {
+				selId = 1 << selId;
+				if( attributes) {
+					for( i = 0; i < attributes.length; ++i) {
+						this.planContainer.map.plan.nodes[attributes[i]].selection |= selId;
+					}
+				}
+				if( links) {
+					for( i = 0; i < links.length; ++i) {
+						this.planContainer.map.plan.links[links[i]].selection |= selId;
+					}
 				}
 			}
 		},
-		/**
-		 * Gets the id of a selection, knowing its name.
-		 * @param selNam	A selection name as defined in the Dictionary.
-		 * @return			An ID in [0,31] or -1 if the selection name is unknown.
-		 */
 		getSelId: function( selection) {
-			if( this.planContainer.map.env.selections[selection] === null) {
+			if( this.planContainer.map.env.selections[selection] == null) {
 				return -1;
 			}
-			return  this.planContainer.map.env.selections[selection];
+			return this.planContainer.map.env.selections[selection];
 		},
 		/**
 		 * Perform an URL action.
@@ -533,6 +524,11 @@ JMI.components.CanvasMap = (function() {
 					}
 				}
 			}
+			// Selections
+			for (p in this.planContainer.map.env.selections) {
+				this.selections[p] = new JMI.components.Selection(this,p,this.planContainer.map.env.selections[p]);
+			}
+			
 			// Extraction des entités
 /*			if( !entityAttProps) {
 				entityAttProps = ['POSS_ID', 'POSS_NAME'];

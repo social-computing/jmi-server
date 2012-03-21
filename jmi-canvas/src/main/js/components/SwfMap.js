@@ -71,6 +71,21 @@ JMI.components.SwfMap = (function() {
 				return this.swfmap.getImage(mime, width, height, keepProportions);
 			}
 		},
+		showSelection: function(selection) {
+			if( this.swfmap) {
+				this.swfmap.showSelection(selection);
+			}
+		},
+		clearSelection: function(selection) {
+			if( this.swfmap) {
+				this.swfmap.clearSelection(selection);
+			}
+		},
+		addSelection: function(selection,attributes,links) {
+			if( this.swfmap) {
+				this.swfmap.addSelection(selection,attributes,links);
+			}
+		},
 		initApiObjects: function() {
 			// Manque les nodes, les entités
 			var i, count, o, swfO, p;
@@ -98,6 +113,11 @@ JMI.components.SwfMap = (function() {
 						}
 					}
 					this.links.push( o);
+				}
+				// Selections
+				o = this.swfmap.getSelections();
+				for (p in o) {
+					this.selections[p] = new JMI.components.Selection(this,p,o[p]);
 				}
 			}
 		},

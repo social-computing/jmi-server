@@ -9,7 +9,7 @@ JMI.components.Node = ( function() {
 	};
 	
 	Node.prototype = {
-		constructor : JMI.script.Node
+		constructor : JMI.components.Node
 
 	};
 

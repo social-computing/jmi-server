@@ -25,7 +25,7 @@ package com.socialcomputing.wps.script
 					env.m_props[i] = json.props[i];
 				}
 			}			
-			env.m_selections = new Array();
+			env.m_selections = new Object();
 			for(i in json.selections){
 				env.m_selections[i] = json.selections[i];
 			}			
