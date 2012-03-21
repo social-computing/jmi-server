@@ -81,11 +81,48 @@
 			}
 			function goImage(){
         		document.location.href = getMap().getImage( "image/png", 200, 200);
-			}			
+			}
 			function goData(){
         		var data = getMap().getAttribute(0);
         		alert( data);
 			}			
+			function goSelection(){
+				var ids = [];
+				for( var i = 0; i < 10; ++i) {
+					ids.push(i);
+				}
+				getMap().addSelection(ids,null,'search');
+				getMap().showSelection('search');
+			}			
+   function JMIF_Focus( args)
+  {
+	var parameters = {};
+	JMIF_CompleteParameters( parameters);
+	parameters.entityId = args[0];
+	parameters.feed = args[2];
+	parameters.track = "";
+	getMap().compute( parameters);
+  }
+  function JMIF_Center( args)
+  {
+	var parameters = {};
+	JMIF_CompleteParameters( parameters);
+	parameters.attributeId = args[0];
+	parameters.feed = args[2];
+	parameters.analysisProfile = "DiscoveryProfile";
+	parameters.track = "";
+	getMap().compute( parameters);
+  }
+function JMIF_CompleteParameters( parameters) {
+	 parameters.allowDomain = "*";
+	 parameters.wpsserverurl = "http://localhost:8080/jmi-server";
+     //parameters.feedsserverurl = "http://localhost:8080/feeds-web";
+	 //parameters.wpsserverurl = "http://server.just-map-it.com";
+     parameters.feedsserverurl = "http://feeds.just-map-it.com";
+	 parameters.wpsplanname = "Feeds";
+	 parameters.site = "";
+	 parameters.jsessionid = '';
+} 
         </script>
 		    
         <script type="text/javascript" src="swfobject.js"></script>
@@ -102,6 +139,7 @@
             flashvars.analysisProfile = "GlobalProfile";
      		flashvars.invert="false";*/
 			flashvars.wpsserverurl = "http://server.just-map-it.com";
+			//flashvars.wpsserverurl = "http://localhost:8080/jmi-server";
 		    flashvars.feedsserverurl = "http://feeds.just-map-it.com";
 			flashvars.wpsplanname = "Feeds";
 		    flashvars.feed = "http://www.social-computing.com/feed";
@@ -130,11 +168,13 @@
                 flashvars, params, attributes);
 			<!-- JavaScript enabled so display the flashContent div in case it is not replaced with a swf object. -->
 			swfobject.createCSS("#flashContent", "display:block;text-align:left;");
+ 
         </script>
     </head>
     <body>
     	<button onclick="goData();">Data</button>
     	<button onclick="goImage();">Image</button>
+    	<button onclick="goSelection();">Select</button>
         <div id="flashContent">
         	<p>
 	        	To view this page ensure that Adobe Flash Player version 

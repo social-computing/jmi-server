@@ -79,8 +79,9 @@
 				ExternalInterface.addCallback( "getLink", getLink);
 				ExternalInterface.addCallback( "getSelections", getSelections);
 				ExternalInterface.addCallback( "showSelection", showSelection);
-				ExternalInterface.addCallback( "addSelection", addSelection);
 				ExternalInterface.addCallback( "clearSelection", clearSelection);
+				ExternalInterface.addCallback( "addSelection", addSelection);
+				ExternalInterface.addCallback( "setSelection", setSelection);
 				
 				// Initialising service
 				this.planService = new PlanService(serverURL);
@@ -166,10 +167,14 @@
 				return map.env == null ? null : map.env.m_selections;
 			}
 			public function showSelection(selection:String):void {
-				return map.showSelection(selection);
+				map.showSelection(selection);
 			}
 			public function clearSelection(selection:String):void {
-				return map.clearSelection(selection);
+				map.clearSelection(selection);
+			}
+			public function setSelection(selection:String,attributes:Array,links:Array):void {
+				map.clearSelection(selection);
+				map.addSelection(selection,attributes,links);
 			}
 			public function addSelection(selection:String,attributes:Array,links:Array):void {
 				map.addSelection(selection,attributes,links);

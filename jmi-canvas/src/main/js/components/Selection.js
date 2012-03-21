@@ -22,12 +22,12 @@ JMI.components.Selection = ( function() {
 			this.map.clearSelection(this.name);
 		},
 		set: function(s) {
+			var refs = this._refs(s);
+			this.map.setSelection(this.name,refs.attributes,refs.links);
 		},
 		add: function(s) {
-			var refs = this._refs(s), i, ref;
+			var refs = this._refs(s);
 			this.map.addSelection(this.name,refs.attributes,refs.links);
-		},
-		remove: function(s) {
 		},
 		_refs: function(s) {
 			var i, ret, attributes = [], links = [];

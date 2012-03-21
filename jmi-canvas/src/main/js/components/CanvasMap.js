@@ -353,10 +353,10 @@ JMI.components.CanvasMap = (function() {
 		},
 		clearSelection: function(selection) {
 			var i, unselBit = ~( 1 << this.getSelId(selection));
-			for( i = 0; i < this.planContainer.map.nodes.length; i ++ ) {
+			for( i = 0; i < this.planContainer.map.plan.nodes.length; i ++ ) {
 				this.planContainer.map.plan.nodes[i].selection &= unselBit;
 			}
-			for( i = 0; i < this.planContainer..map.links.length; i ++ ) {
+			for( i = 0; i < this.planContainer.map.plan.links.length; i ++ ) {
 				this.planContainer.map.plan.links[i].selection &= unselBit;
 			}
 		},
@@ -375,6 +375,10 @@ JMI.components.CanvasMap = (function() {
 					}
 				}
 			}
+		},
+		setSelection: function(selection,attributes,links) {
+			this.clearSelection(selection);
+			this.addSelection(selection,attributes,links);
 		},
 		getSelId: function( selection) {
 			if( this.planContainer.map.env.selections[selection] == null) {

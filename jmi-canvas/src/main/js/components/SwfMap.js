@@ -86,6 +86,11 @@ JMI.components.SwfMap = (function() {
 				this.swfmap.addSelection(selection,attributes,links);
 			}
 		},
+		setSelection: function(selection,attributes,links) {
+			if( this.swfmap) {
+				this.swfmap.setSelection(selection,attributes,links);
+			}
+		},
 		initApiObjects: function() {
 			// Manque les nodes, les entités
 			var i, count, o, swfO, p;

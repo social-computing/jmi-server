@@ -125,7 +125,7 @@ function search(value) {
 	var res1 = map.attributes.match(value,['NAME']);	
 	var res2 = map.links.match(value,['REC_NAME']);	
 	document.getElementById('res').innerHTML = res1.length + ' attribute(s) found / ' + res2.length + ' link(s) found'; 
-	map.selections['search'].add( res1.concat(res2));
+	map.selections['search'].set( res1.concat(res2));
 	map.selections['search'].show();
 };
 </script>
