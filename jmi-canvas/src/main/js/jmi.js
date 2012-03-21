@@ -83,8 +83,8 @@ JMI.Map.InitApiObjects = function(map) {
 	map.attributes.JMI = map;
 	map.attributes.match = function(str,fields) {
 		var i, j, attribute, result = [];
-		for(i = 0; i < map.JMI.attributes.length; ++i) {
-			attribute = map.JMI.attributes[i];
+		for(i = 0; i < map.attributes.length; ++i) {
+			attribute = map.attributes[i];
 			for(j = 0; j < fields.length; ++j) {
 				if( attribute[fields[j]] && attribute[fields[j]].match(str)) {
 					result.push(attribute);

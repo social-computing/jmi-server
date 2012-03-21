@@ -261,4 +261,4 @@ JMI.script.MenuX.hideSubMenu=function(menu) {
 		menu.currentSubMenu.style.visibility = 'hidden';
 		delete menu.currentSubMenu;
 	}
-}
+};

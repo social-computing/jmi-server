@@ -231,6 +231,7 @@ JMI.components.CanvasMap = (function() {
 			}
 		},
 		touchHandler: function(event) {
+			var simulatedEvent, mousePosition;
 			if (this instanceof HTMLCanvasElement) {
 				var touches = event.changedTouches, first = touches[0], type = null;
 				switch(event.type) {
@@ -242,12 +243,12 @@ JMI.components.CanvasMap = (function() {
 							clearTimeout( this.JMI.touchPressedTimer);
 						}
 						this.JMI.touchPressedTimer = setTimeout( function() {
-							var simulatedEvent = document.createEvent("MouseEvent");
+							simulatedEvent = document.createEvent("MouseEvent");
 							simulatedEvent.initMouseEvent('click', true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0, null);
 							first.target.dispatchEvent(simulatedEvent);
 						},this.JMI.touchMenuDelay);
 
-					    var mousePosition = JMI.components.CanvasMap.getPosition(this, first.pageX, first.pageY);
+					    mousePosition = JMI.components.CanvasMap.getPosition(this, first.pageX, first.pageY);
 						this.JMI.curPos.x = mousePosition.x;
 						this.JMI.curPos.y = mousePosition.y;
 						if (this.JMI.ready) {
@@ -261,12 +262,12 @@ JMI.components.CanvasMap = (function() {
 							clearTimeout( this.JMI.touchPressedTimer);
 						}
 						this.JMI.touchPressedTimer = setTimeout( function() {
-							var simulatedEvent = document.createEvent("MouseEvent");
+							simulatedEvent = document.createEvent("MouseEvent");
 							simulatedEvent.initMouseEvent('click', true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0, null);
 							first.target.dispatchEvent(simulatedEvent);
 						},this.JMI.touchMenuDelay);
 
-					    var mousePosition = JMI.components.CanvasMap.getPosition(this, first.pageX, first.pageY);
+					    mousePosition = JMI.components.CanvasMap.getPosition(this, first.pageX, first.pageY);
 						this.JMI.curPos.x = mousePosition.x;
 						this.JMI.curPos.y = mousePosition.y;
 						if (this.JMI.ready) {
@@ -284,7 +285,7 @@ JMI.components.CanvasMap = (function() {
 						return;
 				}
 				if( type !== null) {
-					var simulatedEvent = document.createEvent("MouseEvent");
+					simulatedEvent = document.createEvent("MouseEvent");
 					simulatedEvent.initMouseEvent(type, true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0/*left*/, null);
 					first.target.dispatchEvent(simulatedEvent);
 				}

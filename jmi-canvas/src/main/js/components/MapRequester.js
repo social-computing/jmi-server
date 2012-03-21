@@ -3,8 +3,6 @@ JMI.namespace("components.MapRequester");
 
 JMI.components.MapRequester = (function() {
 	
-	var jmiServerUrl, map;
-	
 	var MapRequester = function( map, jmiServerUrl) {
 		if( !map || !(map instanceof JMI.components.CanvasMap)) {
 			throw('map component is not set');
