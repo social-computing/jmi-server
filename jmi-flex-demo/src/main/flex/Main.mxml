@@ -93,7 +93,7 @@
 			private function selectAttribute(event:IndexChangeEvent):void {
 				map.clearSelection( "search");
 				attributes.selectedItem.select( "search");
-				map.setSelection( "search");
+				map.showSelection( "search");
 			}
 			private function selectEntity(event:IndexChangeEvent):void {
 				map.clearSelection( "search");
@@ -101,7 +101,7 @@
 				for each( var attribute:Attribute in entities.selectedItem.attributes) {
 					attribute.select( "search");
 				}
-				map.setSelection( "search");
+				map.showSelection( "search");
 			}
 	]]>
     </fx:Script>
@@ -119,7 +119,7 @@
 		<s:DropDownList width="150" id="attributes" labelFunction="attLabelFunction" change="selectAttribute(event);" />
 		<s:Label text="{this.checkApplicationParameter('entitiesName')}" />
 		<s:DropDownList width="150" id="entities" labelFunction="entLabelFunction" change="selectEntity(event);" />
-		<s:Button label="Clear" click="map.clearSelection( 'search'); map.setSelection( 'search')"/>
+		<s:Button label="Clear" click="map.clearSelection( 'search'); map.showSelection( 'search')"/>
 	</s:HGroup>
 	<wps:Map id="map"
 			backgroundColor="#7F9FDF"
