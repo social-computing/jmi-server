@@ -48,7 +48,13 @@
 <script type="text/javascript" src="/jmi-canvas/src/main/js/components/Link.js"></script>
 <script type="text/javascript" src="/jmi-canvas/src/main/js/components/Selection.js"></script>
 
+<script type="text/javascript" src="/jmi-canvas/src/main/js/extensions/Breadcrumb.js"></script>
+
 <script>
+var t1 = 'Carte principale', t2;
+function breadcrumbTitles() {
+	return { 'shortTitle': t1, 'longTitle': t2};
+}
 function getParams() {
 	var p = {
 		map: 'Feeds',
@@ -70,7 +76,7 @@ function GoMap() {
 				touchMenuDelay : 1000,
     			//server: 'http://localhost:8080/jmi-server/',
 				//server: 'http://server.just-map-it.com/', 
-				//client: JMI.Map.SWF,
+				//client: JMI.Map.SWF
 				parameters: parameters
 			});
 	map.addEventListener(JMI.Map.event.STATUS, function(event) {
@@ -80,7 +86,7 @@ function GoMap() {
 		window[event.fn](event.map, event.args);
 	} );
 	map.addEventListener(JMI.Map.event.ERROR, function(event) {
-		alert( event.message);
+		//alert( event.message);
 	} );
 	map.addEventListener(JMI.Map.event.READY, function(event) {
 		document.getElementById('status').innerHTML = event.map.type;
@@ -94,20 +100,23 @@ function GoMap() {
 	map.addEventListener(JMI.Map.event.LINK_HOVER, function(event) {
 		document.getElementById('status').innerHTML = event.link._index;
 	} );
+	var breadcrumb = new JMI.extensions.Breadcrumb('breadcrumb',map,breadcrumbTitles);
+	map.compute(parameters);
 };
 function JMIF_Navigate(args) {
 	alert( args[0]);
 };
-function compute() {
-	document.getElementById('map').JMI.compute(getParams());
-};
 function JMIF_Focus(map, args) {
+	t1 = 'Focus';
+	t2 = 'Focus on ' + args[1];
 	var parameters = getParams();
 	parameters.entityId = args[0];
 	parameters.feed = args[2];
 	map.compute( parameters);
 }
 function JMIF_Center(map, args) {
+	t1 = 'Center';
+	t2 = 'Center on ' + args[1];
 	var parameters = getParams();
 	parameters.attributeId = args[0];
 	parameters.feed = args[2];
@@ -138,9 +147,9 @@ function search(value) {
 	</ul>
 </div>
 <div>
+<div id="breadcrumb">&nbsp;</div>
 <div id="map" style="border:1px solid black ;width: 640px ;height: 480px; " ></div>
 <button onclick="document.getElementById('map').JMI.resize(900,480);">Resize</button>
-<button onclick="compute();">Compute</button>
 <button onclick="image();">Image</button>
 <button onclick="data();">Data</button>
 <input onkeyup="search(this.value)"/><span id="res"></span>

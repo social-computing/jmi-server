@@ -3,7 +3,7 @@ JMI.namespace("components.CanvasMap");
 
 JMI.components.CanvasMap = (function() {
 
-	var CanvasMap = function(parent, server, touchMenuDelay, backgroundColor, jmiparams) {
+	var CanvasMap = function(parent, server, touchMenuDelay, backgroundColor) {
 		this.isTouchInterface = JMI.components.CanvasMap.IsTouchInterface();
 		this.type = JMI.Map.CANVAS;
 		this.requester = new JMI.components.MapRequester(this, server);
@@ -69,7 +69,6 @@ JMI.components.CanvasMap = (function() {
 
 		JMI.Map.InitApiObjects(this);
 		
-		this.compute(jmiparams);
 		//'<menu type="context" id="imagemenu"><menuitem label="powered by Just Map It!" onclick="alert('rotate');"/></menu>'
 /*		var wpsMenu:ContextMenu = new ContextMenu();
 		wpsMenu.hideBuiltInItems();
@@ -84,6 +83,7 @@ JMI.components.CanvasMap = (function() {
         constructor: JMI.components.CanvasMap,
 		
 		compute: function(jmiparams) {
+			this.dispatchEvent({map: this, type: JMI.Map.event.START, params: jmiparams});
 			this.requester.getMap(jmiparams.map, jmiparams);
 		},
 		
@@ -381,7 +381,7 @@ JMI.components.CanvasMap = (function() {
 			this.addSelection(selection,attributes,links);
 		},
 		getSelId: function( selection) {
-			if( this.planContainer.map.env.selections[selection] == null) {
+			if( this.planContainer.map.env.selections[selection] === null) {
 				return -1;
 			}
 			return this.planContainer.map.env.selections[selection];
