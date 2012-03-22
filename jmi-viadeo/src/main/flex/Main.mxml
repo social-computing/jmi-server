@@ -147,7 +147,7 @@
 			private function selectFriend(event:IndexChangeEvent):void {
 				map.clearSelection( "search");
 				friends.selectedItem.select( "search");
-				map.setSelection( "search");
+				map.showSelection( "search");
 				items.selectedItem = null;
 			}
 			
@@ -157,7 +157,7 @@
 				for each( var attribute:Attribute in items.selectedItem.attributes) {
 					attribute.select( "search");
 				}
-				map.setSelection( "search");
+				map.showSelection( "search");
 				friends.selectedItem = null;
 			}
 			
