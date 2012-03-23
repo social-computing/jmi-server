@@ -72,6 +72,9 @@ JMI.extensions.Breadcrumb = ( function() {
 						crumb.longTitle = res.longTitle;
 					}
 				}
+				setTimeout( function() {
+					breadcrumb.checkThumbnail(crumb);
+				}, 10);
 				breadcrumb.display();
 			} );
 		}
@@ -93,6 +96,9 @@ JMI.extensions.Breadcrumb = ( function() {
 		},
 		flush: function() {
 			this.crumbs.length = 0;
+		},
+		current: function() {
+			return this.crumbs.length === 0 ? null : this.crumbs[this.crumbs.length-1];
 		},
 		getCrumb: function(crumb) {
 			var c = document.createElement('li'),
@@ -117,7 +123,6 @@ JMI.extensions.Breadcrumb = ( function() {
 			a.addEventListener('mouseover', function(event) {
 				event.preventDefault();
 				var crumb = event.target.crumb;
-				breadcrumb.checkThumbnail(crumb);
 				if( crumb.thumbnail && !crumb.error && !crumb.empty) {
 					var p = JMI.util.ImageUtil.AbsPosition(crumb.li);
 					crumb.thumbnail.style.top = (p.y + crumb.li.offsetHeight) + 'px';
