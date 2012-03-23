@@ -6,7 +6,7 @@ JMI.extensions.Breadcrumb = ( function() {
 	var Breadcrumb = function(parent,map,parameters) {
 		this.crumbs = [];
 		this.counter = 0;
-		this.namingFunc = parameters.namingFunc ? parameters.namingFunc : this.defaultNaming;
+		this.namingFunc = parameters && parameters.namingFunc ? parameters.namingFunc : this.defaultNaming;
 		if(!parent) {
 			throw 'JMI breadcrumb: parent id not set';
 		}
