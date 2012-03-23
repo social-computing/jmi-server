@@ -131,8 +131,9 @@ JMI.extensions.Breadcrumb = ( function() {
 				event.preventDefault();
 				var crumb = event.target.crumb;
 				if( crumb.thumbnail && !crumb.error && !crumb.empty) {
-					crumb.thumbnail.style.top = (crumb.li.offsetTop + crumb.li.offsetHeight) + 'px';
-					crumb.thumbnail.style.left = crumb.li.offsetLeft + 'px';
+					var p = JMI.util.ImageUtil.AbsPosition(crumb.li);
+					crumb.thumbnail.style.top = (p.y + crumb.li.offsetHeight) + 'px';
+					crumb.thumbnail.style.left = p.x + 'px';
 					crumb.thumbnail.style.visibility = '';
 				}
 			}, false);

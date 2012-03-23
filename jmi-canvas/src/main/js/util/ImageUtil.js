@@ -97,3 +97,13 @@ JMI.util.ImageUtil.filterImage = function(gDrawingContext, dim, color) {
 		}
 	}
 };
+
+JMI.util.ImageUtil.AbsPosition = function(el) {
+	var res = new JMI.script.Point();
+	while( el) {
+		res.y += el.offsetTop;
+		res.x += el.offsetLeft;
+		el = el.offsetParent;
+	}
+	return res;
+};
