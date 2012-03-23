@@ -66,7 +66,7 @@ JMI.Map = function(params) {
 		if(!params.swf) {
 			throw 'JMI client: swf path is not set';
 		}
-		return new JMI.components.SwfMap(divParent, server, params.swf, backgroundColor, params.parameters);
+		return new JMI.components.SwfMap(divParent, server, params.swf, backgroundColor);
 	}
 	throw 'No JMI client supported';
 };

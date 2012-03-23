@@ -72,19 +72,6 @@ JMI.extensions.Breadcrumb = ( function() {
 						crumb.longTitle = res.longTitle;
 					}
 				}
-				if( breadcrumb.thumbnail) {
-					var div = document.createElement('div'),
-						image = document.createElement('img');
-					image.src = event.map.getImage('image/png', breadcrumb.thumbnail.width, breadcrumb.thumbnail.height, true);
-					image.alt = crumb.longTitle;
-					image.title = crumb.longTitle;
-					div.appendChild(image);
-					div.className = 'jmi-breadcrumb-thumbnail';
-					div.style.position = 'absolute';
-					div.style.visibility = 'hidden';
-					document.body.appendChild( div);
-					crumb.thumbnail = div;
-				}
 				breadcrumb.display();
 			} );
 		}
@@ -130,6 +117,7 @@ JMI.extensions.Breadcrumb = ( function() {
 			a.addEventListener('mouseover', function(event) {
 				event.preventDefault();
 				var crumb = event.target.crumb;
+				breadcrumb.checkThumbnail(crumb);
 				if( crumb.thumbnail && !crumb.error && !crumb.empty) {
 					var p = JMI.util.ImageUtil.AbsPosition(crumb.li);
 					crumb.thumbnail.style.top = (p.y + crumb.li.offsetHeight) + 'px';
@@ -149,6 +137,21 @@ JMI.extensions.Breadcrumb = ( function() {
 		},
 		defaultNaming: function() {
 			return {'shortTitle': 'Map ' + this.counter, 'longTitle': 'Map ' + this.counter};
+		},
+		checkThumbnail: function(crumb) {
+			if( this.thumbnail && !crumb.thumbnail) {
+				var div = document.createElement('div'),
+					image = document.createElement('img');
+				image.src = this.map.getImage('image/png', this.thumbnail.width, this.thumbnail.height, true);
+				image.alt = crumb.longTitle;
+				image.title = crumb.longTitle;
+				div.appendChild(image);
+				div.className = 'jmi-breadcrumb-thumbnail';
+				div.style.position = 'absolute';
+				div.style.visibility = 'hidden';
+				document.body.appendChild( div);
+				crumb.thumbnail = div;
+			}
 		}
 	};
 

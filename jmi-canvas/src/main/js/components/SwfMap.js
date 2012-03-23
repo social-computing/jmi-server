@@ -3,7 +3,7 @@ JMI.namespace("components.SwfMap");
 
 JMI.components.SwfMap = (function() {
 
-	var SwfMap = function(parent, server, swf, backgroundColor, jmiparams) {
+	var SwfMap = function(parent, server, swf, backgroundColor) {
 		this.type = JMI.Map.SWF;
 		this.server = server;
 		this.swf = swf;
