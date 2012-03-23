@@ -100,7 +100,7 @@ function GoMap() {
 	map.addEventListener(JMI.Map.event.LINK_HOVER, function(event) {
 		document.getElementById('status').innerHTML = event.link._index;
 	} );
-	var breadcrumb = new JMI.extensions.Breadcrumb('breadcrumb',map,breadcrumbTitles);
+	var breadcrumb = new JMI.extensions.Breadcrumb('breadcrumb',map,{'namingFunc':breadcrumbTitles});
 	map.compute(parameters);
 };
 function JMIF_Navigate(args) {
@@ -108,7 +108,7 @@ function JMIF_Navigate(args) {
 };
 function JMIF_Focus(map, args) {
 	t1 = 'Focus';
-	t2 = 'Focus on ' + args[1];
+	t2 = 'Focus on: ' + args[1];
 	var parameters = getParams();
 	parameters.entityId = args[0];
 	parameters.feed = args[2];
@@ -116,7 +116,7 @@ function JMIF_Focus(map, args) {
 }
 function JMIF_Center(map, args) {
 	t1 = 'Center';
-	t2 = 'Center on ' + args[1];
+	t2 = 'Center on: ' + args[1];
 	var parameters = getParams();
 	parameters.attributeId = args[0];
 	parameters.feed = args[2];

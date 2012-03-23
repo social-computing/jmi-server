@@ -3,10 +3,10 @@ JMI.namespace("extensions.Breadcrumb");
 
 JMI.extensions.Breadcrumb = ( function() {
 
-	var Breadcrumb = function(parent,map,namingFunc) {
+	var Breadcrumb = function(parent,map,parameters) {
 		this.crumbs = [];
 		this.counter = 0;
-		this.namingFunc = namingFunc;
+		this.namingFunc = parameters.namingFunc ? parameters.namingFunc : this.defaultNaming;
 		if(!parent) {
 			throw 'JMI breadcrumb: parent id not set';
 		}
@@ -27,12 +27,18 @@ JMI.extensions.Breadcrumb = ( function() {
 		if( this.map) {
 			var p, breadcrumb = this;
 			this.map.addEventListener(JMI.Map.event.START, function(event) {
-				var crumb = {};
-				crumb.params = {};
-				for (p in event.params) {
-					crumb.params[p] = event.params[p];
+				var crumb = breadcrumb.crumbs.length > 0 ? breadcrumb.crumbs[breadcrumb.crumbs.length-1] : null;
+				if( crumb && crumb.self) {
+					delete crumb.self;
 				}
-				breadcrumb.crumbs.push( crumb);
+				else {
+					crumb = {};
+					crumb.params = {};
+					for (p in event.params) {
+						crumb.params[p] = event.params[p];
+					}
+					breadcrumb.crumbs.push( crumb);
+				}
 			} );
 			this.map.addEventListener(JMI.Map.event.EMPTY, function(event) {
 				var crumb = breadcrumb.crumbs[breadcrumb.crumbs.length-1];
@@ -51,20 +57,15 @@ JMI.extensions.Breadcrumb = ( function() {
 			this.map.addEventListener(JMI.Map.event.READY, function(event) {
 				breadcrumb.counter++;
 				var crumb = breadcrumb.crumbs[breadcrumb.crumbs.length-1];
-				if( breadcrumb.namingFunc) {
+				if( !crumb.shortTitle) {
 					var res = breadcrumb.namingFunc(event);
 					if( res.shortTitle) {
 						crumb.shortTitle = res.shortTitle;
+						crumb.longTitle = crumb.shortTitle;
 					}
 					if( res.longTitle) {
 						crumb.longTitle = res.longTitle;
 					}
-				}
-				if(!crumb.shortTitle) {
-					crumb.shortTitle = 'Map ' + breadcrumb.counter;
-				}
-				if(!crumb.longTitle) {
-					crumb.longTitle = crumb.shortTitle;
 				}
 				breadcrumb.display();
 			} );
@@ -92,17 +93,23 @@ JMI.extensions.Breadcrumb = ( function() {
 			a.href = '';
 			a.innerHTML = crumb.shortTitle;
 			a.title = crumb.longTitle;
+			a.crumb = crumb;
 			a.addEventListener('click', function(event) {
 				event.preventDefault();
-				if( !crumb.error && !crumb.empty) {
-					while( breadcrumb.crumbs.pop() !== crumb) {
+				if( !event.target.crumb.error && !event.target.crumb.empty) {
+					while( breadcrumb.crumbs.pop() !== event.target.crumb) {
 					}
-					breadcrumb.map.compute(crumb.params);
+					event.target.crumb.self = true;
+					breadcrumb.crumbs.push(event.target.crumb);
+					breadcrumb.map.compute(event.target.crumb.params);
 				}
 			}, false);
 			//a.addEventListener('dblclick', applet.menuHandler, false);
 			c.appendChild(a);
 			return c;
+		},
+		defaultNaming: function() {
+			return {'shortTitle': 'Map ' + this.counter, 'longTitle': 'Map ' + this.counter};
 		}
 	};
 
