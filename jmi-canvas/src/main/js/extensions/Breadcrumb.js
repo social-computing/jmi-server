@@ -86,6 +86,9 @@ JMI.extensions.Breadcrumb = ( function() {
 			}
 			this.parent.appendChild(lu);
 		},
+		flush: function() {
+			this.crumbs.length = 0;
+		},
 		getCrumb: function(crumb) {
 			var c = document.createElement('li'),
 				a = document.createElement('a'),
