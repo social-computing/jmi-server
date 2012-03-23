@@ -92,21 +92,21 @@ JMI.components.CanvasMap = (function() {
 			this.ready = false;
 		
 			// Stop loaders
-			if( this.planContainer && this.planContainer.map.env) {
+			if( this.planContainer && this.planContainer.map && this.planContainer.map.env) {
 				this.planContainer.map.env.close();
 			}
 			
 			// Clear current
-			if( this.planContainer && this.planContainer.map.plan) {
+			if( this.planContainer && this.planContainer.map && this.planContainer.map.plan) {
 				this.planContainer.map.plan.curSat = null;
 				this.planContainer.map.plan.curZone = null;
 				this.planContainer.map.plan.curSel = -1;
-				
-				this.attributes.length = 0;
-				this.links.length = 0;
-				this.nodes.length = 0;
-				this.selections.length = 0;
 			}
+
+			this.attributes.length = 0;
+			this.links.length = 0;
+			this.nodes.length = 0;
+			this.selections.length = 0;
 			
 			// Clear all drawing surfaces
 			this.clear();
@@ -426,7 +426,14 @@ JMI.components.CanvasMap = (function() {
 					{
 						var func     = actionStr.substring( 0, pos ),
 							paramStr = actionStr.substring( pos + 1, actionStr.length- 1 ),
-							params   = paramStr.split( '%EF%BF%BC');//String.fromCharCode( 0xFFFC));
+							params;
+							if( paramStr.indexOf('%EF%BF%BC') !== -1) {
+								// Chrome, FF
+								params   = paramStr.split( '%EF%BF%BC');
+							}
+							else { // IE
+								params   = paramStr.split( String.fromCharCode( 0xFFFC));
+							}
 						for( i = 0; i < params.length; ++i) {
 							params[i] = decodeURI( params[i]);
 						}
