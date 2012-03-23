@@ -100,7 +100,7 @@ function GoMap() {
 	map.addEventListener(JMI.Map.event.LINK_HOVER, function(event) {
 		document.getElementById('status').innerHTML = event.link._index;
 	} );
-	var breadcrumb = new JMI.extensions.Breadcrumb('breadcrumb',map,{'namingFunc':breadcrumbTitles});
+	var breadcrumb = new JMI.extensions.Breadcrumb('breadcrumb',map,{'namingFunc':breadcrumbTitles,'thumbnail':{}});
 	map.compute(parameters);
 };
 function JMIF_Navigate(args) {

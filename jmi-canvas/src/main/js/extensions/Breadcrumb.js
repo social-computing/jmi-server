@@ -7,6 +7,11 @@ JMI.extensions.Breadcrumb = ( function() {
 		this.crumbs = [];
 		this.counter = 0;
 		this.namingFunc = parameters && parameters.namingFunc ? parameters.namingFunc : this.defaultNaming;
+		this.thumbnail = parameters && parameters.thumbnail;
+		if( this.thumbnail) {
+			this.thumbnail.width = this.thumbnail.width || 200;
+			this.thumbnail.height = this.thumbnail.height || 120;
+		}
 		if(!parent) {
 			throw 'JMI breadcrumb: parent id not set';
 		}
@@ -38,6 +43,7 @@ JMI.extensions.Breadcrumb = ( function() {
 						crumb.params[p] = event.params[p];
 					}
 					breadcrumb.crumbs.push( crumb);
+					breadcrumb.counter++;
 				}
 			} );
 			this.map.addEventListener(JMI.Map.event.EMPTY, function(event) {
@@ -55,7 +61,6 @@ JMI.extensions.Breadcrumb = ( function() {
 				breadcrumb.display();
 			});
 			this.map.addEventListener(JMI.Map.event.READY, function(event) {
-				breadcrumb.counter++;
 				var crumb = breadcrumb.crumbs[breadcrumb.crumbs.length-1];
 				if( !crumb.shortTitle) {
 					var res = breadcrumb.namingFunc(event);
@@ -66,6 +71,19 @@ JMI.extensions.Breadcrumb = ( function() {
 					if( res.longTitle) {
 						crumb.longTitle = res.longTitle;
 					}
+				}
+				if( breadcrumb.thumbnail) {
+					var div = document.createElement('div'),
+						image = document.createElement('img');
+					image.src = event.map.getImage('image/png', breadcrumb.thumbnail.width, breadcrumb.thumbnail.height, true);
+					image.alt = crumb.longTitle;
+					image.title = crumb.longTitle;
+					div.appendChild(image);
+					div.className = 'jmi-breadcrumb-thumbnail';
+					div.style.position = 'absolute';
+					div.style.visibility = 'hidden';
+					document.body.appendChild( div);
+					crumb.thumbnail = div;
 				}
 				breadcrumb.display();
 			} );
@@ -93,6 +111,7 @@ JMI.extensions.Breadcrumb = ( function() {
 			var c = document.createElement('li'),
 				a = document.createElement('a'),
 				breadcrumb = this;
+			crumb.li = c;
 			a.href = '';
 			a.innerHTML = crumb.shortTitle;
 			a.title = crumb.longTitle;
@@ -108,6 +127,22 @@ JMI.extensions.Breadcrumb = ( function() {
 				}
 			}, false);
 			//a.addEventListener('dblclick', applet.menuHandler, false);
+			a.addEventListener('mouseover', function(event) {
+				event.preventDefault();
+				var crumb = event.target.crumb;
+				if( crumb.thumbnail && !crumb.error && !crumb.empty) {
+					crumb.thumbnail.style.top = (crumb.li.offsetTop + crumb.li.offsetHeight) + 'px';
+					crumb.thumbnail.style.left = crumb.li.offsetLeft + 'px';
+					crumb.thumbnail.style.visibility = '';
+				}
+			}, false);
+			a.addEventListener('mouseout', function(event) {
+				event.preventDefault();
+				var crumb = event.target.crumb;
+				if( crumb.thumbnail) {
+					crumb.thumbnail.style.visibility = 'hidden';
+				}
+			}, false);
 			c.appendChild(a);
 			return c;
 		},

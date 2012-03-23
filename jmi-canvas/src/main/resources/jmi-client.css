@@ -113,3 +113,13 @@ ul.jmi-menu {
 .jmi-breadcrumb li a:hover {
 	color:#343434;
 	}
+
+.jmi-breadcrumb-thumbnail {
+	border-style:none;
+	padding-top: 1px;
+	}
+
+.jmi-breadcrumb-thumbnail img {
+	border-style:solid;
+	border-width:1px;
+	}
