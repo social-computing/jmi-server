@@ -121,6 +121,7 @@ public class EngineRESTService {
         }
         return Response.ok( PlanJSONProvider.planToString(jsonResults), MediaType.APPLICATION_JSON)
                         .header( "Access-Control-Allow-Origin", "*")
+                        .header( "access-control-allow-credentials", "true")
                         .build();
     }
 
