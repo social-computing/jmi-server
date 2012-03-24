@@ -34,6 +34,7 @@ JMI.extensions.Breadcrumb = ( function() {
 			this.map.addEventListener(JMI.Map.event.START, function(event) {
 				var crumb = breadcrumb.crumbs.length > 0 ? breadcrumb.crumbs[breadcrumb.crumbs.length-1] : null;
 				if( crumb && crumb.self) {
+					// Celui qui a été cliqué
 					delete crumb.self;
 				}
 				else {
@@ -103,7 +104,7 @@ JMI.extensions.Breadcrumb = ( function() {
 		getCrumb: function(crumb) {
 			var c = document.createElement('li'),
 				a = document.createElement('a'),
-				breadcrumb = this;
+				breadcrumb = this, cur;
 			crumb.li = c;
 			a.href = '';
 			a.innerHTML = crumb.shortTitle;
@@ -112,8 +113,13 @@ JMI.extensions.Breadcrumb = ( function() {
 			a.addEventListener('click', function(event) {
 				event.preventDefault();
 				if( !event.target.crumb.error && !event.target.crumb.empty) {
-					while( breadcrumb.crumbs.pop() !== event.target.crumb) {
-					}
+					do {
+						cur = breadcrumb.crumbs.pop();
+						if( cur.thumbnail) {
+							document.body.removeChild(cur.thumbnail);
+							delete cur.thumbnail;
+						}
+					} while( cur !== event.target.crumb);
 					event.target.crumb.self = true;
 					breadcrumb.crumbs.push(event.target.crumb);
 					breadcrumb.map.compute(event.target.crumb.params);
