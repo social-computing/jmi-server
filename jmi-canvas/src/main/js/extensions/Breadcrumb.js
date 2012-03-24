@@ -88,7 +88,7 @@ JMI.extensions.Breadcrumb = ( function() {
 			var i, lu = document.createElement('lu');
 			lu.className = 'jmi-breadcrumb';
 			for( i = 0; i < this.crumbs.length; ++i) {
-				lu.appendChild( this.getCrumb(this.crumbs[i]));
+				lu.appendChild( this.getCrumb(this.crumbs[i], i === this.crumbs.length-1));
 			}
 			if(this.parent.firstChild) {
 				this.parent.removeChild(this.parent.firstChild);
@@ -101,13 +101,13 @@ JMI.extensions.Breadcrumb = ( function() {
 		current: function() {
 			return this.crumbs.length === 0 ? null : this.crumbs[this.crumbs.length-1];
 		},
-		getCrumb: function(crumb) {
+		getCrumb: function(crumb,last) {
 			var c = document.createElement('li'),
 				a = document.createElement('a'),
 				breadcrumb = this, cur;
 			crumb.li = c;
 			a.href = '';
-			a.innerHTML = crumb.shortTitle;
+			a.innerHTML = last ? crumb.longTitle : crumb.shortTitle;
 			a.title = crumb.longTitle;
 			a.crumb = crumb;
 			a.addEventListener('click', function(event) {
