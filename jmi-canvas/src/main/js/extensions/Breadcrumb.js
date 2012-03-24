@@ -49,14 +49,14 @@ JMI.extensions.Breadcrumb = ( function() {
 			} );
 			this.map.addEventListener(JMI.Map.event.EMPTY, function(event) {
 				var crumb = breadcrumb.crumbs[breadcrumb.crumbs.length-1];
-				crumb.shortTitle = 'Empty';
+				crumb.shortTitle = 'Map is empty';
 				crumb.longTitle = 'Sorry map is empty';
 				crumb.empty = true;
 				breadcrumb.display();
 			});
 			this.map.addEventListener(JMI.Map.event.ERROR, function(event) {
 				var crumb = breadcrumb.crumbs[breadcrumb.crumbs.length-1];
-				crumb.shortTitle = 'Error';
+				crumb.shortTitle = 'An error occured';
 				crumb.longTitle = event.message;
 				crumb.error = true;
 				breadcrumb.display();
@@ -107,7 +107,7 @@ JMI.extensions.Breadcrumb = ( function() {
 				breadcrumb = this, cur;
 			crumb.li = c;
 			a.href = '';
-			a.innerHTML = last ? crumb.longTitle : crumb.shortTitle;
+			a.innerHTML = last && !crumb.error && !crumb.empty ? crumb.longTitle : crumb.shortTitle;
 			a.title = crumb.longTitle;
 			a.crumb = crumb;
 			a.addEventListener('click', function(event) {
