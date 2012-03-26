@@ -51,9 +51,15 @@
 <script type="text/javascript" src="/jmi-canvas/src/main/js/extensions/Breadcrumb.js"></script>
 
 <script>
-var t1 = 'Carte principale', t2;
-function breadcrumbTitles() {
-	return { 'shortTitle': t1, 'longTitle': t2};
+var breadcrumbTitles = { shortTitle: 'Carte principale', longTitle: '' };
+function breadcrumbTitlesFunc(event) {
+	if( event.type === JMI.Map.event.EMPTY) {
+		return {shortTitle: 'Sorry, the map is empty. Does the feed contains categories?', longTitle: 'Sorry, the map is empty. Does the feed contains categories?'};
+	}
+	if( event.type === JMI.Map.event.ERROR) {
+		return {shortTitle: 'Sorry, an error occured. Is this URL correct?', longTitle: 'Sorry, an error occured. Error: ' + event.message};
+	}
+	return breadcrumbTitles;
 }
 function getParams() {
 	var p = {
@@ -99,23 +105,23 @@ function GoMap() {
 	map.addEventListener(JMI.Map.event.LINK_HOVER, function(event) {
 		document.getElementById('status').innerHTML = event.link._index;
 	} );
-	var breadcrumb = new JMI.extensions.Breadcrumb('breadcrumb',map,{'namingFunc':breadcrumbTitles,'thumbnail':{}});
+	var breadcrumb = new JMI.extensions.Breadcrumb('breadcrumb',map,{'namingFunc':breadcrumbTitlesFunc,'thumbnail':{}});
 	map.compute(parameters);
 };
 function JMIF_Navigate(args) {
 	alert( args[0]);
 };
 function JMIF_Focus(map, args) {
-	t1 = 'Focus';
-	t2 = 'Focus on: ' + args[1];
+	breadcrumbTitles.shortTitle = 'Focus';
+	breadcrumbTitles.longTitle = 'Focus on: ' + args[1];
 	var parameters = getParams();
 	parameters.entityId = args[0];
 	parameters.feed = args[2];
 	map.compute( parameters);
 }
 function JMIF_Center(map, args) {
-	t1 = 'Center';
-	t2 = 'Center on: ' + args[1];
+	breadcrumbTitles.shortTitle = 'Center';
+	breadcrumbTitles.longTitle = 'Center on: ' + args[1];
 	var parameters = getParams();
 	parameters.attributeId = args[0];
 	parameters.feed = args[2];

@@ -49,30 +49,19 @@ JMI.extensions.Breadcrumb = ( function() {
 			} );
 			this.map.addEventListener(JMI.Map.event.EMPTY, function(event) {
 				var crumb = breadcrumb.crumbs[breadcrumb.crumbs.length-1];
-				crumb.shortTitle = 'Map is empty';
-				crumb.longTitle = 'Sorry map is empty';
+				breadcrumb.getTitles(crumb,event);
 				crumb.empty = true;
 				breadcrumb.display();
 			});
 			this.map.addEventListener(JMI.Map.event.ERROR, function(event) {
 				var crumb = breadcrumb.crumbs[breadcrumb.crumbs.length-1];
-				crumb.shortTitle = 'An error occured';
-				crumb.longTitle = event.message;
+				breadcrumb.getTitles(crumb,event);
 				crumb.error = true;
 				breadcrumb.display();
 			});
 			this.map.addEventListener(JMI.Map.event.READY, function(event) {
 				var crumb = breadcrumb.crumbs[breadcrumb.crumbs.length-1];
-				if( !crumb.shortTitle) {
-					var res = breadcrumb.namingFunc(event);
-					if( res.shortTitle) {
-						crumb.shortTitle = res.shortTitle;
-						crumb.longTitle = crumb.shortTitle;
-					}
-					if( res.longTitle) {
-						crumb.longTitle = res.longTitle;
-					}
-				}
+				breadcrumb.getTitles(crumb,event);
 				setTimeout( function() {
 					breadcrumb.checkThumbnail(crumb);
 				}, 10);
@@ -146,8 +135,29 @@ JMI.extensions.Breadcrumb = ( function() {
 			c.appendChild(a);
 			return c;
 		},
-		defaultNaming: function() {
-			return {'shortTitle': 'Map ' + this.counter, 'longTitle': 'Map ' + this.counter};
+		defaultNaming: function(event) {
+			if( event.type === JMI.Map.event.READY) {
+				return {shortTitle: 'Map ' + this.counter, longTitle: 'Map ' + this.counter};
+			}
+			if( event.type === JMI.Map.event.EMPTY) {
+				return {shortTitle: 'Map is empty', longTitle: 'Sorry map is empty'};
+			}
+			if( event.type === JMI.Map.event.ERROR) {
+				return {shortTitle: 'An error occured', longTitle: event.message};
+			}
+		},
+		getTitles: function(crumb,event) {
+			var res;
+			if( !crumb.self && !crumb.shortTitle) {
+				res = this.namingFunc(event);
+				if( res.shortTitle) {
+					crumb.shortTitle = res.shortTitle;
+					crumb.longTitle = crumb.shortTitle;
+				}
+				if( res.longTitle) {
+					crumb.longTitle = res.longTitle;
+				}
+			}
 		},
 		checkThumbnail: function(crumb) {
 			if( this.thumbnail && !crumb.thumbnail) {

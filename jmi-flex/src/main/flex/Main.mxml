@@ -104,8 +104,8 @@
 				getPlanResult.token = this.planService.getPlan(parameters.wpsplanname, map.width, map.height, parameters);
 			}
 			
-			public function getProperty( name:String):String {
-				return this.map.getProperty( name) as String;
+			public function getProperty( name:String):Object {
+				return this.map.getProperty( name);
 			}
 			public function getArrayProperty( name:String):Array {
 				return this.map.getProperty( name) as Array;
