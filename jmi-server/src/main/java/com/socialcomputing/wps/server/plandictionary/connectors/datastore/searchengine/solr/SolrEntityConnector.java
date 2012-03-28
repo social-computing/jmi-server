@@ -14,6 +14,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.MoreLikeThisParams;
@@ -26,6 +27,7 @@ import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorExc
 import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.Attribute;
 import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.Entity;
 import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.PropertyDefinition;
+import com.socialcomputing.wps.server.planDictionnary.connectors.utils.UrlHelper;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.searchengine.SearchengineEntityConnector;
 
 /**
@@ -43,38 +45,21 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
     private static final String SEARCH_DOCUMENT_ID_PARAM = "searchDocumentId";
     private static final String FILTER_QUERY_PARAM = "fq";
      
-	private final CommonsHttpSolrServer solrClient;
+	//private final CommonsHttpSolrServer solrClient;
+    private final String url;
 	private final QueryParameters queryParameters;
 	private final String entityField;
 	private final String attributeId;
 	private final boolean invert;
+
+	private boolean authentication = false;
+	private String username;
+	private String password;
 	
 	private Set<PropertyDefinition> attributePropertiesDefinitions;
 	private Set<PropertyDefinition> entityPropertiesDefinitions;
 	
 
-	
-	/**
-	 * Query the Solr server  
-	 * 
-	 * @param solrQuery a valid Solr query
-	 * @return A list of Solr documents
-	 * @throws WPSConnectorException if something bad happened when connecting to the Solr server
-	 */
-	private SolrDocumentList query(SolrQuery solrQuery) throws WPSConnectorException {
-        QueryResponse response;
-        try {
-            response = this.solrClient.query(solrQuery);
-        } 
-        catch (SolrServerException e) {
-            throw new WPSConnectorException("Erreur while connecting to Solr server", e);
-        }
-        LOG.info("{} documents found in {} seconds", response.getResults().getNumFound(), response.getQTime());
-        return response.getResults();
-	}
-	
-	
-	
     /**
      * Static method to construct a SolrEntityConnector from a JDOM Tree used to
      * map the XML Configuration stored in database to a solr connector instance
@@ -96,26 +81,8 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 	    Element connectionElement = element.getChild("connection");
 	    String connectionUrl = connectionElement.getChildText("url");
 	    LOG.debug("  - url = {}", connectionUrl);
-	    Element authenticationElement = connectionElement.getChild("authentication");
-	    CommonsHttpSolrServer solrClient;
-	    try {
-    	    if(authenticationElement != null) {
-    	        String username = authenticationElement.getChildText("username");
-    	        String password = authenticationElement.getChildText("password");
-    	        LOG.debug("  - authentication with user '{}' and password '{}'",
-    	                  username, password);
-    	        solrClient = new CommonsHttpSolrServer(connectionUrl, 
-                        new BasicAuthHttpClient(username, password));
-    	    }
-    	    else {
-    	        LOG.debug("  - authentication is not set");
-    	        solrClient = new CommonsHttpSolrServer(connectionUrl);
-    	    }
-	    } 
-        catch (MalformedURLException e) {
-            throw new WPSConnectorException("Invalid Solr connection URL in dictionary configuration file", e);
-        }
-        
+	    
+
         
         // Reading Solr query parameters names and default values
         Element queryElement = element.getChild("query");
@@ -142,8 +109,18 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 
         
         // Initialize the Solr connector
-		SolrEntityConnector connector
-		    = new SolrEntityConnector(name, solrClient, queryParameters, entityField, attributeId, invert);
+	    Element authenticationElement = connectionElement.getChild("authentication");
+	    SolrEntityConnector connector;
+	    if(authenticationElement != null) {
+	        String username = authenticationElement.getChildText("username");
+	        String password = authenticationElement.getChildText("password");
+	        LOG.debug("  - authentication with user '{}' and password '{}'", username, password);
+	        connector = new SolrEntityConnector(name, connectionUrl, username, password, queryParameters, entityField, attributeId, invert);
+	    }
+	    else {
+	    	connector = new SolrEntityConnector(name, connectionUrl, queryParameters, entityField, attributeId, invert);
+	    }
+	    
 		
 		// Call the initialisation in parent classes
 		connector._readObject(element);
@@ -176,7 +153,7 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 	
 	
     /**
-     * Default Constructor
+     * Constructor with inversion parameter
      * 
      * @param name
      *            name of the connector instance
@@ -185,15 +162,22 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
      * @param queryParameters
      *            List of query parameters to read and their default values
      */
-	public SolrEntityConnector(String name,
-	                           CommonsHttpSolrServer solrClient,
-	                           QueryParameters queryParameters,
-	                           String entityField,
-	                           String attributeId) {
-		this(name, solrClient, queryParameters, entityField, attributeId, false);
-	}
-	
-	
+    public SolrEntityConnector(String name,
+                               String url,
+                               QueryParameters queryParameters,
+                               String entityField,
+                               String attributeId,
+                               boolean invert) {
+        super(name);
+        this.url = url;
+        this.queryParameters = queryParameters;
+        this.entityField = entityField;
+        this.attributeId = attributeId;
+        this.invert = invert;
+        this.attributePropertiesDefinitions = new HashSet<PropertyDefinition>();
+        this.entityPropertiesDefinitions = new HashSet<PropertyDefinition>();
+    }
+    
     /**
      * Constructor with inversion parameter
      * 
@@ -205,19 +189,17 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
      *            List of query parameters to read and their default values
      */
     public SolrEntityConnector(String name,
-                               CommonsHttpSolrServer solrClient,
+                               String url,
+                               String username,
+                               String password,
                                QueryParameters queryParameters,
                                String entityField,
                                String attributeId,
                                boolean invert) {
-        super(name);
-        this.solrClient = solrClient;
-        this.queryParameters = queryParameters;
-        this.entityField = entityField;
-        this.attributeId = attributeId;
-        this.invert = invert;
-        this.attributePropertiesDefinitions = new HashSet<PropertyDefinition>();
-        this.entityPropertiesDefinitions = new HashSet<PropertyDefinition>();
+    	this(name, url, queryParameters, entityField, attributeId, invert);
+        this.authentication = true;
+        this.username = username;
+        this.password = password;
     }
 	
   
@@ -245,6 +227,28 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 	    super.openConnections(planType, wpsparams);
 	    LOG.info("Query remote search server to get attributes and entities");
 	    
+	    
+	    CommonsHttpSolrServer solrClient;
+	    try {
+		    String connectionUrl = UrlHelper.ReplaceParameter(this.url, wpsparams);
+		    LOG.debug("  - connection url {}", connectionUrl);
+	        if(this.authentication) {
+	        	String username = UrlHelper.ReplaceParameter(this.username, wpsparams);
+	        	String password = UrlHelper.ReplaceParameter(this.password, wpsparams);
+	        	LOG.debug("  - authentication with user '{}' and password '{}'",
+	        			username, password);
+	        	solrClient = new CommonsHttpSolrServer(connectionUrl, 
+	        			new BasicAuthHttpClient(username, password));
+	        }
+	        else {
+	        	LOG.debug("  - authentication is not set");
+	        	solrClient = new CommonsHttpSolrServer(connectionUrl);
+	        }
+	    } 
+	    catch (MalformedURLException e) {
+	    	throw new WPSConnectorException("Invalid Solr connection URL", e);
+	    }
+
 	    
 	    /*  Reading query parameters */
         Object invertParam = wpsparams.get(INVERT_PARAM);
@@ -281,7 +285,7 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
             SolrQuery solrQuery = new SolrQuery("uid:" + searchDocumentId)
                                       .setRows(1);
             
-            SolrDocumentList docs = this.query(solrQuery);
+            SolrDocumentList docs = query(solrClient, solrQuery);
             if(docs.size() < 1) {
                 throw new WPSConnectorException("Invalid number of results");
             }
@@ -295,18 +299,19 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
                          .set(MoreLikeThisParams.MIN_DOC_FREQ, 1)
                          .set(MoreLikeThisParams.MIN_TERM_FREQ, 1)
                          .set(MoreLikeThisParams.SIMILARITY_FIELDS, "title, content");
-            documents = this.query(solrQuery);
+            documents = query(solrClient, solrQuery);
             documents.add(document);
         }
         else {
+        	String finalQuery = (query != null) ? query : queryString.getValue();
             SolrQuery solrQuery = 
-                new SolrQuery((query != null) ? query : queryString.getValue())
+                new SolrQuery(ClientUtils.escapeQueryChars(finalQuery))
                     .setRows(max);
             if(filterQuery != null) {
                 String[] filterQueries = filterQuery.split("\\|\\|");
                 solrQuery.setFilterQueries(filterQueries);
             }
-            documents = this.query(solrQuery);
+            documents = query(solrClient, solrQuery);
         }
 	   
 
@@ -405,5 +410,26 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 	public void closeConnections() throws WPSConnectorException {
 		super.closeConnections();
 		// Nothing to do here
-	}	
+	}
+	
+	
+	/**
+	 * Query the Solr server  
+	 * 
+	 * @param solrQuery a valid Solr query
+	 * @return A list of Solr documents
+	 * @throws WPSConnectorException if something bad happened when connecting to the Solr server
+	 */
+	private static SolrDocumentList query(CommonsHttpSolrServer solrClient, SolrQuery solrQuery) 
+			throws WPSConnectorException {
+        QueryResponse response;
+        try {
+            response = solrClient.query(solrQuery);
+        } 
+        catch (SolrServerException e) {
+            throw new WPSConnectorException("Erreur while connecting to Solr server", e);
+        }
+        LOG.info("{} documents found in {} seconds", response.getResults().getNumFound(), response.getQTime());
+        return response.getResults();
+	}
 }

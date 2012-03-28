@@ -189,7 +189,8 @@ public class UrlHelper extends ConnectorHelper {
 
     public InputStream getStream() throws WPSConnectorException {
         try {
-            return contentEncoding != null && contentEncoding.equalsIgnoreCase("gzip") ? new GZIPInputStream( stream) : stream;
+        	LOG.debug("content encoding: {}", contentEncoding);
+            return contentEncoding != null && contentEncoding.equalsIgnoreCase("gzip") ? new GZIPInputStream(stream) : stream;
         }
         catch (IOException e) {
             throw new WPSConnectorException("UrlHelper read failed", e);
@@ -226,6 +227,10 @@ public class UrlHelper extends ConnectorHelper {
 
     public void addParameter(String name, String value) {
         curParams.add(new NameValuePair(name, value));
+    }
+    
+    public List<NameValuePair> getParameters() {
+    	return this.curParams;
     }
 
     public void addHeader(String name, String value) {
