@@ -42,7 +42,7 @@ public class RESTEntityConnector extends FileEntityConnector {
      * @return an initialised instance of <code>RESTEntityConnector</code>
      */
     public static RESTEntityConnector readObject(org.jdom.Element element) {
-        //LOG.info("Reading REST entity connector configuration");
+        LOG.info("Reading REST entity connector configuration");
         RESTEntityConnector connector = new RESTEntityConnector(element.getAttributeValue("name"));
 
         connector._readObject(element);
@@ -64,9 +64,9 @@ public class RESTEntityConnector extends FileEntityConnector {
             connector.attributeProperties.add(new PropertyDefinition(property.getAttributeValue("id"), property
                     .getAttributeValue("entity")));
         }
-        /*LOG.debug("(type = {}, invert = {}, entity=({}), attribute=({}))", new Object[] { connector.contentType,
+        LOG.debug("(type = {}, invert = {}, entity=({}), attribute=({}))", new Object[] { connector.contentType,
                                                                                          connector.invert,
-                                                                                         connector.entityProperties });*/
+                                                                                         connector.entityProperties });
         return connector;
     }
 
@@ -88,6 +88,7 @@ public class RESTEntityConnector extends FileEntityConnector {
         // force the mime type to that value instead of relying on the mime type
         // detected when the connection opens
         String contentType = (this.contentType != null) ? this.contentType : urlHelper.getContentType();
+        LOG.debug("content type = {}", contentType);
 
         m_inverted = UrlHelper.ReplaceParameter(invert, wpsparams).equalsIgnoreCase("true");
 
@@ -133,9 +134,10 @@ public class RESTEntityConnector extends FileEntityConnector {
                 ArrayNode entities = (ArrayNode) node.get(m_EntityMarkup);
                 if (entities != null) {
                     for (JsonNode jsonentity : entities) {
-    
-                        Entity entity = addEntity(jsonentity.get(m_EntityId).getTextValue());
+                    	String entityName = jsonentity.get(m_EntityId).getTextValue();
+                        Entity entity = addEntity(entityName);
                         for (PropertyDefinition property : entityProperties) {
+                        	LOG.debug("reading property {} for entity: {}", property.getName(), entityName);
                             if (property.isSimple()) {
                                 entity.addProperty(property.getName(), readJSONValue( jsonentity.get(property.getName())));
                             }
