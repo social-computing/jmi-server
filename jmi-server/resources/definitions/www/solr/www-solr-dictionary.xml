@@ -9,7 +9,7 @@
 		<SOLR-entities name="Social computing blog search">
 		    <comment>Configuration for Solr server on Social Computing production environment</comment>
 			<connection>
-				<url>http://www.social-computing.com:8080/solr/</url>
+				<url>{$wordpressurl}</url>
 			</connection>
 			
 			<query>
