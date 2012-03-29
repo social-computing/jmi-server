@@ -149,11 +149,11 @@ public class StoreHelper {
        StringBuilder sb = new StringBuilder();
        sb.append("{\"error\":{");
        sb.append("\"code\":");
-       Data.toJson( sb, message);
+       Data.toJson( sb, code);
        sb.append(",\"message\":");
-       Data.toJson( sb, message);
+       Data.toJson( sb, message == null ? "" : message);
        sb.append(",\"trace\":");
-       Data.toJson( sb, trace);
+       Data.toJson( sb, trace == null ? "" : trace);
        sb.append("}}");
        return sb.toString();
    }
