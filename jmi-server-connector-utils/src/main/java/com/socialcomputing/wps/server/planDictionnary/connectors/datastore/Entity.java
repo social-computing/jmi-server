@@ -19,10 +19,13 @@ public class Entity extends Data {
     }
     
 	public void addAttribute( Attribute attribute, float ponderation) {
-	    AttributeEnumeratorItem item = new AttributeEnumeratorItem( attribute.getId(), ponderation);
-	    if( !m_Attributes.contains( item)) {
-    		m_Attributes.add( item);
+	    AttributeEnumeratorItem item = findAttribute(attribute.m_Id);
+	    if(item == null) {
+    		m_Attributes.add( new AttributeEnumeratorItem( attribute.getId(), ponderation));
     		attribute.addEntity( this); // reverse pour le groupe d'affinités
+	    }
+	    else {
+	        item.m_Ponderation += ponderation;
 	    }
 	}
 	
@@ -31,13 +34,17 @@ public class Entity extends Data {
 	}
 	
 	public boolean containsAttribute( String attribute) {
-		for( AttributeEnumeratorItem item :  m_Attributes) {
-			if( item.m_Id.equalsIgnoreCase( attribute))
-				return true;
-		}
-		return false;
+	    return findAttribute( attribute) != null;
 	}
-	
+
+    public AttributeEnumeratorItem findAttribute( String attribute) {
+        for( AttributeEnumeratorItem item :  m_Attributes) {
+            if( item.m_Id.equalsIgnoreCase( attribute))
+                return item;
+        }
+        return null;
+    }
+    
    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

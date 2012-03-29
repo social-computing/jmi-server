@@ -123,7 +123,7 @@ public abstract class Data {
     }
     
     public static String toJson( String str) {
-        return str.replace("\\", "\\\\").replace("\"", "\\\"");
+        return str.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\\n").replace("\r", "\\\r").replace("\t", "\\\t");
     }
     
 }
