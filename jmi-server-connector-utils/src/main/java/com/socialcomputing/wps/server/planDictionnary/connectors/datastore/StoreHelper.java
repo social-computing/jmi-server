@@ -161,9 +161,10 @@ public class StoreHelper {
    }
    
    public static String ErrorToJson( Exception e) {
-       PrintWriter s = new PrintWriter( new StringWriter());
-       e.printStackTrace(s);
-       return StoreHelper.ErrorToJson(0, e.getMessage(), s.toString());
+       StringWriter sw = new StringWriter();
+       PrintWriter pw = new PrintWriter( sw);
+       e.printStackTrace(pw);
+       return StoreHelper.ErrorToJson(0, e.getMessage(), sw.toString());
    }
    
 }
