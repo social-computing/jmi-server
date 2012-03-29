@@ -34,7 +34,8 @@ public abstract class Data {
      *            property's value
      */
     public void addProperty(String name, Object value) {
-        this.m_Properties.put(name, value);
+        if( value != null)
+            this.m_Properties.put(name, value);
     }
 
     /**
