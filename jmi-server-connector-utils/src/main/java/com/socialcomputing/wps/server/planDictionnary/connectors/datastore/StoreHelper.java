@@ -1,5 +1,7 @@
 package com.socialcomputing.wps.server.planDictionnary.connectors.datastore;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -159,7 +161,9 @@ public class StoreHelper {
    }
    
    public static String ErrorToJson( Exception e) {
-       return StoreHelper.ErrorToJson(0, e.getMessage(), e.getStackTrace().toString());
+       PrintWriter s = new PrintWriter( new StringWriter());
+       e.printStackTrace(s);
+       return StoreHelper.ErrorToJson(0, e.getMessage(), s.toString());
    }
    
 }
