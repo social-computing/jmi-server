@@ -117,13 +117,11 @@ public class RESTEntityConnector extends FileEntityConnector {
      */
     private void readJSON(Hashtable<String, Object> wpsparams) throws WPSConnectorException {
         ObjectMapper mapper = new ObjectMapper();
+        JsonNode error = null;
         try {
             JsonNode node = mapper.readTree(urlHelper.getStream());
-            JsonNode error = (JsonNode) node.get("error");
-            if( error != null) {
-                throw new WPSConnectorException( error.get("message").getTextValue());
-            }
-            else {
+            error = (JsonNode) node.get("error");
+            if( error == null) {
                 JsonNode globals = (JsonNode) node.get("globals");
                 if (globals != null) {
                     for (Iterator<String> it = globals.getFieldNames(); it.hasNext();) {
@@ -177,6 +175,16 @@ public class RESTEntityConnector extends FileEntityConnector {
         catch (Exception e) {
             //LOG.error(e.getMessage(), e);
             throw new WPSConnectorException("REST Reading json error", e);
+        }
+        if( error != null) {
+            String m = error.get("message").getTextValue();
+            if( m.length() == 0) {
+                m = error.get("trace").getTextValue();
+                int p = m.indexOf("\n");
+                if( p != -1)
+                    m = m.substring(0,p);
+            }
+            throw new WPSConnectorException( "Rest remote error: " + m);
         }
     }
 
