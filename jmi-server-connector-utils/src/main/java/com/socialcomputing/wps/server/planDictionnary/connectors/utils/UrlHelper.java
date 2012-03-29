@@ -182,6 +182,11 @@ public class UrlHelper extends ConnectorHelper {
     public void setType(Type type) {
         this.type = type;
     }
+    
+    public Type getType() {
+        return this.type;
+    }
+
 
     public List<NameValuePair> getDefParams() {
         return defParams;
@@ -229,6 +234,10 @@ public class UrlHelper extends ConnectorHelper {
         curParams.add(new NameValuePair(name, value));
     }
     
+    public void addParameter(NameValuePair parameter) {
+        curParams.add(parameter);
+    }
+    
     public List<NameValuePair> getParameters() {
     	return this.curParams;
     }
@@ -242,5 +251,4 @@ public class UrlHelper extends ConnectorHelper {
         this.user = user;
         this.password = password;
     }
-
 }
