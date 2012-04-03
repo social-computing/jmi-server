@@ -91,7 +91,6 @@ public abstract class Data {
             else sb.append(',');
             sb.append( "\"").append(Data.toJson(p.getKey())).append("\":");
             Data.toJson(sb, p.getValue());
-            sb.append("");
         }
         return sb;
     }

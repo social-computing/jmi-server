@@ -13,10 +13,11 @@ import org.slf4j.LoggerFactory;
 
 import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.PropertyDefinition;
+import com.socialcomputing.wps.server.planDictionnary.connectors.utils.OAuthHelper;
 import com.socialcomputing.wps.server.planDictionnary.connectors.utils.UrlHelper;
 import com.socialcomputing.wps.server.planDictionnary.connectors.utils.UrlHelper.Type;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.SocialEntityConnector;
-import com.socialcomputing.wps.server.plandictionary.connectors.utils.OAuthHelper;
+import com.socialcomputing.wps.server.planDictionnary.connectors.utils.OAuthHelper;
 
 public class TwitterEntityConnector extends SocialEntityConnector {
     private static final Logger LOG = LoggerFactory.getLogger(TwitterEntityConnector.class);

@@ -45,6 +45,7 @@ public class UrlHelper extends ConnectorHelper {
     protected InputStream stream = null;
     protected String contentType = null;
     protected String contentEncoding = null;
+    protected int responseCode = 0;
     protected URLConnection connection = null;
 
     public UrlHelper() {
@@ -96,6 +97,7 @@ public class UrlHelper extends ConnectorHelper {
     public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
         LOG.debug("UrlHelper open connections");
         StringBuilder parameters = new StringBuilder();
+        HttpURLConnection httpConnection = null;
         
         try {
             String realUrl = super.ReplaceParameter(url, wpsparams);
@@ -138,8 +140,9 @@ public class UrlHelper extends ConnectorHelper {
                 connection.setRequestProperty(header.getName(), paramValue);
                 LOG.debug("Setting parameter {} with value {}", header.getName(), paramValue);
             }
-            if (type == Type.POST && connection instanceof HttpURLConnection) {
-                HttpURLConnection httpConnection = (HttpURLConnection) connection;
+            if (connection instanceof HttpURLConnection) 
+                httpConnection = (HttpURLConnection) connection;
+            if (type == Type.POST && httpConnection != null) {
                 httpConnection.setDoOutput(true);
                 httpConnection.setRequestMethod("POST");
                 httpConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -150,11 +153,16 @@ public class UrlHelper extends ConnectorHelper {
                 wr.flush();
                 wr.close();
             }
-            stream = connection.getInputStream();
+            if( httpConnection != null)
+                responseCode = httpConnection.getResponseCode();
             contentType = connection.getContentType();
             contentEncoding = connection.getContentEncoding();
+            stream = connection.getInputStream();
         }
         catch (IOException e) {
+            if (httpConnection != null) {
+                stream = httpConnection.getErrorStream();
+            }
             LOG.error(e.getMessage(), e);
             throw new WPSConnectorException("openConnections: ", e);
         }
@@ -194,7 +202,6 @@ public class UrlHelper extends ConnectorHelper {
 
     public InputStream getStream() throws WPSConnectorException {
         try {
-        	LOG.debug("content encoding: {}", contentEncoding);
             return contentEncoding != null && contentEncoding.equalsIgnoreCase("gzip") ? new GZIPInputStream(stream) : stream;
         }
         catch (IOException e) {
@@ -214,18 +221,22 @@ public class UrlHelper extends ConnectorHelper {
         return connection ;
     }
     
-    public String getResult() throws WPSConnectorException {
+    public int getResponseCode() {
+        return responseCode;
+    }
+    
+    public String getResult() {
         Writer writer = new StringWriter();
         try {
-            Reader reader = new BufferedReader( new InputStreamReader( contentEncoding != null && contentEncoding.equalsIgnoreCase("gzip") ? new GZIPInputStream( stream): stream));
-            char[] buffer = new char[1024];
+            Reader reader = new BufferedReader( new InputStreamReader( this.getStream()));
+            char[] buffer = new char[5120];
             int n;
             while ((n = reader.read(buffer)) != -1) {
                 writer.write(buffer, 0, n);
             }
         }
-        catch (IOException e) {
-            throw new WPSConnectorException("UrlHelper read failed", e);
+        catch (Exception e) {
+            e.printStackTrace();
         }
         return writer.toString();
     }
