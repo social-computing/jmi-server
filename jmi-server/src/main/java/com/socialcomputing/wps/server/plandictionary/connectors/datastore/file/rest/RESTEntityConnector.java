@@ -64,9 +64,6 @@ public class RESTEntityConnector extends FileEntityConnector {
             connector.attributeProperties.add(new PropertyDefinition(property.getAttributeValue("id"), property
                     .getAttributeValue("entity")));
         }
-        LOG.debug("(type = {}, invert = {}, entity=({}), attribute=({}))", new Object[] { connector.contentType,
-                                                                                         connector.invert,
-                                                                                         connector.entityProperties });
         return connector;
     }
 
@@ -135,7 +132,6 @@ public class RESTEntityConnector extends FileEntityConnector {
                     	String entityName = jsonentity.get(m_EntityId).getTextValue();
                         Entity entity = addEntity(entityName);
                         for (PropertyDefinition property : entityProperties) {
-                        	LOG.debug("reading property {} for entity: {}", property.getName(), entityName);
                             if (property.isSimple()) {
                                 entity.addProperty(property.getName(), readJSONValue( jsonentity.get(property.getName())));
                             }
@@ -177,9 +173,9 @@ public class RESTEntityConnector extends FileEntityConnector {
             throw new WPSConnectorException("REST Reading json error", e);
         }
         if( error != null) {
-            String m = error.get("message").getTextValue();
+            String m = error.get("message") != null ? error.get("message").getTextValue() : "";
             if( m.length() == 0) {
-                m = error.get("trace").getTextValue();
+                m = error.get("trace") != null ? error.get("trace").getTextValue() : "";
                 int p = m.indexOf("\n");
                 if( p != -1)
                     m = m.substring(0,p);

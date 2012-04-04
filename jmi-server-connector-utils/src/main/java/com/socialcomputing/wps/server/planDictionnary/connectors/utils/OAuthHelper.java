@@ -44,8 +44,7 @@ public class OAuthHelper {
         sr.setSeed(seed);
         SecureRandom sr2 = SecureRandom.getInstance("SHA1PRNG");
         sr2.setSeed(seed);
-        //return String.valueOf( sr2.nextLong());
-        return "1234";
+        return String.valueOf( sr2.nextLong());
     }
     
     public void addSignatureParam( String name, String value) {
@@ -53,8 +52,11 @@ public class OAuthHelper {
     }
 
     // oAuth GET 
-    public void addOAuthParams(UrlHelper urh, String uri, String type, String secret) throws java.security.SignatureException, UnsupportedEncodingException {
-        String signature = getSignature( uri, type);
+    public void addOAuthParams(UrlHelper urh, String type, String secret) throws java.security.SignatureException, UnsupportedEncodingException {
+        for( NameValuePair pair : urh.getParameters()) {
+            signatureParams.add( pair);
+        }
+        String signature = getSignature( urh.getUrl(), type);
         String oAuthSignature = getOAuthSignature( signature, secret);
         signatureParams.add( new NameValuePair("oauth_signature", oAuthSignature));
         Collections.sort( signatureParams, new Comparator<NameValuePair>() {
