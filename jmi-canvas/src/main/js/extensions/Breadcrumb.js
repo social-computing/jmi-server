@@ -4,6 +4,10 @@ JMI.namespace("extensions.Breadcrumb");
 JMI.extensions.Breadcrumb = ( function() {
 
 	var Breadcrumb = function(parent,map,parameters) {
+		// IE 6, 7 & 8 not yest supported (event problems) attachEvent, etc...
+		if( navigator.userAgent.indexOf('MSIE 6') > 0 || navigator.userAgent.indexOf('MSIE 7') > 0 || navigator.userAgent.indexOf('MSIE 8') > 0) {
+			return;
+		}
 		this.crumbs = [];
 		this.counter = 0;
 		this.namingFunc = parameters && parameters.namingFunc ? parameters.namingFunc : this.defaultNaming;
