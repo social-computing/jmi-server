@@ -629,14 +629,14 @@ JMI.script.HTMLText = ( function() {
 				if((posFlags & JMI.script.ActiveZone.SIDE_BIT ) !== 0) {
 					x += (posFlags & JMI.script.ActiveZone.LEFT_BIT ) !== 0 ? w2 : -w2;
 				} else {
-					if(dx !== 0) {
+					//if(dx !== 0) {
 						x += dx > 0 ? w2 : -w2;
-					}
+					//}
 				}
 
-				if(dy !== 0) {
+				//if(dy !== 0) {
 					y += dy > 0 ? h2 : -h2;
-				}
+				//}
 			} else if(isFloat) {
 				x += w2;
 				y += h2 + 32;
