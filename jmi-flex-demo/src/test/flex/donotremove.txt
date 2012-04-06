@@ -1,3 +1,0 @@
-The parent folder is needed as src folder in maven and Flash Builder.
-Please do not remove this file or the parent directory will be erased in the version
-control repository (empty folder in mercurial)

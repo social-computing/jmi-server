@@ -16,20 +16,18 @@
 
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.socialcomputing.jmi.jmi</groupId>
-    <artifactId>jmi</artifactId>
+    <groupId>com.socialcomputing.jmi.jmi-server</groupId>
+    <artifactId>jmi-server-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>com.socialcomputing.jmi.jmi</groupId>
   <artifactId>jmi-server</artifactId>
   <packaging>war</packaging>
-  <version>1.0-SNAPSHOT</version>
-  <name>Just Map It - Server</name>
+  <name>Just Map It! - Server</name>
   <url>http://www.social-computing.com/</url>
 
   <repositories>
@@ -199,11 +197,19 @@
     </dependency>
 
     <dependency>
-      <groupId>com.socialcomputing.jmi.jmi</groupId>
+      <groupId>com.socialcomputing.jmi.jmi-server</groupId>
       <artifactId>jmi-server-connector-utils</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
     
+    <dependency>
+      <groupId>com.socialcomputing.jmi.jmi-client</groupId>
+      <artifactId>jmi-canvas</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>jar</type>
+      <scope>runtime</scope>      
+    </dependency>
+    <!--
     <dependency>
       <groupId>com.socialcomputing.jmi.jmi</groupId>
       <artifactId>jmi-flex</artifactId>
@@ -215,24 +221,6 @@
     <dependency>
       <groupId>com.socialcomputing.jmi.jmi</groupId>
       <artifactId>jmi-flex-demo</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <type>swf</type>
-      <scope>runtime</scope>      
-    </dependency>
-   
-    <!-- TODO copy these projects on their own maven project -->
-    <!--
-    <dependency>
-      <groupId>com.socialcomputing.jmi.jmi</groupId>
-      <artifactId>jmi-facebook</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <type>swf</type>
-      <scope>runtime</scope>      
-    </dependency>
-
-    <dependency>
-      <groupId>com.socialcomputing.jmi.jmi</groupId>
-      <artifactId>wps-viadeo</artifactId>
       <version>1.0-SNAPSHOT</version>
       <type>swf</type>
       <scope>runtime</scope>      
@@ -295,7 +283,6 @@
 
   <!-- Build properties -->
   <build>
-    
     <!-- Configuration of a ressource directory to enable filtering 
          Used here to replace applet.version with the property defined here -->
     <resources>
@@ -307,7 +294,6 @@
     </resources>
 
     <plugins>
-    
       <!-- Maven complier configuration -->
       <plugin>
    	    <artifactId>maven-compiler-plugin</artifactId>
@@ -320,6 +306,7 @@
       </plugin>
 
       <!-- récupération de l'application flex -->
+      <!--
       <plugin>
         <groupId>org.sonatype.flexmojos</groupId>
         <artifactId>flexmojos-maven-plugin</artifactId>
@@ -331,14 +318,11 @@
             </goals>
             <configuration>
                 <webappDirectory>${project.build.directory}/${project.build.finalName}/client/flex</webappDirectory> 
-              <!-- Hack :  
-                   Move the generated flex client swf so that it also work with in eclipse
-                   with the m2eclipse plugin -->
-              <!--<webappDirectory>src/main/webapp/flex</webappDirectory> -->
             </configuration>
           </execution>
         </executions>
       </plugin>
+      -->
     
       <!-- Creation of the applet jar -->
       <plugin>
@@ -377,8 +361,23 @@
               <filtering>true</filtering>
             </resource>
           </webResources>
+          <overlays>
+            <overlay>
+              <groupId>com.socialcomputing.jmi.jmi-client</groupId>
+              <artifactId>jmi-canvas</artifactId>
+              <type>jar</type>
+              <targetPath>js/</targetPath>
+              <!--
+                <includes>
+                  <include>build/**</include>
+                </includes>
+              -->
+            </overlay>
+          </overlays>          
         </configuration>
+
       </plugin>
+
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>tomcat-maven-plugin</artifactId>
