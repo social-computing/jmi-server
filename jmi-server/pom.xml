@@ -366,7 +366,7 @@
               <groupId>com.socialcomputing.jmi.jmi-client</groupId>
               <artifactId>jmi-canvas</artifactId>
               <type>jar</type>
-              <targetPath>js/</targetPath>
+              <targetPath>/</targetPath>
               <!--
                 <includes>
                   <include>build/**</include>
