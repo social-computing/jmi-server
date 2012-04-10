@@ -89,39 +89,30 @@ public class WPSDictionary implements java.io.Serializable {
 		return name + "_history";
 	}
 
-    static public WPSDictionary readObject(Element element) 
-            throws JDOMException,  WPSConnectorException {
+    static public WPSDictionary readObject(Element element) throws WPSConnectorException, JDOMException {
         
         String dictionnaryName = element.getAttributeValue("name");
-        LOG.info("Reading dictionary configuration from JDOM Tree");
-        LOG.debug("  - dictionary name = {}", dictionnaryName);
+
 		WPSDictionary dico = new WPSDictionary(dictionnaryName);
 		
 		dico.m_Description = element.getChildText( "comment");
-		LOG.debug("  - dictionary description = {}", dico.m_Description);
 
 		// Connecteur d'entites
 		Element entities = element.getChild( "entities");
-        LOG.debug("  - dictionary entities = {}", entities);
+
 		
 		if(entities == null)
-		    throw new JDOMException(dico.m_Name + " : No Entities Specified");
-		
-		
+		    throw new WPSConnectorException(dico.m_Name + " : No Entities Specified");
 		
 		entities = (org.jdom.Element) entities.getChildren().get( 0);
 		
 		// TODO : Do not throw JDOMExceptions !! They are specific to the JDOM Framework and
 		// shouldn't be thrown up
 		if( entities == null)
-			throw new JDOMException( dico.m_Name + " : No Entities entry found");
+			throw new WPSConnectorException( dico.m_Name + " : No Entities entry found");
 		String className = entities.getAttributeValue( "class");
 		if( className == null)
-			throw new JDOMException( dico.m_Name + " : No Entities class name specified");
-		
-		LOG.debug("  - dictionary entities first child = {}", entities.toString());
-		LOG.debug("  - dictionary class name = {}", className);
-		
+			throw new WPSConnectorException( dico.m_Name + " : No Entities class name specified");
 		
 		try {
 		    // Use reflection to get a method named "readObject" 
@@ -135,16 +126,16 @@ public class WPSDictionary implements java.io.Serializable {
 			dico.m_EntitiesConnector = (iEntityConnector) met.invoke(null, entities);
 		}
 		catch(ClassNotFoundException e) { 
-		    throw new JDOMException( dico.m_Name + " : Unknown Entities Class '" +  className + "'", e);
+		    throw new WPSConnectorException( dico.m_Name + " : Unknown Entities Class '" +  className + "'", e);
 		}
 		catch(IllegalAccessException e) { 
-            throw new JDOMException( dico.m_Name + " : Invalid Entities Class Access '" +  className + "'", e);
+            throw new WPSConnectorException( dico.m_Name + " : Invalid Entities Class Access '" +  className + "'", e);
         }
 		catch(NoSuchMethodException e) {
-		    throw new JDOMException( dico.m_Name + " : Unknown Entities Class Method 'readObject' in '" +  className + "'", e);
+		    throw new WPSConnectorException( dico.m_Name + " : Unknown Entities Class Method 'readObject' in '" +  className + "'", e);
 		}
 		catch( InvocationTargetException e) {
-		    throw new JDOMException( dico.m_Name + " : Invalid Entities Class Method 'readObject' in '" +  className + "'", e);
+		    throw new WPSConnectorException( dico.m_Name + " : Invalid Entities Class Method 'readObject' in '" +  className + "'", e);
 		}
 
 		{   // Global Env Properties
@@ -230,7 +221,6 @@ public class WPSDictionary implements java.io.Serializable {
 			// V\uFFFDrification
 			dico.m_AnalysisLanguageModelMapper.checkIntegrity( dico.m_Name + ", Display Profile Segmentation", dico);
 		}
-
 
 		return dico;
 	}

@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import com.socialcomputing.wps.server.persistence.Dictionary;
 import com.socialcomputing.wps.server.persistence.Swatch;
+import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 
 @Entity
@@ -109,8 +110,6 @@ public class DictionaryImpl implements Serializable, Dictionary {
                 SAXBuilder builder = new SAXBuilder(false);
                 Document doc = builder.build(new StringReader(dictionary));
                 Element root = doc.getRootElement();
-                LOG.debug("Getting XML configuration from database");
-                LOG.debug("Root element of the JDOM Tree : {}", root.toString());
                 m_Dico = WPSDictionary.readObject(root);
             //}
         }

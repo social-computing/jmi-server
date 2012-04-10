@@ -180,7 +180,8 @@ public class RESTEntityConnector extends FileEntityConnector {
                 if( p != -1)
                     m = m.substring(0,p);
             }
-            throw new WPSConnectorException( "Rest remote error: " + m);
+            long code = error.get("code") != null ? error.get("code").getLongValue() : 0;
+            throw new WPSConnectorException( (code != 0 ? "Error " + code + ": " + m : m));
         }
     }
 

@@ -1,13 +1,18 @@
 package com.socialcomputing.wps.server.persistence.hibernate;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.Hashtable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -15,7 +20,7 @@ import org.hibernate.annotations.Index;
 
 @Entity
 @XmlRootElement
-public class Track {
+public class Track implements Serializable {
 
     @Id @GeneratedValue(strategy=GenerationType.AUTO)
     @XmlElement
@@ -35,7 +40,13 @@ public class Track {
     
     @XmlElement
     private boolean     success;
-    
+
+    @OneToOne(cascade = CascadeType.ALL)
+    //@PrimaryKeyJoinColumn
+    @JoinColumn(name="error")
+    @XmlElement
+    private Error       error;
+
     public Track(String name) {
         super();
         this.name = name;
@@ -60,8 +71,15 @@ public class Track {
         return success;
     }
     
-    public void stop( boolean success) {
+    public void stop() {
         this.duration = System.currentTimeMillis() - this.duration;
-        this.success = success;
+        this.success = true;
+        //this.error = null;
+    }
+    
+    public void stop( Exception e, String agent, Hashtable<String, Object> params) {
+        this.duration = System.currentTimeMillis() - this.duration;
+        this.success = false;
+        this.error = new Error(e, agent, params);
     }
 }

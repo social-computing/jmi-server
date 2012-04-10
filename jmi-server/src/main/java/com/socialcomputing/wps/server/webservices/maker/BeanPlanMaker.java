@@ -1,13 +1,10 @@
 package com.socialcomputing.wps.server.webservices.maker;
 
 import java.rmi.RemoteException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Hashtable;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -145,19 +142,20 @@ public class BeanPlanMaker implements PlanMaker {
 
             container = new PlanContainer(planGenerator.getEnv(), planGenerator.getPlan());
             status = Steps.EnvInitialized;
-            track.stop( true);
+            track.stop();
         }
         catch (Exception e) {
             LOG.error(e.getMessage(), e);
-            track.stop( false);
+            track.stop( e, useragent, params);
             throw new RemoteException(e.getMessage());
         }
         finally {
             try {
                 if (dico != null)
                     dico.closeConnections();
-                if( session != null)
+                if( session != null) {
                     session.save( track);
+                }
             }
             catch (Exception e) {
                 LOG.error(e.getMessage(), e);
