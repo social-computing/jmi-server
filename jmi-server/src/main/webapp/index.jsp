@@ -27,8 +27,8 @@ img
 <table width="100%" border="0">
 	<tr>
 		<td><a title="Just Map It! Server" href="./"><img alt="Just Map It! Server" src="./images/justmapit_server.png" /></a></td>
-		<td align="right"><a title="Social Computing" href="http://www.social-computing.com" target="_blank"><img
-			alt="Social Computing" src="./images/logo-sc-white.jpg" /></a></td>
+		<td align="right"><a title="Just Map It!" href="http://www.just-map-it.com" target="_blank"><img
+			alt="Just Map It!" src="./images/justmapit_www.png" /></a></td>
 	</tr>
 </table>
 <table width="100%" border="0" style="padding-top: 100px">
