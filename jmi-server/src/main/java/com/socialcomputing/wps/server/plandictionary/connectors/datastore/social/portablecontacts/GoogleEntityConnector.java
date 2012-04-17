@@ -9,7 +9,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.PropertyDefinition;
 import com.socialcomputing.wps.server.planDictionnary.connectors.utils.UrlHelper;
 import com.socialcomputing.wps.server.plandictionary.connectors.datastore.social.SocialEntityConnector;
@@ -40,7 +40,7 @@ public class GoogleEntityConnector extends SocialEntityConnector {
 
 
     @Override
-    public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
+    public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws JMIException {
         super.openConnections( planType, wpsparams);
         oAuth2Helper.openConnections( planType, wpsparams);
         JSONObject jobj = ( JSONObject)JSONValue.parse( new InputStreamReader(oAuth2Helper.getStream()));
@@ -70,7 +70,7 @@ public class GoogleEntityConnector extends SocialEntityConnector {
 
 
     @Override
-    public void closeConnections() throws WPSConnectorException {
+    public void closeConnections() throws JMIException {
         super.closeConnections();
         oAuth2Helper.closeConnections();
     }

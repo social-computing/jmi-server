@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import com.socialcomputing.wps.server.persistence.Dictionary;
 import com.socialcomputing.wps.server.persistence.Swatch;
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 
 @Entity

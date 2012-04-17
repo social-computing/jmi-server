@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.plandictionary.FilteringProfile;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierConnector;
@@ -61,7 +61,7 @@ public class AffinityProcess
 	* Compute All the affinity coef for all the entities (Rule by Rul, i.e. SegmentBySegment)
 	*
 	*/
-	public Collection<String> compute() throws WPSConnectorException
+	public Collection<String> compute() throws JMIException
 	{
 		Collection<String> col = null;
 		iClassifierConnector classifier = m_Dictionary.getFilteringClassifier();
@@ -103,7 +103,7 @@ public class AffinityProcess
 		return col;
 	}
 
-	private Collection<String> compute( iClassifierRuleConnector ruleConnector, List<String> update) throws WPSConnectorException
+	private Collection<String> compute( iClassifierRuleConnector ruleConnector, List<String> update) throws JMIException
 	{
 		if( ruleConnector == null) return new ArrayList<String>(); // id(s) has been destroyed or data error
 

@@ -3,7 +3,7 @@ package com.socialcomputing.wps.server.plandictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 
 /**
  * Title:        Plan Dictionary
@@ -68,7 +68,7 @@ public class ModelMapper implements java.io.Serializable
 	}
 
 	// Check classifiers existence
-	public void checkIntegrity( String m, WPSDictionary dico) throws org.jdom.JDOMException,  WPSConnectorException
+	public void checkIntegrity( String m, WPSDictionary dico) throws org.jdom.JDOMException,  JMIException
 	{
 		AnalysisProfile profile = dico.getAnalysisProfile( dico.m_AnalysisMapper.getDefault());
 		m_DefaultLanguageMapper.checkIntegrity( m + ", Default Analysis Profile '" + profile.m_Name + "'", dico, profile.m_AttributesRef);

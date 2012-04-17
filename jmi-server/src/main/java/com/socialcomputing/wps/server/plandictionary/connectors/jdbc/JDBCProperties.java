@@ -11,7 +11,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 
 /**
@@ -53,11 +53,11 @@ public class JDBCProperties implements java.io.Serializable {
         }
 
         public void openConnections(Hashtable<String, Object> wpsparams, Connection connection)
-                throws WPSConnectorException {
+                throws JMIException {
             m_PropertyGroupQuery.open(wpsparams, connection);
         }
 
-        public void closeConnections() throws WPSConnectorException {
+        public void closeConnections() throws JMIException {
             if (m_PropertyGroupQuery != null)
                 m_PropertyGroupQuery.close();
             m_PropertyGroupQuery = null;
@@ -74,7 +74,7 @@ public class JDBCProperties implements java.io.Serializable {
             }
         }
 
-        private boolean getColumnInfo(ResultSet rs, String id) throws WPSConnectorException {
+        private boolean getColumnInfo(ResultSet rs, String id) throws JMIException {
             boolean ret = false;
             try {
                 ret = rs.next();
@@ -96,13 +96,13 @@ public class JDBCProperties implements java.io.Serializable {
                      // + type + " '" + id + "'");
             }
             catch (SQLException e) {
-                throw new WPSConnectorException("JDBCPropertyGroup failed to find column information for " + m_Type
+                throw new JMIException(JMIException.ORIGIN.CONNECTOR,"JDBCPropertyGroup failed to find column information for " + m_Type
                         + " '" + id + "'", e);
             }
             return ret;
         }
 
-        private Object getProperty(ResultSet rs, int index) throws WPSConnectorException {
+        private Object getProperty(ResultSet rs, int index) throws JMIException {
             InternalColumnInfo info = null;
             try {
                 // Recherche des valeurs
@@ -153,19 +153,19 @@ public class JDBCProperties implements java.io.Serializable {
                         o = rs.getDate(index + 1);
                         return o;
                     default:
-                        throw new WPSConnectorException("JDBCPropertyGroup unknown DB type: " + info.m_Type);
+                        throw new JMIException(JMIException.ORIGIN.CONNECTOR,"JDBCPropertyGroup unknown DB type: " + info.m_Type);
                 }
             }
             catch (SQLException e) {
-                throw new WPSConnectorException("JDBCPropertyGroup unable to get column type", e);
+                throw new JMIException(JMIException.ORIGIN.CONNECTOR,"JDBCPropertyGroup unable to get column type", e);
             }
             catch (IOException e) {
-                throw new WPSConnectorException("JDBCPropertyGroup error", e);
+                throw new JMIException(JMIException.ORIGIN.CONNECTOR,"JDBCPropertyGroup error", e);
             }
         }
 
         protected int getProperties(Hashtable<String, Object> table, String id, boolean bInBase, String idRef1,
-                                    String idRef2) throws WPSConnectorException {
+                                    String idRef2) throws JMIException {
             if ((bInBase && (m_AttributeRestriction == WPSDictionary.APPLY_TO_NOT_BASE))
                     || (!bInBase && (m_AttributeRestriction == WPSDictionary.APPLY_TO_BASE)))
                 return 0;
@@ -251,7 +251,7 @@ public class JDBCProperties implements java.io.Serializable {
                 rs.close();
             }
             catch (SQLException e) {
-                throw new WPSConnectorException("JDBCProperties failed to read properties", e);
+                throw new JMIException(JMIException.ORIGIN.CONNECTOR,"JDBCProperties failed to read properties", e);
             }
             return added;
         }
@@ -299,20 +299,20 @@ public class JDBCProperties implements java.io.Serializable {
     public JDBCProperties() {}
 
     public void openConnections(Hashtable<String, Object> wpsparams, Connection connection)
-            throws WPSConnectorException {
+            throws JMIException {
         for (JDBCPropertyGroup grp : m_PropertyGroups) {
             grp.openConnections(wpsparams, connection);
         }
     }
 
-    public void closeConnections() throws WPSConnectorException {
+    public void closeConnections() throws JMIException {
         for (JDBCPropertyGroup grp : m_PropertyGroups) {
             grp.closeConnections();
         }
     }
 
     public int getProperties(Hashtable<String, Object> table, String id, boolean bInBase, String idRef1, String idRef2)
-            throws WPSConnectorException {
+            throws JMIException {
         int count = 0;
         for (JDBCPropertyGroup grp : m_PropertyGroups) {
             count += grp.getProperties(table, id, bInBase, idRef1, idRef2);

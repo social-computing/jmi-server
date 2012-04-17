@@ -18,7 +18,7 @@ import com.socialcomputing.utils.database.DatabaseHelper;
 import com.socialcomputing.utils.database.FileFastInserter;
 import com.socialcomputing.utils.database.MultipleFastInserter;
 import com.socialcomputing.utils.database.iFastInsert;
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.plandictionary.FilteringProfile;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
@@ -52,7 +52,7 @@ public class AffinitySegment {
 	/**
 	* */
 	public AffinitySegment(Connection connection, WPSDictionary dictionary, FilteringProfile filteringProfile,
-			iEnumerator<String> enumerator) throws WPSConnectorException {
+			iEnumerator<String> enumerator) throws JMIException {
 		m_DatabaseHelper = new DatabaseHelper(connection, false);
 		m_Dictionary = dictionary;
 		m_FilteringProfile = filteringProfile;
@@ -73,7 +73,7 @@ public class AffinitySegment {
 			}
 			m_Statement = connection.createStatement();
 		} catch (Exception e) {
-			throw new WPSConnectorException("AffinitySegment init failure", e);
+			throw new JMIException("AffinitySegment init failure", e);
 		}
 	}
 
@@ -81,7 +81,7 @@ public class AffinitySegment {
 	*
 	*  */
 	public AffinitySegment(Connection connection, WPSDictionary dictionary, FilteringProfile filteringProfile,
-			iEnumerator<String> enumerator, List<String> entitiesToUpdate) throws WPSConnectorException {
+			iEnumerator<String> enumerator, List<String> entitiesToUpdate) throws JMIException {
 		this(connection, dictionary, filteringProfile, enumerator);
 		m_InitializeProcess = false;
 		m_EntitiesToUpdate = entitiesToUpdate;
@@ -93,7 +93,7 @@ public class AffinitySegment {
 	 * attributes
 	 * 
 	 */
-	public Collection<String> compute() throws WPSConnectorException {
+	public Collection<String> compute() throws JMIException {
 		ArrayList<String> entities = new ArrayList<String>();
 		ArrayList<String> computedEntities = new ArrayList<String>();
 		int maxMapSize = m_FilteringProfile.m_AffProfileMaxAttrNb;
@@ -192,7 +192,7 @@ public class AffinitySegment {
 		return computedEntities;
 	}
 
-	private void AddCoefficientsWithRequests(String name1, Vector<StringAndFloat> coefficients) throws WPSConnectorException {
+	private void AddCoefficientsWithRequests(String name1, Vector<StringAndFloat> coefficients) throws JMIException {
 		try {
 			if (!m_InitializeProcess) { // Lock (pour �viter les conflits avec
 										// les demandes de carte) + suppression
@@ -206,7 +206,7 @@ public class AffinitySegment {
 			AddCoefficientsInFastInserter(m_MultipleInserter, name1, coefficients);
 			m_MultipleInserter.insertAll();
 		} catch (SQLException e) {
-			throw new WPSConnectorException("AffinitySegment AddCoefficientsWithRequests failure", e);
+			throw new JMIException("AffinitySegment AddCoefficientsWithRequests failure", e);
 		} finally {
 			if (!m_InitializeProcess) { // Unlock
 				m_DatabaseHelper.Unlock(WPSDictionary.getCoefficientTableName(m_Dictionary.m_Name));
@@ -215,7 +215,7 @@ public class AffinitySegment {
 	}
 
 	private void AddCoefficientsInFastInserter(iFastInsert inserter, String name, Vector<StringAndFloat> coefficients)
-			throws WPSConnectorException {
+			throws JMIException {
 		try {
 			for( StringAndFloat saf : coefficients) {
 				inserter.startLine();
@@ -225,11 +225,11 @@ public class AffinitySegment {
 				inserter.endLine();
 			}
 		} catch (Exception e) {
-			throw new WPSConnectorException("AffinitySegment AddCoefficientsInFastInserter failure", e);
+			throw new JMIException("AffinitySegment AddCoefficientsInFastInserter failure", e);
 		}
 	}
 
-	private void uploadCoefficientFile(ArrayList<String> computed) throws WPSConnectorException {
+	private void uploadCoefficientFile(ArrayList<String> computed) throws JMIException {
 		try {
 			if (!m_InitializeProcess) { // Lock (pour �viter les conflits avec
 										// les demandes de carte) + suppression
@@ -264,14 +264,14 @@ public class AffinitySegment {
 				m_DatabaseHelper.Unlock(WPSDictionary.getCoefficientTableName(m_Dictionary.m_Name));
 			}
 		} catch (Exception e) {
-			throw new WPSConnectorException("AffinitySegment uploadCoefficientFile failure", e);
+			throw new JMIException("AffinitySegment uploadCoefficientFile failure", e);
 		}
 	}
 
 	/**
 	*
 	*/
-	private AttributesPonderationMap getAttributesMap(String id) throws WPSConnectorException {
+	private AttributesPonderationMap getAttributesMap(String id) throws JMIException {
 		AttributesPonderationMap map;
 		if ((map = m_Profiles.get(id)) == null) {
 			map = new AttributesPonderationMap(m_Connector.getEnumerator(id), m_AttrConverter, id);
@@ -282,7 +282,7 @@ public class AffinitySegment {
 		return map;
 	}
 
-	private ArrayList<String> getRelatedEntities(String id) throws WPSConnectorException {
+	private ArrayList<String> getRelatedEntities(String id) throws JMIException {
 		AttributesPonderationMap map = getAttributesMap(id);
 
 		// On met a jour la table des attributs

@@ -21,7 +21,7 @@ import com.socialcomputing.wps.server.generator.ProtoAttribute;
 import com.socialcomputing.wps.server.generator.ProtoEntity;
 import com.socialcomputing.wps.server.generator.ProtoPlan;
 import com.socialcomputing.wps.server.generator.RecommendationGroup;
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.plandictionary.AnalysisProfile;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
@@ -88,7 +88,7 @@ public class AnalysisProcess {
     /**
      * entities is the affinity group
      **/
-    public AnalysisProcess(PlanRequest planRequest, Collection<String> entities) throws WPSConnectorException {
+    public AnalysisProcess(PlanRequest planRequest, Collection<String> entities) throws JMIException {
         m_PlanRequest = planRequest;
         m_Entities = entities;
         m_RadData = new RadiationData(planRequest, entities);
@@ -99,7 +99,7 @@ public class AnalysisProcess {
      * entities is the affinity group
      **/
     public AnalysisProcess(PlanRequest planRequest, Collection<String> entities, RecommendationInterface recomInterface)
-            throws WPSConnectorException {
+            throws JMIException {
         this(planRequest, entities);
         m_RecomInterface = recomInterface;
     }
@@ -186,7 +186,7 @@ public class AnalysisProcess {
     /**
      * The public function to compute and obtain ProtoPlan
      */
-    public ProtoPlan getProtoPlan() throws WPSConnectorException {
+    public ProtoPlan getProtoPlan() throws JMIException {
 
         Collection base, attributes, entities;
 
@@ -229,7 +229,7 @@ public class AnalysisProcess {
     /**
      * * Compute the attributes of the base
      */
-    private Collection getBase() throws WPSConnectorException {
+    private Collection getBase() throws JMIException {
         Collection base;
         // int firstAttributeNum = -1;
         // int size = m_RadData.getAttributesCnt();
@@ -301,7 +301,7 @@ public class AnalysisProcess {
     /**
      * * Compute the attributes to display on map
      */
-    private Collection computePlanAttributes(Collection base) throws WPSConnectorException {
+    private Collection computePlanAttributes(Collection base) throws JMIException {
         TreeSet tree = new TreeSet();
         Collection attributes = new ArrayList();
         // Integer[] baseArray = (Integer[])base.toArray(new Integer[0]);
@@ -397,7 +397,7 @@ public class AnalysisProcess {
      */
     private Collection<ObjectStringStat> computePlanEntities(Collection<Integer> base,
                                                              Collection<ObjectNumStat> attributes)
-            throws WPSConnectorException {
+            throws JMIException {
         TreeSet<ObjectStringStat> tree = new TreeSet<ObjectStringStat>();
         // convert attibutes collection in array
         int aArray[] = new int[attributes.size() + base.size()];
@@ -440,10 +440,10 @@ public class AnalysisProcess {
      * 
      * @param base
      * @param attributes
-     * @throws WPSConnectorException
+     * @throws JMIException
      */
     private void computeRecommendations(Collection<Integer> base, Collection<ObjectNumStat> attributes)
-            throws WPSConnectorException {
+            throws JMIException {
         if (m_Profile.m_RecomProfiles[RecommendationGroup.SATTRIBUTES_RECOM] == null)
             return; // No recommendation
 
@@ -471,7 +471,7 @@ public class AnalysisProcess {
     }
 
     private void createProtoPlan(Collection base, Collection attributes, Collection entities)
-            throws WPSConnectorException {
+            throws JMIException {
         // AnalysisProfile profile = m_PlanRequest.getAnalysisProfile();
         m_Plan = new ProtoPlan(m_PlanRequest);
 
@@ -742,7 +742,7 @@ public class AnalysisProcess {
 
     }
 
-    private boolean doClustering(ProtoAttribute child, ProtoAttribute parent) throws WPSConnectorException {
+    private boolean doClustering(ProtoAttribute child, ProtoAttribute parent) throws JMIException {
         int MaxAttributesPerCluster = m_Profile.m_MaxAttributesPerCluster;
 
         if ((parent == null) || (parent.isRef() != child.isRef())
@@ -837,12 +837,12 @@ public class AnalysisProcess {
     }
 
     private void attributesClustering(ArrayList aLinkArray, ProtoAttribute[] aArray, Collection base)
-            throws WPSConnectorException {
+            throws JMIException {
         attributesClustering(aLinkArray, aArray, base, (float) (m_Profile.m_DataClusterThreshold / 100.0), false);
     }
 
     private void attributesClustering(ArrayList aLinkArray, ProtoAttribute[] aArray, Collection base, float threshold,
-                                      boolean baseOnly) throws WPSConnectorException {
+                                      boolean baseOnly) throws JMIException {
         if (!m_Profile.m_DoClustering)
             return; // FRV : No Clustering
 
@@ -888,7 +888,7 @@ public class AnalysisProcess {
 
     }
 
-    private boolean basicAttributesClustering(ArrayList aLinkArray, boolean baseOnly) throws WPSConnectorException {
+    private boolean basicAttributesClustering(ArrayList aLinkArray, boolean baseOnly) throws JMIException {
         // int MaxAttributesPerCluster= m_Profile.m_MaxAttributesPerCluster;
         int clusterCnt = m_clusterCnt;
         ProtoAttribute parent, attr1, attr2;
@@ -929,7 +929,7 @@ public class AnalysisProcess {
     }
 
     private boolean globalAttributesClustering(ProtoAttribute[] aArray, float threshold, boolean baseOnly)
-            throws WPSConnectorException {
+            throws JMIException {
         int MaxAttributesPerCluster = m_Profile.m_MaxAttributesPerCluster;
         int clusterCnt = m_clusterCnt;
         boolean isBetweenBase;

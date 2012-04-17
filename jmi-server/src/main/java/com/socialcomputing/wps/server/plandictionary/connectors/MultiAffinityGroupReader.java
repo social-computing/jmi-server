@@ -3,7 +3,7 @@ package com.socialcomputing.wps.server.plandictionary.connectors;
 import java.io.Serializable;
 import java.util.StringTokenizer;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.utils.StringAndFloat;
 
 /**
@@ -23,7 +23,7 @@ public class MultiAffinityGroupReader implements iAffinityGroupReader, Serializa
 	private static final long serialVersionUID = -4985693827455829443L;
 	private static final String _ATT_DEFAULT_PREFIX = "_ATT_PREFIX";
 
-	public static iAffinityGroupReader GetMultiAffinityGroupReader( iEntityConnector entities, String full_reader) throws WPSConnectorException
+	public static iAffinityGroupReader GetMultiAffinityGroupReader( iEntityConnector entities, String full_reader) throws JMIException
 	{
 		int count = 1;
 		for( int pos = -1; ( pos = full_reader.indexOf( '&', pos+1)) != -1; count++);
@@ -44,7 +44,7 @@ public class MultiAffinityGroupReader implements iAffinityGroupReader, Serializa
 				reader = reader.substring( 0, pos);
 			}
 			readers[ i] = entities.getAffinityGroupReader( reader);
-			if( readers[ i] == null) throw new WPSConnectorException( "MultiAffinityGroupReader '" + full_reader + "' affreader '" + reader + "' not found");
+			if( readers[ i] == null) throw new JMIException(JMIException.ORIGIN.CONNECTOR, "MultiAffinityGroupReader '" + full_reader + "' affreader '" + reader + "' not found");
 		}
 		return new MultiAffinityGroupReader( prefixes, readers);
 	}
@@ -58,13 +58,13 @@ public class MultiAffinityGroupReader implements iAffinityGroupReader, Serializa
 		m_AffReaders = profiles;
 	}
 
-	public StringAndFloat[] retrieveAffinityGroup( String id, int affinityThreshold, int max) throws WPSConnectorException
+	public StringAndFloat[] retrieveAffinityGroup( String id, int affinityThreshold, int max) throws JMIException
 	{
 		for( int i = 0; i < m_AffReaders.length; ++i)
 		{
 			 if( id.startsWith( m_Prefixes[i]))
 				 return m_AffReaders[i].retrieveAffinityGroup( id.substring( m_Prefixes[i].length()), affinityThreshold, max);
 		}
-		throw new WPSConnectorException( "MultiAffinityGroupReader retrieveAffinityGroup unknown attributeId origin '" + id + "'");
+		throw new JMIException(JMIException.ORIGIN.CONNECTOR, "MultiAffinityGroupReader retrieveAffinityGroup unknown attributeId origin '" + id + "'");
 	}
 }

@@ -18,6 +18,7 @@ import com.socialcomputing.wps.server.generator.ProtoPlan;
 import com.socialcomputing.wps.server.persistence.Dictionary;
 import com.socialcomputing.wps.server.persistence.hibernate.DictionaryManagerImpl;
 import com.socialcomputing.wps.server.persistence.hibernate.Track;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.plandictionary.AnalysisProfile;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.wps.server.webservices.PlanRequest;
@@ -30,9 +31,8 @@ public class BeanPlanMaker implements PlanMaker {
         AffinityGroupComputed, AnalysisPassed, PlanGenerated, EnvInitialized };
 
     @Override
-    public Hashtable<String, Object> createPlan(Hashtable<String, Object> params) throws RemoteException {
+    public Hashtable<String, Object> createPlan(Hashtable<String, Object> params) throws JMIException {
         Hashtable<String, Object> result = new Hashtable<String, Object>();
-        try {
             EZTimer timer = new EZTimer();
 
             String mime = (String) params.get( PlanMaker.PLAN_MIME);
@@ -56,15 +56,9 @@ public class BeanPlanMaker implements PlanMaker {
 
             timer.showElapsedTime("ALL STEPS");
             return result;
-        }
-        catch (Exception e) {
-            //LOG.error(e.getMessage(), e);
-            throw new RemoteException("JMI '" + (String) params.get("planName") + "' map creation failed: " + e.getMessage());
-        }
     }
 
-    private PlanContainer _createPlan(Hashtable<String, Object> params, Hashtable<String, Object> results)
-            throws RemoteException {
+    private PlanContainer _createPlan(Hashtable<String, Object> params, Hashtable<String, Object> results) throws JMIException {
         Steps status = Steps.PlanMakerStarted;
         boolean isVisual = false;
         WPSDictionary dico = null;
@@ -74,16 +68,16 @@ public class BeanPlanMaker implements PlanMaker {
         
         String name = (String) params.get("planName");
         if (name == null)
-            throw new RemoteException("JMI parameter 'planName' missing.");
+            throw new JMIException(JMIException.ORIGIN.PARAMETER,"JMI parameter 'planName' missing.");
         // Track
         Track track = new Track( name);
 
         String x = (String) params.get("width");
         if (x != null && Integer.parseInt(x) == 0)
-            throw new RemoteException("JMI parameter 'width' can't be 0.");
+            throw new JMIException(JMIException.ORIGIN.PARAMETER,"JMI parameter 'width' can't be 0.");
         x = (String) params.get("height");
         if (x != null && Integer.parseInt(x) == 0)
-            throw new RemoteException("JMI parameter 'height' can't be 0.");
+            throw new JMIException(JMIException.ORIGIN.PARAMETER,"JMI parameter 'height' can't be 0.");
 
         String useragent = (String) params.get("User-Agent");
         if (useragent == null)
@@ -100,7 +94,7 @@ public class BeanPlanMaker implements PlanMaker {
             DictionaryManagerImpl manager = new DictionaryManagerImpl();
             Dictionary dictionaryLoader = manager.findByName(name);
             if (dictionaryLoader == null)
-                throw new RemoteException("JMI server unknown map '" + name + "'");
+                throw new JMIException(JMIException.ORIGIN.PARAMETER,"JMI server unknown map '" + name + "'");
             results.put( PlanMaker.PLAN_NAME, name);
 
             // DICTIONARY RETRIEVAL
@@ -144,10 +138,9 @@ public class BeanPlanMaker implements PlanMaker {
             status = Steps.EnvInitialized;
             track.stop();
         }
-        catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+        catch (JMIException e) {
             track.stop( e, useragent, params);
-            throw new RemoteException(e.getMessage());
+            throw e;
         }
         finally {
             try {

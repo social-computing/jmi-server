@@ -15,7 +15,7 @@ import org.jdom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.Attribute;
 import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.Entity;
 import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.PropertyDefinition;
@@ -78,7 +78,7 @@ public class RESTEntityConnector extends FileEntityConnector {
     }
 
     @Override
-    public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
+    public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws JMIException {
         super.openConnections(planType, wpsparams);
 
         // If the content type is specified in the connector configuration,
@@ -98,7 +98,7 @@ public class RESTEntityConnector extends FileEntityConnector {
             readXml(wpsparams);
         }
         else {
-            throw new WPSConnectorException("Unsupported content type: " + this.contentType + ". Only "
+            throw new JMIException(JMIException.ORIGIN.CONNECTOR,"Unsupported content type: " + this.contentType + ". Only "
                     + MediaType.APPLICATION_JSON + " and " + MediaType.APPLICATION_XML + " are available for now");
         }
     }
@@ -110,9 +110,9 @@ public class RESTEntityConnector extends FileEntityConnector {
      * <p>
      * 
      * @param wpsparams
-     * @throws WPSConnectorException
+     * @throws JMIException
      */
-    private void readJSON(Hashtable<String, Object> wpsparams) throws WPSConnectorException {
+    private void readJSON(Hashtable<String, Object> wpsparams) throws JMIException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode error = null;
         try {
@@ -170,7 +170,7 @@ public class RESTEntityConnector extends FileEntityConnector {
         }
         catch (Exception e) {
             //LOG.error(e.getMessage(), e);
-            throw new WPSConnectorException("REST Reading json error", e);
+            throw new JMIException("REST Reading json error", e);
         }
         if( error != null) {
             String m = error.get("message") != null ? error.get("message").getTextValue() : "";
@@ -181,7 +181,7 @@ public class RESTEntityConnector extends FileEntityConnector {
                     m = m.substring(0,p);
             }
             long code = error.get("code") != null ? error.get("code").getLongValue() : 0;
-            throw new WPSConnectorException( (code != 0 ? "Error " + code + ": " + m : m));
+            throw new JMIException( JMIException.ORIGIN.CONNECTOR, code, m);
         }
     }
 
@@ -212,9 +212,9 @@ public class RESTEntityConnector extends FileEntityConnector {
      * <p>
      * 
      * @param wpsparams
-     * @throws WPSConnectorException
+     * @throws JMIException
      */
-    private void readXml(Hashtable<String, Object> wpsparams) throws WPSConnectorException {
+    private void readXml(Hashtable<String, Object> wpsparams) throws JMIException {
         Element root;
         try {
             // TODO SAX Parser => faster
@@ -224,7 +224,7 @@ public class RESTEntityConnector extends FileEntityConnector {
         }
         catch (Exception e) {
             LOG.error(e.getMessage(), e);
-            throw new WPSConnectorException("REST Reading xml error", e);
+            throw new JMIException("REST Reading xml error", e);
         }
 
         for (Element el : (List<Element>) root.getChildren("globals")) {
@@ -261,7 +261,7 @@ public class RESTEntityConnector extends FileEntityConnector {
     }
 
     @Override
-    public void closeConnections() throws WPSConnectorException {
+    public void closeConnections() throws JMIException {
         super.closeConnections();
     }
 }

@@ -12,7 +12,7 @@ import org.jdom.JDOMException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEntityConnector;
 import com.socialcomputing.wps.server.webservices.RequestingClassifyId;
@@ -89,7 +89,7 @@ public class WPSDictionary implements java.io.Serializable {
 		return name + "_history";
 	}
 
-    static public WPSDictionary readObject(Element element) throws WPSConnectorException, JDOMException {
+    static public WPSDictionary readObject(Element element) throws JMIException, JDOMException {
         
         String dictionnaryName = element.getAttributeValue("name");
 
@@ -102,17 +102,17 @@ public class WPSDictionary implements java.io.Serializable {
 
 		
 		if(entities == null)
-		    throw new WPSConnectorException(dico.m_Name + " : No Entities Specified");
+		    throw new JMIException(JMIException.ORIGIN.DEFINITION,dico.m_Name + " : No Entities Specified");
 		
 		entities = (org.jdom.Element) entities.getChildren().get( 0);
 		
 		// TODO : Do not throw JDOMExceptions !! They are specific to the JDOM Framework and
 		// shouldn't be thrown up
 		if( entities == null)
-			throw new WPSConnectorException( dico.m_Name + " : No Entities entry found");
+			throw new JMIException(JMIException.ORIGIN.DEFINITION, dico.m_Name + " : No Entities entry found");
 		String className = entities.getAttributeValue( "class");
 		if( className == null)
-			throw new WPSConnectorException( dico.m_Name + " : No Entities class name specified");
+			throw new JMIException(JMIException.ORIGIN.DEFINITION, dico.m_Name + " : No Entities class name specified");
 		
 		try {
 		    // Use reflection to get a method named "readObject" 
@@ -126,16 +126,16 @@ public class WPSDictionary implements java.io.Serializable {
 			dico.m_EntitiesConnector = (iEntityConnector) met.invoke(null, entities);
 		}
 		catch(ClassNotFoundException e) { 
-		    throw new WPSConnectorException( dico.m_Name + " : Unknown Entities Class '" +  className + "'", e);
+		    throw new JMIException(JMIException.ORIGIN.DEFINITION, dico.m_Name + " : Unknown Entities Class '" +  className + "'", e);
 		}
 		catch(IllegalAccessException e) { 
-            throw new WPSConnectorException( dico.m_Name + " : Invalid Entities Class Access '" +  className + "'", e);
+            throw new JMIException(JMIException.ORIGIN.DEFINITION, dico.m_Name + " : Invalid Entities Class Access '" +  className + "'", e);
         }
 		catch(NoSuchMethodException e) {
-		    throw new WPSConnectorException( dico.m_Name + " : Unknown Entities Class Method 'readObject' in '" +  className + "'", e);
+		    throw new JMIException(JMIException.ORIGIN.DEFINITION, dico.m_Name + " : Unknown Entities Class Method 'readObject' in '" +  className + "'", e);
 		}
 		catch( InvocationTargetException e) {
-		    throw new WPSConnectorException( dico.m_Name + " : Invalid Entities Class Method 'readObject' in '" +  className + "'", e);
+		    throw new JMIException(JMIException.ORIGIN.DEFINITION, dico.m_Name + " : Invalid Entities Class Method 'readObject' in '" +  className + "'", e);
 		}
 
 		{   // Global Env Properties
@@ -230,11 +230,11 @@ public class WPSDictionary implements java.io.Serializable {
 		m_Name = name;
 	}
 
-	public void openConnections( int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException
+	public void openConnections( int planType, Hashtable<String, Object> wpsparams) throws JMIException
 	{
 		// V\uFFFDrifications de base
 		if( m_EntitiesConnector == null)
-			throw new WPSConnectorException( "No entities connector in WPSDictionary");
+			throw new JMIException(JMIException.ORIGIN.DEFINITION,"No entities connector in WPSDictionary");
 
 		// Information des models sur les entit\uFFFDs utilis\uFFFDes
 		for( Model model : m_Models.values())
@@ -245,7 +245,7 @@ public class WPSDictionary implements java.io.Serializable {
 		m_EntitiesConnector.openConnections( planType, wpsparams);
 	}
 
-	public void closeConnections()  throws WPSConnectorException
+	public void closeConnections()  throws JMIException
 	{
 		for( Model model : m_Models.values())
 		{
@@ -265,23 +265,23 @@ public class WPSDictionary implements java.io.Serializable {
 		return m_FilteringProfiles.get( name);
 	}
 
-	public  iClassifierConnector getFilteringClassifier()  throws WPSConnectorException
+	public  iClassifierConnector getFilteringClassifier()  throws JMIException
 	{
 		String name = m_FilteringMapper.m_ClassifierName;
 		return m_EntitiesConnector.getClassifier( name);
 	}
 
-	private  String getAnalysisProfileName( RequestingClassifyId classifyId )  throws WPSConnectorException
+	private  String getAnalysisProfileName( RequestingClassifyId classifyId )  throws JMIException
 	{
 		return m_AnalysisMapper.getAssociatedName( m_EntitiesConnector, classifyId);
 	}
 
-	public AnalysisProfile getAnalysisProfile( String name )  throws WPSConnectorException
+	public AnalysisProfile getAnalysisProfile( String name )  throws JMIException
 	{
 		return m_AnalysisProfiles.get( name);
 	}
 
-	public AnalysisProfile getAnalysisProfile( RequestingClassifyId classifyId )  throws WPSConnectorException
+	public AnalysisProfile getAnalysisProfile( RequestingClassifyId classifyId )  throws JMIException
 	{
 		return getAnalysisProfile( getAnalysisProfileName( classifyId));
 	}
@@ -291,7 +291,7 @@ public class WPSDictionary implements java.io.Serializable {
 		return m_AffinityReaderProfiles.get( name);
 	}
 
-	public AffinityReaderProfile getAffinityReaderProfile( String analysisProfile, RequestingClassifyId classifyId )  throws WPSConnectorException
+	public AffinityReaderProfile getAffinityReaderProfile( String analysisProfile, RequestingClassifyId classifyId )  throws JMIException
 	{
 		ClassifierMapper mapper = m_AffinityReaderMapper.getClassifier( analysisProfile);
 		String name = mapper.getAssociatedName( m_EntitiesConnector, classifyId);
@@ -303,7 +303,7 @@ public class WPSDictionary implements java.io.Serializable {
 		return m_Models.get( name);
 	}
 
-	public  Model getModel( String analysisProfile, String language, RequestingClassifyId classifyId )  throws WPSConnectorException
+	public  Model getModel( String analysisProfile, String language, RequestingClassifyId classifyId )  throws JMIException
 	{
 		LanguageMapper languageMapper = m_AnalysisLanguageModelMapper.getClassifier( analysisProfile);
 		ClassifierMapper mapper = languageMapper.getClassifier( language);

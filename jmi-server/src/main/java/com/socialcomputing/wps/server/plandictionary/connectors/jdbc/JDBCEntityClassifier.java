@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierRuleConnector;
@@ -71,7 +71,7 @@ public class JDBCEntityClassifier implements iClassifierConnector, Serializable
 		m_Rules = new Hashtable<String, JDBCRuleConnector>();
 	}
 
-	public void openConnections(   Hashtable<String, Object> wpsparams, Connection connection) throws WPSConnectorException
+	public void openConnections(   Hashtable<String, Object> wpsparams, Connection connection) throws JMIException
 	{
 		if( m_UseEntityConnection)
 			m_Connection = connection;
@@ -87,7 +87,7 @@ public class JDBCEntityClassifier implements iClassifierConnector, Serializable
 			m_GetClassifierQuery.open( wpsparams, m_Connection);
 	}
 
-	public void closeConnections() throws WPSConnectorException
+	public void closeConnections() throws JMIException
 	{
 		try {
 			if( m_GetClassifierQuery != null)
@@ -102,7 +102,7 @@ public class JDBCEntityClassifier implements iClassifierConnector, Serializable
 		}
 		catch( SQLException e)
 		{
-			throw new WPSConnectorException( "JDBC connector can't close JDBCEntityClassifier connection", e);
+			throw new JMIException(JMIException.ORIGIN.CONNECTOR, "JDBC connector can't close JDBCEntityClassifier connection", e);
 		}
 	}
 
@@ -129,10 +129,10 @@ public class JDBCEntityClassifier implements iClassifierConnector, Serializable
 	}
 
 	@Override
-	public String getClassification( String id) throws WPSConnectorException
+	public String getClassification( String id) throws JMIException
 	{
 		if( id == null)
-			throw new WPSConnectorException( "JDBCEntityClassifier failed to set getClassification, id is null");
+			throw new JMIException(JMIException.ORIGIN.CONNECTOR, "JDBCEntityClassifier failed to set getClassification, id is null");
 
 		// Default
 		if( m_Name.equalsIgnoreCase(  WPSDictionary.DEFAULT_NAME))

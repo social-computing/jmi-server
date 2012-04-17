@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Hashtable;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 
 /**
  * <p>Title: WPS Connectors</p>
@@ -55,17 +55,17 @@ public abstract class JDBCQuery implements Serializable
 		return o;
 	}
 
-	public abstract void setCurEntity( String id) throws SQLException, WPSConnectorException;
+	public abstract void setCurEntity( String id) throws SQLException, JMIException;
 
-	public abstract void setCurAttribute( String id) throws SQLException, WPSConnectorException;
+	public abstract void setCurAttribute( String id) throws SQLException, JMIException;
 
-	public abstract void setCurSubAttribute( String id) throws SQLException, WPSConnectorException;
+	public abstract void setCurSubAttribute( String id) throws SQLException, JMIException;
 
-	public abstract ResultSet executeQuery() throws SQLException, WPSConnectorException;
+	public abstract ResultSet executeQuery() throws SQLException, JMIException;
 
 	public abstract void reset();
 	
-	public void close() throws WPSConnectorException
+	public void close() throws JMIException
 	{
 		try {
 			if( m_QueryPS != null)
@@ -76,7 +76,7 @@ public abstract class JDBCQuery implements Serializable
 		}
 		catch( SQLException e)
 		{
-			throw new WPSConnectorException( "JDBC query can't close query", e);
+			throw new JMIException(JMIException.ORIGIN.CONNECTOR, "JDBC query can't close query", e);
 		}
 	}
 }

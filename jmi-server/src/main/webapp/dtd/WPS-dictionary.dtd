@@ -28,10 +28,12 @@
 <!ELEMENT url 				(#PCDATA)>
 
 <!ELEMENT url-header 	(#PCDATA)>
-<!ATTLIST url-header name NMTOKEN 	#REQUIRED>
+<!ATTLIST url-header name 		NMTOKEN 	#REQUIRED>
+<!ATTLIST url-header default 	NMTOKEN 	#IMPLIED>
 
 <!ELEMENT url-parameter 	(#PCDATA)>
-<!ATTLIST url-parameter name NMTOKEN 	#REQUIRED>
+<!ATTLIST url-parameter name 	NMTOKEN 	#REQUIRED>
+<!ATTLIST url-parameter default NMTOKEN 	#IMPLIED>
 
 <!-- Basic authentication -->
 <!ELEMENT basic-authentication EMPTY>

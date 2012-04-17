@@ -3,7 +3,7 @@ package com.socialcomputing.wps.server.plandictionary.connectors.jdbc;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 
 /**
  * <p>Title: WPS Connectors</p>
@@ -29,14 +29,14 @@ public class JDBCQuery1 extends JDBCQuery
 	}
 
 	@Override
-	public void setCurEntity( String id) throws SQLException, WPSConnectorException
+	public void setCurEntity( String id) throws SQLException, JMIException
 	{
 		check();
 		m_QueryPS.setString( cpt++, id);
 	}
 
 	@Override
-	public void setCurAttribute( String id) throws SQLException, WPSConnectorException
+	public void setCurAttribute( String id) throws SQLException, JMIException
 	{
 		check();
 		m_QueryPS.setString( cpt++, id);
@@ -44,7 +44,7 @@ public class JDBCQuery1 extends JDBCQuery
 	}
 
 	@Override
-	public void setCurSubAttribute( String id) throws SQLException, WPSConnectorException
+	public void setCurSubAttribute( String id) throws SQLException, JMIException
 	{
 		check();
 		//System.out.println("setCurSubAttribute : "+id+"\n");
@@ -52,7 +52,7 @@ public class JDBCQuery1 extends JDBCQuery
 	}
 
 	@Override
-	public ResultSet executeQuery() throws SQLException, WPSConnectorException
+	public ResultSet executeQuery() throws SQLException, JMIException
 	{
 		//System.out.println(m_Query);
 		check();
@@ -67,7 +67,7 @@ public class JDBCQuery1 extends JDBCQuery
 	}
 
 	// Remplacement parametres globaux uniquement ex : {s$PROP} et creation du PreparedStatement
-	private void check() throws SQLException, WPSConnectorException
+	private void check() throws SQLException, JMIException
 	{
 		if( m_QueryPS != null) return;
 
@@ -82,7 +82,7 @@ public class JDBCQuery1 extends JDBCQuery
 				String propName = m_Query.substring( pos+2, end);
 				String propValue = (String) getWPSProperty( propName);
 				if( propValue == null)
-					throw new WPSConnectorException( "JDBCQuery1 : global property '" + propName + "'is not set for query: " + m_Query);
+					throw new JMIException(JMIException.ORIGIN.CONNECTOR, "JDBCQuery1 : global property '" + propName + "'is not set for query: " + m_Query);
 				nquery.append( m_Query.substring( start, pos));
 				nquery.append( propValue);
 				start = end+1;

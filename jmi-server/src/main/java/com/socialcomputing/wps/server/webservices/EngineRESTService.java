@@ -5,7 +5,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.rmi.RemoteException;
 import java.util.Hashtable;
 
 import javax.ws.rs.GET;
@@ -25,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import com.socialcomputing.wps.server.generator.json.PlanJSONProvider;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.utils.log.DiagnosticContext;
 import com.socialcomputing.wps.server.webservices.maker.BeanPlanMaker;
 import com.socialcomputing.wps.server.webservices.maker.PlanMaker;
@@ -111,9 +111,10 @@ public class EngineRESTService {
                  PlanJSONProvider.putValue( jsonResults, key, wpsresults.get(key));
             }
         }
-        catch (RemoteException e) {
+        catch (JMIException e) {
             LOG.error(e.getMessage(), e);
             jsonResults.put("name", planName);
+            jsonResults.put("origin", e.getOrigin().toString());
             jsonResults.put("error", e.getMessage());
         }
         finally {

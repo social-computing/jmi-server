@@ -12,28 +12,54 @@ import java.io.PrintWriter;
  * @version 1.0
  */
 
-public class WPSConnectorException extends Exception
+public class JMIException extends Exception
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -6564839622930056614L;
+	
+	public enum ORIGIN {
+	    DEFINITION, PARAMETER, PROPERTY, INTERNAL, CONNECTOR
+	}
+	
+	protected ORIGIN origin;
 	protected Throwable cause;
+	protected long code;
 
-	public WPSConnectorException()
+	
+	public JMIException()
 	{
-		super("Error occurred in WPS connector.");
+		this("Error occurred in WPS connector.");
 	}
 
-	public WPSConnectorException( String message)
+	public JMIException( String message)
 	{
-		super( message);
+		this( message, null);
 	}
 
-	public WPSConnectorException(String message, Throwable cause)
+    public JMIException(String message, Throwable cause)
+    {
+        this( ORIGIN.INTERNAL, message, cause);
+    }
+    
+    public JMIException(ORIGIN origin, String message)
+    {
+        this( origin, message, null);
+    }
+
+    public JMIException(ORIGIN origin, long code, String message)
+    {
+        this( origin, code, message, null);
+    }
+    
+    public JMIException(ORIGIN origin, String message, Throwable cause) {
+        this( origin, 0, message, null);
+    }
+    
+	public JMIException(ORIGIN origin, long code, String message, Throwable cause)
 	{
 		super(message);
+		this.origin = origin;
 		this.cause = cause;
+		this.code = code;
 	}
 
 	public String getMessage()
@@ -76,4 +102,9 @@ public class WPSConnectorException extends Exception
 	{
 		return cause;
 	}
+	
+    public ORIGIN getOrigin()
+    {
+        return origin;
+    }
 }

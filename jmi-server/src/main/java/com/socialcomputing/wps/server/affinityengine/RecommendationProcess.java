@@ -10,7 +10,7 @@ import java.util.TreeSet;
 
 import com.socialcomputing.wps.server.generator.RecommendationGroup;
 import com.socialcomputing.wps.server.planDictionnary.connectors.AttributeEnumeratorItem;
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.plandictionary.AnalysisProfile;
 import com.socialcomputing.wps.server.plandictionary.connectors.SubAttributeEnumeratorItem;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
@@ -63,7 +63,7 @@ public class RecommendationProcess {
 	private float m_MaxPond = 100; // A FIXER DATABASE !
 
 	public RecommendationProcess(PlanRequest planRequest,
-			StringAndFloat[] entities) throws WPSConnectorException {
+			StringAndFloat[] entities) throws JMIException {
 		m_PlanRequest = planRequest;
 		m_Profile = m_PlanRequest.getAnalysisProfile();
 
@@ -107,14 +107,14 @@ public class RecommendationProcess {
 	/**
 	 * precompute recommendation for attributes of reference entity
 	 */
-	public void precompute() throws WPSConnectorException {
+	public void precompute() throws JMIException {
 		compute(m_RefAttributes);
 	}
 
 	/**
 	 * recommendation for the reference entity and a given attributes collection
 	 **/
-	public void compute(String attributes[]) throws WPSConnectorException {
+	public void compute(String attributes[]) throws JMIException {
 		double ln2 = MathLogBuffer.getLog(2);
 		double lnAffinityCard = MathLogBuffer.getLog(m_Entities.size() + 1);
 
@@ -243,7 +243,7 @@ public class RecommendationProcess {
 	 * recommendation for the reference entity and a given attributes collection
 	 * called by analyzer with a table of attributes (Numerical)
 	 **/
-	public void compute(int attributes[]) throws WPSConnectorException {
+	public void compute(int attributes[]) throws JMIException {
 		double ln2 = MathLogBuffer.getLog(2);
 		double lnAffinityCard = MathLogBuffer.getLog(m_Entities.size() + 1);
 		Iterator it = m_Profiles.entrySet().iterator();

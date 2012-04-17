@@ -5,7 +5,7 @@ import java.util.Hashtable;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.planDictionnary.connectors.utils.ConnectorHelper;
 
 
@@ -24,7 +24,7 @@ public class ConnectorHelperTest {
             try {
                 Assert.assertTrue( ConnectorHelper.ReplaceParameter( in, params).equalsIgnoreCase( out));
             }
-            catch (WPSConnectorException e) {
+            catch (JMIException e) {
                 Assert.fail( e.getMessage());
             }
         }

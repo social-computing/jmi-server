@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.socialcomputing.utils.http.BasicAuthHttpClient;
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.Attribute;
 import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.Entity;
 import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.PropertyDefinition;
@@ -67,10 +67,10 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
      * @param element
      *            a JDOM element
      * @return a SolrEntityConnector instance
-     * @throws WPSConnectorException
+     * @throws JMIException
      */
 	public static SolrEntityConnector readObject(Element element) 
-	        throws WPSConnectorException {
+	        throws JMIException {
 
 	    LOG.info("Reading Solr configuration from JDOM tree : {}", element.toString());
 	    String name = element.getAttributeValue("name");
@@ -222,7 +222,7 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
     
 	@Override
 	public void openConnections(int planType, Hashtable<String, Object> wpsparams)
-	        throws WPSConnectorException {
+	        throws JMIException {
 		
 	    super.openConnections(planType, wpsparams);
 	    LOG.info("Query remote search server to get attributes and entities");
@@ -246,7 +246,7 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 	        }
 	    } 
 	    catch (MalformedURLException e) {
-	    	throw new WPSConnectorException("Invalid Solr connection URL", e);
+	    	throw new JMIException("Invalid Solr connection URL", e);
 	    }
 
 	    
@@ -287,7 +287,7 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
             
             SolrDocumentList docs = query(solrClient, solrQuery);
             if(docs.size() < 1) {
-                throw new WPSConnectorException("Invalid number of results");
+                throw new JMIException("Invalid number of results");
             }
             SolrDocument document = docs.get(0);
             
@@ -357,7 +357,7 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
                     Collection<Object> entityProperty = document.getFieldValues(field);
                     int size = (entityProperty == null) ? 0 : entityProperty.size();
                     if(entityProperty == null || entityProperty.size() != entityField.size()) {
-                        throw new WPSConnectorException(field + "should have the same number of values as " + this.entityField 
+                        throw new JMIException(field + "should have the same number of values as " + this.entityField 
                                                               + ", found: " + size + ", expected: " + entityField.size());
                     }
                     entityProperties.put(property.getName(), new ArrayList<Object>(entityProperty));
@@ -407,7 +407,7 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 	
 	
 	@Override
-	public void closeConnections() throws WPSConnectorException {
+	public void closeConnections() throws JMIException {
 		super.closeConnections();
 		// Nothing to do here
 	}
@@ -418,16 +418,16 @@ public class SolrEntityConnector extends SearchengineEntityConnector {
 	 * 
 	 * @param solrQuery a valid Solr query
 	 * @return A list of Solr documents
-	 * @throws WPSConnectorException if something bad happened when connecting to the Solr server
+	 * @throws JMIException if something bad happened when connecting to the Solr server
 	 */
 	private static SolrDocumentList query(CommonsHttpSolrServer solrClient, SolrQuery solrQuery) 
-			throws WPSConnectorException {
+			throws JMIException {
         QueryResponse response;
         try {
             response = solrClient.query(solrQuery);
         } 
         catch (SolrServerException e) {
-            throw new WPSConnectorException("Erreur while connecting to Solr server", e);
+            throw new JMIException("Erreur while connecting to Solr server", e);
         }
         LOG.info("{} documents found in {} seconds", response.getResults().getNumFound(), response.getQTime());
         return response.getResults();

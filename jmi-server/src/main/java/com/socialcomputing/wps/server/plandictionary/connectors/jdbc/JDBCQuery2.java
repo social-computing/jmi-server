@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 
 /**
  * <p>Title: WPS Connectors</p>
@@ -76,7 +76,7 @@ public class JDBCQuery2 extends JDBCQuery
 	}
 
 	@Override
-	public ResultSet executeQuery() throws SQLException, WPSConnectorException
+	public ResultSet executeQuery() throws SQLException, JMIException
 	{
 		prepareQuery();
 		fillParameters();
@@ -154,7 +154,7 @@ public class JDBCQuery2 extends JDBCQuery
 		m_QueryPS = m_Connection.prepareStatement( nquery.toString());
 	}
 	
-	private void fillParameters() throws SQLException, WPSConnectorException
+	private void fillParameters() throws SQLException, JMIException
 	{
 		for( int i = 1; i <= listParameters.size(); ++i)
 		{
@@ -163,17 +163,17 @@ public class JDBCQuery2 extends JDBCQuery
 			 {
 				 case QueryParameter.CUR_ENTITY:
 					 if( curEntity == null)
-						 throw new WPSConnectorException( "JDBCQuery2 curEntity is not set for query: " + m_Query);
+						 throw new JMIException(JMIException.ORIGIN.CONNECTOR, "JDBCQuery2 curEntity is not set for query: " + m_Query);
 					 fillParameter( i, qp.type, curEntity);
 					 break;
 				 case QueryParameter.CUR_ATTRIBUTE:
 					 if( curAttribute == null)
-						 throw new WPSConnectorException( "JDBCQuery2 curAttribute is not set for query: " + m_Query);
+						 throw new JMIException(JMIException.ORIGIN.CONNECTOR, "JDBCQuery2 curAttribute is not set for query: " + m_Query);
 					 fillParameter( i, qp.type, curAttribute);
 					 break;
 				 case QueryParameter.CUR_SUB_ATTRIBUTE:
 					 if( curSubAttribute == null)
-						 throw new WPSConnectorException( "JDBCQuery2 curSubAttribute is not set for query: " + m_Query);
+						 throw new JMIException(JMIException.ORIGIN.CONNECTOR, "JDBCQuery2 curSubAttribute is not set for query: " + m_Query);
 					fillParameter( i, qp.type, curSubAttribute);
 					 break;
 				 case QueryParameter.VALUE:
@@ -182,7 +182,7 @@ public class JDBCQuery2 extends JDBCQuery
 			 }
 		}
 	}
-	private void fillParameter( int index, int type, String stringValue) throws SQLException, WPSConnectorException
+	private void fillParameter( int index, int type, String stringValue) throws SQLException, JMIException
 	{
 		if((type & 0x00FF) == QueryParameter.STRING)
 		{

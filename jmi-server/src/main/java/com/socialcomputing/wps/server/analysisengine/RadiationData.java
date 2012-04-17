@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.TreeSet;
 
 import com.socialcomputing.wps.server.planDictionnary.connectors.AttributeEnumeratorItem;
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.plandictionary.AnalysisProfile;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
@@ -100,7 +100,7 @@ public class RadiationData
 
 	/**
 	 */
-	public  RadiationData( PlanRequest planRequest, Collection entities )  throws WPSConnectorException
+	public  RadiationData( PlanRequest planRequest, Collection entities )  throws JMIException
 	{
 		int lastNumOfRequestingEntity=0;
 
@@ -224,7 +224,7 @@ public class RadiationData
 	}
 
 
-	private final void filteringAttributes(int numToStartFiltering) throws WPSConnectorException
+	private final void filteringAttributes(int numToStartFiltering) throws JMIException
 	{
 		int target=Math.min(15*m_PlanRequest.getAnalysisProfile().m_AttributesMaxNb, 1000);
 
@@ -519,7 +519,7 @@ public class RadiationData
 		return firstAttributeNum;
 	}
 
-	public final NumAndFloat [] getNumericalProfile( String entity )  throws WPSConnectorException
+	public final NumAndFloat [] getNumericalProfile( String entity )  throws JMIException
 	{
 		return getNumericalProfile(  entity , true);
 	}
@@ -527,7 +527,7 @@ public class RadiationData
 	/**
 	 * * Get an array of numerical which describe the attributes of entity
 	 */
-	public final NumAndFloat [] getNumericalProfile( String entity , boolean buffering)  throws WPSConnectorException
+	public final NumAndFloat [] getNumericalProfile( String entity , boolean buffering)  throws JMIException
 	{
 		NumAndFloat [] array;
 		boolean discoverAddFlag = m_discoverAddFlag;
@@ -587,7 +587,7 @@ public class RadiationData
 	}
 
 
-	public final Collection getNumProfileCollection( String entity )  throws WPSConnectorException
+	public final Collection getNumProfileCollection( String entity )  throws JMIException
 	{
 		NumAndFloat [] array;
 		Collection ret= new ArrayList();
@@ -623,7 +623,7 @@ public class RadiationData
 
 	/**
 	 */
-	public final float getAverageRadiation( String entity )  throws WPSConnectorException
+	public final float getAverageRadiation( String entity )  throws JMIException
 	{
 		float sum=0;
 		NumAndFloat [] profile=getNumericalProfile(entity);
@@ -637,7 +637,7 @@ public class RadiationData
 	}
 	/**
 	 */
-	public  final float getAverageBalancedRadiation( String entity )  throws WPSConnectorException
+	public  final float getAverageBalancedRadiation( String entity )  throws JMIException
 	{
 		float sum=0;
 		NumAndFloat [] profile=getNumericalProfile(entity);
@@ -652,7 +652,7 @@ public class RadiationData
 	/**
 	 * attributes must be a sorted array
 	 */
-	public  final float getAverageRadiation( String entity , int[] attributes)  throws WPSConnectorException
+	public  final float getAverageRadiation( String entity , int[] attributes)  throws JMIException
 	{
 		float sum=0;
 		NumAndFloat [] profile=getNumericalProfile(entity);
@@ -667,7 +667,7 @@ public class RadiationData
 		return sum/(float)profile.length;
 	}
 
-	public  final float getAverageRadiation( String entity , SymmetricalMatrix radMatrix, int [] attributes)  throws WPSConnectorException
+	public  final float getAverageRadiation( String entity , SymmetricalMatrix radMatrix, int [] attributes)  throws JMIException
 	{
 		int sum=0;
 		int value;
@@ -690,7 +690,7 @@ public class RadiationData
 	/**
 	 * attributes must be a sorted array
 	 */
-	public  final float getAverageBalancedRadiation( String entity , int[] attributes)  throws WPSConnectorException
+	public  final float getAverageBalancedRadiation( String entity , int[] attributes)  throws JMIException
 	{
 		float sum=0;
 		NumAndFloat [] profile=getNumericalProfile(entity);
@@ -704,7 +704,7 @@ public class RadiationData
   return sum/(float)profile.length;
 	}
 
-	public  final float getAverageBalancedRadiation( String entity , FSymmetricalMatrix radMatrix, int[] attributes)  throws WPSConnectorException
+	public  final float getAverageBalancedRadiation( String entity , FSymmetricalMatrix radMatrix, int[] attributes)  throws JMIException
 	{
 		float sum=0;
 		float value=0;

@@ -1,6 +1,6 @@
 package com.socialcomputing.wps.server.plandictionary.connectors;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.utils.StringAndFloat;
 
 /**
@@ -14,5 +14,5 @@ import com.socialcomputing.wps.server.utils.StringAndFloat;
 
 public interface iAffinityGroupReader
 {
-	public  StringAndFloat [] retrieveAffinityGroup( String id, int affinityThreshold, int max) throws WPSConnectorException;
+	public  StringAndFloat [] retrieveAffinityGroup( String id, int affinityThreshold, int max) throws JMIException;
 }

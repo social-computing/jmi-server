@@ -6,13 +6,13 @@ import java.util.Hashtable;
 import org.jdom.JDOMException;
 import org.junit.Test;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.planDictionnary.connectors.utils.UrlHelper;
 
 public class UrlHelperTest {
 
     @Test
-    public void testOk() throws WPSConnectorException, JDOMException, IOException
+    public void testOk() throws JMIException, JDOMException, IOException
     {
         UrlHelper u = new UrlHelper( UrlHelper.Type.GET, "http://news.google.com/news?ned=us&topic=h&output=rss");
         u.openConnections( 0, new Hashtable<String, Object>());

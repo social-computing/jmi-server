@@ -43,7 +43,7 @@ public class VisualMapper extends Mapper implements RelaxListener
 	 * Generate a Plan , while waiting for the user at each stages.
 	 * If the Plan is degenerated no visual feedback can be done.
 	 */
-	public void generatePlan() throws com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException
+	public void generatePlan() throws com.socialcomputing.wps.server.planDictionnary.connectors.JMIException
 	{
 		GfxTester   tester  = new GfxTester();
 		Bounds2D	winBnds	= m_protoPlan.m_mapDat.m_winBnds;

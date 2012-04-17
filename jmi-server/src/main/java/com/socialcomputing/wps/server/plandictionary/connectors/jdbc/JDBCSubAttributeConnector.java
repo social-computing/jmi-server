@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Hashtable;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.plandictionary.connectors.SubAttributeEnumeratorItem;
 import com.socialcomputing.wps.server.plandictionary.connectors.iSubAttributeConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
@@ -60,7 +60,7 @@ public class JDBCSubAttributeConnector implements iSubAttributeConnector, Serial
 		m_Name = name;
 	}
 
-	public void openConnections( Hashtable<String, Object> wpsparams, Connection connection) throws WPSConnectorException
+	public void openConnections( Hashtable<String, Object> wpsparams, Connection connection) throws JMIException
 	{
 		if( m_UseEntityConnection)
 			m_Connection = connection;
@@ -72,7 +72,7 @@ public class JDBCSubAttributeConnector implements iSubAttributeConnector, Serial
 		m_SubAttributeQuery.open( wpsparams, m_Connection);
 	}
 
-	public void closeConnections() throws WPSConnectorException
+	public void closeConnections() throws JMIException
 	{
 		try {
 			m_SubAttributeQuery.close();
@@ -83,7 +83,7 @@ public class JDBCSubAttributeConnector implements iSubAttributeConnector, Serial
 		}
 		catch( SQLException e)
 		{
-			throw new WPSConnectorException( "JDBC connector can't close JDBCSubAttributeConnector connection", e);
+			throw new JMIException(JMIException.ORIGIN.CONNECTOR,"JDBC connector can't close JDBCSubAttributeConnector connection", e);
 		}
 	}
 
@@ -100,12 +100,12 @@ public class JDBCSubAttributeConnector implements iSubAttributeConnector, Serial
 	}
 
 	@Override
-	public iEnumerator<SubAttributeEnumeratorItem> getEnumerator( String entity, String attribute)  throws WPSConnectorException
+	public iEnumerator<SubAttributeEnumeratorItem> getEnumerator( String entity, String attribute)  throws JMIException
 	{
 		if( entity == null)
-			throw new WPSConnectorException( "JDBCSubAttributeConnector failed to set getEnumerator, entity is null");
+			throw new JMIException(JMIException.ORIGIN.CONNECTOR, "JDBCSubAttributeConnector failed to set getEnumerator, entity is null");
 		if( attribute == null)
-			throw new WPSConnectorException( "JDBCSubAttributeConnector failed to set getEnumerator, attribute is null");
+			throw new JMIException(JMIException.ORIGIN.CONNECTOR, "JDBCSubAttributeConnector failed to set getEnumerator, attribute is null");
 		try {
 			m_SubAttributeQuery.setCurEntity( entity);
 			m_SubAttributeQuery.setCurAttribute( attribute);
@@ -113,12 +113,12 @@ public class JDBCSubAttributeConnector implements iSubAttributeConnector, Serial
 		}
 		catch( SQLException e)
 		{
-			throw new WPSConnectorException( "JDBCSubAttributeConnector failed to set enumerator", e);
+			throw new JMIException(JMIException.ORIGIN.CONNECTOR, "JDBCSubAttributeConnector failed to set enumerator", e);
 		}
 	}
 
 	@Override
-	public Hashtable<String, Object> getProperties( String subAttributeId, String attributeId, String entityId ) throws WPSConnectorException
+	public Hashtable<String, Object> getProperties( String subAttributeId, String attributeId, String entityId ) throws JMIException
 	{
 		Hashtable<String, Object> table = new Hashtable<String, Object>();
 		if( m_Properties != null)

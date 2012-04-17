@@ -2,7 +2,7 @@ package com.socialcomputing.wps.server.plandictionary;
 
 import com.socialcomputing.wps.server.generator.MapData;
 import com.socialcomputing.wps.server.generator.RecommendationGroup;
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEntityConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iProfileConnector;
 
@@ -160,13 +160,13 @@ public class AnalysisProfile implements java.io.Serializable
 		m_Name = name;
 	}
 
-	public void checkIntegrity( String m, iEntityConnector entities) throws org.jdom.JDOMException, WPSConnectorException
+	public void checkIntegrity( String m, iEntityConnector entities) throws org.jdom.JDOMException, JMIException
 	{
 		if( entities.getProfile( m_AttributesRef) == null)
 			throw new org.jdom.JDOMException( m + ", Analysis Profile '" + m_Name + "', Unknown Attributes '" + m_AttributesRef + "'");
 	}
 
-	public iProfileConnector getConnector( WPSDictionary dico) throws WPSConnectorException
+	public iProfileConnector getConnector( WPSDictionary dico) throws JMIException
 	{
 		return dico.m_EntitiesConnector.getProfile( m_AttributesRef);
 	}

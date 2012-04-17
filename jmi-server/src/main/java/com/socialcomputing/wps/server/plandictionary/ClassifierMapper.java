@@ -4,7 +4,7 @@ import java.util.Hashtable;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEntityConnector;
 import com.socialcomputing.wps.server.webservices.RequestingClassifyId;
@@ -95,7 +95,7 @@ public class ClassifierMapper implements java.io.Serializable
         return m_ClassifierData.entrySet();
     }
 
-	public String getAssociatedName( iEntityConnector entityConnector, RequestingClassifyId classifyId)  throws WPSConnectorException
+	public String getAssociatedName( iEntityConnector entityConnector, RequestingClassifyId classifyId)  throws JMIException
 	{
 		if( m_ClassifierName.equals(  WPSDictionary.DEFAULT_NAME)) // No segmentation
 			return m_DefaultClassifierData;
@@ -129,7 +129,7 @@ public class ClassifierMapper implements java.io.Serializable
 	}
 
 	// Apply segmentation rules for an entity
-	public String classify( iEntityConnector entityConnector, String entityId) throws WPSConnectorException
+	public String classify( iEntityConnector entityConnector, String entityId) throws JMIException
 	{
 		iClassifierConnector cl = entityConnector.getClassifier( m_ClassifierName);
 		return cl.getClassification( entityId);
@@ -174,7 +174,7 @@ public class ClassifierMapper implements java.io.Serializable
 	}
 
 	// Check classifiers integrity
-	private void checkIntegrity( String m, iEntityConnector entities) throws org.jdom.JDOMException, WPSConnectorException
+	private void checkIntegrity( String m, iEntityConnector entities) throws org.jdom.JDOMException, JMIException
 	{
 		if( m_ClassifierName.equals(  WPSDictionary.DEFAULT_NAME)) // No segmentation
 			return;
@@ -184,7 +184,7 @@ public class ClassifierMapper implements java.io.Serializable
 	}
 
 	// Check classifiers and models integrity
-	public void checkIntegrityForModels( String m, WPSDictionary dico, String attributes) throws org.jdom.JDOMException, WPSConnectorException
+	public void checkIntegrityForModels( String m, WPSDictionary dico, String attributes) throws org.jdom.JDOMException, JMIException
 	{
 		this.checkIntegrity( m, dico.m_EntitiesConnector);
 

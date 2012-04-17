@@ -16,7 +16,7 @@ import com.socialcomputing.wps.server.generator.Recommendable;
 import com.socialcomputing.wps.server.generator.RecommendationGroup;
 import com.socialcomputing.wps.server.persistence.Swatch;
 import com.socialcomputing.wps.server.persistence.hibernate.SwatchManagerImpl;
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.plandictionary.AffinityReaderProfile;
 import com.socialcomputing.wps.server.plandictionary.AnalysisProfile;
 import com.socialcomputing.wps.server.plandictionary.Model;
@@ -52,7 +52,7 @@ public class PlanRequest {
     public RequestingClassifyId m_classifyId = null;
 
     public PlanRequest(Connection WPSConnection, WPSDictionary dico, Hashtable<String, Object> parameters)
-            throws WPSConnectorException {
+            throws JMIException {
         m_LoadedSwatch = new Hashtable<String, XSwatch>();
         m_Dictionary = dico;
         m_RequestParameters = parameters;
@@ -72,12 +72,12 @@ public class PlanRequest {
         switch (analysisProfile.m_planType) {
             case AnalysisProfile.PERSONAL_PLAN:
                 if (m_entityId == null)
-                    throw new WPSConnectorException("JMI server : entityId parameter is not set for personal plan");
+                    throw new JMIException(JMIException.ORIGIN.PARAMETER, "entityId parameter is not set for personal plan");
                 break;
             case AnalysisProfile.DISCOVERY_PLAN:
                 m_discoveryAttributeId = getParameter("attributeId");
                 if (m_discoveryAttributeId == null)
-                    throw new WPSConnectorException("JMI server : attributeId parameter is not set for discovery plan");
+                    throw new JMIException(JMIException.ORIGIN.PARAMETER, "attributeId parameter is not set for discovery plan");
                 if (analysisProfile.m_AttributesRef.indexOf('=') != -1
                         || analysisProfile.m_AttributesRef.indexOf('&') != -1) {
                     StringTokenizer st = new StringTokenizer(analysisProfile.m_AttributesRef, "&");
@@ -108,7 +108,7 @@ public class PlanRequest {
         return param == null ? defaultPrm : param;
     }
 
-    public AnalysisProfile getAnalysisProfile() throws WPSConnectorException {
+    public AnalysisProfile getAnalysisProfile() throws JMIException {
         if (m_AnalysisProfile != null) // Speeder
             return m_AnalysisProfile;
         String profile = this.getParameter("analysisProfile");
@@ -123,36 +123,32 @@ public class PlanRequest {
         return m_AnalysisProfile;
     }
 
-    public AffinityReaderProfile getAffinityReaderProfile() throws WPSConnectorException {
+    public AffinityReaderProfile getAffinityReaderProfile() throws JMIException {
         if (m_AffinityReaderProfile != null)
             return m_AffinityReaderProfile;
         String grpName = this.getParameter("affinityReaderProfile");
         if (grpName == null) { // AffinityGroupReader is dictionary defined
-            m_AffinityReaderProfile = m_Dictionary.getAffinityReaderProfile(this.getAnalysisProfile().m_Name,
-                                                                            m_classifyId);
+            m_AffinityReaderProfile = m_Dictionary.getAffinityReaderProfile(this.getAnalysisProfile().m_Name,m_classifyId);
         }
         else { // AffinityGroupReader is applet defined
             m_AffinityReaderProfile = m_Dictionary.getAffinityReaderProfile(grpName);
             if (m_AffinityReaderProfile == null) // Error : set to default
-                m_AffinityReaderProfile = m_Dictionary.getAffinityReaderProfile(this.getAnalysisProfile().m_Name,
-                                                                                m_classifyId);
+                m_AffinityReaderProfile = m_Dictionary.getAffinityReaderProfile(this.getAnalysisProfile().m_Name,m_classifyId);
         }
         return m_AffinityReaderProfile;
     }
 
-    public Model getModel() throws WPSConnectorException {
+    public Model getModel() throws JMIException {
         if (m_Model != null) // Speeder
             return m_Model;
         String modelName = this.getParameter("displayProfile");
         if (modelName == null) { // Model is dictionary defined
-            m_Model = m_Dictionary.getModel(this.getAnalysisProfile().m_Name, getParameter("language", "en"),
-                                            m_classifyId);
+            m_Model = m_Dictionary.getModel(this.getAnalysisProfile().m_Name, getParameter("language", "en"),m_classifyId);
         }
         else { // Model is applet defined
             m_Model = (Model) m_Dictionary.m_Models.get(modelName);
             if (m_Model == null) // Error : set to default
-                m_Model = m_Dictionary.getModel(this.getAnalysisProfile().m_Name, getParameter("language", "en"),
-                                                m_classifyId);
+                m_Model = m_Dictionary.getModel(this.getAnalysisProfile().m_Name, getParameter("language", "en"),m_classifyId);
         }
         return m_Model;
     }
@@ -162,7 +158,7 @@ public class PlanRequest {
      * (32bits Integer). The Model find the Swatch corresponding to this id and
      * calls getBoundNames. Those names can be cached by the ServerSwatch
      */
-    public Hashtable<String, Object> getEntityProps(String swatchName, String id) throws WPSConnectorException {
+    public Hashtable<String, Object> getEntityProps(String swatchName, String id) throws JMIException {
         // DB properties
         Hashtable<String, Object> dbProperties = m_Dictionary.getEntityConnector().getProperties(id);
 
@@ -193,8 +189,7 @@ public class PlanRequest {
                     if (prop != null) {
                         Object v = val.getValue(name, prop);
                         if (v == null)
-                            throw new WPSConnectorException("Entity '" + id + "' property '" + name
-                                    + "' can't be evaluated ");
+                            throw new JMIException(JMIException.ORIGIN.PROPERTY,"Entity '" + id + "' property '" + name + "' can't be evaluated ");
                         swatchProperties.put(name, v);
                     }
                 }
@@ -226,12 +221,12 @@ public class PlanRequest {
     }
 
     public void updateAttLinkInterProps(AttributeLink link, XSwatch restSwh, XSwatch curSwh, Hashtable props)
-            throws WPSConnectorException {
+            throws JMIException {
         updateInterProps(null, restSwh, curSwh, props);
     }
 
     public void updateInterProps(ProtoAttribute att, XSwatch restSwh, XSwatch curSwh, Hashtable props)
-            throws WPSConnectorException {
+            throws JMIException {
         // Generator used swatch properties
         InterValue[] restVals = restSwh.getAdaptiveInterValues(), curVals = curSwh.getAdaptiveInterValues();
         InterValue val;
@@ -247,7 +242,7 @@ public class PlanRequest {
             if (prop != null) {
                 Object v = val.getValue(name, prop);
                 if (v == null)
-                    throw new WPSConnectorException("Link property '" + name + "' can't be evaluated ");
+                    throw new JMIException(JMIException.ORIGIN.PROPERTY,"Link property '" + name + "' can't be evaluated ");
             }
         }
     }
@@ -258,7 +253,7 @@ public class PlanRequest {
      * calls getBoundNames. Those names can be cached by the XSwatch.
      */
     public void putAttributeProps(Recommendable recommendable, XSwatch restSwh, XSwatch curSwh,
-                                  Hashtable<String, Object> props) throws WPSConnectorException {
+                                  Hashtable<String, Object> props) throws JMIException {
         // DB properties
         boolean isBase = recommendable.isRef();
         String strId = recommendable.getStrId();
@@ -325,7 +320,7 @@ public class PlanRequest {
                     else if (!props.containsKey(name)) {
                         Object v = val.getValue(name, prop);
                         if (v == null)
-                            throw new WPSConnectorException("Attribute '" + strId + "' property '" + name
+                            throw new JMIException(JMIException.ORIGIN.PROPERTY,"Attribute '" + strId + "' property '" + name
                                     + "' can't be evaluated ");
                         props.put(name, v);
                     }
@@ -364,7 +359,7 @@ public class PlanRequest {
      * calls getBoundNames. Those names can be cached by the XSwatch.
      */
     public void putAttLinkProps(Recommendable recommendable, XSwatch restSwh, XSwatch curSwh, Hashtable props)
-            throws WPSConnectorException {
+            throws JMIException {
         boolean isReal = recommendable != null;
         AnalysisProfile profile = isReal ? getAnalysisProfile() : null;
         ValueContainer[] restVals = restSwh.getProps(), curVals = curSwh == null ? null : curSwh.getProps();
@@ -442,7 +437,7 @@ public class PlanRequest {
     }
 
     private Hashtable<String, Object> transformRecommendation(Recommendable recommendable, AnalysisProfile profile,
-                                                              int recIndex) throws WPSConnectorException {
+                                                              int recIndex) throws JMIException {
         String[] strIds = (String[]) recommendable.getRecommendations(recIndex).toArray(new String[0]);
         Hashtable<String, Object> props = new Hashtable<String, Object>();
         int i, size = strIds.length;
@@ -491,7 +486,7 @@ public class PlanRequest {
      * @see #getGroupSwatchName
      * @see #getGroupSwatch
      */
-    public XSwatch getSwatch(int type, int style) throws WPSConnectorException {
+    public XSwatch getSwatch(int type, int style) throws JMIException {
         Model model = getModel();
         String swatchName = null;
 
@@ -532,7 +527,7 @@ public class PlanRequest {
      * Returns the named Swatch. Useful to retrieve the Swatchs after we've got
      * their names.
      */
-    public XSwatch getSwatch(String swatchName) throws WPSConnectorException {
+    public XSwatch getSwatch(String swatchName) throws JMIException {
         XSwatch swatch = null;
 
         if (swatchName != null) {
@@ -550,7 +545,7 @@ public class PlanRequest {
                     m_LoadedSwatch.put(swatchName, swatch);
                 }
                 catch (Exception e) {
-                    throw new WPSConnectorException("JMI server unable to find swatch", e);
+                    throw new JMIException(JMIException.ORIGIN.DEFINITION,"JMI server unable to find swatch", e);
                     //e.printStackTrace();
                 }
             }
@@ -559,7 +554,7 @@ public class PlanRequest {
         return swatch;
     }
 
-    public Env initEnv() throws WPSConnectorException {
+    public Env initEnv() throws JMIException {
         Model model = this.getModel();
         Env env = new Env();
 
@@ -593,7 +588,7 @@ public class PlanRequest {
     }
 
     static public Object ExtractProperty(String definition, Hashtable<String, Object> properties)
-            throws WPSConnectorException {
+            throws JMIException {
         if (definition.indexOf('&') == -1)
             return properties.get(definition);
 

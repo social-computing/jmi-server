@@ -1,6 +1,6 @@
 package com.socialcomputing.wps.server.plandictionary;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iAffinityGroupReader;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEntityConnector;
 
@@ -48,14 +48,14 @@ public class AffinityReaderProfile implements java.io.Serializable
 		m_Name = name;
 	}
 
-	public iAffinityGroupReader getConnector( WPSDictionary dico)  throws WPSConnectorException
+	public iAffinityGroupReader getConnector( WPSDictionary dico)  throws JMIException
 	{
 		if( m_ReaderRef.equalsIgnoreCase(  WPSDictionary.DEFAULT_NAME))
 			return m_defaultConnector;
 		return dico.m_EntitiesConnector.getAffinityGroupReader( m_ReaderRef);
 	}
 
-	public void checkIntegrity( String m, iEntityConnector entities) throws org.jdom.JDOMException, WPSConnectorException
+	public void checkIntegrity( String m, iEntityConnector entities) throws org.jdom.JDOMException, JMIException
 	{
 		if( m_ReaderRef.equalsIgnoreCase(  WPSDictionary.DEFAULT_NAME))
 			return;

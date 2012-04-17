@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import com.socialcomputing.wps.server.generator.RecommendationGroup;
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.plandictionary.AffinityReaderProfile;
 import com.socialcomputing.wps.server.plandictionary.AnalysisProfile;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
@@ -38,7 +38,7 @@ public class RecommendationInterface
 
 	/**
 	* Compute recommandation for a given list of attributes */
-	public  void computeRecommendations( Collection attributes ) throws WPSConnectorException
+	public  void computeRecommendations( Collection attributes ) throws JMIException
 	{
 		m_RecommendationProcess.compute((String [])attributes.toArray());
 	}
@@ -66,7 +66,7 @@ public class RecommendationInterface
 
 	/**
 	*/
-	public Collection<String> retrieveAffinityGroup() throws WPSConnectorException
+	public Collection<String> retrieveAffinityGroup() throws JMIException
 	{
 		Collection<String> retVal = new ArrayList<String>();
 		AffinityReaderProfile affinityProfile = m_PlanRequest.getAffinityReaderProfile();

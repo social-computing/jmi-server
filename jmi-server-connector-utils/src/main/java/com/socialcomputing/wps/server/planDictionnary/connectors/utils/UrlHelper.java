@@ -21,7 +21,7 @@ import org.jdom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 
 import sun.misc.BASE64Encoder;
 
@@ -66,17 +66,16 @@ public class UrlHelper extends ConnectorHelper {
     @Override
     public void readObject(Element connection) {
         url = connection.getChildText("url");
-        if (connection.getAttributeValue("type") != null
-                && connection.getAttributeValue("type").equalsIgnoreCase("POST"))
+        if (connection.getAttributeValue("type") != null && connection.getAttributeValue("type").equalsIgnoreCase("POST")) {
             type = Type.POST;
-        LOG.debug("type = {}", this.type);
+        }
         for (Element elem : (List<Element>) connection.getChildren("url-header")) {
-            NameValuePair nameValue = new NameValuePair(elem.getAttributeValue("name"), elem.getText());
+            NameValuePair nameValue = new NameValuePair(elem.getAttributeValue("name"), elem.getText(), elem.getAttributeValue("default"));
             LOG.debug("url header = {}", nameValue);
             headerParams.add(nameValue);
         }
         for (Element elem : (List<Element>) connection.getChildren("url-parameter")) {
-            NameValuePair nameValue = new NameValuePair(elem.getAttributeValue("name"), elem.getText());
+            NameValuePair nameValue = new NameValuePair(elem.getAttributeValue("name"), elem.getText(), elem.getAttributeValue("default"));
             LOG.debug("url parameter = {}", nameValue);
             defParams.add(nameValue);
         }
@@ -89,12 +88,12 @@ public class UrlHelper extends ConnectorHelper {
         }
     }
 
-    public void openConnections() throws WPSConnectorException {
+    public void openConnections() throws JMIException {
         openConnections(0, null);
     }
 
     @Override
-    public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
+    public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws JMIException {
         LOG.debug("UrlHelper open connections");
         StringBuilder parameters = new StringBuilder();
         HttpURLConnection httpConnection = null;
@@ -164,12 +163,12 @@ public class UrlHelper extends ConnectorHelper {
                 stream = httpConnection.getErrorStream();
             }
             LOG.error(e.getMessage(), e);
-            throw new WPSConnectorException("openConnections: ", e);
+            throw new JMIException("openConnections: ", e);
         }
     }
 
     @Override
-    public void closeConnections() throws WPSConnectorException {
+    public void closeConnections() throws JMIException {
         if (stream != null) {
             try {
                 stream.close();
@@ -200,12 +199,12 @@ public class UrlHelper extends ConnectorHelper {
         return defParams;
     }
 
-    public InputStream getStream() throws WPSConnectorException {
+    public InputStream getStream() throws JMIException {
         try {
             return contentEncoding != null && contentEncoding.equalsIgnoreCase("gzip") ? new GZIPInputStream(stream) : stream;
         }
         catch (IOException e) {
-            throw new WPSConnectorException("UrlHelper read failed", e);
+            throw new JMIException("UrlHelper read failed", e);
         }
     }
 
@@ -257,7 +256,7 @@ public class UrlHelper extends ConnectorHelper {
         headerParams.add(new NameValuePair(name, value));
     }
     
-    public void setBasicAuth( String user, String password) throws WPSConnectorException {
+    public void setBasicAuth( String user, String password) throws JMIException {
         basicAuth = true;
         this.user = user;
         this.password = password;

@@ -19,7 +19,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 
 import sun.misc.BASE64Encoder;
 
@@ -127,7 +127,7 @@ public class OAuthHelper {
         }
     }
     
-    static public OAuthHelper GetOAuth(String key, String token) throws WPSConnectorException {
+    static public OAuthHelper GetOAuth(String key, String token) throws JMIException {
         OAuthHelper oAuth = new OAuthHelper();
         try {
             oAuth.addSignatureParam("oauth_consumer_key", key);
@@ -138,12 +138,12 @@ public class OAuthHelper {
             oAuth.addSignatureParam("oauth_version", "1.0");
         }
         catch (Exception e) {
-            throw new WPSConnectorException("GetOAuth: ", e);
+            throw new JMIException("GetOAuth: ", e);
         }
         return oAuth;
     }
     
-    static public Map<String,String> GetAccessToken(String accessTokenUrl, String key, String secret, String authTokenSecret, String token, String verifier) throws WPSConnectorException {
+    static public Map<String,String> GetAccessToken(String accessTokenUrl, String key, String secret, String authTokenSecret, String token, String verifier) throws JMIException {
         Map<String,String> result = new HashMap<String,String>();
         OAuthHelper oAuth = new OAuthHelper();
         try {
@@ -165,12 +165,12 @@ public class OAuthHelper {
             }
         }
         catch (Exception e) {
-            throw new WPSConnectorException("GetAccessToken: ", e);
+            throw new JMIException("GetAccessToken: ", e);
         }
         return result;
     }
     
-    static public Map<String,String> GetRequestToken(String requestTokenUrl, String callback, String key, String secret) throws WPSConnectorException {
+    static public Map<String,String> GetRequestToken(String requestTokenUrl, String callback, String key, String secret) throws JMIException {
         Map<String,String> result = new HashMap<String,String>();
         OAuthHelper oAuth = new OAuthHelper();
         try {
@@ -191,7 +191,7 @@ public class OAuthHelper {
             }
         }
         catch (Exception e) {
-            throw new WPSConnectorException("GetRequestToken: ", e);
+            throw new JMIException("GetRequestToken: ", e);
         }
         return result;
     }

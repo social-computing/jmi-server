@@ -6,7 +6,7 @@ import java.util.Hashtable;
 import org.jdom.Element;
 
 import com.socialcomputing.wps.server.planDictionnary.connectors.AttributeEnumeratorItem;
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 import com.socialcomputing.wps.server.plandictionary.connectors.iProfileConnector;
@@ -42,7 +42,7 @@ public class DatastoreProfileConnector implements iProfileConnector {
 	}
 
 	@Override
-	public iEnumerator<AttributeEnumeratorItem> getEnumerator(String entityId) throws WPSConnectorException {
+	public iEnumerator<AttributeEnumeratorItem> getEnumerator(String entityId) throws JMIException {
         if( m_entityConnector.isInverted()) {
             DataEnumerator<AttributeEnumeratorItem> e = new DataEnumerator<AttributeEnumeratorItem>();
             for( String id : m_entityConnector.getAttribute(entityId).getEntities()) {
@@ -56,37 +56,37 @@ public class DatastoreProfileConnector implements iProfileConnector {
 	}
 
 	@Override
-	public iEnumerator<String> getExclusionEnumerator(String entityId) throws WPSConnectorException {
+	public iEnumerator<String> getExclusionEnumerator(String entityId) throws JMIException {
 		return new DataEnumerator<String>();
 	}
 
 	@Override
-	public Hashtable<String, Object> getAnalysisProperties(String attributeId, String entityId) throws WPSConnectorException {
+	public Hashtable<String, Object> getAnalysisProperties(String attributeId, String entityId) throws JMIException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Hashtable<String, Object> getProperties(String attributeId, boolean bInBase, String entityId) throws WPSConnectorException {
+	public Hashtable<String, Object> getProperties(String attributeId, boolean bInBase, String entityId) throws JMIException {
 		return m_entityConnector.isInverted() ? 
                 m_entityConnector.getEntity( attributeId).getProperties() 
 		        : m_entityConnector.getAttribute( attributeId).getProperties();
 	}
 
 	@Override
-	public iSubAttributeConnector getSubAttribute() throws WPSConnectorException {
+	public iSubAttributeConnector getSubAttribute() throws JMIException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<iSelectionConnector> getSelections() throws WPSConnectorException {
+	public Collection<iSelectionConnector> getSelections() throws JMIException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public iSelectionConnector getSelection(String selectionId) throws WPSConnectorException {
+	public iSelectionConnector getSelection(String selectionId) throws JMIException {
 		// TODO Auto-generated method stub
 		return null;
 	}

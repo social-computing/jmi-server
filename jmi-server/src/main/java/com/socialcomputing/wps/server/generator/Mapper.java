@@ -254,7 +254,7 @@ public class Mapper {
 	/**
 	 * Generate a new Plan by executing all the stages.
 	 */
-	public void generatePlan() throws com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException {
+	public void generatePlan() throws com.socialcomputing.wps.server.planDictionnary.connectors.JMIException {
 		EZTimer timer = new EZTimer();
 
 		if (!m_protoPlan.m_isDegenerated) {
@@ -476,7 +476,7 @@ public class Mapper {
 					tesselate();
 				else
 					normalizeData();
-			} catch (com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException e) {
+			} catch (com.socialcomputing.wps.server.planDictionnary.connectors.JMIException e) {
 				e.printStackTrace();
 			}
 			break;
@@ -555,7 +555,7 @@ public class Mapper {
 	 * are added only if they exists in the ProtoPlan and the angle between them
 	 * and previous links is > PI/8.
 	 */
-	protected void tesselate() throws com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException {
+	protected void tesselate() throws com.socialcomputing.wps.server.planDictionnary.connectors.JMIException {
 		ArrayList edges = m_delaunay.process().edges(), fakeEdges = new ArrayList();
 		QuadEdge edge;
 		NodeRelaxData fromDat, toDat;
@@ -688,7 +688,7 @@ public class Mapper {
 	 * Creates the WPSApplet Plan using the Mapper nodes and links. Links are
 	 * sorted using the LinkMapData.s_comp comparator.
 	 */
-	protected void toZones() throws com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException {
+	protected void toZones() throws com.socialcomputing.wps.server.planDictionnary.connectors.JMIException {
 		int i, j, n = m_nodes.length, m = m_fakeLinks.length;
 		// ActiveZone zone;
 		// NodeMapData node;
@@ -766,7 +766,7 @@ public class Mapper {
 	 * evaluated. Then the automatic "inter" properties can be set.
 	 */
 	protected void initNodesSwatchs()
-			throws com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException {
+			throws com.socialcomputing.wps.server.planDictionnary.connectors.JMIException {
 		EZTimer timer = new EZTimer();
 		// NodeMapData sNode;
 		ProtoAttribute att;
@@ -822,7 +822,7 @@ public class Mapper {
 	 * Initialize the link Swatchs and properties for the WPSApplet (LinkZones).
 	 */
 	protected void initLinksSwatchs()
-			throws com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException {
+			throws com.socialcomputing.wps.server.planDictionnary.connectors.JMIException {
 		EZTimer timer = new EZTimer();
 		LinkMapData sLink;
 		AttributeLink link;

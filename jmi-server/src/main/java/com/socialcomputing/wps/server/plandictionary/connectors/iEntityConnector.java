@@ -3,7 +3,7 @@ package com.socialcomputing.wps.server.plandictionary.connectors;
 import java.util.Collection;
 import java.util.Hashtable;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 
 public interface iEntityConnector {
 
@@ -26,92 +26,92 @@ public interface iEntityConnector {
      * 
      * @param planType
      * @param wpsparams
-     * @throws WPSConnectorException
+     * @throws JMIException
      */
-    void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException;
+    void openConnections(int planType, Hashtable<String, Object> wpsparams) throws JMIException;
 
     /**
      * Close all opened connections
      * 
-     * @throws WPSConnectorException
+     * @throws JMIException
      */
-    void closeConnections() throws WPSConnectorException;
+    void closeConnections() throws JMIException;
 
     /**
      * Load the entity properties (image, age, income, ...).
      * 
      * @param entityId
      * @return
-     * @throws WPSConnectorException
+     * @throws JMIException
      */
-    Hashtable<String, Object> getProperties(String entityId) throws WPSConnectorException;
+    Hashtable<String, Object> getProperties(String entityId) throws JMIException;
 
     /**
      * 
      * @return
-     * @throws WPSConnectorException
+     * @throws JMIException
      */
-    iEnumerator<String> getEnumerator() throws WPSConnectorException;
+    iEnumerator<String> getEnumerator() throws JMIException;
 
     /**
      * 
      * @return
-     * @throws WPSConnectorException
+     * @throws JMIException
      */
-    Collection<iAffinityGroupReader> getAffinityGroupReaders() throws WPSConnectorException;
+    Collection<iAffinityGroupReader> getAffinityGroupReaders() throws JMIException;
 
     /**
      * 
      * 
      * @param affGrpReader
      * @return
-     * @throws WPSConnectorException
+     * @throws JMIException
      */
-    iAffinityGroupReader getAffinityGroupReader(String affGrpReader) throws WPSConnectorException;
+    iAffinityGroupReader getAffinityGroupReader(String affGrpReader) throws JMIException;
 
     /**
      * 
      * 
      * @return
-     * @throws WPSConnectorException
+     * @throws JMIException
      */
-    Collection<iProfileConnector> getProfiles() throws WPSConnectorException;
+    Collection<iProfileConnector> getProfiles() throws JMIException;
 
     /**
      * 
      * @param profile
      * @return
-     * @throws WPSConnectorException
+     * @throws JMIException
      */
-    iProfileConnector getProfile(String profile) throws WPSConnectorException;
+    iProfileConnector getProfile(String profile) throws JMIException;
 
     /**
      * 
      * @return
-     * @throws WPSConnectorException
+     * @throws JMIException
      */
-    Collection<iClassifierConnector> getClassifiers() throws WPSConnectorException;
+    Collection<iClassifierConnector> getClassifiers() throws JMIException;
 
     /**
      * 
      * @param classifierId
      * @return
-     * @throws WPSConnectorException
+     * @throws JMIException
      */
-    iClassifierConnector getClassifier(String classifierId) throws WPSConnectorException;
+    iClassifierConnector getClassifier(String classifierId) throws JMIException;
 
     /**
      * 
      * @return
-     * @throws WPSConnectorException
+     * @throws JMIException
      */
-    Collection<iSelectionConnector> getSelections() throws WPSConnectorException;
+    Collection<iSelectionConnector> getSelections() throws JMIException;
 
     /**
      * 
      * @param selectionId
      * @return
-     * @throws WPSConnectorException
+     * @throws JMIException
      */
-    iSelectionConnector getSelection(String selectionId) throws WPSConnectorException;
+    iSelectionConnector getSelection(String selectionId) throws JMIException;
 }

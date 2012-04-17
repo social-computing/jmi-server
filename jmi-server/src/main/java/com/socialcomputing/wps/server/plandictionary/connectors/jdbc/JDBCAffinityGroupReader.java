@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iAffinityGroupReader;
 import com.socialcomputing.wps.server.utils.StringAndFloat;
 
@@ -52,7 +52,7 @@ public class JDBCAffinityGroupReader implements iAffinityGroupReader, Serializab
 		m_Name = name;
 	}
 
-	public void openConnections( Hashtable<String, Object> wpsparams, Connection connection) throws WPSConnectorException
+	public void openConnections( Hashtable<String, Object> wpsparams, Connection connection) throws JMIException
 	{
 		if( m_UseEntityConnection)
 			m_Connection = connection;
@@ -61,7 +61,7 @@ public class JDBCAffinityGroupReader implements iAffinityGroupReader, Serializab
 		m_ReaderQuery.open( wpsparams, m_Connection);
 	}
 
-	public void closeConnections() throws WPSConnectorException
+	public void closeConnections() throws JMIException
 	{
 		try {
 			m_ReaderQuery.close();
@@ -70,12 +70,12 @@ public class JDBCAffinityGroupReader implements iAffinityGroupReader, Serializab
 		}
 		catch( SQLException e)
 		{
-			throw new WPSConnectorException( "JDBC connector can't close JDBCAffinityGroupReader connection", e);
+			throw new JMIException(JMIException.ORIGIN.CONNECTOR, "JDBC connector can't close JDBCAffinityGroupReader connection", e);
 		}
 	}
 
 	@Override
-	public StringAndFloat[] retrieveAffinityGroup( String id, int affinityThreshold, int max) throws WPSConnectorException
+	public StringAndFloat[] retrieveAffinityGroup( String id, int affinityThreshold, int max) throws JMIException
 	{
 		boolean normalizeIt=false;
 		float pond;
@@ -100,7 +100,7 @@ public class JDBCAffinityGroupReader implements iAffinityGroupReader, Serializab
 		}
 		catch( SQLException e)
 		{
-			throw new WPSConnectorException( "JDBCAffinityGroupReader can not read affinity group", e);
+			throw new JMIException(JMIException.ORIGIN.CONNECTOR, "JDBCAffinityGroupReader can not read affinity group", e);
 		}
 
 		if (normalizeIt)

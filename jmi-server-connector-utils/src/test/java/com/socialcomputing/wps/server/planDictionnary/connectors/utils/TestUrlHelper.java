@@ -3,12 +3,12 @@ package com.socialcomputing.wps.server.planDictionnary.connectors.utils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 
 public class TestUrlHelper {
 
     @Test
-    public void testWww() throws WPSConnectorException {
+    public void testWww() throws JMIException {
         UrlHelper urlHelper = new UrlHelper("http://www.lemonde.fr");
         urlHelper.openConnections();
         Assert.assertTrue( urlHelper.getContentType().startsWith("text/html"));
@@ -18,7 +18,7 @@ public class TestUrlHelper {
     }
 
     @Test
-    public void testFeedsImage() throws WPSConnectorException {
+    public void testFeedsImage() throws JMIException {
         UrlHelper urlHelper = new UrlHelper("http://feeds.just-map-it.com/rest/feeds/feed/thumbnail.png");
         urlHelper.addParameter( "url", "http://www.social-computing.com/feed/");
         urlHelper.openConnections();
@@ -28,7 +28,7 @@ public class TestUrlHelper {
     }
     
     @Test
-    public void testLabs() throws WPSConnectorException {
+    public void testLabs() throws JMIException {
         UrlHelper urlHelper = new UrlHelper("http://labs.just-map-it.com/rest/viadeo/maps/contacts.json");
         urlHelper.openConnections();
         Assert.assertTrue( urlHelper.getContentType().startsWith("application/json"));

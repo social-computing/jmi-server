@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.socialcomputing.wps.server.planDictionnary.connectors.AttributeEnumeratorItem;
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.Attribute;
 import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.Entity;
 import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.PropertyDefinition;
@@ -54,7 +54,7 @@ public abstract class DatastoreEntityConnector extends StoreHelper implements iE
     }
 
     @Override
-    public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws WPSConnectorException {
+    public void openConnections(int planType, Hashtable<String, Object> wpsparams) throws JMIException {
         m_planType = planType;
         m_WPSParams = wpsparams;
 
@@ -67,7 +67,7 @@ public abstract class DatastoreEntityConnector extends StoreHelper implements iE
     }
 
     @Override
-    public void closeConnections() throws WPSConnectorException {
+    public void closeConnections() throws JMIException {
         for (DatastoreAffinityGroupReader affinityGroupReader : affinityGroupReaders) {
             affinityGroupReader.closeConnections();
         }
@@ -77,12 +77,12 @@ public abstract class DatastoreEntityConnector extends StoreHelper implements iE
     }
 
     @Override
-    public Hashtable<String, Object> getProperties(String entityId) throws WPSConnectorException {
+    public Hashtable<String, Object> getProperties(String entityId) throws JMIException {
         return isInverted() ? getAttribute(entityId).getProperties() : getEntity(entityId).getProperties();
     }
 
     @Override
-    public iEnumerator<String> getEnumerator() throws WPSConnectorException {
+    public iEnumerator<String> getEnumerator() throws JMIException {
         return isInverted() ? new DataEnumerator<String>(m_Attributes.keySet()) : new DataEnumerator<String>(m_Entities.keySet());
     }
 
@@ -98,35 +98,35 @@ public abstract class DatastoreEntityConnector extends StoreHelper implements iE
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public Collection getProfiles() throws WPSConnectorException {
+    public Collection getProfiles() throws JMIException {
         return profileConnectors;
     }
 
     @Override
-    public iProfileConnector getProfile(String profile) throws WPSConnectorException {
+    public iProfileConnector getProfile(String profile) throws JMIException {
         return profileConnectors.get(0);
     }
 
     @Override
-    public Collection<iClassifierConnector> getClassifiers() throws WPSConnectorException {
+    public Collection<iClassifierConnector> getClassifiers() throws JMIException {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public iClassifierConnector getClassifier(String classifierId) throws WPSConnectorException {
+    public iClassifierConnector getClassifier(String classifierId) throws JMIException {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Collection<iSelectionConnector> getSelections() throws WPSConnectorException {
+    public Collection<iSelectionConnector> getSelections() throws JMIException {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public iSelectionConnector getSelection(String selectionId) throws WPSConnectorException {
+    public iSelectionConnector getSelection(String selectionId) throws JMIException {
         // TODO Auto-generated method stub
         return null;
     }

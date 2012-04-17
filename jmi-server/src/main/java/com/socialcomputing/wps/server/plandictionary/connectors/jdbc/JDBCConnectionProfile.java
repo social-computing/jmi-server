@@ -7,7 +7,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 
 /**
  * Title:        WPS Connectors
@@ -63,7 +63,7 @@ public class JDBCConnectionProfile implements java.io.Serializable
 		m_URL = URL;
 	}
 
-	public Connection getConnection() throws WPSConnectorException
+	public Connection getConnection() throws JMIException
 	{
 		Connection connection = null;
 		try {
@@ -92,7 +92,7 @@ public class JDBCConnectionProfile implements java.io.Serializable
 		}
 		catch( Exception e)
 		{
-			throw new WPSConnectorException( "JDBC connector can not open connection: '" + (m_JNDIDataSource == null ? m_URL : m_JNDIDataSource) + "'", e);
+			throw new JMIException(JMIException.ORIGIN.CONNECTOR, "JDBC connector can not open connection: '" + (m_JNDIDataSource == null ? m_URL : m_JNDIDataSource) + "'", e);
 		}
 		return connection;
 	}

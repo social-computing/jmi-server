@@ -12,6 +12,7 @@ import com.socialcomputing.wps.client.applet.Env;
 import com.socialcomputing.wps.client.applet.Plan;
 import com.socialcomputing.wps.server.generator.json.PlanJSONProvider;
 import com.socialcomputing.wps.server.generator.json.PlanJSONProvider;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 
 /**
  * <p>Title: PlanContainer</p>
@@ -35,17 +36,23 @@ public class PlanContainer implements Serializable
 		m_plan = plan;
 	}
 	
-	public byte[] toBinary() throws IOException {
-        if (m_env != null) {
-            ByteArrayOutputStream bout = new ByteArrayOutputStream(32768);
-            ObjectOutputStream objectOutStream = new ObjectOutputStream(new GZIPOutputStream(bout));
-            objectOutStream.writeObject( m_env);
-            objectOutStream.writeObject( m_plan);
-            objectOutStream.close();
-            return bout.toByteArray();
+	public byte[] toBinary() throws JMIException {
+        try {
+            if (m_env != null) {
+                ByteArrayOutputStream bout = new ByteArrayOutputStream(32768);
+                ObjectOutputStream objectOutStream;
+                objectOutStream = new ObjectOutputStream(new GZIPOutputStream(bout));
+                objectOutStream.writeObject( m_env);
+                objectOutStream.writeObject( m_plan);
+                objectOutStream.close();
+                return bout.toByteArray();
+            }
+            else {
+                return new byte[0];
+            }
         }
-        else {
-            return new byte[0];
+        catch (IOException e) {
+            throw new JMIException( "toBinary", e);
         }
 	}
 	

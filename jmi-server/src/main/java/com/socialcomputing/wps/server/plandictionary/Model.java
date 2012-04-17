@@ -5,7 +5,7 @@ import java.util.Hashtable;
 
 import com.socialcomputing.wps.client.applet.ColorX;
 import com.socialcomputing.wps.client.applet.Env;
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEntityConnector;
 import com.socialcomputing.wps.server.webservices.RequestingClassifyId;
 
@@ -143,28 +143,28 @@ public class Model implements java.io.Serializable
 	}
 
 	// Param�tres de g�n�ration du plan
-	public String getEntitySwatch( RequestingClassifyId classifyId, String entityId, int swatchType) throws WPSConnectorException
+	public String getEntitySwatch( RequestingClassifyId classifyId, String entityId, int swatchType) throws JMIException
 	{   // La segmentation sur entityId n'est pas trait�e
 		return m_EntityMapper[ swatchType].getAssociatedName( m_EntitiesConnector, classifyId);
 	}
 
-	public String getAttributeSwatch( RequestingClassifyId classifyId, int swatchType) throws WPSConnectorException
+	public String getAttributeSwatch( RequestingClassifyId classifyId, int swatchType) throws JMIException
 	{
 		return m_AttributeMapper[ swatchType].getAssociatedName( m_EntitiesConnector, classifyId);
 	}
-	public String getLinkSwatch( RequestingClassifyId classifyId, int swatchType) throws WPSConnectorException
+	public String getLinkSwatch( RequestingClassifyId classifyId, int swatchType) throws JMIException
 	{
 		return m_LinkMapper[ swatchType].getAssociatedName( m_EntitiesConnector, classifyId);
 	}
-	public String getClusterSwatch( RequestingClassifyId classifyId, int swatchType) throws WPSConnectorException
+	public String getClusterSwatch( RequestingClassifyId classifyId, int swatchType) throws JMIException
 	{
 		return m_ClusterMapper[ swatchType].getAssociatedName( m_EntitiesConnector, classifyId);
 	}
-	public String getReferenceSwatch( RequestingClassifyId classifyId, int swatchType) throws WPSConnectorException
+	public String getReferenceSwatch( RequestingClassifyId classifyId, int swatchType) throws JMIException
 	{
 		return m_ReferenceMapper[ swatchType].getAssociatedName( m_EntitiesConnector, classifyId);
 	}
-	public String getAdvertisingSwatch( RequestingClassifyId classifyId, int swatchType) throws WPSConnectorException
+	public String getAdvertisingSwatch( RequestingClassifyId classifyId, int swatchType) throws JMIException
 	{
 		return m_AdvertisingMapper[ swatchType].getAssociatedName( m_EntitiesConnector, classifyId);
 	}
@@ -212,7 +212,7 @@ public class Model implements java.io.Serializable
 	}
 
 	// Check classifiers integrity
-	public void checkIntegrity( String m, iEntityConnector entities, String attributes) throws org.jdom.JDOMException, WPSConnectorException
+	public void checkIntegrity( String m, iEntityConnector entities, String attributes) throws org.jdom.JDOMException, JMIException
 	{
 		for( int i = 0; i < Model.MAX_SELECTION; ++i)
 		{

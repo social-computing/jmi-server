@@ -8,7 +8,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.TreeMap;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.wps.server.plandictionary.connectors.MultiAffinityGroupReader;
 import com.socialcomputing.wps.server.plandictionary.connectors.MultiProfileConnector;
@@ -124,7 +124,7 @@ public class JDBCEntityConnector implements iEntityConnector, Serializable {
 	}
 
 	@Override
-	public void openConnections( int planType,Hashtable<String, Object> wpsparams) throws WPSConnectorException {
+	public void openConnections( int planType,Hashtable<String, Object> wpsparams) throws JMIException {
 		m_Connection = m_ConnectionProfile.getConnection();
 		if (m_AffinityGroupReaders.size() > 0) {
 			for (JDBCAffinityGroupReader j : m_AffinityGroupReaders.values()) {
@@ -144,7 +144,7 @@ public class JDBCEntityConnector implements iEntityConnector, Serializable {
 		m_StockedProperties = new Hashtable<String, Hashtable<String, Object>>();
 	}
 
-	public void closeConnections() throws WPSConnectorException {
+	public void closeConnections() throws JMIException {
 		try {
 			if (m_AffinityGroupReaders.size() > 0) {
 				for (JDBCAffinityGroupReader j : m_AffinityGroupReaders.values()) {
@@ -164,7 +164,7 @@ public class JDBCEntityConnector implements iEntityConnector, Serializable {
 			m_StockedProperties = null;
 			m_Connection.close();
 		} catch (SQLException e) {
-			throw new WPSConnectorException("JDBC connector can't close JDBCEntityConnector connection", e);
+			throw new JMIException(JMIException.ORIGIN.CONNECTOR,"JDBC connector can't close JDBCEntityConnector connection", e);
 		}
 	}
 
@@ -172,7 +172,7 @@ public class JDBCEntityConnector implements iEntityConnector, Serializable {
 	 * Load the entity properties (image, age, income, ...).
 	 */
 	@Override
-	public Hashtable<String, Object> getProperties(String entityId) throws WPSConnectorException {
+	public Hashtable<String, Object> getProperties(String entityId) throws JMIException {
 		Hashtable<String, Object> table = m_StockedProperties.get( entityId);
 		if (table == null) {
 			table = new Hashtable<String, Object>();
@@ -183,7 +183,7 @@ public class JDBCEntityConnector implements iEntityConnector, Serializable {
 	}
 
 	@Override
-	public iEnumerator<String> getEnumerator() throws WPSConnectorException {
+	public iEnumerator<String> getEnumerator() throws JMIException {
 		JDBCEntityClassifier classifier = m_Classifiers.get(WPSDictionary.DEFAULT_NAME);
 		iClassifierRuleConnector rule = classifier.getRules().iterator().next(); 
 		// first and unique rule
@@ -196,7 +196,7 @@ public class JDBCEntityConnector implements iEntityConnector, Serializable {
 	}
 
 	@Override
-	public iAffinityGroupReader getAffinityGroupReader(String full_reader) throws WPSConnectorException {
+	public iAffinityGroupReader getAffinityGroupReader(String full_reader) throws JMIException {
 		if (full_reader.indexOf('=') == -1 && full_reader.indexOf('&') == -1) {
 			// Cas frequent : attributs homogenes
 			return (JDBCAffinityGroupReader) m_AffinityGroupReaders.get(full_reader);
@@ -217,7 +217,7 @@ public class JDBCEntityConnector implements iEntityConnector, Serializable {
 	 * full_profile = profile [&profile]* profile = jdbcname[=prefix]
 	 */
 	@Override
-	public iProfileConnector getProfile(String full_profile) throws WPSConnectorException {
+	public iProfileConnector getProfile(String full_profile) throws JMIException {
 		if (full_profile.indexOf('=') == -1 && full_profile.indexOf('&') == -1)
 			// Cas fréquent : attributs homogenes
 			return (JDBCProfileConnector) m_Profiles.get(full_profile);

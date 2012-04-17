@@ -1,6 +1,6 @@
 package com.socialcomputing.wps.server.plandictionary.connectors;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 
 /**
  * Title:        WPS Connectors
@@ -16,6 +16,6 @@ public interface iSelectionConnector
    public abstract  String getName(  );
    public abstract  String getDescription(  );
 
-   public abstract  boolean isRuleVerified( String id, boolean bInBase, String refEntityId ) throws WPSConnectorException;
+   public abstract  boolean isRuleVerified( String id, boolean bInBase, String refEntityId ) throws JMIException;
 
 }

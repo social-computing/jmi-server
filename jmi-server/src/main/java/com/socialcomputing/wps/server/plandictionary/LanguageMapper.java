@@ -3,7 +3,7 @@ package com.socialcomputing.wps.server.plandictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 
 /**
  * Title:        Plan Dictionary
@@ -69,7 +69,7 @@ public class LanguageMapper implements java.io.Serializable
 	}
 
 	// Check classifiers existence
-	public void checkIntegrity( String m, WPSDictionary dico, String attributes) throws org.jdom.JDOMException, WPSConnectorException
+	public void checkIntegrity( String m, WPSDictionary dico, String attributes) throws org.jdom.JDOMException, JMIException
 	{
 		m_DefaultClassifier.checkIntegrityForModels( m + ", Default Language", dico, attributes);
 		Enumeration enumvar = this.m_LanguageData.keys();

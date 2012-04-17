@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.socialcomputing.wps.server.planDictionnary.connectors.AttributeEnumeratorItem;
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEnumerator;
 import com.socialcomputing.wps.server.plandictionary.connectors.iProfileConnector;
@@ -86,7 +86,7 @@ public class JDBCProfileConnector implements iProfileConnector, Serializable
 		m_Selections = new Hashtable<String,JDBCSelectionConnector>();
 	}
 
-	public void openConnections( Hashtable<String, Object> wpsparams, Connection connection) throws WPSConnectorException
+	public void openConnections( Hashtable<String, Object> wpsparams, Connection connection) throws JMIException
 	{
 		if( m_UseEntityConnection)
 			m_Connection = connection;
@@ -108,7 +108,7 @@ public class JDBCProfileConnector implements iProfileConnector, Serializable
 			m_ExclusionQuery.open( wpsparams, m_Connection);
 	}
 
-	public void closeConnections() throws WPSConnectorException
+	public void closeConnections() throws JMIException
 	{
 		try {
 			m_ProfileQuery.close();
@@ -129,7 +129,7 @@ public class JDBCProfileConnector implements iProfileConnector, Serializable
 		}
 		catch( SQLException e)
 		{
-			throw new WPSConnectorException( "JDBC connector can't close JDBCProfileConnector connection", e);
+			throw new JMIException(JMIException.ORIGIN.CONNECTOR, "JDBC connector can't close JDBCProfileConnector connection", e);
 		}
 	}
 
@@ -146,22 +146,22 @@ public class JDBCProfileConnector implements iProfileConnector, Serializable
 	}
 
 	@Override
-	public iEnumerator<AttributeEnumeratorItem> getEnumerator( String entityId ) throws WPSConnectorException
+	public iEnumerator<AttributeEnumeratorItem> getEnumerator( String entityId ) throws JMIException
 	{
 		if( entityId == null)
-			throw new WPSConnectorException( "JDBCProfileConnector failed to set getEnumerator, entityId is null");
+			throw new JMIException(JMIException.ORIGIN.CONNECTOR, "JDBCProfileConnector failed to set getEnumerator, entityId is null");
 		try {
 			m_ProfileQuery.setCurEntity( entityId);
 			return new JDBCAttributeEnumerator( m_ProfileQuery.executeQuery());
 		}
 		catch( SQLException e)
 		{
-			throw new WPSConnectorException( "JDBCProfileConnector failed to set enumerator", e);
+			throw new JMIException(JMIException.ORIGIN.CONNECTOR,"JDBCProfileConnector failed to set enumerator", e);
 		}
 	}
 
 	@Override
-	public Hashtable<String, Object> getAnalysisProperties( String attributeId, String entityId) throws WPSConnectorException
+	public Hashtable<String, Object> getAnalysisProperties( String attributeId, String entityId) throws JMIException
 	{
 		Hashtable<String, Object> table = new Hashtable<String, Object>();
 		m_AnalysisProperties.getProperties( table, attributeId, false, entityId, null);
@@ -169,7 +169,7 @@ public class JDBCProfileConnector implements iProfileConnector, Serializable
 	}
 
 	@Override
-	public iEnumerator<String> getExclusionEnumerator( String entityId) throws WPSConnectorException
+	public iEnumerator<String> getExclusionEnumerator( String entityId) throws JMIException
 	{
 		if( m_ExclusionQuery != null)
 		{
@@ -180,14 +180,14 @@ public class JDBCProfileConnector implements iProfileConnector, Serializable
 			}
 			catch( SQLException e)
 			{
-				throw new WPSConnectorException( "JDBCProfileConnector failed to set exclusion enumerator", e);
+				throw new JMIException(JMIException.ORIGIN.CONNECTOR, "JDBCProfileConnector failed to set exclusion enumerator", e);
 			}
 		}
 		return new JDBCIdEnumerator( null);
 	}
 
 	@Override
-	public Hashtable<String, Object> getProperties( String attributeId, boolean bInBase, String entityId) throws WPSConnectorException
+	public Hashtable<String, Object> getProperties( String attributeId, boolean bInBase, String entityId) throws JMIException
 	{
 		Hashtable<String, Object> table = new Hashtable<String, Object>();
 		m_Properties.getProperties( table, attributeId, bInBase, entityId, null);

@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Hashtable;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.WPSConnectorException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
 import com.socialcomputing.wps.server.plandictionary.WPSDictionary;
 import com.socialcomputing.wps.server.plandictionary.connectors.iSelectionConnector;
 
@@ -81,7 +81,7 @@ public class JDBCSelectionConnector implements iSelectionConnector, java.io.Seri
 		m_Name = name;
 	}
 
-	public void openConnections( Hashtable<String, Object> wpsparams, Connection connection) throws WPSConnectorException
+	public void openConnections( Hashtable<String, Object> wpsparams, Connection connection) throws JMIException
 	{
 		if( m_UseEntityConnection)
 			m_Connection = connection;
@@ -92,7 +92,7 @@ public class JDBCSelectionConnector implements iSelectionConnector, java.io.Seri
 		m_SelectionQuery.open( wpsparams, m_Connection);
 	}
 
-	public void closeConnections() throws WPSConnectorException
+	public void closeConnections() throws JMIException
 	{
 		try {
 			m_SelectionQuery.close();
@@ -102,7 +102,7 @@ public class JDBCSelectionConnector implements iSelectionConnector, java.io.Seri
 		}
 		catch( SQLException e)
 		{
-			throw new WPSConnectorException( "JDBC connector can't close JDBCSelectionConnector connection", e);
+			throw new JMIException( "JDBC connector can't close JDBCSelectionConnector connection", e);
 		}
 	}
 
@@ -119,7 +119,7 @@ public class JDBCSelectionConnector implements iSelectionConnector, java.io.Seri
 	}
 
 	@Override
-	public boolean isRuleVerified(String id, boolean bInBase, String refEntityId) throws WPSConnectorException
+	public boolean isRuleVerified(String id, boolean bInBase, String refEntityId) throws JMIException
 	{
 		boolean ret  = false;
 		if ((bInBase && (m_AttributeRestriction == WPSDictionary.APPLY_TO_NOT_BASE))
@@ -134,7 +134,7 @@ public class JDBCSelectionConnector implements iSelectionConnector, java.io.Seri
 		}
 		catch( SQLException e)
 		{
-			throw new WPSConnectorException( "JDBCSelectionConnector failed to verify rule", e);
+			throw new JMIException(JMIException.ORIGIN.CONNECTOR, "JDBCSelectionConnector failed to verify rule", e);
 		}
 
 		switch( m_Flag)
@@ -153,7 +153,7 @@ public class JDBCSelectionConnector implements iSelectionConnector, java.io.Seri
 					}
 					catch( SQLException e)
 					{
-						throw new WPSConnectorException( "JDBCSelectionConnector failed to verify rule", e);
+						throw new JMIException(JMIException.ORIGIN.CONNECTOR, "JDBCSelectionConnector failed to verify rule", e);
 					}
 				}
 				else
@@ -170,7 +170,7 @@ public class JDBCSelectionConnector implements iSelectionConnector, java.io.Seri
 						rs.close();
 					} catch( SQLException e)
 					{
-						throw new WPSConnectorException( "JDBCSelectionConnector failed to verify rule", e);
+						throw new JMIException(JMIException.ORIGIN.CONNECTOR, "JDBCSelectionConnector failed to verify rule", e);
 					}
 				break;
 		}
