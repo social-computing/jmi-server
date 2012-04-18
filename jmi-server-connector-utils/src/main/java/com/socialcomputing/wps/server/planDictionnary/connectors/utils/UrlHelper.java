@@ -163,7 +163,7 @@ public class UrlHelper extends ConnectorHelper {
                 stream = httpConnection.getErrorStream();
             }
             LOG.error(e.getMessage(), e);
-            throw new JMIException("openConnections: ", e);
+            throw new JMIException(JMIException.ORIGIN.INTERNAL, getResponseCode(),"Open connection failed", e);
         }
     }
 

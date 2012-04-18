@@ -24,8 +24,7 @@ public class JMIException extends Exception
 	protected Throwable cause;
 	protected long code;
 
-	
-	public JMIException()
+	    public JMIException()
 	{
 		this("Error occurred in WPS connector.");
 	}
@@ -107,4 +106,11 @@ public class JMIException extends Exception
     {
         return origin;
     }
+    /**
+     * @return the code
+     */
+    public long getCode() {
+        return code;
+    }
+
 }
