@@ -18,6 +18,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.hibernate.annotations.Index;
 
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
+
 @Entity
 @XmlRootElement
 public class Track implements Serializable {
@@ -55,6 +57,10 @@ public class Track implements Serializable {
         this.success = false;
     }
     
+    public Long getId() {
+        return id;
+    }
+    
     public String getName() {
         return name;
     }
@@ -77,7 +83,7 @@ public class Track implements Serializable {
         //this.error = null;
     }
     
-    public void stop( Exception e, String agent, Hashtable<String, Object> params) {
+    public void stop( JMIException e, String agent, Hashtable<String, Object> params) {
         this.duration = System.currentTimeMillis() - this.duration;
         this.success = false;
         this.error = new Error(e, agent, params);

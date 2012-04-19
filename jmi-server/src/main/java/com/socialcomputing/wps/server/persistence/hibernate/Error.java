@@ -16,6 +16,8 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
+
 @Entity
 @XmlRootElement
 public class Error implements Serializable {
@@ -24,6 +26,13 @@ public class Error implements Serializable {
     @XmlElement
     private Long id;
 
+    @XmlElement
+    @Column(columnDefinition = "varchar(64)")
+    private String      origin;
+
+    @XmlElement
+    private Long        code;
+    
     @XmlElement
     @Column(columnDefinition = "varchar(512)")
     private String      message;
@@ -40,8 +49,10 @@ public class Error implements Serializable {
     @Column(columnDefinition="text")
     private String      parameters;
     
-    public Error(Exception e, String agent, Hashtable<String, Object> params) {
+    public Error(JMIException e, String agent, Hashtable<String, Object> params) {
         super();
+        this.origin = e.getOrigin().toString();
+        this.code = e.getCode();
         this.message = e.getMessage();
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter( sw);

@@ -23,6 +23,7 @@ public class JMIException extends Exception
 	protected ORIGIN origin;
 	protected Throwable cause;
 	protected long code;
+    protected long track;
 
 	    public JMIException()
 	{
@@ -113,4 +114,11 @@ public class JMIException extends Exception
         return code;
     }
 
+    public void setTrack(long track) {
+        this.track = track;
+    }
+    
+    public long getTrack() {
+        return track;
+    }
 }

@@ -117,6 +117,7 @@ public class EngineRESTService {
             jsonResults.put("origin", e.getOrigin().toString());
             jsonResults.put("error", e.getMessage());
             jsonResults.put("code", e.getCode());
+            jsonResults.put("track", e.getTrack());
         }
         finally {
             MDC.remove(DiagnosticContext.ENTRY_POINT_CTX.name);

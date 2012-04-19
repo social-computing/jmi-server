@@ -71,7 +71,8 @@ public class BeanPlanMaker implements PlanMaker {
             throw new JMIException(JMIException.ORIGIN.PARAMETER,"JMI parameter 'planName' missing.");
         // Track
         Track track = new Track( name);
-
+        JMIException exception = null;
+        
         String x = (String) params.get("width");
         if (x != null && Integer.parseInt(x) == 0)
             throw new JMIException(JMIException.ORIGIN.PARAMETER,"JMI parameter 'width' can't be 0.");
@@ -139,6 +140,7 @@ public class BeanPlanMaker implements PlanMaker {
             track.stop();
         }
         catch (JMIException e) {
+            exception = e;
             track.stop( e, useragent, params);
             throw e;
         }
@@ -148,6 +150,7 @@ public class BeanPlanMaker implements PlanMaker {
                     dico.closeConnections();
                 if( session != null) {
                     session.save( track);
+                    exception.setTrack( track.getId());
                 }
             }
             catch (Exception e) {
