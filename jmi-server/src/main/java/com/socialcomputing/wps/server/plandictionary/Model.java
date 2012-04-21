@@ -198,9 +198,11 @@ public class Model implements java.io.Serializable
 
 		// Propriétés globales du plan
 		for( NameValuePair value : dico.m_EnvProperties) {
-			String name = value.getName().startsWith( "$") ? value.getName() : "$" + value.getName();
-			if( !wpsparams.containsKey(name)) 
+		    String name = value.getName();
+		    if( !wpsparams.containsKey(name))  {
+	            name = name.startsWith( "$") ? name : "$" + name;
 			    env.m_props.put( name, ConnectorHelper.ReplaceParameter(value, wpsparams));
+			}
 		}
 
 		// S�lection Attributes
