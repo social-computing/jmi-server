@@ -112,6 +112,10 @@ public final class Env implements Serializable, Runnable
 	 */
 //	public static final int ZONE_RAD        = 50;
 
+	public Env() {
+        m_props     = new Hashtable();
+	}
+	
 	/**
 	 * Initialize transient fields and set Applet background color.
 	 * @param applet

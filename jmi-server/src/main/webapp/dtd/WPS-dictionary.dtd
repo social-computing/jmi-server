@@ -29,11 +29,11 @@
 
 <!ELEMENT url-header 	(#PCDATA)>
 <!ATTLIST url-header name 		NMTOKEN 	#REQUIRED>
-<!ATTLIST url-header default 	NMTOKEN 	#IMPLIED>
+<!ATTLIST url-header default 	CDATA 		#IMPLIED>
 
 <!ELEMENT url-parameter 	(#PCDATA)>
 <!ATTLIST url-parameter name 	NMTOKEN 	#REQUIRED>
-<!ATTLIST url-parameter default NMTOKEN 	#IMPLIED>
+<!ATTLIST url-parameter default CDATA 		#IMPLIED>
 
 <!-- Basic authentication -->
 <!ELEMENT basic-authentication EMPTY>
@@ -58,8 +58,8 @@
 <!-- Env Properties : fixing env properties -->
 <!-- =====================================================================  -->
 <!ELEMENT env-property EMPTY>
-<!ATTLIST env-property name  CDATA    #REQUIRED>
-<!ATTLIST env-property value CDATA    #REQUIRED>
+<!ATTLIST env-property name  	CDATA    #REQUIRED>
+<!ATTLIST env-property value 	CDATA    #REQUIRED>
 
 <!-- =====================================================================  -->
 <!-- Filtering scheduling  -->

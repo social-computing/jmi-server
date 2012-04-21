@@ -3,6 +3,7 @@ package com.socialcomputing.wps.server.plandictionary;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.TreeMap;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.utils.NameValuePair;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierConnector;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEntityConnector;
 import com.socialcomputing.wps.server.webservices.RequestingClassifyId;
@@ -72,8 +74,8 @@ public class WPSDictionary implements java.io.Serializable {
 	public ModelMapper m_AnalysisLanguageModelMapper = new ModelMapper(); // Segmentation : Analysis / Language / Classifier / Model
 
 	// Global Env Properties
-	public Hashtable<String, String> m_EnvProperties = new Hashtable<String, String>();
-
+	public List<NameValuePair> m_EnvProperties = new ArrayList<NameValuePair>();
+	
 	static public String getCoefficientTableName( String name)
 	{
 		return name + "_coef";
@@ -144,7 +146,7 @@ public class WPSDictionary implements java.io.Serializable {
 			for( int i = 0; i < size; ++i)
 			{
 				org.jdom.Element elem = ( org.jdom.Element)lst.get( i);
-				dico.m_EnvProperties.put( elem.getAttributeValue( "name"), elem.getAttributeValue( "value"));
+				dico.m_EnvProperties.add( new NameValuePair(elem.getAttributeValue( "name"), elem.getAttributeValue( "value")));
 			}
 		}
 

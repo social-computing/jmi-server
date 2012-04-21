@@ -558,10 +558,7 @@ public class PlanRequest {
         Model model = this.getModel();
         Env env = new Env();
 
-        // Donn�es issues du mod�le
-        model.initClientEnv(m_Dictionary, env);
-
-        // Propri�t�s globales venant de la demande de plan
+        // Propriétés globales venant de la demande de plan
         Enumeration enumvar = m_RequestParameters.keys();
         while (enumvar.hasMoreElements()) {
             String name = (String) enumvar.nextElement();
@@ -573,12 +570,14 @@ public class PlanRequest {
                     env.m_props.put("$" + name, value);
             }
         }
+        
+        // Données issues du modèle (utilisation des valeurs par défaut au cas où)
+        model.initClientEnv(m_Dictionary, m_RequestParameters, env);
 
         // Autres donn�es
         try {
             env.m_transfo = new Transfo(Float.parseFloat(getParameter("width", "640")),
-                                        Float.parseFloat(getParameter("height", "480")), 1.f, Transfo.CART_BIT
-                                                | Transfo.ABS_BIT);
+                                        Float.parseFloat(getParameter("height", "480")), 1.f, Transfo.CART_BIT | Transfo.ABS_BIT);
         }
         catch (NumberFormatException e) {
             env.m_transfo = new Transfo(640, 480, 1.f, Transfo.CART_BIT | Transfo.ABS_BIT);

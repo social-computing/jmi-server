@@ -6,6 +6,8 @@ import java.util.Hashtable;
 import com.socialcomputing.wps.client.applet.ColorX;
 import com.socialcomputing.wps.client.applet.Env;
 import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
+import com.socialcomputing.wps.server.planDictionnary.connectors.utils.ConnectorHelper;
+import com.socialcomputing.wps.server.planDictionnary.connectors.utils.NameValuePair;
 import com.socialcomputing.wps.server.plandictionary.connectors.iEntityConnector;
 import com.socialcomputing.wps.server.webservices.RequestingClassifyId;
 
@@ -72,15 +74,15 @@ public class Model implements java.io.Serializable
         else
             model.m_DisplayFakeLinks = false;
 		if( element.getAttributeValue( "in-color") != null)
-			model.m_inCol = new ColorX( Integer.parseInt( element.getAttributeValue( "in-color"), 16));
+			model.m_inCol = Model.readColorX(element.getAttributeValue( "in-color"));
         else
             model.m_inCol = new ColorX( 0xFFFFFF);
 		if( element.getAttributeValue( "out-color") != null)
-			model.m_outCol = new ColorX( Integer.parseInt( element.getAttributeValue( "out-color"), 16));
+			model.m_outCol = Model.readColorX(element.getAttributeValue( "out-color"));
         else
             model.m_outCol = new ColorX( 0xFFFFFF);
 		if( element.getAttributeValue( "filter-color") != null)
-			model.m_filterCol = new ColorX( Integer.parseInt( element.getAttributeValue( "filter-color"), 16));
+			model.m_filterCol = Model.readColorX(element.getAttributeValue( "filter-color"));
 		else
 		    model.m_filterCol = new ColorX( 0xFFFFFF);
 		{   // Swatchs
@@ -116,6 +118,15 @@ public class Model implements java.io.Serializable
 		return model;
 	}
 
+	static protected ColorX readColorX( String value) {
+	    try {
+	        return new ColorX( Integer.parseInt( value.startsWith("#") ? value.substring(1): value, 16));
+	    }
+	    catch (Exception e) {
+        }
+	    return new ColorX( value);
+	}
+	
 	// Constructor
 	public Model( String name)
 	{
@@ -169,7 +180,7 @@ public class Model implements java.io.Serializable
 		return m_AdvertisingMapper[ swatchType].getAssociatedName( m_EntitiesConnector, classifyId);
 	}
 
-	public void initClientEnv( WPSDictionary dico, Env env)
+	public void initClientEnv( WPSDictionary dico, Hashtable<String, Object> wpsparams, Env env)
 	{
 	/*
 	public static final int AUDIO_BIT       = 0x01;
@@ -184,17 +195,12 @@ public class Model implements java.io.Serializable
 		env.m_outCol    = m_outCol;
 		env.m_filterCol = m_filterCol;
 		env.m_transfo   = null;
-		env.m_props     = new Hashtable();
 
-		// Propri�t�s globales du plan
-		Enumeration enumvar = dico.m_EnvProperties.keys();
-		while( enumvar.hasMoreElements())
-		{
-			String name = ( String)enumvar.nextElement();
-			if( name.startsWith( "$"))
-				env.m_props.put( name, dico.m_EnvProperties.get( name));
-			else
-				env.m_props.put( "$" + name, dico.m_EnvProperties.get( name));
+		// Propriétés globales du plan
+		for( NameValuePair value : dico.m_EnvProperties) {
+			String name = value.getName().startsWith( "$") ? value.getName() : "$" + value.getName();
+			if( !wpsparams.containsKey(name)) 
+			    env.m_props.put( name, ConnectorHelper.ReplaceParameter(value, wpsparams));
 		}
 
 		// S�lection Attributes

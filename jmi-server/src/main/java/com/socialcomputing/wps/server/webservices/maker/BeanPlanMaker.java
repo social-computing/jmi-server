@@ -150,7 +150,8 @@ public class BeanPlanMaker implements PlanMaker {
                     dico.closeConnections();
                 if( session != null) {
                     session.save( track);
-                    exception.setTrack( track.getId());
+                    if( exception != null)
+                        exception.setTrack( track.getId());
                 }
             }
             catch (Exception e) {
