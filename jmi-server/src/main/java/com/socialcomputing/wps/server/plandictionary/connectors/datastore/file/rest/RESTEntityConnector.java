@@ -53,16 +53,18 @@ public class RESTEntityConnector extends FileEntityConnector {
         connector.m_EntityMarkup = entity.getAttributeValue("markup");
         connector.m_EntityId = entity.getAttributeValue("id");
         for (Element property : (List<Element>) entity.getChildren("REST-property")) {
-            connector.entityProperties.add(new PropertyDefinition(property.getAttributeValue("id"), property
-                    .getAttributeValue("attribute")));
+            connector.entityProperties.add(new PropertyDefinition(property.getAttributeValue("id"), 
+                                                                  property.getAttributeValue("attribute"),
+                                                                  property.getAttributeValue("default")));
         }
 
         Element attribute = element.getChild("REST-attribute");
         connector.m_AttributeMarkup = attribute.getAttributeValue("markup");
         connector.m_AttributeId = attribute.getAttributeValue("id");
         for (Element property : (List<Element>) attribute.getChildren("REST-property")) {
-            connector.attributeProperties.add(new PropertyDefinition(property.getAttributeValue("id"), property
-                    .getAttributeValue("entity")));
+            connector.attributeProperties.add(new PropertyDefinition(property.getAttributeValue("id"), 
+                                                                     property.getAttributeValue("entity"),
+                                                                     property.getAttributeValue("default")));
         }
         return connector;
     }
@@ -133,7 +135,7 @@ public class RESTEntityConnector extends FileEntityConnector {
                         Entity entity = addEntity(entityName);
                         for (PropertyDefinition property : entityProperties) {
                             if (property.isSimple()) {
-                                entity.addProperty(property.getName(), readJSONValue( jsonentity.get(property.getName())));
+                                entity.addProperty(property, readJSONValue( jsonentity.get(property.getName())));
                             }
                         }
     
@@ -151,11 +153,8 @@ public class RESTEntityConnector extends FileEntityConnector {
                     for (JsonNode jsonattribute : attributes) {
                         Attribute attribute = addAttribute(jsonattribute.get(m_AttributeId).getTextValue());
                         for (PropertyDefinition property : attributeProperties) {
-                            if (property.isSimple()) {
-                                JsonNode p = jsonattribute.get(property.getName());
-                                if (p != null)
-                                    attribute.addProperty(property, readJSONValue( p));
-                            }
+                            if (property.isSimple()) 
+                                attribute.addProperty(property, readJSONValue( jsonattribute.get(property.getName())));
                         }
                         if (!isInverted())
                             addEntityProperties(attribute);
@@ -234,7 +233,7 @@ public class RESTEntityConnector extends FileEntityConnector {
             Entity entity = addEntity(el.getAttributeValue(m_EntityId));
             for (PropertyDefinition property : entityProperties) {
                 if (property.isSimple()) {
-                    entity.addProperty(property.getName(), el.getAttributeValue(property.getName()));
+                    entity.addProperty(property, el.getAttributeValue(property.getName()));
                 }
             }
 

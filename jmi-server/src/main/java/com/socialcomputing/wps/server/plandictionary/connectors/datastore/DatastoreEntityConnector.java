@@ -2,16 +2,10 @@ package com.socialcomputing.wps.server.plandictionary.connectors.datastore;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Set;
 
-import com.socialcomputing.wps.server.planDictionnary.connectors.AttributeEnumeratorItem;
 import com.socialcomputing.wps.server.planDictionnary.connectors.JMIException;
-import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.Attribute;
-import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.Entity;
-import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.PropertyDefinition;
 import com.socialcomputing.wps.server.planDictionnary.connectors.datastore.StoreHelper;
 import com.socialcomputing.wps.server.plandictionary.connectors.iAffinityGroupReader;
 import com.socialcomputing.wps.server.plandictionary.connectors.iClassifierConnector;

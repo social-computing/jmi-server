@@ -38,6 +38,10 @@ public abstract class Data {
             this.m_Properties.put(name, value);
     }
 
+    public void addProperty(PropertyDefinition definition, Object value) {
+        addProperty(definition.getName(), value == null ? definition.getDefault() : value);
+    }
+    
     /**
      * Add multiple properties to this element
      * 

@@ -88,6 +88,8 @@ public class StoreHelper {
                     Attribute attribute = m_Attributes.get(attributeItem.m_Id);
                     if( attribute != null) {
                         String value = (String) attribute.getProperties().get(propDefinition.getId());
+                        if (value == null)
+                            value = propDefinition.getDefault();
                         if (value != null)
                             property.add(value);
                     }
@@ -105,6 +107,8 @@ public class StoreHelper {
                     Entity entity = m_Entities.get(entityId);
                     if( entity != null) {
                         String value = (String) entity.getProperties().get(propDefinition.getId());
+                        if (value == null)
+                            value = propDefinition.getDefault();
                         if (value != null)
                             property.add(value);
                     }

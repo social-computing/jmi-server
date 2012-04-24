@@ -15,10 +15,6 @@ public class Attribute extends Data {
         return m_Entities;
     }
 
-    public void addProperty(PropertyDefinition definition, Object value) {
-        addProperty(definition.getName(), value);
-    }
-
     public void addEntity(Entity entity) {
         m_Entities.add(entity.getId());
     }

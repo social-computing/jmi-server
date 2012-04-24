@@ -17,6 +17,7 @@
 <!ATTLIST REST-property	id    		CDATA    #REQUIRED>
 <!ATTLIST REST-property	attribute   CDATA    #IMPLIED>
 <!ATTLIST REST-property	entity    	CDATA    #IMPLIED>
+<!ATTLIST REST-property	default		CDATA    #IMPLIED>
 
 <!ELEMENT REST-attribute (REST-property*)>
 <!ATTLIST REST-attribute	markup		   	CDATA    #REQUIRED>

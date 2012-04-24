@@ -8,11 +8,16 @@ package com.socialcomputing.wps.server.planDictionnary.connectors.datastore;
  */
 public class PropertyDefinition {
 
-	private final String m_Name, m_Id;
+	private final String m_Name, m_Id, m_Default;
 	
-	public PropertyDefinition(String name, String id) {
+    public PropertyDefinition(String name, String id) {
+        this(name, id, null);
+    }
+    
+	public PropertyDefinition(String name, String id, String def) {
 		this.m_Name = name;
 		this.m_Id = id;
+		this.m_Default = def;
 	}
 	
 	public boolean isSimple() {
@@ -26,4 +31,8 @@ public class PropertyDefinition {
 	public String getId() {
 		return m_Id;
 	}
+
+    public String getDefault() {
+        return m_Default;
+    }
 }
