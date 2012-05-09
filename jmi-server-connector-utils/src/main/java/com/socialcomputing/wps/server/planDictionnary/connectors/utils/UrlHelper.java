@@ -71,12 +71,10 @@ public class UrlHelper extends ConnectorHelper {
         }
         for (Element elem : (List<Element>) connection.getChildren("url-header")) {
             NameValuePair nameValue = new NameValuePair(elem.getAttributeValue("name"), elem.getText(), elem.getAttributeValue("default"));
-            LOG.debug("url header = {}", nameValue);
             headerParams.add(nameValue);
         }
         for (Element elem : (List<Element>) connection.getChildren("url-parameter")) {
             NameValuePair nameValue = new NameValuePair(elem.getAttributeValue("name"), elem.getText(), elem.getAttributeValue("default"));
-            LOG.debug("url parameter = {}", nameValue);
             defParams.add(nameValue);
         }
         Element basic = connection.getChild("basic-authentication");
@@ -84,7 +82,6 @@ public class UrlHelper extends ConnectorHelper {
             basicAuth = true;
             user = basic.getAttributeValue("username");
             password = basic.getAttributeValue("password");
-            LOG.debug("basic autentication enabled");
         }
     }
 

@@ -154,7 +154,7 @@ public class EngineRESTService {
         MultivaluedMap<String, String> pathParams = formParams == null ? uriInfo.getQueryParameters() : formParams;
         Hashtable<String, Object> queryParameters = new Hashtable<String, Object>();
         for (String key : pathParams.keySet()) {
-            LOG.info("  - query parameter {} = {}", key, pathParams.get(key).get(0));
+            //LOG.info("  - query parameter {} = {}", key, pathParams.get(key).get(0));
             queryParameters.put(key, pathParams.get(key).get(0));
         }
         if (userAgent != null)

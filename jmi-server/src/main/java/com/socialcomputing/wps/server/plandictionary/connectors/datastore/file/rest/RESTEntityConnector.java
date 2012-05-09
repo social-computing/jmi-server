@@ -26,6 +26,7 @@ public class RESTEntityConnector extends FileEntityConnector {
 
     protected String contentType = null;
     protected String invert = null;
+    protected String data = null;
     protected String m_EntityId = null, m_EntityMarkup = null, m_AttributeId = null, m_AttributeMarkup = null;
 
     private static final Logger LOG = LoggerFactory.getLogger(RESTEntityConnector.class);
@@ -48,6 +49,7 @@ public class RESTEntityConnector extends FileEntityConnector {
         connector._readObject(element);
         connector.contentType = element.getAttributeValue("type");
         connector.invert = element.getAttributeValue("invert");
+        connector.data = element.getAttributeValue("data");
 
         Element entity = element.getChild("REST-entity");
         connector.m_EntityMarkup = entity.getAttributeValue("markup");
@@ -120,6 +122,10 @@ public class RESTEntityConnector extends FileEntityConnector {
         try {
             JsonNode node = mapper.readTree(urlHelper.getStream());
             error = (JsonNode) node.get("error");
+            if( error == null && this.data != null && wpsparams.containsKey(this.data)) {
+                // Data
+                node = mapper.readTree((String)wpsparams.get(this.data));
+            }
             if( error == null) {
                 JsonNode globals = (JsonNode) node.get("globals");
                 if (globals != null) {
@@ -169,7 +175,7 @@ public class RESTEntityConnector extends FileEntityConnector {
         }
         catch (Exception e) {
             //LOG.error(e.getMessage(), e);
-            throw new JMIException("REST Reading json error", e);
+            throw new JMIException("Reading json error:" + e.getMessage(), e);
         }
         if( error != null) {
             String m = error.get("message") != null ? error.get("message").getTextValue() : "";
