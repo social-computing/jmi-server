@@ -7,8 +7,10 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Hashtable;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -41,6 +43,9 @@ public class EngineRESTService {
 
     private final static Logger LOG = LoggerFactory.getLogger(EngineRESTService.class);
 
+    @Context
+    UriInfo uriInfo;
+    
     /**
      * The method will process HTTP GET requests
      * 
@@ -52,11 +57,10 @@ public class EngineRESTService {
     @GET
     @Path("{map}.java")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response getBinaryPlan(@HeaderParam("User-Agent") String userAgent, @PathParam("account") String account,
-                                  @PathParam("map") String planName, @Context UriInfo ui) {
+    public Response getBinaryPlan(@HeaderParam("User-Agent") String userAgent, @PathParam("account") String account, @PathParam("map") String planName) {
         MDC.put(DiagnosticContext.ENTRY_POINT_CTX.name, "GET /engine/" + account + "/" + planName + ".java");
         PlanMaker planMaker = new BeanPlanMaker();
-        Hashtable<String, Object> planParameters = this.getQueryParameters(userAgent, ui);
+        Hashtable<String, Object> planParameters = this.getQueryParameters(userAgent, null);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream outputStream = new DataOutputStream(baos);
         try {
@@ -96,11 +100,22 @@ public class EngineRESTService {
     @GET
     @Path("{map}.json")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getJSonPlan(@HeaderParam("User-Agent") String userAgent, @PathParam("account") String account,
-                              @PathParam("map") String planName, @Context UriInfo ui) {
-        MDC.put(DiagnosticContext.ENTRY_POINT_CTX.name, "GET /engine/" + account + "/" + planName + ".json");
+    public Response getJSonPlan(@HeaderParam("User-Agent") String userAgent, @PathParam("account") String account, @PathParam("map") String planName) {
+        return _JSonPlan(userAgent, account, planName, null);
+    }
+    
+    @POST
+    @Path("{map}.json")
+    @Consumes("application/x-www-form-urlencoded")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response postJSonPlan(@HeaderParam("User-Agent") String userAgent, @PathParam("account") String account, @PathParam("map") String planName, MultivaluedMap<String, String> formParams) {
+        return _JSonPlan(userAgent, account, planName, formParams);
+    }
+    
+    private Response _JSonPlan(@HeaderParam("User-Agent") String userAgent, @PathParam("account") String account, @PathParam("map") String planName, MultivaluedMap<String, String> formParams) {
+        MDC.put(DiagnosticContext.ENTRY_POINT_CTX.name, "/engine/" + account + "/" + planName + ".json");
         PlanMaker planMaker = new BeanPlanMaker();
-        Hashtable<String, Object> planParameters = this.getQueryParameters(userAgent, ui);
+        Hashtable<String, Object> planParameters = this.getQueryParameters(userAgent, formParams);
         ObjectNode jsonResults = PlanJSONProvider.GetMapper().createObjectNode();
         try {
             planParameters.put("planName", planName);
@@ -135,8 +150,8 @@ public class EngineRESTService {
      *            UriInfo path and query information wrapper
      * @return HashTable of parameters
      */
-    private Hashtable<String, Object> getQueryParameters(String userAgent, UriInfo ui) {
-        MultivaluedMap<String, String> pathParams = ui.getQueryParameters();
+    private Hashtable<String, Object> getQueryParameters(String userAgent, MultivaluedMap<String, String> formParams) {
+        MultivaluedMap<String, String> pathParams = formParams == null ? uriInfo.getQueryParameters() : formParams;
         Hashtable<String, Object> queryParameters = new Hashtable<String, Object>();
         for (String key : pathParams.keySet()) {
             LOG.info("  - query parameter {} = {}", key, pathParams.get(key).get(0));

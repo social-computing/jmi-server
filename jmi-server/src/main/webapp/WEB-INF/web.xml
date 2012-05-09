@@ -5,8 +5,8 @@
 	id="jmi-server" version="2.5">
 
 	<!-- General application settings -->
-	<display-name>WPS</display-name>
-	<description>WPS Server</description>
+	<display-name>JMI</display-name>
+	<description>JMI Server</description>
 	<welcome-file-list>
 		<welcome-file>
 			/index.jsp
@@ -26,11 +26,6 @@
 
     <!-- Servlets declaration -->
 	<servlet>
-		<servlet-name>WPSPlanMakerServlet</servlet-name>
-		<servlet-class>com.socialcomputing.wps.server.web.WPSPlanMakerServlet</servlet-class>
-		<load-on-startup></load-on-startup>
-	</servlet>
-	<servlet>
 		<servlet-name>WPSPlanUploaderServlet</servlet-name>
 		<servlet-class>com.socialcomputing.wps.server.web.WPSPlanUploaderServlet</servlet-class>
 		<load-on-startup></load-on-startup>
@@ -45,6 +40,11 @@
 		<servlet-class>com.socialcomputing.wps.server.web.WPSUploadServlet</servlet-class>
 		<load-on-startup></load-on-startup>
 	</servlet>
+    <servlet>
+        <servlet-name>jersey-servlet</servlet-name> 
+        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
 
 	<!-- Servlet filters mapping configuration -->
 	<filter-mapping>
@@ -59,10 +59,6 @@
 
 	<!-- Servlets mapping configuration -->
 	<servlet-mapping>
-		<servlet-name>WPSPlanMakerServlet</servlet-name>
-		<url-pattern>/maker</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
 		<servlet-name>WPSPlanUploaderServlet</servlet-name>
 		<url-pattern>/loader</url-pattern>
 	</servlet-mapping>
@@ -74,6 +70,10 @@
 		<servlet-name>WPSUploadServlet</servlet-name>
 		<url-pattern>/admin/upload</url-pattern>
 	</servlet-mapping>
+    <servlet-mapping>
+		<servlet-name>jersey-servlet</servlet-name>
+		<url-pattern>/services/*</url-pattern>
+    </servlet-mapping>
 
 	<resource-ref>
 		<res-ref-name>jdbc/wps-db</res-ref-name>
@@ -106,7 +106,7 @@
 	</session-config>
 
 	<!-- Jersey Servlet filter configuration with Guice dependecy injection -->
-	<listener>
+	<!--listener>
 		<listener-class>com.socialcomputing.config.GuiceConfig</listener-class>
 	</listener>
 	<filter>
@@ -116,5 +116,5 @@
 	<filter-mapping>
 		<filter-name>Guice Filter</filter-name>
 		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+	</filter-mapping-->
 </web-app>
