@@ -64,7 +64,7 @@ public class Entity extends Data {
        for (AttributeEnumeratorItem item : this.m_Attributes) {
            if( first) first = false;
            else sb.append(',');
-           sb.append( "{\"id\":\"").append(item.m_Id).append("\"}");
+           sb.append( "{\"id\":\"").append(item.m_Id).append("\",\"p\":").append(item.m_Ponderation).append("}");
        }
        sb.append("]}");
        return sb;

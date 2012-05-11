@@ -27,7 +27,7 @@ public class RESTEntityConnector extends FileEntityConnector {
     protected String contentType = null;
     protected String invert = null;
     protected String data = null;
-    protected String m_EntityId = null, m_EntityMarkup = null, m_AttributeId = null, m_AttributeMarkup = null;
+    protected String m_GlobalMarkup = null, m_EntityId = null, m_EntityMarkup = null, m_PonderationMarkup = null, m_AttributeId = null, m_AttributeMarkup = null;
 
     private static final Logger LOG = LoggerFactory.getLogger(RESTEntityConnector.class);
 
@@ -50,7 +50,13 @@ public class RESTEntityConnector extends FileEntityConnector {
         connector.contentType = element.getAttributeValue("type");
         connector.invert = element.getAttributeValue("invert");
         connector.data = element.getAttributeValue("data");
-
+        connector.m_GlobalMarkup = element.getAttributeValue("markup");
+        if( connector.m_GlobalMarkup == null)
+            connector.m_GlobalMarkup = "globals"; // compatibility patch
+        connector.m_PonderationMarkup = element.getAttributeValue("ponderation");
+        if( connector.m_PonderationMarkup == null)
+            connector.m_PonderationMarkup = "p"; // compatibility patch
+            
         Element entity = element.getChild("REST-entity");
         connector.m_EntityMarkup = entity.getAttributeValue("markup");
         connector.m_EntityId = entity.getAttributeValue("id");
@@ -127,7 +133,7 @@ public class RESTEntityConnector extends FileEntityConnector {
                 node = mapper.readTree((String)wpsparams.get(this.data));
             }
             if( error == null) {
-                JsonNode globals = (JsonNode) node.get("globals");
+                JsonNode globals = (JsonNode) node.get(m_GlobalMarkup);
                 if (globals != null) {
                     for (Iterator<String> it = globals.getFieldNames(); it.hasNext();) {
                         String key = it.next();
@@ -137,8 +143,7 @@ public class RESTEntityConnector extends FileEntityConnector {
                 ArrayNode entities = (ArrayNode) node.get(m_EntityMarkup);
                 if (entities != null) {
                     for (JsonNode jsonentity : entities) {
-                    	String entityName = jsonentity.get(m_EntityId).getTextValue();
-                        Entity entity = addEntity(entityName);
+                        Entity entity = addEntity( readId( jsonentity.get(m_EntityId)));
                         for (PropertyDefinition property : entityProperties) {
                             if (property.isSimple()) {
                                 entity.addProperty(property, readJSONValue( jsonentity.get(property.getName())));
@@ -148,8 +153,8 @@ public class RESTEntityConnector extends FileEntityConnector {
                         ArrayNode attributes = (ArrayNode) jsonentity.get(m_AttributeMarkup);
                         if (attributes != null) {
                             for (JsonNode jsonattribute : attributes) {
-                                Attribute attribute = addAttribute( jsonattribute.get(m_AttributeId).getTextValue());
-                                entity.addAttribute(attribute, 1);
+                                Attribute attribute = addAttribute( readId( jsonattribute.get(m_AttributeId)));
+                                entity.addAttribute(attribute, readPonderation( jsonattribute.get(m_PonderationMarkup)));
                             }
                         }
                     }
@@ -157,7 +162,7 @@ public class RESTEntityConnector extends FileEntityConnector {
                 ArrayNode attributes = (ArrayNode) node.get(m_AttributeMarkup);
                 if (attributes != null) {
                     for (JsonNode jsonattribute : attributes) {
-                        Attribute attribute = addAttribute(jsonattribute.get(m_AttributeId).getTextValue());
+                        Attribute attribute = addAttribute( readId( jsonattribute.get(m_AttributeId)));
                         for (PropertyDefinition property : attributeProperties) {
                             if (property.isSimple()) 
                                 attribute.addProperty(property, readJSONValue( jsonattribute.get(property.getName())));
@@ -204,10 +209,46 @@ public class RESTEntityConnector extends FileEntityConnector {
         else if( node.isInt()) {
             return node.getIntValue();
         }
+        else if( node.isLong()) {
+            return node.getLongValue();
+        }
         else if ( node.isDouble()) {
             return node.getDoubleValue();
         }
         return StringEscapeUtils.unescapeHtml(node.getTextValue());
+    }
+
+    private String readId(JsonNode node) {
+        if( node == null)
+            return null;
+        if ( node.isTextual()) {
+            return node.getTextValue();
+        }
+        else if( node.isInt()) {
+            return String.valueOf(node.getIntValue());
+        }
+        else if( node.isLong()) {
+            return String.valueOf(node.getLongValue());
+        }
+        else if ( node.isDouble()) {
+            return String.valueOf(node.getDoubleValue());
+        }
+        return null;
+    }
+    
+    private float readPonderation(JsonNode node) {
+        if( node == null)
+            return 1;
+        if( node.isInt()) {
+            return node.getIntValue();
+        }
+        else if( node.isLong()) {
+            return node.getLongValue();
+        }
+        else if ( node.isDouble()) {
+            return (float)node.getDoubleValue();
+        }
+        return 1;
     }
     
     /**
