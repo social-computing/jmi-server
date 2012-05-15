@@ -5,8 +5,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.google.inject.servlet.GuiceServletContextListener;
-
 /**
  * @author "Jonathan Dray <jonathan@social-computing.com>"
  * 
