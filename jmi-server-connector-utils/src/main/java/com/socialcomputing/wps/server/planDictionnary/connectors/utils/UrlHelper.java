@@ -13,8 +13,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
 import org.jdom.Element;
@@ -258,4 +260,18 @@ public class UrlHelper extends ConnectorHelper {
         this.user = user;
         this.password = password;
     }
+    
+    public static Map<String, String> getParameters(String urlPart) {
+    	Map<String, String> parameters = new HashMap<String, String>();
+    	if(urlPart != null) {
+    		for(String p : urlPart.split("&")) {
+                int pos = p.indexOf('=');
+                if( pos != -1) {
+                	parameters.put( p.substring(0, pos), p.substring(pos+1));
+                }
+    		}
+    	}
+    	return parameters;
+    }
+    
 }
