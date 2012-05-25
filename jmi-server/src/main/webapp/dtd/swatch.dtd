@@ -168,6 +168,7 @@ At least 2 keys are needed to interpolate using a property or a randon factor. M
 	<!ATTLIST item      label   CDATA   #REQUIRED
 						url     CDATA   #IMPLIED
 						track   CDATA   #IMPLIED
+						checked CDATA   #IMPLIED
 						font    IDREF   #IMPLIED
 						id      ID      #IMPLIED>
 					

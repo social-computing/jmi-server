@@ -215,6 +215,9 @@ public class RESTEntityConnector extends FileEntityConnector {
         else if ( node.isDouble()) {
             return node.getDoubleValue();
         }
+        else if ( node.isBoolean()) {
+            return node.getBooleanValue();
+        }
         return StringEscapeUtils.unescapeHtml(node.getTextValue());
     }
 

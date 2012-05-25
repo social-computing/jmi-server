@@ -36,8 +36,9 @@ public class XItem extends XMLBase
 				hasElem = item.putElemObj( "call", elem, root, refs ),
 				hasCall = item.putAttRef( "call", String.class, elem, root, refs, IDREF );
 
-		item.putAttRef( "track", TextValue.class, elem, root, refs, CDATA | IDREF );
+//		item.putAttRef( "track", TextValue.class, elem, root, refs, CDATA | IDREF );
 		item.putAttRef( "label", TextValue.class, elem, root, refs, CDATA | IDREF );
+        item.putAttRef( "checked", TextValue.class, elem, root, refs, CDATA | IDREF );
 		item.putAttRef( "font", XFont.class, elem, root, refs, IDREF );
 
 		if ( hasURL &&( hasElem || hasCall ))   // Should not have URL && Call!
@@ -75,10 +76,14 @@ public class XItem extends XMLBase
 		{
 			label += (String)toClient( "url", refs );
 
-			if ( containsKey( "track" ))
-			{
-				label += Base.SEP + (String)toClient( "track", refs );
-			}
+//			if ( containsKey( "track" ))
+//			{
+//				label += Base.SEP + (String)toClient( "track", refs );
+//			}
+            if ( containsKey( "checked" ))
+            {
+                label += Base.SEP + (String)toClient( "checked", refs );
+            }
 		}
 		else if ( containsKey( "call" ))
 		{
