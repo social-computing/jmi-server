@@ -18,7 +18,7 @@
         overflowToDisk="false" />
     <cache
         name="com.socialcomputing.wps.server.persistence.hibernate.SwatchImpl"
-        maxElementsInMemory="10000"
+        maxElementsInMemory="800"
         eternal="false"
         overflowToDisk="false" />
 </ehcache>

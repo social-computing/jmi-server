@@ -49,6 +49,9 @@ public class Error implements Serializable {
     @Column(columnDefinition="text")
     private String      parameters;
     
+    public Error() {
+    }
+    
     public Error(JMIException e, String agent, Hashtable<String, Object> params) {
         super();
         this.origin = e.getOrigin().toString();

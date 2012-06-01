@@ -1,12 +1,10 @@
 package com.socialcomputing.wps.server.webservices;
 
-import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Set;
-import java.util.StringTokenizer;
 import java.util.Map.Entry;
+import java.util.StringTokenizer;
 
 import com.socialcomputing.wps.client.applet.Env;
 import com.socialcomputing.wps.client.applet.Transfo;

@@ -34,7 +34,7 @@ import com.socialcomputing.wps.server.utils.log.DiagnosticContext;
  * </p>
  * 
  */
-@Path("/rest") // Will be hosted at the URI path "/rest"
+@Path("/admin") // Will be hosted at the URI path "/admin"
 public class PlanRESTService {
 
     private final static Logger LOG = LoggerFactory.getLogger(PlanRESTService.class);

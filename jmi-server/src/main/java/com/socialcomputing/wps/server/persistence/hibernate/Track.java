@@ -12,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -49,6 +48,9 @@ public class Track implements Serializable {
     @XmlElement
     private Error       error;
 
+    public Track() {
+    }
+    
     public Track(String name) {
         super();
         this.name = name;
