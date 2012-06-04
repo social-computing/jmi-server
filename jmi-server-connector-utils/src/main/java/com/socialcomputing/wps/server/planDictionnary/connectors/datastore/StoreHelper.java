@@ -43,8 +43,13 @@ public class StoreHelper {
     public Hashtable<String, Attribute> getAttributes() {
         return m_Attributes;
     }
+    
     public Entity getEntity(String id) {
         return m_Entities.get(id);
+    }
+    
+    public boolean hasEntity(String id) {
+    	return (this.getEntity(id) == null) ? false : true;
     }
 
     public Entity addEntity(String id) {
@@ -67,8 +72,13 @@ public class StoreHelper {
         }
     }
     
+    
     public Attribute getAttribute(String id) {
         return m_Attributes.get(id);
+    }
+    
+    public boolean hasAttribute(String id) {
+    	return (this.getAttribute(id) == null) ? false : true;
     }
 
     public Attribute addAttribute(String id) {

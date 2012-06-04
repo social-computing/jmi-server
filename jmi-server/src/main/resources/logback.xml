@@ -10,7 +10,7 @@
     </appender>
     <!-- Log file -->
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>${logback.path}/wps.log</file>
+        <file>${logback.path}/jmi-server.log</file>
         <append>false</append>
         <encoder>
             <pattern>%d|%-5level|%X{entryPoint}|%logger{36} - %msg%n</pattern>
