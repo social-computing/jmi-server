@@ -96,6 +96,8 @@ public class PlanJSONProvider {
                 tab.add((Float) val);
             else if (val instanceof Long)
                 tab.add((Long) val);
+            else if (val instanceof Boolean)
+                tab.add((Boolean) val);
             else
                 tab.add(toJSON( val));
         }
