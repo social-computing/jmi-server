@@ -93,18 +93,18 @@ public class StoreHelper {
     public void addAttributeProperties(Entity entity) {
         for (PropertyDefinition propDefinition : entityProperties) {
             if (!propDefinition.isSimple()) {
-                ArrayList<String> property = new ArrayList<String>();
+                ArrayList<Object> property = new ArrayList<Object>();
                 for (AttributeEnumeratorItem attributeItem : entity.getAttributes()) {
                     Attribute attribute = m_Attributes.get(attributeItem.m_Id);
                     if( attribute != null) {
-                        String value = (String) attribute.getProperties().get(propDefinition.getId());
+                        Object value = (Object) attribute.getProperties().get(propDefinition.getId());
                         if (value == null)
                             value = propDefinition.getDefault();
                         if (value != null)
                             property.add(value);
                     }
                 }
-                entity.addProperty(propDefinition.getName(), property.toArray(new String[property.size()]));
+                entity.addProperty(propDefinition.getName(), property.toArray(new Object[property.size()]));
             }
         }
     }
@@ -112,18 +112,18 @@ public class StoreHelper {
    public void addEntityProperties(Attribute attribute) {
         for (PropertyDefinition propDefinition : attributeProperties) {
             if (!propDefinition.isSimple()) {
-                ArrayList<String> property = new ArrayList<String>();
-                for (String entityId : attribute.getEntities()) {
+                ArrayList<Object> property = new ArrayList<Object>();
+                for (Object entityId : attribute.getEntities()) {
                     Entity entity = m_Entities.get(entityId);
                     if( entity != null) {
-                        String value = (String) entity.getProperties().get(propDefinition.getId());
+                        Object value = (Object) entity.getProperties().get(propDefinition.getId());
                         if (value == null)
                             value = propDefinition.getDefault();
                         if (value != null)
                             property.add(value);
                     }
                 }
-                attribute.addProperty(propDefinition, property.toArray(new String[property.size()]));
+                attribute.addProperty(propDefinition, property.toArray(new Object[property.size()]));
             }
         }
     }
