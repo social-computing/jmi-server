@@ -57,10 +57,14 @@ public class Error implements Serializable {
         this.origin = e.getOrigin().toString();
         this.code = e.getCode();
         this.message = e.getMessage();
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter( sw);
-        e.printStackTrace(pw);
-        this.trace = sw.toString();
+        if( e.getTrace() != null) 
+            this.trace = e.getTrace();
+        else {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter( sw);
+            e.printStackTrace(pw);
+            this.trace = sw.toString();
+        }
         this.agent = agent;
         List<String> keys = new ArrayList<String>( params.keySet());
         Collections.sort(keys);

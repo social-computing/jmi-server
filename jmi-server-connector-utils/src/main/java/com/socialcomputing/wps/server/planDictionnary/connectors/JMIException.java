@@ -24,8 +24,9 @@ public class JMIException extends Exception
 	protected Throwable cause;
 	protected long code;
     protected long track;
+    protected String trace;
 
-	    public JMIException()
+	public JMIException()
 	{
 		this("Error occurred in WPS connector.");
 	}
@@ -47,11 +48,24 @@ public class JMIException extends Exception
 
     public JMIException(ORIGIN origin, long code, String message)
     {
-        this( origin, code, message, null);
+        super(message);
+        this.origin = origin;
+        this.cause = null;
+        this.code = code;
+        this.trace = null;
+    }
+
+    public JMIException(ORIGIN origin, long code, String message, String trace)
+    {
+        super(message);
+        this.origin = origin;
+        this.cause = null;
+        this.code = code;
+        this.trace = trace;
     }
     
     public JMIException(ORIGIN origin, String message, Throwable cause) {
-        this( origin, 0, message, null);
+        this( origin, 0, message, cause);
     }
     
 	public JMIException(ORIGIN origin, long code, String message, Throwable cause)
@@ -60,6 +74,7 @@ public class JMIException extends Exception
 		this.origin = origin;
 		this.cause = cause;
 		this.code = code;
+		this.trace = null;
 	}
 
 	public String getMessage()
@@ -114,6 +129,10 @@ public class JMIException extends Exception
         return code;
     }
 
+    public String getTrace() {
+        return trace;
+    }
+    
     public void setTrack(long track) {
         this.track = track;
     }

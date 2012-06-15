@@ -191,7 +191,7 @@ public class RESTEntityConnector extends FileEntityConnector {
                     m = m.substring(0,p);
             }
             long code = error.get("code") != null ? error.get("code").getLongValue() : 0;
-            throw new JMIException( JMIException.ORIGIN.CONNECTOR, code, m);
+            throw new JMIException( JMIException.ORIGIN.CONNECTOR, code, m, error.get("trace").getTextValue());
         }
     }
 
