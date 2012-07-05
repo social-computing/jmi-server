@@ -105,7 +105,7 @@ public class UrlHelper extends ConnectorHelper {
                     if (!first)
                         parameters.append('&');
                     parameters.append(param.getName()).append('=')
-                            .append(URLEncoder.encode(super.ReplaceParameter(param.getValue(), wpsparams), "UTF-8"));
+                            .append(URLEncoder.encode(param.getParse() ? super.ReplaceParameter(param.getValue(), wpsparams) : param.getValue(), "UTF-8"));
                     first = false;
                 }
             }
@@ -114,7 +114,7 @@ public class UrlHelper extends ConnectorHelper {
                     if (!first)
                         parameters.append('&');
                     parameters.append(param.getName()).append('=')
-                            .append(URLEncoder.encode(super.ReplaceParameter(param.getValue(), wpsparams), "UTF-8"));
+                            .append(URLEncoder.encode(param.getParse() ? super.ReplaceParameter(param.getValue(), wpsparams) : param.getValue(), "UTF-8"));
                     first = false;
                 }
             }
@@ -240,7 +240,11 @@ public class UrlHelper extends ConnectorHelper {
     }
 
     public void addParameter(String name, String value) {
-        curParams.add(new NameValuePair(name, value));
+        this.addParameter(name, value, true);
+    }
+    
+    public void addParameter(String name, String value, boolean parse) {
+        curParams.add(new NameValuePair(name, value, parse));
     }
     
     public void addParameter(NameValuePair parameter) {
