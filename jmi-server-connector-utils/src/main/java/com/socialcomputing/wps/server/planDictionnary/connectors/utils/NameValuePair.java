@@ -20,7 +20,7 @@ public class NameValuePair {
     }
     
     public NameValuePair(String name, String value, String defaultValue) {
-        this(name, value, null, true);
+        this(name, value, defaultValue, true);
     }
     
     public NameValuePair(String name, String value, String defaultValue, boolean parse) {

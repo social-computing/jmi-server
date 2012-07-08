@@ -105,7 +105,7 @@ public class UrlHelper extends ConnectorHelper {
                     if (!first)
                         parameters.append('&');
                     parameters.append(param.getName()).append('=')
-                            .append(URLEncoder.encode(param.getParse() ? super.ReplaceParameter(param.getValue(), wpsparams) : param.getValue(), "UTF-8"));
+                            .append(URLEncoder.encode(param.getParse() ? super.ReplaceParameter(param, wpsparams) : param.getValue(), "UTF-8"));
                     first = false;
                 }
             }
