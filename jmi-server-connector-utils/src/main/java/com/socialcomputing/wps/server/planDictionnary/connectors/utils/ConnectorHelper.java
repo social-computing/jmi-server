@@ -43,7 +43,7 @@ public abstract class ConnectorHelper {
             else
                 result.append( token);
         }
-        return result.length() == 0 ? pair.getDefaultValue() : result.toString();
+        return result.length() == 0 ? (pair.getDefaultValue() == null ?  "" : pair.getDefaultValue()): result.toString();
     }
 
     public static String ReplaceParameter(String value, Hashtable<String, Object> wpsparams) throws JMIException {
