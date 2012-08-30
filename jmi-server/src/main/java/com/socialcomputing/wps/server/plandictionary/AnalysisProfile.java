@@ -137,6 +137,11 @@ public class AnalysisProfile implements java.io.Serializable
 			if( pps != null)
 				profile.m_SubAttributePropertiesMapper = ClassifierMapper.readSimpleMapping( pps);
 		}
+		else {
+            profile.m_EntityPropertiesMapper = ClassifierMapper.GetSimpleMapping();
+            profile.m_AttributePropertiesMapper = ClassifierMapper.GetSimpleMapping();
+            profile.m_SubAttributePropertiesMapper = ClassifierMapper.GetSimpleMapping();
+		}
 
 		// Recommandation profiles
 		org.jdom.Element rec = element.getChild( "entities-recommendation");

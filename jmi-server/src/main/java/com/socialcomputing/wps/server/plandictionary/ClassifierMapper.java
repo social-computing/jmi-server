@@ -23,6 +23,7 @@ public class ClassifierMapper implements java.io.Serializable
 
 	public String m_ClassifierName =  WPSDictionary.DEFAULT_NAME;
 	public String m_Description = null;
+	public boolean m_AllProperties = false;
 
 	/**
 	* The classifier association map (for ech rule of iClassifierConnector) */
@@ -53,6 +54,8 @@ public class ClassifierMapper implements java.io.Serializable
 	static public ClassifierMapper readSimpleMapping( org.jdom.Element element)
 	{
 		ClassifierMapper cm = new ClassifierMapper();
+        String v = element.getAttributeValue("all-properties");
+        cm.m_AllProperties = v != null ? (v.equalsIgnoreCase("true") ? true : false) : false;
 		java.util.List lst = element.getChildren( "mapping");
 		int size = lst.size();
 		for( int i = 0; i < size; ++i)
@@ -63,6 +66,13 @@ public class ClassifierMapper implements java.io.Serializable
 		return cm;
 	}
 
+    static public ClassifierMapper GetSimpleMapping()
+    {
+        ClassifierMapper cm = new ClassifierMapper();
+        cm.m_AllProperties = true;
+        return cm;
+    }
+	
 	// classifier / default rule
 	public ClassifierMapper()
 	{
@@ -121,9 +131,13 @@ public class ClassifierMapper implements java.io.Serializable
 		String result;
 		result = ( String) m_ClassifierData.get( classifyName);
 
-		if( result == null) // Error : Association not defined
-			return m_DefaultClassifierData;
-
+		if( result == null) {
+		    if( m_AllProperties)
+		        return classifyName;
+		    else 
+    		    // Error : Association not defined
+    			return m_DefaultClassifierData;
+		}
 		// Ok
 		return result;
 	}

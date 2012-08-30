@@ -28,7 +28,8 @@ public class RESTEntityConnector extends FileEntityConnector {
     protected String invert = null;
     protected String data = null;
     protected String m_GlobalMarkup = null, m_EntityId = null, m_EntityMarkup = null, m_PonderationMarkup = null, m_AttributeId = null, m_AttributeMarkup = null;
-
+    protected boolean m_entitiesAllProperties = true, m_atttributesAllProperties = true;
+    
     private static final Logger LOG = LoggerFactory.getLogger(RESTEntityConnector.class);
 
     /**
@@ -60,6 +61,8 @@ public class RESTEntityConnector extends FileEntityConnector {
         Element entity = element.getChild("REST-entity");
         connector.m_EntityMarkup = entity.getAttributeValue("markup");
         connector.m_EntityId = entity.getAttributeValue("id");
+        String v = entity.getAttributeValue("all-properties");
+        connector.m_entitiesAllProperties = v != null ? (v.equalsIgnoreCase("true") ? true : false) : false;
         for (Element property : (List<Element>) entity.getChildren("REST-property")) {
             connector.entityProperties.add(new PropertyDefinition(property.getAttributeValue("id"), 
                                                                   property.getAttributeValue("attribute"),
@@ -69,6 +72,8 @@ public class RESTEntityConnector extends FileEntityConnector {
         Element attribute = element.getChild("REST-attribute");
         connector.m_AttributeMarkup = attribute.getAttributeValue("markup");
         connector.m_AttributeId = attribute.getAttributeValue("id");
+        v = attribute.getAttributeValue("all-properties");
+        connector.m_atttributesAllProperties = v != null ? (v.equalsIgnoreCase("true") ? true : false) : false;
         for (Element property : (List<Element>) attribute.getChildren("REST-property")) {
             connector.attributeProperties.add(new PropertyDefinition(property.getAttributeValue("id"), 
                                                                      property.getAttributeValue("entity"),
@@ -144,9 +149,19 @@ public class RESTEntityConnector extends FileEntityConnector {
                 if (entities != null) {
                     for (JsonNode jsonentity : entities) {
                         Entity entity = addEntity( readId( jsonentity.get(m_EntityId)));
-                        for (PropertyDefinition property : entityProperties) {
-                            if (property.isSimple()) {
-                                entity.addProperty(property, readJSONValue( jsonentity.get(property.getName())));
+                        if( m_entitiesAllProperties) {
+                            for( Iterator<String> it = jsonentity.getFieldNames(); it.hasNext(); ) {
+                                String field = it.next();
+                                if( !field.equalsIgnoreCase(m_EntityId)) {
+                                    entity.addProperty(field, readJSONValue( jsonentity.get(field)));
+                                }
+                            }
+                        }
+                        else {
+                            for (PropertyDefinition property : entityProperties) {
+                                if (property.isSimple()) {
+                                    entity.addProperty(property, readJSONValue( jsonentity.get(property.getName())));
+                                }
                             }
                         }
     
@@ -163,9 +178,19 @@ public class RESTEntityConnector extends FileEntityConnector {
                 if (attributes != null) {
                     for (JsonNode jsonattribute : attributes) {
                         Attribute attribute = addAttribute( readId( jsonattribute.get(m_AttributeId)));
-                        for (PropertyDefinition property : attributeProperties) {
-                            if (property.isSimple()) 
-                                attribute.addProperty(property, readJSONValue( jsonattribute.get(property.getName())));
+                        if( m_atttributesAllProperties) {
+                            for( Iterator<String> it = jsonattribute.getFieldNames(); it.hasNext(); ) {
+                                String field = it.next();
+                                if( !field.equalsIgnoreCase(m_AttributeId)) {
+                                    attribute.addProperty(field, readJSONValue( jsonattribute.get(field)));
+                                }
+                            }
+                        }
+                        else {
+                            for (PropertyDefinition property : attributeProperties) {
+                                if (property.isSimple()) 
+                                    attribute.addProperty(property, readJSONValue( jsonattribute.get(property.getName())));
+                            }
                         }
                         if (!isInverted())
                             addEntityProperties(attribute);

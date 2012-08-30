@@ -94,7 +94,7 @@
 <!-- =====================================================================  -->
 <!-- Analysis Profile : fixing parameters and connector -->
 <!-- =====================================================================  -->
-<!ELEMENT analysis-profile (comment?, props-mapping, entities-recommendation?, attributes-recommendation?, subattributes-recommendation?, relax?)>
+<!ELEMENT analysis-profile (comment?, props-mapping?, entities-recommendation?, attributes-recommendation?, subattributes-recommendation?, relax?)>
 <!ATTLIST analysis-profile name     					CDATA    #REQUIRED>
 <!ATTLIST analysis-profile attributes-ref				CDATA    #REQUIRED>
 <!ATTLIST analysis-profile type							(personal|global|discovery) "personal">
@@ -131,8 +131,11 @@
 <!-- Swatchs => DB Properties Names Mapping -->
 <!ELEMENT props-mapping (entity-props-mapping?, attribute-props-mapping?, subattribute-props-mapping?)>
 <!ELEMENT entity-props-mapping (comment?, mapping*)>
+<!ATTLIST entity-props-mapping all-properties	(true|false) "false">
 <!ELEMENT attribute-props-mapping (comment?, mapping*)>
+<!ATTLIST attribute-props-mapping all-properties	(true|false) "false">
 <!ELEMENT subattribute-props-mapping (comment?, mapping*)>
+<!ATTLIST subattribute-props-mapping all-properties	(true|false) "false">
 
 <!-- Mapping -->
 <!ELEMENT mapping EMPTY>

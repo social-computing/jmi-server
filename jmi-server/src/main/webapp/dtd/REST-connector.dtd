@@ -4,21 +4,23 @@
 <!-- REST-entities : data connectors description -->
 <!-- =====================================================================  -->
 <!ELEMENT REST-entities (comment?, URL-connection, REST-entity, REST-attribute)>
-<!ATTLIST REST-entities	name    CDATA    #REQUIRED>
-<!ATTLIST REST-entities	class   CDATA    "com.socialcomputing.wps.server.plandictionary.connectors.datastore.file.rest.RESTEntityConnector" >
-<!ATTLIST REST-entities	type    (xml|json)	"xml">
-<!ATTLIST REST-entities	markup	CDATA    	"globals">
-<!ATTLIST REST-entities	invert  CDATA 	   	"false">
-<!ATTLIST REST-entities	data    CDATA 	   	#IMPLIED>
+<!ATTLIST REST-entities	name    CDATA    		#REQUIRED>
+<!ATTLIST REST-entities	class   CDATA    		"com.socialcomputing.wps.server.plandictionary.connectors.datastore.file.rest.RESTEntityConnector" >
+<!ATTLIST REST-entities	type    (xml|json)		"xml">
+<!ATTLIST REST-entities	markup	CDATA    		"globals">
+<!ATTLIST REST-entities	invert  (true|false) 	"false">
+<!ATTLIST REST-entities	data    CDATA 	   		#IMPLIED>
 
 <!ELEMENT REST-entity 	(REST-property*)>
 <!ATTLIST REST-entity	markup	    	CDATA    "entities">
 <!ATTLIST REST-entity	id    			CDATA    "id">
 <!ATTLIST REST-entity	ponderation     CDATA    "p">
+<!ATTLIST REST-entity   all-properties	(true|false) "false">
 
 <!ELEMENT REST-attribute (REST-property*)>
 <!ATTLIST REST-attribute	markup		   	CDATA    "attributes">
 <!ATTLIST REST-attribute	id    			CDATA    "id">
+<!ATTLIST REST-attribute	all-properties	(true|false) "true">
 
 <!ELEMENT REST-property 	EMPTY>
 <!ATTLIST REST-property	id    		CDATA    #REQUIRED>

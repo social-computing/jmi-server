@@ -195,11 +195,20 @@ public class PlanRequest {
         }
 
         // ALL OTHER DB Properties
-        for( Entry<String, String> entry : profile.m_EntityPropertiesMapper.entryies()) {
-            if( !swatchProperties.contains( entry.getKey())) {
-                prop = dbProperties.get( entry.getValue());
-                if( prop != null)
-                    swatchProperties.put( entry.getKey(), prop);
+        if( profile.m_EntityPropertiesMapper.m_AllProperties) {
+            for( Entry<String, Object> entry : dbProperties.entrySet()) {
+                if( !swatchProperties.contains( entry.getKey())) {
+                    swatchProperties.put( entry.getKey(), entry.getValue());
+                }
+            }
+        }
+        else {
+            for( Entry<String, String> entry : profile.m_EntityPropertiesMapper.entryies()) {
+                if( !swatchProperties.contains( entry.getKey())) {
+                    prop = dbProperties.get( entry.getValue());
+                    if( prop != null)
+                        swatchProperties.put( entry.getKey(), prop);
+                }
             }
         }
 
@@ -318,8 +327,7 @@ public class PlanRequest {
                     else if (!props.containsKey(name)) {
                         Object v = val.getValue(name, prop);
                         if (v == null)
-                            throw new JMIException(JMIException.ORIGIN.PROPERTY,"Attribute '" + strId + "' property '" + name
-                                    + "' can't be evaluated ");
+                            throw new JMIException(JMIException.ORIGIN.PROPERTY,"Attribute '" + strId + "' property '" + name + "' can't be evaluated ");
                         props.put(name, v);
                     }
                 }
@@ -327,11 +335,20 @@ public class PlanRequest {
         }
         
         // ALL OTHER DB Properties
-        for( Entry<String, String> entry : profile.m_AttributePropertiesMapper.entryies()) {
-            if( !props.contains( entry.getKey())) {
-                prop = dbProperties.get( entry.getValue());
-                if( prop != null)
-                    props.put( entry.getKey(), prop);
+        if( profile.m_AttributePropertiesMapper.m_AllProperties) {
+            for( Entry<String, Object> entry : dbProperties.entrySet()) {
+                if( !props.contains( entry.getKey())) {
+                    props.put( entry.getKey(), entry.getValue());
+                }
+            }
+        }
+        else {
+            for( Entry<String, String> entry : profile.m_AttributePropertiesMapper.entryies()) {
+                if( !props.contains( entry.getKey())) {
+                    prop = dbProperties.get( entry.getValue());
+                    if( prop != null)
+                        props.put( entry.getKey(), prop);
+                }
             }
         }
 
@@ -444,8 +461,7 @@ public class PlanRequest {
             Hashtable dbProps = null;
             switch (recIndex) {
                 case RecommendationGroup.ATTRIBUTES_RECOM:
-                    dbProps = profile.getConnector(m_Dictionary).getProperties(strIds[i], recommendable.isRef(),
-                                                                               m_entityId);
+                    dbProps = profile.getConnector(m_Dictionary).getProperties(strIds[i], recommendable.isRef(),m_entityId);
                     break;
                 case RecommendationGroup.ENTITIES_RECOM:
                     dbProps = m_Dictionary.getEntityConnector().getProperties(strIds[i]);
