@@ -8,7 +8,7 @@
 <!ATTLIST REST-entities	class   CDATA    		"com.socialcomputing.wps.server.plandictionary.connectors.datastore.file.rest.RESTEntityConnector" >
 <!ATTLIST REST-entities	type    (xml|json)		"xml">
 <!ATTLIST REST-entities	markup	CDATA    		"globals">
-<!ATTLIST REST-entities	invert  (true|false) 	"false">
+<!ATTLIST REST-entities	invert  CDATA		 	"false">
 <!ATTLIST REST-entities	data    CDATA 	   		#IMPLIED>
 
 <!ELEMENT REST-entity 	(REST-property*)>
