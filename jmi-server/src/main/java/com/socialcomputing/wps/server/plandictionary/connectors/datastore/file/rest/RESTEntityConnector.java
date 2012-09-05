@@ -152,9 +152,7 @@ public class RESTEntityConnector extends FileEntityConnector {
                         if( m_entitiesAllProperties) {
                             for( Iterator<String> it = jsonentity.getFieldNames(); it.hasNext(); ) {
                                 String field = it.next();
-                                if( !field.equalsIgnoreCase(m_EntityId)) {
-                                    entity.addProperty(field, readJSONValue( jsonentity.get(field)));
-                                }
+                                entity.addProperty(field, readJSONValue( jsonentity.get(field)));
                             }
                         }
                         else {
@@ -181,9 +179,7 @@ public class RESTEntityConnector extends FileEntityConnector {
                         if( m_atttributesAllProperties) {
                             for( Iterator<String> it = jsonattribute.getFieldNames(); it.hasNext(); ) {
                                 String field = it.next();
-                                if( !field.equalsIgnoreCase(m_AttributeId)) {
-                                    attribute.addProperty(field, readJSONValue( jsonattribute.get(field)));
-                                }
+                                attribute.addProperty(field, readJSONValue( jsonattribute.get(field)));
                             }
                         }
                         else {
