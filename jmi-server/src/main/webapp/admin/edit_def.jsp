@@ -1,3 +1,4 @@
+<%@page import="com.socialcomputing.utils.servlet.HtmlEncoder"%>
 <%@page import="com.socialcomputing.wps.server.persistence.Dictionary"%>
 <%@page import="com.socialcomputing.wps.server.persistence.DictionaryManager"%>
 <%@page import="com.socialcomputing.wps.server.persistence.hibernate.DictionaryManagerImpl"%>
@@ -35,7 +36,7 @@ if (dictionaryName != null) {
 <%
 		DictionaryManager managerD = new DictionaryManagerImpl();
 		Dictionary dic = managerD.findByName(dictionaryName);
-		out.print(dic.getDefinition());
+		out.print(HtmlEncoder.encode(dic.getDefinition()));
     } else {
 %>
 <input type="hidden" name="dictionary" value="<%=dictionaryName %>" />
@@ -45,7 +46,7 @@ if (dictionaryName != null) {
 <%
 		SwatchManager managerS = new SwatchManagerImpl();
 		Swatch swatch = managerS.findByName(swatchName, dictionaryName);
-		out.print(swatch.getDefinition());
+		out.print(HtmlEncoder.encode(swatch.getDefinition())); 
     }
 }
 %>
