@@ -103,7 +103,7 @@ public class DatastoreAffinityGroupReader implements iAffinityGroupReader {
                 }
 				result = new StringAndFloat[ set.size()];
 				for( Entry<String, Integer> entry : set.entrySet()) {
-					result[i++] = new StringAndFloat( entry.getKey(), (maxPond - entry.getValue()) / maxPond);
+					result[i++] = new StringAndFloat( entry.getKey(), 1 - ((maxPond - entry.getValue())) / maxPond);
 				}
 				break;
 				
@@ -146,7 +146,7 @@ public class DatastoreAffinityGroupReader implements iAffinityGroupReader {
                 }
 				result = new StringAndFloat[ set2.size()];
 				for( Entry<String, Integer> entry : set2.entrySet()) {
-					result[i++] = new StringAndFloat( entry.getKey(), (maxPond - entry.getValue()) / maxPond);
+					result[i++] = new StringAndFloat( entry.getKey(), 1 - ((maxPond - entry.getValue()) / maxPond));
 				}
 				break;
 		}
