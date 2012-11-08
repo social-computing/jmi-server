@@ -32,12 +32,6 @@
   </modules>
 
   <repositories>
-    <!-- Social computing 3rd party repository -->
-	  <repository>
-      <id>cloudbees-private</id>
-      <url>https://repository-wps.forge.cloudbees.com/private/</url>
-    </repository>
-    
     <repository>
       <id>sonatype-repository</id>
       <url>http://repository.sonatype.org/content/groups/public/</url>
